@@ -1,0 +1,13 @@
+use_frameworks!
+
+platform :ios, '8.0'
+
+target 'AdvanceSDK_Example' do
+  pod 'AdvanceSDK', :path => '../'
+
+  target 'AdvanceSDK_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
