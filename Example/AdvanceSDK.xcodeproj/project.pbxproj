@@ -7,6 +7,23 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		31B1448C2408E71E005A2865 /* DemoSplashViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31B144642408E71E005A2865 /* DemoSplashViewController.m */; };
+		31B1448D2408E71E005A2865 /* DemoRewardVideoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31B144672408E71E005A2865 /* DemoRewardVideoViewController.m */; };
+		31B1448E2408E71E005A2865 /* DemoInterstitialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31B144682408E71E005A2865 /* DemoInterstitialViewController.m */; };
+		31B1448F2408E71E005A2865 /* DemoBannerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31B1446B2408E71E005A2865 /* DemoBannerViewController.m */; };
+		31B144902408E71E005A2865 /* BYFeedExpressViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31B1446F2408E71E005A2865 /* BYFeedExpressViewController.m */; };
+		31B144912408E71E005A2865 /* FeedExpressViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31B144702408E71E005A2865 /* FeedExpressViewController.m */; };
+		31B144922408E71E005A2865 /* ViewBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 31B144742408E71E005A2865 /* ViewBuilder.m */; };
+		31B144932408E71E005A2865 /* JDStatusBarNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 31B144762408E71E005A2865 /* JDStatusBarNotification.m */; };
+		31B144942408E71E005A2865 /* JDStatusBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 31B144782408E71E005A2865 /* JDStatusBarView.m */; };
+		31B144952408E71E005A2865 /* JDStatusBarLayoutMarginHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 31B144792408E71E005A2865 /* JDStatusBarLayoutMarginHelper.m */; };
+		31B144962408E71E005A2865 /* JDStatusBarStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = 31B1447C2408E71E005A2865 /* JDStatusBarStyle.m */; };
+		31B144972408E71E005A2865 /* BYExamCellModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 31B1447F2408E71E005A2865 /* BYExamCellModel.m */; };
+		31B144982408E71E005A2865 /* CellBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 31B144802408E71E005A2865 /* CellBuilder.m */; };
+		31B144992408E71E005A2865 /* cell01.json in Resources */ = {isa = PBXBuildFile; fileRef = 31B144822408E71E005A2865 /* cell01.json */; };
+		31B1449A2408E71E005A2865 /* ExamTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 31B144842408E71E005A2865 /* ExamTableViewCell.m */; };
+		31B1449B2408E71E005A2865 /* DemoUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 31B144872408E71E005A2865 /* DemoUtils.m */; };
+		31B1449C2408E71E005A2865 /* BaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31B1448A2408E71E005A2865 /* BaseViewController.m */; };
 		6003F58E195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58F195388D20070C39A /* CoreGraphics.framework */; };
 		6003F592195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
@@ -38,10 +55,43 @@
 
 /* Begin PBXFileReference section */
 		0FB18A5DAA171A55502E9407 /* Pods-AdvanceSDK_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AdvanceSDK_Example.debug.xcconfig"; path = "Target Support Files/Pods-AdvanceSDK_Example/Pods-AdvanceSDK_Example.debug.xcconfig"; sourceTree = "<group>"; };
-		145849F14F3C5444A6FFC93D /* AdvanceSDK.podspec */ = {isa = PBXFileReference; includeInIndex = 1; name = AdvanceSDK.podspec; path = ../AdvanceSDK.podspec; sourceTree = "<group>"; };
+		145849F14F3C5444A6FFC93D /* AdvanceSDK.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = AdvanceSDK.podspec; path = ../AdvanceSDK.podspec; sourceTree = "<group>"; };
 		19B4DCB70CF5FFF496339425 /* Pods-AdvanceSDK_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AdvanceSDK_Example.release.xcconfig"; path = "Target Support Files/Pods-AdvanceSDK_Example/Pods-AdvanceSDK_Example.release.xcconfig"; sourceTree = "<group>"; };
 		1E33D807387F6C88EC879C30 /* Pods_AdvanceSDK_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AdvanceSDK_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		5AD1647B6E4DD4231AFEFF67 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
+		31B144642408E71E005A2865 /* DemoSplashViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DemoSplashViewController.m; sourceTree = "<group>"; };
+		31B144652408E71E005A2865 /* DemoInterstitialViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DemoInterstitialViewController.h; sourceTree = "<group>"; };
+		31B144662408E71E005A2865 /* DemoBannerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DemoBannerViewController.h; sourceTree = "<group>"; };
+		31B144672408E71E005A2865 /* DemoRewardVideoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DemoRewardVideoViewController.m; sourceTree = "<group>"; };
+		31B144682408E71E005A2865 /* DemoInterstitialViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DemoInterstitialViewController.m; sourceTree = "<group>"; };
+		31B144692408E71E005A2865 /* DemoSplashViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DemoSplashViewController.h; sourceTree = "<group>"; };
+		31B1446A2408E71E005A2865 /* DemoRewardVideoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DemoRewardVideoViewController.h; sourceTree = "<group>"; };
+		31B1446B2408E71E005A2865 /* DemoBannerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DemoBannerViewController.m; sourceTree = "<group>"; };
+		31B1446D2408E71E005A2865 /* BYFeedExpressViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BYFeedExpressViewController.h; sourceTree = "<group>"; };
+		31B1446E2408E71E005A2865 /* FeedExpressViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedExpressViewController.h; sourceTree = "<group>"; };
+		31B1446F2408E71E005A2865 /* BYFeedExpressViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BYFeedExpressViewController.m; sourceTree = "<group>"; };
+		31B144702408E71E005A2865 /* FeedExpressViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeedExpressViewController.m; sourceTree = "<group>"; };
+		31B144732408E71E005A2865 /* ViewBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewBuilder.h; sourceTree = "<group>"; };
+		31B144742408E71E005A2865 /* ViewBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewBuilder.m; sourceTree = "<group>"; };
+		31B144762408E71E005A2865 /* JDStatusBarNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JDStatusBarNotification.m; sourceTree = "<group>"; };
+		31B144772408E71E005A2865 /* JDStatusBarStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JDStatusBarStyle.h; sourceTree = "<group>"; };
+		31B144782408E71E005A2865 /* JDStatusBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JDStatusBarView.m; sourceTree = "<group>"; };
+		31B144792408E71E005A2865 /* JDStatusBarLayoutMarginHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JDStatusBarLayoutMarginHelper.m; sourceTree = "<group>"; };
+		31B1447A2408E71E005A2865 /* JDStatusBarNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JDStatusBarNotification.h; sourceTree = "<group>"; };
+		31B1447B2408E71E005A2865 /* JDStatusBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JDStatusBarView.h; sourceTree = "<group>"; };
+		31B1447C2408E71E005A2865 /* JDStatusBarStyle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JDStatusBarStyle.m; sourceTree = "<group>"; };
+		31B1447D2408E71E005A2865 /* JDStatusBarLayoutMarginHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JDStatusBarLayoutMarginHelper.h; sourceTree = "<group>"; };
+		31B1447F2408E71E005A2865 /* BYExamCellModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BYExamCellModel.m; sourceTree = "<group>"; };
+		31B144802408E71E005A2865 /* CellBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CellBuilder.m; sourceTree = "<group>"; };
+		31B144812408E71E005A2865 /* ExamTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExamTableViewCell.h; sourceTree = "<group>"; };
+		31B144822408E71E005A2865 /* cell01.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = cell01.json; sourceTree = "<group>"; };
+		31B144832408E71E005A2865 /* BYExamCellModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BYExamCellModel.h; sourceTree = "<group>"; };
+		31B144842408E71E005A2865 /* ExamTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExamTableViewCell.m; sourceTree = "<group>"; };
+		31B144852408E71E005A2865 /* CellBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CellBuilder.h; sourceTree = "<group>"; };
+		31B144872408E71E005A2865 /* DemoUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DemoUtils.m; sourceTree = "<group>"; };
+		31B144882408E71E005A2865 /* DemoUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DemoUtils.h; sourceTree = "<group>"; };
+		31B1448A2408E71E005A2865 /* BaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseViewController.m; sourceTree = "<group>"; };
+		31B1448B2408E71E005A2865 /* BaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseViewController.h; sourceTree = "<group>"; };
+		5AD1647B6E4DD4231AFEFF67 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		6003F58A195388D20070C39A /* AdvanceSDK_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AdvanceSDK_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F58D195388D20070C39A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		6003F58F195388D20070C39A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -66,7 +116,7 @@
 		B2181D0EB3A4AD12D3CEEEF5 /* Pods_AdvanceSDK_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AdvanceSDK_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C0659F3B8009DD3C080E2003 /* Pods-AdvanceSDK_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AdvanceSDK_Tests.release.xcconfig"; path = "Target Support Files/Pods-AdvanceSDK_Tests/Pods-AdvanceSDK_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		CE4684C5481FB52F323A4426 /* Pods-AdvanceSDK_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AdvanceSDK_Tests.debug.xcconfig"; path = "Target Support Files/Pods-AdvanceSDK_Tests/Pods-AdvanceSDK_Tests.debug.xcconfig"; sourceTree = "<group>"; };
-		E5B804D9A1812796B3A043CC /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; name = README.md; path = ../README.md; sourceTree = "<group>"; };
+		E5B804D9A1812796B3A043CC /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,6 +145,100 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		31B144632408E71E005A2865 /* TestSingleController */ = {
+			isa = PBXGroup;
+			children = (
+				31B144642408E71E005A2865 /* DemoSplashViewController.m */,
+				31B144652408E71E005A2865 /* DemoInterstitialViewController.h */,
+				31B144662408E71E005A2865 /* DemoBannerViewController.h */,
+				31B144672408E71E005A2865 /* DemoRewardVideoViewController.m */,
+				31B144682408E71E005A2865 /* DemoInterstitialViewController.m */,
+				31B144692408E71E005A2865 /* DemoSplashViewController.h */,
+				31B1446A2408E71E005A2865 /* DemoRewardVideoViewController.h */,
+				31B1446B2408E71E005A2865 /* DemoBannerViewController.m */,
+			);
+			path = TestSingleController;
+			sourceTree = "<group>";
+		};
+		31B1446C2408E71E005A2865 /* TestFeedController */ = {
+			isa = PBXGroup;
+			children = (
+				31B1446D2408E71E005A2865 /* BYFeedExpressViewController.h */,
+				31B1446E2408E71E005A2865 /* FeedExpressViewController.h */,
+				31B1446F2408E71E005A2865 /* BYFeedExpressViewController.m */,
+				31B144702408E71E005A2865 /* FeedExpressViewController.m */,
+			);
+			path = TestFeedController;
+			sourceTree = "<group>";
+		};
+		31B144712408E71E005A2865 /* AppViewBuilder */ = {
+			isa = PBXGroup;
+			children = (
+				31B144722408E71E005A2865 /* ViewBuilder */,
+				31B144752408E71E005A2865 /* JDStatusBarNotification */,
+				31B1447E2408E71E005A2865 /* CellBuilder */,
+				31B144862408E71E005A2865 /* Base */,
+			);
+			path = AppViewBuilder;
+			sourceTree = "<group>";
+		};
+		31B144722408E71E005A2865 /* ViewBuilder */ = {
+			isa = PBXGroup;
+			children = (
+				31B144732408E71E005A2865 /* ViewBuilder.h */,
+				31B144742408E71E005A2865 /* ViewBuilder.m */,
+			);
+			path = ViewBuilder;
+			sourceTree = "<group>";
+		};
+		31B144752408E71E005A2865 /* JDStatusBarNotification */ = {
+			isa = PBXGroup;
+			children = (
+				31B144762408E71E005A2865 /* JDStatusBarNotification.m */,
+				31B144772408E71E005A2865 /* JDStatusBarStyle.h */,
+				31B144782408E71E005A2865 /* JDStatusBarView.m */,
+				31B144792408E71E005A2865 /* JDStatusBarLayoutMarginHelper.m */,
+				31B1447A2408E71E005A2865 /* JDStatusBarNotification.h */,
+				31B1447B2408E71E005A2865 /* JDStatusBarView.h */,
+				31B1447C2408E71E005A2865 /* JDStatusBarStyle.m */,
+				31B1447D2408E71E005A2865 /* JDStatusBarLayoutMarginHelper.h */,
+			);
+			path = JDStatusBarNotification;
+			sourceTree = "<group>";
+		};
+		31B1447E2408E71E005A2865 /* CellBuilder */ = {
+			isa = PBXGroup;
+			children = (
+				31B1447F2408E71E005A2865 /* BYExamCellModel.m */,
+				31B144802408E71E005A2865 /* CellBuilder.m */,
+				31B144812408E71E005A2865 /* ExamTableViewCell.h */,
+				31B144822408E71E005A2865 /* cell01.json */,
+				31B144832408E71E005A2865 /* BYExamCellModel.h */,
+				31B144842408E71E005A2865 /* ExamTableViewCell.m */,
+				31B144852408E71E005A2865 /* CellBuilder.h */,
+			);
+			path = CellBuilder;
+			sourceTree = "<group>";
+		};
+		31B144862408E71E005A2865 /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				31B144872408E71E005A2865 /* DemoUtils.m */,
+				31B144882408E71E005A2865 /* DemoUtils.h */,
+				31B144892408E71E005A2865 /* ViewController */,
+			);
+			path = Base;
+			sourceTree = "<group>";
+		};
+		31B144892408E71E005A2865 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				31B1448A2408E71E005A2865 /* BaseViewController.m */,
+				31B1448B2408E71E005A2865 /* BaseViewController.h */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
 		6003F581195388D10070C39A = {
 			isa = PBXGroup;
 			children = (
@@ -139,6 +283,9 @@
 				6003F5A6195388D20070C39A /* ADVANCEViewController.m */,
 				71719F9D1E33DC2100824A3D /* LaunchScreen.storyboard */,
 				6003F5A8195388D20070C39A /* Images.xcassets */,
+				31B144712408E71E005A2865 /* AppViewBuilder */,
+				31B1446C2408E71E005A2865 /* TestFeedController */,
+				31B144632408E71E005A2865 /* TestSingleController */,
 				6003F594195388D20070C39A /* Supporting Files */,
 			);
 			name = "Example for AdvanceSDK";
@@ -193,7 +340,6 @@
 				CE4684C5481FB52F323A4426 /* Pods-AdvanceSDK_Tests.debug.xcconfig */,
 				C0659F3B8009DD3C080E2003 /* Pods-AdvanceSDK_Tests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -208,7 +354,7 @@
 				6003F586195388D20070C39A /* Sources */,
 				6003F587195388D20070C39A /* Frameworks */,
 				6003F588195388D20070C39A /* Resources */,
-				3DAA5B6F3319CB339418B69C /* [CP] Embed Pods Frameworks */,
+				7825C87CC6722F811ABDEC3E /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -248,6 +394,9 @@
 				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = Cheng455153666;
 				TargetAttributes = {
+					6003F589195388D20070C39A = {
+						DevelopmentTeam = 5WDP5GLS3U;
+					};
 					6003F5AD195388D20070C39A = {
 						TestTargetID = 6003F589195388D20070C39A;
 					};
@@ -258,6 +407,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -281,6 +431,7 @@
 				71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */,
 				6003F5A9195388D20070C39A /* Images.xcassets in Resources */,
 				6003F598195388D20070C39A /* InfoPlist.strings in Resources */,
+				31B144992408E71E005A2865 /* cell01.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -317,24 +468,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		3DAA5B6F3319CB339418B69C /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-AdvanceSDK_Example/Pods-AdvanceSDK_Example-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/AdvanceSDK/AdvanceSDK.framework",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AdvanceSDK.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-AdvanceSDK_Example/Pods-AdvanceSDK_Example-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		4929D1A60817B5925A4F204A /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -357,6 +490,26 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		7825C87CC6722F811ABDEC3E /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-AdvanceSDK_Example/Pods-AdvanceSDK_Example-resources.sh",
+				"${PODS_ROOT}/Bytedance-UnionAD/Bytedance-UnionAd/Frameworks/BUAdSDK.bundle",
+				"${PODS_ROOT}/MercurySDK/MercurySDK/MercurySDKBundle.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/BUAdSDK.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MercurySDKBundle.bundle",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-AdvanceSDK_Example/Pods-AdvanceSDK_Example-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -364,9 +517,25 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				31B1449C2408E71E005A2865 /* BaseViewController.m in Sources */,
+				31B144932408E71E005A2865 /* JDStatusBarNotification.m in Sources */,
+				31B144922408E71E005A2865 /* ViewBuilder.m in Sources */,
+				31B144912408E71E005A2865 /* FeedExpressViewController.m in Sources */,
+				31B144962408E71E005A2865 /* JDStatusBarStyle.m in Sources */,
+				31B144902408E71E005A2865 /* BYFeedExpressViewController.m in Sources */,
+				31B1448F2408E71E005A2865 /* DemoBannerViewController.m in Sources */,
+				31B1448C2408E71E005A2865 /* DemoSplashViewController.m in Sources */,
 				6003F59E195388D20070C39A /* ADVANCEAppDelegate.m in Sources */,
+				31B144972408E71E005A2865 /* BYExamCellModel.m in Sources */,
 				6003F5A7195388D20070C39A /* ADVANCEViewController.m in Sources */,
+				31B1448D2408E71E005A2865 /* DemoRewardVideoViewController.m in Sources */,
+				31B144952408E71E005A2865 /* JDStatusBarLayoutMarginHelper.m in Sources */,
+				31B1449A2408E71E005A2865 /* ExamTableViewCell.m in Sources */,
+				31B1448E2408E71E005A2865 /* DemoInterstitialViewController.m in Sources */,
+				31B1449B2408E71E005A2865 /* DemoUtils.m in Sources */,
+				31B144942408E71E005A2865 /* JDStatusBarView.m in Sources */,
 				6003F59A195388D20070C39A /* main.m in Sources */,
+				31B144982408E71E005A2865 /* CellBuilder.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -494,6 +663,7 @@
 			baseConfigurationReference = 0FB18A5DAA171A55502E9407 /* Pods-AdvanceSDK_Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 5WDP5GLS3U;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AdvanceSDK/AdvanceSDK-Prefix.pch";
 				INFOPLIST_FILE = "AdvanceSDK/AdvanceSDK-Info.plist";
@@ -510,6 +680,7 @@
 			baseConfigurationReference = 19B4DCB70CF5FFF496339425 /* Pods-AdvanceSDK_Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 5WDP5GLS3U;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AdvanceSDK/AdvanceSDK-Prefix.pch";
 				INFOPLIST_FILE = "AdvanceSDK/AdvanceSDK-Info.plist";
