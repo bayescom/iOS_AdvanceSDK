@@ -1,0 +1,41 @@
+PODS:
+  - AdvanceSDK (3.0.2):
+    - AdvanceSDK/Core (= 3.0.2)
+    - AdvanceSDK/Mercury (= 3.0.2)
+  - AdvanceSDK/Core (3.0.2)
+  - AdvanceSDK/CSJ (3.0.2):
+    - Bytedance-UnionAD (~> 2.7.5.2)
+  - AdvanceSDK/GDT (3.0.2):
+    - GDTMobSDK (~> 4.11.2)
+  - AdvanceSDK/Mercury (3.0.2):
+    - MercurySDK (~> 3.0.2)
+  - Bytedance-UnionAD (2.7.5.2)
+  - GDTMobSDK (4.11.4):
+    - GDTMobSDK/GDTMobSDK (= 4.11.4)
+  - GDTMobSDK/GDTMobSDK (4.11.4)
+  - MercurySDK (3.0.2)
+
+DEPENDENCIES:
+  - AdvanceSDK (from `../`)
+  - AdvanceSDK/CSJ (from `../`)
+  - AdvanceSDK/GDT (from `../`)
+
+SPEC REPOS:
+  trunk:
+    - Bytedance-UnionAD
+    - GDTMobSDK
+    - MercurySDK
+
+EXTERNAL SOURCES:
+  AdvanceSDK:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  AdvanceSDK: 0830a5b22f7354f08ab5502f8e7ed8ed5de8ca11
+  Bytedance-UnionAD: e044ef9fd7dfa8b974ac6b0bd026788164a8be57
+  GDTMobSDK: 99a2c1ad44f346df5347e10f334dd3f949b86a1d
+  MercurySDK: b49d863f34322e5a33a3646843356da445b1bca0
+
+PODFILE CHECKSUM: 7c59c08441ceb93725d5b6d034f6150cb2a31adc
+
+COCOAPODS: 1.9.0.beta.3

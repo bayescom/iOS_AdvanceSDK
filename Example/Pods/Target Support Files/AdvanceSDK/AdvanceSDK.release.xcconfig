@@ -1,0 +1,13 @@
+CONFIGURATION_BUILD_DIR = ${PODS_CONFIGURATION_BUILD_DIR}/AdvanceSDK
+ENABLE_BITCODE = NO
+FRAMEWORK_SEARCH_PATHS = $(inherited) "${PODS_ROOT}/../../AdvanceSDK" "${PODS_ROOT}/Bytedance-UnionAD/Bytedance-UnionAd/Frameworks" "${PODS_ROOT}/MercurySDK/MercurySDK/Classes"
+GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
+HEADER_SEARCH_PATHS = $(inherited) "${PODS_ROOT}/Headers/Public"
+OTHER_LDFLAGS = $(inherited) -l"c++" -l"resolv.9" -l"sqlite3" -l"xml2" -l"z" -framework "AVFoundation" -framework "Accelerate" -framework "AdSupport" -framework "CoreLocation" -framework "CoreMedia" -framework "CoreMotion" -framework "CoreTelephony" -framework "Foundation" -framework "MapKit" -framework "MediaPlayer" -framework "MobileCoreServices" -framework "QuartzCore" -framework "Security" -framework "StoreKit" -framework "SystemConfiguration" -framework "UIKit" -framework "WebKit" -weak_framework "WebKit"
+PODS_BUILD_DIR = ${BUILD_DIR}
+PODS_CONFIGURATION_BUILD_DIR = ${PODS_BUILD_DIR}/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)
+PODS_ROOT = ${SRCROOT}
+PODS_TARGET_SRCROOT = ${PODS_ROOT}/../..
+PRODUCT_BUNDLE_IDENTIFIER = org.cocoapods.${PRODUCT_NAME:rfc1034identifier}
+SKIP_INSTALL = YES
+USE_RECURSIVE_SCRIPT_INPUTS_IN_SCRIPT_PHASES = YES
