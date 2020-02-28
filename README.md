@@ -1,6 +1,5 @@
 # AdvanceSDK
 
-[![CI Status](https://img.shields.io/travis/Cheng455153666/AdvanceSDK.svg?style=flat)](https://travis-ci.org/Cheng455153666/AdvanceSDK)
 [![Version](https://img.shields.io/cocoapods/v/AdvanceSDK.svg?style=flat)](https://cocoapods.org/pods/AdvanceSDK)
 [![License](https://img.shields.io/cocoapods/l/AdvanceSDK.svg?style=flat)](https://cocoapods.org/pods/AdvanceSDK)
 [![Platform](https://img.shields.io/cocoapods/p/AdvanceSDK.svg?style=flat)](https://cocoapods.org/pods/AdvanceSDK)
