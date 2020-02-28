@@ -1,9 +1,11 @@
 use_frameworks!
 
-platform :ios, '8.0'
+platform :ios, '9.0'
 
 target 'AdvanceSDK_Example' do
   pod 'AdvanceSDK', :path => '../'
+  pod 'AdvanceSDK/CSJ', :path => '../'
+  pod 'AdvanceSDK/GDT', :path => '../'
 
   target 'AdvanceSDK_Tests' do
     inherit! :search_paths
