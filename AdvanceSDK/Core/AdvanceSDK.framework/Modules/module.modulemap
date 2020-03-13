@@ -1,0 +1,6 @@
+framework module AdvanceSDK {
+  umbrella header "AdvanceSDK.h"
+
+  export *
+  module * { export * }
+}

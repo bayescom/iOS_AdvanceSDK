@@ -117,65 +117,64 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		132B35EEE1844D01837CC71287BA1136 /* GDTSDKDefines.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GDTSDKDefines.h; path = lib/GDTSDKDefines.h; sourceTree = "<group>"; };
-		133F85F1EE55EE90452926EFABC4072F /* GDTLogoView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GDTLogoView.h; path = lib/GDTLogoView.h; sourceTree = "<group>"; };
+		00834655C0AF5803A867DDB4754C6B8B /* GDTUnifiedNativeAdDataObject.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GDTUnifiedNativeAdDataObject.h; path = lib/GDTUnifiedNativeAdDataObject.h; sourceTree = "<group>"; };
 		1675384A70BB1D5D9341FB2B4D0C82EA /* Pods-AdvanceSDK_Example.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-AdvanceSDK_Example.modulemap"; sourceTree = "<group>"; };
-		18768B784D75834B8498D2C5D93A0B67 /* GDTMediaView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GDTMediaView.h; path = lib/GDTMediaView.h; sourceTree = "<group>"; };
 		1C0F0CCEDA6647E55016473D522F346A /* Pods-AdvanceSDK_Example-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-AdvanceSDK_Example-dummy.m"; sourceTree = "<group>"; };
-		1C38CD70D6878C5B9F1502DAAABA53C3 /* MercurySDK.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = MercurySDK.release.xcconfig; sourceTree = "<group>"; };
-		226DC4A9985374DCAA14D0ED368404E3 /* MercurySDK.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = MercurySDK.debug.xcconfig; sourceTree = "<group>"; };
+		230F78E1DAED5861B86843949C302F07 /* GDTSDKConfig.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GDTSDKConfig.h; path = lib/GDTSDKConfig.h; sourceTree = "<group>"; };
+		2715F85D82CC89629987233938AE2D54 /* GDTBaseAdNetworkAdapterProtocol.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GDTBaseAdNetworkAdapterProtocol.h; path = lib/GDTBaseAdNetworkAdapterProtocol.h; sourceTree = "<group>"; };
 		27A5B49AA06359C60FAA503C296E666F /* AdvanceSDK.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = AdvanceSDK.release.xcconfig; sourceTree = "<group>"; };
 		2AA3EA4FFC7E7522095D8D0374967A3C /* Pods_AdvanceSDK_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_AdvanceSDK_Tests.framework; path = "Pods-AdvanceSDK_Tests.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2B8E4D6B91E3F4E6D7838C3AF4C66765 /* Bytedance-UnionAD.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Bytedance-UnionAD.debug.xcconfig"; sourceTree = "<group>"; };
+		2FC0E5F0A6BEC48EF4AD3288B07FDF0D /* GDTLogoView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GDTLogoView.h; path = lib/GDTLogoView.h; sourceTree = "<group>"; };
 		3212113385A8FBBDB272BD23C409FF61 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS12.2.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		3472E9A697BAEA0DA2B1FB83B17D1027 /* GDTNativeAd.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GDTNativeAd.h; path = lib/GDTNativeAd.h; sourceTree = "<group>"; };
 		3591D60391A775A8BBF4885875EAAD55 /* Pods-AdvanceSDK_Tests-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-AdvanceSDK_Tests-Info.plist"; sourceTree = "<group>"; };
-		376E7DDB49594DA446647F59C88D178A /* AdvanceSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdvanceSDK.framework; path = AdvanceSDK/AdvanceSDK.framework; sourceTree = "<group>"; };
+		35D1D0552978E19CD1E77274F71AFBF5 /* GDTRewardVideoAd.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GDTRewardVideoAd.h; path = lib/GDTRewardVideoAd.h; sourceTree = "<group>"; };
 		379D2C41ED40639000EBC272D7B1FC01 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE; sourceTree = "<group>"; };
-		381410D62B4E578F8594ADE6E599910B /* GDTMobSDK.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = GDTMobSDK.debug.xcconfig; sourceTree = "<group>"; };
 		38CC190EE4BEC4D7DF56609174AB7BDB /* Pods-AdvanceSDK_Tests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-AdvanceSDK_Tests.modulemap"; sourceTree = "<group>"; };
+		38F26CD6CF3F2342D8BC137DAD660C60 /* GDTSplashAd.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GDTSplashAd.h; path = lib/GDTSplashAd.h; sourceTree = "<group>"; };
 		394FF6FB3DCF98F086F427A52EA991D3 /* Pods-AdvanceSDK_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-AdvanceSDK_Example.debug.xcconfig"; sourceTree = "<group>"; };
-		3A699ECE71B9F5A4FEDB25C59BBFC144 /* GDTRewardVideoAdNetworkConnectorProtocol.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GDTRewardVideoAdNetworkConnectorProtocol.h; path = lib/GDTRewardVideoAdNetworkConnectorProtocol.h; sourceTree = "<group>"; };
-		3FA97A8AB2D3AAC04012B08321D73D47 /* GDTRewardVideoAdNetworkAdapterProtocol.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GDTRewardVideoAdNetworkAdapterProtocol.h; path = lib/GDTRewardVideoAdNetworkAdapterProtocol.h; sourceTree = "<group>"; };
+		3A628C91CE4612ABDF87523C1C2CC86F /* GDTMobSDK.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = GDTMobSDK.debug.xcconfig; sourceTree = "<group>"; };
+		442CCB9F2FC0B528BE9366569082BE4D /* GDTMediaView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GDTMediaView.h; path = lib/GDTMediaView.h; sourceTree = "<group>"; };
+		4433C1B9152FF93301B3EDDB02F333F0 /* MercurySDK.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = MercurySDK.release.xcconfig; sourceTree = "<group>"; };
+		462B2BD595165F7F30DE83A4861516EF /* GDTNativeExpressAd.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GDTNativeExpressAd.h; path = lib/GDTNativeExpressAd.h; sourceTree = "<group>"; };
+		4FFEDBFBE3FC0390242CAEDAEF7071A3 /* MercurySDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MercurySDK.framework; path = MercurySDK/MercurySDK.framework; sourceTree = "<group>"; };
 		522E24A809E5FF7379D4F067EA23A35B /* Pods-AdvanceSDK_Example-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-AdvanceSDK_Example-acknowledgements.markdown"; sourceTree = "<group>"; };
-		53DE30FCFAB0B2EAAD49C9B20116A737 /* GDTVideoConfig.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GDTVideoConfig.h; path = lib/GDTVideoConfig.h; sourceTree = "<group>"; };
-		57B029E9A0A62EA50444533D56AD79F2 /* GDTMobSDK.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = GDTMobSDK.release.xcconfig; sourceTree = "<group>"; };
+		582674CD439821D8E67414A4FBFF6F94 /* GDTUnifiedNativeAd.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GDTUnifiedNativeAd.h; path = lib/GDTUnifiedNativeAd.h; sourceTree = "<group>"; };
+		5A02471BA7D0F1EC6A868ACF640770AA /* GDTHybridAd.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GDTHybridAd.h; path = lib/GDTHybridAd.h; sourceTree = "<group>"; };
 		5EA66183AE6F94CDC77B1E611F43D115 /* Pods-AdvanceSDK_Tests-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-AdvanceSDK_Tests-umbrella.h"; sourceTree = "<group>"; };
-		5EF2EDC23BE82FB19551E3DCEA132F0B /* GDTHybridAd.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GDTHybridAd.h; path = lib/GDTHybridAd.h; sourceTree = "<group>"; };
-		6161996A6C676DC95F0013574AE0FAD5 /* Bytedance-UnionAD.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Bytedance-UnionAD.debug.xcconfig"; sourceTree = "<group>"; };
+		6529982E35F79BEB0B56A2866E4DB7B6 /* GDTNativeAd.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GDTNativeAd.h; path = lib/GDTNativeAd.h; sourceTree = "<group>"; };
 		671F4AE95187949B35803D693578A954 /* Pods-AdvanceSDK_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-AdvanceSDK_Example.release.xcconfig"; sourceTree = "<group>"; };
-		68B7E6B49EF1269500719E7BFC465B85 /* GDTNativeExpressAd.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GDTNativeExpressAd.h; path = lib/GDTNativeExpressAd.h; sourceTree = "<group>"; };
+		68680F071900F32E5AF53CFF0837FF8C /* GDTUnifiedInterstitialAd.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GDTUnifiedInterstitialAd.h; path = lib/GDTUnifiedInterstitialAd.h; sourceTree = "<group>"; };
+		6F685C929C214A5FFDC1B95BFD038E98 /* AdvanceSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdvanceSDK.framework; path = AdvanceSDK/Core/AdvanceSDK.framework; sourceTree = "<group>"; };
 		7A877D1FD151A6F62DC9DCE7265EB61B /* Pods-AdvanceSDK_Tests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-AdvanceSDK_Tests-acknowledgements.markdown"; sourceTree = "<group>"; };
 		7BA3521E733DCD2A8348DE85B57090F5 /* Pods-AdvanceSDK_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-AdvanceSDK_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		7BEF3A50820B410CE22B81524803A4D3 /* Pods-AdvanceSDK_Tests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-AdvanceSDK_Tests-dummy.m"; sourceTree = "<group>"; };
 		7CCBDD62CD56EEBB616525A9D7DE0DBF /* Pods-AdvanceSDK_Example-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-AdvanceSDK_Example-resources.sh"; sourceTree = "<group>"; };
 		7DDF6366468039C67AD9D2C3E80EE346 /* Pods-AdvanceSDK_Tests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-AdvanceSDK_Tests-acknowledgements.plist"; sourceTree = "<group>"; };
-		856E2D9C60334DC762E28B8F0BD018CB /* GDTSplashAd.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GDTSplashAd.h; path = lib/GDTSplashAd.h; sourceTree = "<group>"; };
-		97BB2C7582BFE35D1C43ABCE4429DBB5 /* libGDTMobSDK.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libGDTMobSDK.a; path = lib/libGDTMobSDK.a; sourceTree = "<group>"; };
-		9C02A91B5AAA60971618D5868489633F /* BUAdSDK.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; name = BUAdSDK.bundle; path = "Bytedance-UnionAd/Frameworks/BUAdSDK.bundle"; sourceTree = "<group>"; };
-		9CEBE563F29197D4B6972308E9991937 /* GDTUnifiedNativeAd.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GDTUnifiedNativeAd.h; path = lib/GDTUnifiedNativeAd.h; sourceTree = "<group>"; };
+		7E31AFB01D5C3B5E17EFB1B3FC3BE906 /* GDTVideoConfig.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GDTVideoConfig.h; path = lib/GDTVideoConfig.h; sourceTree = "<group>"; };
+		81993495F7F853C57043F71B2622AB2E /* BUAdSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BUAdSDK.framework; path = "Bytedance-UnionAd/Frameworks/BUAdSDK.framework"; sourceTree = "<group>"; };
+		8272EE4E651D4BC10E880235AB943D15 /* GDTMobBannerView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GDTMobBannerView.h; path = lib/GDTMobBannerView.h; sourceTree = "<group>"; };
+		9087E181B7027CE8CAB21B6E85784A84 /* GDTUnifiedBannerView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GDTUnifiedBannerView.h; path = lib/GDTUnifiedBannerView.h; sourceTree = "<group>"; };
+		93C75FA947D8F4372F9C3824EC27F7D0 /* BUAdSDK.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; name = BUAdSDK.bundle; path = "Bytedance-UnionAd/Frameworks/BUAdSDK.bundle"; sourceTree = "<group>"; };
 		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		9F654200BF968FEA1E09209830C0C73A /* AdvanceSDK.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = AdvanceSDK.debug.xcconfig; sourceTree = "<group>"; };
-		A4E631480EF758488A388894EB0EED8F /* MercurySDKBundle.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; name = MercurySDKBundle.bundle; path = MercurySDK/MercurySDKBundle.bundle; sourceTree = "<group>"; };
+		A17FA3C7170F89CF45A07884E30DC4F9 /* Bytedance-UnionAD.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Bytedance-UnionAD.release.xcconfig"; sourceTree = "<group>"; };
+		A33A938A09899EB9DDD40956938884DB /* GDTRewardVideoAdNetworkAdapterProtocol.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GDTRewardVideoAdNetworkAdapterProtocol.h; path = lib/GDTRewardVideoAdNetworkAdapterProtocol.h; sourceTree = "<group>"; };
 		A5F5FA39B1860EA90B0EFEB292D92AE0 /* Pods-AdvanceSDK_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-AdvanceSDK_Tests.release.xcconfig"; sourceTree = "<group>"; };
-		A996D4E369C54EB57AF94057B1B0A8E7 /* GDTBaseAdNetworkAdapterProtocol.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GDTBaseAdNetworkAdapterProtocol.h; path = lib/GDTBaseAdNetworkAdapterProtocol.h; sourceTree = "<group>"; };
-		ACD31F294BD3A647DD07C99AA238C379 /* GDTNativeExpressAdView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GDTNativeExpressAdView.h; path = lib/GDTNativeExpressAdView.h; sourceTree = "<group>"; };
+		A953BA905032A242F0FE7D750799AD9D /* libGDTMobSDK.a */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = archive.ar; name = libGDTMobSDK.a; path = lib/libGDTMobSDK.a; sourceTree = "<group>"; };
+		AB6DA9FC9C9F0F63BEC72D87F392406D /* GDTRewardVideoAdNetworkConnectorProtocol.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GDTRewardVideoAdNetworkConnectorProtocol.h; path = lib/GDTRewardVideoAdNetworkConnectorProtocol.h; sourceTree = "<group>"; };
 		AE87219249DE4708B7D37FFDFA8681A7 /* Pods_AdvanceSDK_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_AdvanceSDK_Example.framework; path = "Pods-AdvanceSDK_Example.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
-		B3DBDF1FED595925C28A64542A8D00AB /* GDTSDKConfig.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GDTSDKConfig.h; path = lib/GDTSDKConfig.h; sourceTree = "<group>"; };
-		B6AF9B89194ED2E3ABBC76499D0FA020 /* GDTUnifiedBannerView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GDTUnifiedBannerView.h; path = lib/GDTUnifiedBannerView.h; sourceTree = "<group>"; };
+		BAAD5A825CFDC2EEEDF202210346491D /* GDTSDKDefines.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GDTSDKDefines.h; path = lib/GDTSDKDefines.h; sourceTree = "<group>"; };
 		BC6C07FAA1097A805EE4769BE3D36E3D /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
-		C02552DCC7E7FDE26A3E147AF04B5C99 /* GDTMobInterstitial.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GDTMobInterstitial.h; path = lib/GDTMobInterstitial.h; sourceTree = "<group>"; };
-		C1BE268FDD9B7A0F65706D7237E29D86 /* GDTUnifiedInterstitialAd.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GDTUnifiedInterstitialAd.h; path = lib/GDTUnifiedInterstitialAd.h; sourceTree = "<group>"; };
 		C39B45CD0EBFA7D38A8768BAAC989BEF /* Pods-AdvanceSDK_Example-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-AdvanceSDK_Example-umbrella.h"; sourceTree = "<group>"; };
-		C5A1BBA2CADEB441DBFD35265875A8C5 /* MercurySDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MercurySDK.framework; path = MercurySDK/Classes/MercurySDK.framework; sourceTree = "<group>"; };
-		C67408635CA20EAADD984B7ABF2172EA /* GDTUnifiedNativeAdDataObject.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GDTUnifiedNativeAdDataObject.h; path = lib/GDTUnifiedNativeAdDataObject.h; sourceTree = "<group>"; };
 		C810E50585AB4B0273F1B97973A97B9C /* Pods-AdvanceSDK_Example-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-AdvanceSDK_Example-Info.plist"; sourceTree = "<group>"; };
-		C87334644EF28768620FCDC6631103E5 /* Bytedance-UnionAD.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Bytedance-UnionAD.release.xcconfig"; sourceTree = "<group>"; };
-		CC39253D271739B7434234EDA2B70A1A /* GDTMobBannerView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GDTMobBannerView.h; path = lib/GDTMobBannerView.h; sourceTree = "<group>"; };
-		CE2913ED8603B54497B8D8FEBD8096C1 /* GDTRewardVideoAd.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GDTRewardVideoAd.h; path = lib/GDTRewardVideoAd.h; sourceTree = "<group>"; };
 		D5D7BB9237C5AFD02A789CD2E6D92317 /* AdvanceSDK.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = AdvanceSDK.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		F18FBF85ED3BBD08C7D35B910E875A01 /* BUAdSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BUAdSDK.framework; path = "Bytedance-UnionAd/Frameworks/BUAdSDK.framework"; sourceTree = "<group>"; };
-		F489804751B095EC2F15CB77ACDA67E9 /* GDTUnifiedNativeAdView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GDTUnifiedNativeAdView.h; path = lib/GDTUnifiedNativeAdView.h; sourceTree = "<group>"; };
+		DA0DBD1817DA8FACCE19A79178E2BBD7 /* GDTMobSDK.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = GDTMobSDK.release.xcconfig; sourceTree = "<group>"; };
+		E4DF7234DA41F0BFFD88C5DD20C41A37 /* GDTNativeExpressAdView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GDTNativeExpressAdView.h; path = lib/GDTNativeExpressAdView.h; sourceTree = "<group>"; };
+		E8CFF8221F4034C9E990A514B6CEECA6 /* MercurySDK.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = MercurySDK.debug.xcconfig; sourceTree = "<group>"; };
+		F84797F5A80B4A16412AAB4B9D7549E3 /* GDTUnifiedNativeAdView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GDTUnifiedNativeAdView.h; path = lib/GDTUnifiedNativeAdView.h; sourceTree = "<group>"; };
 		F8CEC8BF6D266E0DDCF03F12BBCDF3D7 /* Pods-AdvanceSDK_Example-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-AdvanceSDK_Example-acknowledgements.plist"; sourceTree = "<group>"; };
+		FD2E57104AFDC810BAA434F64C06D96D /* GDTMobInterstitial.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GDTMobInterstitial.h; path = lib/GDTMobInterstitial.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -198,41 +197,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		0BCCFAD6FB50070C89526D8A6395C860 /* Frameworks */ = {
+		2D4BB2D69F29A7C7745775368CD6DDA1 /* Support Files */ = {
 			isa = PBXGroup;
 			children = (
-				F18FBF85ED3BBD08C7D35B910E875A01 /* BUAdSDK.framework */,
+				E8CFF8221F4034C9E990A514B6CEECA6 /* MercurySDK.debug.xcconfig */,
+				4433C1B9152FF93301B3EDDB02F333F0 /* MercurySDK.release.xcconfig */,
 			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		20BCA602FE5CB1D662C9D2DF4697E851 /* MercurySDK */ = {
-			isa = PBXGroup;
-			children = (
-				2DE734BB0CC270E1B726815918FE6D1B /* Frameworks */,
-				99541E45DBCD02BFDFA128A753B4632C /* Resources */,
-				88C7A1B7A47CAF843C509DF2E14840A4 /* Support Files */,
-			);
-			name = MercurySDK;
-			path = MercurySDK;
-			sourceTree = "<group>";
-		};
-		23C8E3B251E2BE14500F96D22AD87199 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				3A359D309B27EAE8437D41F72927915C /* Bytedance-UnionAD */,
-				389CDF323F172554CD59D8D95E80DE36 /* GDTMobSDK */,
-				20BCA602FE5CB1D662C9D2DF4697E851 /* MercurySDK */,
-			);
-			name = Pods;
-			sourceTree = "<group>";
-		};
-		2DE734BB0CC270E1B726815918FE6D1B /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				C5A1BBA2CADEB441DBFD35265875A8C5 /* MercurySDK.framework */,
-			);
-			name = Frameworks;
+			name = "Support Files";
+			path = "../Target Support Files/MercurySDK";
 			sourceTree = "<group>";
 		};
 		2ECDA2DEB3D02325CA800D7F2200BAB6 /* Development Pods */ = {
@@ -243,31 +215,10 @@
 			name = "Development Pods";
 			sourceTree = "<group>";
 		};
-		389CDF323F172554CD59D8D95E80DE36 /* GDTMobSDK */ = {
-			isa = PBXGroup;
-			children = (
-				DAB26C68E240AA85A7021795DF82DDEF /* GDTMobSDK */,
-				7DBB628152D41C6C0A3B9AA698819BB7 /* Support Files */,
-			);
-			name = GDTMobSDK;
-			path = GDTMobSDK;
-			sourceTree = "<group>";
-		};
-		3A359D309B27EAE8437D41F72927915C /* Bytedance-UnionAD */ = {
-			isa = PBXGroup;
-			children = (
-				0BCCFAD6FB50070C89526D8A6395C860 /* Frameworks */,
-				FB44FE0725B5E9433DC3D7397287AF88 /* Resources */,
-				FAC24F4D007A05FAEBE22BB9C4A05DE6 /* Support Files */,
-			);
-			name = "Bytedance-UnionAD";
-			path = "Bytedance-UnionAD";
-			sourceTree = "<group>";
-		};
 		4545AF5B796067CC32B4D8A958F30EF0 /* Core */ = {
 			isa = PBXGroup;
 			children = (
-				BD5BC2F4299C8D0B380B8E9F5B7154C4 /* Frameworks */,
+				B33F5A35828A138CD9D8D56825B1CC85 /* Frameworks */,
 			);
 			name = Core;
 			sourceTree = "<group>";
@@ -281,14 +232,79 @@
 			name = "Targets Support Files";
 			sourceTree = "<group>";
 		};
-		7DBB628152D41C6C0A3B9AA698819BB7 /* Support Files */ = {
+		5033247CEF48160BD852FA806F75C5D3 /* GDTMobSDK */ = {
 			isa = PBXGroup;
 			children = (
-				381410D62B4E578F8594ADE6E599910B /* GDTMobSDK.debug.xcconfig */,
-				57B029E9A0A62EA50444533D56AD79F2 /* GDTMobSDK.release.xcconfig */,
+				2715F85D82CC89629987233938AE2D54 /* GDTBaseAdNetworkAdapterProtocol.h */,
+				5A02471BA7D0F1EC6A868ACF640770AA /* GDTHybridAd.h */,
+				2FC0E5F0A6BEC48EF4AD3288B07FDF0D /* GDTLogoView.h */,
+				442CCB9F2FC0B528BE9366569082BE4D /* GDTMediaView.h */,
+				8272EE4E651D4BC10E880235AB943D15 /* GDTMobBannerView.h */,
+				FD2E57104AFDC810BAA434F64C06D96D /* GDTMobInterstitial.h */,
+				6529982E35F79BEB0B56A2866E4DB7B6 /* GDTNativeAd.h */,
+				462B2BD595165F7F30DE83A4861516EF /* GDTNativeExpressAd.h */,
+				E4DF7234DA41F0BFFD88C5DD20C41A37 /* GDTNativeExpressAdView.h */,
+				35D1D0552978E19CD1E77274F71AFBF5 /* GDTRewardVideoAd.h */,
+				A33A938A09899EB9DDD40956938884DB /* GDTRewardVideoAdNetworkAdapterProtocol.h */,
+				AB6DA9FC9C9F0F63BEC72D87F392406D /* GDTRewardVideoAdNetworkConnectorProtocol.h */,
+				230F78E1DAED5861B86843949C302F07 /* GDTSDKConfig.h */,
+				BAAD5A825CFDC2EEEDF202210346491D /* GDTSDKDefines.h */,
+				38F26CD6CF3F2342D8BC137DAD660C60 /* GDTSplashAd.h */,
+				9087E181B7027CE8CAB21B6E85784A84 /* GDTUnifiedBannerView.h */,
+				68680F071900F32E5AF53CFF0837FF8C /* GDTUnifiedInterstitialAd.h */,
+				582674CD439821D8E67414A4FBFF6F94 /* GDTUnifiedNativeAd.h */,
+				00834655C0AF5803A867DDB4754C6B8B /* GDTUnifiedNativeAdDataObject.h */,
+				F84797F5A80B4A16412AAB4B9D7549E3 /* GDTUnifiedNativeAdView.h */,
+				7E31AFB01D5C3B5E17EFB1B3FC3BE906 /* GDTVideoConfig.h */,
+				AC1A7B8FDFFFC59F6CF28D1BB1AEBA6F /* Frameworks */,
+			);
+			name = GDTMobSDK;
+			sourceTree = "<group>";
+		};
+		56D3FA0F88A38A7091C320D918AC5483 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				93C75FA947D8F4372F9C3824EC27F7D0 /* BUAdSDK.bundle */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		5A8F4A3D7A23B4BD2F88DC31EFDDBC03 /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				3A628C91CE4612ABDF87523C1C2CC86F /* GDTMobSDK.debug.xcconfig */,
+				DA0DBD1817DA8FACCE19A79178E2BBD7 /* GDTMobSDK.release.xcconfig */,
 			);
 			name = "Support Files";
 			path = "../Target Support Files/GDTMobSDK";
+			sourceTree = "<group>";
+		};
+		5FDB9099850A45F1CF94B1A824935F77 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				81993495F7F853C57043F71B2622AB2E /* BUAdSDK.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		7F698D7F9932CEDF52942F6115CDA909 /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				2B8E4D6B91E3F4E6D7838C3AF4C66765 /* Bytedance-UnionAD.debug.xcconfig */,
+				A17FA3C7170F89CF45A07884E30DC4F9 /* Bytedance-UnionAD.release.xcconfig */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/Bytedance-UnionAD";
+			sourceTree = "<group>";
+		};
+		827F273CCB23E70D225B6F7D2BCCAC84 /* MercurySDK */ = {
+			isa = PBXGroup;
+			children = (
+				CFEEAD6886D95AE929737FA986E0E87A /* Frameworks */,
+				2D4BB2D69F29A7C7745775368CD6DDA1 /* Support Files */,
+			);
+			name = MercurySDK;
+			path = MercurySDK;
 			sourceTree = "<group>";
 		};
 		84365DFB0F66558344BA175AD078FD95 /* Support Files */ = {
@@ -310,22 +326,33 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		88C7A1B7A47CAF843C509DF2E14840A4 /* Support Files */ = {
+		964B950EFD02175728D6FEC9C59FDBB7 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				226DC4A9985374DCAA14D0ED368404E3 /* MercurySDK.debug.xcconfig */,
-				1C38CD70D6878C5B9F1502DAAABA53C3 /* MercurySDK.release.xcconfig */,
+				9D805016D5711E300F045332417CEF25 /* Bytedance-UnionAD */,
+				D3FFD36F303CFBADE42DD0B5DF2B2144 /* GDTMobSDK */,
+				827F273CCB23E70D225B6F7D2BCCAC84 /* MercurySDK */,
 			);
-			name = "Support Files";
-			path = "../Target Support Files/MercurySDK";
+			name = Pods;
 			sourceTree = "<group>";
 		};
-		99541E45DBCD02BFDFA128A753B4632C /* Resources */ = {
+		9D805016D5711E300F045332417CEF25 /* Bytedance-UnionAD */ = {
 			isa = PBXGroup;
 			children = (
-				A4E631480EF758488A388894EB0EED8F /* MercurySDKBundle.bundle */,
+				5FDB9099850A45F1CF94B1A824935F77 /* Frameworks */,
+				56D3FA0F88A38A7091C320D918AC5483 /* Resources */,
+				7F698D7F9932CEDF52942F6115CDA909 /* Support Files */,
 			);
-			name = Resources;
+			name = "Bytedance-UnionAD";
+			path = "Bytedance-UnionAD";
+			sourceTree = "<group>";
+		};
+		AC1A7B8FDFFFC59F6CF28D1BB1AEBA6F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A953BA905032A242F0FE7D750799AD9D /* libGDTMobSDK.a */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		AF7C2979A76B32E39D970F8BF1D5AF03 /* Pod */ = {
@@ -338,10 +365,10 @@
 			name = Pod;
 			sourceTree = "<group>";
 		};
-		B048926504F84CD2B23061F336696931 /* Frameworks */ = {
+		B33F5A35828A138CD9D8D56825B1CC85 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				97BB2C7582BFE35D1C43ABCE4429DBB5 /* libGDTMobSDK.a */,
+				6F685C929C214A5FFDC1B95BFD038E98 /* AdvanceSDK.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -363,14 +390,6 @@
 			path = "Target Support Files/Pods-AdvanceSDK_Example";
 			sourceTree = "<group>";
 		};
-		BD5BC2F4299C8D0B380B8E9F5B7154C4 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				376E7DDB49594DA446647F59C88D178A /* AdvanceSDK.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 		C0834CEBB1379A84116EF29F93051C60 /* iOS */ = {
 			isa = PBXGroup;
 			children = (
@@ -385,10 +404,18 @@
 				9D940727FF8FB9C785EB98E56350EF41 /* Podfile */,
 				2ECDA2DEB3D02325CA800D7F2200BAB6 /* Development Pods */,
 				D210D550F4EA176C3123ED886F8F87F5 /* Frameworks */,
-				23C8E3B251E2BE14500F96D22AD87199 /* Pods */,
+				964B950EFD02175728D6FEC9C59FDBB7 /* Pods */,
 				85BBA45F0DA20DF6CAF13181EF122D90 /* Products */,
 				4DEF5356F357426073BD2F48D297EE4A /* Targets Support Files */,
 			);
+			sourceTree = "<group>";
+		};
+		CFEEAD6886D95AE929737FA986E0E87A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				4FFEDBFBE3FC0390242CAEDAEF7071A3 /* MercurySDK.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		D210D550F4EA176C3123ED886F8F87F5 /* Frameworks */ = {
@@ -410,33 +437,14 @@
 			path = ../..;
 			sourceTree = "<group>";
 		};
-		DAB26C68E240AA85A7021795DF82DDEF /* GDTMobSDK */ = {
+		D3FFD36F303CFBADE42DD0B5DF2B2144 /* GDTMobSDK */ = {
 			isa = PBXGroup;
 			children = (
-				A996D4E369C54EB57AF94057B1B0A8E7 /* GDTBaseAdNetworkAdapterProtocol.h */,
-				5EF2EDC23BE82FB19551E3DCEA132F0B /* GDTHybridAd.h */,
-				133F85F1EE55EE90452926EFABC4072F /* GDTLogoView.h */,
-				18768B784D75834B8498D2C5D93A0B67 /* GDTMediaView.h */,
-				CC39253D271739B7434234EDA2B70A1A /* GDTMobBannerView.h */,
-				C02552DCC7E7FDE26A3E147AF04B5C99 /* GDTMobInterstitial.h */,
-				3472E9A697BAEA0DA2B1FB83B17D1027 /* GDTNativeAd.h */,
-				68B7E6B49EF1269500719E7BFC465B85 /* GDTNativeExpressAd.h */,
-				ACD31F294BD3A647DD07C99AA238C379 /* GDTNativeExpressAdView.h */,
-				CE2913ED8603B54497B8D8FEBD8096C1 /* GDTRewardVideoAd.h */,
-				3FA97A8AB2D3AAC04012B08321D73D47 /* GDTRewardVideoAdNetworkAdapterProtocol.h */,
-				3A699ECE71B9F5A4FEDB25C59BBFC144 /* GDTRewardVideoAdNetworkConnectorProtocol.h */,
-				B3DBDF1FED595925C28A64542A8D00AB /* GDTSDKConfig.h */,
-				132B35EEE1844D01837CC71287BA1136 /* GDTSDKDefines.h */,
-				856E2D9C60334DC762E28B8F0BD018CB /* GDTSplashAd.h */,
-				B6AF9B89194ED2E3ABBC76499D0FA020 /* GDTUnifiedBannerView.h */,
-				C1BE268FDD9B7A0F65706D7237E29D86 /* GDTUnifiedInterstitialAd.h */,
-				9CEBE563F29197D4B6972308E9991937 /* GDTUnifiedNativeAd.h */,
-				C67408635CA20EAADD984B7ABF2172EA /* GDTUnifiedNativeAdDataObject.h */,
-				F489804751B095EC2F15CB77ACDA67E9 /* GDTUnifiedNativeAdView.h */,
-				53DE30FCFAB0B2EAAD49C9B20116A737 /* GDTVideoConfig.h */,
-				B048926504F84CD2B23061F336696931 /* Frameworks */,
+				5033247CEF48160BD852FA806F75C5D3 /* GDTMobSDK */,
+				5A8F4A3D7A23B4BD2F88DC31EFDDBC03 /* Support Files */,
 			);
 			name = GDTMobSDK;
+			path = GDTMobSDK;
 			sourceTree = "<group>";
 		};
 		F79E857F9DAABF959E23FA856B01631D /* Pods-AdvanceSDK_Tests */ = {
@@ -453,24 +461,6 @@
 			);
 			name = "Pods-AdvanceSDK_Tests";
 			path = "Target Support Files/Pods-AdvanceSDK_Tests";
-			sourceTree = "<group>";
-		};
-		FAC24F4D007A05FAEBE22BB9C4A05DE6 /* Support Files */ = {
-			isa = PBXGroup;
-			children = (
-				6161996A6C676DC95F0013574AE0FAD5 /* Bytedance-UnionAD.debug.xcconfig */,
-				C87334644EF28768620FCDC6631103E5 /* Bytedance-UnionAD.release.xcconfig */,
-			);
-			name = "Support Files";
-			path = "../Target Support Files/Bytedance-UnionAD";
-			sourceTree = "<group>";
-		};
-		FB44FE0725B5E9433DC3D7397287AF88 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				9C02A91B5AAA60971618D5868489633F /* BUAdSDK.bundle */,
-			);
-			name = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -658,7 +648,7 @@
 /* Begin XCBuildConfiguration section */
 		009F833FB9680990B3020B2676E36E05 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 381410D62B4E578F8594ADE6E599910B /* GDTMobSDK.debug.xcconfig */;
+			baseConfigurationReference = 3A628C91CE4612ABDF87523C1C2CC86F /* GDTMobSDK.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -669,13 +659,26 @@
 			};
 			name = Debug;
 		};
-		20FFC19202E42F73C6961C49FC0A79A9 /* Release */ = {
+		14060FA79B6D6244152696B6865FA5D4 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1C38CD70D6878C5B9F1502DAAABA53C3 /* MercurySDK.release.xcconfig */;
+			baseConfigurationReference = E8CFF8221F4034C9E990A514B6CEECA6 /* MercurySDK.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		161BF81581EB3B47BD7B69B1F8CDF63B /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4433C1B9152FF93301B3EDDB02F333F0 /* MercurySDK.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -749,19 +752,6 @@
 				VERSION_INFO_PREFIX = "";
 			};
 			name = Release;
-		};
-		5C075A909BDDDACBAADE6EFA7CB351CC /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 226DC4A9985374DCAA14D0ED368404E3 /* MercurySDK.debug.xcconfig */;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
 		};
 		6BDDC75520FF71343C69EE4E45463098 /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -845,7 +835,7 @@
 		};
 		8DF59A86867BB3D9784A1C998C987B23 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C87334644EF28768620FCDC6631103E5 /* Bytedance-UnionAD.release.xcconfig */;
+			baseConfigurationReference = A17FA3C7170F89CF45A07884E30DC4F9 /* Bytedance-UnionAD.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -983,7 +973,7 @@
 		};
 		AC23C9E068C8017521853A3691FE9DBE /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6161996A6C676DC95F0013574AE0FAD5 /* Bytedance-UnionAD.debug.xcconfig */;
+			baseConfigurationReference = 2B8E4D6B91E3F4E6D7838C3AF4C66765 /* Bytedance-UnionAD.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -996,7 +986,7 @@
 		};
 		E13F21464CD86B8EFF798C0CBAB29F88 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 57B029E9A0A62EA50444533D56AD79F2 /* GDTMobSDK.release.xcconfig */;
+			baseConfigurationReference = DA0DBD1817DA8FACCE19A79178E2BBD7 /* GDTMobSDK.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -1082,8 +1072,8 @@
 		F976B840D8DD65BF2B3709B2248E1D0B /* Build configuration list for PBXAggregateTarget "MercurySDK" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				5C075A909BDDDACBAADE6EFA7CB351CC /* Debug */,
-				20FFC19202E42F73C6961C49FC0A79A9 /* Release */,
+				14060FA79B6D6244152696B6865FA5D4 /* Debug */,
+				161BF81581EB3B47BD7B69B1F8CDF63B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
