@@ -30,8 +30,11 @@ NS_ASSUME_NONNULL_BEGIN
 /// 广告点击
 - (void)advanceSplashOnAdClicked;
 
-/// 广告关闭
-- (void)advanceSplashOnAdClosed;
+/// 广告点击跳过
+- (void)advanceSplashOnAdSkipClicked;
+
+/// 广告倒计时结束回调
+- (void)advanceSplashOnAdCountdownToZero;
 
 @end
 

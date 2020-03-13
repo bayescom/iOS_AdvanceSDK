@@ -57,6 +57,9 @@ extern NSString * const AdvanceSDKConfigMercuryMediaKey;
 
 /// Mercury 是否开启日志打印，默认 NO
 extern NSString * const AdvanceSDKConfigMercuryOpenDebug;
+///// 是否打开预缓存，默认NO
+//extern NSString * const AdvanceSDKConfigMercuryOpenRreload;
+
 // MARK: ======================= 广点通配置 Key =======================
 /// 广点通 是否开启GPS
 extern NSString * const AdvanceSDKConfigGDTEnableGPS;
@@ -83,6 +86,7 @@ extern NSString * const AdvanceSDKConfigGDTSdkType;
 //    999：其他
 extern NSString * const AdvanceSDKConfigGDTChannel;
 // MARK: ======================= SDK =======================
+extern NSString *const AdvanceSdkAPIVersion;
 extern NSString *const AdvanceSdkVersion;
 extern NSString *const AdvanceSdkRequestUrl;
 extern NSString *const AdvanceReportDataUrl;
@@ -99,6 +103,8 @@ extern int const ADVANCE_ERROR;
 
 
 @interface AdvanceSdkConfig : NSObject
+/// SDK版本
++ (NSString *)sdkVersion;
 
 + (instancetype)shareInstance;
 
