@@ -7,6 +7,8 @@
 //
 
 #import "ADVANCEViewController.h"
+//#import <BUAdSDK/BUAdSDK.h>
+//#import <BUAdSDK/BUNativeExpressSplashView.h>
 
 @interface ADVANCEViewController () <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong) UITableView *tableView;
@@ -19,6 +21,11 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+//    BUNativeExpressSplashView *res = [[BUNativeExpressSplashView alloc] initWithFrame:CGRectZero];
+//    NSLog(@"%@", res);
+//    NSLog(@"%@", [NSClassFromString(@"BUNativeExpressSplashView") class]);
+//    NSLog(@"%@", [NSClassFromString(@"GDTSplashAd") class]);
     
     [self initSubviews];
     

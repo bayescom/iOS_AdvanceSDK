@@ -69,9 +69,14 @@
     [DemoUtils showToast:@"广告点击"];
 }
 
-/// 广告关闭
-- (void)advanceSplashOnAdClosed {
-    [DemoUtils showToast:@"广告关闭"];
+/// 广告点击跳过
+- (void)advanceSplashOnAdSkipClicked {
+    [DemoUtils showToast:@"广告点击跳过"];
+}
+
+/// 广告倒计时结束
+- (void)advanceSplashOnAdCountdownToZero {
+    [DemoUtils showToast:@"广告倒计时结束"];
 }
 
 @end
