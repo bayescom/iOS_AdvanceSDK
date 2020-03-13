@@ -4,6 +4,7 @@ platform :ios, '9.0'
 
 target 'AdvanceSDK_Example' do
   pod 'AdvanceSDK', :path => '../'
+  pod 'AdvanceSDK/Mercury', :path => '../'
   pod 'AdvanceSDK/CSJ', :path => '../'
   pod 'AdvanceSDK/GDT', :path => '../'
 

@@ -148,14 +148,14 @@
 		31B144632408E71E005A2865 /* TestSingleController */ = {
 			isa = PBXGroup;
 			children = (
-				31B144642408E71E005A2865 /* DemoSplashViewController.m */,
-				31B144652408E71E005A2865 /* DemoInterstitialViewController.h */,
 				31B144662408E71E005A2865 /* DemoBannerViewController.h */,
-				31B144672408E71E005A2865 /* DemoRewardVideoViewController.m */,
-				31B144682408E71E005A2865 /* DemoInterstitialViewController.m */,
-				31B144692408E71E005A2865 /* DemoSplashViewController.h */,
-				31B1446A2408E71E005A2865 /* DemoRewardVideoViewController.h */,
 				31B1446B2408E71E005A2865 /* DemoBannerViewController.m */,
+				31B144652408E71E005A2865 /* DemoInterstitialViewController.h */,
+				31B144682408E71E005A2865 /* DemoInterstitialViewController.m */,
+				31B1446A2408E71E005A2865 /* DemoRewardVideoViewController.h */,
+				31B144672408E71E005A2865 /* DemoRewardVideoViewController.m */,
+				31B144692408E71E005A2865 /* DemoSplashViewController.h */,
+				31B144642408E71E005A2865 /* DemoSplashViewController.m */,
 			);
 			path = TestSingleController;
 			sourceTree = "<group>";
@@ -354,7 +354,7 @@
 				6003F586195388D20070C39A /* Sources */,
 				6003F587195388D20070C39A /* Frameworks */,
 				6003F588195388D20070C39A /* Resources */,
-				7825C87CC6722F811ABDEC3E /* [CP] Copy Pods Resources */,
+				736FF783573B88BEFA14CAC0 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -490,7 +490,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		7825C87CC6722F811ABDEC3E /* [CP] Copy Pods Resources */ = {
+		736FF783573B88BEFA14CAC0 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -498,12 +498,10 @@
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-AdvanceSDK_Example/Pods-AdvanceSDK_Example-resources.sh",
 				"${PODS_ROOT}/Bytedance-UnionAD/Bytedance-UnionAd/Frameworks/BUAdSDK.bundle",
-				"${PODS_ROOT}/MercurySDK/MercurySDK/MercurySDKBundle.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/BUAdSDK.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MercurySDKBundle.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -618,7 +616,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -651,7 +649,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -667,6 +665,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AdvanceSDK/AdvanceSDK-Prefix.pch";
 				INFOPLIST_FILE = "AdvanceSDK/AdvanceSDK-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -684,6 +683,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AdvanceSDK/AdvanceSDK-Prefix.pch";
 				INFOPLIST_FILE = "AdvanceSDK/AdvanceSDK-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";

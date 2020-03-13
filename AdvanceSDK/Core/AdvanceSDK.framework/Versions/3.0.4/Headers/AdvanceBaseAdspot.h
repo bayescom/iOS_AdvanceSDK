@@ -40,5 +40,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initWithMediaId:(NSString *)mediaid
                        adspotId:(NSString *)adspotid;
 
-NS_ASSUME_NONNULL_END
+
 @end
+NS_ASSUME_NONNULL_END

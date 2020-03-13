@@ -9,6 +9,24 @@
 #import "BaseViewController.h"
 #import "ViewBuilder.h"
 
+/// 是否是刘海屏
+static inline BOOL adv_IsIPhoneXSeries() {
+    if (@available(iOS 11.0, *)) {
+        UIWindow *mainWindow;
+        if (@available(iOS 13, *)) {
+            mainWindow = UIApplication.sharedApplication.windows.firstObject;
+        } else {
+            mainWindow = UIApplication.sharedApplication.keyWindow;
+        }
+        if (mainWindow.safeAreaInsets.bottom > 0.0) {
+            return YES;
+        }
+    }
+    return NO;
+}
+
+#define kNavTopH 0//(adv_IsIPhoneXSeries()?88:64)
+
 @interface BaseViewController () <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong) UIView *_v1;
 @property (nonatomic, strong) UIView *_v2;
@@ -35,6 +53,7 @@
     
     UIBarButtonItem *settingItem = [[UIBarButtonItem alloc] initWithTitle:@"隐藏键盘" style:UIBarButtonItemStylePlain target:__txtF01 action:@selector(resignFirstResponder)];
     self.navigationItem.rightBarButtonItem = settingItem;
+    self.automaticallyAdjustsScrollViewInsets = NO;
 }
 
 - (BOOL)checkAdspotId {
@@ -55,8 +74,8 @@
         __lbl01.text = @"MediaId";
         __lbl02.text = @"AdspotId";
         
-        self._v1.frame = CGRectMake(0, 0, self.view.bounds.size.width*0.5, 200);
-        self._v2.frame = CGRectMake(self.view.bounds.size.width*0.5, 0, self.view.bounds.size.width*0.5, 200);
+        self._v1.frame = CGRectMake(0, kNavTopH, self.view.bounds.size.width*0.5, 200);
+        self._v2.frame = CGRectMake(self.view.bounds.size.width*0.5, kNavTopH, self.view.bounds.size.width*0.5, 200);
         self._v3.frame = CGRectMake(0, CGRectGetMaxY(self._v2.frame), self.view.bounds.size.width, 1);
         _adShowView.frame = CGRectMake(0, CGRectGetMaxY(self._v3.frame)+118, self.view.bounds.size.width, self.view.bounds.size.height-CGRectGetMaxY(self._v3.frame)-kAppTopH-118);
         
