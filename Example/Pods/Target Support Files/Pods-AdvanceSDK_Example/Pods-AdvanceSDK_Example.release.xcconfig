@@ -1,10 +1,10 @@
 ENABLE_BITCODE = NO
-FRAMEWORK_SEARCH_PATHS = $(inherited) "${PODS_ROOT}/../../AdvanceSDK/Core" "${PODS_ROOT}/Bytedance-UnionAD/Bytedance-UnionAd/Frameworks" "${PODS_ROOT}/MercurySDK/MercurySDK"
+FRAMEWORK_SEARCH_PATHS = $(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/AdvanceSDK" "${PODS_CONFIGURATION_BUILD_DIR}/Masonry" "${PODS_CONFIGURATION_BUILD_DIR}/SDWebImage" "${PODS_ROOT}/Bytedance-UnionAD/Bytedance-UnionAd/Frameworks" "${PODS_ROOT}/MercurySDK/MercurySDK"
 GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
-HEADER_SEARCH_PATHS = $(inherited) "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/GDTMobSDK" $(SDKROOT)/usr/include/libxml2
+HEADER_SEARCH_PATHS = $(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/AdvanceSDK/AdvanceSDK.framework/Headers" "${PODS_CONFIGURATION_BUILD_DIR}/Masonry/Masonry.framework/Headers" "${PODS_CONFIGURATION_BUILD_DIR}/SDWebImage/SDWebImage.framework/Headers" "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/GDTMobSDK" $(SDKROOT)/usr/include/libxml2
 LD_RUNPATH_SEARCH_PATHS = $(inherited) '@executable_path/Frameworks' '@loader_path/Frameworks'
 LIBRARY_SEARCH_PATHS = $(inherited) "${PODS_ROOT}/GDTMobSDK/lib"
-OTHER_LDFLAGS = $(inherited) -ObjC -l"GDTMobSDK" -l"c++" -l"resolv" -l"resolv.9" -l"sqlite3" -l"xml2" -l"z" -framework "AVFoundation" -framework "Accelerate" -framework "AdSupport" -framework "AdvanceSDK" -framework "BUAdSDK" -framework "CoreLocation" -framework "CoreMedia" -framework "CoreMotion" -framework "CoreTelephony" -framework "Foundation" -framework "MapKit" -framework "MediaPlayer" -framework "MercurySDK" -framework "MobileCoreServices" -framework "QuartzCore" -framework "Security" -framework "StoreKit" -framework "SystemConfiguration" -framework "UIKit" -framework "WebKit" -weak_framework "WebKit"
+OTHER_LDFLAGS = $(inherited) -ObjC -l"GDTMobSDK" -l"c++" -l"resolv" -l"resolv.9" -l"sqlite3" -l"xml2" -l"z" -framework "AVFoundation" -framework "Accelerate" -framework "AdSupport" -framework "AdvanceSDK" -framework "BUAdSDK" -framework "BUFoundation" -framework "CoreLocation" -framework "CoreMedia" -framework "CoreMotion" -framework "CoreTelephony" -framework "Foundation" -framework "ImageIO" -framework "MapKit" -framework "Masonry" -framework "MediaPlayer" -framework "MercurySDK" -framework "MobileCoreServices" -framework "QuartzCore" -framework "SDWebImage" -framework "Security" -framework "StoreKit" -framework "SystemConfiguration" -framework "UIKit" -framework "WebKit" -weak_framework "WebKit"
 PODS_BUILD_DIR = ${BUILD_DIR}
 PODS_CONFIGURATION_BUILD_DIR = ${PODS_BUILD_DIR}/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)
 PODS_PODFILE_DIR_PATH = ${SRCROOT}/.

@@ -1,41 +1,55 @@
 PODS:
-  - AdvanceSDK (3.0.4):
-    - AdvanceSDK/Core (= 3.0.4)
-  - AdvanceSDK/Core (3.0.4)
-  - AdvanceSDK/CSJ (3.0.4):
-    - Bytedance-UnionAD (= 2.8.0.1)
-  - AdvanceSDK/GDT (3.0.4):
-    - GDTMobSDK (= 4.11.5)
-  - AdvanceSDK/Mercury (3.0.4):
-    - MercurySDK (= 3.0.3)
-  - Bytedance-UnionAD (2.8.0.1)
-  - GDTMobSDK (4.11.5):
-    - GDTMobSDK/GDTMobSDK (= 4.11.5)
-  - GDTMobSDK/GDTMobSDK (4.11.5)
-  - MercurySDK (3.0.3)
+  - AdvanceSDK (3.1.0):
+    - AdvanceSDK/Core (= 3.1.0)
+  - AdvanceSDK/Adspot (3.1.0)
+  - AdvanceSDK/Core (3.1.0)
+  - AdvanceSDK/CSJ (3.1.0):
+    - AdvanceSDK/Adspot
+    - Bytedance-UnionAD
+  - AdvanceSDK/GDT (3.1.0):
+    - AdvanceSDK/Adspot
+    - GDTMobSDK
+  - AdvanceSDK/Mercury (3.1.0):
+    - AdvanceSDK/Adspot
+    - MercurySDK
+  - Bytedance-UnionAD (2.9.0.1)
+  - GDTMobSDK (4.11.6):
+    - GDTMobSDK/GDTMobSDK (= 4.11.6)
+  - GDTMobSDK/GDTMobSDK (4.11.6)
+  - Masonry (1.1.0)
+  - MercurySDK (3.1.2.1)
+  - SDWebImage (5.7.1):
+    - SDWebImage/Core (= 5.7.1)
+  - SDWebImage/Core (5.7.1)
 
 DEPENDENCIES:
   - AdvanceSDK (from `../`)
   - AdvanceSDK/CSJ (from `../`)
   - AdvanceSDK/GDT (from `../`)
   - AdvanceSDK/Mercury (from `../`)
+  - Masonry
+  - SDWebImage
 
 SPEC REPOS:
-  trunk:
+  https://github.com/CocoaPods/Specs.git:
     - Bytedance-UnionAD
     - GDTMobSDK
+    - Masonry
     - MercurySDK
+    - SDWebImage
 
 EXTERNAL SOURCES:
   AdvanceSDK:
     :path: "../"
 
 SPEC CHECKSUMS:
-  AdvanceSDK: 39f50a729ea3f88fce601c9c30051e8c7289ca8e
-  Bytedance-UnionAD: 289dd37fe5378e49143a5918e2ef464e102a7243
-  GDTMobSDK: da0cfe597627720b69889314091964ca2f3ae1e5
-  MercurySDK: ee26ae7cfb56f3f341e5320a2fdd8cdc5e1634a5
+  AdvanceSDK: 490c65990067c4d2c2ca97ae534fc03f2b220760
+  Bytedance-UnionAD: e145f7e98e5a714332d7d31e764696e569483755
+  GDTMobSDK: ecd24483bd0be41f56b70ce3d12e4b18d76ab06b
+  Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
+  MercurySDK: 464ed8b482653f38a29bdf4960d17987438b16c6
+  SDWebImage: 5d4cf6afccd9ac1d2ee701ed0c4917cbb1b80536
 
-PODFILE CHECKSUM: 5be639c1ab3935a29b05daf92582fa590db0a45e
+PODFILE CHECKSUM: 6b6cc5c2e8ea04560308241c77514436a5e3739b
 
-COCOAPODS: 1.9.0
+COCOAPODS: 1.9.1
