@@ -34,13 +34,6 @@
         "UIKit",
         "Foundation",
         "AdSupport"
-      ],
-      "libraries": [
-        "z",
-        "sqlite3",
-        "c++",
-        "resolv.9",
-        "xml2"
       ]
     },
     {
