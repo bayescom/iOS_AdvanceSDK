@@ -43,7 +43,7 @@
     [self.advanceBanner setDefaultSdkSupplierWithMediaId:@"100255"
                                                 adspotid:@"10000558"
                                                 mediakey:@"757d5119466abe3d771a211cc1278df7"
-                                                  sdkTag:SDK_TAG_MERCURY];
+                                                  sdkTag:@"bayes"];
     [self.advanceBanner loadAd];
     
 }

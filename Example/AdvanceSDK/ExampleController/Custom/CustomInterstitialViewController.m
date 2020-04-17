@@ -43,7 +43,7 @@
     [_adspot setDefaultSdkSupplierWithMediaId:@"100255"
                                 adspotid:@"10002436"
                                 mediakey:@"757d5119466abe3d771a211cc1278df7"
-                                  sdkTag:SDK_TAG_MERCURY];
+                                  sdkTag:@"bayes"];
     _adspot.supplierDelegate = self;
     [_adspot loadAd];
 }

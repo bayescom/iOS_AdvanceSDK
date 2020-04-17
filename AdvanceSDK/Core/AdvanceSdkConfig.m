@@ -20,7 +20,7 @@ NSString *const AdvanceSdkRequestUrl = @"http://cruiser.bayescom.cn/eleven";
 NSString *const AdvanceReportDataUrl = @"http://cruiser.bayescom.cn/native";
 NSString *const SDK_TAG_MERCURY = @"bayes";
 NSString *const SDK_TAG_GDT = @"gdt";
-NSString *const SDK_TAG_CSJ = @"csj";
+NSString *const csj = @"csj";
 NSString *const DEFAULT_IMPTK = @"http://cruiser.bayescom.cn/win?action=win&adspotid=__ADSPOTID__&appid=__APPID__&idfa=__IDFA__&os=1&supplierid=__SUPPLIERID__&track_time=__TIME__&auction_id=__AUCTION_ID__&supplier_adspotid=__SUPPLIER_ADSPOT_ID__&is_bottom=1";
 NSString *const DEFAULT_CLICKTK = @"http://cruiser.bayescom.cn/click?action=click&adspotid=__ADSPOTID__&appid=__APPID__&idfa=__IDFA__&os=1&supplierid=__SUPPLIERID__&track_time=__TIME__&auction_id=__AUCTION_ID__&supplier_adspotid=__SUPPLIER_ADSPOT_ID__&is_bottom=1";
 NSString *const DEFAULT_SUCCEEDTK = @"http://cruiser.bayescom.cn/succeed?action=succeed&adspotid=__ADSPOTID__&appid=__APPID__&idfa=__IDFA__&os=1&supplierid=__SUPPLIERID__&track_time=__TIME__&auction_id=__AUCTION_ID__&supplier_adspotid=__SUPPLIER_ADSPOT_ID__&is_bottom=1";
@@ -98,7 +98,7 @@ static AdvanceSdkConfig *instance = nil;
         return @"1";
     } else if ([SDK_TAG_GDT isEqualToString:tag]) {
         return @"2";
-    } else if ([SDK_TAG_CSJ isEqualToString:tag]) {
+    } else if ([csj isEqualToString:tag]) {
         return @"3";
     } else {
         return @"0";
