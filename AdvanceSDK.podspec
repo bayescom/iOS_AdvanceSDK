@@ -42,32 +42,32 @@ Blink倍联——免费透明的流量变现神器 
     core.frameworks = 'UIKit', 'Foundation', 'AdSupport'
   end
 
-  # s.subspec 'Adspot' do |adspot|
-  #   adspot.source_files = 'AdvanceSDK/Adspot/**/*.{h,m}'
-  # end
+  s.subspec 'Adspot' do |adspot|
+    adspot.source_files = 'AdvanceSDK/Adspot/**/*.{h,m}'
+  end
 
-  # s.subspec 'Mercury' do |mer|
-  #   mer.dependency 'AdvanceSDK/Adspot'
-  #   mer.source_files = 'AdvanceSDK/Adapter/mercury/**/*.{h,m}'
-  #   mer.dependency 'MercurySDK'
-  #   mer.frameworks = 'StoreKit', 'AVFoundation'
-  # end
+  s.subspec 'Mercury' do |mer|
+    mer.dependency 'AdvanceSDK/Adspot'
+    mer.source_files = 'AdvanceSDK/Adapter/mercury/**/*.{h,m}'
+    mer.dependency 'MercurySDK'
+    mer.frameworks = 'StoreKit', 'AVFoundation'
+  end
 
-  # s.subspec 'CSJ' do |csj|
-  #   csj.dependency 'AdvanceSDK/Adspot'
-  #   csj.source_files = 'AdvanceSDK/Adapter/csj/**/*.{h,m}'
-  #   csj.dependency 'Bytedance-UnionAD'
-  #   csj.frameworks = 'UIKit', 'MapKit', 'WebKit', 'MediaPlayer', 'CoreLocation', 'AdSupport', 'CoreMedia', 'AVFoundation', 'CoreTelephony', 'StoreKit', 'SystemConfiguration', 'MobileCoreServices', 'CoreMotion', 'Accelerate'
-  #   csj.libraries  = 'c++', 'resolv', 'z', 'sqlite3'
-  # end
+  s.subspec 'CSJ' do |csj|
+    csj.dependency 'AdvanceSDK/Adspot'
+    csj.source_files = 'AdvanceSDK/Adapter/csj/**/*.{h,m}'
+    csj.dependency 'Bytedance-UnionAD'
+    csj.frameworks = 'UIKit', 'MapKit', 'WebKit', 'MediaPlayer', 'CoreLocation', 'AdSupport', 'CoreMedia', 'AVFoundation', 'CoreTelephony', 'StoreKit', 'SystemConfiguration', 'MobileCoreServices', 'CoreMotion', 'Accelerate'
+    csj.libraries  = 'c++', 'resolv', 'z', 'sqlite3'
+  end
 
-  # s.subspec 'GDT' do |gdt|
-  #   gdt.dependency 'AdvanceSDK/Adspot'
-  #   gdt.source_files =  'AdvanceSDK/Adapter/gdt/**/*.{h,m}'
-  #   gdt.dependency 'GDTMobSDK'
-  #   gdt.frameworks = 'AdSupport', 'CoreLocation', 'QuartzCore', 'SystemConfiguration', 'CoreTelephony', 'Security', 'StoreKit', 'AVFoundation', 'WebKit'
-  #   gdt.libraries     = 'xml2', 'z'
-  # end
+  s.subspec 'GDT' do |gdt|
+    gdt.dependency 'AdvanceSDK/Adspot'
+    gdt.source_files =  'AdvanceSDK/Adapter/gdt/**/*.{h,m}'
+    gdt.dependency 'GDTMobSDK'
+    gdt.frameworks = 'AdSupport', 'CoreLocation', 'QuartzCore', 'SystemConfiguration', 'CoreTelephony', 'Security', 'StoreKit', 'AVFoundation', 'WebKit'
+    gdt.libraries     = 'xml2', 'z'
+  end
 
   valid_archs = ['armv7', 'armv7s', 'x86_64', 'arm64']
   s.xcconfig = {
