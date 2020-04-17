@@ -1,0 +1,167 @@
+//
+//  CustomSplashViewController.m
+//  AAA
+//
+//  Created by 程立卿 on 2019/11/1.
+//  Copyright © 2019 CherryKing. All rights reserved.
+//
+
+#import "CustomSplashViewController.h"
+#import "DemoUtils.h"
+
+#import "AdvanceSDK.h"
+
+#import <GDTSplashAd.h>
+#import <BUAdSDK/BUAdSDK.h>
+#import <MercurySDK/MercurySDK.h>
+
+
+@interface CustomSplashViewController () <AdvanceBaseAdspotDelegate, GDTSplashAdDelegate, BUNativeExpressSplashViewDelegate, MercurySplashAdDelegate>
+@property (nonatomic, strong) AdvanceBaseAdspot *adspot;
+
+@property (nonatomic, strong) GDTSplashAd *gdt_ad;
+@property (nonatomic, strong) BUNativeExpressSplashView *csj_ad;
+@property (nonatomic, strong) MercurySplashAd *mercury_ad;
+
+@end
+
+@implementation CustomSplashViewController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+
+    self.initDefSubviewsFlag = YES;
+    self.adspotIdsArr = @[
+        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"10033-200034"},
+    ];
+    self.btn1Title = @"加载并显示广告";
+}
+
+- (void)loadAdBtn1Action {
+    if (![self checkAdspotId]) { return; }
+    _adspot = [[AdvanceBaseAdspot alloc] initWithMediaId:self.mediaId adspotId:self.adspotId];
+    [_adspot setDefaultSdkSupplierWithMediaId:@"100255"
+                                adspotid:@"10002436"
+                                mediakey:@"757d5119466abe3d771a211cc1278df7"
+                                  sdkTag:SDK_TAG_MERCURY];
+    _adspot.supplierDelegate = self;
+    [_adspot loadAd];
+}
+
+// MARK: ======================= AdvanceBaseAdspotDelegate =======================
+/// 加载渠道广告，将会返回渠道所需参数
+/// @param sdkTag 渠道Tag
+/// @param params 渠道参数
+- (void)advanceBaseAdspotWithSdkTag:(NSString *)sdkTag params:(NSDictionary *)params {
+    UIWindow *window = [UIApplication sharedApplication].keyWindow;
+    // 根据渠道id自定义初始化
+    if ([sdkTag isEqualToString:@"gdt"]) {
+        _gdt_ad = [[GDTSplashAd alloc] initWithAppId:[params objectForKey:@"mediaid"]
+                                         placementId:[params objectForKey:@"adspotid"]];
+        _gdt_ad.delegate = self;
+        _gdt_ad.fetchDelay = 5;
+        [_gdt_ad loadAdAndShowInWindow:window];
+    } else if ([sdkTag isEqualToString:@"csj"]) {
+        _csj_ad = [[BUNativeExpressSplashView alloc] initWithSlotID:[params objectForKey:@"adspotid"]
+                                                             adSize:[UIScreen mainScreen].bounds.size
+                                                 rootViewController:self];
+        _csj_ad.delegate = self;
+        _csj_ad.tolerateTimeout = 3;
+        [_csj_ad loadAdData];
+        [window addSubview:_csj_ad];
+    } else if ([sdkTag isEqualToString:@"bayes"]) {
+        _mercury_ad = [[MercurySplashAd alloc] initAdWithAdspotId:[params objectForKey:@"adspotid"]
+                                                         delegate:self];
+        _mercury_ad.controller = self;
+        [_mercury_ad loadAdAndShow];
+    }
+}
+
+/// 策略请求失败
+/// @param sdkTag 渠道Tag
+/// @param error 失败原因
+- (void)advanceBaseAdspotWithSdkTag:(NSString *)sdkTag error:(NSError *)error {
+    NSLog(@"%@", error);
+}
+
+// MARK: ======================= MercurySplashAdDelegate =======================
+- (void)mercury_splashAdDidLoad:(MercurySplashAd *)splashAd {
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded];
+    NSLog(@"广告加载成功");
+}
+
+- (void)mercury_splashAdSuccessPresentScreen:(MercurySplashAd *)splashAd {
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoImped];
+    NSLog(@"广告曝光");
+}
+
+- (void)mercury_splashAdFailError:(nullable NSError *)error {
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
+    [self.adspot selectSdkSupplierWithError:error];
+    NSLog(@"广告加载失败");
+}
+
+- (void)mercury_splashAdClicked:(MercurySplashAd *)splashAd {
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked];
+    NSLog(@"广告点击");
+}
+
+// MARK: ======================= GDTSplashAdDelegate =======================
+- (void)splashAdDidLoad:(GDTSplashAd *)splashAd {
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded];
+    NSLog(@"广告加载成功");
+}
+
+- (void)splashAdExposured:(GDTSplashAd *)splashAd {
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoImped];
+    NSLog(@"广告曝光");
+}
+
+- (void)splashAdFailToPresent:(GDTSplashAd *)splashAd withError:(NSError *)error {
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
+    [self.adspot selectSdkSupplierWithError:error];
+    NSLog(@"广告加载失败");
+}
+
+- (void)splashAdClicked:(GDTSplashAd *)splashAd {
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked];
+    NSLog(@"广告点击");
+}
+
+// MARK: ======================= BUNativeExpressSplashViewDelegate =======================
+- (void)nativeExpressSplashViewDidLoad:(BUNativeExpressSplashView *)splashAdView {
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded];
+    NSLog(@"广告加载成功");
+}
+
+- (void)nativeExpressSplashView:(BUNativeExpressSplashView *)splashAdView didFailWithError:(NSError * _Nullable)error {
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
+    NSLog(@"广告加载失败");
+    [_csj_ad removeFromSuperview];
+    _csj_ad = nil;
+    [self.adspot selectSdkSupplierWithError:error];
+}
+
+- (void)nativeExpressSplashViewWillVisible:(BUNativeExpressSplashView *)splashAdView {
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoImped];
+    NSLog(@"广告曝光");
+}
+
+- (void)nativeExpressSplashViewDidClick:(BUNativeExpressSplashView *)splashAdView {
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked];
+    NSLog(@"广告点击");
+}
+
+- (void)nativeExpressSplashViewDidClose:(nonnull UIView *)splashAdView {
+    [_csj_ad removeFromSuperview];
+    _csj_ad = nil;
+}
+
+- (void)nativeExpressSplashViewRenderFail:(nonnull BUNativeExpressSplashView *)splashAdView error:(NSError * _Nullable)error {
+    NSLog(@"广告渲染失败");
+    [_csj_ad removeFromSuperview];
+    _csj_ad = nil;
+    [self.adspot selectSdkSupplierWithError:error];
+}
+
+@end
