@@ -10,10 +10,6 @@
 #import <objc/runtime.h>
 #import <objc/message.h>
 
-#import "GdtBannerAdapter.h"
-#import "CsjBannerAdapter.h"
-#import "MercuryBannerAdapter.h"
-
 @interface AdvanceBanner () <AdvanceBaseAdspotDelegate>
 @property (nonatomic, strong) id adapter;
 

@@ -10,7 +10,7 @@
 
 #import "DemoUtils.h"
 
-#import "AdvanceSDK.h"
+#import <AdvanceSDK/AdvanceSplash.h>
 
 @interface DemoSplashViewController () <AdvanceSplashDelegate>
 @property(strong,nonatomic) AdvanceSplash *advanceSplash;
@@ -39,7 +39,7 @@
     [self.advanceSplash setDefaultSdkSupplierWithMediaId:@"100255"
                                                 adspotid:@"10002436"
                                                 mediakey:@"757d5119466abe3d771a211cc1278df7"
-                                                  sdkTag:SDK_TAG_MERCURY];
+                                                  sdkTag:@"bayes"];
     [self.advanceSplash loadAd];
 }
 

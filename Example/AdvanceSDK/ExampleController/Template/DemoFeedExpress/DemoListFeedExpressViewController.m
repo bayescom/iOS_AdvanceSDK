@@ -11,7 +11,7 @@
 #import "BYExamCellModel.h"
 
 #import "DemoUtils.h"
-#import "AdvanceSDK.h"
+#import <AdvanceSDK/AdvanceNativeExpress.h>
 
 @interface DemoListFeedExpressViewController () <UITableViewDelegate, UITableViewDataSource, AdvanceNativeExpressDelegate>
 @property (strong, nonatomic) UITableView *tableView;
@@ -48,7 +48,7 @@
     [_advanceFeed setDefaultSdkSupplierWithMediaId:@"100255"
                                           adspotid:@"10002698"
                                           mediakey:@"757d5119466abe3d771a211cc1278df7"
-                                            sdkTag:SDK_TAG_MERCURY];
+                                            sdkTag:@"bayes"];
     [_advanceFeed loadAd];
 }
 
