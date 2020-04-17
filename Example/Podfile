@@ -5,9 +5,9 @@ source 'https://github.com/CocoaPods/Specs.git'
 target 'AdvanceSDK_Example' do
   
   pod 'AdvanceSDK', :path => '../'
-  pod 'AdvanceSDK/Mercury', :path => '../'
-  pod 'AdvanceSDK/CSJ', :path => '../'
-  pod 'AdvanceSDK/GDT', :path => '../'
+#  pod 'AdvanceSDK/Mercury', :path => '../'
+#  pod 'AdvanceSDK/CSJ', :path => '../'
+#  pod 'AdvanceSDK/GDT', :path => '../'
  
   pod 'SDWebImage'
   pod 'Masonry'
