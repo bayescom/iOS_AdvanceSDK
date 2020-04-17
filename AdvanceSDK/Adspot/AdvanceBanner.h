@@ -6,7 +6,7 @@
 //  Copyright © 2020 Mercury. All rights reserved.
 //
 
-#import "AdvanceSDK.h"
+#import "AdvanceBaseAdspot.h"
 #import "AdvanceBannerDelegate.h"
 
 NS_ASSUME_NONNULL_BEGIN
