@@ -13,7 +13,6 @@
 @interface AdvanceSplash () <AdvanceBaseAdspotDelegate>
 @property (nonatomic, strong) id adapter;
 
-
 @end
 
 @implementation AdvanceSplash

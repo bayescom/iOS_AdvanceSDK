@@ -42,11 +42,19 @@
     },
     {
       "name": "Adspot",
+      "dependencies": {
+        "AdvanceSDK/Core": [
+
+        ]
+      },
       "source_files": "AdvanceSDK/Adspot/**/*.{h,m}"
     },
     {
       "name": "Mercury",
       "dependencies": {
+        "AdvanceSDK/Core": [
+
+        ],
         "AdvanceSDK/Adspot": [
 
         ],
@@ -63,6 +71,9 @@
     {
       "name": "CSJ",
       "dependencies": {
+        "AdvanceSDK/Core": [
+
+        ],
         "AdvanceSDK/Adspot": [
 
         ],
@@ -97,6 +108,9 @@
     {
       "name": "GDT",
       "dependencies": {
+        "AdvanceSDK/Core": [
+
+        ],
         "AdvanceSDK/Adspot": [
 
         ],
