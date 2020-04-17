@@ -11,19 +11,6 @@
 
 #import <UIKit/UIKit.h>
 
-static inline BOOL IsIPhoneXSeries() {
-    if (@available(iOS 11.0, *)) {
-        UIWindow *mainWindow = [[[UIApplication sharedApplication] delegate] window];
-        if (mainWindow.safeAreaInsets.bottom > 0.0) {
-            return YES;
-        }
-    }
-    return NO;
-}
-
-#define kAppTopH    (IsIPhoneXSeries()?88:64)
-#define kAppBottomH (IsIPhoneXSeries()?34:0)
-
 NS_ASSUME_NONNULL_BEGIN
 
 @interface BaseViewController : UIViewController
