@@ -39,6 +39,87 @@
         "Foundation",
         "AdSupport"
       ]
+    },
+    {
+      "name": "Adspot",
+      "source_files": "AdvanceSDK/Adspot/**/*.{h,m}"
+    },
+    {
+      "name": "Mercury",
+      "dependencies": {
+        "AdvanceSDK/Adspot": [
+
+        ],
+        "MercurySDK": [
+
+        ]
+      },
+      "source_files": "AdvanceSDK/Adapter/mercury/**/*.{h,m}",
+      "frameworks": [
+        "StoreKit",
+        "AVFoundation"
+      ]
+    },
+    {
+      "name": "CSJ",
+      "dependencies": {
+        "AdvanceSDK/Adspot": [
+
+        ],
+        "Bytedance-UnionAD": [
+
+        ]
+      },
+      "source_files": "AdvanceSDK/Adapter/csj/**/*.{h,m}",
+      "frameworks": [
+        "UIKit",
+        "MapKit",
+        "WebKit",
+        "MediaPlayer",
+        "CoreLocation",
+        "AdSupport",
+        "CoreMedia",
+        "AVFoundation",
+        "CoreTelephony",
+        "StoreKit",
+        "SystemConfiguration",
+        "MobileCoreServices",
+        "CoreMotion",
+        "Accelerate"
+      ],
+      "libraries": [
+        "c++",
+        "resolv",
+        "z",
+        "sqlite3"
+      ]
+    },
+    {
+      "name": "GDT",
+      "dependencies": {
+        "AdvanceSDK/Adspot": [
+
+        ],
+        "GDTMobSDK": [
+
+        ]
+      },
+      "source_files": "AdvanceSDK/Adapter/gdt/**/*.{h,m}",
+      "frameworks": [
+        "AdSupport",
+        "CoreLocation",
+        "QuartzCore",
+        "SystemConfiguration",
+        "CoreTelephony",
+        "Security",
+        "StoreKit",
+        "AVFoundation",
+        "WebKit"
+      ],
+      "libraries": [
+        "xml2",
+        "z"
+      ]
     }
   ]
 }
