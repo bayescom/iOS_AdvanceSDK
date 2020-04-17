@@ -11,8 +11,7 @@
 
 @implementation DemoUtils
 
-+ (void)showToast:(NSString *)text{
-    NSLog(@"%@", text);
++ (void)showToast:(NSString *)text {
     [DemoUtils showToast:text inView:[UIApplication sharedApplication].windows.lastObject];
 }
 

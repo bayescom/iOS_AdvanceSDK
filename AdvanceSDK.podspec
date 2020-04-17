@@ -8,13 +8,13 @@
 
 Pod::Spec.new do |s|
   s.name             = 'AdvanceSDK'
-  s.version          = '3.0.4'
+  s.version          = '3.1.0'
   
   s.ios.deployment_target = '9.0'
   s.platform     = :ios, "9.0" 
   s.requires_arc = true
   
-  s.license          = { :type => 'MIT', :file => 'LICENSE' }
+  # s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.summary          = 'bayescom iOS AdvabceSDK'
   s.description      = <<-DESC
 Blink倍联——免费透明的流量变现神器 
@@ -35,26 +35,36 @@ Blink倍联——免费透明的流量变现神器 
   s.default_subspec = 'Core'
   
   s.requires_arc = true
+  s.static_framework = true
 
   s.subspec 'Core' do |core|
-    core.vendored_frameworks = 'AdvanceSDK/Core/*.framework'
+    core.source_files = 'AdvanceSDK/Core/**/*.{h,m}'
     core.frameworks = 'UIKit', 'Foundation', 'AdSupport'
-    core.libraries  = 'z', 'sqlite3', 'c++', 'resolv.9', 'xml2'
   end
 
-  s.subspec 'Mercury' do |mercury|
-    mercury.dependency 'MercurySDK', '3.0.3'
-    mercury.frameworks = 'StoreKit', 'AVFoundation'
+  s.subspec 'Adspot' do |adspot|
+    adspot.source_files = 'AdvanceSDK/Adspot/**/*.{h,m}'
+  end
+
+  s.subspec 'Mercury' do |mer|
+    mer.dependency 'AdvanceSDK/Adspot'
+    mer.source_files = 'AdvanceSDK/Adapter/mercury/**/*.{h,m}'
+    mer.dependency 'MercurySDK'
+    mer.frameworks = 'StoreKit', 'AVFoundation'
   end
 
   s.subspec 'CSJ' do |csj|
-    csj.dependency 'Bytedance-UnionAD', '2.8.0.1'
+    csj.dependency 'AdvanceSDK/Adspot'
+    csj.source_files = 'AdvanceSDK/Adapter/csj/**/*.{h,m}'
+    csj.dependency 'Bytedance-UnionAD'
     csj.frameworks = 'UIKit', 'MapKit', 'WebKit', 'MediaPlayer', 'CoreLocation', 'AdSupport', 'CoreMedia', 'AVFoundation', 'CoreTelephony', 'StoreKit', 'SystemConfiguration', 'MobileCoreServices', 'CoreMotion', 'Accelerate'
     csj.libraries  = 'c++', 'resolv', 'z', 'sqlite3'
   end
 
   s.subspec 'GDT' do |gdt|
-    gdt.dependency 'GDTMobSDK', '4.11.5'
+    gdt.dependency 'AdvanceSDK/Adspot'
+    gdt.source_files =  'AdvanceSDK/Adapter/gdt/**/*.{h,m}'
+    gdt.dependency 'GDTMobSDK'
     gdt.frameworks = 'AdSupport', 'CoreLocation', 'QuartzCore', 'SystemConfiguration', 'CoreTelephony', 'Security', 'StoreKit', 'AVFoundation', 'WebKit'
     gdt.libraries     = 'xml2', 'z'
   end

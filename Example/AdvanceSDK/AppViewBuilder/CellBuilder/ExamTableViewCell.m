@@ -99,26 +99,26 @@
     } else if (_item.showtype == 2) {
         self.titleLabel.frame = CGRectMake(edge, edge, GlobleWidth-edge*2, 50);
         self.bigImg = [[UIImageView alloc] initWithFrame:CGRectMake(edge, self.titleLabel.frame.origin.y+self.titleLabel.frame.size.height + edge, GlobleWidth-edge*2, (GlobleWidth-edge*2)*0.6)];
-        self.bigImg.backgroundColor = imgBgColor;
+        self.bigImg.backgroundColor = [UIColor colorWithRed:0.74 green:0.75 blue:0.76 alpha:1.00];
         [self.contentView addSubview:self.bigImg];
     } else if (_item.showtype == 3) {
         self.img = [[UIImageView alloc] initWithFrame:CGRectMake(GlobleWidth-edge-120, edge, 120, 80)];
-        self.img.backgroundColor = imgBgColor;
+        self.img.backgroundColor = [UIColor colorWithRed:0.74 green:0.75 blue:0.76 alpha:1.00];
         [self.contentView addSubview:self.img];
         self.titleLabel.frame = CGRectMake(edge, edge, GlobleWidth-120-edge*3, 50);
     } else if (_item.showtype == 4) {
         self.titleLabel.frame = CGRectMake(edge, edge, GlobleWidth-edge*2, 50);
         
         self.img1 = [[UIImageView alloc] initWithFrame:CGRectMake(edge, self.titleLabel.frame.origin.y+self.titleLabel.frame.size.height + edge, (GlobleWidth - edge*2-5-5)/3, 80)];
-        self.img1.backgroundColor = imgBgColor;
+        self.img1.backgroundColor = [UIColor colorWithRed:0.74 green:0.75 blue:0.76 alpha:1.00];
         [self.contentView addSubview:self.img1];
         
         self.img2 = [[UIImageView alloc] initWithFrame:CGRectMake(self.img1.frame.size.width+self.img1.frame.origin.x + 5, self.titleLabel.frame.origin.y+self.titleLabel.frame.size.height + edge, (GlobleWidth - edge*2-5-5)/3, 80)];
-        self.img2.backgroundColor = imgBgColor;
+        self.img2.backgroundColor = [UIColor colorWithRed:0.74 green:0.75 blue:0.76 alpha:1.00];
         [self.contentView addSubview:self.img2];
         
         self.img3 = [[UIImageView alloc] initWithFrame:CGRectMake(self.img2.frame.size.width+self.img2.frame.origin.x + 5, self.titleLabel.frame.origin.y+self.titleLabel.frame.size.height + edge, (GlobleWidth - edge*2-5-5)/3, 80)];
-        self.img3.backgroundColor = imgBgColor;
+        self.img3.backgroundColor = [UIColor colorWithRed:0.74 green:0.75 blue:0.76 alpha:1.00];
         [self.contentView addSubview:self.img3];
     }
 }
