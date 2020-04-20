@@ -6,7 +6,8 @@
 //  Copyright © 2020 Mercury. All rights reserved.
 //
 
-#import "AdvanceSDK.h"
+#import "AdvanceBaseAdspot.h"
+#import "AdvanceSdkConfig.h"
 #import "AdvanceSplashDelegate.h"
 
 NS_ASSUME_NONNULL_BEGIN
