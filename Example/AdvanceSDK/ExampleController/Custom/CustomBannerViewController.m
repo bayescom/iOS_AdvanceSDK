@@ -42,7 +42,7 @@
     [_adspot setDefaultSdkSupplierWithMediaId:@"100255"
                                 adspotid:@"10002436"
                                 mediakey:@"757d5119466abe3d771a211cc1278df7"
-                                  sdkTag:@"bayes"];
+                                  sdkTag:SDK_TAG_MERCURY];
     _adspot.supplierDelegate = self;
     [_adspot loadAd];
 }
@@ -53,7 +53,7 @@
 - (void)advanceBaseAdspotWithSdkTag:(NSString *)sdkTag params:(NSDictionary *)params {
     self.adShowView.hidden = NO;
     // 根据渠道id自定义初始化
-    if ([sdkTag isEqualToString:@"gdt"]) {
+    if ([sdkTag isEqualToString:SDK_TAG_GDT]) {
         _gdt_ad = [[GDTUnifiedBannerView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.width/6.4)
                                                         appId:[params objectForKey:@"mediaid"]
                                                   placementId:[params objectForKey:@"adspotid"]
@@ -63,7 +63,7 @@
         _gdt_ad.autoSwitchInterval = 60;
         [self.adShowView addSubview:_gdt_ad];
         [_gdt_ad loadAdAndShow];
-    } else if ([sdkTag isEqualToString:@"csj"]) {
+    } else if ([sdkTag isEqualToString:SDK_TAG_CSJ]) {
         _csj_ad = [[BUNativeExpressBannerView alloc] initWithSlotID:[params objectForKey:@"adspotid"]
                                                  rootViewController:self
                                                              adSize:CGSizeMake(self.view.bounds.size.width, self.view.bounds.size.width/6.4) IsSupportDeepLink:YES];
@@ -71,7 +71,7 @@
         _csj_ad.delegate = self;
         [self.adShowView addSubview:_csj_ad];
        [_csj_ad loadAdData];
-    } else if ([sdkTag isEqualToString:@"bayes"]) {
+    } else if ([sdkTag isEqualToString:SDK_TAG_MERCURY]) {
         _mercury_ad = [[MercuryBannerAdView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.width/6.4)
                                                         adspotId:[params objectForKey:@"adspotid"]
                                                         delegate:self];

@@ -58,7 +58,7 @@
     [_adspot setDefaultSdkSupplierWithMediaId:@"100255"
                                           adspotid:@"10002698"
                                           mediakey:@"757d5119466abe3d771a211cc1278df7"
-                                            sdkTag:@"bayes"];
+                                            sdkTag:SDK_TAG_MERCURY];
     [_adspot loadAd];
 }
 
@@ -75,13 +75,13 @@
     }
     CGSize adSize = CGSizeMake(self.view.bounds.size.width, 300);
     
-    if ([sdkTag isEqualToString:@"gdt"]) {
+    if ([sdkTag isEqualToString:SDK_TAG_GDT]) {
         _gdt_ad = [[GDTNativeExpressAd alloc] initWithAppId:[params objectForKey:@"mediaid"]
                                                 placementId:[params objectForKey:@"adspotid"]
                                                      adSize:adSize];
         _gdt_ad.delegate = self;
         [_gdt_ad loadAd:adCount];
-    } else if ([sdkTag isEqualToString:@"csj"]) {
+    } else if ([sdkTag isEqualToString:SDK_TAG_CSJ]) {
         BUAdSlot *slot = [[BUAdSlot alloc] init];
         slot.ID = [params objectForKey:@"adspotid"];
         slot.isSupportDeepLink = YES;
@@ -91,7 +91,7 @@
         _csj_ad = [[BUNativeExpressAdManager alloc] initWithSlot:slot adSize:adSize];
         _csj_ad.delegate = self;
         [_csj_ad loadAd:adCount];
-    } else if ([sdkTag isEqualToString:@"bayes"]) {
+    } else if ([sdkTag isEqualToString:SDK_TAG_MERCURY]) {
         _mercury_ad = [[MercuryNativeExpressAd alloc] initAdWithAdspotId:_adspot.currentSdkSupplier.adspotid];
         _mercury_ad.delegate = self;
         _mercury_ad.videoMuted = YES;
@@ -167,11 +167,11 @@
         [self.adspot selectSdkSupplierWithError:nil];
     } else {
         [_adspot reportWithType:AdvanceSdkSupplierRepoSucceeded];
-        if ([self.adspot.currentSdkSupplier.sdkTag isEqualToString:@"gdt"]) {
+        if ([self.adspot.currentSdkSupplier.sdkTag isEqualToString:SDK_TAG_GDT]) {
             for (GDTNativeExpressAdView *view in views) {
                 view.controller = self;
             }
-        } else if ([self.adspot.currentSdkSupplier.sdkTag isEqualToString:@"csj"]) {
+        } else if ([self.adspot.currentSdkSupplier.sdkTag isEqualToString:SDK_TAG_CSJ]) {
             [_adspot reportWithType:AdvanceSdkSupplierRepoSucceeded];
             for (BUNativeExpressAdView *view in views) {
                 view.rootViewController = self;
