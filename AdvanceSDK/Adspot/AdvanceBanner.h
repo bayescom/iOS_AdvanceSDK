@@ -7,6 +7,7 @@
 //
 
 #import "AdvanceBaseAdspot.h"
+#import "AdvanceSdkConfig.h"
 #import "AdvanceBannerDelegate.h"
 
 NS_ASSUME_NONNULL_BEGIN
