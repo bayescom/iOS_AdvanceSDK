@@ -38,7 +38,7 @@
     [self.advanceInterstitial setDefaultSdkSupplierWithMediaId:@"100255"
                                                       adspotid:@"10000559"
                                                       mediakey:@"757d5119466abe3d771a211cc1278df7"
-                                                        sdkTag:@"bayes"];
+                                                        sdkTag:SDK_TAG_MERCURY];
     [self.advanceInterstitial loadAd];
 }
 

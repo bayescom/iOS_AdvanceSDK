@@ -6,7 +6,7 @@
 //  Copyright © 2020 bayescom. All rights reserved.
 //
 
-#import "AdvanceBaseAdspot.h"
+#import "AdvanceSDK.h"
 #import "AdvanceFullScreenVideoDelegate.h"
 
 NS_ASSUME_NONNULL_BEGIN

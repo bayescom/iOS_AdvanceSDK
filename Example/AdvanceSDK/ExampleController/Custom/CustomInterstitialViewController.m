@@ -43,17 +43,17 @@
     [_adspot setDefaultSdkSupplierWithMediaId:@"100255"
                                 adspotid:@"10002436"
                                 mediakey:@"757d5119466abe3d771a211cc1278df7"
-                                  sdkTag:@"bayes"];
+                                  sdkTag:SDK_TAG_MERCURY];
     _adspot.supplierDelegate = self;
     [_adspot loadAd];
 }
 
 - (void)loadAdBtn2Action {
-    if ([_adspot.currentSdkSupplier.sdkTag isEqualToString:@"gdt"]) {
+    if ([_adspot.currentSdkSupplier.sdkTag isEqualToString:SDK_TAG_GDT]) {
         [_gdt_ad presentAdFromRootViewController:self];
-    } else if ([_adspot.currentSdkSupplier.sdkTag isEqualToString:@"csj"]) {
+    } else if ([_adspot.currentSdkSupplier.sdkTag isEqualToString:SDK_TAG_CSJ]) {
         [_csj_ad showAdFromRootViewController:self];
-    } else if ([_adspot.currentSdkSupplier.sdkTag isEqualToString:@"bayes"]) {
+    } else if ([_adspot.currentSdkSupplier.sdkTag isEqualToString:SDK_TAG_MERCURY]) {
         [_mercury_ad presentAdFromViewController:self];
     }
 }
@@ -64,16 +64,16 @@
 /// @param params 渠道参数
 - (void)advanceBaseAdspotWithSdkTag:(NSString *)sdkTag params:(NSDictionary *)params {
     // 根据渠道id自定义初始化
-    if ([sdkTag isEqualToString:@"gdt"]) {
+    if ([sdkTag isEqualToString:SDK_TAG_GDT]) {
         _gdt_ad = [[GDTUnifiedInterstitialAd alloc] initWithAppId:[params objectForKey:@"mediaid"]
                                                       placementId:[params objectForKey:@"adspotid"]];
         _gdt_ad.delegate = self;
         [_gdt_ad loadAd];
-    } else if ([sdkTag isEqualToString:@"csj"]) {
+    } else if ([sdkTag isEqualToString:SDK_TAG_CSJ]) {
         _csj_ad = [[BUNativeExpressInterstitialAd alloc] initWithSlotID:@"900546270" adSize:CGSizeMake(300, 450)];
         _csj_ad.delegate = self;
         [_csj_ad loadAdData];
-    } else if ([sdkTag isEqualToString:@"bayes"]) {
+    } else if ([sdkTag isEqualToString:SDK_TAG_MERCURY]) {
         _mercury_ad = [[MercuryInterstitialAd alloc] initAdWithAdspotId:[params objectForKey:@"adspotid"] delegate:self];
         [_mercury_ad loadAd];
     }
