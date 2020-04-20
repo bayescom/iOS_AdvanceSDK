@@ -7,6 +7,7 @@
 //
 
 #import "AdvanceBaseAdspot.h"
+#import "AdvanceSdkConfig.h"
 #import "AdvanceFullScreenVideoDelegate.h"
 
 NS_ASSUME_NONNULL_BEGIN
