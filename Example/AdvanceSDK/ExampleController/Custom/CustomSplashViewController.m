@@ -41,27 +41,27 @@
     if (![self checkAdspotId]) { return; }
     _adspot = [[AdvanceBaseAdspot alloc] initWithMediaId:self.mediaId adspotId:self.adspotId];
     [_adspot setDefaultSdkSupplierWithMediaId:@"100255"
-                                adspotid:@"10002436"
-                                mediakey:@"757d5119466abe3d771a211cc1278df7"
-                                  sdkTag:SDK_TAG_MERCURY];
+                                adspotId:@"10002436"
+                                mediaKey:@"757d5119466abe3d771a211cc1278df7"
+                                  sdkId:SDK_ID_MERCURY];
     _adspot.supplierDelegate = self;
     [_adspot loadAd];
 }
 
 // MARK: ======================= AdvanceBaseAdspotDelegate =======================
 /// 加载渠道广告，将会返回渠道所需参数
-/// @param sdkTag 渠道Tag
+/// @param sdkId 渠道Id
 /// @param params 渠道参数
-- (void)advanceBaseAdspotWithSdkTag:(NSString *)sdkTag params:(NSDictionary *)params {
+- (void)advanceBaseAdspotWithSdkId:(NSString *)sdkId params:(NSDictionary *)params {
     UIWindow *window = [UIApplication sharedApplication].keyWindow;
     // 根据渠道id自定义初始化
-    if ([sdkTag isEqualToString:SDK_TAG_GDT]) {
+    if ([sdkId isEqualToString:SDK_ID_GDT]) {
         _gdt_ad = [[GDTSplashAd alloc] initWithAppId:[params objectForKey:@"mediaid"]
                                          placementId:[params objectForKey:@"adspotid"]];
         _gdt_ad.delegate = self;
         _gdt_ad.fetchDelay = 5;
         [_gdt_ad loadAdAndShowInWindow:window];
-    } else if ([sdkTag isEqualToString:SDK_TAG_CSJ]) {
+    } else if ([sdkId isEqualToString:SDK_ID_CSJ]) {
         _csj_ad = [[BUNativeExpressSplashView alloc] initWithSlotID:[params objectForKey:@"adspotid"]
                                                              adSize:[UIScreen mainScreen].bounds.size
                                                  rootViewController:self];
@@ -69,18 +69,16 @@
         _csj_ad.tolerateTimeout = 3;
         [_csj_ad loadAdData];
         [window addSubview:_csj_ad];
-    } else if ([sdkTag isEqualToString:SDK_TAG_MERCURY]) {
+    } else if ([sdkId isEqualToString:SDK_ID_MERCURY]) {
         _mercury_ad = [[MercurySplashAd alloc] initAdWithAdspotId:[params objectForKey:@"adspotid"]
                                                          delegate:self];
         _mercury_ad.controller = self;
         [_mercury_ad loadAdAndShow];
     }
 }
-
-/// 策略请求失败
-/// @param sdkTag 渠道Tag
+/// @param sdkId 渠道Id
 /// @param error 失败原因
-- (void)advanceBaseAdspotWithSdkTag:(NSString *)sdkTag error:(NSError *)error {
+- (void)advanceBaseAdspotWithSdkId:(NSString *)sdkId error:(NSError *)error {
     NSLog(@"%@", error);
 }
 

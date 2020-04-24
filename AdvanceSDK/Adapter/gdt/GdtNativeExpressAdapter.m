@@ -64,8 +64,8 @@
 - (void)nativeExpressAdSuccessToLoad:(GDTNativeExpressAd *)nativeExpressAd views:(NSArray<__kindof GDTNativeExpressAdView *> *)views {
     if (views == nil || views.count == 0) {
         [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
-        if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdFailedWithAdapterId:error:)]) {
-            [_delegate advanceNativeExpressOnAdFailedWithAdapterId:_adspot.currentSdkSupplier.sdkTag error:[NSError errorWithDomain:@"" code:100000 userInfo:@{@"msg":@"无广告返回"}]];
+        if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdFailedWithSdkId:error:)]) {
+            [_delegate advanceNativeExpressOnAdFailedWithSdkId:_adspot.currentSdkSupplier.id error:[NSError errorWithDomain:@"" code:100000 userInfo:@{@"msg":@"无广告返回"}]];
         }
         [self.adspot selectSdkSupplierWithError:nil];
     } else {
@@ -84,8 +84,8 @@
  */
 - (void)nativeExpressAdFailToLoad:(GDTNativeExpressAd *)nativeExpressAd error:(NSError *)error {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
-    if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdFailedWithAdapterId:error:)]) {
-        [_delegate advanceNativeExpressOnAdFailedWithAdapterId:_adspot.currentSdkSupplier.sdkTag error:error];
+    if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdFailedWithSdkId:error:)]) {
+        [_delegate advanceNativeExpressOnAdFailedWithSdkId:_adspot.currentSdkSupplier.id error:error];
     }
     _gdt_ad = nil;
     [_adspot selectSdkSupplierWithError:error];
@@ -96,8 +96,8 @@
  */
 - (void)nativeExpressAdViewRenderFail:(GDTNativeExpressAdView *)nativeExpressAdView {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
-    if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdFailedWithAdapterId:error:)]) {
-        [_delegate advanceNativeExpressOnAdFailedWithAdapterId:_adspot.currentSdkSupplier.sdkTag error:[NSError errorWithDomain:@"" code:10000 userInfo:@{@"msg": @"渲染原生模板广告失败"}]];
+    if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdFailedWithSdkId:error:)]) {
+        [_delegate advanceNativeExpressOnAdFailedWithSdkId:_adspot.currentSdkSupplier.id error:[NSError errorWithDomain:@"" code:10000 userInfo:@{@"msg": @"渲染原生模板广告失败"}]];
     }
     _gdt_ad = nil;
     [_adspot selectSdkSupplierWithError:[NSError errorWithDomain:@"" code:10000 userInfo:@{@"msg": @"渲染原生模板广告失败"}]];

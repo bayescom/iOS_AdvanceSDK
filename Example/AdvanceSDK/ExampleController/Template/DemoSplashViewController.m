@@ -37,9 +37,9 @@
     self.advanceSplash.logoImage = [UIImage imageNamed:@"app_logo"];
     self.advanceSplash.backgroundImage = [UIImage imageNamed:@"LaunchImage_img"];
     [self.advanceSplash setDefaultSdkSupplierWithMediaId:@"100255"
-                                                adspotid:@"10002436"
-                                                mediakey:@"757d5119466abe3d771a211cc1278df7"
-                                                  sdkTag:SDK_TAG_MERCURY];
+                                                adspotId:@"10002436"
+                                                mediaKey:@"757d5119466abe3d771a211cc1278df7"
+                                                  sdkId:SDK_ID_MERCURY];
     [self.advanceSplash loadAd];
 }
 
@@ -56,8 +56,8 @@
 }
 
 /// 广告展示失败
-- (void)advanceSplashOnAdFailedWithAdapterId:(NSString *)adapterId error:(NSError *)error {
-    NSLog(@"广告展示失败(%@):%@", adapterId, error);
+- (void)advanceSplashOnAdFailedWithSdkId:(NSString *)sdkId error:(NSError *)error {
+    NSLog(@"广告展示失败(%@):%@", sdkId, error);
 }
 
 /// 广告点击
