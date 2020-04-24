@@ -60,8 +60,8 @@
 - (void)mercury_interstitialFailError:(NSError *)error {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
     _mercury_ad = nil;
-    if ([self.delegate respondsToSelector:@selector(advanceInterstitialOnAdFailedWithAdapterId:error:)]) {
-        [self.delegate advanceInterstitialOnAdFailedWithAdapterId:_adspot.currentSdkSupplier.adspotid error:error];
+    if ([self.delegate respondsToSelector:@selector(advanceInterstitialOnAdFailedWithSdkId:error:)]) {
+        [self.delegate advanceInterstitialOnAdFailedWithSdkId:_adspot.currentSdkSupplier.id error:error];
     }
     [self.adspot selectSdkSupplierWithError:error];
 }

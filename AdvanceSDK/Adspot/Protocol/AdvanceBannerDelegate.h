@@ -22,7 +22,7 @@
 - (void)advanceBannerOnAdClicked;
 
 /// 广告展示失败
-- (void)advanceBannerOnAdFailedWithAdapterId:(NSString *)adapterId error:(NSError *)error;
+- (void)advanceBannerOnAdFailedWithSdkId:(NSString *)sdkId error:(NSError *)error;
 
 /// 广告关闭回调
 - (void)advanceBannerOnAdClosed;

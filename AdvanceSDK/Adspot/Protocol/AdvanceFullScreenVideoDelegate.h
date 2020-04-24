@@ -25,7 +25,7 @@
 - (void)advanceFullScreenVideoOnAdRenderFailed;
 
 /// 广告拉取失败
-- (void)advanceFullScreenVideoOnAdFailedWithAdapterId:(NSString *)adapterId error:(NSError *)error;
+- (void)advanceFullScreenVideoOnAdFailedWithSdkId:(NSString *)sdkId error:(NSError *)error;
 
 /// 广告关闭
 - (void)advanceFullScreenVideoOnAdClosed;

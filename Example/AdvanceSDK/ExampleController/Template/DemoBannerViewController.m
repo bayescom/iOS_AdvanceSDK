@@ -41,9 +41,9 @@
     self.advanceBanner = [[AdvanceBanner alloc] initWithMediaId:self.mediaId adspotId:self.adspotId adContainer:self.contentV viewController:self];
     self.advanceBanner.delegate = self;
     [self.advanceBanner setDefaultSdkSupplierWithMediaId:@"100255"
-                                                adspotid:@"10000558"
-                                                mediakey:@"757d5119466abe3d771a211cc1278df7"
-                                                  sdkTag:SDK_TAG_MERCURY];
+                                                adspotId:@"10000558"
+                                                mediaKey:@"757d5119466abe3d771a211cc1278df7"
+                                                  sdkId:SDK_ID_MERCURY];
     [self.advanceBanner loadAd];
     
 }
@@ -65,7 +65,7 @@
 }
 
 /// 请求广告数据失败后调用
-- (void)advanceBannerOnAdFailedWithAdapterId:(NSString *)adapterId error:(NSError *)error {
+- (void)advanceBannerOnAdFailedWithSdkId:(NSString *)sdkId error:(NSError *)error {
     NSLog(@"请求广告数据失败后调用");
 }
 

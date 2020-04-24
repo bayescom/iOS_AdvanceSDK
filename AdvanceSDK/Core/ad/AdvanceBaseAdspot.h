@@ -27,15 +27,15 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol AdvanceBaseAdspotDelegate <NSObject>
 @required
 /// 加载渠道广告，将会返回渠道所需参数
-/// @param sdkTag 渠道Tag
+/// @param sdkId 渠道ID
 /// @param params 渠道参数
-- (void)advanceBaseAdspotWithSdkTag:(NSString *)sdkTag params:(NSDictionary *)params;
+- (void)advanceBaseAdspotWithSdkId:(NSString *)sdkId params:(NSDictionary *)params;
 
 @optional
-/// 策略请求失败
-/// @param sdkTag 渠道Tag
+/// 请求失败
+/// @param sdkId 渠道Id
 /// @param error 失败原因
-- (void)advanceBaseAdspotWithSdkTag:(NSString *)sdkTag error:(NSError *)error;
+- (void)advanceBaseAdspotWithSdkId:(NSString *)sdkId error:(NSError *)error;
 
 
 @end
@@ -48,32 +48,36 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) SdkSupplier * _Nullable currentSdkSupplier;
 /// 策略代理[必填]
 @property (nonatomic, weak) id<AdvanceBaseAdspotDelegate> supplierDelegate;
-@property (nonatomic, assign) BOOL useCache;
+///是否开启策略缓存。注意这里缓存的是SDK的调度策略，而非缓存的广告信息。
+
+@property (nonatomic, assign) BOOL enableStrategyCache;
 
 /// 加载广告
 - (void)loadAd;
 
 /// 设置打底渠道
 /// @param mediaId mediaId
-/// @param adspotid adspotid
-/// @param mediakey mediakey
-/// @param sdktag SDK_TAG_XXX
+/// @param adspotId adspotId
+/// @param mediaKey mediaKey
+/// @param sdkId SDK_ID_XXX
 - (void)setDefaultSdkSupplierWithMediaId:(NSString *)mediaId
-                                adspotid:(NSString *)adspotid
-                                mediakey:(nullable NSString *)mediakey
-                                  sdkTag:(nonnull NSString *)sdktag;
+                                adspotId:(NSString *)adspotId
+                                mediaKey:(nullable NSString *)mediaKey
+                                  sdkId:(nonnull NSString *)sdkId;
 
 /// 初始化方法
-/// @param mediaid mediaid
-/// @param adspotid adspotid
-- (instancetype)initWithMediaId:(NSString *)mediaid
-                       adspotId:(NSString *)adspotid;
+/// @param mediaId mediaId
+/// @param adspotId adspotId
+- (instancetype)initWithMediaId:(NSString *)mediaId
+                       adspotId:(NSString *)adspotId;
 
 /// 选择策略(在广告失败后，需手动调用此方法)
 - (void)selectSdkSupplierWithError:(NSError * _Nullable)error;
 
 /// 上报
 - (void)reportWithType:(AdvanceSdkSupplierRepoType)repoType;
+
+///
 
 @end
 NS_ASSUME_NONNULL_END

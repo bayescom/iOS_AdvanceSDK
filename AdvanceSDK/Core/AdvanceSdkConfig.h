@@ -15,10 +15,10 @@ extern NSString *const AdvanceSdkAPIVersion;
 extern NSString *const AdvanceSdkVersion;
 extern NSString *const AdvanceSdkRequestUrl;
 extern NSString *const AdvanceReportDataUrl;
-extern NSString *const SDK_TAG_MERCURY;
-extern NSString *const SDK_TAG_GDT;
-extern NSString *const SDK_TAG_CSJ;
-extern NSString *const SDK_TAG_BQT;
+extern NSString *const SDK_ID_MERCURY;
+extern NSString *const SDK_ID_GDT;
+extern NSString *const SDK_ID_CSJ;
+extern NSString *const SDK_ID_BAIDU;
 extern NSString *const DEFAULT_IMPTK;
 extern NSString *const DEFAULT_CLICKTK;
 extern NSString *const DEFAULT_SUCCEEDTK;
@@ -33,8 +33,6 @@ extern int const ADVANCE_ERROR;
 + (NSString *)sdkVersion;
 
 + (instancetype)shareInstance;
-
-+ (NSString *)getSupplierIdWithTag:(NSString *)tag;
 
 /// 是否是Debug
 @property(nonatomic) bool isDebug;

@@ -42,42 +42,42 @@
     
     _adspot = [[AdvanceBaseAdspot alloc] initWithMediaId:self.mediaId adspotId:self.adspotId];
     [_adspot setDefaultSdkSupplierWithMediaId:@"100255"
-                                adspotid:@"10002436"
-                                mediakey:@"757d5119466abe3d771a211cc1278df7"
-                                  sdkTag:SDK_TAG_MERCURY];
+                                adspotId:@"10002436"
+                                mediaKey:@"757d5119466abe3d771a211cc1278df7"
+                                  sdkId:SDK_ID_MERCURY];
     _adspot.supplierDelegate = self;
     
     [_adspot loadAd];
 }
 
 - (void)loadAdBtn2Action {
-    if ([_adspot.currentSdkSupplier.sdkTag isEqualToString:SDK_TAG_GDT]) {
+    if ([_adspot.currentSdkSupplier.id isEqualToString:SDK_ID_GDT]) {
         [_gdt_ad showAdFromRootViewController:self];
-    } else if ([_adspot.currentSdkSupplier.sdkTag isEqualToString:SDK_TAG_CSJ]) {
+    } else if ([_adspot.currentSdkSupplier.id isEqualToString:SDK_ID_CSJ]) {
         [_csj_ad showAdFromRootViewController:self];
-    } else if ([_adspot.currentSdkSupplier.sdkTag isEqualToString:SDK_TAG_MERCURY]) {
+    } else if ([_adspot.currentSdkSupplier.id isEqualToString:SDK_ID_MERCURY]) {
         [_mercury_ad showAdFromVC:self];
     }
 }
 
 // MARK: ======================= AdvanceBaseAdspotDelegate =======================
 /// 加载渠道广告，将会返回渠道所需参数
-/// @param sdkTag 渠道Tag
+/// @param sdkId 渠道Id
 /// @param params 渠道参数
-- (void)advanceBaseAdspotWithSdkTag:(NSString *)sdkTag params:(NSDictionary *)params {
+- (void)advanceBaseAdspotWithSdkId:(NSString *)sdkId params:(NSDictionary *)params {
     // 根据渠道id自定义初始化
-    if ([sdkTag isEqualToString:SDK_TAG_GDT]) {
+    if ([sdkId isEqualToString:SDK_ID_GDT]) {
         _gdt_ad = [[GDTRewardVideoAd alloc] initWithAppId:[params objectForKey:@"mediaid"]
                                               placementId:[params objectForKey:@"adspotid"]];
         _gdt_ad.delegate = self;
         [_gdt_ad loadAd];
-    } else if ([sdkTag isEqualToString:SDK_TAG_CSJ]) {
+    } else if ([sdkId isEqualToString:SDK_ID_CSJ]) {
         BURewardedVideoModel *model = [[BURewardedVideoModel alloc] init];
         model.userId = @"123";
         _csj_ad = [[BUNativeExpressRewardedVideoAd alloc] initWithSlotID:[params objectForKey:@"adspotid"] rewardedVideoModel:model];
         _csj_ad.delegate = self;
         [_csj_ad loadAdData];
-    } else if ([sdkTag isEqualToString:SDK_TAG_MERCURY]) {
+    } else if ([sdkId isEqualToString:SDK_ID_MERCURY]) {
         _mercury_ad = [[MercuryRewardVideoAd alloc] initAdWithAdspotId:[params objectForKey:@"adspotid"] delegate:self];
         [_mercury_ad loadRewardVideoAd];
     }
