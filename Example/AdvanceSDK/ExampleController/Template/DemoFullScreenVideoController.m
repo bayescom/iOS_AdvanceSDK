@@ -36,9 +36,9 @@
                                                              viewController:self];
     self.advanceFullScreenVideo.delegate = self;
     [self.advanceFullScreenVideo setDefaultSdkSupplierWithMediaId:@"100255"
-                                                      adspotid:@"10000559"
-                                                      mediakey:@"757d5119466abe3d771a211cc1278df7"
-                                                        sdkTag:SDK_TAG_MERCURY];
+                                                      adspotId:@"10000559"
+                                                      mediaKey:@"757d5119466abe3d771a211cc1278df7"
+                                                        sdkId:SDK_ID_MERCURY];
     [self.advanceFullScreenVideo loadAd];
 }
 
@@ -69,7 +69,7 @@
 }
 
 /// 广告拉取失败
-- (void)advanceFullScreenVideoOnAdFailedWithAdapterId:(NSString *)adapterId error:(NSError *)error {
+- (void)advanceFullScreenVideoOnAdFailedWithSdkId:(NSString *)sdkId error:(NSError *)error {
     NSLog(@"广告拉取失败");
 }
 

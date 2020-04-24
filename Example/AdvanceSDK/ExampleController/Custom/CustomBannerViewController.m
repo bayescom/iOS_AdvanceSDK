@@ -40,20 +40,20 @@
     if (![self checkAdspotId]) { return; }
     _adspot = [[AdvanceBaseAdspot alloc] initWithMediaId:self.mediaId adspotId:self.adspotId];
     [_adspot setDefaultSdkSupplierWithMediaId:@"100255"
-                                adspotid:@"10002436"
-                                mediakey:@"757d5119466abe3d771a211cc1278df7"
-                                  sdkTag:SDK_TAG_MERCURY];
+                                adspotId:@"10002436"
+                                mediaKey:@"757d5119466abe3d771a211cc1278df7"
+                                  sdkId:SDK_ID_MERCURY];
     _adspot.supplierDelegate = self;
     [_adspot loadAd];
 }
 // MARK: ======================= AdvanceBaseAdspotDelegate =======================
 /// 加载渠道广告，将会返回渠道所需参数
-/// @param sdkTag 渠道Tag
+/// @param sdkId 渠道Id
 /// @param params 渠道参数
-- (void)advanceBaseAdspotWithSdkTag:(NSString *)sdkTag params:(NSDictionary *)params {
+- (void)advanceBaseAdspotWithSdkId:(NSString *)sdkId params:(NSDictionary *)params {
     self.adShowView.hidden = NO;
     // 根据渠道id自定义初始化
-    if ([sdkTag isEqualToString:SDK_TAG_GDT]) {
+    if ([sdkId isEqualToString:SDK_ID_GDT]) {
         _gdt_ad = [[GDTUnifiedBannerView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.width/6.4)
                                                         appId:[params objectForKey:@"mediaid"]
                                                   placementId:[params objectForKey:@"adspotid"]
@@ -63,7 +63,7 @@
         _gdt_ad.autoSwitchInterval = 60;
         [self.adShowView addSubview:_gdt_ad];
         [_gdt_ad loadAdAndShow];
-    } else if ([sdkTag isEqualToString:SDK_TAG_CSJ]) {
+    } else if ([sdkId isEqualToString:SDK_ID_CSJ]) {
         _csj_ad = [[BUNativeExpressBannerView alloc] initWithSlotID:[params objectForKey:@"adspotid"]
                                                  rootViewController:self
                                                              adSize:CGSizeMake(self.view.bounds.size.width, self.view.bounds.size.width/6.4) IsSupportDeepLink:YES];
@@ -71,7 +71,7 @@
         _csj_ad.delegate = self;
         [self.adShowView addSubview:_csj_ad];
        [_csj_ad loadAdData];
-    } else if ([sdkTag isEqualToString:SDK_TAG_MERCURY]) {
+    } else if ([sdkId isEqualToString:SDK_ID_MERCURY]) {
         _mercury_ad = [[MercuryBannerAdView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.width/6.4)
                                                         adspotId:[params objectForKey:@"adspotid"]
                                                         delegate:self];
@@ -86,9 +86,9 @@
 }
 
 /// 策略请求失败
-/// @param sdkTag 渠道Tag
+/// @param sdkId 渠道Id
 /// @param error 失败原因
-- (void)advanceBaseAdspotWithSdkTag:(NSString *)sdkTag error:(NSError *)error {
+- (void)advanceBaseAdspotWithSdkId:(NSString *)sdkId error:(NSError *)error {
     NSLog(@"%@", error);
 }
 

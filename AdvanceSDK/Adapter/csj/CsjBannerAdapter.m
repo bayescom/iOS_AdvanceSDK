@@ -61,8 +61,8 @@
 - (void)nativeExpressBannerAdView:(BUNativeExpressBannerView *)bannerAdView didLoadFailWithError:(NSError *)error {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
     [self.adspot selectSdkSupplierWithError:error];
-    if ([self.delegate respondsToSelector:@selector(advanceBannerOnAdFailedWithAdapterId:error:)]) {
-        [self.delegate advanceBannerOnAdFailedWithAdapterId:_adspot.currentSdkSupplier.adspotid error:error];
+    if ([self.delegate respondsToSelector:@selector(advanceBannerOnAdFailedWithSdkId:error:)]) {
+        [self.delegate advanceBannerOnAdFailedWithSdkId:_adspot.currentSdkSupplier.id error:error];
     }
     [_csj_ad removeFromSuperview];
     _csj_ad = nil;

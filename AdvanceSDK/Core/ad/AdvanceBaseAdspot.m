@@ -63,7 +63,7 @@ NSString *const CACHE_PREFIX = @"mercury_advance_%@";
         _defaultSdkSupplier = nil;
         _currentSdkSupplier = nil;
         _suppliers = nil;
-        _useCache = YES;
+        _enableStrategyCache = YES;
     }
     return self;
 }
@@ -73,10 +73,10 @@ NSString *const CACHE_PREFIX = @"mercury_advance_%@";
         [self.suppliers removeAllObjects];
         self.currentSdkSupplier = nil;
         if (!self.defaultSdkSupplier) {
-            NSLog(@"请设置打底渠道 (setDefaultSdkSupplierWithMediaId:adspotid:mediakey:sdkTag)");
+            NSLog(@"请设置打底渠道 (setDefaultSdkSupplierWithMediaId:adspotid:mediakey:sdkId)");
             return;
         }
-        if (self.useCache) {
+        if (self.enableStrategyCache) {
 //            //从缓存读取策略
             [self loadStrategyFromCache];
             dispatch_async(dispatch_get_global_queue(0, 0), ^{
@@ -233,8 +233,8 @@ NSString *const CACHE_PREFIX = @"mercury_advance_%@";
 }
 
 // MARK: ======================= 构建打底渠道 =======================
-- (void)setDefaultSdkSupplierWithMediaId:(NSString *)mediaId adspotid:(NSString *)adspotid mediakey:(NSString *)mediakey sdkTag:(nonnull NSString *)sdktag {
-    self.defaultSdkSupplier = [[SdkSupplier alloc] initWithMediaId:mediaId adspotId:adspotid mediaKey:mediakey sdkTag:sdktag];
+- (void)setDefaultSdkSupplierWithMediaId:(NSString *)mediaId adspotId:(NSString *)adspotid mediaKey:(NSString *)mediakey sdkId:(nonnull NSString *)sdkid {
+    self.defaultSdkSupplier = [[SdkSupplier alloc] initWithMediaId:mediaId adspotId:adspotid mediaKey:mediakey sdkId:sdkid];
 }
 
 - (NSString *)constructDefaultTk:(NSString *)url withAppId:(NSString *)appid adspotId:(NSString *)adspotid idfa:(NSString *)idfa
@@ -280,8 +280,8 @@ NSString *const CACHE_PREFIX = @"mercury_advance_%@";
                         initWithMediaId:[supplierDict objectForKey:@"mediaid"]
                                adspotId:[supplierDict objectForKey:@"adspotid"]
                                mediaKey:[supplierDict objectForKey:@"mediakey"]
-                                 sdkTag:[supplierDict objectForKey:@"sdktag"]];
-                supplier.id = [supplierDict objectForKey:@"id"];
+                                 sdkId:[supplierDict objectForKey:@"id"]];
+                supplier.sdkTag = [supplierDict objectForKey:@"sdktag"];
                 supplier.timeout = [[supplierDict objectForKey:@"timeout"] intValue];
                 supplier.priority = [[supplierDict objectForKey:@"priority"] intValue];
                 supplier.name = [supplierDict objectForKey:@"name"];
@@ -334,8 +334,8 @@ NSString *const CACHE_PREFIX = @"mercury_advance_%@";
             self.currentSdkSupplier = self.suppliers.firstObject;
             [self.suppliers removeObjectAtIndex:0];
             [self reportWithType:AdvanceSdkSupplierRepoLoaded];
-            if ([_supplierDelegate respondsToSelector:@selector(advanceBaseAdspotWithSdkTag:params:)]) {
-                [_supplierDelegate advanceBaseAdspotWithSdkTag:self.currentSdkSupplier.sdkTag params:@{
+            if ([_supplierDelegate respondsToSelector:@selector(advanceBaseAdspotWithSdkId:params:)]) {
+                [_supplierDelegate advanceBaseAdspotWithSdkId:self.currentSdkSupplier.id params:@{
                     @"mediaid": self.currentSdkSupplier.mediaid,
                     @"adspotid": self.currentSdkSupplier.adspotid,
                     @"mediakey": self.currentSdkSupplier.mediakey,
@@ -352,26 +352,24 @@ NSString *const CACHE_PREFIX = @"mercury_advance_%@";
         @try {
             NSString *idfa = [self getIdfa];
             NSString *auctionId= [self getAuctionId];
-            NSString *supplierId = [AdvanceSdkConfig getSupplierIdWithTag:self.defaultSdkSupplier.sdkTag];
             self.defaultSdkSupplier.imptk = [[[NSMutableArray alloc] init] arrayByAddingObject:
-                                             [self constructDefaultTk:DEFAULT_IMPTK withAppId:self.mediaid adspotId:self.adspotid idfa:idfa supplierId:supplierId auctionId:auctionId supplierAdspotId:self.defaultSdkSupplier.adspotid]];
+                                             [self constructDefaultTk:DEFAULT_IMPTK withAppId:self.mediaid adspotId:self.adspotid idfa:idfa supplierId:self.defaultSdkSupplier.id auctionId:auctionId supplierAdspotId:self.defaultSdkSupplier.adspotid]];
             self.defaultSdkSupplier.succeedtk = [[[NSMutableArray alloc] init] arrayByAddingObject:
-                                                 [self constructDefaultTk:DEFAULT_SUCCEEDTK withAppId:self.mediaid adspotId:self.adspotid idfa:idfa supplierId:supplierId auctionId:auctionId supplierAdspotId:self.defaultSdkSupplier.adspotid]];
+                                                 [self constructDefaultTk:DEFAULT_SUCCEEDTK withAppId:self.mediaid adspotId:self.adspotid idfa:idfa supplierId:self.defaultSdkSupplier.id auctionId:auctionId supplierAdspotId:self.defaultSdkSupplier.adspotid]];
             self.defaultSdkSupplier.clicktk = [[[NSMutableArray alloc] init] arrayByAddingObject:
-                                               [self constructDefaultTk:DEFAULT_CLICKTK withAppId:self.mediaid adspotId:self.adspotid idfa:idfa supplierId:supplierId auctionId: auctionId supplierAdspotId:self.defaultSdkSupplier.adspotid]];
+                                               [self constructDefaultTk:DEFAULT_CLICKTK withAppId:self.mediaid adspotId:self.adspotid idfa:idfa supplierId:self.defaultSdkSupplier.id auctionId: auctionId supplierAdspotId:self.defaultSdkSupplier.adspotid]];
             self.defaultSdkSupplier.failedtk = [[[NSMutableArray alloc] init] arrayByAddingObject:
-                                                [self constructDefaultTk:DEFAULT_FAILEDTK withAppId:self.mediaid adspotId:self.adspotid idfa:idfa supplierId:supplierId auctionId:auctionId supplierAdspotId:self.defaultSdkSupplier.adspotid]];
+                                                [self constructDefaultTk:DEFAULT_FAILEDTK withAppId:self.mediaid adspotId:self.adspotid idfa:idfa supplierId:self.defaultSdkSupplier.id auctionId:auctionId supplierAdspotId:self.defaultSdkSupplier.adspotid]];
             self.defaultSdkSupplier.loadedtk =[[[NSMutableArray alloc] init] arrayByAddingObject:
-                                               [self constructDefaultTk:DEFAULT_LOADEDTK withAppId:self.mediaid adspotId:self.adspotid idfa:idfa supplierId:supplierId auctionId:auctionId supplierAdspotId:self.defaultSdkSupplier.adspotid]];
+                                               [self constructDefaultTk:DEFAULT_LOADEDTK withAppId:self.mediaid adspotId:self.adspotid idfa:idfa supplierId:self.defaultSdkSupplier.id auctionId:auctionId supplierAdspotId:self.defaultSdkSupplier.adspotid]];
         } @catch (NSException *exception) {
         }
     }
 }
 
 - (void)selectSdkSupplierFailed:(NSError *)error {
-    if ([_supplierDelegate respondsToSelector:@selector(advanceBaseAdspotWithSdkTag:error:)]) {
-        [_supplierDelegate advanceBaseAdspotWithSdkTag:self.currentSdkSupplier.sdkTag error:error];
+    if ([_supplierDelegate respondsToSelector:@selector(advanceBaseAdspotWithSdkId:error:)]) {
+        [_supplierDelegate advanceBaseAdspotWithSdkId:self.currentSdkSupplier.id error:error];
     }
 }
-
 @end
