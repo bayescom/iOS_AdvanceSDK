@@ -17,8 +17,9 @@
 #import "AdvanceSplash.h"
 #import "UIApplication+Advance.h"
 
-@interface CsjSplashAdapter ()  <BUNativeExpressSplashViewDelegate>
-@property (nonatomic, strong) BUNativeExpressSplashView *csj_ad;
+@interface CsjSplashAdapter ()  <BUSplashAdDelegate>
+
+@property (nonatomic, strong) BUSplashAdView *csj_ad;
 @property (nonatomic, weak) AdvanceSplash *adspot;
 @property (nonatomic, strong) NSDictionary *params;
 
@@ -34,29 +35,37 @@
 }
 
 - (void)loadAd {
-    _csj_ad = [[BUNativeExpressSplashView alloc] initWithSlotID:_adspot.currentSdkSupplier.adspotid adSize:[UIScreen mainScreen].bounds.size rootViewController:_adspot.viewController];
-    _csj_ad.delegate = self;
-
+    
+    _csj_ad = [[BUSplashAdView alloc] initWithSlotID:_adspot.currentSdkSupplier.adspotid frame:[UIScreen mainScreen].bounds];
     if (self.adspot.currentSdkSupplier.timeout &&
         self.adspot.currentSdkSupplier.timeout > 0) {
         _csj_ad.tolerateTimeout = _adspot.currentSdkSupplier.timeout / 1000;
     } else {
         _csj_ad.tolerateTimeout = 5.0;
     }
+    _csj_ad.delegate = self;
+    
     [_csj_ad loadAdData];
-    UIWindow *window = [UIApplication sharedApplication].by_getCurrentWindow;
-    [window addSubview:_csj_ad];
+    [[UIApplication sharedApplication].by_getCurrentWindow.rootViewController.view addSubview:_csj_ad];
+    _csj_ad.rootViewController = [UIApplication sharedApplication].by_getCurrentWindow.rootViewController;
 }
 
-// MARK: ======================= BUNativeExpressSplashViewDelegate =======================
-- (void)nativeExpressSplashViewDidLoad:(BUNativeExpressSplashView *)splashAdView {
+// MARK: ======================= BUSplashAdDelegate =======================
+/**
+ This method is called when splash ad material loaded successfully.
+ */
+- (void)splashAdDidLoad:(BUSplashAdView *)splashAd {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded];
     if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdReceived)]) {
         [self.delegate advanceSplashOnAdReceived];
     }
 }
 
-- (void)nativeExpressSplashView:(BUNativeExpressSplashView *)splashAdView didFailWithError:(NSError * _Nullable)error {
+/**
+ This method is called when splash ad material failed to load.
+ @param error : the reason of error
+ */
+- (void)splashAd:(BUSplashAdView *)splashAd didFailWithError:(NSError * _Nullable)error {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
     if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdFailedWithSdkId:error:)]) {
         [self.delegate advanceSplashOnAdFailedWithSdkId:_adspot.currentSdkSupplier.id error:error];
@@ -66,57 +75,40 @@
     [self.adspot selectSdkSupplierWithError:error];
 }
 
-- (void)nativeExpressSplashViewWillVisible:(BUNativeExpressSplashView *)splashAdView {
+/**
+ This method is called when splash ad slot will be showing.
+ */
+- (void)splashAdWillVisible:(BUSplashAdView *)splashAd {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoImped];
     if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdShow)]) {
         [self.delegate advanceSplashOnAdShow];
     }
 }
 
-- (void)nativeExpressSplashViewDidClick:(BUNativeExpressSplashView *)splashAdView {
+/**
+ This method is called when splash ad is clicked.
+ */
+- (void)splashAdDidClick:(BUSplashAdView *)splashAd {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked];
     if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdClicked)]) {
         [self.delegate advanceSplashOnAdClicked];
     }
 }
 
-- (void)nativeExpressSplashViewDidClose:(nonnull UIView *)splashAdView {
+/**
+ This method is called when splash ad is closed.
+ */
+- (void)splashAdDidClose:(BUSplashAdView *)splashAd {
     [_csj_ad removeFromSuperview];
     _csj_ad = nil;
 }
 
-- (void)nativeExpressSplashViewCountdownToZero:(nonnull BUNativeExpressSplashView *)splashAdView {
-    if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdCountdownToZero)]) {
-        [self.delegate advanceSplashOnAdCountdownToZero];
-    }
-}
-
-
-- (void)nativeExpressSplashViewDidClickSkip:(nonnull BUNativeExpressSplashView *)splashAdView {
+/**
+ This method is called when spalashAd skip button  is clicked.
+ */
+- (void)splashAdDidClickSkip:(BUSplashAdView *)splashAd {
     if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdSkipClicked)]) {
         [self.delegate advanceSplashOnAdSkipClicked];
     }
 }
-
-
-- (void)nativeExpressSplashViewFinishPlayDidPlayFinish:(nonnull BUNativeExpressSplashView *)splashView didFailWithError:(nonnull NSError *)error {
-    
-}
-
-
-- (void)nativeExpressSplashViewRenderFail:(nonnull BUNativeExpressSplashView *)splashAdView error:(NSError * _Nullable)error {
-    [self.adspot selectSdkSupplierWithError:error];
-    if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdFailedWithSdkId:error:)]) {
-        [self.delegate advanceSplashOnAdFailedWithSdkId:_adspot.currentSdkSupplier.id error:error];
-    }
-    [_csj_ad removeFromSuperview];
-    _csj_ad = nil;
-}
-
-
-- (void)nativeExpressSplashViewRenderSuccess:(nonnull BUNativeExpressSplashView *)splashAdView {
-    
-}
-
-
 @end
