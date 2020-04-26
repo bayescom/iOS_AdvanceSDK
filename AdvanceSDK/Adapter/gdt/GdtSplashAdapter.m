@@ -42,6 +42,7 @@
 
 - (void)loadAd {
     _gdt_ad = [[GDTSplashAd alloc] initWithAppId:_adspot.currentSdkSupplier.mediaid placementId:_adspot.currentSdkSupplier.adspotid];
+    
     _gdt_ad.delegate = self;
     if (_adspot.currentSdkSupplier.timeout &&
         _adspot.currentSdkSupplier.timeout > 0) {
@@ -50,7 +51,17 @@
         _gdt_ad.fetchDelay = 5.0;
     }
     _adspot.viewController.modalPresentationStyle = 0;
-    [_gdt_ad loadAdAndShowInWindow:[UIApplication sharedApplication].by_getCurrentWindow];
+    // 设置logo
+    UIImageView *imgV;
+    if (_adspot.logoImage) {
+        CGFloat real_w = [UIScreen mainScreen].bounds.size.width;
+        CGFloat real_h = _adspot.logoImage.size.height*(real_w/_adspot.logoImage.size.width);
+        imgV = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, real_w, real_h)];
+        imgV.image = _adspot.logoImage;
+    }
+    // 设置 backgroundImage
+    _gdt_ad.backgroundImage = _adspot.backgroundImage;
+    [_gdt_ad loadAdAndShowInWindow:[UIApplication sharedApplication].by_getCurrentWindow withBottomView:imgV];
 }
 
 // MARK: ======================= GDTSplashAdDelegate =======================
@@ -70,7 +81,7 @@
 
 - (void)splashAdFailToPresent:(GDTSplashAd *)splashAd withError:(NSError *)error {
     if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdFailedWithSdkId:error:)]) {
-        [self.delegate advanceSplashOnAdFailedWithSdkId:_adspot.currentSdkSupplier.id error:error];
+        [self.delegate advanceSplashOnAdFailedWithSdkId:_adspot.currentSdkSupplier.adspotid error:error];
     }
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
     [self.adspot selectSdkSupplierWithError:error];
