@@ -56,17 +56,17 @@
     
     _adspot.supplierDelegate = self;
     [_adspot setDefaultSdkSupplierWithMediaId:@"100255"
-                                          adspotid:@"10002698"
-                                          mediakey:@"757d5119466abe3d771a211cc1278df7"
-                                            sdkTag:SDK_TAG_MERCURY];
+                                          adspotId:@"10002698"
+                                          mediaKey:@"757d5119466abe3d771a211cc1278df7"
+                                            sdkId:SDK_ID_MERCURY];
     [_adspot loadAd];
 }
 
 // MARK: ======================= AdvanceBaseAdspotDelegate =======================
 /// 加载渠道广告，将会返回渠道所需参数
-/// @param sdkTag 渠道Tag
+/// @param sdkId 渠道Id
 /// @param params 渠道参数
-- (void)advanceBaseAdspotWithSdkTag:(NSString *)sdkTag params:(NSDictionary *)params {
+- (void)advanceBaseAdspotWithSdkId:(NSString *)sdkId params:(NSDictionary *)params {
     // 根据渠道id自定义初始化
     
     int adCount = 1;
@@ -75,13 +75,13 @@
     }
     CGSize adSize = CGSizeMake(self.view.bounds.size.width, 300);
     
-    if ([sdkTag isEqualToString:SDK_TAG_GDT]) {
+    if ([sdkId isEqualToString:SDK_ID_GDT]) {
         _gdt_ad = [[GDTNativeExpressAd alloc] initWithAppId:[params objectForKey:@"mediaid"]
                                                 placementId:[params objectForKey:@"adspotid"]
                                                      adSize:adSize];
         _gdt_ad.delegate = self;
         [_gdt_ad loadAd:adCount];
-    } else if ([sdkTag isEqualToString:SDK_TAG_CSJ]) {
+    } else if ([sdkId isEqualToString:SDK_ID_CSJ]) {
         BUAdSlot *slot = [[BUAdSlot alloc] init];
         slot.ID = [params objectForKey:@"adspotid"];
         slot.isSupportDeepLink = YES;
@@ -91,7 +91,7 @@
         _csj_ad = [[BUNativeExpressAdManager alloc] initWithSlot:slot adSize:adSize];
         _csj_ad.delegate = self;
         [_csj_ad loadAd:adCount];
-    } else if ([sdkTag isEqualToString:SDK_TAG_MERCURY]) {
+    } else if ([sdkId isEqualToString:SDK_ID_MERCURY]) {
         _mercury_ad = [[MercuryNativeExpressAd alloc] initAdWithAdspotId:_adspot.currentSdkSupplier.adspotid];
         _mercury_ad.delegate = self;
         _mercury_ad.videoMuted = YES;
@@ -167,11 +167,11 @@
         [self.adspot selectSdkSupplierWithError:nil];
     } else {
         [_adspot reportWithType:AdvanceSdkSupplierRepoSucceeded];
-        if ([self.adspot.currentSdkSupplier.sdkTag isEqualToString:SDK_TAG_GDT]) {
+        if ([self.adspot.currentSdkSupplier.id isEqualToString:SDK_ID_GDT]) {
             for (GDTNativeExpressAdView *view in views) {
                 view.controller = self;
             }
-        } else if ([self.adspot.currentSdkSupplier.sdkTag isEqualToString:SDK_TAG_CSJ]) {
+        } else if ([self.adspot.currentSdkSupplier.id isEqualToString:SDK_ID_CSJ]) {
             [_adspot reportWithType:AdvanceSdkSupplierRepoSucceeded];
             for (BUNativeExpressAdView *view in views) {
                 view.rootViewController = self;

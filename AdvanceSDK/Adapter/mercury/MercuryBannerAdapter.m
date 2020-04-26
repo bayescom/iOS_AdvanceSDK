@@ -62,8 +62,8 @@
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
     [_mercury_ad removeFromSuperview];
     _mercury_ad = nil;
-    if ([self.delegate respondsToSelector:@selector(advanceBannerOnAdFailedWithAdapterId:error:)]) {
-        [self.delegate advanceBannerOnAdFailedWithAdapterId:_adspot.currentSdkSupplier.adspotid error:error];
+    if ([self.delegate respondsToSelector:@selector(advanceBannerOnAdFailedWithSdkId:error:)]) {
+        [self.delegate advanceBannerOnAdFailedWithSdkId:_adspot.currentSdkSupplier.id error:error];
     }
     [self.adspot selectSdkSupplierWithError:error];
 }

@@ -27,7 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(strong, nonatomic, nullable) NSArray<NSString *> *loadedtk;
 @property(strong, nonatomic, nullable) NSArray<NSString *> *ext;
 
-- (instancetype)initWithMediaId:(NSString *)mediaid adspotId:(NSString *)adspotid mediaKey:(nullable NSString *)mediakey sdkTag:(NSString *)sdkTag;
+- (instancetype)initWithMediaId:(NSString *)mediaid adspotId:(NSString *)adspotid mediaKey:(nullable NSString *)mediakey sdkId:(NSString *)sdkId;
 
 + (void)sortByPriority:(nullable NSMutableArray<SdkSupplier *> *)sdkList;
 

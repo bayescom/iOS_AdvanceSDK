@@ -46,9 +46,9 @@
     
     _advanceFeed.delegate = self;
     [_advanceFeed setDefaultSdkSupplierWithMediaId:@"100255"
-                                          adspotid:@"10002698"
-                                          mediakey:@"757d5119466abe3d771a211cc1278df7"
-                                            sdkTag:SDK_TAG_MERCURY];
+                                          adspotId:@"10002698"
+                                          mediaKey:@"757d5119466abe3d771a211cc1278df7"
+                                            sdkId:SDK_ID_MERCURY];
     [_advanceFeed loadAd];
 }
 
@@ -102,7 +102,7 @@
 }
 
 /// 广告数据拉取失败
-- (void)advanceNativeExpressOnAdFailedWithAdapterId:(nullable NSString *)adapterId error:(nullable NSError *)error {
+- (void)advanceNativeExpressOnAdFailedWithSdkId:(nullable NSString *)sdkId error:(nullable NSError *)error {
     NSLog(@"广告拉取失败");
 }
 

@@ -30,7 +30,7 @@
 - (void)advanceNativeExpressOnAdClosed:(nullable UIView *)adView;
 
 /// 广告拉取失败
-- (void)advanceNativeExpressOnAdFailedWithAdapterId:(nullable NSString *)adapterId error:(nullable NSError *)error;
+- (void)advanceNativeExpressOnAdFailedWithSdkId:(nullable NSString *)sdkId error:(nullable NSError *)error;
 
 @end
 

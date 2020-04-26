@@ -10,16 +10,16 @@
 
 @implementation SdkSupplier
 
-- (instancetype)initWithMediaId:(NSString *)mediaid adspotId:(NSString *)adspotid mediaKey:(NSString *)mediakey sdkTag:(NSString *)sdkTag {
+- (instancetype)initWithMediaId:(NSString *)mediaid adspotId:(NSString *)adspotid mediaKey:(NSString *)mediakey sdkId:(NSString *)sdkId {
     if (self = [super init]) {
 
         _mediaid = mediaid;
         _adspotid = adspotid;
         _mediakey = mediakey;
-        _sdkTag = sdkTag;
-        _id = @"0";
+        _sdkTag = @"default";
+        _id = sdkId;
         _adCount = 1;
-        _name = @"默认SDK";
+        _name = @"打底SDK";
         _priority = 1;
         _timeout = 5000;
     }
