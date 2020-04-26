@@ -91,28 +91,28 @@
     
     _adspot.supplierDelegate = self;
     [_adspot setDefaultSdkSupplierWithMediaId:@"100255"
-                                          adspotid:@"10002698"
-                                          mediakey:@"757d5119466abe3d771a211cc1278df7"
-                                            sdkTag:SDK_TAG_MERCURY];
+                                          adspotId:@"10002698"
+                                          mediaKey:@"757d5119466abe3d771a211cc1278df7"
+                                            sdkId:SDK_ID_MERCURY];
     [_adspot loadAd];
 }
 
 // MARK: ======================= AdvanceBaseAdspotDelegate =======================
 /// 加载渠道广告，将会返回渠道所需参数
-/// @param sdkTag 渠道Tag
+/// @param sdkId 渠道Id
 /// @param params 渠道参数
-- (void)advanceBaseAdspotWithSdkTag:(NSString *)sdkTag params:(NSDictionary *)params {
+- (void)advanceBaseAdspotWithSdkId:(NSString *)sdkId params:(NSDictionary *)params {
     // 根据渠道id自定义初始化
     int adCount = 1;
     if (_adspot && _adspot.currentSdkSupplier.adCount > 0) {
         adCount = _adspot.currentSdkSupplier.adCount;
     }
-    if ([sdkTag isEqualToString:SDK_TAG_GDT]) {
+    if ([sdkId isEqualToString:SDK_ID_GDT]) {
         self.gdt_ad = [[GDTUnifiedNativeAd alloc] initWithAppId:[params objectForKey:@"mediaid"]//@"1105344611"
                                                     placementId:[params objectForKey:@"adspotid"]];//@"2000566593234845"];
         self.gdt_ad.delegate = self;
         [self.gdt_ad loadAdWithAdCount:adCount];
-    } else if ([sdkTag isEqualToString:SDK_TAG_CSJ]) {
+    } else if ([sdkId isEqualToString:SDK_ID_CSJ]) {
         BUNativeAdsManager *nad = [BUNativeAdsManager new];
         BUAdSlot *slot1 = [[BUAdSlot alloc] init];
         slot1.ID = [params objectForKey:@"adspotid"];//@"900546910";
@@ -124,14 +124,14 @@
         nad.delegate = self;
         _csj_ad = nad;
         [nad loadAdDataWithCount:adCount];
-    } else if ([sdkTag isEqualToString:SDK_TAG_MERCURY]) {
+    } else if ([sdkId isEqualToString:SDK_ID_MERCURY]) {
         _mercury_ad = [[MercuryNativeAd alloc] initAdWithAdspotId:[params objectForKey:@"adspotid"]];//@"10002698"];
         _mercury_ad.delegate = self;
         [_mercury_ad loadAdWithCount:adCount];
     }
 }
 
-- (void)advanceBaseAdspotWithSdkTag:(NSString *)sdkTag error:(NSError *)error {
+- (void)advanceBaseAdspotWithSdkId:(NSString *)sdkId error:(NSError *)error {
     NSLog(@"%@", error);
 }
 

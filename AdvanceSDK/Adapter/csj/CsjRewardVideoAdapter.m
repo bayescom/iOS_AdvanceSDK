@@ -68,8 +68,8 @@
 - (void)nativeExpressRewardedVideoAdViewRenderFail:(BUNativeExpressRewardedVideoAd *)rewardedVideoAd error:(NSError *)error {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
     _csj_ad = nil;
-    if ([self.delegate respondsToSelector:@selector(advanceRewardVideoOnAdFailedWithAdapterId:error:)]) {
-        [self.delegate advanceRewardVideoOnAdFailedWithAdapterId:_adspot.currentSdkSupplier.adspotid error:error];
+    if ([self.delegate respondsToSelector:@selector(advanceRewardVideoOnAdFailedWithSdkId:error:)]) {
+        [self.delegate advanceRewardVideoOnAdFailedWithSdkId:_adspot.currentSdkSupplier.id error:error];
     }
     [self.adspot selectSdkSupplierWithError:error];
 }

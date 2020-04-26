@@ -56,8 +56,8 @@
 - (void)mercury_nativeExpressAdSuccessToLoad:(id)nativeExpressAd views:(NSArray<UIView *> *)views {
     if (views == nil || views.count == 0) {
         [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
-        if ([self.delegate respondsToSelector:@selector(advanceNativeExpressOnAdFailedWithAdapterId:error:)]) {
-            [self.delegate advanceNativeExpressOnAdFailedWithAdapterId:_adspot.currentSdkSupplier.adspotid
+        if ([self.delegate respondsToSelector:@selector(advanceNativeExpressOnAdFailedWithSdkId:error:)]) {
+            [self.delegate advanceNativeExpressOnAdFailedWithSdkId:_adspot.currentSdkSupplier.id
                                                                  error:[NSError errorWithDomain:@"" code:100000 userInfo:@{@"msg": @"无广告返回"}]];
         }
         [self.adspot selectSdkSupplierWithError:nil];
@@ -78,8 +78,8 @@
 - (void)mercury_nativeExpressAdFailToLoadWithError:(NSError *)error {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
     _mercury_ad = nil;
-    if ([self.delegate respondsToSelector:@selector(advanceNativeExpressOnAdFailedWithAdapterId:error:)]) {
-        [self.delegate advanceNativeExpressOnAdFailedWithAdapterId:_adspot.currentSdkSupplier.adspotid error:error];
+    if ([self.delegate respondsToSelector:@selector(advanceNativeExpressOnAdFailedWithSdkId:error:)]) {
+        [self.delegate advanceNativeExpressOnAdFailedWithSdkId:_adspot.currentSdkSupplier.id error:error];
     }
     [self.adspot selectSdkSupplierWithError:error];
 }
