@@ -58,8 +58,8 @@
 - (void)mercury_rewardAdFailError:(nullable NSError *)error {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
     _mercury_ad = nil;
-    if ([self.delegate respondsToSelector:@selector(advanceRewardVideoOnAdFailedWithAdapterId:error:)]) {
-        [self.delegate advanceRewardVideoOnAdFailedWithAdapterId:_adspot.currentSdkSupplier.adspotid error:error];
+    if ([self.delegate respondsToSelector:@selector(advanceRewardVideoOnAdFailedWithSdkId:error:)]) {
+        [self.delegate advanceRewardVideoOnAdFailedWithSdkId:_adspot.currentSdkSupplier.id error:error];
     }
     [self.adspot selectSdkSupplierWithError:error];
 }

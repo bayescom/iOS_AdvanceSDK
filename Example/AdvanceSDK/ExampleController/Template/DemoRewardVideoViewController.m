@@ -35,9 +35,9 @@
                                                            viewController:self];
     self.advanceRewardVideo.delegate=self;
     [self.advanceRewardVideo setDefaultSdkSupplierWithMediaId:@"100255"
-                                                     adspotid:@"10002595"
-                                                     mediakey:@"757d5119466abe3d771a211cc1278df7"
-                                                       sdkTag:SDK_TAG_MERCURY];
+                                                     adspotId:@"10002595"
+                                                     mediaKey:@"757d5119466abe3d771a211cc1278df7"
+                                                       sdkId:SDK_ID_MERCURY];
     [self.advanceRewardVideo loadAd];
 }
 
@@ -67,7 +67,7 @@
     NSLog(@"广告点击");
 }
 
-- (void)advanceRewardVideoOnAdFailedWithAdapterId:(NSString *)adapterId error:(NSError *)error {
+- (void)advanceRewardVideoOnAdFailedWithSdkId:(NSString *)sdkId error:(NSError *)error {
     NSLog(@"广告拉取失败");
 }
 

@@ -57,8 +57,8 @@
 - (void)nativeExpressAdSuccessToLoad:(id)nativeExpressAd views:(nonnull NSArray<__kindof BUNativeExpressAdView *> *)views {
     if (views == nil || views.count == 0) {
         [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
-        if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdFailedWithAdapterId:error:)]) {
-            [_delegate advanceNativeExpressOnAdFailedWithAdapterId:_adspot.currentSdkSupplier.sdkTag error:[NSError errorWithDomain:@"" code:100000 userInfo:@{@"msg":@"无广告返回"}]];
+        if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdFailedWithSdkId:error:)]) {
+            [_delegate advanceNativeExpressOnAdFailedWithSdkId:_adspot.currentSdkSupplier.id error:[NSError errorWithDomain:@"" code:100000 userInfo:@{@"msg":@"无广告返回"}]];
         }
         [self.adspot selectSdkSupplierWithError:nil];
     } else {
@@ -74,8 +74,8 @@
 
 - (void)nativeExpressAdFailToLoad:(BUNativeExpressAdManager *)nativeExpressAd error:(NSError *)error {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
-    if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdFailedWithAdapterId:error:)]) {
-        [_delegate advanceNativeExpressOnAdFailedWithAdapterId:_adspot.currentSdkSupplier.sdkTag error:error];
+    if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdFailedWithSdkId:error:)]) {
+        [_delegate advanceNativeExpressOnAdFailedWithSdkId:_adspot.currentSdkSupplier.id error:error];
     }
     _csj_ad = nil;
     [_adspot selectSdkSupplierWithError:error];

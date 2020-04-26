@@ -64,8 +64,8 @@
 - (void)unifiedBannerViewFailedToLoad:(GDTUnifiedBannerView *)unifiedBannerView error:(NSError *)error {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
     [self.adspot selectSdkSupplierWithError:error];
-    if ([self.delegate respondsToSelector:@selector(advanceBannerOnAdFailedWithAdapterId:error:)]) {
-        [self.delegate advanceBannerOnAdFailedWithAdapterId:_adspot.currentSdkSupplier.adspotid error:error];
+    if ([self.delegate respondsToSelector:@selector(advanceBannerOnAdFailedWithSdkId:error:)]) {
+        [self.delegate advanceBannerOnAdFailedWithSdkId:_adspot.currentSdkSupplier.id error:error];
     }
     [_gdt_ad removeFromSuperview];
     _gdt_ad = nil;

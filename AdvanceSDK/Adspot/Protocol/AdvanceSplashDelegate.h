@@ -21,7 +21,7 @@
 - (void)advanceSplashOnAdRenderFailed;
 
 /// 广告展示失败
-- (void)advanceSplashOnAdFailedWithAdapterId:(NSString *)adapterId error:(NSError *)error;
+- (void)advanceSplashOnAdFailedWithSdkId:(NSString *)sdkId error:(NSError *)error;
 
 /// 广告点击
 - (void)advanceSplashOnAdClicked;

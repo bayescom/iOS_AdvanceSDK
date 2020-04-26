@@ -67,8 +67,8 @@
  */
 - (void)splashAd:(BUSplashAdView *)splashAd didFailWithError:(NSError * _Nullable)error {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
-    if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdFailedWithAdapterId:error:)]) {
-        [self.delegate advanceSplashOnAdFailedWithAdapterId:_adspot.currentSdkSupplier.adspotid error:error];
+    if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdFailedWithSdkId:error:)]) {
+        [self.delegate advanceSplashOnAdFailedWithSdkId:_adspot.currentSdkSupplier.id error:error];
     }
     [_csj_ad removeFromSuperview];
     _csj_ad = nil;
@@ -111,14 +111,4 @@
         [self.delegate advanceSplashOnAdSkipClicked];
     }
 }
-
-/**
- This method is called when spalashAd countdown equals to zero
- */
-- (void)splashAdCountdownToZero:(BUSplashAdView *)splashAd {
-    if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdCountdownToZero)]) {
-        [self.delegate advanceSplashOnAdCountdownToZero];
-    }
-}
-
 @end

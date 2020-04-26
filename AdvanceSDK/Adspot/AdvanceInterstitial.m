@@ -29,16 +29,16 @@
 
 // MARK: ======================= AdvanceBaseAdspotDelegate =======================
 /// 加载渠道广告，将会返回渠道所需参数
-/// @param sdkTag 渠道Tag
+/// @param sdkId 渠道ID
 /// @param params 渠道参数
-- (void)advanceBaseAdspotWithSdkTag:(NSString *)sdkTag params:(NSDictionary *)params {
+- (void)advanceBaseAdspotWithSdkId:(NSString *)sdkId params:(NSDictionary *)params {
     // 根据渠道id自定义初始化
     NSString *clsName = @"";
-    if ([sdkTag isEqualToString:@"gdt"]) {
+    if ([sdkId isEqualToString:SDK_ID_GDT]) {
         clsName = @"GdtInterstitialAdapter";
-    } else if ([sdkTag isEqualToString:@"csj"]) {
+    } else if ([sdkId isEqualToString:SDK_ID_CSJ]) {
         clsName = @"CsjInterstitialAdapter";
-    } else if ([sdkTag isEqualToString:@"bayes"]) {
+    } else if ([sdkId isEqualToString:SDK_ID_MERCURY]) {
         clsName = @"MercuryInterstitialAdapter";
     }
     if (NSClassFromString(clsName)) {
@@ -61,9 +61,9 @@
 }
 
 /// 策略请求失败
-/// @param sdkTag 渠道Tag
+/// @param sdkId 渠道ID
 /// @param error 失败原因
-- (void)advanceBaseAdspotWithSdkTag:(NSString *)sdkTag error:(NSError *)error {
+- (void)advanceBaseAdspotWithSdkId:(NSString *)sdkId error:(NSError *)error {
     NSLog(@"%@", error);
 }
 

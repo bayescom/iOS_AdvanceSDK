@@ -25,7 +25,7 @@
 - (void)advanceInterstitialOnAdRenderFailed;
 
 /// 广告拉取失败
-- (void)advanceInterstitialOnAdFailedWithAdapterId:(NSString *)adapterId error:(NSError *)error;
+- (void)advanceInterstitialOnAdFailedWithSdkId:(NSString *)sdkId error:(NSError *)error;
 
 /// 广告关闭
 - (void)advanceInterstitialOnAdClosed;
