@@ -32,10 +32,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)advanceBaseAdspotWithSdkId:(NSString *)sdkId params:(NSDictionary *)params;
 
 @optional
-/// 请求失败
-/// @param sdkId 渠道Id
+/// 策略请求失败
 /// @param error 失败原因
-- (void)advanceBaseAdspotWithSdkId:(NSString *)sdkId error:(NSError *)error;
+- (void)advanceBaseAdspotFailedWithError:(NSError *)error;
 
 
 @end
