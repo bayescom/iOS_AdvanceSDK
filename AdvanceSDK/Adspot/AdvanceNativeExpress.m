@@ -64,9 +64,8 @@
 }
 
 /// 策略请求失败
-/// @param sdkId 渠道Id
 /// @param error 失败原因
-- (void)advanceBaseAdspotWithSdkId:(NSString *)sdkId error:(NSError *)error {
+- (void)advanceBaseAdspotFailedWithError:(NSError *)error {
     NSLog(@"%@", error);
 }
 @end

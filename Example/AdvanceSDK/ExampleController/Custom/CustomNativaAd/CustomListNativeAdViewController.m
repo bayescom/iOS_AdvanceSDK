@@ -131,7 +131,7 @@
     }
 }
 
-- (void)advanceBaseAdspotWithSdkId:(NSString *)sdkId error:(NSError *)error {
+- (void)advanceBaseAdspotFailedWithError:(NSError *)error {
     NSLog(@"%@", error);
 }
 
