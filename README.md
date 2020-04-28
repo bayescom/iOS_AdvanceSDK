@@ -134,24 +134,13 @@ git lfs version
 
 苹果公司在iOS9中升级了应用网络通信安全策略，默认推荐开发者使用HTTPS协议来进行网络通信，并限制HTTP协议的请求，sdk需要app支持http请求：
 
-![advancesdk_support_http](./advancesdk_support_http.png)
+![advancesdk_support_http](http://www.bayescom.com/docsify/docs/#/bayescom/advancesdk/advancesdk_support_http.png)
 
 #### Step 7 链接设置(必须)
 
 在Target->Build Settings -> Other Linker Flags中添加-ObjC, 字母o和c大写。
 
-![advancesdk_otherlinking](./advancesdk_otherlinking.png)
-
-### 获取聚合SDK系统对接ID
-
-在AdvanceSdk策略管理系统中配置聚合SDK媒体ID，和各个广告位ID，作为加载聚合SDK广告位的参数，如有疑问，请咨询我方运营人员。
-
-例如:媒体ID：10033，广告位ID：200034 。
-
-在系统设置sdk的参数和优先级：
-
-![advancesdk_sdk_setting](./advancesdk_sdk_setting.png)
-
+![advancesdk_otherlinking](http://www.bayescom.com/docsify/docs/#/bayescom/advancesdk/advancesdk_otherlinking.png)
 
 ## 接入代码
 
