@@ -150,7 +150,7 @@ git lfs version
 
 ## 接入代码
 
-您可以运行自带的AdvanceSDKDemo工程，参考Demo工程中的接入代码进行开发。
+您可以运行自带的Example工程，参考Example工程中的接入代码进行开发。
 
 ### 全局初始化设置
 
