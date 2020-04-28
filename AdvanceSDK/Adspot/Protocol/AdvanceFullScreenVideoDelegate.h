@@ -8,8 +8,9 @@
 
 #ifndef AdvanceFullScreenVideoDelegate_h
 #define AdvanceFullScreenVideoDelegate_h
+#import "AdvanceBaseDelegate.h"
 
-@protocol AdvanceFullScreenVideoDelegate <NSObject>
+@protocol AdvanceFullScreenVideoDelegate <AdvanceBaseDelegate>
 @optional
 
 /// 请求广告数据成功后调用

@@ -1,6 +1,0 @@
-framework module MercurySDK {
-  umbrella header "MercurySDK.h"
-
-  export *
-  module * { export * }
-}
