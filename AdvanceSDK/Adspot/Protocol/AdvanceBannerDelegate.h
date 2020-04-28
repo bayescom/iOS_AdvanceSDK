@@ -8,8 +8,9 @@
 
 #ifndef AdvanceBannerProtocol_h
 #define AdvanceBannerProtocol_h
+#import "AdvanceBaseDelegate.h"
 
-@protocol AdvanceBannerDelegate <NSObject>
+@protocol AdvanceBannerDelegate <AdvanceBaseDelegate>
 @optional
 
 /// 请求广告数据成功后调用

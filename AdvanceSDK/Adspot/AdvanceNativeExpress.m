@@ -67,5 +67,9 @@
 /// @param error 失败原因
 - (void)advanceBaseAdspotFailedWithError:(NSError *)error {
     NSLog(@"%@", error);
+    if([self.delegate respondsToSelector:@selector(advanceOnAdNotFilled:)])
+    {
+        [self.delegate advanceOnAdNotFilled:error];
+    }
 }
 @end
