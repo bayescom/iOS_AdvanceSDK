@@ -8,8 +8,9 @@
 
 #ifndef AdvanceInterstitialProtocol_h
 #define AdvanceInterstitialProtocol_h
+#import "AdvanceBaseDelegate.h"
 
-@protocol AdvanceInterstitialDelegate <NSObject>
+@protocol AdvanceInterstitialDelegate <AdvanceBaseDelegate>
 @optional
 
 /// 请求广告数据成功后调用
