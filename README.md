@@ -134,13 +134,13 @@ git lfs version
 
 苹果公司在iOS9中升级了应用网络通信安全策略，默认推荐开发者使用HTTPS协议来进行网络通信，并限制HTTP协议的请求，sdk需要app支持http请求：
 
-![advancesdk_support_http](http://www.bayescom.com/docsify/docs/#/bayescom/advancesdk/advancesdk_support_http.png)
+![7YkxZs](http://cknote.oss-cn-beijing.aliyuncs.com/7YkxZs.jpg)
 
 #### Step 7 链接设置(必须)
 
 在Target->Build Settings -> Other Linker Flags中添加-ObjC, 字母o和c大写。
 
-![advancesdk_otherlinking](http://www.bayescom.com/docsify/docs/#/bayescom/advancesdk/advancesdk_otherlinking.png)
+![OY1Eao](http://cknote.oss-cn-beijing.aliyuncs.com/OY1Eao.jpg)
 
 ## 接入代码
 
