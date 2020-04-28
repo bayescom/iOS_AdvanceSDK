@@ -176,7 +176,7 @@ NSString *const CACHE_PREFIX = @"mercury_advance_%@";
                                                                           NSHTTPURLResponse *httpResp = (NSHTTPURLResponse *) response;
                                                                           if (httpResp.statusCode != 200) {
                                                                               AdvanceLog(AdvanceErrorMsg_Server_01);
-                                                                              [self selectSdkSupplierFailed:AdvanceError(AdvanceErrorCode_Server_01, AdvanceErrorMsg_Server_01)];
+                                                                              [self strategyFailedWithError:AdvanceError(AdvanceErrorCode_Server_01, AdvanceErrorMsg_Server_01)];
                                                                               if (!isToCache) {
                                                                                   [self processRequestFailed];
                                                                               }
@@ -190,7 +190,7 @@ NSString *const CACHE_PREFIX = @"mercury_advance_%@";
                                                                                                                         error:&jsonError];
                                                                               if (jsonError) {
                                                                                   AdvanceLog(AdvanceErrorMsg_JsonParse_01);
-                                                                                  [self selectSdkSupplierFailed:AdvanceError(AdvanceErrorCode_JsonParse_01, AdvanceErrorMsg_JsonParse_01)];
+                                                                                  [self strategyFailedWithError:AdvanceError(AdvanceErrorCode_JsonParse_01, AdvanceErrorMsg_JsonParse_01)];
                                                                                   if (!isToCache) {
                                                                                       [self processRequestFailed];
                                                                                   }
@@ -206,7 +206,7 @@ NSString *const CACHE_PREFIX = @"mercury_advance_%@";
                                                                                       }
                                                                                   } else {
                                                                                       AdvanceLog(AdvanceErrorMsg_Server_01);
-                                                                                      [self selectSdkSupplierFailed:AdvanceError(AdvanceErrorCode_Server_01, AdvanceErrorMsg_Server_01)];
+                                                                                      [self strategyFailedWithError:AdvanceError(AdvanceErrorCode_Server_01, AdvanceErrorMsg_Server_01)];
                                                                                       if (!isToCache) {
                                                                                           [self processRequestFailed];
                                                                                       }
@@ -216,7 +216,7 @@ NSString *const CACHE_PREFIX = @"mercury_advance_%@";
                                                                           }
                                                                       } else {
                                                                           AdvanceLog(AdvanceErrorMsg_Server_02);
-                                                                          [self selectSdkSupplierFailed:AdvanceError(AdvanceErrorCode_Server_02, AdvanceErrorMsg_Server_02)];
+                                                                          [self strategyFailedWithError:AdvanceError(AdvanceErrorCode_Server_02, AdvanceErrorMsg_Server_02)];
                                                                           if (!isToCache) {
                                                                               [self processRequestFailed];
                                                                           }
@@ -262,7 +262,7 @@ NSString *const CACHE_PREFIX = @"mercury_advance_%@";
                 [self.suppliers addObject:self.defaultSdkSupplier];
                 [self selectSdkSupplier];
             } else {
-                [self selectSdkSupplierFailed:AdvanceError(AdvanceErrorCode_Server_01, AdvanceErrorMsg_Server_01)];
+                [self strategyFailedWithError:AdvanceError(AdvanceErrorCode_Server_01, AdvanceErrorMsg_Server_01)];
             }
         } @catch (NSException *exception) {
         } @finally {
@@ -328,7 +328,7 @@ NSString *const CACHE_PREFIX = @"mercury_advance_%@";
 - (void)selectSdkSupplierWithError:(NSError * _Nullable)error {
     if (self.suppliers == nil ||
        [self.suppliers count] == 0) {
-        [self selectSdkSupplierFailed:AdvanceError(AdvanceErrorCode_NoMoreSupplier, AdvanceErrorMsg_NoMoreSupplier)];
+        [self strategyFailedWithError:AdvanceError(AdvanceErrorCode_NoMoreSupplier, AdvanceErrorMsg_NoMoreSupplier)];
     } else {
         @try {
             self.currentSdkSupplier = self.suppliers.firstObject;
@@ -367,9 +367,9 @@ NSString *const CACHE_PREFIX = @"mercury_advance_%@";
     }
 }
 
-- (void)selectSdkSupplierFailed:(NSError *)error {
-    if ([_supplierDelegate respondsToSelector:@selector(advanceBaseAdspotWithSdkId:error:)]) {
-        [_supplierDelegate advanceBaseAdspotWithSdkId:self.currentSdkSupplier.id error:error];
+- (void)strategyFailedWithError:(NSError *)error {
+    if ([_supplierDelegate respondsToSelector:@selector(advanceBaseAdspotFailedWithError:)]) {
+        [_supplierDelegate advanceBaseAdspotFailedWithError:error];
     }
 }
 @end
