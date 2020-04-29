@@ -58,7 +58,7 @@ platform :ios, '9.0'
 target '你的项目名称' do
   # use_frameworks!
   # Pods for 你的项目名称
-  pod 'AdvanceSDK', '~> 3.2.0' # 可指定你想要的版本号
+  pod 'AdvanceSDK', '~> 3.2.1' # 可指定你想要的版本号
   pod 'AdvanceSDK/CSJ', 	# 如果需要导入穿山甲SDK
   pod 'AdvanceSDK/GDT', 	# 如果需要导入广点通SDK
   pod 'AdvanceSDK/Mercury' # 如果需要导入MercurySDK
