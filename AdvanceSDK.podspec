@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'AdvanceSDK'
-  s.version          = '3.2.0'
+  s.version          = '3.2.1'
   
   s.ios.deployment_target = '9.0'
   s.platform     = :ios, "9.0" 
