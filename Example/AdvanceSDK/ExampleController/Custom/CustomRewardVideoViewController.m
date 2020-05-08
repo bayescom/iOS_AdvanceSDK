@@ -21,6 +21,7 @@
 @property (nonatomic, strong) GDTRewardVideoAd *gdt_ad;
 @property (nonatomic, strong) BUNativeExpressRewardedVideoAd *csj_ad;
 @property (nonatomic, strong) MercuryRewardVideoAd *mercury_ad;
+@property (nonatomic) bool isAdLoaded;
 
 @end
 
@@ -46,11 +47,14 @@
                                 mediaKey:@"757d5119466abe3d771a211cc1278df7"
                                   sdkId:SDK_ID_MERCURY];
     _adspot.supplierDelegate = self;
-    
+    _isAdLoaded=false;
     [_adspot loadAd];
 }
 
 - (void)loadAdBtn2Action {
+    if (!_isAdLoaded) {
+        [JDStatusBarNotification showWithStatus:@"请先加载广告" dismissAfter:1.5];
+    }
     if ([_adspot.currentSdkSupplier.id isEqualToString:SDK_ID_GDT]) {
         [_gdt_ad showAdFromRootViewController:self];
     } else if ([_adspot.currentSdkSupplier.id isEqualToString:SDK_ID_CSJ]) {
@@ -88,6 +92,9 @@
 - (void)mercury_rewardVideoAdDidLoad {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded];
     NSLog(@"广告数据加载成功回调");
+    _isAdLoaded=true;
+    [JDStatusBarNotification showWithStatus:@"广告加载成功" dismissAfter:1.5];
+
 }
 
 /// 广告加载失败回调
@@ -96,6 +103,8 @@
     _mercury_ad = nil;
     [self.adspot selectSdkSupplierWithError:error];
     NSLog(@"广告加载失败回调");
+    [JDStatusBarNotification showWithStatus:@"广告加载失败" dismissAfter:1.5];
+
 }
 
 // 视频缓存成功回调
@@ -135,6 +144,8 @@
 - (void)nativeExpressRewardedVideoAdDidLoad:(BUNativeExpressRewardedVideoAd *)rewardedVideoAd {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded];
     NSLog(@"广告数据加载成功回调");
+    _isAdLoaded=true;
+    [JDStatusBarNotification showWithStatus:@"广告加载成功" dismissAfter:1.5];
 }
 
 ///
@@ -143,6 +154,8 @@
     _csj_ad = nil;
     [self.adspot selectSdkSupplierWithError:error];
     NSLog(@"广告加载失败回调");
+    [JDStatusBarNotification showWithStatus:@"广告加载失败" dismissAfter:1.5];
+
 }
 
 // 视频缓存成功回调
@@ -177,6 +190,8 @@
 - (void)gdt_rewardVideoAdDidLoad:(GDTRewardVideoAd *)rewardedVideoAd {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded];
     NSLog(@"广告数据加载成功回调");
+    _isAdLoaded=true;
+    [JDStatusBarNotification showWithStatus:@"广告加载成功" dismissAfter:1.5];
 }
 
 /// 广告加载失败回调
@@ -185,6 +200,7 @@
     _gdt_ad = nil;
     [self.adspot selectSdkSupplierWithError:error];
     NSLog(@"广告加载失败回调");
+    [JDStatusBarNotification showWithStatus:@"广告加载失败" dismissAfter:1.5];
 }
 
 /// 视频广告曝光回调

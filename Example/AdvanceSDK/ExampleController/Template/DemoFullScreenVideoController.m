@@ -13,6 +13,7 @@
 
 @interface DemoFullScreenVideoController () <AdvanceFullScreenVideoDelegate>
 @property (nonatomic, strong) AdvanceFullScreenVideo *advanceFullScreenVideo;
+@property (nonatomic) bool isAdLoaded;
 
 @end
 
@@ -39,10 +40,15 @@
                                                       adspotId:@"10000559"
                                                       mediaKey:@"757d5119466abe3d771a211cc1278df7"
                                                         sdkId:SDK_ID_MERCURY];
+    _isAdLoaded=false;
     [self.advanceFullScreenVideo loadAd];
 }
 
 - (void)loadAdBtn2Action {
+    if (!_isAdLoaded) {
+        [JDStatusBarNotification showWithStatus:@"请先加载广告" dismissAfter:1.5];
+
+    }
     [self.advanceFullScreenVideo showAd];
 }
 
@@ -51,6 +57,9 @@
 /// 请求广告数据成功后调用
 - (void)advanceFullScreenVideoOnAdReceived {
     NSLog(@"请求广告数据成功后调用");
+    _isAdLoaded=true;
+    [JDStatusBarNotification showWithStatus:@"广告加载成功" dismissAfter:1.5];
+
 }
 
 /// 广告渲染失败
@@ -71,6 +80,8 @@
 /// 广告拉取失败
 - (void)advanceFullScreenVideoOnAdFailedWithSdkId:(NSString *)sdkId error:(NSError *)error {
     NSLog(@"广告拉取失败");
+    [JDStatusBarNotification showWithStatus:@"广告加载失败" dismissAfter:1.5];
+
 }
 
 /// 广告关闭
