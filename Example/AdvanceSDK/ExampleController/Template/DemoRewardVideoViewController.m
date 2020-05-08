@@ -13,6 +13,7 @@
 
 @interface DemoRewardVideoViewController () <AdvanceRewardVideoDelegate>
 @property (nonatomic, strong) AdvanceRewardVideo *advanceRewardVideo;
+@property (nonatomic) bool isAdLoaded;
 @end
 
 @implementation DemoRewardVideoViewController
@@ -37,22 +38,30 @@
     [self.advanceRewardVideo setDefaultSdkSupplierWithMediaId:@"100255"
                                                      adspotId:@"10002595"
                                                      mediaKey:@"757d5119466abe3d771a211cc1278df7"
-                                                       sdkId:SDK_ID_MERCURY];
+                                                     sdkId:SDK_ID_MERCURY];
+    _isAdLoaded=false;
     [self.advanceRewardVideo loadAd];
 }
 
 - (void)loadAdBtn2Action {
+    if (!_isAdLoaded) {
+       [JDStatusBarNotification showWithStatus:@"请先加载广告" dismissAfter:1.5];
+    }
     [self.advanceRewardVideo showAd];
 }
 
 // MARK: ======================= AdvanceRewardVideoDelegate =======================
 - (void)advanceRewardVideoOnAdReady {
     NSLog(@"广告数据加载成功");
+    _isAdLoaded=true;
+    [JDStatusBarNotification showWithStatus:@"广告加载成功" dismissAfter:1.5];
 }
 
 - (void)advanceRewardVideoOnAdVideoCached
 {
     NSLog(@"视频缓存成功");
+    [JDStatusBarNotification showWithStatus:@"视频缓存成功" dismissAfter:1.5];
+
 }
 
 - (void)advanceRewardVideoAdDidRewardEffective {
@@ -69,6 +78,8 @@
 
 - (void)advanceRewardVideoOnAdFailedWithSdkId:(NSString *)sdkId error:(NSError *)error {
     NSLog(@"广告拉取失败");
+    [JDStatusBarNotification showWithStatus:@"广告加载失败" dismissAfter:1.5];
+
 }
 
 - (void)advanceRewardVideoOnAdShow {
