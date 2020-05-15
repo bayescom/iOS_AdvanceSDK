@@ -8,7 +8,12 @@
 
 #ifndef AdvanceInterstitialProtocol_h
 #define AdvanceInterstitialProtocol_h
+
+#if __has_include(<MercurySDK/AdvanceBaseDelegate.h>)
+#import <MercurySDK/AdvanceBaseDelegate.h>
+#else
 #import "AdvanceBaseDelegate.h"
+#endif
 
 @protocol AdvanceInterstitialDelegate <AdvanceBaseDelegate>
 @optional
@@ -30,6 +35,9 @@
 
 /// 广告关闭
 - (void)advanceInterstitialOnAdClosed;
+
+/// 广告可以调用show方法
+- (void)advanceInterstitialOnReadyToShow;
 
 @end
 

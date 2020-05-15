@@ -8,7 +8,12 @@
 
 #ifndef AdvanceSplashProtocol_h
 #define AdvanceSplashProtocol_h
+
+#if __has_include(<MercurySDK/AdvanceBaseDelegate.h>)
+#import <MercurySDK/AdvanceBaseDelegate.h>
+#else
 #import "AdvanceBaseDelegate.h"
+#endif
 
 @protocol AdvanceSplashDelegate <AdvanceBaseDelegate>
 @optional

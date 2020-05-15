@@ -37,6 +37,7 @@
     _mercury_ad.placeholderImage = _adspot.backgroundImage;
     _mercury_ad.logoImage = _adspot.logoImage;
     _mercury_ad.delegate = self;
+//    _mercury_ad.showType = MercurySplashAdShowCutBottom;
     _mercury_ad.controller = _adspot.viewController;
     [_mercury_ad loadAdAndShow];
 }
