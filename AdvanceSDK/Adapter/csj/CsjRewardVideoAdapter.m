@@ -115,4 +115,12 @@
     }
 }
 
+// renderSuccess
+- (void)nativeExpressRewardedVideoAdViewRenderSuccess:(BUNativeExpressRewardedVideoAd *)rewardedVideoAd {
+    /// 视频广告视频可以调用Show方法
+    if ([self.delegate respondsToSelector:@selector(advanceRewardVideoIsReadyToShow)]) {
+        [self.delegate advanceRewardVideoIsReadyToShow];
+    }
+}
+
 @end

@@ -8,7 +8,12 @@
 
 #ifndef AdvanceFullScreenVideoDelegate_h
 #define AdvanceFullScreenVideoDelegate_h
+
+#if __has_include(<MercurySDK/AdvanceBaseDelegate.h>)
+#import <MercurySDK/AdvanceBaseDelegate.h>
+#else
 #import "AdvanceBaseDelegate.h"
+#endif
 
 @protocol AdvanceFullScreenVideoDelegate <AdvanceBaseDelegate>
 @optional
