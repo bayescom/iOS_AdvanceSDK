@@ -8,7 +8,12 @@
 
 #ifndef AdvanceBannerProtocol_h
 #define AdvanceBannerProtocol_h
+
+#if __has_include(<MercurySDK/AdvanceBaseDelegate.h>)
+#import <MercurySDK/AdvanceBaseDelegate.h>
+#else
 #import "AdvanceBaseDelegate.h"
+#endif
 
 @protocol AdvanceBannerDelegate <AdvanceBaseDelegate>
 @optional
