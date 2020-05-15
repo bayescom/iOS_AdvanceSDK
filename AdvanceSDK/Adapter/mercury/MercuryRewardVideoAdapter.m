@@ -69,6 +69,10 @@
     if ([self.delegate respondsToSelector:@selector(advanceRewardVideoOnAdVideoCached)]) {
         [self.delegate advanceRewardVideoOnAdVideoCached];
     }
+    /// 视频广告视频可以调用Show方法
+    if ([self.delegate respondsToSelector:@selector(advanceRewardVideoIsReadyToShow)]) {
+        [self.delegate advanceRewardVideoIsReadyToShow];
+    }
 }
 
 /// 视频广告曝光回调

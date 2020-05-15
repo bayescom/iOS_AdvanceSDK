@@ -8,7 +8,12 @@
 
 #ifndef AdvanceRewardVideoProtocol_h
 #define AdvanceRewardVideoProtocol_h
+
+#if __has_include(<MercurySDK/AdvanceBaseDelegate.h>)
+#import <MercurySDK/AdvanceBaseDelegate.h>
+#else
 #import "AdvanceBaseDelegate.h"
+#endif
 
 @protocol AdvanceRewardVideoDelegate <AdvanceBaseDelegate>
 @optional
@@ -39,6 +44,9 @@
 
 /// 广告到达激励时间
 - (void)advanceRewardVideoAdDidRewardEffective;
+
+/// 激励视频可以调用show方法
+- (void)advanceRewardVideoIsReadyToShow;
 
 @end
 
