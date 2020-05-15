@@ -54,6 +54,9 @@
     if ([self.delegate respondsToSelector:@selector(advanceInterstitialOnAdReceived)]) {
         [self.delegate advanceInterstitialOnAdReceived];
     }
+    if ([self.delegate respondsToSelector:@selector(advanceInterstitialOnReadyToShow)]) {
+        [self.delegate advanceInterstitialOnReadyToShow];
+    }
 }
 
 /// 插屏广告预加载失败回调，当接收服务器返回的广告数据失败后调用该函数

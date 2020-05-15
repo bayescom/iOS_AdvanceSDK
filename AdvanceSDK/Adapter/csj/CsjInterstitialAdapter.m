@@ -101,4 +101,11 @@
     }
 }
 
+/// 广告可以调用Show
+- (void)nativeExpresInterstitialAdRenderSuccess:(BUNativeExpressInterstitialAd *)interstitialAd {
+    if ([self.delegate respondsToSelector:@selector(advanceInterstitialOnReadyToShow)]) {
+        [self.delegate advanceInterstitialOnReadyToShow];
+    }
+}
+
 @end
