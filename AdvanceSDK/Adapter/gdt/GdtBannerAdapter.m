@@ -36,7 +36,7 @@
 
 - (void)loadAd {
     CGRect rect = CGRectMake(0, 0, _adspot.adContainer.frame.size.width, _adspot.adContainer.frame.size.height);
-    _gdt_ad = [[GDTUnifiedBannerView alloc] initWithFrame:rect appId:_adspot.currentSdkSupplier.mediaid placementId:_adspot.currentSdkSupplier.adspotid viewController:_adspot.viewController];
+    _gdt_ad = [[GDTUnifiedBannerView alloc] initWithFrame:rect placementId:_adspot.currentSdkSupplier.adspotid viewController:_adspot.viewController]
     _gdt_ad.animated = YES;
     _gdt_ad.autoSwitchInterval = _adspot.refreshInterval;
     _gdt_ad.delegate = self;
