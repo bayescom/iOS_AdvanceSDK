@@ -2,7 +2,7 @@
 //  NSTimeUtils.m
 //  AdvanceSDKExample
 //
-//  Created by 程立卿 on 2020/3/16.
+//  Created by CherryKing on 2020/3/16.
 //  Copyright © 2020 Mercury. All rights reserved.
 //
 

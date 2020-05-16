@@ -12,6 +12,8 @@
 #import "ViewController.h"
 
 #import <MercurySDK/MercurySDK.h>
+#import <BUAdSDK/BUAdSDK.h>
+#import <GDTSDKConfig.h>
 
 @interface AppDelegate ()
 @end
@@ -27,8 +29,15 @@
     self.window.rootViewController = nav;
     [self.window makeKeyAndVisible];
     
+    // 初始化各渠道SDK
+    
+    // MercurySDK
     [MercuryConfigManager setAppID:@"100255"
                           mediaKey:@"757d5119466abe3d771a211cc1278df7"];
+    // 穿山甲SDK
+    [BUAdSDKManager setAppID:@"5000546"];
+    // 广点通SDK
+    [GDTSDKConfig registerAppId:@"1105344611"];
     
     return YES;
 }

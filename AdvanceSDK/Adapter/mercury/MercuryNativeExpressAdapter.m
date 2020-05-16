@@ -2,7 +2,7 @@
 //  MercuryNativeExpressAdapter.m
 //  AdvanceSDKDev
 //
-//  Created by 程立卿 on 2020/4/9.
+//  Created by CherryKing on 2020/4/9.
 //  Copyright © 2020 bayescom. All rights reserved.
 //
 
@@ -10,7 +10,7 @@
 #if __has_include(<MercurySDK/MercuryNativeExpressAd.h>)
 #import <MercurySDK/MercuryNativeExpressAd.h>
 #else
-#import "MercurySDK/MercuryNativeExpressAd.h"
+#import "MercuryNativeExpressAd.h"
 #endif
 #import "AdvanceNativeExpress.h"
 
