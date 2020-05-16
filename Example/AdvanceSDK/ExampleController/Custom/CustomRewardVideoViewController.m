@@ -2,7 +2,7 @@
 //  CustomRewardVideoViewController.m
 //  AdvanceSDKCustom
 //
-//  Created by 程立卿 on 2020/1/3.
+//  Created by CherryKing on 2020/1/3.
 //  Copyright © 2020 BAYESCOM. All rights reserved.
 //
 
@@ -71,8 +71,7 @@
 - (void)advanceBaseAdspotWithSdkId:(NSString *)sdkId params:(NSDictionary *)params {
     // 根据渠道id自定义初始化
     if ([sdkId isEqualToString:SDK_ID_GDT]) {
-        _gdt_ad = [[GDTRewardVideoAd alloc] initWithAppId:[params objectForKey:@"mediaid"]
-                                              placementId:[params objectForKey:@"adspotid"]];
+        _gdt_ad = [[GDTRewardVideoAd alloc] initWithPlacementId:[params objectForKey:@"adspotid"]];
         _gdt_ad.delegate = self;
         [_gdt_ad loadAd];
     } else if ([sdkId isEqualToString:SDK_ID_CSJ]) {
