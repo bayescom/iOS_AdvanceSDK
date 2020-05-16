@@ -2,7 +2,7 @@
 //  AdvanceBanner.m
 //  AdvanceSDKExample
 //
-//  Created by 程立卿 on 2020/4/7.
+//  Created by CherryKing on 2020/4/7.
 //  Copyright © 2020 Mercury. All rights reserved.
 //
 

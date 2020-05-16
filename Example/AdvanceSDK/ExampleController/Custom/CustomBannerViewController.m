@@ -2,7 +2,7 @@
 //  CustomBannerViewController.m
 //  Example
 //
-//  Created by 程立卿 on 2019/11/8.
+//  Created by CherryKing on 2019/11/8.
 //  Copyright © 2019 CherryKing. All rights reserved.
 //
 
@@ -55,7 +55,6 @@
     // 根据渠道id自定义初始化
     if ([sdkId isEqualToString:SDK_ID_GDT]) {
         _gdt_ad = [[GDTUnifiedBannerView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.width/6.4)
-                                                        appId:[params objectForKey:@"mediaid"]
                                                   placementId:[params objectForKey:@"adspotid"]
                                                viewController:self];
         _gdt_ad.delegate = self;

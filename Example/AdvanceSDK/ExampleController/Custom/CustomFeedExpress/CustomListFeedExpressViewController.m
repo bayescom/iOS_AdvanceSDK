@@ -2,7 +2,7 @@
 //  CustomListFeedExpressViewController.m
 //  AdvanceSDKDev
 //
-//  Created by 程立卿 on 2020/4/13.
+//  Created by CherryKing on 2020/4/13.
 //  Copyright © 2020 bayescom. All rights reserved.
 //
 
@@ -76,9 +76,8 @@
     CGSize adSize = CGSizeMake(self.view.bounds.size.width, 300);
     
     if ([sdkId isEqualToString:SDK_ID_GDT]) {
-        _gdt_ad = [[GDTNativeExpressAd alloc] initWithAppId:[params objectForKey:@"mediaid"]
-                                                placementId:[params objectForKey:@"adspotid"]
-                                                     adSize:adSize];
+        _gdt_ad = [[GDTNativeExpressAd alloc] initWithPlacementId:[params objectForKey:@"adspotid"]
+                                                           adSize:adSize];
         _gdt_ad.delegate = self;
         [_gdt_ad loadAd:adCount];
     } else if ([sdkId isEqualToString:SDK_ID_CSJ]) {
