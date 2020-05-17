@@ -2,7 +2,7 @@
 //  CsjRewardVideoAdapter.m
 //  AdvanceSDKDev
 //
-//  Created by 程立卿 on 2020/4/9.
+//  Created by CherryKing on 2020/4/9.
 //  Copyright © 2020 bayescom. All rights reserved.
 //
 
@@ -11,12 +11,12 @@
 #if __has_include(<BUAdSDK/BUNativeExpressRewardedVideoAd.h>)
 #import <BUAdSDK/BUNativeExpressRewardedVideoAd.h>
 #else
-#import "BUAdSDK/BUNativeExpressRewardedVideoAd.h"
+#import "BUNativeExpressRewardedVideoAd.h"
 #endif
 #if __has_include(<BUAdSDK/BURewardedVideoModel.h>)
 #import <BUAdSDK/BURewardedVideoModel.h>
 #else
-#import "BUAdSDK/BURewardedVideoModel.h"
+#import "BURewardedVideoModel.h"
 #endif
 
 #import "AdvanceRewardVideo.h"

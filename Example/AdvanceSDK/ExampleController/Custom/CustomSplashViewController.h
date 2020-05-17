@@ -2,7 +2,7 @@
 //  CustomSplashViewController.h
 //  AAA
 //
-//  Created by 程立卿 on 2019/11/1.
+//  Created by CherryKing on 2019/11/1.
 //  Copyright © 2019 CherryKing. All rights reserved.
 //
 
