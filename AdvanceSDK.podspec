@@ -50,7 +50,7 @@ Blink倍联——免费透明的流量变现神器 
   s.subspec 'Mercury' do |mer|
     mer.dependency 'AdvanceSDK/Core'
     mer.dependency 'AdvanceSDK/Adspot'
-    mer.dependency 'MercurySDK'
+    mer.dependency 'MercurySDK', '3.1.3.3'
     mer.source_files = 'AdvanceSDK/Adapter/mercury/**/*.{h,m}'
     mer.frameworks = 'StoreKit', 'AVFoundation'
   end
@@ -58,7 +58,7 @@ Blink倍联——免费透明的流量变现神器 
   s.subspec 'CSJ' do |csj|
     csj.dependency 'AdvanceSDK/Core'
     csj.dependency 'AdvanceSDK/Adspot'
-    csj.dependency 'Bytedance-UnionAD'
+    csj.dependency 'Bytedance-UnionAD', '2.9.5.6'
     csj.source_files = 'AdvanceSDK/Adapter/csj/**/*.{h,m}'
     csj.frameworks = 'UIKit', 'MapKit', 'WebKit', 'MediaPlayer', 'CoreLocation', 'AdSupport', 'CoreMedia', 'AVFoundation', 'CoreTelephony', 'StoreKit', 'SystemConfiguration', 'MobileCoreServices', 'CoreMotion', 'Accelerate'
     csj.libraries  = 'c++', 'resolv', 'z', 'sqlite3'
@@ -67,7 +67,7 @@ Blink倍联——免费透明的流量变现神器 
   s.subspec 'GDT' do |gdt|
     gdt.dependency 'AdvanceSDK/Core'
     gdt.dependency 'AdvanceSDK/Adspot'
-    gdt.dependency 'GDTMobSDK'
+    gdt.dependency 'GDTMobSDK', '4.11.7'
     gdt.source_files =  'AdvanceSDK/Adapter/gdt/**/*.{h,m}'
     gdt.frameworks = 'AdSupport', 'CoreLocation', 'QuartzCore', 'SystemConfiguration', 'CoreTelephony', 'Security', 'StoreKit', 'AVFoundation', 'WebKit'
     gdt.libraries     = 'xml2', 'z'
