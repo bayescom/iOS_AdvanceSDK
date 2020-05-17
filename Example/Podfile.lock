@@ -1,30 +1,30 @@
 PODS:
-  - AdvanceSDK (3.2.1):
-    - AdvanceSDK/Core (= 3.2.1)
-  - AdvanceSDK/Adspot (3.2.1):
+  - AdvanceSDK (3.2.1.1):
+    - AdvanceSDK/Core (= 3.2.1.1)
+  - AdvanceSDK/Adspot (3.2.1.1):
     - AdvanceSDK/Core
-  - AdvanceSDK/Core (3.2.1)
-  - AdvanceSDK/CSJ (3.2.1):
+  - AdvanceSDK/Core (3.2.1.1)
+  - AdvanceSDK/CSJ (3.2.1.1):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - Bytedance-UnionAD
-  - AdvanceSDK/GDT (3.2.1):
+  - AdvanceSDK/GDT (3.2.1.1):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - GDTMobSDK
-  - AdvanceSDK/Mercury (3.2.1):
+  - AdvanceSDK/Mercury (3.2.1.1):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - MercurySDK
   - Bytedance-UnionAD (2.9.0.7)
-  - GDTMobSDK (4.11.7):
-    - GDTMobSDK/GDTMobSDK (= 4.11.7)
-  - GDTMobSDK/GDTMobSDK (4.11.7)
+  - GDTMobSDK (4.11.8):
+    - GDTMobSDK/GDTMobSDK (= 4.11.8)
+  - GDTMobSDK/GDTMobSDK (4.11.8)
   - Masonry (1.1.0)
-  - MercurySDK (3.1.3.1)
-  - SDWebImage (5.7.3):
-    - SDWebImage/Core (= 5.7.3)
-  - SDWebImage/Core (5.7.3)
+  - MercurySDK (3.1.3.3)
+  - SDWebImage (5.8.0):
+    - SDWebImage/Core (= 5.8.0)
+  - SDWebImage/Core (5.8.0)
 
 DEPENDENCIES:
   - AdvanceSDK (from `../`)
@@ -47,12 +47,12 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  AdvanceSDK: 13d166aa901e6cf2df015132e6255523a0ab2c1c
+  AdvanceSDK: 9d31739781180c560f6cb147e16f0b743c4e67d8
   Bytedance-UnionAD: e1f318b415a713c3be23ee357db7521fe20d76d0
-  GDTMobSDK: edb52f3721c8c62b790b255833e423a00a3d2172
+  GDTMobSDK: 91ee9dc551484739c62b6ec4f5f1728d2fd1fe26
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
-  MercurySDK: acae8806f445fab69d6bdda3936e3c8d1857e6f5
-  SDWebImage: 97351f6582ceca541ea294ba66a1fcb342a331c2
+  MercurySDK: 534432be082e43906459a455015b9d8fd424d796
+  SDWebImage: 84000f962cbfa70c07f19d2234cbfcf5d779b5dc
 
 PODFILE CHECKSUM: 3fa1f9b174589e51040c04ae7d9f8774bd1857d6
 

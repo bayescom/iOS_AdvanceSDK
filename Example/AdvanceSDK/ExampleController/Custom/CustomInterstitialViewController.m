@@ -70,8 +70,8 @@
 - (void)advanceBaseAdspotWithSdkId:(NSString *)sdkId params:(NSDictionary *)params {
     // 根据渠道id自定义初始化
     if ([sdkId isEqualToString:SDK_ID_GDT]) {
-        _gdt_ad = [[GDTUnifiedInterstitialAd alloc] initWithAppId:[params objectForKey:@"mediaid"]
-                                                      placementId:[params objectForKey:@"adspotid"]];
+        _gdt_ad = [[GDTUnifiedInterstitialAd alloc] initWithPlacementId:[params objectForKey:@"adspotid"]];
+        
         _gdt_ad.delegate = self;
         [_gdt_ad loadAd];
     } else if ([sdkId isEqualToString:SDK_ID_CSJ]) {

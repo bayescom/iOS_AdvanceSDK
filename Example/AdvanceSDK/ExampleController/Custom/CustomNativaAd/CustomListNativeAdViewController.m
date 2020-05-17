@@ -2,7 +2,7 @@
 //  CustomListNativeAdViewController.m
 //  AdvanceSDKDev
 //
-//  Created by 程立卿 on 2020/4/14.
+//  Created by CherryKing on 2020/4/14.
 //  Copyright © 2020 bayescom. All rights reserved.
 //
 
@@ -108,8 +108,7 @@
         adCount = _adspot.currentSdkSupplier.adCount;
     }
     if ([sdkId isEqualToString:SDK_ID_GDT]) {
-        self.gdt_ad = [[GDTUnifiedNativeAd alloc] initWithAppId:[params objectForKey:@"mediaid"]//@"1105344611"
-                                                    placementId:[params objectForKey:@"adspotid"]];//@"2000566593234845"];
+        self.gdt_ad = [[GDTUnifiedNativeAd alloc] initWithPlacementId:[params objectForKey:@"adspotid"]];//@"2000566593234845"];
         self.gdt_ad.delegate = self;
         [self.gdt_ad loadAdWithAdCount:adCount];
     } else if ([sdkId isEqualToString:SDK_ID_CSJ]) {

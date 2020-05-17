@@ -2,7 +2,7 @@
 //  GdtSplashAdapter.m
 //  AdvanceSDKExample
 //
-//  Created by 程立卿 on 2020/4/8.
+//  Created by CherryKing on 2020/4/8.
 //  Copyright © 2020 Gdt. All rights reserved.
 //
 
@@ -41,7 +41,7 @@
 }
 
 - (void)loadAd {
-    _gdt_ad = [[GDTSplashAd alloc] initWithAppId:_adspot.currentSdkSupplier.mediaid placementId:_adspot.currentSdkSupplier.adspotid];
+    _gdt_ad = [[GDTSplashAd alloc] initWithPlacementId:_adspot.currentSdkSupplier.adspotid];
     
     _gdt_ad.delegate = self;
     if (_adspot.currentSdkSupplier.timeout &&
@@ -61,15 +61,19 @@
     }
     // 设置 backgroundImage
     _gdt_ad.backgroundImage = _adspot.backgroundImage;
-    [_gdt_ad loadAdAndShowInWindow:[UIApplication sharedApplication].by_getCurrentWindow withBottomView:imgV];
+    [_gdt_ad loadAd];
 }
 
 // MARK: ======================= GDTSplashAdDelegate =======================
-- (void)splashAdDidLoad:(GDTSplashAd *)splashAd {
+- (void)splashAdSuccessPresentScreen:(GDTSplashAd *)splashAd {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded];
     if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdReceived)]) {
         [self.delegate advanceSplashOnAdReceived];
     }
+}
+
+- (void)splashAdDidLoad:(GDTSplashAd *)splashAd {
+    [_gdt_ad showAdInWindow:[UIApplication sharedApplication].by_getCurrentWindow withBottomView:nil skipView:nil];
 }
 
 - (void)splashAdExposured:(GDTSplashAd *)splashAd {

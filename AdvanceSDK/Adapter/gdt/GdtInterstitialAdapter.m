@@ -2,7 +2,7 @@
 //  GdtInterstitialAdapter.m
 //  AdvanceSDKDev
 //
-//  Created by 程立卿 on 2020/4/9.
+//  Created by CherryKing on 2020/4/9.
 //  Copyright © 2020 bayescom. All rights reserved.
 //
 
@@ -35,8 +35,7 @@
 }
 
 - (void)loadAd {
-    _gdt_ad = [[GDTUnifiedInterstitialAd alloc] initWithAppId:_adspot.currentSdkSupplier.mediaid
-                                                  placementId:_adspot.currentSdkSupplier.adspotid];
+    _gdt_ad = [[GDTUnifiedInterstitialAd alloc] initWithPlacementId:_adspot.currentSdkSupplier.adspotid];
     _gdt_ad.delegate = self;
     [_gdt_ad loadAd];
 }
