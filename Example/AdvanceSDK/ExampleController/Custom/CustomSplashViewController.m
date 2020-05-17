@@ -2,7 +2,7 @@
 //  CustomSplashViewController.m
 //  AAA
 //
-//  Created by 程立卿 on 2019/11/1.
+//  Created by CherryKing on 2019/11/1.
 //  Copyright © 2019 CherryKing. All rights reserved.
 //
 
@@ -56,8 +56,7 @@
     UIWindow *window = [UIApplication sharedApplication].keyWindow;
     // 根据渠道id自定义初始化
     if ([sdkId isEqualToString:SDK_ID_GDT]) {
-        _gdt_ad = [[GDTSplashAd alloc] initWithAppId:[params objectForKey:@"mediaid"]
-                                         placementId:[params objectForKey:@"adspotid"]];
+        _gdt_ad = [[GDTSplashAd alloc] initWithPlacementId:[params objectForKey:@"adspotid"]];
         _gdt_ad.delegate = self;
         _gdt_ad.fetchDelay = 5;
         [_gdt_ad loadAdAndShowInWindow:window];

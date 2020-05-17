@@ -2,7 +2,7 @@
 //  MercuryInterstitialAdapter.m
 //  AdvanceSDKDev
 //
-//  Created by 程立卿 on 2020/4/9.
+//  Created by CherryKing on 2020/4/9.
 //  Copyright © 2020 bayescom. All rights reserved.
 //
 
@@ -10,7 +10,7 @@
 #if __has_include(<MercurySDK/MercuryInterstitialAd.h>)
 #import <MercurySDK/MercuryInterstitialAd.h>
 #else
-#import "MercurySDK/MercuryInterstitialAd.h"
+#import "MercuryInterstitialAd.h"
 #endif
 
 #import "AdvanceInterstitial.h"

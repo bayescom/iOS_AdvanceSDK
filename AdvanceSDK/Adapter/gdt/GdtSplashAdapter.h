@@ -2,7 +2,7 @@
 //  GdtSplashAdapter.h
 //  AdvanceSDKExample
 //
-//  Created by 程立卿 on 2020/4/8.
+//  Created by CherryKing on 2020/4/8.
 //  Copyright © 2020 Gdt. All rights reserved.
 //
 

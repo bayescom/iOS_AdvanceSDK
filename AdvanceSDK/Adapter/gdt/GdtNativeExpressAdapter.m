@@ -2,7 +2,7 @@
 //  GdtNativeExpressAdapter.m
 //  AdvanceSDKDev
 //
-//  Created by 程立卿 on 2020/4/9.
+//  Created by CherryKing on 2020/4/9.
 //  Copyright © 2020 bayescom. All rights reserved.
 //
 
@@ -46,9 +46,8 @@
         adCount = _adspot.currentSdkSupplier.adCount;
     }
     
-    _gdt_ad = [[GDTNativeExpressAd alloc] initWithAppId:_adspot.currentSdkSupplier.mediaid
-                                            placementId:_adspot.currentSdkSupplier.adspotid
-                                                 adSize:_adspot.adSize];
+    _gdt_ad = [[GDTNativeExpressAd alloc] initWithPlacementId:_adspot.currentSdkSupplier.adspotid
+                                                       adSize:_adspot.adSize];
     _gdt_ad.delegate = self;
     [_gdt_ad loadAd:adCount];
 }

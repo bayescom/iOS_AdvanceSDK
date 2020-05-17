@@ -2,7 +2,7 @@
 //  DemoRewardVideoViewController.m
 //  AdvanceSDKDemo
 //
-//  Created by 程立卿 on 2020/1/3.
+//  Created by CherryKing on 2020/1/3.
 //  Copyright © 2020 BAYESCOM. All rights reserved.
 //
 
@@ -79,7 +79,6 @@
 - (void)advanceRewardVideoOnAdFailedWithSdkId:(NSString *)sdkId error:(NSError *)error {
     NSLog(@"广告拉取失败");
     [JDStatusBarNotification showWithStatus:@"广告加载失败" dismissAfter:1.5];
-
 }
 
 - (void)advanceRewardVideoOnAdShow {
@@ -92,6 +91,14 @@
 
 - (void)advanceRewardVideoAdDidPlayFinish {
     NSLog(@"播放完成");
+}
+
+- (void)advanceRewardVideoIsReadyToShow {
+    if (!_isAdLoaded) {
+       [JDStatusBarNotification showWithStatus:@"请先加载广告" dismissAfter:1.5];
+    }
+    NSLog(@"播放可以Show");
+    [self.advanceRewardVideo showAd];
 }
 
 @end
