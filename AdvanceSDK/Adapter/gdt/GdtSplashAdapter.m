@@ -51,14 +51,6 @@
         _gdt_ad.fetchDelay = 5.0;
     }
     _adspot.viewController.modalPresentationStyle = 0;
-    // 设置logo
-    UIImageView *imgV;
-    if (_adspot.logoImage) {
-        CGFloat real_w = [UIScreen mainScreen].bounds.size.width;
-        CGFloat real_h = _adspot.logoImage.size.height*(real_w/_adspot.logoImage.size.width);
-        imgV = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, real_w, real_h)];
-        imgV.image = _adspot.logoImage;
-    }
     // 设置 backgroundImage
     _gdt_ad.backgroundImage = _adspot.backgroundImage;
     [_gdt_ad loadAd];
@@ -70,10 +62,19 @@
     if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdReceived)]) {
         [self.delegate advanceSplashOnAdReceived];
     }
+    
 }
 
 - (void)splashAdDidLoad:(GDTSplashAd *)splashAd {
-    [_gdt_ad showAdInWindow:[UIApplication sharedApplication].by_getCurrentWindow withBottomView:nil skipView:nil];
+    // 设置logo
+    UIImageView *imgV;
+    if (_adspot.logoImage) {
+        CGFloat real_w = [UIScreen mainScreen].bounds.size.width;
+        CGFloat real_h = _adspot.logoImage.size.height*(real_w/_adspot.logoImage.size.width);
+        imgV = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, real_w, real_h)];
+        imgV.image = _adspot.logoImage;
+    }
+    [_gdt_ad showAdInWindow:[UIApplication sharedApplication].by_getCurrentWindow withBottomView:_adspot.showLogoRequire?imgV:nil skipView:nil];
 }
 
 - (void)splashAdExposured:(GDTSplashAd *)splashAd {
