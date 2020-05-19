@@ -39,7 +39,7 @@
 - (void)loadAd {
     CGRect adFrame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height);
     // 设置logo
-    if (_adspot.logoImage) {
+    if (_adspot.logoImage && _adspot.showLogoRequire) {
         CGFloat real_w = [UIScreen mainScreen].bounds.size.width;
         CGFloat real_h = _adspot.logoImage.size.height*(real_w/_adspot.logoImage.size.width);
         adFrame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height-real_h);
@@ -74,13 +74,15 @@
     if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdReceived)]) {
         [self.delegate advanceSplashOnAdReceived];
     }
-    // 添加Logo
-    CGFloat real_w = [UIScreen mainScreen].bounds.size.width;
-    CGFloat real_h = _adspot.logoImage.size.height*(real_w/_adspot.logoImage.size.width);
-    UIImageView *imgV = [[UIImageView alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height-real_h, real_w, real_h)];
-    imgV.image = _adspot.logoImage;
-    if (imgV) {
-        [_csj_ad addSubview:imgV];
+    if (_adspot.showLogoRequire) {
+        // 添加Logo
+        CGFloat real_w = [UIScreen mainScreen].bounds.size.width;
+        CGFloat real_h = _adspot.logoImage.size.height*(real_w/_adspot.logoImage.size.width);
+        UIImageView *imgV = [[UIImageView alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height-real_h, real_w, real_h)];
+        imgV.image = _adspot.logoImage;
+        if (imgV) {
+            [_csj_ad addSubview:imgV];
+        }
     }
 }
 

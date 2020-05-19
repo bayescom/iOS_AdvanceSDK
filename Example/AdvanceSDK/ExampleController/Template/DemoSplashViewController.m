@@ -34,6 +34,7 @@
                                                        adspotId:self.adspotId
                                                  viewController:self];
     self.advanceSplash.delegate = self;
+//    self.advanceSplash.showLogoRequire = YES;
     self.advanceSplash.logoImage = [UIImage imageNamed:@"app_logo"];
     self.advanceSplash.backgroundImage = [UIImage imageNamed:@"LaunchImage_img"];
     [self.advanceSplash setDefaultSdkSupplierWithMediaId:@"100255"
