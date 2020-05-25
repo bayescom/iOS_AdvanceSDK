@@ -13,8 +13,6 @@
 @interface AdvanceNativeExpress () <AdvanceBaseAdspotDelegate>
 @property (nonatomic, strong) id adapter;
 
-@property (nonatomic, strong) UIViewController *controller;
-
 @end
 
 @implementation AdvanceNativeExpress
@@ -48,6 +46,7 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wundeclared-selector"
         _adapter = ((id (*)(id, SEL, id, id))objc_msgSend)((id)[NSClassFromString(clsName) alloc], @selector(initWithParams:adspot:), params, self);
+        ((void (*)(id, SEL, id))objc_msgSend)((id)_adapter, @selector(setController:), _viewController);
         ((void (*)(id, SEL, id))objc_msgSend)((id)_adapter, @selector(setDelegate:), _delegate);
         ((void (*)(id, SEL))objc_msgSend)((id)_adapter, @selector(loadAd));
 #pragma clang diagnostic pop
