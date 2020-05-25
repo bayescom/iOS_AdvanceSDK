@@ -34,6 +34,7 @@
 
 - (void)loadAd {
     _mercury_ad = [[MercuryRewardVideoAd alloc] initAdWithAdspotId:_adspot.currentSdkSupplier.adspotid delegate:self];
+    _mercury_ad.timeoutTime = 5;
     [_mercury_ad loadRewardVideoAd];
 }
 
