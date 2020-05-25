@@ -30,6 +30,7 @@
 + (NSMutableDictionary *)getDeviceInfoWithMediaId:(NSString *)mediaId adspotId:(NSString *)adspotId {
     NSMutableDictionary *deviceInfo = [[NSMutableDictionary alloc] init];
     @try {
+        [deviceInfo setValue:AdvanceSdkAPIVersion forKey:@"sdk_version"];
         [deviceInfo setValue:AdvanceSdkAPIVersion forKey:@"version"];
         [deviceInfo setValue:mediaId forKey:@"appid"];
         [deviceInfo setValue:adspotId forKey:@"adspotid"];
