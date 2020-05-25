@@ -32,6 +32,12 @@
     if (self = [super init]) {
         _adspot = adspot;
         _params = params;
+        // 占位背景
+        if (_adspot.backgroundImage) {
+            _backgroundImageV = [[UIImageView alloc] initWithImage:_adspot.backgroundImage];
+            _backgroundImageV.frame = [UIScreen mainScreen].bounds;
+            [[UIApplication sharedApplication].by_getCurrentWindow.rootViewController.view addSubview:_backgroundImageV];
+        }
     }
     return self;
 }
@@ -54,14 +60,11 @@
     _csj_ad.delegate = self;
     
     [_csj_ad loadAdData];
-    [[UIApplication sharedApplication].by_getCurrentWindow.rootViewController.view addSubview:_csj_ad];
+    _backgroundImageV.userInteractionEnabled = YES;
+    [_backgroundImageV addSubview:_csj_ad];
+    _csj_ad.backgroundColor = [UIColor clearColor];
     _csj_ad.rootViewController = [UIApplication sharedApplication].by_getCurrentWindow.rootViewController;
-    // 占位背景
-    if (_adspot.backgroundImage) {
-        _backgroundImageV = [[UIImageView alloc] initWithImage:_adspot.backgroundImage];
-        _backgroundImageV.frame = [UIScreen mainScreen].bounds;
-        [_csj_ad addSubview:_backgroundImageV];
-    }
+    
 }
 
 // MARK: ======================= BUSplashAdDelegate =======================
@@ -69,7 +72,6 @@
  This method is called when splash ad material loaded successfully.
  */
 - (void)splashAdDidLoad:(BUSplashAdView *)splashAd {
-    [_backgroundImageV removeFromSuperview];
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded];
     if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdReceived)]) {
         [self.delegate advanceSplashOnAdReceived];
@@ -97,6 +99,8 @@
     }
     [_csj_ad removeFromSuperview];
     _csj_ad = nil;
+    [_backgroundImageV removeFromSuperview];
+    _backgroundImageV = nil;
     [self.adspot selectSdkSupplierWithError:error];
 }
 
@@ -124,6 +128,7 @@
  This method is called when splash ad is closed.
  */
 - (void)splashAdDidClose:(BUSplashAdView *)splashAd {
+    [_backgroundImageV removeFromSuperview];
     [_csj_ad removeFromSuperview];
     _csj_ad = nil;
 }
@@ -132,6 +137,7 @@
  This method is called when spalashAd skip button  is clicked.
  */
 - (void)splashAdDidClickSkip:(BUSplashAdView *)splashAd {
+    [_backgroundImageV removeFromSuperview];
     if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdSkipClicked)]) {
         [self.delegate advanceSplashOnAdSkipClicked];
     }
@@ -141,6 +147,7 @@
  This method is called when spalashAd countdown equals to zero
  */
 - (void)splashAdCountdownToZero:(BUSplashAdView *)splashAd {
+    [_backgroundImageV removeFromSuperview];
     if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdCountdownToZero)]) {
         [self.delegate advanceSplashOnAdCountdownToZero];
     }
