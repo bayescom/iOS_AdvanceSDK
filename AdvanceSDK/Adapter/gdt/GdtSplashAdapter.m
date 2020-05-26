@@ -66,6 +66,7 @@
 }
 
 - (void)splashAdDidLoad:(GDTSplashAd *)splashAd {
+    [[_adspot performSelector:@selector(bgImgV)] removeFromSuperview];
     // 设置logo
     UIImageView *imgV;
     if (_adspot.logoImage) {
@@ -85,6 +86,7 @@
 }
 
 - (void)splashAdFailToPresent:(GDTSplashAd *)splashAd withError:(NSError *)error {
+    [[_adspot performSelector:@selector(bgImgV)] removeFromSuperview];
     if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdFailedWithSdkId:error:)]) {
         [self.delegate advanceSplashOnAdFailedWithSdkId:_adspot.currentSdkSupplier.adspotid error:error];
     }
@@ -93,6 +95,7 @@
 }
 
 - (void)splashAdClicked:(GDTSplashAd *)splashAd {
+    [[_adspot performSelector:@selector(bgImgV)] removeFromSuperview];
     [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked];
     if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdClicked)]) {
         [self.delegate advanceSplashOnAdClicked];
@@ -101,6 +104,7 @@
 }
 
 - (void)splashAdClosed:(GDTSplashAd *)splashAd {
+    [[_adspot performSelector:@selector(bgImgV)] removeFromSuperview];
     // 如果时间大于0 且不是因为点击触发的，则认为是点击了跳过
     if (_leftTime > 0 && !_isClick) {
         if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdSkipClicked)]) {
@@ -110,6 +114,7 @@
 }
 
 - (void)splashAdLifeTime:(NSUInteger)time {
+    [[_adspot performSelector:@selector(bgImgV)] removeFromSuperview];
     _leftTime = time;
     if (time <= 0 && [self.delegate respondsToSelector:@selector(advanceSplashOnAdCountdownToZero)]) {
         [self.delegate advanceSplashOnAdCountdownToZero];
