@@ -64,7 +64,6 @@
     [_backgroundImageV addSubview:_csj_ad];
     _csj_ad.backgroundColor = [UIColor clearColor];
     _csj_ad.rootViewController = [UIApplication sharedApplication].by_getCurrentWindow.rootViewController;
-    
 }
 
 // MARK: ======================= BUSplashAdDelegate =======================
@@ -99,6 +98,7 @@
     }
     [_csj_ad removeFromSuperview];
     _csj_ad = nil;
+    [[_adspot performSelector:@selector(bgImgV)] removeFromSuperview];
     [_backgroundImageV removeFromSuperview];
     _backgroundImageV = nil;
     [self.adspot selectSdkSupplierWithError:error];
@@ -130,6 +130,7 @@
 - (void)splashAdDidClose:(BUSplashAdView *)splashAd {
     [_backgroundImageV removeFromSuperview];
     [_csj_ad removeFromSuperview];
+    [[_adspot performSelector:@selector(bgImgV)] removeFromSuperview];
     _csj_ad = nil;
 }
 
@@ -138,6 +139,7 @@
  */
 - (void)splashAdDidClickSkip:(BUSplashAdView *)splashAd {
     [_backgroundImageV removeFromSuperview];
+    [[_adspot performSelector:@selector(bgImgV)] removeFromSuperview];
     if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdSkipClicked)]) {
         [self.delegate advanceSplashOnAdSkipClicked];
     }
@@ -148,6 +150,7 @@
  */
 - (void)splashAdCountdownToZero:(BUSplashAdView *)splashAd {
     [_backgroundImageV removeFromSuperview];
+    [[_adspot performSelector:@selector(bgImgV)] removeFromSuperview];
     if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdCountdownToZero)]) {
         [self.delegate advanceSplashOnAdCountdownToZero];
     }

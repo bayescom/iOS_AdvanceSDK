@@ -51,6 +51,7 @@
 
 // MARK: ======================= MercurySplashAdDelegate =======================
 - (void)mercury_splashAdDidLoad:(MercurySplashAd *)splashAd {
+    [[_adspot performSelector:@selector(bgImgV)] removeFromSuperview];
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded];
     if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdReceived)]) {
         [self.delegate advanceSplashOnAdReceived];
@@ -58,6 +59,7 @@
 }
 
 - (void)mercury_splashAdExposured:(MercurySplashAd *)splashAd {
+    [[_adspot performSelector:@selector(bgImgV)] removeFromSuperview];
     [self.adspot reportWithType:AdvanceSdkSupplierRepoImped];
     if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdShow)]) {
         [self.delegate advanceSplashOnAdShow];
@@ -65,6 +67,7 @@
 }
 
 - (void)mercury_splashAdFailError:(nullable NSError *)error {
+    [[_adspot performSelector:@selector(bgImgV)] removeFromSuperview];
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
     if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdFailedWithSdkId:error:)]) {
         [self.delegate advanceSplashOnAdFailedWithSdkId:_adspot.currentSdkSupplier.id error:error];
@@ -73,6 +76,7 @@
 }
 
 - (void)mercury_splashAdClicked:(MercurySplashAd *)splashAd {
+    [[_adspot performSelector:@selector(bgImgV)] removeFromSuperview];
     [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked];
     if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdClicked)]) {
         [self.delegate advanceSplashOnAdClicked];
@@ -80,12 +84,14 @@
 }
 
 - (void)mercury_splashAdLifeTime:(NSUInteger)time {
+    [[_adspot performSelector:@selector(bgImgV)] removeFromSuperview];
     if (time <= 0 && [self.delegate respondsToSelector:@selector(advanceSplashOnAdCountdownToZero)]) {
         [self.delegate advanceSplashOnAdCountdownToZero];
     }
 }
 
 - (void)mercury_splashAdSkipClicked:(MercurySplashAd *)splashAd {
+    [[_adspot performSelector:@selector(bgImgV)] removeFromSuperview];
     if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdSkipClicked)]) {
         [self.delegate advanceSplashOnAdSkipClicked];
     }

@@ -9,9 +9,12 @@
 #import "AdvanceSplash.h"
 #import <objc/runtime.h>
 #import <objc/message.h>
+#import "UIApplication+Advance.h"
 
 @interface AdvanceSplash () <AdvanceBaseAdspotDelegate>
 @property (nonatomic, strong) id adapter;
+
+@property (nonatomic, strong) UIImageView *bgImgV;
 
 @end
 
@@ -62,9 +65,17 @@
 /// @param error 失败原因
 - (void)advanceBaseAdspotFailedWithError:(NSError *)error {
     NSLog(@"%@", error);
-    if([self.delegate respondsToSelector:@selector(advanceOnAdNotFilled:)])
-    {
+    if([self.delegate respondsToSelector:@selector(advanceOnAdNotFilled:)]) {
         [self.delegate advanceOnAdNotFilled:error];
+    }
+}
+
+- (void)loadAd {
+    [super loadAd];
+    if (_bgImgV) {
+        _bgImgV = [[UIImageView alloc] initWithImage:_backgroundImage];
+        _bgImgV.frame = [UIScreen mainScreen].bounds;
+        [[UIApplication sharedApplication].by_getCurrentWindow.rootViewController.view addSubview:_bgImgV];
     }
 }
 
