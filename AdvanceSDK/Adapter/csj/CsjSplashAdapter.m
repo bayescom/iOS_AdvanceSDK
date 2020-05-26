@@ -108,6 +108,7 @@
  This method is called when splash ad slot will be showing.
  */
 - (void)splashAdWillVisible:(BUSplashAdView *)splashAd {
+    [[_adspot performSelector:@selector(bgImgV)] removeFromSuperview];
     [self.adspot reportWithType:AdvanceSdkSupplierRepoImped];
     if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdShow)]) {
         [self.delegate advanceSplashOnAdShow];
