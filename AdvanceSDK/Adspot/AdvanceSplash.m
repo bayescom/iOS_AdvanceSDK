@@ -64,6 +64,7 @@
 /// 策略请求失败
 /// @param error 失败原因
 - (void)advanceBaseAdspotFailedWithError:(NSError *)error {
+    [_bgImgV removeFromSuperview];
     NSLog(@"%@", error);
     if([self.delegate respondsToSelector:@selector(advanceOnAdNotFilled:)]) {
         [self.delegate advanceOnAdNotFilled:error];
@@ -72,7 +73,7 @@
 
 - (void)loadAd {
     [super loadAd];
-    if (_bgImgV) {
+    if (_backgroundImage) {
         _bgImgV = [[UIImageView alloc] initWithImage:_backgroundImage];
         _bgImgV.frame = [UIScreen mainScreen].bounds;
         [[UIApplication sharedApplication].by_getCurrentWindow.rootViewController.view addSubview:_bgImgV];
