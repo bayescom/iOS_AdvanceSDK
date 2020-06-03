@@ -61,11 +61,11 @@
             [views[i] performSelector:@selector(setRootViewController:) withObject:self];
             [views[i] performSelector:@selector(render)];
         } else if ([views[i] isKindOfClass:NSClassFromString(@"MercuryNativeExpressAdView")]) {
-            [views[i] performSelector:@selector(render)];
             [views[i] performSelector:@selector(setController:) withObject:self];
+            [views[i] performSelector:@selector(render)];
         } else if ([views[i] isKindOfClass:NSClassFromString(@"GDTNativeExpressAdView")]) {
-            [views[i] performSelector:@selector(render)];
             [views[i] performSelector:@selector(setController:) withObject:self];
+            [views[i] performSelector:@selector(render)];
         }
         [_dataArrM insertObject:views[i] atIndex:1];
     }

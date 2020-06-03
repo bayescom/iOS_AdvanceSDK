@@ -87,7 +87,7 @@
 }
 
 - (void)loadBtnAction:(id)sender {
-    _adspot = [[AdvanceNativeExpress alloc] initWithMediaId:@"200048" adspotId:@"10002710" viewController:self adSize:CGSizeMake(self.view.bounds.size.width, 300)];
+    _adspot = [[AdvanceNativeExpress alloc] initWithMediaId:@"100255" adspotId:@"10002698" viewController:self adSize:CGSizeMake(self.view.bounds.size.width, 300)];
     
     _adspot.supplierDelegate = self;
     [_adspot setDefaultSdkSupplierWithMediaId:@"100255"
@@ -108,13 +108,13 @@
         adCount = _adspot.currentSdkSupplier.adCount;
     }
     if ([sdkId isEqualToString:SDK_ID_GDT]) {
-        self.gdt_ad = [[GDTUnifiedNativeAd alloc] initWithPlacementId:[params objectForKey:@"adspotid"]];//@"2000566593234845"];
+        self.gdt_ad = [[GDTUnifiedNativeAd alloc] initWithPlacementId:[params objectForKey:@"2000566593234845"]];//@"2000566593234845"];
         self.gdt_ad.delegate = self;
         [self.gdt_ad loadAdWithAdCount:adCount];
     } else if ([sdkId isEqualToString:SDK_ID_CSJ]) {
         BUNativeAdsManager *nad = [BUNativeAdsManager new];
         BUAdSlot *slot1 = [[BUAdSlot alloc] init];
-        slot1.ID = [params objectForKey:@"adspotid"];//@"900546910";
+        slot1.ID = [params objectForKey:@"900546910"];//@"900546910";
         slot1.AdType = BUAdSlotAdTypeFeed;
         slot1.position = BUAdSlotPositionTop;
         slot1.imgSize = [BUSize sizeBy:BUProposalSize_Feed690_388];
@@ -124,7 +124,7 @@
         _csj_ad = nad;
         [nad loadAdDataWithCount:adCount];
     } else if ([sdkId isEqualToString:SDK_ID_MERCURY]) {
-        _mercury_ad = [[MercuryNativeAd alloc] initAdWithAdspotId:[params objectForKey:@"adspotid"]];//@"10002698"];
+        _mercury_ad = [[MercuryNativeAd alloc] initAdWithAdspotId:[params objectForKey:@"10002698"]];//@"10002698"];
         _mercury_ad.delegate = self;
         [_mercury_ad loadAdWithCount:adCount];
     }

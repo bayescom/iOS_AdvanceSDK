@@ -20,7 +20,7 @@
     
     self.initDefSubviewsFlag = YES;
     self.adspotIdsArr = @[
-        @{@"addesc": @"图片信息流", @"adspotId": @"10033-200046"},
+        @{@"addesc": @"图片信息流", @"adspotId": @"100255-10002698"},
     ];
     self.btn1Title = @"展示广告";
 }

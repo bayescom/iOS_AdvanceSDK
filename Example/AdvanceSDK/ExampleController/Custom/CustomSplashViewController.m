@@ -32,7 +32,7 @@
 
     self.initDefSubviewsFlag = YES;
     self.adspotIdsArr = @[
-        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"10033-200034"},
+        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10002619"},
     ];
     self.btn1Title = @"加载并显示广告";
 }
@@ -41,7 +41,7 @@
     if (![self checkAdspotId]) { return; }
     _adspot = [[AdvanceBaseAdspot alloc] initWithMediaId:self.mediaId adspotId:self.adspotId];
     [_adspot setDefaultSdkSupplierWithMediaId:@"100255"
-                                adspotId:@"10002436"
+                                adspotId:@"10002619"
                                 mediaKey:@"757d5119466abe3d771a211cc1278df7"
                                   sdkId:SDK_ID_MERCURY];
     _adspot.supplierDelegate = self;

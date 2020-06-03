@@ -169,13 +169,20 @@
         if ([self.adspot.currentSdkSupplier.id isEqualToString:SDK_ID_GDT]) {
             for (GDTNativeExpressAdView *view in views) {
                 view.controller = self;
+                [view render];
+                [_dataArrM insertObject:view atIndex:1];
+
             }
         } else if ([self.adspot.currentSdkSupplier.id isEqualToString:SDK_ID_CSJ]) {
-            [_adspot reportWithType:AdvanceSdkSupplierRepoSucceeded];
             for (BUNativeExpressAdView *view in views) {
                 view.rootViewController = self;
+                [view render];
+                [_dataArrM insertObject:view atIndex:1];
+
             }
         }
+        [self.tableView reloadData];
+
     }
 }
 
@@ -208,13 +215,25 @@
 
 // MARK: ======================= BUNativeExpressAdViewDelegate =======================
 // 这两个方法与广点通的相同，具体处理见 GDTNativeExpressAdDelegete
-//- (void)nativeExpressAdFailToLoad:(BUNativeExpressAdManager *)nativeExpressAd error:(NSError *)error;
-//- (void)nativeExpressAdSuccessToLoad:(GDTNativeExpressAd *)nativeExpressAd views:(NSArray<__kindof GDTNativeExpressAdView *> *)views
+
+//- (void)nativeExpressAdSuccessToLoad:(BUNativeExpressAdManager *)nativeExpressAd views:(NSArray<__kindof BUNativeExpressAdView *> *)views
+//{
+//
+//}
+//- (void)nativeExpressAdFailToLoad:(BUNativeExpressAdManager *)nativeExpressAd error:(NSError *)error
+//{
+//
+//}
 
 - (void)nativeExpressAdViewRenderFail:(BUNativeExpressAdView *)nativeExpressAdView error:(NSError *)error {
     [_adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
     _csj_ad = nil;
     [_adspot selectSdkSupplierWithError:error];
+}
+- (void)nativeExpressAdViewRenderSuccess:(BUNativeExpressAdView *)nativeExpressAdView
+{
+    [self.tableView reloadData];
+
 }
 
 - (void)nativeExpressAdViewWillShow:(BUNativeExpressAdView *)nativeExpressAdView {
