@@ -23,7 +23,7 @@
     
     self.initDefSubviewsFlag = YES;
     self.adspotIdsArr = @[
-        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"10033-200034"},
+        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10002436"},
     ];
     self.btn1Title = @"加载并显示广告";
 }

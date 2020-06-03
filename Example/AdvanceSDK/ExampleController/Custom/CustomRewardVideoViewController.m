@@ -32,7 +32,7 @@
     
     self.initDefSubviewsFlag = YES;
     self.adspotIdsArr = @[
-        @{@"addesc": @"激励视频", @"adspotId": @"10033-200045"},
+        @{@"addesc": @"激励视频", @"adspotId": @"100255-10002595"},
     ];
     self.btn1Title = @"加载广告";
     self.btn2Title = @"显示广告";
@@ -43,7 +43,7 @@
     
     _adspot = [[AdvanceBaseAdspot alloc] initWithMediaId:self.mediaId adspotId:self.adspotId];
     [_adspot setDefaultSdkSupplierWithMediaId:@"100255"
-                                adspotId:@"10002436"
+                                adspotId:@"10002595"
                                 mediaKey:@"757d5119466abe3d771a211cc1278df7"
                                   sdkId:SDK_ID_MERCURY];
     _adspot.supplierDelegate = self;
