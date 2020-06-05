@@ -68,6 +68,18 @@ NSString *const CACHE_PREFIX = @"mercury_advance_%@";
     return self;
 }
 
+- (instancetype)initWithAdspotId:(NSString *)adspotid {
+    if (self = [super init]) {
+        _adspotid = adspotid;
+        _mediaid = @"";
+        _defaultSdkSupplier = nil;
+        _currentSdkSupplier = nil;
+        _suppliers = nil;
+        _enableStrategyCache = YES;
+    }
+    return self;
+}
+
 - (void)loadAd {
     @try {
         [self.suppliers removeAllObjects];

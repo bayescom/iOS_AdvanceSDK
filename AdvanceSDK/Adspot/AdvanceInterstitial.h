@@ -18,7 +18,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, weak) UIViewController *viewController;
 
-- (instancetype)initWithMediaId:(NSString *)mediaid adspotId:(NSString *)adspotid viewController:(UIViewController *)viewController;
+- (instancetype)initWithMediaId:(NSString *)mediaid
+                       adspotId:(NSString *)adspotid
+                 viewController:(UIViewController *)viewController DEPRECATED_MSG_ATTRIBUTE("聚合SDK可以直接使用广告位ID初始化");
+
+- (instancetype)initWithAdspotId:(NSString *)adspotid
+                  viewController:(UIViewController *)viewController;
 
 - (void)showAd;
 

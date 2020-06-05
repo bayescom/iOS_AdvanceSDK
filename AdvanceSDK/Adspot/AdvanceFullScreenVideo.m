@@ -20,7 +20,14 @@
 
 @implementation AdvanceFullScreenVideo
 - (instancetype)initWithMediaId:(NSString *)mediaid adspotId:(NSString *)adspotid viewController:(nonnull UIViewController *)viewController {
-    if (self = [super initWithMediaId:mediaid adspotId:adspotid]) {
+    if (self = [super initWithAdspotId:adspotid]) {
+        self.supplierDelegate = self;
+        _viewController = viewController;
+    }
+    return self;
+}
+- (instancetype)initWithAdspotId:(NSString *)adspotid viewController:(nonnull UIViewController *)viewController {
+    if (self = [super initWithAdspotId:adspotid]) {
         self.supplierDelegate = self;
         _viewController = viewController;
     }

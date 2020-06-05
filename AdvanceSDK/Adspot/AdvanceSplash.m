@@ -19,17 +19,20 @@
 @end
 
 @implementation AdvanceSplash
-- (instancetype)initWithMediaId:(NSString *)mediaid adspotId:(NSString *)adspotid {
-    if (self = [super initWithMediaId:mediaid adspotId:adspotid]) {
-        self.supplierDelegate = self;
-    }
-    return self;
-}
 
 -  (instancetype)initWithMediaId:(NSString *)mediaid
                         adspotId:(NSString *)adspotid
                   viewController:(UIViewController *)viewController {
-    if (self = [self initWithMediaId:mediaid adspotId:adspotid]) {
+    if (self = [super initWithAdspotId:adspotid]) {
+        self.supplierDelegate = self;
+        self.viewController = viewController;
+    }
+    return self;
+}
+-  (instancetype)initWithAdspotId:(NSString *)adspotid
+                   viewController:(UIViewController *)viewController {
+    if (self = [super initWithAdspotId:adspotid]) {
+        self.supplierDelegate = self;
         self.viewController = viewController;
     }
     return self;

@@ -20,7 +20,17 @@
                        adspotId:(NSString *)adspotid
                  viewController:(UIViewController *)viewController
                          adSize:(CGSize)size {
-    if (self = [super initWithMediaId:mediaid adspotId:adspotid]) {
+    if (self = [super initWithAdspotId:adspotid]) {
+        self.supplierDelegate = self;
+        _viewController = viewController;
+        _adSize = size;
+    }
+    return self;
+}
+- (instancetype)initWithAdspotId:(NSString *)adspotid
+                 viewController:(UIViewController *)viewController
+                         adSize:(CGSize)size {
+    if (self = [super initWithAdspotId:adspotid]) {
         self.supplierDelegate = self;
         _viewController = viewController;
         _adSize = size;

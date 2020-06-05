@@ -87,7 +87,7 @@
 }
 
 - (void)loadBtnAction:(id)sender {
-    _adspot = [[AdvanceNativeExpress alloc] initWithMediaId:@"100255" adspotId:@"10002698" viewController:self adSize:CGSizeMake(self.view.bounds.size.width, 300)];
+    _adspot = [[AdvanceNativeExpress alloc] initWithAdspotId:@"10002698" viewController:self adSize:CGSizeMake(self.view.bounds.size.width, 300)];
     
     _adspot.supplierDelegate = self;
     [_adspot setDefaultSdkSupplierWithMediaId:@"100255"
