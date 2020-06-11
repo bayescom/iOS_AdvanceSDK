@@ -32,9 +32,8 @@
 
 - (void)loadAdBtn1Action {
     if (![self checkAdspotId]) { return; }
-    self.advanceFullScreenVideo = [[AdvanceFullScreenVideo alloc] initWithMediaId:self.mediaId
-                                                                   adspotId:self.adspotId
-                                                             viewController:self];
+    self.advanceFullScreenVideo = [[AdvanceFullScreenVideo alloc] initWithAdspotId:self.adspotId
+                                                                    viewController:self];
     self.advanceFullScreenVideo.delegate = self;
     [self.advanceFullScreenVideo setDefaultSdkSupplierWithMediaId:@"100255"
                                                       adspotId:@"10000559"

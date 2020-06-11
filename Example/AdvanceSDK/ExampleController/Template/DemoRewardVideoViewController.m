@@ -31,8 +31,7 @@
 
 - (void)loadAdBtn1Action {
     if (![self checkAdspotId]) { return; }
-    self.advanceRewardVideo = [[AdvanceRewardVideo alloc] initWithMediaId:self.mediaId
-                                                                 adspotId:self.adspotId
+    self.advanceRewardVideo = [[AdvanceRewardVideo alloc] initWithAdspotId:self.adspotId
                                                            viewController:self];
     self.advanceRewardVideo.delegate=self;
     [self.advanceRewardVideo setDefaultSdkSupplierWithMediaId:@"100255"

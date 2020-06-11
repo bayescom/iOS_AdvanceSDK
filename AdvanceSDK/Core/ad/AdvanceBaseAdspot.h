@@ -68,7 +68,11 @@ NS_ASSUME_NONNULL_BEGIN
 /// @param mediaId mediaId
 /// @param adspotId adspotId
 - (instancetype)initWithMediaId:(NSString *)mediaId
-                       adspotId:(NSString *)adspotId;
+                       adspotId:(NSString *)adspotId DEPRECATED_MSG_ATTRIBUTE("聚合SDK可以直接使用广告位ID初始化");
+
+/// 初始化方法
+/// @param adspotId adspotId
+- (instancetype)initWithAdspotId:(NSString *)adspotId;
 
 /// 选择策略(在广告失败后，需手动调用此方法)
 - (void)selectSdkSupplierWithError:(NSError * _Nullable)error;

@@ -42,7 +42,7 @@
 
 - (void)loadBtnAction:(id)sender {
     _dataArrM = [NSMutableArray arrayWithArray:[CellBuilder dataFromJsonFile:@"cell01"]];
-    _advanceFeed = [[AdvanceNativeExpress alloc] initWithMediaId:self.mediaId adspotId:self.adspotId viewController:self adSize:CGSizeMake(self.view.bounds.size.width, 300)];
+    _advanceFeed = [[AdvanceNativeExpress alloc] initWithAdspotId:self.adspotId viewController:self adSize:CGSizeMake(self.view.bounds.size.width, 300)];
     
     _advanceFeed.delegate = self;
     [_advanceFeed setDefaultSdkSupplierWithMediaId:@"100255"

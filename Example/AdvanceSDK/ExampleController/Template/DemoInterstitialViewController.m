@@ -31,9 +31,8 @@
 
 - (void)loadAdBtn1Action {
     if (![self checkAdspotId]) { return; }
-    self.advanceInterstitial = [[AdvanceInterstitial alloc] initWithMediaId:self.mediaId
-                                                                   adspotId:self.adspotId
-                                                             viewController:self];
+    self.advanceInterstitial = [[AdvanceInterstitial alloc] initWithAdspotId:self.adspotId
+                                                              viewController:self];
     self.advanceInterstitial.delegate = self;
     [self.advanceInterstitial setDefaultSdkSupplierWithMediaId:@"100255"
                                                       adspotId:@"10000559"

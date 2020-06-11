@@ -41,7 +41,7 @@
 - (void)loadAdBtn1Action {
     if (![self checkAdspotId]) { return; }
     
-    _adspot = [[AdvanceBaseAdspot alloc] initWithMediaId:self.mediaId adspotId:self.adspotId];
+    _adspot = [[AdvanceBaseAdspot alloc] initWithAdspotId:self.adspotId];
     [_adspot setDefaultSdkSupplierWithMediaId:@"100255"
                                 adspotId:@"10002595"
                                 mediaKey:@"757d5119466abe3d771a211cc1278df7"

@@ -24,7 +24,19 @@
                        adspotId:(NSString *)adspotid
                     adContainer:(UIView *)adContainer
                  viewController:(nonnull UIViewController *)viewController {
-    if (self = [super initWithMediaId:mediaid adspotId:adspotid]) {
+    if (self = [super initWithAdspotId:adspotid]) {
+        self.supplierDelegate = self;
+        _adContainer = adContainer;
+        _viewController = viewController;
+        _refreshInterval = 30;
+    }
+    return self;
+}
+
+- (instancetype)initWithAdspotId:(NSString *)adspotid
+                     adContainer:(UIView *)adContainer
+                  viewController:(nonnull UIViewController *)viewController {
+    if (self = [super initWithAdspotId:adspotid]) {
         self.supplierDelegate = self;
         _adContainer = adContainer;
         _viewController = viewController;
