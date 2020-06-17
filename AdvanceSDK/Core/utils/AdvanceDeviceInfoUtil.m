@@ -9,7 +9,6 @@
 #import "AdvanceDeviceInfoUtil.h"
 #import "AdvanceSdkConfig.h"
 #import <UIKit/UIDevice.h>
-#import <UIKit/UIWebview.h>
 #import <UIKit/UIScreen.h>
 #import <ifaddrs.h>
 #import <arpa/inet.h>
@@ -87,22 +86,6 @@
     }
 }
 
-//+(NSString*)getUserAgent
-//{
-//    @try {
-//        NSString *ua =[[UIWebView new]stringByEvaluatingJavaScriptFromString:
-//                       @"navigator.userAgent"];
-//        return ua;
-//    } @catch (NSException *exception) {
-//        return @"";
-//    }
-//
-//}
-//+(NSDictionary*)getLatAndLon
-//{
-//    NSDictionary * latLonDict = [[NSDictionary alloc]init];
-//    return latLonDict;
-//}
 + (NSString *)getMake {
     return @"apple";
 }
