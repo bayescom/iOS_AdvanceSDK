@@ -71,6 +71,7 @@
     } else if ([sdkId isEqualToString:SDK_ID_MERCURY]) {
         _mercury_ad = [[MercurySplashAd alloc] initAdWithAdspotId:[params objectForKey:@"adspotid"]
                                                          delegate:self];
+        _mercury_ad.fetchDelay = 5;
         _mercury_ad.controller = self;
         [_mercury_ad loadAdAndShow];
     }

@@ -44,6 +44,7 @@
 /// @param params 渠道参数
 - (void)advanceBaseAdspotWithSdkId:(NSString *)sdkId params:(NSDictionary *)params {
     // 根据渠道id自定义初始化
+    NSLog(@"%@", params);
     NSString *clsName = @"";
     if ([sdkId isEqualToString:SDK_ID_GDT]) {
         clsName = @"GdtSplashAdapter";
@@ -79,9 +80,17 @@
     if (_backgroundImage) {
         _bgImgV = [[UIImageView alloc] initWithImage:_backgroundImage];
         _bgImgV.frame = [UIScreen mainScreen].bounds;
-        [[UIApplication sharedApplication].by_getCurrentWindow.rootViewController.view addSubview:_bgImgV];
+        [self.viewController.view addSubview:_bgImgV];
     }
 }
 
+// MARK: ======================= get =======================
+- (UIViewController *)viewController {
+    if (_viewController) {
+        return _viewController;
+    } else {
+        return [UIApplication sharedApplication].by_getCurrentWindow.rootViewController;
+    }
+}
 
 @end
