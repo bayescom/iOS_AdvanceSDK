@@ -48,7 +48,9 @@
 }
 
 - (void)showAd {
-    [_csj_ad showAdFromRootViewController:_adspot.viewController];
+    if (_csj_ad.isAdValid) {
+        [_csj_ad showAdFromRootViewController:_adspot.viewController];
+    }
 }
 
 - (void)dealloc {
@@ -78,6 +80,10 @@
 - (void)nativeExpressRewardedVideoAdDidDownLoadVideo:(BUNativeExpressRewardedVideoAd *)rewardedVideoAd {
     if ([self.delegate respondsToSelector:@selector(advanceRewardVideoOnAdVideoCached)]) {
         [self.delegate advanceRewardVideoOnAdVideoCached];
+    }
+    /// 视频广告视频可以调用Show方法
+    if ([self.delegate respondsToSelector:@selector(advanceRewardVideoIsReadyToShow)]) {
+        [self.delegate advanceRewardVideoIsReadyToShow];
     }
 }
 
@@ -112,14 +118,6 @@
     /// 视频广告视频播放完成
     if ([self.delegate respondsToSelector:@selector(advanceRewardVideoAdDidPlayFinish)]) {
         [self.delegate advanceRewardVideoAdDidPlayFinish];
-    }
-}
-
-// renderSuccess
-- (void)nativeExpressRewardedVideoAdViewRenderSuccess:(BUNativeExpressRewardedVideoAd *)rewardedVideoAd {
-    /// 视频广告视频可以调用Show方法
-    if ([self.delegate respondsToSelector:@selector(advanceRewardVideoIsReadyToShow)]) {
-        [self.delegate advanceRewardVideoIsReadyToShow];
     }
 }
 

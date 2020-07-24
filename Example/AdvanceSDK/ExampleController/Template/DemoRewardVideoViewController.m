@@ -60,7 +60,7 @@
 {
     NSLog(@"视频缓存成功");
     [JDStatusBarNotification showWithStatus:@"视频缓存成功" dismissAfter:1.5];
-
+    [self.advanceRewardVideo showAd];
 }
 
 - (void)advanceRewardVideoAdDidRewardEffective {
@@ -97,7 +97,6 @@
        [JDStatusBarNotification showWithStatus:@"请先加载广告" dismissAfter:1.5];
     }
     NSLog(@"播放可以Show");
-    [self.advanceRewardVideo showAd];
 }
 
 @end
