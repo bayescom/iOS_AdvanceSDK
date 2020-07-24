@@ -36,7 +36,7 @@
         if (_adspot.backgroundImage) {
             _backgroundImageV = [[UIImageView alloc] initWithImage:_adspot.backgroundImage];
             _backgroundImageV.frame = [UIScreen mainScreen].bounds;
-            [[UIApplication sharedApplication].by_getCurrentWindow.rootViewController.view addSubview:_backgroundImageV];
+            [_adspot.viewController.view addSubview:_backgroundImageV];
         }
     }
     return self;
@@ -63,7 +63,7 @@
     _backgroundImageV.userInteractionEnabled = YES;
     [_backgroundImageV addSubview:_csj_ad];
     _csj_ad.backgroundColor = [UIColor clearColor];
-    _csj_ad.rootViewController = [UIApplication sharedApplication].by_getCurrentWindow.rootViewController;
+    _csj_ad.rootViewController = _adspot.viewController;
 }
 
 // MARK: ======================= BUSplashAdDelegate =======================

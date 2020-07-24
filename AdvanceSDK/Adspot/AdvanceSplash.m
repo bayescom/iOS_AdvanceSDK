@@ -68,7 +68,6 @@
 /// @param error 失败原因
 - (void)advanceBaseAdspotFailedWithError:(NSError *)error {
     [_bgImgV removeFromSuperview];
-    NSLog(@"%@", error);
     if([self.delegate respondsToSelector:@selector(advanceOnAdNotFilled:)]) {
         [self.delegate advanceOnAdNotFilled:error];
     }
@@ -79,9 +78,17 @@
     if (_backgroundImage) {
         _bgImgV = [[UIImageView alloc] initWithImage:_backgroundImage];
         _bgImgV.frame = [UIScreen mainScreen].bounds;
-        [[UIApplication sharedApplication].by_getCurrentWindow.rootViewController.view addSubview:_bgImgV];
+        [self.viewController.view addSubview:_bgImgV];
     }
 }
 
+// MARK: ======================= get =======================
+- (UIViewController *)viewController {
+    if (_viewController) {
+        return _viewController;
+    } else {
+        return [UIApplication sharedApplication].by_getCurrentWindow.rootViewController;
+    }
+}
 
 @end
