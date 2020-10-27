@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'AdvanceSDK'
-  s.version          = '3.2.2.1'
+  s.version          = '3.2.2.2'
   
   s.ios.deployment_target = '9.0'
   s.platform     = :ios, "9.0" 
@@ -28,9 +28,10 @@ Blink倍联——免费透明的流量变现神器 
    
   s.user_target_xcconfig = {'OTHER_LDFLAGS' => ['-ObjC']}
    
+  valid_archs = ['i386', 'armv7', 'x86_64', 'arm64']
   # bitcode
-  s.pod_target_xcconfig = { 'ENABLE_BITCODE' => 'NO' }
-  s.user_target_xcconfig = { 'ENABLE_BITCODE' => 'NO' }
+  s.pod_target_xcconfig = { 'ENABLE_BITCODE' => 'NO', 'VALID_ARCHS' => valid_archs.join(' '), 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
+  s.user_target_xcconfig = { 'ENABLE_BITCODE' => 'NO', 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
 
   s.default_subspec = 'Core'
   
@@ -73,7 +74,6 @@ Blink倍联——免费透明的流量变现神器 
     gdt.libraries     = 'xml2', 'z'
   end
 
-  valid_archs = ['armv7', 'armv7s', 'x86_64', 'arm64']
   s.xcconfig = {
     'VALID_ARCHS' =>  valid_archs.join(' '),
   }

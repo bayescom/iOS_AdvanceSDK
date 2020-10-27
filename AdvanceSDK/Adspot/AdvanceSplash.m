@@ -60,7 +60,10 @@
         ((void (*)(id, SEL))objc_msgSend)((id)_adapter, @selector(loadAd));
 #pragma clang diagnostic pop
     } else {
-        NSLog(@"%@ 不存在", clsName);
+        NSString *msg = [NSString stringWithFormat:@"%@ 不存在", clsName];
+        if([self.delegate respondsToSelector:@selector(advanceOnAdNotFilled:)]) {
+            [self.delegate advanceOnAdNotFilled:[NSError errorWithDomain:@"com.AdvanceSDK.error" code:10600 userInfo:@{@"msg": msg}]];
+        }
     }
 }
 
@@ -75,7 +78,7 @@
 
 - (void)loadAd {
     [super loadAd];
-    if (_backgroundImage) {
+    if (_adapter && _backgroundImage) {
         _bgImgV = [[UIImageView alloc] initWithImage:_backgroundImage];
         _bgImgV.frame = [UIScreen mainScreen].bounds;
         [self.viewController.view addSubview:_bgImgV];
