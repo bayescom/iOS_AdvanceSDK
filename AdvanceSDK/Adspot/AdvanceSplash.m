@@ -16,6 +16,8 @@
 
 @property (nonatomic, strong) UIImageView *bgImgV;
 
+@property (nonatomic, assign) NSInteger timeout_stamp;
+
 @end
 
 @implementation AdvanceSplash
@@ -52,17 +54,32 @@
     } else if ([sdkId isEqualToString:SDK_ID_MERCURY]) {
         clsName = @"MercurySplashAdapter";
     }
-    if (NSClassFromString(clsName)) {
+
+    // 请求超时了
+    NSTimeInterval now = [[NSDate date] timeIntervalSince1970];
+    if (now > _timeout_stamp) {
+        [_bgImgV removeFromSuperview];
+        [self clearSuppliers];
+        if([self.delegate respondsToSelector:@selector(advanceOnAdNotFilled:)]) {
+            [self.delegate advanceOnAdNotFilled:[NSError errorWithDomain:@"com.AdvanceSDK.error" code:10601 userInfo:@{@"msg": @"请求超出设定总时长"}]];
+        }
+        _adapter = nil;
+        self.delegate = nil;
+    } else {
+        self.currentSdkSupplier.timeout = ((_timeout_stamp - now) >= 5 ? 5 : (_timeout_stamp - now))*1000;
+        
+        if (NSClassFromString(clsName)) {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wundeclared-selector"
-        _adapter = ((id (*)(id, SEL, id, id))objc_msgSend)((id)[NSClassFromString(clsName) alloc], @selector(initWithParams:adspot:), params, self);
-        ((void (*)(id, SEL, id))objc_msgSend)((id)_adapter, @selector(setDelegate:), _delegate);
-        ((void (*)(id, SEL))objc_msgSend)((id)_adapter, @selector(loadAd));
+            _adapter = ((id (*)(id, SEL, id, id))objc_msgSend)((id)[NSClassFromString(clsName) alloc], @selector(initWithParams:adspot:), params, self);
+            ((void (*)(id, SEL, id))objc_msgSend)((id)_adapter, @selector(setDelegate:), _delegate);
+            ((void (*)(id, SEL))objc_msgSend)((id)_adapter, @selector(loadAd));
 #pragma clang diagnostic pop
-    } else {
-        NSString *msg = [NSString stringWithFormat:@"%@ 不存在", clsName];
-        if([self.delegate respondsToSelector:@selector(advanceOnAdNotFilled:)]) {
-            [self.delegate advanceOnAdNotFilled:[NSError errorWithDomain:@"com.AdvanceSDK.error" code:10600 userInfo:@{@"msg": msg}]];
+        } else {
+            NSString *msg = [NSString stringWithFormat:@"%@ 不存在", clsName];
+            if([self.delegate respondsToSelector:@selector(advanceOnAdNotFilled:)]) {
+                [self.delegate advanceOnAdNotFilled:[NSError errorWithDomain:@"com.AdvanceSDK.error" code:10600 userInfo:@{@"msg": msg}]];
+            }
         }
     }
 }
@@ -77,11 +94,14 @@
 }
 
 - (void)loadAd {
+    // 记录过期的时间
+    _timeout_stamp = [[NSDate date] timeIntervalSince1970] + _timeout*1000;
+    
     [super loadAd];
     if (_adapter && _backgroundImage) {
         _bgImgV = [[UIImageView alloc] initWithImage:_backgroundImage];
         _bgImgV.frame = [UIScreen mainScreen].bounds;
-        [self.viewController.view addSubview:_bgImgV];
+        [[UIApplication sharedApplication].by_getCurrentWindow addSubview:_bgImgV];
     }
 }
 

@@ -23,6 +23,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, strong) UIImage *backgroundImage;
 /// 控制器【必传】
 @property(nonatomic, weak) UIViewController *viewController;
+/// 总超时时间
+@property (nonatomic, assign) NSInteger timeout;
 
 - (instancetype)initWithMediaId:(NSString *)mediaid
                        adspotId:(NSString *)adspotid
