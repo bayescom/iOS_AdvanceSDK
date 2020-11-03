@@ -31,7 +31,7 @@
     
     // 初始化各渠道SDK
     
-    // MercurySDK
+//     MercurySDK
     [MercuryConfigManager setAppID:@"100255"
                           mediaKey:@"757d5119466abe3d771a211cc1278df7"];
     // 穿山甲SDK
