@@ -24,6 +24,7 @@
     self.initDefSubviewsFlag = YES;
     self.adspotIdsArr = @[
         @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10002436"},
+        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10002619"},
     ];
     self.btn1Title = @"加载并显示广告";
 }
@@ -40,6 +41,7 @@
                                                 adspotId:@"10002436"
                                                 mediaKey:@"757d5119466abe3d771a211cc1278df7"
                                                   sdkId:SDK_ID_MERCURY];
+    self.advanceSplash.timeout = 3;
     [self.advanceSplash loadAd];
 }
 

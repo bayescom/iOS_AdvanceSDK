@@ -17,6 +17,8 @@
 @property (nonatomic, strong) UIImageView *bgImgV;
 
 @property (nonatomic, assign) NSInteger timeout_stamp;
+@property (nonatomic, strong) CADisplayLink *timeoutCheckTimer;
+
 
 @end
 
@@ -40,6 +42,24 @@
     return self;
 }
 
+- (void)deallocSelf {
+    [_bgImgV removeFromSuperview];
+    [self clearSuppliers];
+    if([self.delegate respondsToSelector:@selector(advanceOnAdNotFilled:)]) {
+        [self.delegate advanceOnAdNotFilled:[NSError errorWithDomain:@"com.AdvanceSDK.error" code:10601 userInfo:@{@"msg": @"请求超出设定总时长"}]];
+        _adapter = nil;
+        self.delegate = nil;
+    }
+}
+
+- (void)timeoutCheckTimerAction {
+    if ([[NSDate date] timeIntervalSince1970]*1000 > _timeout_stamp) {
+        [self deallocSelf];
+        [_timeoutCheckTimer invalidate];
+        _timeoutCheckTimer = nil;
+    }
+}
+
 // MARK: ======================= AdvanceBaseAdspotDelegate =======================
 /// 加载渠道广告，将会返回渠道所需参数
 /// @param sdkId 渠道ID
@@ -56,18 +76,11 @@
     }
 
     // 请求超时了
-    NSTimeInterval now = [[NSDate date] timeIntervalSince1970];
+    NSTimeInterval now = [[NSDate date] timeIntervalSince1970]*1000;
     if (now > _timeout_stamp) {
-        [_bgImgV removeFromSuperview];
-        [self clearSuppliers];
-        if([self.delegate respondsToSelector:@selector(advanceOnAdNotFilled:)]) {
-            [self.delegate advanceOnAdNotFilled:[NSError errorWithDomain:@"com.AdvanceSDK.error" code:10601 userInfo:@{@"msg": @"请求超出设定总时长"}]];
-        }
-        _adapter = nil;
-        self.delegate = nil;
+        [self deallocSelf];
     } else {
         self.currentSdkSupplier.timeout = ((_timeout_stamp - now) >= 5 ? 5 : (_timeout_stamp - now))*1000;
-        
         if (NSClassFromString(clsName)) {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wundeclared-selector"
@@ -95,8 +108,11 @@
 
 - (void)loadAd {
     // 记录过期的时间
-    _timeout_stamp = [[NSDate date] timeIntervalSince1970] + _timeout*1000;
-    
+    _timeout_stamp = ([[NSDate date] timeIntervalSince1970] + _timeout)*1000;
+    // 开启定时器监听过期
+    _timeoutCheckTimer = [CADisplayLink displayLinkWithTarget:self selector:@selector(timeoutCheckTimerAction)];
+    [_timeoutCheckTimer addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
+
     [super loadAd];
     if (_adapter && _backgroundImage) {
         _bgImgV = [[UIImageView alloc] initWithImage:_backgroundImage];

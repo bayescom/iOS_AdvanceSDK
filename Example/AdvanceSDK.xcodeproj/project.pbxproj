@@ -77,7 +77,7 @@
 
 /* Begin PBXFileReference section */
 		0FB18A5DAA171A55502E9407 /* Pods-AdvanceSDK_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AdvanceSDK_Example.debug.xcconfig"; path = "Target Support Files/Pods-AdvanceSDK_Example/Pods-AdvanceSDK_Example.debug.xcconfig"; sourceTree = "<group>"; };
-		145849F14F3C5444A6FFC93D /* AdvanceSDK.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = AdvanceSDK.podspec; path = ../AdvanceSDK.podspec; sourceTree = "<group>"; };
+		145849F14F3C5444A6FFC93D /* AdvanceSDK.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = AdvanceSDK.podspec; path = ../AdvanceSDK.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		19B4DCB70CF5FFF496339425 /* Pods-AdvanceSDK_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AdvanceSDK_Example.release.xcconfig"; path = "Target Support Files/Pods-AdvanceSDK_Example/Pods-AdvanceSDK_Example.release.xcconfig"; sourceTree = "<group>"; };
 		1E33D807387F6C88EC879C30 /* Pods_AdvanceSDK_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AdvanceSDK_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		31FE7BAC24482CEE00CB2062 /* ViewBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewBuilder.h; sourceTree = "<group>"; };
