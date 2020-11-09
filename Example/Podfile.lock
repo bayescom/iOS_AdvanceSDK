@@ -1,60 +1,56 @@
 PODS:
-  - AdvanceSDK (3.2.2.2):
-    - AdvanceSDK/Core (= 3.2.2.2)
-  - AdvanceSDK/Adspot (3.2.2.2):
+  - AdvanceSDK (3.2.2.4):
+    - AdvanceSDK/Core (= 3.2.2.4)
+  - AdvanceSDK/Adspot (3.2.2.4):
     - AdvanceSDK/Core
-  - AdvanceSDK/Core (3.2.2.2)
-  - AdvanceSDK/CSJ (3.2.2.2):
+  - AdvanceSDK/Core (3.2.2.4)
+  - AdvanceSDK/CSJ (3.2.2.4):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - Bytedance-UnionAD
-  - AdvanceSDK/GDT (3.2.2.2):
+  - AdvanceSDK/GDT (3.2.2.4):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - GDTMobSDK
-  - AdvanceSDK/Mercury (3.2.2.2):
+  - AdvanceSDK/Mercury (3.2.2.4):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - MercurySDK
-  - Bytedance-UnionAD (3.3.0.4)
+  - Bytedance-UnionAD (3.3.0.5)
   - GDTMobSDK (4.11.12):
     - GDTMobSDK/GDTMobSDK (= 4.11.12)
   - GDTMobSDK/GDTMobSDK (4.11.12)
   - Masonry (1.1.0)
-  - MercurySDK (3.1.5.1)
-  - SDWebImage (5.8.0):
-    - SDWebImage/Core (= 5.8.0)
-  - SDWebImage/Core (5.8.0)
+  - MercurySDK (3.1.5.2)
+  - SDWebImage (5.9.4):
+    - SDWebImage/Core (= 5.9.4)
+  - SDWebImage/Core (5.9.4)
 
 DEPENDENCIES:
-  - AdvanceSDK (from `../`)
-  - AdvanceSDK/CSJ (from `../`)
-  - AdvanceSDK/GDT (from `../`)
-  - AdvanceSDK/Mercury (from `../`)
+  - AdvanceSDK
+  - AdvanceSDK/CSJ
+  - AdvanceSDK/GDT
+  - AdvanceSDK/Mercury
   - Masonry
-  - MercurySDK (= 3.1.5.1)
   - SDWebImage
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
+    - AdvanceSDK
     - Bytedance-UnionAD
     - GDTMobSDK
     - Masonry
     - MercurySDK
     - SDWebImage
 
-EXTERNAL SOURCES:
-  AdvanceSDK:
-    :path: "../"
-
 SPEC CHECKSUMS:
-  AdvanceSDK: 451a49b8f71b94d7898a4d1855700037e4de31be
-  Bytedance-UnionAD: 1c658dd37741b799c6fb6f8a242a14b409711e15
+  AdvanceSDK: 1a6cb4170a19e0b8c9e834580d9c3fdad11fdca5
+  Bytedance-UnionAD: 7fc15b173b44303a548b25ec534e4c1b04263b21
   GDTMobSDK: 16ef708ffcbbeca455d9df754694bc647401f454
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
-  MercurySDK: da82a02b57eeafa07e3c184f36b40283632e166c
-  SDWebImage: 84000f962cbfa70c07f19d2234cbfcf5d779b5dc
+  MercurySDK: 95870529a8c8aa6cbd81cb120d93019c18134b4b
+  SDWebImage: b69257f4ab14e9b6a2ef53e910fdf914d8f757c1
 
-PODFILE CHECKSUM: 47b29b6f44e3e7ee5c55987d16c4e06a5542f7a2
+PODFILE CHECKSUM: 1838dbf2fce7829a34b5f5f33f58d1c3aef9762c
 
 COCOAPODS: 1.10.0
