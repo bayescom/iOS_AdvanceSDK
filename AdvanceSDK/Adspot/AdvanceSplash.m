@@ -80,7 +80,7 @@
     if (now > _timeout_stamp) {
         [self deallocSelf];
     } else {
-        self.currentSdkSupplier.timeout = ((_timeout_stamp - now) >= 5 ? 5 : (_timeout_stamp - now))*1000;
+        self.currentSdkSupplier.timeout = (_timeout_stamp - now) >= 5000 ? 5000 : (_timeout_stamp - now);
         if (NSClassFromString(clsName)) {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wundeclared-selector"
