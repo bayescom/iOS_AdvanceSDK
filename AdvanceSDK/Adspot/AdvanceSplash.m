@@ -44,7 +44,6 @@
 
 - (void)deallocSelf {
     [_bgImgV removeFromSuperview];
-    [self clearSuppliers];
     if([self.delegate respondsToSelector:@selector(advanceOnAdNotFilled:)]) {
         [self.delegate advanceOnAdNotFilled:[NSError errorWithDomain:@"com.AdvanceSDK.error" code:10601 userInfo:@{@"msg": @"请求超出设定总时长"}]];
         _adapter = nil;
@@ -55,6 +54,14 @@
 - (void)timeoutCheckTimerAction {
     if ([[NSDate date] timeIntervalSince1970]*1000 > _timeout_stamp) {
         [self deallocSelf];
+        [_timeoutCheckTimer invalidate];
+        _timeoutCheckTimer = nil;
+    }
+}
+
+- (void)reportWithType:(AdvanceSdkSupplierRepoType)repoType {
+    [super reportWithType:repoType];
+    if (repoType == AdvanceSdkSupplierRepoImped) {
         [_timeoutCheckTimer invalidate];
         _timeoutCheckTimer = nil;
     }

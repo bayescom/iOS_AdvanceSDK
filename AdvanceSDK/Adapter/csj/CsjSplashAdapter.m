@@ -43,6 +43,7 @@
 }
 
 - (void)loadAd {
+    NSLog(@"====> CsjSplashAdapter Load");
     CGRect adFrame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height);
     // 设置logo
     if (_adspot.logoImage && _adspot.showLogoRequire) {
@@ -53,15 +54,18 @@
     _csj_ad = [[BUSplashAdView alloc] initWithSlotID:_adspot.currentSdkSupplier.adspotid frame:adFrame];
     if (self.adspot.currentSdkSupplier.timeout &&
         self.adspot.currentSdkSupplier.timeout > 0) {
-        _csj_ad.tolerateTimeout = _adspot.currentSdkSupplier.timeout / 1000;
+        _csj_ad.tolerateTimeout = _adspot.currentSdkSupplier.timeout / 1000.0;
     } else {
         _csj_ad.tolerateTimeout = 5.0;
     }
+    
     _csj_ad.delegate = self;
     
     [_csj_ad loadAdData];
     _backgroundImageV.userInteractionEnabled = YES;
-    [_backgroundImageV addSubview:_csj_ad];
+//    [_backgroundImageV addSubview:_csj_ad];
+    [[UIApplication sharedApplication].keyWindow addSubview:_csj_ad];
+    [[UIApplication sharedApplication].keyWindow addSubview:_backgroundImageV];
     _csj_ad.backgroundColor = [UIColor clearColor];
     _csj_ad.rootViewController = _adspot.viewController;
 }
@@ -113,6 +117,8 @@
     if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdShow)]) {
         [self.delegate advanceSplashOnAdShow];
     }
+    [_backgroundImageV removeFromSuperview];
+    _backgroundImageV = nil;
 }
 
 /**

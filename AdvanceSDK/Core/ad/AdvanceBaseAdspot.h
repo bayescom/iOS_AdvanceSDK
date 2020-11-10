@@ -64,8 +64,8 @@ NS_ASSUME_NONNULL_BEGIN
                                 mediaKey:(nullable NSString *)mediaKey
                                   sdkId:(nonnull NSString *)sdkId;
 
-/// 清空本地缓存的渠道
-- (void)clearSuppliers;
+///// 清空本地缓存的渠道
+//- (void)clearSuppliers;
 
 /// 初始化方法
 /// @param mediaId mediaId

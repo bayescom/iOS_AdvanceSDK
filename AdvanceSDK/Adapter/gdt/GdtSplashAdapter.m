@@ -27,6 +27,8 @@
 // 是否点击了
 @property (nonatomic, assign) BOOL isClick;
 
+@property (nonatomic, strong) UIImageView *backgroundImageV;
+
 @end
 
 @implementation GdtSplashAdapter
@@ -62,7 +64,8 @@
     if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdReceived)]) {
         [self.delegate advanceSplashOnAdReceived];
     }
-    
+    [_backgroundImageV removeFromSuperview];
+    _backgroundImageV = nil;
 }
 
 - (void)splashAdDidLoad:(GDTSplashAd *)splashAd {
@@ -83,6 +86,8 @@
     if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdShow)]) {
         [self.delegate advanceSplashOnAdShow];
     }
+    [_backgroundImageV removeFromSuperview];
+    _backgroundImageV = nil;
 }
 
 - (void)splashAdFailToPresent:(GDTSplashAd *)splashAd withError:(NSError *)error {
@@ -92,6 +97,8 @@
     }
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
     [self.adspot selectSdkSupplierWithError:error];
+    [_backgroundImageV removeFromSuperview];
+    _backgroundImageV = nil;
 }
 
 - (void)splashAdClicked:(GDTSplashAd *)splashAd {
@@ -101,6 +108,8 @@
         [self.delegate advanceSplashOnAdClicked];
     }
     _isClick = YES;
+    [_backgroundImageV removeFromSuperview];
+    _backgroundImageV = nil;
 }
 
 - (void)splashAdClosed:(GDTSplashAd *)splashAd {
@@ -111,6 +120,8 @@
             [self.delegate advanceSplashOnAdSkipClicked];
         }
     }
+    [_backgroundImageV removeFromSuperview];
+    _backgroundImageV = nil;
 }
 
 - (void)splashAdLifeTime:(NSUInteger)time {
@@ -119,6 +130,8 @@
     if (time <= 0 && [self.delegate respondsToSelector:@selector(advanceSplashOnAdCountdownToZero)]) {
         [self.delegate advanceSplashOnAdCountdownToZero];
     }
+    [_backgroundImageV removeFromSuperview];
+    _backgroundImageV = nil;
 }
 
 @end

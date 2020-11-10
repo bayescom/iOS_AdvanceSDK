@@ -250,11 +250,11 @@ NSString *const CACHE_PREFIX = @"mercury_advance_%@";
     self.defaultSdkSupplier = [[SdkSupplier alloc] initWithMediaId:mediaId adspotId:adspotid mediaKey:mediakey sdkId:sdkid];
 }
 
-- (void)clearSuppliers {
-    self.suppliers = nil;
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults removeObjectForKey:[NSString stringWithFormat:CACHE_PREFIX, self.adspotid]];
-}
+//- (void)clearSuppliers {
+//    self.suppliers = nil;
+//    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+//    [userDefaults removeObjectForKey:[NSString stringWithFormat:CACHE_PREFIX, self.adspotid]];
+//}
 
 - (NSString *)constructDefaultTk:(NSString *)url withAppId:(NSString *)appid adspotId:(NSString *)adspotid idfa:(NSString *)idfa
                       supplierId:(NSString *)supplierid auctionId:(NSString*)auctionId supplierAdspotId:(NSString*) supplierAdspotId{
