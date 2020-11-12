@@ -46,7 +46,7 @@
     [_bgImgV removeFromSuperview];
     if([self.delegate respondsToSelector:@selector(advanceOnAdNotFilled:)]) {
         [self.delegate advanceOnAdNotFilled:[NSError errorWithDomain:@"com.AdvanceSDK.error" code:10601 userInfo:@{@"msg": @"请求超出设定总时长"}]];
-        _adapter = nil;
+        [_adapter performSelector:@selector(deallocAdapter)];
         self.delegate = nil;
     }
 }
@@ -64,6 +64,8 @@
     if (repoType == AdvanceSdkSupplierRepoImped) {
         [_timeoutCheckTimer invalidate];
         _timeoutCheckTimer = nil;
+        [_bgImgV removeFromSuperview];
+        _bgImgV = nil;
     }
 }
 
@@ -84,7 +86,7 @@
 
     // 请求超时了
     NSTimeInterval now = [[NSDate date] timeIntervalSince1970]*1000;
-    if (now > _timeout_stamp) {
+    if (now+500 > _timeout_stamp) {
         [self deallocSelf];
     } else {
         self.currentSdkSupplier.timeout = (_timeout_stamp - now) >= 5000 ? 5000 : (_timeout_stamp - now);

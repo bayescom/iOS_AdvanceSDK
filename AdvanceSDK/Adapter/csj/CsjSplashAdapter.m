@@ -23,8 +23,6 @@
 @property (nonatomic, weak) AdvanceSplash *adspot;
 @property (nonatomic, strong) NSDictionary *params;
 
-@property (nonatomic, strong) UIImageView *backgroundImageV;
-
 @end
 
 @implementation CsjSplashAdapter
@@ -32,19 +30,12 @@
     if (self = [super init]) {
         _adspot = adspot;
         _params = params;
-        // 占位背景
-        if (_adspot.backgroundImage) {
-            _backgroundImageV = [[UIImageView alloc] initWithImage:_adspot.backgroundImage];
-            _backgroundImageV.frame = [UIScreen mainScreen].bounds;
-            [_adspot.viewController.view addSubview:_backgroundImageV];
-        }
     }
     return self;
 }
 
 - (void)loadAd {
-    NSLog(@"====> CsjSplashAdapter Load");
-    CGRect adFrame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height);
+    CGRect adFrame = [UIApplication sharedApplication].keyWindow.bounds;
     // 设置logo
     if (_adspot.logoImage && _adspot.showLogoRequire) {
         CGFloat real_w = [UIScreen mainScreen].bounds.size.width;
@@ -52,22 +43,25 @@
         adFrame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height-real_h);
     }
     _csj_ad = [[BUSplashAdView alloc] initWithSlotID:_adspot.currentSdkSupplier.adspotid frame:adFrame];
-    if (self.adspot.currentSdkSupplier.timeout &&
-        self.adspot.currentSdkSupplier.timeout > 0) {
-        _csj_ad.tolerateTimeout = _adspot.currentSdkSupplier.timeout / 1000.0;
-    } else {
-        _csj_ad.tolerateTimeout = 5.0;
+    if (self.adspot.currentSdkSupplier.timeout) {
+        if (self.adspot.currentSdkSupplier.timeout > 500) {
+            _csj_ad.tolerateTimeout = _adspot.currentSdkSupplier.timeout / 1000.0;
+        }
     }
     
     _csj_ad.delegate = self;
     
     [_csj_ad loadAdData];
-    _backgroundImageV.userInteractionEnabled = YES;
-//    [_backgroundImageV addSubview:_csj_ad];
+    
     [[UIApplication sharedApplication].keyWindow addSubview:_csj_ad];
-    [[UIApplication sharedApplication].keyWindow addSubview:_backgroundImageV];
+    [[UIApplication sharedApplication].keyWindow bringSubviewToFront:[_adspot performSelector:@selector(bgImgV)]];
+    
     _csj_ad.backgroundColor = [UIColor clearColor];
     _csj_ad.rootViewController = _adspot.viewController;
+}
+
+- (void)deallocAdapter {
+    [_csj_ad removeFromSuperview];
 }
 
 // MARK: ======================= BUSplashAdDelegate =======================
@@ -101,10 +95,8 @@
         [self.delegate advanceSplashOnAdFailedWithSdkId:_adspot.currentSdkSupplier.adspotid error:error];
     }
     [_csj_ad removeFromSuperview];
-    _csj_ad = nil;
-    [[_adspot performSelector:@selector(bgImgV)] removeFromSuperview];
-    [_backgroundImageV removeFromSuperview];
-    _backgroundImageV = nil;
+//    _csj_ad = nil;
+//    [[_adspot performSelector:@selector(bgImgV)] removeFromSuperview];
     [self.adspot selectSdkSupplierWithError:error];
 }
 
@@ -112,13 +104,11 @@
  This method is called when splash ad slot will be showing.
  */
 - (void)splashAdWillVisible:(BUSplashAdView *)splashAd {
-    [[_adspot performSelector:@selector(bgImgV)] removeFromSuperview];
+//    [[_adspot performSelector:@selector(bgImgV)] removeFromSuperview];
     [self.adspot reportWithType:AdvanceSdkSupplierRepoImped];
     if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdShow)]) {
         [self.delegate advanceSplashOnAdShow];
     }
-    [_backgroundImageV removeFromSuperview];
-    _backgroundImageV = nil;
 }
 
 /**
@@ -135,18 +125,16 @@
  This method is called when splash ad is closed.
  */
 - (void)splashAdDidClose:(BUSplashAdView *)splashAd {
-    [_backgroundImageV removeFromSuperview];
     [_csj_ad removeFromSuperview];
-    [[_adspot performSelector:@selector(bgImgV)] removeFromSuperview];
-    _csj_ad = nil;
+//    [[_adspot performSelector:@selector(bgImgV)] removeFromSuperview];
+//    _csj_ad = nil;
 }
 
 /**
  This method is called when spalashAd skip button  is clicked.
  */
 - (void)splashAdDidClickSkip:(BUSplashAdView *)splashAd {
-    [_backgroundImageV removeFromSuperview];
-    [[_adspot performSelector:@selector(bgImgV)] removeFromSuperview];
+//    [[_adspot performSelector:@selector(bgImgV)] removeFromSuperview];
     if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdSkipClicked)]) {
         [self.delegate advanceSplashOnAdSkipClicked];
     }
@@ -156,8 +144,7 @@
  This method is called when spalashAd countdown equals to zero
  */
 - (void)splashAdCountdownToZero:(BUSplashAdView *)splashAd {
-    [_backgroundImageV removeFromSuperview];
-    [[_adspot performSelector:@selector(bgImgV)] removeFromSuperview];
+//    [[_adspot performSelector:@selector(bgImgV)] removeFromSuperview];
     if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdCountdownToZero)]) {
         [self.delegate advanceSplashOnAdCountdownToZero];
     }
