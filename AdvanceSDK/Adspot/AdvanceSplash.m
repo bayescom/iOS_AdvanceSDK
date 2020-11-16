@@ -97,6 +97,9 @@
             ((void (*)(id, SEL, id))objc_msgSend)((id)_adapter, @selector(setDelegate:), _delegate);
             ((void (*)(id, SEL))objc_msgSend)((id)_adapter, @selector(loadAd));
 #pragma clang diagnostic pop
+            if (_adapter && _backgroundImage) {
+                [[UIApplication sharedApplication].by_getCurrentWindow addSubview:self.bgImgV];
+            }
         } else {
             NSString *msg = [NSString stringWithFormat:@"%@ 不存在", clsName];
             if([self.delegate respondsToSelector:@selector(advanceOnAdNotFilled:)]) {
@@ -124,9 +127,7 @@
 
     [super loadAd];
     if (_adapter && _backgroundImage) {
-        _bgImgV = [[UIImageView alloc] initWithImage:_backgroundImage];
-        _bgImgV.frame = [UIScreen mainScreen].bounds;
-        [[UIApplication sharedApplication].by_getCurrentWindow addSubview:_bgImgV];
+        [[UIApplication sharedApplication].by_getCurrentWindow addSubview:self.bgImgV];
     }
 }
 
@@ -137,6 +138,15 @@
     } else {
         return [UIApplication sharedApplication].by_getCurrentWindow.rootViewController;
     }
+}
+
+- (UIImageView *)bgImgV {
+    if (!_bgImgV) {
+        _bgImgV = [[UIImageView alloc] initWithImage:_backgroundImage];
+    }
+    _bgImgV.frame = [UIScreen mainScreen].bounds;
+    _bgImgV.image = _backgroundImage;
+    return _bgImgV;
 }
 
 @end
