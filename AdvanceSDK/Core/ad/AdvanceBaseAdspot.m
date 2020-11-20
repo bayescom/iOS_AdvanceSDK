@@ -183,58 +183,11 @@ NSString *const CACHE_PREFIX = @"mercury_advance_%@";
         NSURLSession *sharedSession = [NSURLSession sharedSession];
         //use system dataTask
         NSURLSessionDataTask *dataTask = [sharedSession dataTaskWithRequest:request
-                                                          completionHandler:
-                                                                  ^(NSData *_Nullable data, NSURLResponse *_Nullable response, NSError *_Nullable error) {
-                                                                      if (data && (error == nil)) {
-                                                                          NSHTTPURLResponse *httpResp = (NSHTTPURLResponse *) response;
-                                                                          if (httpResp.statusCode != 200) {
-                                                                              AdvanceLog(AdvanceErrorMsg_Server_01);
-//                                                                              [self strategyFailedWithError:AdvanceError(AdvanceErrorCode_Server_01, AdvanceErrorMsg_Server_01)];
-                                                                              if (!isToCache) {
-                                                                                  [self processRequestFailed];
-                                                                              }
-
-                                                                          } else {
-                                                                              NSError *jsonError;
-                                                                              //parse json data
-                                                                              NSDictionary *repJsonDict =
-                                                                                      [NSJSONSerialization JSONObjectWithData:data
-                                                                                                                      options:NSJSONReadingAllowFragments
-                                                                                                                        error:&jsonError];
-                                                                              if (jsonError) {
-                                                                                  AdvanceLog(AdvanceErrorMsg_JsonParse_01);
-//                                                                                  [self strategyFailedWithError:AdvanceError(AdvanceErrorCode_JsonParse_01, AdvanceErrorMsg_JsonParse_01)];
-                                                                                  if (!isToCache) {
-                                                                                      [self processRequestFailed];
-                                                                                  }
-                                                                              } else {
-                                                                                  if ([[repJsonDict objectForKey:@"code"] isEqual:@200]) {
-                                                                                      if (!isToCache) {
-                                                                                          [self processRequestResult:repJsonDict];
-                                                                                      } else {
-                                                                                          //仅仅保存至缓存
-                                                                                          NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
-                                                                                          [userDefault setObject:repJsonDict forKey:[NSString stringWithFormat:CACHE_PREFIX, self.adspotid]];
-                                                                                          [userDefault synchronize];
-                                                                                      }
-                                                                                  } else {
-                                                                                      AdvanceLog(AdvanceErrorMsg_Server_01);
-//                                                                                      [self strategyFailedWithError:AdvanceError(AdvanceErrorCode_Server_01, AdvanceErrorMsg_Server_01)];
-                                                                                      if (!isToCache) {
-                                                                                          [self processRequestFailed];
-                                                                                      }
-
-                                                                                  }
-                                                                              }
-                                                                          }
-                                                                      } else {
-                                                                          AdvanceLog(AdvanceErrorMsg_Server_02);
-//                                                                          [self strategyFailedWithError:AdvanceError(AdvanceErrorCode_Server_02, AdvanceErrorMsg_Server_02)];
-                                                                          if (!isToCache) {
-                                                                              [self processRequestFailed];
-                                                                          }
-                                                                      }
-                                                                  }];
+                                                          completionHandler:^(NSData *_Nullable data, NSURLResponse *_Nullable response, NSError *_Nullable error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self doResultData:data response:response error:error isToCache:isToCache];
+            });
+        }];
         //task need to resume
         [dataTask resume];
     } @catch (NSException *exception) {
@@ -242,6 +195,60 @@ NSString *const CACHE_PREFIX = @"mercury_advance_%@";
             [self processRequestFailed];
         }
     } @finally {
+    }
+}
+
+- (void)doResultData:(NSData * )data response:(NSURLResponse *)response error:(NSError *)error isToCache:(BOOL)isToCache {
+    if (data && (error == nil)) {
+        NSHTTPURLResponse *httpResp = (NSHTTPURLResponse *)response;
+        if (httpResp.statusCode != 200) {
+            AdvanceLog(AdvanceErrorMsg_Server_01);
+            if (!isToCache) {
+                [self processRequestFailed];
+            }
+        } else {
+            NSError *jsonError;
+            //parse json data
+            NSDictionary *repJsonDict = [NSJSONSerialization JSONObjectWithData:data
+                                                                        options:NSJSONReadingAllowFragments
+                                                                          error:&jsonError];
+            if (jsonError) {
+                AdvanceLog(AdvanceErrorMsg_JsonParse_01);
+                if (!isToCache) {
+                    [self processRequestFailed];
+                }
+            } else {
+                if ([[repJsonDict objectForKey:@"code"] isEqual:@200]) {
+                    if (!isToCache) {
+                        [self processRequestResult:repJsonDict];
+                    } else {
+                        // 保存到本地
+                        NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
+                        // 超时时间
+                        if ([repJsonDict valueForKey:@"setting"]) {
+                            NSMutableDictionary *dicM = [NSMutableDictionary dictionaryWithDictionary:repJsonDict];
+                            NSMutableDictionary *dicSettingM = [NSMutableDictionary dictionaryWithDictionary:[repJsonDict valueForKey:@"setting"]];
+                            [dicSettingM setValue:@([[NSDate date] timeIntervalSince1970] + [[[repJsonDict valueForKey:@"setting"] valueForKey:@"cache_dur"] floatValue]) forKey:@"timeOut"];
+                            [dicM setValue:[dicSettingM copy] forKey:@"setting"];
+                            [userDefault setObject:[dicM copy] forKey:[NSString stringWithFormat:CACHE_PREFIX, self.adspotid]];
+                        } else {
+                            [userDefault setObject:repJsonDict forKey:[NSString stringWithFormat:CACHE_PREFIX, self.adspotid]];
+                        }
+                        [userDefault synchronize];
+                    }
+                } else {
+                    AdvanceLog(AdvanceErrorMsg_Server_01);
+                    if (!isToCache) {
+                        [self processRequestFailed];
+                    }
+                }
+            }
+        }
+    } else {
+        AdvanceLog(AdvanceErrorMsg_Server_02);
+        if (!isToCache) {
+            [self processRequestFailed];
+        }
     }
 }
 

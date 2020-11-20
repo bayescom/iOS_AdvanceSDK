@@ -93,6 +93,7 @@
         if (NSClassFromString(clsName)) {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wundeclared-selector"
+            [_adapter performSelector:@selector(deallocAdapter)];
             _adapter = ((id (*)(id, SEL, id, id))objc_msgSend)((id)[NSClassFromString(clsName) alloc], @selector(initWithParams:adspot:), params, self);
             ((void (*)(id, SEL, id))objc_msgSend)((id)_adapter, @selector(setDelegate:), _delegate);
             ((void (*)(id, SEL))objc_msgSend)((id)_adapter, @selector(loadAd));
@@ -119,9 +120,12 @@
 }
 
 - (void)loadAd {
+    if (_timeout <= 0) { _timeout = 60; }
     // 记录过期的时间
     _timeout_stamp = ([[NSDate date] timeIntervalSince1970] + _timeout)*1000;
     // 开启定时器监听过期
+    [_timeoutCheckTimer invalidate];
+
     _timeoutCheckTimer = [CADisplayLink displayLinkWithTarget:self selector:@selector(timeoutCheckTimerAction)];
     [_timeoutCheckTimer addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
 

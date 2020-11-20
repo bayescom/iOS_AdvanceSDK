@@ -34,7 +34,7 @@
 
 - (void)loadAd {
     _mercury_ad = [[MercurySplashAd alloc] initAdWithAdspotId:_adspot.currentSdkSupplier.adspotid delegate:self];
-    _mercury_ad.placeholderImage = _adspot.backgroundImage;
+//    _mercury_ad.placeholderImage = _adspot.backgroundImage;
     _mercury_ad.logoImage = _adspot.logoImage;
     if (_adspot.showLogoRequire) {
         _mercury_ad.showType = MercurySplashAdShowCutBottom;
