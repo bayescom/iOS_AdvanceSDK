@@ -35,13 +35,8 @@
 }
 
 - (void)loadAd {
-<<<<<<< HEAD
     _mercury_ad = [[MercurySplashAd alloc] initAdWithAdspotId:_supplier.adspotid delegate:self];
     _mercury_ad.placeholderImage = _adspot.backgroundImage;
-=======
-    _mercury_ad = [[MercurySplashAd alloc] initAdWithAdspotId:_adspot.currentSdkSupplier.adspotid delegate:self];
-//    _mercury_ad.placeholderImage = _adspot.backgroundImage;
->>>>>>> 0124cdfaf9aac7d872f258f5b86800836d235275
     _mercury_ad.logoImage = _adspot.logoImage;
     if (_adspot.showLogoRequire) {
         _mercury_ad.showType = MercurySplashAdShowCutBottom;
