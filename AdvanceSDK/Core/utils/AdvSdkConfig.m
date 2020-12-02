@@ -15,7 +15,7 @@
 
 @implementation AdvSdkConfig
 NSString *const AdvanceSdkAPIVersion = @"3.0";
-NSString *const AdvanceSdkVersion = @"3.2.2.9";
+NSString *const AdvanceSdkVersion = @"3.2.3.0";
 //NSString *const AdvanceSdkRequestUrl = @"http://cruiser.bayescom.cn/eleven";
 NSString *const AdvanceSdkRequestUrl = @"https://mock.yonyoucloud.com/mock/2650/api/v3/eleven";
 NSString *const AdvanceReportDataUrl = @"http://cruiser.bayescom.cn/native";
