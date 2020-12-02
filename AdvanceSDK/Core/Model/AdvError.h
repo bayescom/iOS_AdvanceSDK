@@ -20,6 +20,7 @@ typedef NS_ENUM(NSUInteger, AdvErrorCode) {
     AdvErrorCode_112    =    112,
     AdvErrorCode_113    =    113,
     AdvErrorCode_114    =    114,
+    AdvErrorCode_115    =    115,
 };
 
 @interface AdvError : NSObject

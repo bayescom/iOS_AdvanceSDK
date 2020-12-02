@@ -50,19 +50,7 @@
         @(AdvErrorCode_112) : @"本地有策略但未命中CPT目标渠道",
         @(AdvErrorCode_113) : @"非CPT本地无策略",
         @(AdvErrorCode_114) : @"非CPT本地策略都执行失败",
-//        @(MercuryResultCode103) : @"SDK初始化失败",
-////        @(MercuryResultCode104) : @"SDK异常退出",
-//        @(MercuryResultCode200) : @"广告返回成功",
-//        @(MercuryResultCode204) : @"无广告返回",
-//        @(MercuryResultCode210) : @"广告返回内容解析失败",
-//        @(MercuryResultCode211) : @"广告返回类型与请求不符",
-//        @(MercuryResultCode212) : @"广告请求网络失败",
-//        @(MercuryResultCode213) : @"广告请求超时",
-//        @(MercuryResultCode214) : @"广告服务器错误",
-//        @(MercuryResultCode215) : @"广告预加载失败",
-//        @(MercuryResultCode300) : @"广告素材加载失败",
-//        @(MercuryResultCode301) : @"广告素材渲染失败",
-//        @(MercuryResultCode302) : @"广告素材请求超时",
+        @(AdvErrorCode_115) : @"请求超出设定总时长",
     };
     return [codeMap objectForKey:@(code)];
 }

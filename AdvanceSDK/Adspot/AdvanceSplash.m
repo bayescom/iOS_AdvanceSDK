@@ -13,6 +13,7 @@
 #import "AdvSupplierModel.h"
 #import "UIApplication+Adv.h"
 #import "AdvLog.h"
+#import "AdvError.h"
 
 @interface AdvanceSplash ()
 @property (nonatomic, strong) id adapter;
@@ -69,7 +70,7 @@
     _timeoutCheckTimer = nil;
     _timeout_stamp = 0;
     if([_delegate respondsToSelector:@selector(advanceOnAdNotFilled:)]) {
-        [_delegate advanceOnAdNotFilled:[NSError errorWithDomain:@"com.AdvanceSDK.error" code:10601 userInfo:@{@"msg": @"请求超出设定总时长"}]];
+        [_delegate advanceOnAdNotFilled:[AdvError errorWithCode:AdvErrorCode_115].toNSError];
         [_adapter performSelector:@selector(deallocAdapter)];
     }
     _delegate = nil;
