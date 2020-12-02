@@ -51,7 +51,7 @@
     }
     _adspot.viewController.modalPresentationStyle = 0;
     // 设置 backgroundImage
-    _gdt_ad.backgroundImage = _adspot.backgroundImage;
+//    _gdt_ad.backgroundImage = _adspot.backgroundImage;
     [_gdt_ad loadAd];
 }
 

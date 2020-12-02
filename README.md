@@ -58,7 +58,11 @@ platform :ios, '9.0'
 target '你的项目名称' do
   # use_frameworks!
   # Pods for 你的项目名称
+<<<<<<< HEAD
   pod 'AdvanceSDK', '~> 3.2.3.1' # 可指定你想要的版本号
+=======
+  pod 'AdvanceSDK', '~> 3.2.2.9' # 可指定你想要的版本号
+>>>>>>> 0124cdfaf9aac7d872f258f5b86800836d235275
   pod 'AdvanceSDK/CSJ', 	# 如果需要导入穿山甲SDK
   pod 'AdvanceSDK/GDT', 	# 如果需要导入广点通SDK
   pod 'AdvanceSDK/Mercury' # 如果需要导入MercurySDK
@@ -102,9 +106,15 @@ $ pod install
 指定SDK版本前，请先确保repo库为最新版本，参考上一小节内容进行更新。如果需要指定SDK版本，需要在Podfile文件中，pod那一行指定版本号：
 
 ```
+<<<<<<< HEAD
   pod 'AdvanceSDK', '~> 3.2.3.1' # 可指定你想要的版本号
   pod 'AdvanceSDK/CSJ', '~> 3.2.3.1'	# 如果需要导入穿山甲SDK
   pod 'AdvanceSDK/GDT', '~> 3.2.3.1'	# 如果需要导入广点通SDK
+=======
+  pod 'AdvanceSDK', '~> 3.2.2.9' # 可指定你想要的版本号
+  pod 'AdvanceSDK/CSJ', '~> 3.2.2.9'	# 如果需要导入穿山甲SDK
+  pod 'AdvanceSDK/GDT', '~> 3.2.2.9'	# 如果需要导入广点通SDK
+>>>>>>> 0124cdfaf9aac7d872f258f5b86800836d235275
 
 ```
 之后运行命令：

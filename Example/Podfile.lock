@@ -1,4 +1,5 @@
 PODS:
+<<<<<<< HEAD
   - AdvanceSDK (3.2.3.1):
     - AdvanceSDK/Core (= 3.2.3.1)
   - AdvanceSDK/Adspot (3.2.3.1):
@@ -13,6 +14,22 @@ PODS:
     - AdvanceSDK/Core
     - GDTMobSDK
   - AdvanceSDK/Mercury (3.2.3.1):
+=======
+  - AdvanceSDK (3.2.2.9):
+    - AdvanceSDK/Core (= 3.2.2.9)
+  - AdvanceSDK/Adspot (3.2.2.9):
+    - AdvanceSDK/Core
+  - AdvanceSDK/Core (3.2.2.9)
+  - AdvanceSDK/CSJ (3.2.2.9):
+    - AdvanceSDK/Adspot
+    - AdvanceSDK/Core
+    - Bytedance-UnionAD
+  - AdvanceSDK/GDT (3.2.2.9):
+    - AdvanceSDK/Adspot
+    - AdvanceSDK/Core
+    - GDTMobSDK
+  - AdvanceSDK/Mercury (3.2.2.9):
+>>>>>>> 0124cdfaf9aac7d872f258f5b86800836d235275
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - MercurySDK
@@ -23,10 +40,16 @@ PODS:
   - JPFPSStatus (0.1.1)
   - Masonry (1.1.0)
   - MercurySDK (3.1.5.2)
+<<<<<<< HEAD
   - SDWebImage (5.9.4):
     - SDWebImage/Core (= 5.9.4)
   - SDWebImage/Core (5.9.4)
   - STDebugConsole (0.1.1)
+=======
+  - SDWebImage (5.9.5):
+    - SDWebImage/Core (= 5.9.5)
+  - SDWebImage/Core (5.9.5)
+>>>>>>> 0124cdfaf9aac7d872f258f5b86800836d235275
 
 DEPENDENCIES:
   - AdvanceSDK (from `../`)
@@ -53,14 +76,22 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
+<<<<<<< HEAD
   AdvanceSDK: 70d6b3b7431aac5ef4a1d69a83929d6edef4d9ec
+=======
+  AdvanceSDK: 935336826c506a502ba78714eb01a5e3274e70bf
+>>>>>>> 0124cdfaf9aac7d872f258f5b86800836d235275
   Bytedance-UnionAD: 7fc15b173b44303a548b25ec534e4c1b04263b21
   GDTMobSDK: 16ef708ffcbbeca455d9df754694bc647401f454
   JPFPSStatus: 03f32aa3d4d7d0c5bf56f6f3e7cf8b7280a5f52c
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   MercurySDK: 95870529a8c8aa6cbd81cb120d93019c18134b4b
+<<<<<<< HEAD
   SDWebImage: b69257f4ab14e9b6a2ef53e910fdf914d8f757c1
   STDebugConsole: f07227199c0f906953e84f1d12e1fec4a9fc60d7
+=======
+  SDWebImage: 0b2ba0d56479bf6a45ecddbfd5558bea93150d25
+>>>>>>> 0124cdfaf9aac7d872f258f5b86800836d235275
 
 PODFILE CHECKSUM: 9e5461ee58b88c09869216d290ca418b17c94169
 
