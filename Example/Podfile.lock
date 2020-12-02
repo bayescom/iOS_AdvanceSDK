@@ -20,33 +20,27 @@ PODS:
   - GDTMobSDK (4.11.12):
     - GDTMobSDK/GDTMobSDK (= 4.11.12)
   - GDTMobSDK/GDTMobSDK (4.11.12)
-  - JPFPSStatus (0.1.1)
   - Masonry (1.1.0)
   - MercurySDK (3.1.5.2)
   - SDWebImage (5.9.5):
     - SDWebImage/Core (= 5.9.5)
   - SDWebImage/Core (5.9.5)
-  - STDebugConsole (0.1.1)
 
 DEPENDENCIES:
   - AdvanceSDK (from `../`)
   - AdvanceSDK/CSJ (from `../`)
   - AdvanceSDK/GDT (from `../`)
   - AdvanceSDK/Mercury (from `../`)
-  - JPFPSStatus
   - Masonry
   - SDWebImage
-  - STDebugConsole
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
     - Bytedance-UnionAD
     - GDTMobSDK
-    - JPFPSStatus
     - Masonry
     - MercurySDK
     - SDWebImage
-    - STDebugConsole
 
 EXTERNAL SOURCES:
   AdvanceSDK:
@@ -56,12 +50,10 @@ SPEC CHECKSUMS:
   AdvanceSDK: 704f03fa2f59df5e772d611ae357a480cf0139fb
   Bytedance-UnionAD: 7fc15b173b44303a548b25ec534e4c1b04263b21
   GDTMobSDK: 16ef708ffcbbeca455d9df754694bc647401f454
-  JPFPSStatus: 03f32aa3d4d7d0c5bf56f6f3e7cf8b7280a5f52c
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   MercurySDK: 95870529a8c8aa6cbd81cb120d93019c18134b4b
   SDWebImage: 0b2ba0d56479bf6a45ecddbfd5558bea93150d25
-  STDebugConsole: f07227199c0f906953e84f1d12e1fec4a9fc60d7
 
-PODFILE CHECKSUM: 9e5461ee58b88c09869216d290ca418b17c94169
+PODFILE CHECKSUM: 38e0e8acb454284244bb5b8382b8574303f581be
 
 COCOAPODS: 1.10.0

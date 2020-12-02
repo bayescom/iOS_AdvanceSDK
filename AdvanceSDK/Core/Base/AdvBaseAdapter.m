@@ -17,12 +17,7 @@
 #import "AdvanceSupplierDelegate.h"
 #import "AdvSdkConfig.h"
 
-@interface AdvBaseAdapter ()  <AdvSupplierManagerDelegate, AdvanceSupplierDelegate> {
-    
-//@protected
-//    NSString *test;
-    
-}
+@interface AdvBaseAdapter ()  <AdvSupplierManagerDelegate, AdvanceSupplierDelegate>
 @property (nonatomic, strong) AdvSupplierManager *mgr;
 
 @property (nonatomic, weak) id<AdvanceSupplierDelegate> baseDelegate;
