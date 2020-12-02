@@ -36,7 +36,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, weak) id<AdvSupplierManagerDelegate> delegate;
 
 /// 设置打底渠道
-- (void)setDefaultSdkSupplierWithMediaId:(NSString *)mediaId
+- (void)setDefaultAdvSupplierWithMediaId:(NSString *)mediaId
                                 adspotId:(NSString *)adspotid
                                 mediaKey:(NSString *)mediakey
                                    sdkId:(nonnull NSString *)sdkid;
