@@ -160,7 +160,7 @@
 }
 
 /// 设置打底渠道
-- (void)setDefaultSdkSupplierWithMediaId:(NSString *)mediaId
+- (void)setDefaultAdvSupplierWithMediaId:(NSString *)mediaId
                                 adspotId:(NSString *)adspotid
                                 mediaKey:(NSString *)mediakey
                                    sdkId:(nonnull NSString *)sdkid {
@@ -193,11 +193,12 @@
 // MARK: ======================= Net Work =======================
 /// 拉取线上数据 如果是仅仅储存 不会触发任何回调，仅存储策略信息
 - (void)fetchData:(BOOL)saveOnly {
+    _mediaId = @"";
     NSMutableDictionary *deviceInfo = [AdvDeviceInfoUtil getDeviceInfoWithMediaId:_mediaId adspotId:_adspotId];
     NSError *parseError = nil;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:deviceInfo options:NSJSONWritingPrettyPrinted error:&parseError];
-//    NSURL *url = [NSURL URLWithString:AdvanceSdkRequestUrl];
-    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@?adspotid=%@", AdvanceSdkRequestUrl, _adspotId]];
+    NSURL *url = [NSURL URLWithString:AdvanceSdkRequestUrl];
+//    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@?adspotid=%@", AdvanceSdkRequestUrl, _adspotId]];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:self.fetchTime];
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     request.HTTPBody = jsonData;

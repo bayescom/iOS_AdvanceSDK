@@ -19,8 +19,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSString *adspotid;
 
 /// 初始化渠道
-- (instancetype)initWithMediaId:(NSString *)mediaId
-                       adspotId:(NSString *)adspotid;
+- (instancetype)initWithMediaId:(nullable NSString *)mediaId
+                       adspotId:(nullable NSString *)adspotid;
 
 /// 设置打底渠道
 - (void)setDefaultAdvSupplierWithMediaId:(NSString *)mediaId

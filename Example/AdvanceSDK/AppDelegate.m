@@ -18,6 +18,7 @@
 #import <AdvanceSplash.h>
 
 #import <AdvanceSDK/AdvanceSplash.h>
+#import <AdvSdkConfig.h>
 
 @interface AppDelegate () <AdvanceSplashDelegate>
 @property(strong,nonatomic) AdvanceSplash *advanceSplash;
@@ -27,7 +28,8 @@
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    
+    [AdvSdkConfig shareInstance].isDebug = YES;
+    [AdvSdkConfig shareInstance].appId = @"";
     // 冷启动 监听
     [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidFinishLaunchingNotification object:nil queue:nil usingBlock:^(NSNotification * _Nonnull note) {
         
@@ -62,7 +64,7 @@
                                                 adspotId:@"887336462"
                                                 mediaKey:@""
                                                   sdkId:SDK_ID_CSJ];
-    self.advanceSplash.timeout = 3;
+    self.advanceSplash.timeout = 5;
     [self.advanceSplash loadAd];
 }
 

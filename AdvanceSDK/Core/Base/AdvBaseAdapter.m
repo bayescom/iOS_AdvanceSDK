@@ -6,13 +6,6 @@
 //
 
 #import "AdvBaseAdapter.h"
-
-#import <MercurySDK/MercurySDK.h>
-#import <BUAdSDK/BUAdSDK.h>
-//#import <GDTSDKConfig.h>
-#import "GDTSDKConfig.h"
-
-
 #import "AdvSupplierManager.h"
 #import "AdvanceSupplierDelegate.h"
 #import "AdvSdkConfig.h"
@@ -56,7 +49,7 @@
                                 adspotId:(NSString *)adspotid
                                 mediaKey:(NSString *)mediakey
                                    sdkId:(nonnull NSString *)sdkid {
-    [_mgr setDefaultAdvSupplierWithMediaId:mediaId adspotId:adspotid mediaKey:mediakey sdkId:sdkid];
+    [self.mgr setDefaultAdvSupplierWithMediaId:mediaId adspotId:adspotid mediaKey:mediakey sdkId:sdkid];
 }
 
 // MARK: ======================= AdvSupplierManagerDelegate =======================
