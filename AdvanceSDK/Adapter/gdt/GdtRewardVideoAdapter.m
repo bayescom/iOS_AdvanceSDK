@@ -13,27 +13,27 @@
 #import "GDTRewardVideoAd.h"
 #endif
 #import "AdvanceRewardVideo.h"
+#import "AdvLog.h"
 
 @interface GdtRewardVideoAdapter () <GDTRewardedVideoAdDelegate>
 @property (nonatomic, strong) GDTRewardVideoAd *gdt_ad;
-@property (nonatomic, strong) NSDictionary *params;
 @property (nonatomic, weak) AdvanceRewardVideo *adspot;
+@property (nonatomic, strong) AdvSupplier *supplier;
 
 @end
 
 @implementation GdtRewardVideoAdapter
 
-- (instancetype)initWithParams:(NSDictionary *)params
-                        adspot:(AdvanceRewardVideo *)adspot {
+- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(AdvanceRewardVideo *)adspot {
     if (self = [super init]) {
         _adspot = adspot;
-        _params = params;
+        _supplier = supplier;
     }
     return self;
 }
 
 - (void)loadAd {
-    _gdt_ad = [[GDTRewardVideoAd alloc] initWithPlacementId:_adspot.currentSdkSupplier.adspotid];
+    _gdt_ad = [[GDTRewardVideoAd alloc] initWithPlacementId:_supplier.adspotid];
     _gdt_ad.delegate = self;
     [_gdt_ad loadAd];
 }
@@ -43,7 +43,7 @@
 }
 
 - (void)dealloc {
-    NSLog(@"%s", __func__);
+    ADVLog(@"%s", __func__);
 }
 
 // MARK: ======================= GdtRewardVideoAdDelegate =======================
@@ -60,9 +60,8 @@
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
     _gdt_ad = nil;
     if ([self.delegate respondsToSelector:@selector(advanceRewardVideoOnAdFailedWithSdkId:error:)]) {
-        [self.delegate advanceRewardVideoOnAdFailedWithSdkId:_adspot.currentSdkSupplier.id error:error];
+        [self.delegate advanceRewardVideoOnAdFailedWithSdkId:_supplier.identifier error:error];
     }
-    [self.adspot selectSdkSupplierWithError:error];
 }
 
 //视频缓存成功回调

@@ -13,27 +13,27 @@
 #import "MercuryRewardVideoAd.h"
 #endif
 #import "AdvanceRewardVideo.h"
+#import "AdvLog.h"
 
 @interface MercuryRewardVideoAdapter () <MercuryRewardVideoAdDelegate>
 @property (nonatomic, strong) MercuryRewardVideoAd *mercury_ad;
-@property (nonatomic, strong) NSDictionary *params;
 @property (nonatomic, weak) AdvanceRewardVideo *adspot;
+@property (nonatomic, strong) AdvSupplier *supplier;
 
 @end
 
 @implementation MercuryRewardVideoAdapter
 
-- (instancetype)initWithParams:(NSDictionary *)params
-                        adspot:(AdvanceRewardVideo *)adspot {
+- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(AdvanceRewardVideo *)adspot {
     if (self = [super init]) {
         _adspot = adspot;
-        _params = params;
+        _supplier = supplier;
     }
     return self;
 }
 
 - (void)loadAd {
-    _mercury_ad = [[MercuryRewardVideoAd alloc] initAdWithAdspotId:_adspot.currentSdkSupplier.adspotid delegate:self];
+    _mercury_ad = [[MercuryRewardVideoAd alloc] initAdWithAdspotId:_supplier.adspotid delegate:self];
     _mercury_ad.timeoutTime = 5;
     [_mercury_ad loadRewardVideoAd];
 }
@@ -43,7 +43,7 @@
 }
 
 - (void)dealloc {
-    NSLog(@"%s", __func__);
+    ADVLog(@"%s", __func__);
 }
 
 // MARK: ======================= MercuryRewardVideoAdDelegate =======================
@@ -60,9 +60,8 @@
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
     _mercury_ad = nil;
     if ([self.delegate respondsToSelector:@selector(advanceRewardVideoOnAdFailedWithSdkId:error:)]) {
-        [self.delegate advanceRewardVideoOnAdFailedWithSdkId:_adspot.currentSdkSupplier.id error:error];
+        [self.delegate advanceRewardVideoOnAdFailedWithSdkId:_supplier.identifier error:error];
     }
-    [self.adspot selectSdkSupplierWithError:error];
 }
 
 //视频缓存成功回调

@@ -34,7 +34,7 @@
     self.advanceRewardVideo = [[AdvanceRewardVideo alloc] initWithAdspotId:self.adspotId
                                                            viewController:self];
     self.advanceRewardVideo.delegate=self;
-    [self.advanceRewardVideo setDefaultSdkSupplierWithMediaId:@"100255"
+    [self.advanceRewardVideo setDefaultAdvSupplierWithMediaId:@"100255"
                                                      adspotId:@"10002595"
                                                      mediaKey:@"757d5119466abe3d771a211cc1278df7"
                                                      sdkId:SDK_ID_MERCURY];

@@ -8,12 +8,14 @@
 
 #import "AppDelegate.h"
 
-#import <AdvanceSDK/AdvanceSDK.h>
+// DEBUG
+#import <STDebugConsole.h>
+#import <STDebugConsoleViewController.h>
+#import <JPFPSStatus.h>
+
 #import "ViewController.h"
 
-#import <MercurySDK/MercurySDK.h>
-#import <BUAdSDK/BUAdSDK.h>
-#import <GDTSDKConfig.h>
+#import <AdvanceSplash.h>
 
 #import <AdvanceSDK/AdvanceSplash.h>
 
@@ -26,37 +28,38 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
-    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    UIViewController *vc = [[ViewController alloc] init];
-    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
-    nav.navigationBar.translucent = NO;
-    self.window.rootViewController = nav;
-    [self.window makeKeyAndVisible];
+    // 冷启动 监听
+    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidFinishLaunchingNotification object:nil queue:nil usingBlock:^(NSNotification * _Nonnull note) {
+        
+        // DEBUG
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+//            [self debugConf];
+        });
+        
+        //初始化开屏广告
+        [self loadSplash];
+    }];
     
-    // 初始化各渠道SDK
-    
-//     MercurySDK
-    [MercuryConfigManager setAppID:@"100255"
-                          mediaKey:@"757d5119466abe3d771a211cc1278df7"];
-    // 穿山甲SDK
-    [BUAdSDKManager setAppID:@"5000546"];
-    // 广点通SDK
-    [GDTSDKConfig registerAppId:@"1105344611"];
-    
-    [self loadAdBtn1Action];
+    // 热启动 监听
+    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillEnterForegroundNotification object:nil queue:nil usingBlock:^(NSNotification * _Nonnull note) {
+        //初始化开屏广告
+//        [self loadSplash];
+    }];
     
     return YES;
 }
 
-- (void)loadAdBtn1Action {
+- (void)loadSplash {
     self.advanceSplash = [[AdvanceSplash alloc] initWithAdspotId:@"10002619"
+//    self.advanceSplash = [[AdvanceSplash alloc] initWithAdspotId:@"20000003"
                                                   viewController:self.window.rootViewController];
     self.advanceSplash.delegate = self;
 //    self.advanceSplash.showLogoRequire = YES;
     self.advanceSplash.logoImage = [UIImage imageNamed:@"app_logo"];
     self.advanceSplash.backgroundImage = [UIImage imageNamed:@"LaunchImage_img"];
-    [self.advanceSplash setDefaultSdkSupplierWithMediaId:@"5000546"
-                                                adspotId:@"800546808"
+    [self.advanceSplash setDefaultAdvSupplierWithMediaId:@"5023114"
+                                                adspotId:@"887336462"
                                                 mediaKey:@""
                                                   sdkId:SDK_ID_CSJ];
     self.advanceSplash.timeout = 3;
@@ -93,6 +96,34 @@
 /// 广告倒计时结束
 - (void)advanceSplashOnAdCountdownToZero {
     NSLog(@"广告倒计时结束");
+}
+
+/// 广告策略失败
+- (void)advanceOnAdNotFilled:(NSError *)error {
+    NSLog(@"广告失败:%@", error);
+}
+
+// MARK: ======================= // MARK: ======================= Debug =======================
+- (void)debugConf {
+    [STDebugConsole setModel:STDebugConsoleModelRedirect];
+    
+    UIButton *logBtn = [[UIButton alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width-50-8, [UIScreen mainScreen].bounds.size.height-50-28, 50, 50)];
+    logBtn.backgroundColor = [UIColor colorWithRed:0.44 green:0.81 blue:0.89 alpha:1.00];
+    [logBtn setTitle:@"日志" forState:UIControlStateNormal];
+    [logBtn setTitleColor:[UIColor colorWithWhite:0.1 alpha:0.3] forState:UIControlStateNormal];
+    logBtn.layer.cornerRadius = 25;
+    [[UIApplication sharedApplication].keyWindow addSubview:logBtn];
+    
+    [logBtn addTarget:self action:@selector(showDebug) forControlEvents:UIControlEventTouchUpInside];
+}
+
+- (void)showDebug {
+    STDebugConsoleViewController *vc = [[STDebugConsoleViewController alloc] init];
+    UINavigationController *navc = [[UINavigationController alloc] initWithRootViewController:vc];
+//    navc.navigationBarHidden = YES;
+    [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:navc animated:YES completion:nil];
+    
+    [[JPFPSStatus sharedInstance] open];
 }
 
 @end

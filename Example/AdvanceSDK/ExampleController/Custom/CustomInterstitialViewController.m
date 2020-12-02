@@ -41,7 +41,7 @@
 - (void)loadAdBtn1Action {
     if (![self checkAdspotId]) { return; }
     _adspot = [[AdvanceBaseAdspot alloc] initWithAdspotId:self.adspotId];
-    [_adspot setDefaultSdkSupplierWithMediaId:@"100255"
+    [_adspot setDefaultAdvSupplierWithMediaId:@"100255"
                                 adspotId:@"10000559"
                                 mediaKey:@"757d5119466abe3d771a211cc1278df7"
                                   sdkId:SDK_ID_MERCURY];
@@ -54,11 +54,11 @@
     if (!_isAdLoaded) {
        [JDStatusBarNotification showWithStatus:@"请先加载广告" dismissAfter:1.5];
     }
-    if ([_adspot.currentSdkSupplier.id isEqualToString:SDK_ID_GDT]) {
+    if ([_adspot.currentAdvSupplier.identifier isEqualToString:SDK_ID_GDT]) {
         [_gdt_ad presentAdFromRootViewController:self];
-    } else if ([_adspot.currentSdkSupplier.id isEqualToString:SDK_ID_CSJ]) {
+    } else if ([_adspot.currentAdvSupplier.identifier isEqualToString:SDK_ID_CSJ]) {
         [_csj_ad showAdFromRootViewController:self];
-    } else if ([_adspot.currentSdkSupplier.id isEqualToString:SDK_ID_MERCURY]) {
+    } else if ([_adspot.currentAdvSupplier.identifier isEqualToString:SDK_ID_MERCURY]) {
         [_mercury_ad presentAdFromViewController:self];
     }
 }
@@ -88,7 +88,7 @@
 // MARK: ======================= MercuryInterstitialAdDelegate =======================
 /// 插屏广告预加载成功回调，当接收服务器返回的广告数据成功且预加载后调用该函数
 - (void)mercury_interstitialSuccess {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded];
+    [self.adspot reportWithType:AdvanceAdvSupplierRepoSucceeded];
     NSLog(@"插屏广告预加载成功回调，当接收服务器返回的广告数据成功且预加载后调用该函数");
     _isAdLoaded=true;
     [JDStatusBarNotification showWithStatus:@"广告加载成功" dismissAfter:1.5];
@@ -98,9 +98,9 @@
 
 /// 插屏广告预加载失败回调，当接收服务器返回的广告数据失败后调用该函数
 - (void)mercury_interstitialFailError:(NSError *)error {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
+    [self.adspot reportWithType:AdvanceAdvSupplierRepoFaileded];
     _mercury_ad = nil;
-    [self.adspot selectSdkSupplierWithError:error];
+    [self.adspot selectAdvSupplierWithError:error];
     NSLog(@"插屏广告预加载失败回调，当接收服务器返回的广告数据失败后调用该函数");
     [JDStatusBarNotification showWithStatus:@"广告加载失败" dismissAfter:1.5];
 
@@ -113,13 +113,13 @@
 
 /// 插屏广告曝光回调
 - (void)mercury_interstitialWillExposure {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoImped];
+    [self.adspot reportWithType:AdvanceAdvSupplierRepoImped];
     NSLog(@"插屏广告曝光回调");
 }
 
 /// 插屏广告点击回调
 - (void)mercury_interstitialClicked {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked];
+    [self.adspot reportWithType:AdvanceAdvSupplierRepoClicked];
     NSLog(@"插屏广告点击回调");
 }
 
@@ -131,7 +131,7 @@
 // MARK: ======================= BUNativeExpresInterstitialAdDelegate =======================
 /// 插屏广告预加载成功回调，当接收服务器返回的广告数据成功且预加载后调用该函数
 - (void)nativeExpresInterstitialAdDidLoad:(BUNativeExpressInterstitialAd *)interstitialAd {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded];
+    [self.adspot reportWithType:AdvanceAdvSupplierRepoSucceeded];
     NSLog(@"插屏广告预加载成功回调，当接收服务器返回的广告数据成功且预加载后调用该函数");
     _isAdLoaded=true;
     [JDStatusBarNotification showWithStatus:@"广告加载成功" dismissAfter:1.5];
@@ -141,9 +141,9 @@
 
 /// 插屏广告预加载失败回调，当接收服务器返回的广告数据失败后调用该函数
 - (void)nativeExpresInterstitialAd:(BUNativeExpressInterstitialAd *)interstitialAd didFailWithError:(NSError *)error {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
+    [self.adspot reportWithType:AdvanceAdvSupplierRepoFaileded];
     _csj_ad = nil;
-    [self.adspot selectSdkSupplierWithError:error];
+    [self.adspot selectAdvSupplierWithError:error];
     NSLog(@"插屏广告预加载失败回调，当接收服务器返回的广告数据失败后调用该函数");
     [JDStatusBarNotification showWithStatus:@"广告加载失败" dismissAfter:1.5];
 
@@ -151,22 +151,22 @@
 
 /// 插屏广告渲染失败
 - (void)nativeExpresInterstitialAdRenderFail:(BUNativeExpressInterstitialAd *)interstitialAd error:(NSError *)error {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
+    [self.adspot reportWithType:AdvanceAdvSupplierRepoFaileded];
     _csj_ad = nil;
-    [self.adspot selectSdkSupplierWithError:error];
+    [self.adspot selectAdvSupplierWithError:error];
     NSLog(@"插屏广告渲染失败");
 }
 
 
 /// 插屏广告曝光回调
 - (void)nativeExpresInterstitialAdWillVisible:(BUNativeExpressInterstitialAd *)interstitialAd {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoImped];
+    [self.adspot reportWithType:AdvanceAdvSupplierRepoImped];
     NSLog(@"插屏广告曝光回调");
 }
 
 /// 插屏广告点击回调
 - (void)nativeExpresInterstitialAdDidClick:(BUNativeExpressInterstitialAd *)interstitialAd {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked];
+    [self.adspot reportWithType:AdvanceAdvSupplierRepoClicked];
     NSLog(@"插屏广告点击回调");
 }
 
@@ -178,7 +178,7 @@
 // MARK: ======================= GdtInterstitialAdDelegate =======================
 /// 插屏广告预加载成功回调，当接收服务器返回的广告数据成功且预加载后调用该函数
 - (void)unifiedInterstitialSuccessToLoadAd:(GDTUnifiedInterstitialAd *)unifiedInterstitial {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded];
+    [self.adspot reportWithType:AdvanceAdvSupplierRepoSucceeded];
     NSLog(@"插屏广告预加载成功回调，当接收服务器返回的广告数据成功且预加载后调用该函数");
     _isAdLoaded=true;
     [JDStatusBarNotification showWithStatus:@"广告加载成功" dismissAfter:1.5];
@@ -188,9 +188,9 @@
 
 /// 插屏广告预加载失败回调，当接收服务器返回的广告数据失败后调用该函数
 - (void)unifiedInterstitialFailToLoadAd:(GDTUnifiedInterstitialAd *)unifiedInterstitial error:(NSError *)error {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
+    [self.adspot reportWithType:AdvanceAdvSupplierRepoFaileded];
     _gdt_ad = nil;
-    [self.adspot selectSdkSupplierWithError:error];
+    [self.adspot selectAdvSupplierWithError:error];
     NSLog(@"插屏广告预加载失败回调，当接收服务器返回的广告数据失败后调用该函数");
     [JDStatusBarNotification showWithStatus:@"广告加载失败" dismissAfter:1.5];
 
@@ -198,13 +198,13 @@
 
 /// 插屏广告曝光回调
 - (void)unifiedInterstitialWillExposure:(GDTUnifiedInterstitialAd *)unifiedInterstitial {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoImped];
+    [self.adspot reportWithType:AdvanceAdvSupplierRepoImped];
     NSLog(@"插屏广告曝光回调");
 }
 
 /// 插屏广告点击回调
 - (void)unifiedInterstitialClicked:(GDTUnifiedInterstitialAd *)unifiedInterstitial {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked];
+    [self.adspot reportWithType:AdvanceAdvSupplierRepoClicked];
     NSLog(@"插屏广告点击回调");
 }
 

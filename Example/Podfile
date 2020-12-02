@@ -11,6 +11,8 @@ target 'AdvanceSDK_Example' do
 
   pod 'SDWebImage'
   pod 'Masonry'
+  pod "STDebugConsole"
+  pod 'JPFPSStatus'
  
   target 'AdvanceSDK_Tests' do
     inherit! :search_paths

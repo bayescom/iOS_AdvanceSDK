@@ -40,7 +40,7 @@
 - (void)loadAdBtn1Action {
     if (![self checkAdspotId]) { return; }
     _adspot = [[AdvanceBaseAdspot alloc] initWithAdspotId:self.adspotId];
-    [_adspot setDefaultSdkSupplierWithMediaId:@"100255"
+    [_adspot setDefaultAdvSupplierWithMediaId:@"100255"
                                 adspotId:@"10002619"
                                 mediaKey:@"757d5119466abe3d771a211cc1278df7"
                                   sdkId:SDK_ID_MERCURY];
@@ -82,69 +82,69 @@
 
 // MARK: ======================= MercurySplashAdDelegate =======================
 - (void)mercury_splashAdDidLoad:(MercurySplashAd *)splashAd {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded];
+    [self.adspot reportWithType:AdvanceAdvSupplierRepoSucceeded];
     NSLog(@"广告加载成功");
 }
 
 - (void)mercury_splashAdSuccessPresentScreen:(MercurySplashAd *)splashAd {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoImped];
+    [self.adspot reportWithType:AdvanceAdvSupplierRepoImped];
     NSLog(@"广告曝光");
 }
 
 - (void)mercury_splashAdFailError:(nullable NSError *)error {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
-    [self.adspot selectSdkSupplierWithError:error];
+    [self.adspot reportWithType:AdvanceAdvSupplierRepoFaileded];
+    [self.adspot selectAdvSupplierWithError:error];
     NSLog(@"广告加载失败");
 }
 
 - (void)mercury_splashAdClicked:(MercurySplashAd *)splashAd {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked];
+    [self.adspot reportWithType:AdvanceAdvSupplierRepoClicked];
     NSLog(@"广告点击");
 }
 
 // MARK: ======================= GDTSplashAdDelegate =======================
 - (void)splashAdDidLoad:(GDTSplashAd *)splashAd {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded];
+    [self.adspot reportWithType:AdvanceAdvSupplierRepoSucceeded];
     NSLog(@"广告加载成功");
 }
 
 - (void)splashAdExposured:(GDTSplashAd *)splashAd {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoImped];
+    [self.adspot reportWithType:AdvanceAdvSupplierRepoImped];
     NSLog(@"广告曝光");
 }
 
 - (void)splashAdFailToPresent:(GDTSplashAd *)splashAd withError:(NSError *)error {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
-    [self.adspot selectSdkSupplierWithError:error];
+    [self.adspot reportWithType:AdvanceAdvSupplierRepoFaileded];
+    [self.adspot selectAdvSupplierWithError:error];
     NSLog(@"广告加载失败");
 }
 
 - (void)splashAdClicked:(GDTSplashAd *)splashAd {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked];
+    [self.adspot reportWithType:AdvanceAdvSupplierRepoClicked];
     NSLog(@"广告点击");
 }
 
 // MARK: ======================= BUNativeExpressSplashViewDelegate =======================
 - (void)nativeExpressSplashViewDidLoad:(BUNativeExpressSplashView *)splashAdView {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded];
+    [self.adspot reportWithType:AdvanceAdvSupplierRepoSucceeded];
     NSLog(@"广告加载成功");
 }
 
 - (void)nativeExpressSplashView:(BUNativeExpressSplashView *)splashAdView didFailWithError:(NSError * _Nullable)error {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
+    [self.adspot reportWithType:AdvanceAdvSupplierRepoFaileded];
     NSLog(@"广告加载失败");
     [_csj_ad removeFromSuperview];
     _csj_ad = nil;
-    [self.adspot selectSdkSupplierWithError:error];
+    [self.adspot selectAdvSupplierWithError:error];
 }
 
 - (void)nativeExpressSplashViewWillVisible:(BUNativeExpressSplashView *)splashAdView {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoImped];
+    [self.adspot reportWithType:AdvanceAdvSupplierRepoImped];
     NSLog(@"广告曝光");
 }
 
 - (void)nativeExpressSplashViewDidClick:(BUNativeExpressSplashView *)splashAdView {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked];
+    [self.adspot reportWithType:AdvanceAdvSupplierRepoClicked];
     NSLog(@"广告点击");
 }
 
@@ -157,7 +157,7 @@
     NSLog(@"广告渲染失败");
     [_csj_ad removeFromSuperview];
     _csj_ad = nil;
-    [self.adspot selectSdkSupplierWithError:error];
+    [self.adspot selectAdvSupplierWithError:error];
 }
 
 @end

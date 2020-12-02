@@ -10,6 +10,7 @@
 #import <UIKit/UIKit.h>
 #import "AdvanceSplashDelegate.h"
 
+@class AdvSupplier;
 @class AdvanceSplash;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -18,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, weak) id<AdvanceSplashDelegate> delegate;
 
-- (instancetype)initWithParams:(NSDictionary *)params adspot:(AdvanceSplash *)adspot;
+- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(AdvanceSplash *)adspot;
 
 - (void)loadAd;
 

@@ -15,27 +15,27 @@
 #endif
 
 #import "AdvanceFullScreenVideo.h"
+#import "AdvLog.h"
 
 @interface GdtFullScreenVideoAdapter () <GDTUnifiedInterstitialAdDelegate>
 @property (nonatomic, strong) GDTUnifiedInterstitialAd *gdt_ad;
-@property (nonatomic, strong) NSDictionary *params;
 @property (nonatomic, weak) AdvanceFullScreenVideo *adspot;
+@property (nonatomic, strong) AdvSupplier *supplier;
 
 @end
 
 @implementation GdtFullScreenVideoAdapter
 
-- (instancetype)initWithParams:(NSDictionary *)params
-                        adspot:(AdvanceFullScreenVideo *)adspot {
+- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(AdvanceFullScreenVideo *)adspot {
     if (self = [super init]) {
         _adspot = adspot;
-        _params = params;
+        _supplier = supplier;
     }
     return self;
 }
 
 - (void)loadAd {
-    _gdt_ad = [[GDTUnifiedInterstitialAd alloc] initWithPlacementId:_adspot.currentSdkSupplier.adspotid];
+    _gdt_ad = [[GDTUnifiedInterstitialAd alloc] initWithPlacementId:_supplier.adspotid];
     _gdt_ad.delegate = self;
     [_gdt_ad loadFullScreenAd];
 }
@@ -45,7 +45,7 @@
 }
 
 - (void)dealloc {
-    NSLog(@"%s", __func__);
+    ADVLog(@"%s", __func__);
 }
 
 
@@ -63,9 +63,8 @@
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
     _gdt_ad = nil;
     if ([self.delegate respondsToSelector:@selector(advanceFullScreenVideoOnAdFailedWithSdkId:error:)]) {
-        [self.delegate advanceFullScreenVideoOnAdFailedWithSdkId:_adspot.currentSdkSupplier.id error:error];
+        [self.delegate advanceFullScreenVideoOnAdFailedWithSdkId:_supplier.identifier error:error];
     }
-    [self.adspot selectSdkSupplierWithError:error];
 }
 
 /// 插屏广告曝光回调

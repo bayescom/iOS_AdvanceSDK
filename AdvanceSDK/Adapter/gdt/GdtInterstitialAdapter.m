@@ -15,27 +15,28 @@
 #endif
 
 #import "AdvanceInterstitial.h"
+#import "AdvLog.h"
 
 @interface GdtInterstitialAdapter () <GDTUnifiedInterstitialAdDelegate>
 @property (nonatomic, strong) GDTUnifiedInterstitialAd *gdt_ad;
-@property (nonatomic, strong) NSDictionary *params;
 @property (nonatomic, weak) AdvanceInterstitial *adspot;
+@property (nonatomic, strong) AdvSupplier *supplier;
 
 @end
 
 @implementation GdtInterstitialAdapter
 
-- (instancetype)initWithParams:(NSDictionary *)params
-                        adspot:(AdvanceInterstitial *)adspot {
+- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(AdvanceInterstitial *)adspot {
     if (self = [super init]) {
         _adspot = adspot;
-        _params = params;
+        _supplier = supplier;
     }
     return self;
 }
 
+
 - (void)loadAd {
-    _gdt_ad = [[GDTUnifiedInterstitialAd alloc] initWithPlacementId:_adspot.currentSdkSupplier.adspotid];
+    _gdt_ad = [[GDTUnifiedInterstitialAd alloc] initWithPlacementId:_supplier.adspotid];
     _gdt_ad.delegate = self;
     [_gdt_ad loadAd];
 }
@@ -45,7 +46,7 @@
 }
 
 - (void)dealloc {
-    NSLog(@"%s", __func__);
+    ADVLog(@"%s", __func__);
 }
 
 
@@ -66,9 +67,8 @@
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
     _gdt_ad = nil;
     if ([self.delegate respondsToSelector:@selector(advanceInterstitialOnAdFailedWithSdkId:error:)]) {
-        [self.delegate advanceInterstitialOnAdFailedWithSdkId:_adspot.currentSdkSupplier.id error:error];
+        [self.delegate advanceInterstitialOnAdFailedWithSdkId:_supplier.identifier error:error];
     }
-    [self.adspot selectSdkSupplierWithError:error];
 }
 
 /// 插屏广告曝光回调

@@ -20,23 +20,23 @@
 @interface GdtBannerAdapter () <GDTUnifiedBannerViewDelegate>
 @property (nonatomic, strong) GDTUnifiedBannerView *gdt_ad;
 @property (nonatomic, weak) AdvanceBanner *adspot;
-@property (nonatomic, strong) NSDictionary *params;
+@property (nonatomic, strong) AdvSupplier *supplier;
 
 @end
 
 @implementation GdtBannerAdapter
 
-- (instancetype)initWithParams:(NSDictionary *)params adspot:(AdvanceBanner *)adspot {
+- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(AdvanceBanner *)adspot {
     if (self = [super init]) {
         _adspot = adspot;
-        _params = params;
+        _supplier = supplier;
     }
     return self;
 }
 
 - (void)loadAd {
     CGRect rect = CGRectMake(0, 0, _adspot.adContainer.frame.size.width, _adspot.adContainer.frame.size.height);
-    _gdt_ad = [[GDTUnifiedBannerView alloc] initWithFrame:rect placementId:_adspot.currentSdkSupplier.adspotid viewController:_adspot.viewController];
+    _gdt_ad = [[GDTUnifiedBannerView alloc] initWithFrame:rect placementId:_supplier.adspotid viewController:_adspot.viewController];
     _gdt_ad.animated = YES;
     _gdt_ad.autoSwitchInterval = _adspot.refreshInterval;
     _gdt_ad.delegate = self;
@@ -63,9 +63,8 @@
 
 - (void)unifiedBannerViewFailedToLoad:(GDTUnifiedBannerView *)unifiedBannerView error:(NSError *)error {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
-    [self.adspot selectSdkSupplierWithError:error];
     if ([self.delegate respondsToSelector:@selector(advanceBannerOnAdFailedWithSdkId:error:)]) {
-        [self.delegate advanceBannerOnAdFailedWithSdkId:_adspot.currentSdkSupplier.id error:error];
+        [self.delegate advanceBannerOnAdFailedWithSdkId:_supplier.identifier error:error];
     }
     [_gdt_ad removeFromSuperview];
     _gdt_ad = nil;

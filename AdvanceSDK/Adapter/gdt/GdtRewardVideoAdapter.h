@@ -10,6 +10,7 @@
 #import <UIKit/UIKit.h>
 #import "AdvanceRewardVideoDelegate.h"
 
+@class AdvSupplier;
 @class AdvanceRewardVideo;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -17,8 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface GdtRewardVideoAdapter : NSObject
 @property (nonatomic, weak) id<AdvanceRewardVideoDelegate> delegate;
 
-- (instancetype)initWithParams:(NSDictionary *)params
-                        adspot:(AdvanceRewardVideo *)adspot;
+- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(AdvanceRewardVideo *)adspot;
 
 - (void)loadAd;
 

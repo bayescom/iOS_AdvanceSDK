@@ -20,40 +20,37 @@
 #endif
 
 #import "AdvanceNativeExpress.h"
+#import "AdvLog.h"
 
 @interface GdtNativeExpressAdapter () <GDTNativeExpressAdDelegete>
 @property (nonatomic, strong) GDTNativeExpressAd *gdt_ad;
-@property (nonatomic, strong) NSDictionary *params;
 @property (nonatomic, weak) AdvanceNativeExpress *adspot;
 @property (nonatomic, weak) UIViewController *controller;
+@property (nonatomic, strong) AdvSupplier *supplier;
 
 @end
 
 @implementation GdtNativeExpressAdapter
 
-- (instancetype)initWithParams:(NSDictionary *)params
-                        adspot:(AdvanceNativeExpress *)adspot {
+- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(AdvanceNativeExpress *)adspot {
     if (self = [super init]) {
         _adspot = adspot;
-        _params = params;
+        _supplier = supplier;
     }
     return self;
 }
 
 - (void)loadAd {
     int adCount = 1;
-    if (_adspot && _adspot.currentSdkSupplier.adCount > 0) {
-        adCount = _adspot.currentSdkSupplier.adCount;
-    }
     
-    _gdt_ad = [[GDTNativeExpressAd alloc] initWithPlacementId:_adspot.currentSdkSupplier.adspotid
+    _gdt_ad = [[GDTNativeExpressAd alloc] initWithPlacementId:_supplier.adspotid
                                                        adSize:_adspot.adSize];
     _gdt_ad.delegate = self;
     [_gdt_ad loadAd:adCount];
 }
 
 - (void)dealloc {
-    NSLog(@"%s", __func__);
+    ADVLog(@"%s", __func__);
 }
 
 // MARK: ======================= GDTNativeExpressAdDelegete =======================
@@ -64,9 +61,8 @@
     if (views == nil || views.count == 0) {
         [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
         if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdFailedWithSdkId:error:)]) {
-            [_delegate advanceNativeExpressOnAdFailedWithSdkId:_adspot.currentSdkSupplier.id error:[NSError errorWithDomain:@"" code:100000 userInfo:@{@"msg":@"无广告返回"}]];
+            [_delegate advanceNativeExpressOnAdFailedWithSdkId:_supplier.identifier error:[NSError errorWithDomain:@"" code:100000 userInfo:@{@"msg":@"无广告返回"}]];
         }
-        [self.adspot selectSdkSupplierWithError:nil];
     } else {
         [_adspot reportWithType:AdvanceSdkSupplierRepoSucceeded];
         for (GDTNativeExpressAdView *view in views) {
@@ -84,10 +80,9 @@
 - (void)nativeExpressAdFailToLoad:(GDTNativeExpressAd *)nativeExpressAd error:(NSError *)error {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
     if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdFailedWithSdkId:error:)]) {
-        [_delegate advanceNativeExpressOnAdFailedWithSdkId:_adspot.currentSdkSupplier.id error:error];
+        [_delegate advanceNativeExpressOnAdFailedWithSdkId:_supplier.identifier error:error];
     }
     _gdt_ad = nil;
-    [_adspot selectSdkSupplierWithError:error];
 }
 
 /**
@@ -96,10 +91,9 @@
 - (void)nativeExpressAdViewRenderFail:(GDTNativeExpressAdView *)nativeExpressAdView {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
     if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdFailedWithSdkId:error:)]) {
-        [_delegate advanceNativeExpressOnAdFailedWithSdkId:_adspot.currentSdkSupplier.id error:[NSError errorWithDomain:@"" code:10000 userInfo:@{@"msg": @"渲染原生模板广告失败"}]];
+        [_delegate advanceNativeExpressOnAdFailedWithSdkId:_supplier.identifier error:[NSError errorWithDomain:@"" code:10000 userInfo:@{@"msg": @"渲染原生模板广告失败"}]];
     }
     _gdt_ad = nil;
-    [_adspot selectSdkSupplierWithError:[NSError errorWithDomain:@"" code:10000 userInfo:@{@"msg": @"渲染原生模板广告失败"}]];
 }
 
 - (void)nativeExpressAdViewRenderSuccess:(GDTNativeExpressAdView *)nativeExpressAdView {

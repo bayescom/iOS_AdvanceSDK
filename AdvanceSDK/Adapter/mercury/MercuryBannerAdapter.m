@@ -15,27 +15,28 @@
 #endif
 
 #import "AdvanceBanner.h"
+#import "AdvLog.h"
 
 @interface MercuryBannerAdapter () <MercuryBannerAdViewDelegate>
 @property (nonatomic, strong) MercuryBannerAdView *mercury_ad;
-@property (nonatomic, strong) NSDictionary *params;
 @property (nonatomic, weak) AdvanceBanner *adspot;
+@property (nonatomic, strong) AdvSupplier *supplier;
 
 @end
 
 @implementation MercuryBannerAdapter
 
-- (instancetype)initWithParams:(NSDictionary *)params adspot:(AdvanceBanner *)adspot {
+- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(AdvanceBanner *)adspot {
     if (self = [super init]) {
         _adspot = adspot;
-        _params = params;
+        _supplier = supplier;
     }
     return self;
 }
 
 - (void)loadAd {
     CGRect rect = CGRectMake(0, 0, _adspot.adContainer.frame.size.width, _adspot.adContainer.frame.size.height);
-    _mercury_ad = [[MercuryBannerAdView alloc] initWithFrame:rect adspotId:_adspot.currentSdkSupplier.adspotid delegate:self];
+    _mercury_ad = [[MercuryBannerAdView alloc] initWithFrame:rect adspotId:_supplier.adspotid delegate:self];
     _mercury_ad.controller = _adspot.viewController;
     _mercury_ad.animationOn = YES;
     _mercury_ad.showCloseBtn = YES;
@@ -45,7 +46,7 @@
 }
 
 - (void)dealloc {
-    NSLog(@"%s", __func__);
+    ADVLog(@"%s", __func__);
 }
 
 // MARK: ======================= MercuryBannerAdViewDelegate =======================
@@ -63,9 +64,8 @@
     [_mercury_ad removeFromSuperview];
     _mercury_ad = nil;
     if ([self.delegate respondsToSelector:@selector(advanceBannerOnAdFailedWithSdkId:error:)]) {
-        [self.delegate advanceBannerOnAdFailedWithSdkId:_adspot.currentSdkSupplier.id error:error];
+        [self.delegate advanceBannerOnAdFailedWithSdkId:_supplier.identifier error:error];
     }
-    [self.adspot selectSdkSupplierWithError:error];
 }
 
 // 曝光回调

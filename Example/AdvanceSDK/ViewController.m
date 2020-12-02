@@ -25,7 +25,7 @@
     [self initSubviews];
     
     _dataArr = @[
-        @{@"title":@"自定义管理SDK", @"targetVCName": @"CustomListViewController"},
+//        @{@"title":@"自定义管理SDK", @"targetVCName": @"CustomListViewController"},
         @{@"title":@"开屏", @"targetVCName": @"DemoSplashViewController"},
         @{@"title":@"Banner", @"targetVCName": @"DemoBannerViewController"},
         @{@"title":@"插屏", @"targetVCName": @"DemoInterstitialViewController"},

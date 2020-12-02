@@ -14,34 +14,36 @@
 #import "MercurySplashAd.h"
 #endif
 
+#import "AdvSupplierModel.h"
 #import "AdvanceSplash.h"
+#import "AdvLog.h"
 
 @interface MercurySplashAdapter () <MercurySplashAdDelegate>
 @property (nonatomic, strong) MercurySplashAd *mercury_ad;
-@property (nonatomic, strong) NSDictionary *params;
+@property (nonatomic, strong) AdvSupplier *supplier;
 @property (nonatomic, weak) AdvanceSplash *adspot;
 
 @end
 
 @implementation MercurySplashAdapter
-- (instancetype)initWithParams:(NSDictionary *)params adspot:(AdvanceSplash *)adspot {
-    if (self = [super init]) {
+- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(AdvanceSplash *)adspot {
+    if ([self init]) {
         _adspot = adspot;
-        _params = params;
+        _supplier = supplier;
     }
     return self;
 }
 
 - (void)loadAd {
-    _mercury_ad = [[MercurySplashAd alloc] initAdWithAdspotId:_adspot.currentSdkSupplier.adspotid delegate:self];
+    _mercury_ad = [[MercurySplashAd alloc] initAdWithAdspotId:_supplier.adspotid delegate:self];
     _mercury_ad.placeholderImage = _adspot.backgroundImage;
     _mercury_ad.logoImage = _adspot.logoImage;
     if (_adspot.showLogoRequire) {
         _mercury_ad.showType = MercurySplashAdShowCutBottom;
     }
-    if (self.adspot.currentSdkSupplier.timeout) {
-        if (self.adspot.currentSdkSupplier.timeout > 500) {
-            _mercury_ad.fetchDelay = _adspot.currentSdkSupplier.timeout / 1000.0;
+    if (_adspot.timeout) {
+        if (_adspot.timeout > 500) {
+            _mercury_ad.fetchDelay = _supplier.timeout / 1000.0;
         }
     }
     _mercury_ad.delegate = self;
@@ -52,7 +54,7 @@
 }
 
 - (void)dealloc {
-    NSLog(@"%s", __func__);
+    ADVLog(@"%s", __func__);
 }
 
 - (void)deallocAdapter {
@@ -77,9 +79,8 @@
 - (void)mercury_splashAdFailError:(nullable NSError *)error {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
     if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdFailedWithSdkId:error:)]) {
-        [self.delegate advanceSplashOnAdFailedWithSdkId:_adspot.currentSdkSupplier.id error:error];
+        [self.delegate advanceSplashOnAdFailedWithSdkId:_supplier.identifier error:error];
     }
-    [self.adspot selectSdkSupplierWithError:error];
 }
 
 - (void)mercury_splashAdClicked:(MercurySplashAd *)splashAd {

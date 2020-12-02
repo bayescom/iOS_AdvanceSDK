@@ -8,7 +8,7 @@
 
 #import "DemoBannerViewController.h"
 #import "ViewBuilder.h"
-#import "AdvanceSdkConfig.h"
+#import "AdvSdkConfig.h"
 #import "AdvanceBanner.h"
 
 
@@ -40,10 +40,11 @@
 
     self.advanceBanner = [[AdvanceBanner alloc] initWithAdspotId:self.adspotId adContainer:self.contentV viewController:self];
     self.advanceBanner.delegate = self;
-    [self.advanceBanner setDefaultSdkSupplierWithMediaId:@"100255"
+    [self.advanceBanner setDefaultAdvSupplierWithMediaId:@"100255"
                                                 adspotId:@"10000558"
                                                 mediaKey:@"757d5119466abe3d771a211cc1278df7"
                                                   sdkId:SDK_ID_MERCURY];
+    
     [self.advanceBanner loadAd];
     
 }

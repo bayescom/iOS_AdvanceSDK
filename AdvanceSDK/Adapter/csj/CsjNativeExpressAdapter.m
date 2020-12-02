@@ -13,44 +13,43 @@
 #import "BUAdSDK.h"
 #endif
 #import "AdvanceNativeExpress.h"
+#import "AdvLog.h"
 
 @interface CsjNativeExpressAdapter () <BUNativeExpressAdViewDelegate>
 @property (nonatomic, strong) BUNativeExpressAdManager *csj_ad;
-@property (nonatomic, strong) NSDictionary *params;
 @property (nonatomic, weak) AdvanceNativeExpress *adspot;
 @property (nonatomic, weak) UIViewController *controller;
+@property (nonatomic, strong) AdvSupplier *supplier;
 
 @end
 
 @implementation CsjNativeExpressAdapter
 
-- (instancetype)initWithParams:(NSDictionary *)params
-                        adspot:(AdvanceNativeExpress *)adspot {
+- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(AdvanceNativeExpress *)adspot; {
     if (self = [super init]) {
         _adspot = adspot;
-        _params = params;
+        _supplier = supplier;
     }
     return self;
 }
 
 - (void)loadAd {
     int adCount = 1;
-    if (_adspot && _adspot.currentSdkSupplier.adCount > 0) {
-        adCount = _adspot.currentSdkSupplier.adCount;
-    }
+
     BUAdSlot *slot = [[BUAdSlot alloc] init];
-    slot.ID = _adspot.currentSdkSupplier.adspotid;
-    slot.isSupportDeepLink = YES;
+    slot.ID = _supplier.adspotid;
     slot.AdType = BUAdSlotAdTypeFeed;
     slot.position = BUAdSlotPositionFeed;
     slot.imgSize = [BUSize sizeBy:BUProposalSize_Feed228_150];
     _csj_ad = [[BUNativeExpressAdManager alloc] initWithSlot:slot adSize:_adspot.adSize];
     _csj_ad.delegate = self;
-    [_csj_ad loadAd:adCount];
+    
+    [_csj_ad loadAdDataWithCount:adCount];
+    
 }
 
 - (void)dealloc {
-    NSLog(@"%s", __func__);
+    ADVLog(@"%s", __func__);
 }
 
 // MARK: ======================= BUNativeExpressAdViewDelegate =======================
@@ -58,9 +57,8 @@
     if (views == nil || views.count == 0) {
         [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
         if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdFailedWithSdkId:error:)]) {
-            [_delegate advanceNativeExpressOnAdFailedWithSdkId:_adspot.currentSdkSupplier.id error:[NSError errorWithDomain:@"" code:100000 userInfo:@{@"msg":@"无广告返回"}]];
+            [_delegate advanceNativeExpressOnAdFailedWithSdkId:_supplier.identifier error:[NSError errorWithDomain:@"" code:100000 userInfo:@{@"msg":@"无广告返回"}]];
         }
-        [self.adspot selectSdkSupplierWithError:nil];
     } else {
         [_adspot reportWithType:AdvanceSdkSupplierRepoSucceeded];
         for (BUNativeExpressAdView *view in views) {
@@ -75,10 +73,9 @@
 - (void)nativeExpressAdFailToLoad:(BUNativeExpressAdManager *)nativeExpressAd error:(NSError *)error {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
     if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdFailedWithSdkId:error:)]) {
-        [_delegate advanceNativeExpressOnAdFailedWithSdkId:_adspot.currentSdkSupplier.id error:error];
+        [_delegate advanceNativeExpressOnAdFailedWithSdkId:_supplier.identifier error:error];
     }
     _csj_ad = nil;
-    [_adspot selectSdkSupplierWithError:error];
 }
 
 - (void)nativeExpressAdViewRenderSuccess:(BUNativeExpressAdView *)nativeExpressAdView {
@@ -93,7 +90,6 @@
         [_delegate advanceNativeExpressOnAdRenderFail:nativeExpressAdView];
     }
     _csj_ad = nil;
-    [_adspot selectSdkSupplierWithError:error];
 }
 
 - (void)nativeExpressAdViewWillShow:(BUNativeExpressAdView *)nativeExpressAdView {

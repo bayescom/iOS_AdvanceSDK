@@ -9,13 +9,7 @@
 #ifndef AdvanceRewardVideoProtocol_h
 #define AdvanceRewardVideoProtocol_h
 
-#if __has_include(<MercurySDK/AdvanceBaseDelegate.h>)
-#import <MercurySDK/AdvanceBaseDelegate.h>
-#else
-#import "AdvanceBaseDelegate.h"
-#endif
-
-@protocol AdvanceRewardVideoDelegate <AdvanceBaseDelegate>
+@protocol AdvanceRewardVideoDelegate <NSObject>
 @optional
 
 /// 广告准备完成
@@ -47,6 +41,9 @@
 
 /// 激励视频可以调用show方法
 - (void)advanceRewardVideoIsReadyToShow;
+
+/// 策略请求失败
+- (void)advanceOnAdNotFilled:(NSError *)error;
 
 @end
 

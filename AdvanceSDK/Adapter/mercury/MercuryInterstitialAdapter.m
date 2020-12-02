@@ -14,27 +14,28 @@
 #endif
 
 #import "AdvanceInterstitial.h"
+#import "AdvLog.h"
 
 @interface MercuryInterstitialAdapter () <MercuryInterstitialAdDelegate>
 @property (nonatomic, strong) MercuryInterstitialAd *mercury_ad;
-@property (nonatomic, strong) NSDictionary *params;
 @property (nonatomic, weak) AdvanceInterstitial *adspot;
+@property (nonatomic, strong) AdvSupplier *supplier;
 
 @end
 
 @implementation MercuryInterstitialAdapter
 
-- (instancetype)initWithParams:(NSDictionary *)params
-                        adspot:(AdvanceInterstitial *)adspot {
+- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(AdvanceInterstitial *)adspot {
     if (self = [super init]) {
         _adspot = adspot;
-        _params = params;
+        _supplier = supplier;
     }
     return self;
 }
 
+
 - (void)loadAd {
-    _mercury_ad = [[MercuryInterstitialAd alloc] initAdWithAdspotId:_adspot.currentSdkSupplier.adspotid delegate:self];
+    _mercury_ad = [[MercuryInterstitialAd alloc] initAdWithAdspotId:_supplier.adspotid delegate:self];
     [_mercury_ad loadAd];
 }
 
@@ -43,7 +44,7 @@
 }
 
 - (void)dealloc {
-    NSLog(@"%s", __func__);
+    ADVLog(@"%s", __func__);
 }
 
 
@@ -64,18 +65,16 @@
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
     _mercury_ad = nil;
     if ([self.delegate respondsToSelector:@selector(advanceInterstitialOnAdFailedWithSdkId:error:)]) {
-        [self.delegate advanceInterstitialOnAdFailedWithSdkId:_adspot.currentSdkSupplier.id error:error];
+        [self.delegate advanceInterstitialOnAdFailedWithSdkId:_supplier.identifier error:error];
     }
-    [self.adspot selectSdkSupplierWithError:error];
 }
 
 /// 插屏广告视图曝光失败回调，插屏广告曝光失败回调该函数
 - (void)mercury_interstitialFailToPresent {
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
     if ([self.delegate respondsToSelector:@selector(advanceInterstitialOnAdRenderFailed)]) {
         [self.delegate advanceInterstitialOnAdRenderFailed];
     }
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
-    [self.adspot selectSdkSupplierWithError:nil];
 }
 
 /// 插屏广告曝光回调

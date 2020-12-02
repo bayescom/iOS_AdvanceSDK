@@ -10,6 +10,7 @@
 #import <UIKit/UIKit.h>
 #import "AdvanceInterstitialDelegate.h"
 
+@class AdvSupplier;
 @class AdvanceInterstitial;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -17,8 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface CsjInterstitialAdapter : NSObject
 @property (nonatomic, weak) id<AdvanceInterstitialDelegate> delegate;
 
-- (instancetype)initWithParams:(NSDictionary *)params
-                        adspot:(AdvanceInterstitial *)adspot;
+- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(AdvanceInterstitial *)adspot;
 
 - (void)loadAd;
 

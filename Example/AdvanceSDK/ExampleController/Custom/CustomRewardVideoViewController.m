@@ -42,7 +42,7 @@
     if (![self checkAdspotId]) { return; }
     
     _adspot = [[AdvanceBaseAdspot alloc] initWithAdspotId:self.adspotId];
-    [_adspot setDefaultSdkSupplierWithMediaId:@"100255"
+    [_adspot setDefaultAdvSupplierWithMediaId:@"100255"
                                 adspotId:@"10002595"
                                 mediaKey:@"757d5119466abe3d771a211cc1278df7"
                                   sdkId:SDK_ID_MERCURY];
@@ -55,11 +55,11 @@
     if (!_isAdLoaded) {
         [JDStatusBarNotification showWithStatus:@"请先加载广告" dismissAfter:1.5];
     }
-    if ([_adspot.currentSdkSupplier.id isEqualToString:SDK_ID_GDT]) {
+    if ([_adspot.currentAdvSupplier.identifier isEqualToString:SDK_ID_GDT]) {
         [_gdt_ad showAdFromRootViewController:self];
-    } else if ([_adspot.currentSdkSupplier.id isEqualToString:SDK_ID_CSJ]) {
+    } else if ([_adspot.currentAdvSupplier.identifier isEqualToString:SDK_ID_CSJ]) {
         [_csj_ad showAdFromRootViewController:self];
-    } else if ([_adspot.currentSdkSupplier.id isEqualToString:SDK_ID_MERCURY]) {
+    } else if ([_adspot.currentAdvSupplier.identifier isEqualToString:SDK_ID_MERCURY]) {
         [_mercury_ad showAdFromVC:self];
     }
 }
@@ -89,7 +89,7 @@
 // MARK: ======================= MercuryRewardVideoAdDelegate =======================
 /// 广告数据加载成功回调
 - (void)mercury_rewardVideoAdDidLoad {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded];
+    [self.adspot reportWithType:AdvanceAdvSupplierRepoSucceeded];
     NSLog(@"广告数据加载成功回调");
     _isAdLoaded=true;
     [JDStatusBarNotification showWithStatus:@"广告加载成功" dismissAfter:1.5];
@@ -98,9 +98,9 @@
 
 /// 广告加载失败回调
 - (void)mercury_rewardAdFailError:(nullable NSError *)error {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
+    [self.adspot reportWithType:AdvanceAdvSupplierRepoFaileded];
     _mercury_ad = nil;
-    [self.adspot selectSdkSupplierWithError:error];
+    [self.adspot selectAdvSupplierWithError:error];
     NSLog(@"广告加载失败回调");
     [JDStatusBarNotification showWithStatus:@"广告加载失败" dismissAfter:1.5];
 
@@ -113,7 +113,7 @@
 
 /// 视频广告曝光回调
 - (void)mercury_rewardVideoAdDidExposed {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoImped];
+    [self.adspot reportWithType:AdvanceAdvSupplierRepoImped];
     NSLog(@"视频广告曝光回调");
 }
 
@@ -124,7 +124,7 @@
 
 /// 视频广告信息点击回调
 - (void)mercury_rewardVideoAdDidClicked {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked];
+    [self.adspot reportWithType:AdvanceAdvSupplierRepoClicked];
     NSLog(@"视频广告信息点击回调");
 }
 
@@ -141,7 +141,7 @@
 // MARK: ======================= BUNativeExpressRewardedVideoAdDelegate =======================
 /// 广告数据加载成功回调
 - (void)nativeExpressRewardedVideoAdDidLoad:(BUNativeExpressRewardedVideoAd *)rewardedVideoAd {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded];
+    [self.adspot reportWithType:AdvanceAdvSupplierRepoSucceeded];
     NSLog(@"广告数据加载成功回调");
     _isAdLoaded=true;
     [JDStatusBarNotification showWithStatus:@"广告加载成功" dismissAfter:1.5];
@@ -149,9 +149,9 @@
 
 ///
 - (void)nativeExpressRewardedVideoAdViewRenderFail:(BUNativeExpressRewardedVideoAd *)rewardedVideoAd error:(NSError *)error {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
+    [self.adspot reportWithType:AdvanceAdvSupplierRepoFaileded];
     _csj_ad = nil;
-    [self.adspot selectSdkSupplierWithError:error];
+    [self.adspot selectAdvSupplierWithError:error];
     NSLog(@"广告加载失败回调");
     [JDStatusBarNotification showWithStatus:@"广告加载失败" dismissAfter:1.5];
 
@@ -164,7 +164,7 @@
 
 /// 视频广告曝光回调
 - (void)nativeExpressRewardedVideoAdDidVisible:(BUNativeExpressRewardedVideoAd *)rewardedVideoAd {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoImped];
+    [self.adspot reportWithType:AdvanceAdvSupplierRepoImped];
     NSLog(@"视频广告曝光回调");
 }
 
@@ -175,7 +175,7 @@
 
 /// 视频广告信息点击回调
 - (void)nativeExpressRewardedVideoAdDidClick:(BUNativeExpressRewardedVideoAd *)rewardedVideoAd {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked];
+    [self.adspot reportWithType:AdvanceAdvSupplierRepoClicked];
     NSLog(@"视频广告信息点击回调");
 }
 
@@ -187,7 +187,7 @@
 // MARK: ======================= GdtRewardVideoAdDelegate =======================
 /// 广告数据加载成功回调
 - (void)gdt_rewardVideoAdDidLoad:(GDTRewardVideoAd *)rewardedVideoAd {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded];
+    [self.adspot reportWithType:AdvanceAdvSupplierRepoSucceeded];
     NSLog(@"广告数据加载成功回调");
     _isAdLoaded=true;
     [JDStatusBarNotification showWithStatus:@"广告加载成功" dismissAfter:1.5];
@@ -195,22 +195,22 @@
 
 /// 广告加载失败回调
 - (void)gdt_rewardVideoAd:(GDTRewardVideoAd *)rewardedVideoAd didFailWithError:(NSError *)error {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
+    [self.adspot reportWithType:AdvanceAdvSupplierRepoFaileded];
     _gdt_ad = nil;
-    [self.adspot selectSdkSupplierWithError:error];
+    [self.adspot selectAdvSupplierWithError:error];
     NSLog(@"广告加载失败回调");
     [JDStatusBarNotification showWithStatus:@"广告加载失败" dismissAfter:1.5];
 }
 
 /// 视频广告曝光回调
 - (void)gdt_rewardVideoAdDidExposed:(GDTRewardVideoAd *)rewardedVideoAd {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoImped];
+    [self.adspot reportWithType:AdvanceAdvSupplierRepoImped];
     NSLog(@"视频广告曝光回调");
 }
 
 /// 视频广告信息点击回调
 - (void)gdt_rewardVideoAdDidClicked:(GDTRewardVideoAd *)rewardedVideoAd {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked];
+    [self.adspot reportWithType:AdvanceAdvSupplierRepoClicked];
     NSLog(@"视频广告信息点击回调");
 }
 

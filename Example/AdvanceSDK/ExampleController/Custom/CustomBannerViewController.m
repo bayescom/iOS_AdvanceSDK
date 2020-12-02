@@ -39,7 +39,7 @@
 - (void)loadAdBtn1Action {
     if (![self checkAdspotId]) { return; }
     _adspot = [[AdvanceBaseAdspot alloc] initWithAdspotId:self.adspotId];
-    [_adspot setDefaultSdkSupplierWithMediaId:@"100255"
+    [_adspot setDefaultAdvSupplierWithMediaId:@"100255"
                                 adspotId:@"10000558"
                                 mediaKey:@"757d5119466abe3d771a211cc1278df7"
                                   sdkId:SDK_ID_MERCURY];
@@ -93,28 +93,28 @@
 // MARK: ======================= BYBannerAdViewDelegate =======================
 // 广告数据拉取成功回调
 - (void)mercury_bannerViewDidReceived {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded];
+    [self.adspot reportWithType:AdvanceAdvSupplierRepoSucceeded];
     NSLog(@"广告数据拉取成功回调");
 }
 
 // 请求广告数据失败后调用
 - (void)mercury_bannerViewFailToReceived:(NSError *)error {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
+    [self.adspot reportWithType:AdvanceAdvSupplierRepoFaileded];
     [_mercury_ad removeFromSuperview];
     _mercury_ad = nil;
-    [self.adspot selectSdkSupplierWithError:error];
+    [self.adspot selectAdvSupplierWithError:error];
     NSLog(@"请求广告数据失败后调用 %@", error);
 }
 
 // 曝光回调
 - (void)mercury_bannerViewWillExposure {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoImped];
+    [self.adspot reportWithType:AdvanceAdvSupplierRepoImped];
     NSLog(@"曝光回调");
 }
 
 // 点击回调
 - (void)mercury_bannerViewClicked {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked];
+    [self.adspot reportWithType:AdvanceAdvSupplierRepoClicked];
     NSLog(@"点击回调");
 }
 
@@ -131,7 +131,7 @@
  *  当接收服务器返回的广告数据成功后调用该函数
  */
 - (void)nativeExpressBannerAdViewDidLoad:(BUNativeExpressBannerView *)bannerAdView {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded];
+    [self.adspot reportWithType:AdvanceAdvSupplierRepoSucceeded];
     NSLog(@"广告数据拉取成功回调");
 }
 
@@ -141,8 +141,8 @@
  */
 
 - (void)nativeExpressBannerAdView:(BUNativeExpressBannerView *)bannerAdView didLoadFailWithError:(NSError *)error {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
-    [self.adspot selectSdkSupplierWithError:error];
+    [self.adspot reportWithType:AdvanceAdvSupplierRepoFaileded];
+    [self.adspot selectAdvSupplierWithError:error];
     [_csj_ad removeFromSuperview];
     _csj_ad = nil;
     NSLog(@"请求广告数据失败后调用");
@@ -152,7 +152,7 @@
  *  banner2.0曝光回调
  */
 - (void)nativeExpressBannerAdViewWillBecomVisible:(BUNativeExpressBannerView *)bannerAdView {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoImped];
+    [self.adspot reportWithType:AdvanceAdvSupplierRepoImped];
     NSLog(@"曝光回调");
 }
 
@@ -160,7 +160,7 @@
  *  banner2.0点击回调
  */
 - (void)nativeExpressBannerAdViewDidClick:(BUNativeExpressBannerView *)bannerAdView {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked];
+    [self.adspot reportWithType:AdvanceAdvSupplierRepoClicked];
     NSLog(@"点击回调");
 }
 
@@ -178,7 +178,7 @@
  *  当接收服务器返回的广告数据成功后调用该函数
  */
 - (void)unifiedBannerViewDidLoad:(GDTUnifiedBannerView *)unifiedBannerView {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded];
+    [self.adspot reportWithType:AdvanceAdvSupplierRepoSucceeded];
     NSLog(@"广告数据拉取成功回调");
 }
 
@@ -188,8 +188,8 @@
  */
 
 - (void)unifiedBannerViewFailedToLoad:(GDTUnifiedBannerView *)unifiedBannerView error:(NSError *)error {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
-    [self.adspot selectSdkSupplierWithError:error];
+    [self.adspot reportWithType:AdvanceAdvSupplierRepoFaileded];
+    [self.adspot selectAdvSupplierWithError:error];
     [_gdt_ad removeFromSuperview];
     _gdt_ad = nil;
     NSLog(@"请求广告数据失败后调用");
@@ -199,7 +199,7 @@
  *  banner2.0曝光回调
  */
 - (void)unifiedBannerViewWillExpose:(GDTUnifiedBannerView *)unifiedBannerView {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoImped];
+    [self.adspot reportWithType:AdvanceAdvSupplierRepoImped];
     NSLog(@"曝光回调");
 }
 
@@ -207,7 +207,7 @@
  *  banner2.0点击回调
  */
 - (void)unifiedBannerViewClicked:(GDTUnifiedBannerView *)unifiedBannerView {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked];
+    [self.adspot reportWithType:AdvanceAdvSupplierRepoClicked];
     NSLog(@"点击回调");
 }
 

@@ -37,7 +37,7 @@
 //    self.advanceSplash.showLogoRequire = YES;
     self.advanceSplash.logoImage = [UIImage imageNamed:@"app_logo"];
     self.advanceSplash.backgroundImage = [UIImage imageNamed:@"LaunchImage_img"];
-    [self.advanceSplash setDefaultSdkSupplierWithMediaId:@"100255"
+    [self.advanceSplash setDefaultAdvSupplierWithMediaId:@"100255"
                                                 adspotId:@"10002436"
                                                 mediaKey:@"757d5119466abe3d771a211cc1278df7"
                                                   sdkId:SDK_ID_MERCURY];

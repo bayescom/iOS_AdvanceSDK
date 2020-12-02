@@ -9,13 +9,7 @@
 #ifndef AdvanceFullScreenVideoDelegate_h
 #define AdvanceFullScreenVideoDelegate_h
 
-#if __has_include(<MercurySDK/AdvanceBaseDelegate.h>)
-#import <MercurySDK/AdvanceBaseDelegate.h>
-#else
-#import "AdvanceBaseDelegate.h"
-#endif
-
-@protocol AdvanceFullScreenVideoDelegate <AdvanceBaseDelegate>
+@protocol AdvanceFullScreenVideoDelegate <NSObject>
 @optional
 
 /// 请求广告数据成功后调用
@@ -38,6 +32,9 @@
 
 /// 视频播放完成
 - (void)advanceFullScreenVideoOnAdPlayFinish;
+
+/// 策略请求失败
+- (void)advanceOnAdNotFilled:(NSError *)error;
 
 @end
 

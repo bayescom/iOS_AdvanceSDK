@@ -10,6 +10,7 @@
 #import <UIKit/UIKit.h>
 #import "AdvanceNativeExpressDelegate.h"
 
+@class AdvSupplier;
 @class AdvanceNativeExpress;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -17,8 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface CsjNativeExpressAdapter : NSObject
 @property (nonatomic, weak) id<AdvanceNativeExpressDelegate> delegate;
 
-- (instancetype)initWithParams:(NSDictionary *)params
-                        adspot:(AdvanceNativeExpress *)adspot;
+- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(AdvanceNativeExpress *)adspot;
 
 - (void)loadAd;
 

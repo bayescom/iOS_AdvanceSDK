@@ -90,7 +90,7 @@
     _adspot = [[AdvanceNativeExpress alloc] initWithAdspotId:@"10002698" viewController:self adSize:CGSizeMake(self.view.bounds.size.width, 300)];
     
     _adspot.supplierDelegate = self;
-    [_adspot setDefaultSdkSupplierWithMediaId:@"100255"
+    [_adspot setDefaultAdvSupplierWithMediaId:@"100255"
                                           adspotId:@"10002698"
                                           mediaKey:@"757d5119466abe3d771a211cc1278df7"
                                             sdkId:SDK_ID_MERCURY];
@@ -104,8 +104,8 @@
 - (void)advanceBaseAdspotWithSdkId:(NSString *)sdkId params:(NSDictionary *)params {
     // 根据渠道id自定义初始化
     int adCount = 1;
-    if (_adspot && _adspot.currentSdkSupplier.adCount > 0) {
-        adCount = _adspot.currentSdkSupplier.adCount;
+    if (_adspot && _adspot.currentAdvSupplier.adCount > 0) {
+        adCount = _adspot.currentAdvSupplier.adCount;
     }
     if ([sdkId isEqualToString:SDK_ID_GDT]) {
         self.gdt_ad = [[GDTUnifiedNativeAd alloc] initWithPlacementId:[params objectForKey:@"2000566593234845"]];//@"2000566593234845"];
@@ -179,7 +179,7 @@
 // MARK: BUNativeAdsManagerDelegate
 - (void)nativeAdsManagerSuccessToLoad:(BUNativeAdsManager *)adsManager nativeAds:(NSArray<BUNativeAd *> *_Nullable)nativeAdDataArray {
     if (nativeAdDataArray.count > 0) {
-        [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded];
+        [self.adspot reportWithType:AdvanceAdvSupplierRepoSucceeded];
         for (BUNativeAd *model in nativeAdDataArray) {
             NSUInteger index = rand() % (self.dataArrM.count-3)+2;
             [self.dataArrM insertObject:model atIndex:index];
@@ -187,27 +187,27 @@
         NSLog(@"广告拉取成功");
         [_tableView reloadData];
     } else {
-        [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
-        [self.adspot selectSdkSupplierWithError:nil];
+        [self.adspot reportWithType:AdvanceAdvSupplierRepoFaileded];
+        [self.adspot selectAdvSupplierWithError:nil];
         NSLog(@"广告拉取失败");
     }
 }
 
 - (void)nativeAdsManager:(BUNativeAdsManager *)adsManager didFailWithError:(NSError *_Nullable)error {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
-    [self.adspot selectSdkSupplierWithError:error];
+    [self.adspot reportWithType:AdvanceAdvSupplierRepoFaileded];
+    [self.adspot selectAdvSupplierWithError:error];
     NSLog(@"广告请求失败");
 }
 
 // MARK: BUVideoAdViewDelegate
 - (void)videoAdViewDidClick:(BUVideoAdView *)videoAdView {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked];
+    [self.adspot reportWithType:AdvanceAdvSupplierRepoClicked];
     NSLog(@"广告点击");
 }
 
 // MARK: BUNativeAdDelegate
 - (void)nativeAdDidBecomeVisible:(BUNativeAd *)nativeAd {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoImped];
+    [self.adspot reportWithType:AdvanceAdvSupplierRepoImped];
     NSLog(@"广告曝光");
 }
 
@@ -284,27 +284,27 @@
 - (void)mercury_nativeAdLoaded:(NSArray<MercuryNativeAdDataModel *> * _Nullable)nativeAdDataModels error:(NSError * _Nullable)error {
     if (!error && nativeAdDataModels.count > 0) {
         [_tableView reloadData];
-        [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded];
+        [self.adspot reportWithType:AdvanceAdvSupplierRepoSucceeded];
         NSUInteger index = rand() % (self.dataArrM.count-3)+2;
         [_dataArrM insertObject:nativeAdDataModels[0] atIndex:index];
         [_tableView reloadData];
         NSLog(@"广告拉取成功");
         return;
     } else {
-        [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
-        [self.adspot selectSdkSupplierWithError:error];
+        [self.adspot reportWithType:AdvanceAdvSupplierRepoFaileded];
+        [self.adspot selectAdvSupplierWithError:error];
         NSLog(@"广告渲染失败");
     }
 }
 
 // MARK: MercuryNativeAdViewDelegate
 - (void)mercury_nativeAdViewWillExpose:(MercuryNativeAdView *)nativeAdView {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoImped];
+    [self.adspot reportWithType:AdvanceAdvSupplierRepoImped];
     NSLog(@"广告曝光成功");
 }
 
 - (void)mercury_nativeAdViewDidClick:(MercuryNativeAdView *)nativeAdView {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked];
+    [self.adspot reportWithType:AdvanceAdvSupplierRepoClicked];
     NSLog(@"广告点击");
 }
 
@@ -332,12 +332,12 @@
         NSUInteger index = rand() % (self.dataArrM.count-3)+2;
         [_dataArrM insertObject:unifiedNativeAdDataObjects[0] atIndex:index];
         [self.tableView reloadData];
-        [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded];
+        [self.adspot reportWithType:AdvanceAdvSupplierRepoSucceeded];
         NSLog(@"成功请求到广告数据");
         return;
     } else {
-        [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
-        [self.adspot selectSdkSupplierWithError:error];
+        [self.adspot reportWithType:AdvanceAdvSupplierRepoFaileded];
+        [self.adspot selectAdvSupplierWithError:error];
     }
     
     if (error.code == 5004) {
@@ -361,12 +361,12 @@
 
 // MARK: GDTUnifiedNativeAdViewDelegate
 - (void)gdt_unifiedNativeAdViewDidClick:(GDTUnifiedNativeAdView *)unifiedNativeAdView {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked];
+    [self.adspot reportWithType:AdvanceAdvSupplierRepoClicked];
     NSLog(@"广告点击");
 }
 
 - (void)gdt_unifiedNativeAdViewWillExpose:(GDTUnifiedNativeAdView *)unifiedNativeAdView {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoImped];
+    [self.adspot reportWithType:AdvanceAdvSupplierRepoImped];
     NSLog(@"广告曝光");
 }
 

@@ -15,27 +15,27 @@
 #endif
 
 #import "AdvanceInterstitial.h"
+#import "AdvLog.h"
 
 @interface CsjInterstitialAdapter () <BUNativeExpresInterstitialAdDelegate>
 @property (nonatomic, strong) BUNativeExpressInterstitialAd *csj_ad;
-@property (nonatomic, strong) NSDictionary *params;
 @property (nonatomic, weak) AdvanceInterstitial *adspot;
+@property (nonatomic, strong) AdvSupplier *supplier;
 
 @end
 
 @implementation CsjInterstitialAdapter
 
-- (instancetype)initWithParams:(NSDictionary *)params
-                        adspot:(AdvanceInterstitial *)adspot {
+- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(AdvanceInterstitial *)adspot {
     if (self = [super init]) {
         _adspot = adspot;
-        _params = params;
+        _supplier = supplier;
     }
     return self;
 }
 
 - (void)loadAd {
-    _csj_ad = [[BUNativeExpressInterstitialAd alloc] initWithSlotID:_adspot.currentSdkSupplier.adspotid adSize:CGSizeMake(300, 450)];
+    _csj_ad = [[BUNativeExpressInterstitialAd alloc] initWithSlotID:_supplier.adspotid adSize:CGSizeMake(300, 450)];
     _csj_ad.delegate = self;
     [_csj_ad loadAdData];
 }
@@ -45,7 +45,7 @@
 }
 
 - (void)dealloc {
-    NSLog(@"%s", __func__);
+    ADVLog(@"%s", __func__);
 }
 
 // MARK: ======================= BUNativeExpresInterstitialAdDelegate =======================
@@ -62,9 +62,8 @@
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
     _csj_ad = nil;
     if ([self.delegate respondsToSelector:@selector(advanceInterstitialOnAdFailedWithSdkId:error:)]) {
-        [self.delegate advanceInterstitialOnAdFailedWithSdkId:_adspot.currentSdkSupplier.id error:error];
+        [self.delegate advanceInterstitialOnAdFailedWithSdkId:_supplier.identifier error:error];
     }
-    [self.adspot selectSdkSupplierWithError:error];
 }
 
 /// 插屏广告渲染失败
@@ -74,7 +73,6 @@
     if ([self.delegate respondsToSelector:@selector(advanceInterstitialOnAdRenderFailed)]) {
         [self.delegate advanceInterstitialOnAdRenderFailed];
     }
-    [self.adspot selectSdkSupplierWithError:error];
 }
 
 

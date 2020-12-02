@@ -13,33 +13,30 @@
 #import "MercuryNativeExpressAd.h"
 #endif
 #import "AdvanceNativeExpress.h"
+#import "AdvLog.h"
 
 @interface MercuryNativeExpressAdapter () <MercuryNativeExpressAdDelegete>
 @property (nonatomic, strong) MercuryNativeExpressAd *mercury_ad;
-@property (nonatomic, strong) NSDictionary *params;
 @property (nonatomic, weak) AdvanceNativeExpress *adspot;
 @property (nonatomic, weak) UIViewController *controller;
+@property (nonatomic, strong) AdvSupplier *supplier;
 
 @end
 
 @implementation MercuryNativeExpressAdapter
 
-- (instancetype)initWithParams:(NSDictionary *)params
-                        adspot:(AdvanceNativeExpress *)adspot {
+- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(AdvanceNativeExpress *)adspot; {
     if (self = [super init]) {
         _adspot = adspot;
-        _params = params;
+        _supplier = supplier;
     }
     return self;
 }
 
 - (void)loadAd {
     int adCount = 1;
-    if (_adspot && _adspot.currentSdkSupplier.adCount > 0) {
-        adCount = _adspot.currentSdkSupplier.adCount;
-    }
     
-    _mercury_ad = [[MercuryNativeExpressAd alloc] initAdWithAdspotId:_adspot.currentSdkSupplier.adspotid];
+    _mercury_ad = [[MercuryNativeExpressAd alloc] initAdWithAdspotId:_supplier.adspotid];
     _mercury_ad.delegate = self;
     _mercury_ad.videoMuted = YES;
     _mercury_ad.videoPlayPolicy = MercuryVideoAutoPlayPolicyWIFI;
@@ -48,7 +45,7 @@
 }
 
 - (void)dealloc {
-    NSLog(@"%s", __func__);
+    ADVLog(@"%s", __func__);
 }
 
 // MARK: ======================= MercuryNativeExpressAdDelegete =======================
@@ -57,10 +54,9 @@
     if (views == nil || views.count == 0) {
         [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
         if ([self.delegate respondsToSelector:@selector(advanceNativeExpressOnAdFailedWithSdkId:error:)]) {
-            [self.delegate advanceNativeExpressOnAdFailedWithSdkId:_adspot.currentSdkSupplier.id
+            [self.delegate advanceNativeExpressOnAdFailedWithSdkId:_supplier.identifier
                                                                  error:[NSError errorWithDomain:@"" code:100000 userInfo:@{@"msg": @"无广告返回"}]];
         }
-        [self.adspot selectSdkSupplierWithError:nil];
     } else if (self.adspot) {
         for (UIView *view in views) {
             if ([view isKindOfClass:NSClassFromString(@"MercuryNativeExpressAdView")]) {
@@ -79,9 +75,8 @@
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
     _mercury_ad = nil;
     if ([self.delegate respondsToSelector:@selector(advanceNativeExpressOnAdFailedWithSdkId:error:)]) {
-        [self.delegate advanceNativeExpressOnAdFailedWithSdkId:_adspot.currentSdkSupplier.id error:error];
+        [self.delegate advanceNativeExpressOnAdFailedWithSdkId:_supplier.identifier error:error];
     }
-    [self.adspot selectSdkSupplierWithError:error];
 }
 
 /// 原生模板广告渲染成功, 此时的 nativeExpressAdView.size.height 根据 size.width 完成了动态更新。

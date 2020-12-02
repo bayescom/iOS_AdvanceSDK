@@ -55,7 +55,7 @@
     _adspot = [[AdvanceNativeExpress alloc] initWithAdspotId:self.adspotId viewController:self adSize:CGSizeMake(self.view.bounds.size.width, 300)];
     
     _adspot.supplierDelegate = self;
-    [_adspot setDefaultSdkSupplierWithMediaId:@"100255"
+    [_adspot setDefaultAdvSupplierWithMediaId:@"100255"
                                           adspotId:@"10002698"
                                           mediaKey:@"757d5119466abe3d771a211cc1278df7"
                                             sdkId:SDK_ID_MERCURY];
@@ -70,8 +70,8 @@
     // 根据渠道id自定义初始化
     
     int adCount = 1;
-    if (_adspot && _adspot.currentSdkSupplier.adCount > 0) {
-        adCount = _adspot.currentSdkSupplier.adCount;
+    if (_adspot && _adspot.currentAdvSupplier.adCount > 0) {
+        adCount = _adspot.currentAdvSupplier.adCount;
     }
     CGSize adSize = CGSizeMake(self.view.bounds.size.width, 300);
     
@@ -91,7 +91,7 @@
         _csj_ad.delegate = self;
         [_csj_ad loadAd:adCount];
     } else if ([sdkId isEqualToString:SDK_ID_MERCURY]) {
-        _mercury_ad = [[MercuryNativeExpressAd alloc] initAdWithAdspotId:_adspot.currentSdkSupplier.adspotid];
+        _mercury_ad = [[MercuryNativeExpressAd alloc] initAdWithAdspotId:_adspot.currentAdvSupplier.adspotid];
         _mercury_ad.delegate = self;
         _mercury_ad.videoMuted = YES;
         _mercury_ad.videoPlayPolicy = MercuryVideoAutoPlayPolicyWIFI;
@@ -104,8 +104,8 @@
 /// 拉取原生模板广告成功 | (注意: nativeExpressAdView在此方法执行结束不被强引用，nativeExpressAd中的对象会被自动释放)
 - (void)mercury_nativeExpressAdSuccessToLoad:(id)nativeExpressAd views:(nonnull NSArray<MercuryNativeExpressAdView *> *)views {
     if (views == nil || views.count == 0) {
-        [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
-        [self.adspot selectSdkSupplierWithError:nil];
+        [self.adspot reportWithType:AdvanceAdvSupplierRepoFaileded];
+        [self.adspot selectAdvSupplierWithError:nil];
     } else {
         for (UIView *view in views) {
             if ([view isKindOfClass:NSClassFromString(@"MercuryNativeExpressAdView")]) {
@@ -114,7 +114,7 @@
                 [_dataArrM insertObject:view atIndex:1];
             }
         }
-        [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded];
+        [self.adspot reportWithType:AdvanceAdvSupplierRepoSucceeded];
         [self.tableView reloadData];
         NSLog(@"拉取数据成功 ");
     }
@@ -122,8 +122,8 @@
 
 /// 拉取原生模板广告失败
 - (void)mercury_nativeExpressAdFailToLoadWithError:(NSError *)error {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
-    [self.adspot selectSdkSupplierWithError:error];
+    [self.adspot reportWithType:AdvanceAdvSupplierRepoFaileded];
+    [self.adspot selectAdvSupplierWithError:error];
     NSLog(@"拉取原生模板广告失败");
 }
 
@@ -134,20 +134,20 @@
 
 /// 原生模板广告渲染失败
 - (void)mercury_nativeExpressAdViewRenderFail:(MercuryNativeExpressAdView *)nativeExpressAdView {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
-    [self.adspot selectSdkSupplierWithError:nil];
+    [self.adspot reportWithType:AdvanceAdvSupplierRepoFaileded];
+    [self.adspot selectAdvSupplierWithError:nil];
     NSLog(@"原生模板广告渲染失败");
 }
 
 /// 原生模板广告曝光回调
 - (void)mercury_nativeExpressAdViewExposure:(MercuryNativeExpressAdView *)nativeExpressAdView {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoImped];
+    [self.adspot reportWithType:AdvanceAdvSupplierRepoImped];
     NSLog(@"原生模板广告曝光回调");
 }
 
 /// 原生模板广告点击回调
 - (void)mercury_nativeExpressAdViewClicked:(MercuryNativeExpressAdView *)nativeExpressAdView {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked];
+    [self.adspot reportWithType:AdvanceAdvSupplierRepoClicked];
     NSLog(@"原生模板广告点击回调");
 }
 
@@ -162,18 +162,18 @@
  */
 - (void)nativeExpressAdSuccessToLoad:(GDTNativeExpressAd *)nativeExpressAd views:(NSArray<__kindof GDTNativeExpressAdView *> *)views {
     if (views == nil || views.count == 0) {
-        [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
-        [self.adspot selectSdkSupplierWithError:nil];
+        [self.adspot reportWithType:AdvanceAdvSupplierRepoFaileded];
+        [self.adspot selectAdvSupplierWithError:nil];
     } else {
-        [_adspot reportWithType:AdvanceSdkSupplierRepoSucceeded];
-        if ([self.adspot.currentSdkSupplier.id isEqualToString:SDK_ID_GDT]) {
+        [_adspot reportWithType:AdvanceAdvSupplierRepoSucceeded];
+        if ([self.adspot.currentAdvSupplier.identifier isEqualToString:SDK_ID_GDT]) {
             for (GDTNativeExpressAdView *view in views) {
                 view.controller = self;
                 [view render];
                 [_dataArrM insertObject:view atIndex:1];
 
             }
-        } else if ([self.adspot.currentSdkSupplier.id isEqualToString:SDK_ID_CSJ]) {
+        } else if ([self.adspot.currentAdvSupplier.identifier isEqualToString:SDK_ID_CSJ]) {
             for (BUNativeExpressAdView *view in views) {
                 view.rootViewController = self;
                 [view render];
@@ -190,27 +190,27 @@
  * 拉取广告失败的回调
  */
 - (void)nativeExpressAdFailToLoad:(GDTNativeExpressAd *)nativeExpressAd error:(NSError *)error {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
+    [self.adspot reportWithType:AdvanceAdvSupplierRepoFaileded];
     _gdt_ad = nil;
     _csj_ad = nil;
-    [_adspot selectSdkSupplierWithError:error];
+    [_adspot selectAdvSupplierWithError:error];
 }
 
 /**
  * 渲染原生模板广告失败
  */
 - (void)nativeExpressAdViewRenderFail:(GDTNativeExpressAdView *)nativeExpressAdView {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
+    [self.adspot reportWithType:AdvanceAdvSupplierRepoFaileded];
     _gdt_ad = nil;
-    [_adspot selectSdkSupplierWithError:[NSError errorWithDomain:@"" code:10000 userInfo:@{@"msg": @"渲染原生模板广告失败"}]];
+    [_adspot selectAdvSupplierWithError:[NSError errorWithDomain:@"" code:10000 userInfo:@{@"msg": @"渲染原生模板广告失败"}]];
 }
 
 - (void)nativeExpressAdViewClicked:(GDTNativeExpressAdView *)nativeExpressAdView {
-    [_adspot reportWithType:AdvanceSdkSupplierRepoClicked];
+    [_adspot reportWithType:AdvanceAdvSupplierRepoClicked];
 }
 
 - (void)nativeExpressAdViewExposure:(GDTNativeExpressAdView *)nativeExpressAdView {
-    [_adspot reportWithType:AdvanceSdkSupplierRepoImped];
+    [_adspot reportWithType:AdvanceAdvSupplierRepoImped];
 }
 
 // MARK: ======================= BUNativeExpressAdViewDelegate =======================
@@ -226,9 +226,9 @@
 //}
 
 - (void)nativeExpressAdViewRenderFail:(BUNativeExpressAdView *)nativeExpressAdView error:(NSError *)error {
-    [_adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
+    [_adspot reportWithType:AdvanceAdvSupplierRepoFaileded];
     _csj_ad = nil;
-    [_adspot selectSdkSupplierWithError:error];
+    [_adspot selectAdvSupplierWithError:error];
 }
 - (void)nativeExpressAdViewRenderSuccess:(BUNativeExpressAdView *)nativeExpressAdView
 {
@@ -237,11 +237,11 @@
 }
 
 - (void)nativeExpressAdViewWillShow:(BUNativeExpressAdView *)nativeExpressAdView {
-    [_adspot reportWithType:AdvanceSdkSupplierRepoImped];
+    [_adspot reportWithType:AdvanceAdvSupplierRepoImped];
 }
 
 - (void)nativeExpressAdViewDidClick:(BUNativeExpressAdView *)nativeExpressAdView {
-    [_adspot reportWithType:AdvanceSdkSupplierRepoClicked];
+    [_adspot reportWithType:AdvanceAdvSupplierRepoClicked];
 }
 
 // MARK: ======================= UITableViewDelegate, UITableViewDataSource =======================

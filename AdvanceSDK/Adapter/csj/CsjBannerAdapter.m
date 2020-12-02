@@ -19,22 +19,22 @@
 @interface CsjBannerAdapter () <BUNativeExpressBannerViewDelegate>
 @property (nonatomic, strong) BUNativeExpressBannerView *csj_ad;
 @property (nonatomic, weak) AdvanceBanner *adspot;
-@property (nonatomic, strong) NSDictionary *params;
+@property (nonatomic, strong) AdvSupplier *supplier;
 
 @end
 
 @implementation CsjBannerAdapter
 
-- (instancetype)initWithParams:(NSDictionary *)params adspot:(AdvanceBanner *)adspot {
+- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(AdvanceBanner *)adspot {
     if (self = [super init]) {
         _adspot = adspot;
-        _params = params;
+        _supplier = supplier;
     }
     return self;
 }
 
 - (void)loadAd {
-    _csj_ad = [[BUNativeExpressBannerView alloc] initWithSlotID:_adspot.currentSdkSupplier.adspotid rootViewController:_adspot.viewController adSize:_adspot.adContainer.bounds.size IsSupportDeepLink:YES interval:_adspot.refreshInterval];
+    _csj_ad = [[BUNativeExpressBannerView alloc] initWithSlotID:_supplier.adspotid rootViewController:_adspot.viewController adSize:_adspot.adContainer.bounds.size IsSupportDeepLink:YES interval:_adspot.refreshInterval];
     _csj_ad.frame = _adspot.adContainer.bounds;
     _csj_ad.delegate = self;
     [_adspot.adContainer addSubview:_csj_ad];
@@ -57,12 +57,10 @@
  *  请求广告数据失败后调用
  *  当接收服务器返回的广告数据失败后调用该函数
  */
-
 - (void)nativeExpressBannerAdView:(BUNativeExpressBannerView *)bannerAdView didLoadFailWithError:(NSError *)error {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
-    [self.adspot selectSdkSupplierWithError:error];
     if ([self.delegate respondsToSelector:@selector(advanceBannerOnAdFailedWithSdkId:error:)]) {
-        [self.delegate advanceBannerOnAdFailedWithSdkId:_adspot.currentSdkSupplier.id error:error];
+        [self.delegate advanceBannerOnAdFailedWithSdkId:_supplier.identifier error:error];
     }
     [_csj_ad removeFromSuperview];
     _csj_ad = nil;

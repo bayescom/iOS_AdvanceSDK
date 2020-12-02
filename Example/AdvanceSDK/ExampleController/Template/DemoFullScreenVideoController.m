@@ -35,7 +35,7 @@
     self.advanceFullScreenVideo = [[AdvanceFullScreenVideo alloc] initWithAdspotId:self.adspotId
                                                                     viewController:self];
     self.advanceFullScreenVideo.delegate = self;
-    [self.advanceFullScreenVideo setDefaultSdkSupplierWithMediaId:@"100255"
+    [self.advanceFullScreenVideo setDefaultAdvSupplierWithMediaId:@"100255"
                                                       adspotId:@"10000559"
                                                       mediaKey:@"757d5119466abe3d771a211cc1278df7"
                                                         sdkId:SDK_ID_MERCURY];

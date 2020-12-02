@@ -9,13 +9,7 @@
 #ifndef AdvanceSplashProtocol_h
 #define AdvanceSplashProtocol_h
 
-#if __has_include(<MercurySDK/AdvanceBaseDelegate.h>)
-#import <MercurySDK/AdvanceBaseDelegate.h>
-#else
-#import "AdvanceBaseDelegate.h"
-#endif
-
-@protocol AdvanceSplashDelegate <AdvanceBaseDelegate>
+@protocol AdvanceSplashDelegate <NSObject>
 @optional
 /// 广告数据拉取成功
 - (void)advanceSplashOnAdReceived;
@@ -37,6 +31,9 @@
 
 /// 广告倒计时结束回调
 - (void)advanceSplashOnAdCountdownToZero;
+
+/// 策略请求失败
+- (void)advanceOnAdNotFilled:(NSError *)error;
 
 @end
 

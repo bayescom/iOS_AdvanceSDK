@@ -9,13 +9,7 @@
 #ifndef AdvanceInterstitialProtocol_h
 #define AdvanceInterstitialProtocol_h
 
-#if __has_include(<MercurySDK/AdvanceBaseDelegate.h>)
-#import <MercurySDK/AdvanceBaseDelegate.h>
-#else
-#import "AdvanceBaseDelegate.h"
-#endif
-
-@protocol AdvanceInterstitialDelegate <AdvanceBaseDelegate>
+@protocol AdvanceInterstitialDelegate <NSObject>
 @optional
 
 /// 请求广告数据成功后调用
@@ -38,6 +32,9 @@
 
 /// 广告可以调用show方法
 - (void)advanceInterstitialOnReadyToShow;
+
+/// 策略请求失败
+- (void)advanceOnAdNotFilled:(NSError *)error;
 
 @end
 

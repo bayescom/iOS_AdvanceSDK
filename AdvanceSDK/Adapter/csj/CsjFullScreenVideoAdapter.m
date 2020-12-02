@@ -13,27 +13,27 @@
 #import "BUAdSDK.h"
 #endif
 #import "AdvanceFullScreenVideo.h"
+#import "AdvLog.h"
 
 @interface CsjFullScreenVideoAdapter () <BUNativeExpressFullscreenVideoAdDelegate>
 @property (nonatomic, strong) BUNativeExpressFullscreenVideoAd *csj_ad;
-@property (nonatomic, strong) NSDictionary *params;
 @property (nonatomic, weak) AdvanceFullScreenVideo *adspot;
+@property (nonatomic, strong) AdvSupplier *supplier;
 
 @end
 
 @implementation CsjFullScreenVideoAdapter
 
-- (instancetype)initWithParams:(NSDictionary *)params
-                        adspot:(AdvanceFullScreenVideo *)adspot {
+- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(AdvanceFullScreenVideo *)adspot {
     if (self = [super init]) {
         _adspot = adspot;
-        _params = params;
+        _supplier = supplier;
     }
     return self;
 }
 
 - (void)loadAd {
-    _csj_ad = [[BUNativeExpressFullscreenVideoAd alloc] initWithSlotID:_adspot.currentSdkSupplier.adspotid];
+    _csj_ad = [[BUNativeExpressFullscreenVideoAd alloc] initWithSlotID:_supplier.adspotid];
     _csj_ad.delegate = self;
     [_csj_ad loadAdData];
 }
@@ -43,7 +43,7 @@
 }
 
 - (void)dealloc {
-    NSLog(@"%s", __func__);
+    ADVLog(@"%s", __func__);
 }
 
 
@@ -61,9 +61,8 @@
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
     _csj_ad = nil;
     if ([self.delegate respondsToSelector:@selector(advanceFullScreenVideoOnAdFailedWithSdkId:error:)]) {
-        [self.delegate advanceFullScreenVideoOnAdFailedWithSdkId:_adspot.currentSdkSupplier.id error:error];
+        [self.delegate advanceFullScreenVideoOnAdFailedWithSdkId:_supplier.identifier error:error];
     }
-    [self.adspot selectSdkSupplierWithError:error];
 }
 
 /// 渲染失败
@@ -71,9 +70,8 @@
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
     _csj_ad = nil;
     if ([self.delegate respondsToSelector:@selector(advanceFullScreenVideoOnAdFailedWithSdkId:error:)]) {
-        [self.delegate advanceFullScreenVideoOnAdFailedWithSdkId:_adspot.currentSdkSupplier.id error:error];
+        [self.delegate advanceFullScreenVideoOnAdFailedWithSdkId:_supplier.identifier error:error];
     }
-    [self.adspot selectSdkSupplierWithError:error];
 }
 
 /// 广告曝光回调

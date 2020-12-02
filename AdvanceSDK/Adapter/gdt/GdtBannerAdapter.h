@@ -10,6 +10,7 @@
 #import <UIKit/UIKit.h>
 #import "AdvanceBannerDelegate.h"
 
+@class AdvSupplier;
 @class AdvanceBanner;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -18,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, weak) id<AdvanceBannerDelegate> delegate;
 
-- (instancetype)initWithParams:(NSDictionary *)params adspot:(AdvanceBanner *)adspot;
+- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(AdvanceBanner *)adspot;
 
 - (void)loadAd;
 

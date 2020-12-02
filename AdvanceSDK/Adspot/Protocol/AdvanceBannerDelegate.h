@@ -9,13 +9,7 @@
 #ifndef AdvanceBannerProtocol_h
 #define AdvanceBannerProtocol_h
 
-#if __has_include(<MercurySDK/AdvanceBaseDelegate.h>)
-#import <MercurySDK/AdvanceBaseDelegate.h>
-#else
-#import "AdvanceBaseDelegate.h"
-#endif
-
-@protocol AdvanceBannerDelegate <AdvanceBaseDelegate>
+@protocol AdvanceBannerDelegate <NSObject>
 @optional
 
 /// 请求广告数据成功后调用
@@ -33,6 +27,8 @@
 /// 广告关闭回调
 - (void)advanceBannerOnAdClosed;
 
+/// 策略请求失败
+- (void)advanceOnAdNotFilled:(NSError *)error;
 
 @end
 

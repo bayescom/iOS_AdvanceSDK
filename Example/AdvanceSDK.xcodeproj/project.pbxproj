@@ -28,25 +28,6 @@
 		31FE7C2624482D2300CB2062 /* DemoFullScreenVideoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31FE7BED24482D2200CB2062 /* DemoFullScreenVideoController.m */; };
 		31FE7C2724482D2300CB2062 /* DemoInterstitialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31FE7BEE24482D2200CB2062 /* DemoInterstitialViewController.m */; };
 		31FE7C2824482D2300CB2062 /* DemoBannerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31FE7BF124482D2300CB2062 /* DemoBannerViewController.m */; };
-		31FE7C2924482D2300CB2062 /* CustomRewardVideoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31FE7BF324482D2300CB2062 /* CustomRewardVideoViewController.m */; };
-		31FE7C2A24482D2300CB2062 /* CustomListFeedExpressViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31FE7BF824482D2300CB2062 /* CustomListFeedExpressViewController.m */; };
-		31FE7C2B24482D2300CB2062 /* CustomFeedExpressViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31FE7BF924482D2300CB2062 /* CustomFeedExpressViewController.m */; };
-		31FE7C2C24482D2300CB2062 /* CustomBannerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31FE7BFB24482D2300CB2062 /* CustomBannerViewController.m */; };
-		31FE7C2D24482D2300CB2062 /* CustomSplashViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31FE7BFC24482D2300CB2062 /* CustomSplashViewController.m */; };
-		31FE7C2E24482D2300CB2062 /* CustomInterstitialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31FE7BFD24482D2300CB2062 /* CustomInterstitialViewController.m */; };
-		31FE7C2F24482D2300CB2062 /* TestCustomFeedTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 31FE7C0324482D2300CB2062 /* TestCustomFeedTableViewCell.m */; };
-		31FE7C3024482D2300CB2062 /* BYNativeAdCustomView.m in Sources */ = {isa = PBXBuildFile; fileRef = 31FE7C0424482D2300CB2062 /* BYNativeAdCustomView.m */; };
-		31FE7C3124482D2300CB2062 /* UnifiedNativeAdBaseTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 31FE7C0B24482D2300CB2062 /* UnifiedNativeAdBaseTableViewCell.m */; };
-		31FE7C3224482D2300CB2062 /* UnifiedNativeAdCustomView.m in Sources */ = {isa = PBXBuildFile; fileRef = 31FE7C0C24482D2300CB2062 /* UnifiedNativeAdCustomView.m */; };
-		31FE7C3324482D2300CB2062 /* UnifiedNativeAdImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 31FE7C0D24482D2300CB2062 /* UnifiedNativeAdImageCell.m */; };
-		31FE7C3424482D2300CB2062 /* UnifiedNativeAdThreeImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 31FE7C0E24482D2300CB2062 /* UnifiedNativeAdThreeImageCell.m */; };
-		31FE7C3524482D2300CB2062 /* BUDFeedNormalTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 31FE7C1124482D2300CB2062 /* BUDFeedNormalTableViewCell.m */; };
-		31FE7C3624482D2300CB2062 /* BUDConfigModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 31FE7C1424482D2300CB2062 /* BUDConfigModel.m */; };
-		31FE7C3724482D2300CB2062 /* BUDFeedNormalModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 31FE7C1824482D2300CB2062 /* BUDFeedNormalModel.m */; };
-		31FE7C3824482D2300CB2062 /* BUDActionAreaView.m in Sources */ = {isa = PBXBuildFile; fileRef = 31FE7C1924482D2300CB2062 /* BUDActionAreaView.m */; };
-		31FE7C3924482D2300CB2062 /* BUDFeedAdTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 31FE7C1A24482D2300CB2062 /* BUDFeedAdTableViewCell.m */; };
-		31FE7C3A24482D2300CB2062 /* BUDSelcetedItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 31FE7C1C24482D2300CB2062 /* BUDSelcetedItem.m */; };
-		31FE7C3B24482D2300CB2062 /* CustomListNativeAdViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31FE7C1D24482D2300CB2062 /* CustomListNativeAdViewController.m */; };
 		6003F58E195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58F195388D20070C39A /* CoreGraphics.framework */; };
 		6003F592195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
@@ -122,44 +103,6 @@
 		31FE7BEF24482D2300CB2062 /* DemoSplashViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DemoSplashViewController.h; sourceTree = "<group>"; };
 		31FE7BF024482D2300CB2062 /* DemoRewardVideoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DemoRewardVideoViewController.h; sourceTree = "<group>"; };
 		31FE7BF124482D2300CB2062 /* DemoBannerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DemoBannerViewController.m; sourceTree = "<group>"; };
-		31FE7BF324482D2300CB2062 /* CustomRewardVideoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomRewardVideoViewController.m; sourceTree = "<group>"; };
-		31FE7BF424482D2300CB2062 /* CustomInterstitialViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomInterstitialViewController.h; sourceTree = "<group>"; };
-		31FE7BF624482D2300CB2062 /* CustomListFeedExpressViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomListFeedExpressViewController.h; sourceTree = "<group>"; };
-		31FE7BF724482D2300CB2062 /* CustomFeedExpressViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomFeedExpressViewController.h; sourceTree = "<group>"; };
-		31FE7BF824482D2300CB2062 /* CustomListFeedExpressViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomListFeedExpressViewController.m; sourceTree = "<group>"; };
-		31FE7BF924482D2300CB2062 /* CustomFeedExpressViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomFeedExpressViewController.m; sourceTree = "<group>"; };
-		31FE7BFA24482D2300CB2062 /* CustomSplashViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomSplashViewController.h; sourceTree = "<group>"; };
-		31FE7BFB24482D2300CB2062 /* CustomBannerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomBannerViewController.m; sourceTree = "<group>"; };
-		31FE7BFC24482D2300CB2062 /* CustomSplashViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomSplashViewController.m; sourceTree = "<group>"; };
-		31FE7BFD24482D2300CB2062 /* CustomInterstitialViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomInterstitialViewController.m; sourceTree = "<group>"; };
-		31FE7BFE24482D2300CB2062 /* CustomRewardVideoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomRewardVideoViewController.h; sourceTree = "<group>"; };
-		31FE7C0024482D2300CB2062 /* CustomListNativeAdViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomListNativeAdViewController.h; sourceTree = "<group>"; };
-		31FE7C0324482D2300CB2062 /* TestCustomFeedTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestCustomFeedTableViewCell.m; sourceTree = "<group>"; };
-		31FE7C0424482D2300CB2062 /* BYNativeAdCustomView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BYNativeAdCustomView.m; sourceTree = "<group>"; };
-		31FE7C0524482D2300CB2062 /* TestCustomFeedTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestCustomFeedTableViewCell.h; sourceTree = "<group>"; };
-		31FE7C0624482D2300CB2062 /* BYNativeAdCustomView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BYNativeAdCustomView.h; sourceTree = "<group>"; };
-		31FE7C0824482D2300CB2062 /* UnifiedNativeAdImageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnifiedNativeAdImageCell.h; sourceTree = "<group>"; };
-		31FE7C0924482D2300CB2062 /* UnifiedNativeAdCustomView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnifiedNativeAdCustomView.h; sourceTree = "<group>"; };
-		31FE7C0A24482D2300CB2062 /* UnifiedNativeAdThreeImageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnifiedNativeAdThreeImageCell.h; sourceTree = "<group>"; };
-		31FE7C0B24482D2300CB2062 /* UnifiedNativeAdBaseTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UnifiedNativeAdBaseTableViewCell.m; sourceTree = "<group>"; };
-		31FE7C0C24482D2300CB2062 /* UnifiedNativeAdCustomView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UnifiedNativeAdCustomView.m; sourceTree = "<group>"; };
-		31FE7C0D24482D2300CB2062 /* UnifiedNativeAdImageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UnifiedNativeAdImageCell.m; sourceTree = "<group>"; };
-		31FE7C0E24482D2300CB2062 /* UnifiedNativeAdThreeImageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UnifiedNativeAdThreeImageCell.m; sourceTree = "<group>"; };
-		31FE7C0F24482D2300CB2062 /* UnifiedNativeAdBaseTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnifiedNativeAdBaseTableViewCell.h; sourceTree = "<group>"; };
-		31FE7C1124482D2300CB2062 /* BUDFeedNormalTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BUDFeedNormalTableViewCell.m; sourceTree = "<group>"; };
-		31FE7C1224482D2300CB2062 /* BUDActionAreaView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BUDActionAreaView.h; sourceTree = "<group>"; };
-		31FE7C1324482D2300CB2062 /* BUDFeedNormalModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BUDFeedNormalModel.h; sourceTree = "<group>"; };
-		31FE7C1424482D2300CB2062 /* BUDConfigModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BUDConfigModel.m; sourceTree = "<group>"; };
-		31FE7C1524482D2300CB2062 /* BUDFeedAdTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BUDFeedAdTableViewCell.h; sourceTree = "<group>"; };
-		31FE7C1624482D2300CB2062 /* BUDSelcetedItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BUDSelcetedItem.h; sourceTree = "<group>"; };
-		31FE7C1724482D2300CB2062 /* BUDFeedNormalTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BUDFeedNormalTableViewCell.h; sourceTree = "<group>"; };
-		31FE7C1824482D2300CB2062 /* BUDFeedNormalModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BUDFeedNormalModel.m; sourceTree = "<group>"; };
-		31FE7C1924482D2300CB2062 /* BUDActionAreaView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BUDActionAreaView.m; sourceTree = "<group>"; };
-		31FE7C1A24482D2300CB2062 /* BUDFeedAdTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BUDFeedAdTableViewCell.m; sourceTree = "<group>"; };
-		31FE7C1B24482D2300CB2062 /* BUDConfigModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BUDConfigModel.h; sourceTree = "<group>"; };
-		31FE7C1C24482D2300CB2062 /* BUDSelcetedItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BUDSelcetedItem.m; sourceTree = "<group>"; };
-		31FE7C1D24482D2300CB2062 /* CustomListNativeAdViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomListNativeAdViewController.m; sourceTree = "<group>"; };
-		31FE7C1E24482D2300CB2062 /* CustomBannerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomBannerViewController.h; sourceTree = "<group>"; };
 		5AD1647B6E4DD4231AFEFF67 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		6003F58A195388D20070C39A /* AdvanceSDK_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AdvanceSDK_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F58D195388D20070C39A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -168,7 +111,6 @@
 		6003F595195388D20070C39A /* AdvanceSDK-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "AdvanceSDK-Info.plist"; sourceTree = "<group>"; };
 		6003F597195388D20070C39A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		6003F599195388D20070C39A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		6003F59B195388D20070C39A /* AdvanceSDK-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AdvanceSDK-Prefix.pch"; sourceTree = "<group>"; };
 		6003F59C195388D20070C39A /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		6003F59D195388D20070C39A /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		6003F5A8195388D20070C39A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
@@ -284,7 +226,6 @@
 			isa = PBXGroup;
 			children = (
 				31FE7BE224482D2200CB2062 /* Template */,
-				31FE7BF224482D2300CB2062 /* Custom */,
 			);
 			path = ExampleController;
 			sourceTree = "<group>";
@@ -316,99 +257,6 @@
 				31FE7BEC24482D2200CB2062 /* DemoListFeedExpressViewController.m */,
 			);
 			path = DemoFeedExpress;
-			sourceTree = "<group>";
-		};
-		31FE7BF224482D2300CB2062 /* Custom */ = {
-			isa = PBXGroup;
-			children = (
-				31FE7C1E24482D2300CB2062 /* CustomBannerViewController.h */,
-				31FE7BFB24482D2300CB2062 /* CustomBannerViewController.m */,
-				31FE7BF424482D2300CB2062 /* CustomInterstitialViewController.h */,
-				31FE7BFD24482D2300CB2062 /* CustomInterstitialViewController.m */,
-				31FE7BFE24482D2300CB2062 /* CustomRewardVideoViewController.h */,
-				31FE7BF324482D2300CB2062 /* CustomRewardVideoViewController.m */,
-				31FE7BFA24482D2300CB2062 /* CustomSplashViewController.h */,
-				31FE7BFC24482D2300CB2062 /* CustomSplashViewController.m */,
-				31FE7BF524482D2300CB2062 /* CustomFeedExpress */,
-				31FE7BFF24482D2300CB2062 /* CustomNativaAd */,
-			);
-			path = Custom;
-			sourceTree = "<group>";
-		};
-		31FE7BF524482D2300CB2062 /* CustomFeedExpress */ = {
-			isa = PBXGroup;
-			children = (
-				31FE7BF724482D2300CB2062 /* CustomFeedExpressViewController.h */,
-				31FE7BF924482D2300CB2062 /* CustomFeedExpressViewController.m */,
-				31FE7BF624482D2300CB2062 /* CustomListFeedExpressViewController.h */,
-				31FE7BF824482D2300CB2062 /* CustomListFeedExpressViewController.m */,
-			);
-			path = CustomFeedExpress;
-			sourceTree = "<group>";
-		};
-		31FE7BFF24482D2300CB2062 /* CustomNativaAd */ = {
-			isa = PBXGroup;
-			children = (
-				31FE7C0024482D2300CB2062 /* CustomListNativeAdViewController.h */,
-				31FE7C1D24482D2300CB2062 /* CustomListNativeAdViewController.m */,
-				31FE7C0124482D2300CB2062 /* NativeAdCell */,
-			);
-			path = CustomNativaAd;
-			sourceTree = "<group>";
-		};
-		31FE7C0124482D2300CB2062 /* NativeAdCell */ = {
-			isa = PBXGroup;
-			children = (
-				31FE7C0224482D2300CB2062 /* Mercury */,
-				31FE7C0724482D2300CB2062 /* GDT */,
-				31FE7C1024482D2300CB2062 /* CSJ */,
-			);
-			path = NativeAdCell;
-			sourceTree = "<group>";
-		};
-		31FE7C0224482D2300CB2062 /* Mercury */ = {
-			isa = PBXGroup;
-			children = (
-				31FE7C0324482D2300CB2062 /* TestCustomFeedTableViewCell.m */,
-				31FE7C0424482D2300CB2062 /* BYNativeAdCustomView.m */,
-				31FE7C0524482D2300CB2062 /* TestCustomFeedTableViewCell.h */,
-				31FE7C0624482D2300CB2062 /* BYNativeAdCustomView.h */,
-			);
-			path = Mercury;
-			sourceTree = "<group>";
-		};
-		31FE7C0724482D2300CB2062 /* GDT */ = {
-			isa = PBXGroup;
-			children = (
-				31FE7C0824482D2300CB2062 /* UnifiedNativeAdImageCell.h */,
-				31FE7C0924482D2300CB2062 /* UnifiedNativeAdCustomView.h */,
-				31FE7C0A24482D2300CB2062 /* UnifiedNativeAdThreeImageCell.h */,
-				31FE7C0B24482D2300CB2062 /* UnifiedNativeAdBaseTableViewCell.m */,
-				31FE7C0C24482D2300CB2062 /* UnifiedNativeAdCustomView.m */,
-				31FE7C0D24482D2300CB2062 /* UnifiedNativeAdImageCell.m */,
-				31FE7C0E24482D2300CB2062 /* UnifiedNativeAdThreeImageCell.m */,
-				31FE7C0F24482D2300CB2062 /* UnifiedNativeAdBaseTableViewCell.h */,
-			);
-			path = GDT;
-			sourceTree = "<group>";
-		};
-		31FE7C1024482D2300CB2062 /* CSJ */ = {
-			isa = PBXGroup;
-			children = (
-				31FE7C1124482D2300CB2062 /* BUDFeedNormalTableViewCell.m */,
-				31FE7C1224482D2300CB2062 /* BUDActionAreaView.h */,
-				31FE7C1324482D2300CB2062 /* BUDFeedNormalModel.h */,
-				31FE7C1424482D2300CB2062 /* BUDConfigModel.m */,
-				31FE7C1524482D2300CB2062 /* BUDFeedAdTableViewCell.h */,
-				31FE7C1624482D2300CB2062 /* BUDSelcetedItem.h */,
-				31FE7C1724482D2300CB2062 /* BUDFeedNormalTableViewCell.h */,
-				31FE7C1824482D2300CB2062 /* BUDFeedNormalModel.m */,
-				31FE7C1924482D2300CB2062 /* BUDActionAreaView.m */,
-				31FE7C1A24482D2300CB2062 /* BUDFeedAdTableViewCell.m */,
-				31FE7C1B24482D2300CB2062 /* BUDConfigModel.h */,
-				31FE7C1C24482D2300CB2062 /* BUDSelcetedItem.m */,
-			);
-			path = CSJ;
 			sourceTree = "<group>";
 		};
 		6003F581195388D10070C39A = {
@@ -474,7 +322,6 @@
 				6003F595195388D20070C39A /* AdvanceSDK-Info.plist */,
 				6003F596195388D20070C39A /* InfoPlist.strings */,
 				6003F599195388D20070C39A /* main.m */,
-				6003F59B195388D20070C39A /* AdvanceSDK-Prefix.pch */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -693,13 +540,17 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-AdvanceSDK_Example/Pods-AdvanceSDK_Example-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/JPFPSStatus/JPFPSStatus.framework",
 				"${BUILT_PRODUCTS_DIR}/Masonry/Masonry.framework",
 				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
+				"${BUILT_PRODUCTS_DIR}/STDebugConsole/STDebugConsole.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JPFPSStatus.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Masonry.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/STDebugConsole.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -716,44 +567,25 @@
 				31FE7BD924482D0500CB2062 /* ViewController.m in Sources */,
 				31FE7C2824482D2300CB2062 /* DemoBannerViewController.m in Sources */,
 				31FE7C2624482D2300CB2062 /* DemoFullScreenVideoController.m in Sources */,
-				31FE7C3824482D2300CB2062 /* BUDActionAreaView.m in Sources */,
 				6003F59E195388D20070C39A /* AppDelegate.m in Sources */,
-				31FE7C2924482D2300CB2062 /* CustomRewardVideoViewController.m in Sources */,
-				31FE7C3624482D2300CB2062 /* BUDConfigModel.m in Sources */,
-				31FE7C3424482D2300CB2062 /* UnifiedNativeAdThreeImageCell.m in Sources */,
 				31FE7C2424482D2300CB2062 /* DemoFeedExpressViewController.m in Sources */,
 				31FE7BCF24482CEE00CB2062 /* BaseViewController.m in Sources */,
-				31FE7C2C24482D2300CB2062 /* CustomBannerViewController.m in Sources */,
-				31FE7C3024482D2300CB2062 /* BYNativeAdCustomView.m in Sources */,
-				31FE7C3B24482D2300CB2062 /* CustomListNativeAdViewController.m in Sources */,
-				31FE7C3924482D2300CB2062 /* BUDFeedAdTableViewCell.m in Sources */,
 				31FE7C2324482D2300CB2062 /* DemoRewardVideoViewController.m in Sources */,
 				31FE7BCA24482CEE00CB2062 /* BYExamCellModel.m in Sources */,
-				31FE7C3A24482D2300CB2062 /* BUDSelcetedItem.m in Sources */,
 				31FE7C2224482D2300CB2062 /* DemoSplashViewController.m in Sources */,
-				31FE7C3224482D2300CB2062 /* UnifiedNativeAdCustomView.m in Sources */,
 				31FE7BCE24482CEE00CB2062 /* DemoUtils.m in Sources */,
 				31FE7BC624482CEE00CB2062 /* JDStatusBarNotification.m in Sources */,
 				31FE7BC724482CEE00CB2062 /* JDStatusBarView.m in Sources */,
 				31FE7BC924482CEE00CB2062 /* JDStatusBarStyle.m in Sources */,
 				6003F59A195388D20070C39A /* main.m in Sources */,
 				31FE7BD724482D0500CB2062 /* NSTimeUtils.m in Sources */,
-				31FE7C2F24482D2300CB2062 /* TestCustomFeedTableViewCell.m in Sources */,
 				31FE7C2724482D2300CB2062 /* DemoInterstitialViewController.m in Sources */,
-				31FE7C3124482D2300CB2062 /* UnifiedNativeAdBaseTableViewCell.m in Sources */,
-				31FE7C3724482D2300CB2062 /* BUDFeedNormalModel.m in Sources */,
-				31FE7C2A24482D2300CB2062 /* CustomListFeedExpressViewController.m in Sources */,
 				31FE7BC524482CEE00CB2062 /* ViewBuilder.m in Sources */,
-				31FE7C2E24482D2300CB2062 /* CustomInterstitialViewController.m in Sources */,
 				31FE7BCB24482CEE00CB2062 /* CellBuilder.m in Sources */,
-				31FE7C2B24482D2300CB2062 /* CustomFeedExpressViewController.m in Sources */,
 				31FE7BD824482D0500CB2062 /* CustomListViewController.m in Sources */,
 				31FE7BCD24482CEE00CB2062 /* ExamTableViewCell.m in Sources */,
 				31FE7C2524482D2300CB2062 /* DemoListFeedExpressViewController.m in Sources */,
 				31FE7BC824482CEE00CB2062 /* JDStatusBarLayoutMarginHelper.m in Sources */,
-				31FE7C3524482D2300CB2062 /* BUDFeedNormalTableViewCell.m in Sources */,
-				31FE7C2D24482D2300CB2062 /* CustomSplashViewController.m in Sources */,
-				31FE7C3324482D2300CB2062 /* UnifiedNativeAdImageCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -45,7 +45,7 @@
     _advanceFeed = [[AdvanceNativeExpress alloc] initWithAdspotId:self.adspotId viewController:self adSize:CGSizeMake(self.view.bounds.size.width, 300)];
     
     _advanceFeed.delegate = self;
-    [_advanceFeed setDefaultSdkSupplierWithMediaId:@"100255"
+    [_advanceFeed setDefaultAdvSupplierWithMediaId:@"100255"
                                           adspotId:@"10002698"
                                           mediaKey:@"757d5119466abe3d771a211cc1278df7"
                                             sdkId:SDK_ID_MERCURY];
@@ -57,7 +57,8 @@
 - (void)advanceNativeExpressOnAdLoadSuccess:(NSArray<UIView *> *)views {
     NSLog(@"拉取数据成功 ");
     for (NSInteger i=0; i<views.count;i++) {
-        if ([views[i] isKindOfClass:NSClassFromString(@"BUNativeExpressFeedVideoAdView")]) {
+        if ([views[i] isKindOfClass:NSClassFromString(@"BUNativeExpressFeedVideoAdView")] ||
+            [views[i] isKindOfClass:NSClassFromString(@"BUNativeExpressAdView")]) {
             [views[i] performSelector:@selector(setRootViewController:) withObject:self];
             [views[i] performSelector:@selector(render)];
         } else if ([views[i] isKindOfClass:NSClassFromString(@"MercuryNativeExpressAdView")]) {

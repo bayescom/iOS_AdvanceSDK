@@ -20,21 +20,21 @@
 #endif
 
 #import "AdvanceRewardVideo.h"
+#import "AdvLog.h"
 
 @interface CsjRewardVideoAdapter () <BUNativeExpressRewardedVideoAdDelegate>
 @property (nonatomic, strong) BUNativeExpressRewardedVideoAd *csj_ad;
-@property (nonatomic, strong) NSDictionary *params;
 @property (nonatomic, weak) AdvanceRewardVideo *adspot;
+@property (nonatomic, strong) AdvSupplier *supplier;
 
 @end
 
 @implementation CsjRewardVideoAdapter
 
-- (instancetype)initWithParams:(NSDictionary *)params
-                        adspot:(AdvanceRewardVideo *)adspot {
+- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(AdvanceRewardVideo *)adspot {
     if (self = [super init]) {
         _adspot = adspot;
-        _params = params;
+        _supplier = supplier;
     }
     return self;
 }
@@ -42,7 +42,7 @@
 - (void)loadAd {
     BURewardedVideoModel *model = [[BURewardedVideoModel alloc] init];
     [model setUserId:@"playable"];
-    _csj_ad = [[BUNativeExpressRewardedVideoAd alloc] initWithSlotID:_adspot.currentSdkSupplier.adspotid rewardedVideoModel:model];
+    _csj_ad = [[BUNativeExpressRewardedVideoAd alloc] initWithSlotID:_supplier.adspotid rewardedVideoModel:model];
     _csj_ad.delegate = self;
     [_csj_ad loadAdData];
 }
@@ -54,7 +54,7 @@
 }
 
 - (void)dealloc {
-    NSLog(@"%s", __func__);
+    ADVLog(@"%s", __func__);
 }
 
 // MARK: ======================= BUNativeExpressRewardedVideoAdDelegate =======================
@@ -71,9 +71,8 @@
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
     _csj_ad = nil;
     if ([self.delegate respondsToSelector:@selector(advanceRewardVideoOnAdFailedWithSdkId:error:)]) {
-        [self.delegate advanceRewardVideoOnAdFailedWithSdkId:_adspot.currentSdkSupplier.id error:error];
+        [self.delegate advanceRewardVideoOnAdFailedWithSdkId:_supplier.identifier error:error];
     }
-    [self.adspot selectSdkSupplierWithError:error];
 }
 
 //视频缓存成功回调

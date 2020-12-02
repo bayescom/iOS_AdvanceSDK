@@ -10,6 +10,7 @@
 #import <UIKit/UIKit.h>
 #import "AdvanceFullScreenVideoDelegate.h"
 
+@class AdvSupplier;
 @class AdvanceFullScreenVideo;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -17,8 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface GdtFullScreenVideoAdapter : NSObject
 @property (nonatomic, weak) id<AdvanceFullScreenVideoDelegate> delegate;
 
-- (instancetype)initWithParams:(NSDictionary *)params
-                        adspot:(AdvanceFullScreenVideo *)adspot;
+- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(AdvanceFullScreenVideo *)adspot;
 
 - (void)loadAd;
 

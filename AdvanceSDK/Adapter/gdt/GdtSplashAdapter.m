@@ -15,12 +15,12 @@
 #endif
 
 #import "AdvanceSplash.h"
-#import "UIApplication+Advance.h"
+#import "UIApplication+Adv.h"
 
 @interface GdtSplashAdapter () <GDTSplashAdDelegate>
 @property (nonatomic, strong) GDTSplashAd *gdt_ad;
 @property (nonatomic, weak) AdvanceSplash *adspot;
-@property (nonatomic, strong) NSDictionary *params;
+@property (nonatomic, strong) AdvSupplier *supplier;
 
 // 剩余时间，用来判断用户是点击跳过，还是正常倒计时结束
 @property (nonatomic, assign) NSUInteger leftTime;
@@ -31,22 +31,22 @@
 
 @implementation GdtSplashAdapter
 
-- (instancetype)initWithParams:(NSDictionary *)params adspot:(AdvanceSplash *)adspot {
+- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(AdvanceSplash *)adspot {
     if (self = [super init]) {
         _adspot = adspot;
-        _params = params;
+        _supplier = supplier;
         _leftTime = 5;  // 默认5s
     }
     return self;
 }
 
 - (void)loadAd {
-    _gdt_ad = [[GDTSplashAd alloc] initWithPlacementId:_adspot.currentSdkSupplier.adspotid];
-    
+    _gdt_ad = [[GDTSplashAd alloc] initWithPlacementId:_supplier.adspotid];
+
     _gdt_ad.delegate = self;
-    if (self.adspot.currentSdkSupplier.timeout) {
-        if (self.adspot.currentSdkSupplier.timeout > 500) {
-            _gdt_ad.fetchDelay = _adspot.currentSdkSupplier.timeout / 1000.0;
+    if (self.adspot.timeout) {
+        if (self.adspot.timeout > 500) {
+            _gdt_ad.fetchDelay = _adspot.timeout / 1000.0;
         }
     }
     _adspot.viewController.modalPresentationStyle = 0;
@@ -76,7 +76,7 @@
         imgV = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, real_w, real_h)];
         imgV.image = _adspot.logoImage;
     }
-    [_gdt_ad showAdInWindow:[UIApplication sharedApplication].by_getCurrentWindow withBottomView:_adspot.showLogoRequire?imgV:nil skipView:nil];
+    [_gdt_ad showAdInWindow:[UIApplication sharedApplication].adv_getCurrentWindow withBottomView:_adspot.showLogoRequire?imgV:nil skipView:nil];
 }
 
 - (void)splashAdExposured:(GDTSplashAd *)splashAd {
@@ -87,11 +87,10 @@
 }
 
 - (void)splashAdFailToPresent:(GDTSplashAd *)splashAd withError:(NSError *)error {
-    if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdFailedWithSdkId:error:)]) {
-        [self.delegate advanceSplashOnAdFailedWithSdkId:_adspot.currentSdkSupplier.adspotid error:error];
-    }
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
-    [self.adspot selectSdkSupplierWithError:error];
+    if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdFailedWithSdkId:error:)]) {
+        [self.delegate advanceSplashOnAdFailedWithSdkId:_adspot.adspotid error:error];
+    }
 }
 
 - (void)splashAdClicked:(GDTSplashAd *)splashAd {
