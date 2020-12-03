@@ -419,7 +419,7 @@
 				ORGANIZATIONNAME = Cheng455153666;
 				TargetAttributes = {
 					6003F589195388D20070C39A = {
-						DevelopmentTeam = K58KSJ5P75;
+						DevelopmentTeam = 3544QT5FQ7;
 						ProvisioningStyle = Manual;
 					};
 					6003F5AD195388D20070C39A = {
@@ -740,7 +740,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = K58KSJ5P75;
+				DEVELOPMENT_TEAM = 3544QT5FQ7;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/AdvanceSDK/PrefixHeader.pch";
@@ -749,7 +749,7 @@
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = com.bytedance.ADUnion;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = commonBundleIDDevelopmentProfile;
+				PROVISIONING_PROFILE_SPECIFIER = ashionweatherCommon_Development_Company_Profile;
 				SWIFT_VERSION = 4.0;
 				WRAPPER_EXTENSION = app;
 			};
@@ -761,7 +761,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = K58KSJ5P75;
+				DEVELOPMENT_TEAM = 3544QT5FQ7;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/AdvanceSDK/PrefixHeader.pch";
@@ -770,7 +770,7 @@
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = com.bytedance.ADUnion;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = commonBundleIDDevelopmentProfile;
+				PROVISIONING_PROFILE_SPECIFIER = ashionweatherCommon_Development_Company_Profile;
 				SWIFT_VERSION = 4.0;
 				WRAPPER_EXTENSION = app;
 			};
