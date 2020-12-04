@@ -37,18 +37,15 @@
 - (void)loadAd {
     // 占位图
     [[UIApplication sharedApplication].adv_getCurrentWindow addSubview:self.bgImgV];
-    
-    UIWindow *ww = [UIApplication sharedApplication].adv_getCurrentWindow;
-    [ww addSubview:self.bgImgV];
-    
+        
     if (_timeout <= 0) { _timeout = 60; }
     // 记录过期的时间
     _timeout_stamp = ([[NSDate date] timeIntervalSince1970] + _timeout)*1000;
     // 开启定时器监听过期
     [_timeoutCheckTimer invalidate];
 
-//    _timeoutCheckTimer = [CADisplayLink displayLinkWithTarget:self selector:@selector(timeoutCheckTimerAction)];
-//    [_timeoutCheckTimer addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
+    _timeoutCheckTimer = [CADisplayLink displayLinkWithTarget:self selector:@selector(timeoutCheckTimerAction)];
+    [_timeoutCheckTimer addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
     
     [super loadAd];
 }
