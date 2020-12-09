@@ -27,9 +27,6 @@
 /// 广告关闭回调
 - (void)advanceBannerOnAdClosed;
 
-/// 策略请求失败
-- (void)advanceOnAdNotFilled:(NSError *)error;
-
 @end
 
 #endif

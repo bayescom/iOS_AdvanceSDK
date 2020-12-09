@@ -32,8 +32,6 @@
 /// 广告倒计时结束回调
 - (void)advanceSplashOnAdCountdownToZero;
 
-/// 策略请求失败
-- (void)advanceOnAdNotFilled:(NSError *)error;
 
 @end
 

@@ -33,8 +33,6 @@
 /// 视频播放完成
 - (void)advanceFullScreenVideoOnAdPlayFinish;
 
-/// 策略请求失败
-- (void)advanceOnAdNotFilled:(NSError *)error;
 
 @end
 

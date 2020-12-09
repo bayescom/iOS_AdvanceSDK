@@ -32,9 +32,6 @@
 /// 广告拉取失败
 - (void)advanceNativeExpressOnAdFailedWithSdkId:(nullable NSString *)sdkId error:(nullable NSError *)error;
 
-/// 策略请求失败
-- (void)advanceOnAdNotFilled:(NSError *)error;
-
 @end
 
 #endif

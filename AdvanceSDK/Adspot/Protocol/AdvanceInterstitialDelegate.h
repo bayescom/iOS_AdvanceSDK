@@ -33,9 +33,6 @@
 /// 广告可以调用show方法
 - (void)advanceInterstitialOnReadyToShow;
 
-/// 策略请求失败
-- (void)advanceOnAdNotFilled:(NSError *)error;
-
 @end
 
 #endif

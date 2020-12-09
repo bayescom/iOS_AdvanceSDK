@@ -77,4 +77,9 @@
     NSLog(@"广告倒计时结束");
 }
 
+// 策略请求失败
+- (void)advanceOnAdNotFilled:(NSError *)error
+{
+    NSLog(@"策略加载失败....");
+}
 @end
