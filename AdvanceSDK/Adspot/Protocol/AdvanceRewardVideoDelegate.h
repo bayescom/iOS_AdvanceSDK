@@ -8,8 +8,8 @@
 
 #ifndef AdvanceRewardVideoProtocol_h
 #define AdvanceRewardVideoProtocol_h
-
-@protocol AdvanceRewardVideoDelegate <NSObject>
+#import "AdvanceBaseDelegate.h"
+@protocol AdvanceRewardVideoDelegate <AdvanceBaseDelegate>
 @optional
 
 /// 广告准备完成

@@ -8,8 +8,8 @@
 
 #ifndef AdvanceSplashProtocol_h
 #define AdvanceSplashProtocol_h
-
-@protocol AdvanceSplashDelegate <NSObject>
+#import "AdvanceBaseDelegate.h"
+@protocol AdvanceSplashDelegate <AdvanceBaseDelegate>
 @optional
 /// 广告数据拉取成功
 - (void)advanceSplashOnAdReceived;

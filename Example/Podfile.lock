@@ -1,18 +1,18 @@
 PODS:
-  - AdvanceSDK (3.2.3.0):
-    - AdvanceSDK/Core (= 3.2.3.0)
-  - AdvanceSDK/Adspot (3.2.3.0):
+  - AdvanceSDK (3.2.3.1):
+    - AdvanceSDK/Core (= 3.2.3.1)
+  - AdvanceSDK/Adspot (3.2.3.1):
     - AdvanceSDK/Core
-  - AdvanceSDK/Core (3.2.3.0)
-  - AdvanceSDK/CSJ (3.2.3.0):
+  - AdvanceSDK/Core (3.2.3.1)
+  - AdvanceSDK/CSJ (3.2.3.1):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - Bytedance-UnionAD
-  - AdvanceSDK/GDT (3.2.3.0):
+  - AdvanceSDK/GDT (3.2.3.1):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - GDTMobSDK
-  - AdvanceSDK/Mercury (3.2.3.0):
+  - AdvanceSDK/Mercury (3.2.3.1):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - MercurySDK
@@ -47,7 +47,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  AdvanceSDK: 704f03fa2f59df5e772d611ae357a480cf0139fb
+  AdvanceSDK: 70d6b3b7431aac5ef4a1d69a83929d6edef4d9ec
   Bytedance-UnionAD: 7fc15b173b44303a548b25ec534e4c1b04263b21
   GDTMobSDK: 16ef708ffcbbeca455d9df754694bc647401f454
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
