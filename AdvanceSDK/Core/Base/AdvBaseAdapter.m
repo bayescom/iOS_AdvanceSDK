@@ -28,8 +28,19 @@
     return self;
 }
 
+- (instancetype)initWithMediaId:(NSString *)mediaId
+                       adspotId:(NSString *)adspotid
+                      customExt:(NSDictionary *)ext {
+    if (self = [super init]) {
+        _mediaId = mediaId;
+        _adspotid = adspotid;
+        _ext = [ext mutableCopy];
+    }
+    return self;
+}
+
 - (void)loadAd {
-    [self.mgr loadDataWithMediaId:_mediaId adspotId:_adspotid];
+    [self.mgr loadDataWithMediaId:_mediaId adspotId:_adspotid customExt:_ext];
 }
 
 - (void)loadNextSupplierIfHas {

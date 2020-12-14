@@ -26,6 +26,8 @@
 @property (nonatomic, copy) NSString *mediaId;
 /// 广告位id
 @property (nonatomic, copy) NSString *adspotId;
+/// 自定义拓展字段
+@property (nonatomic, strong) NSDictionary *ext;
 
 /// 是否是走的本地的渠道
 @property (nonatomic, assign) BOOL isLoadLocalSupplier;
@@ -44,9 +46,12 @@
  * 如果本地存在有效数据，直接加载本地数据
  * 数据不存在则同步数据
  */
-- (void)loadDataWithMediaId:(NSString *)mediaId adspotId:(NSString *)adspotId {
+- (void)loadDataWithMediaId:(NSString *)mediaId
+                   adspotId:(NSString *)adspotId
+                  customExt:(NSDictionary * _Nonnull)ext {
     self.mediaId = mediaId;
     self.adspotId = adspotId;
+    self.ext = [ext mutableCopy];
     
     // 获取本地数据
     _model = [AdvSupplierModel loadDataWithMediaId:mediaId adspotId:adspotId];
@@ -195,6 +200,10 @@
 - (void)fetchData:(BOOL)saveOnly {
     _mediaId = @"";
     NSMutableDictionary *deviceInfo = [AdvDeviceInfoUtil getDeviceInfoWithMediaId:_mediaId adspotId:_adspotId];
+    if (self.ext) {
+        [deviceInfo setValue:self.ext forKey:@"ext"];
+    }
+    NSLog(@"请求参数 %@", deviceInfo);
     NSError *parseError = nil;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:deviceInfo options:NSJSONWritingPrettyPrinted error:&parseError];
     NSURL *url = [NSURL URLWithString:AdvanceSdkRequestUrl];

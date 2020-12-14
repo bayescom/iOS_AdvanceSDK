@@ -28,7 +28,11 @@
 @implementation AdvanceSplash
 
 - (instancetype)initWithAdspotId:(NSString *)adspotid viewController:(nonnull UIViewController *)viewController {
-    if (self = [super initWithMediaId:nil adspotId:adspotid]) {
+    return [self initWithAdspotId:adspotid customExt:nil viewController:viewController];
+}
+
+- (instancetype)initWithAdspotId:(NSString *)adspotid customExt:(NSDictionary *)ext viewController:(UIViewController *)viewController {
+    if (self = [super initWithMediaId:nil adspotId:adspotid customExt:ext]) {
         _viewController = viewController;
     }
     return self;

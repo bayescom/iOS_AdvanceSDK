@@ -33,6 +33,10 @@
     if (![self checkAdspotId]) { return; }
     self.advanceSplash = [[AdvanceSplash alloc] initWithAdspotId:self.adspotId
                                                   viewController:self];
+//    self.advanceSplash = [[AdvanceSplash alloc] initWithAdspotId:self.adspotId
+//                                                       customExt:@{@"test" : @"自定义拓展参数"}
+//                                                  viewController:self];
+
     self.advanceSplash.delegate = self;
 //    self.advanceSplash.showLogoRequire = YES;
     self.advanceSplash.logoImage = [UIImage imageNamed:@"app_logo"];
