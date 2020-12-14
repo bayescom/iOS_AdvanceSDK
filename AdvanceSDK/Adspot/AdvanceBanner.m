@@ -24,13 +24,21 @@
 - (instancetype)initWithAdspotId:(NSString *)adspotid
                      adContainer:(UIView *)adContainer
                   viewController:(nonnull UIViewController *)viewController {
-    if (self = [super initWithMediaId:nil adspotId:adspotid]) {
+    return [self initWithAdspotId:adspotid adContainer:adContainer customExt:nil viewController:viewController];
+}
+
+- (instancetype)initWithAdspotId:(NSString *)adspotid
+                     adContainer:(UIView *)adContainer
+                       customExt:(NSDictionary * _Nonnull)ext
+                  viewController:(nonnull UIViewController *)viewController {
+    if (self = [super initWithMediaId:nil adspotId:adspotid customExt:ext]) {
         _adContainer = adContainer;
         _viewController = viewController;
         _refreshInterval = 30;
     }
     return self;
 }
+
 
 // MARK: ======================= AdvanceSupplierDelegate =======================
 /// 加载策略Model成功

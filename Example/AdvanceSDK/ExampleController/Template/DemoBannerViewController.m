@@ -39,6 +39,7 @@
     self.adShowView.hidden = NO;
 
     self.advanceBanner = [[AdvanceBanner alloc] initWithAdspotId:self.adspotId adContainer:self.contentV viewController:self];
+//    self.advanceBanner = [[AdvanceBanner alloc] initWithAdspotId:self.adspotId adContainer:self.contentV customExt:@{@"test" : @"自定义拓展参数"} viewController:self];
     self.advanceBanner.delegate = self;
     [self.advanceBanner setDefaultAdvSupplierWithMediaId:@"100255"
                                                 adspotId:@"10000558"
