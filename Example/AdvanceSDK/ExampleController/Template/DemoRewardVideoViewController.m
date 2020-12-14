@@ -33,6 +33,9 @@
     if (![self checkAdspotId]) { return; }
     self.advanceRewardVideo = [[AdvanceRewardVideo alloc] initWithAdspotId:self.adspotId
                                                            viewController:self];
+//    self.advanceRewardVideo = [[AdvanceRewardVideo alloc] initWithAdspotId:self.adspotId
+//                                                                 customExt:@{@"test" : @"测试自定义拓展字段"}
+//                                                            viewController:self];
     self.advanceRewardVideo.delegate=self;
     [self.advanceRewardVideo setDefaultAdvSupplierWithMediaId:@"100255"
                                                      adspotId:@"10002595"
