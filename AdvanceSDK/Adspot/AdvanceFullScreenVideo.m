@@ -22,11 +22,16 @@
 @implementation AdvanceFullScreenVideo
 
 - (instancetype)initWithAdspotId:(NSString *)adspotid viewController:(nonnull UIViewController *)viewController {
-    if (self = [super initWithMediaId:nil adspotId:adspotid]) {
+    return [self initWithAdspotId:adspotid customExt:nil viewController:viewController];
+}
+
+- (instancetype)initWithAdspotId:(NSString *)adspotid customExt:(NSDictionary * _Nonnull)ext viewController:(nonnull UIViewController *)viewController {
+    if (self = [super initWithMediaId:nil adspotId:adspotid customExt:ext]) {
         _viewController = viewController;
     }
     return self;
 }
+
 
 // MARK: ======================= AdvanceSupplierDelegate =======================
 /// 加载策略Model成功
