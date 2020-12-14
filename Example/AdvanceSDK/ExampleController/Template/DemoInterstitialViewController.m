@@ -33,6 +33,10 @@
     if (![self checkAdspotId]) { return; }
     self.advanceInterstitial = [[AdvanceInterstitial alloc] initWithAdspotId:self.adspotId
                                                               viewController:self];
+    
+//    self.advanceInterstitial = [[AdvanceInterstitial alloc] initWithAdspotId:self.adspotId
+//                                                                   customExt:@{@"test" : @"测试自定义拓展参数"}
+//                                                              viewController:self];
     self.advanceInterstitial.delegate = self;
     [self.advanceInterstitial setDefaultAdvSupplierWithMediaId:@"100255"
                                                       adspotId:@"10000559"
