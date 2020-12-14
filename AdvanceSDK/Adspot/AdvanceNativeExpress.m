@@ -21,12 +21,20 @@
 - (instancetype)initWithAdspotId:(NSString *)adspotid
                  viewController:(UIViewController *)viewController
                          adSize:(CGSize)size {
-    if (self = [super initWithMediaId:nil adspotId:adspotid]) {
+    return [self initWithMediaId:nil adspotId:adspotid customExt:nil];
+}
+
+- (instancetype)initWithAdspotId:(NSString *)adspotid
+                       customExt:(NSDictionary * _Nonnull)ext
+                  viewController:(UIViewController *)viewController
+                          adSize:(CGSize)size {
+    if (self = [super initWithMediaId:nil adspotId:adspotid customExt:ext]) {
         _viewController = viewController;
         _adSize = size;
     }
     return self;
 }
+
 
 // MARK: ======================= AdvanceSupplierDelegate =======================
 /// 加载策略Model成功
