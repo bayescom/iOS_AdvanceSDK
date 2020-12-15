@@ -86,4 +86,11 @@
 {
     NSLog(@"策略加载失败....");
 }
+
+// 策略请求成功
+- (void)advanceOnAdReceived:(NSString *)reqId
+{
+    NSLog(@"策略id为: %@", reqId);
+}
+
 @end

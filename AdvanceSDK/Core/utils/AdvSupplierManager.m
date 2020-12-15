@@ -203,6 +203,7 @@
     if (self.ext) {
         [deviceInfo setValue:self.ext forKey:@"ext"];
     }
+//    [deviceInfo setValue:@"" forKey:@"adspotid"];
     NSLog(@"请求参数 %@", deviceInfo);
     NSError *parseError = nil;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:deviceInfo options:NSJSONWritingPrettyPrinted error:&parseError];

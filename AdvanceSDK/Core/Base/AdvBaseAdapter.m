@@ -21,11 +21,7 @@
 
 -  (instancetype)initWithMediaId:(NSString *)mediaId
                         adspotId:(NSString *)adspotid {
-    if (self = [super init]) {
-        _mediaId = mediaId;
-        _adspotid = adspotid;
-    }
-    return self;
+    return [self initWithMediaId:mediaId adspotId:adspotid customExt:nil];
 }
 
 - (instancetype)initWithMediaId:(NSString *)mediaId
@@ -111,6 +107,11 @@
         });
     }
     
+    // 如果执行了打底渠道 则执行此方法
+    if ([supplier.sdktag isEqualToString:@"bottom_default"]) {
+        [self advSupplierLoadDefaultSuppluer:supplier];
+    }
+
     // 加载渠道
     if ([_baseDelegate respondsToSelector:@selector(advSupplierLoadSuppluer:error:)]) {
         [_baseDelegate advanceBaseAdapterLoadSuppluer:supplier error:error];

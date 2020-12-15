@@ -11,6 +11,14 @@
 @protocol AdvanceBaseDelegate <NSObject>
 
 @optional
+
+
+/// 策略请求成功
+/// @param reqId 策略id
+/// 若 reqId = bottom_default 则执行的是打底渠道
+- (void)advanceOnAdReceived:(NSString *)reqId;
+
+
 /// 策略请求失败
 - (void)advanceOnAdNotFilled:(NSError *)error;
 

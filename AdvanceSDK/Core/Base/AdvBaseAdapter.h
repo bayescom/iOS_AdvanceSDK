@@ -52,7 +52,8 @@ NS_ASSUME_NONNULL_BEGIN
 /// 上报
 - (void)reportWithType:(AdvanceSdkSupplierRepoType)repoType;
 
-
+/// 执行了打底渠道
+- (void)advSupplierLoadDefaultSuppluer:(AdvSupplier *)supplier;
 @end
 
 NS_ASSUME_NONNULL_END
