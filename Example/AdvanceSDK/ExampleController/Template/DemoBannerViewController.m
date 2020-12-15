@@ -76,4 +76,14 @@
     NSLog(@"广告关闭回调");
 }
 
+/// 策略请求成功
+- (void)advanceOnAdReceived:(NSString *)reqId {
+    NSLog(@"策略id:%@", reqId);
+}
+
+/// 策略请求失败
+- (void)advanceOnAdNotFilled:(NSError *)error {
+    NSLog(@"策略请求失败");
+}
+
 @end

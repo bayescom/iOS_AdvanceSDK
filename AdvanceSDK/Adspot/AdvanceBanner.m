@@ -39,6 +39,20 @@
     return self;
 }
 
+// 执行了打底渠道
+- (void)advSupplierLoadDefaultSuppluer:(AdvSupplier *)supplier
+{
+    ADVLog(@"执行了打底渠道: %@", supplier.sdktag);
+    [self advanceOnAdReceivedWithReqId:supplier.sdktag];
+}
+
+// 返回策略id
+- (void)advanceOnAdReceivedWithReqId:(NSString *)reqId
+{
+    if ([_delegate respondsToSelector:@selector(advanceOnAdReceived:)]) {
+        [_delegate advanceOnAdReceived:reqId];
+    }
+}
 
 // MARK: ======================= AdvanceSupplierDelegate =======================
 /// 加载策略Model成功
@@ -46,6 +60,7 @@
 //    if ([_delegate respondsToSelector:@selector(advanceSplashOnAdReceived)]) {
 //        [_delegate advanceSplashOnAdReceived];
 //    }
+    [self advanceOnAdReceivedWithReqId:model.reqid];
 }
 
 /// 加载策略Model失败
