@@ -97,5 +97,14 @@
     NSLog(@"广告播放完成");
 }
 
+- (void)advanceOnAdNotFilled:(NSError *)error
+{
+    NSLog(@"策略加载失败");
+}
+
+- (void)advanceOnAdReceived:(NSString *)reqId
+{
+    NSLog(@"全屏广告策略请求成功:%@", reqId);
+}
 
 @end
