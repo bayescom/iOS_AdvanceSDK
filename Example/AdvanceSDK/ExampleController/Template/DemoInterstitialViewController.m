@@ -90,6 +90,12 @@
     NSLog(@"广告关闭");
 }
 
+/// 策略请求成功
+- (void)advanceOnAdReceived:(NSString *)reqId {
+    NSLog(@"策略id:%@", reqId);
+}
+
+
 - (void)advanceInterstitialOnReadyToShow {
     if (!_isAdLoaded) {
        [JDStatusBarNotification showWithStatus:@"请先加载广告" dismissAfter:1.5];
