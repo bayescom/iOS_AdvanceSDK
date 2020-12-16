@@ -94,6 +94,16 @@
     NSLog(@"广告渲染失败");
 }
 
+- (void)advanceOnAdReceived:(NSString *)reqId
+{
+    NSLog(@"信息流广告策略加载成功:%@", reqId);
+}
+
+- (void)advanceOnAdNotFilled:(NSError *)error
+{
+    NSLog(@"策略加载失败");
+}
+
 /// 广告被关闭
 - (void)advanceNativeExpressOnAdClosed:(UIView *)adView {
     //需要从tableview中删除
