@@ -87,7 +87,7 @@
 }
 
 - (void)splashAdFailToPresent:(GDTSplashAd *)splashAd withError:(NSError *)error {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded error:error];
     if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdFailedWithSdkId:error:)]) {
         [self.delegate advanceSplashOnAdFailedWithSdkId:_adspot.adspotid error:error];
     }

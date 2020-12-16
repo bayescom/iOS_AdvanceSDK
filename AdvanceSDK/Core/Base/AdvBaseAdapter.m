@@ -44,7 +44,11 @@
 }
 
 - (void)reportWithType:(AdvanceSdkSupplierRepoType)repoType {
-    [_mgr reportWithType:repoType];
+    [self reportWithType:repoType error:nil];
+}
+
+- (void)reportWithType:(AdvanceSdkSupplierRepoType)repoType error:(NSError *)error {
+    [_mgr reportWithType:repoType error:error];
     if (repoType == AdvanceSdkSupplierRepoFaileded) {
         [_mgr loadNextSupplierIfHas];
     }

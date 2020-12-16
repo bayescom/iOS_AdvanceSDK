@@ -128,7 +128,7 @@
         }
         
         _currSupplier = targetSupplier;
-        [self reportWithType:AdvanceSdkSupplierRepoLoaded];
+        [self reportWithType:AdvanceSdkSupplierRepoLoaded error:nil];
         if ([_delegate respondsToSelector:@selector(advSupplierLoadSuppluer:error:)]) {
             [_delegate advSupplierLoadSuppluer:targetSupplier error:nil];
         }
@@ -158,7 +158,7 @@
     
     _currSupplier = supplier;
     [_supplierM removeObject:_currSupplier];
-    [self reportWithType:AdvanceSdkSupplierRepoLoaded];
+    [self reportWithType:AdvanceSdkSupplierRepoLoaded error:nil];
     if ([_delegate respondsToSelector:@selector(advSupplierLoadSuppluer:error:)]) {
         [_delegate advSupplierLoadSuppluer:supplier error:error];
     }
@@ -188,7 +188,7 @@
         return;
     }
     _currSupplier = _baseSupplier;
-    [self reportWithType:AdvanceSdkSupplierRepoLoaded];
+    [self reportWithType:AdvanceSdkSupplierRepoLoaded error:nil];
     if ([_delegate respondsToSelector:@selector(advSupplierLoadSuppluer:error:)]) {
         [_delegate advSupplierLoadSuppluer:_baseSupplier error:nil];
     }
@@ -310,12 +310,16 @@
 }
 
 /// 数据上报
-- (void)reportWithUploadArr:(NSArray<NSString *> *)uploadArr {
+- (void)reportWithUploadArr:(NSArray<NSString *> *)uploadArr error:(NSError *)error{
     for (id obj in uploadArr) {
         @try {
+            NSLog(@"UPLOAD error: %@", error);
             NSString *urlString = obj;
             NSTimeInterval timeStamp = [[NSDate dateWithTimeIntervalSinceNow:0] timeIntervalSince1970] * 1000;
             urlString = [urlString stringByReplacingOccurrencesOfString:@"__TIME__" withString:[NSString stringWithFormat:@"%0.0f", timeStamp]];
+            if (error) {
+                urlString = [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=err_sup_%ld&track_time",(long)error.code]];
+            }
             NSURL *url = [NSURL URLWithString:urlString];
             NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:
                                             NSURLRequestReloadIgnoringLocalCacheData   timeoutInterval:5];
@@ -350,7 +354,7 @@
 }
 
 // MARK: ======================= 上报 =======================
-- (void)reportWithType:(AdvanceSdkSupplierRepoType)repoType {
+- (void)reportWithType:(AdvanceSdkSupplierRepoType)repoType error:(nonnull NSError *)error{
     NSArray<NSString *> *uploadArr = nil;
     /// 按照类型判断上报地址
     if (repoType == AdvanceSdkSupplierRepoLoaded) {
@@ -374,7 +378,7 @@
         return;
     }
     // 执行上报请求
-    [self reportWithUploadArr:uploadArr];
+    [self reportWithUploadArr:uploadArr error:error];
     ADVLog(@"%@ = 上报(impid: %@)", ADVStringFromNAdvanceSdkSupplierRepoType(repoType), _currSupplier.name);
 }
 

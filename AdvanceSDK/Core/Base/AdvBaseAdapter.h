@@ -49,8 +49,11 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)loadNextSupplierIfHas;
 
-/// 上报
+/// 上报 (将来会被废弃)
 - (void)reportWithType:(AdvanceSdkSupplierRepoType)repoType;
+
+/// 上报
+- (void)reportWithType:(AdvanceSdkSupplierRepoType)repoType error:(NSError *)error;
 
 /// 执行了打底渠道
 - (void)advSupplierLoadDefaultSuppluer:(AdvSupplier *)supplier;
