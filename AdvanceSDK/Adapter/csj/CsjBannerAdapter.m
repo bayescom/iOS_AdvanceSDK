@@ -58,7 +58,7 @@
  *  当接收服务器返回的广告数据失败后调用该函数
  */
 - (void)nativeExpressBannerAdView:(BUNativeExpressBannerView *)bannerAdView didLoadFailWithError:(NSError *)error {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded error:error];
     if ([self.delegate respondsToSelector:@selector(advanceBannerOnAdFailedWithSdkId:error:)]) {
         [self.delegate advanceBannerOnAdFailedWithSdkId:_supplier.identifier error:error];
     }
