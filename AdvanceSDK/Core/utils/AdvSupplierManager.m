@@ -314,13 +314,8 @@
     for (id obj in uploadArr) {
         @try {
             NSLog(@"UPLOAD error: %@", error);
-            NSString *urlString = obj;
-            NSTimeInterval timeStamp = [[NSDate dateWithTimeIntervalSinceNow:0] timeIntervalSince1970] * 1000;
-            urlString = [urlString stringByReplacingOccurrencesOfString:@"__TIME__" withString:[NSString stringWithFormat:@"%0.0f", timeStamp]];
-            if (error) {
-                urlString = [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=err_sup_%ld&track_time",(long)error.code]];
-            }
-            NSURL *url = [NSURL URLWithString:urlString];
+
+            NSURL *url = [NSURL URLWithString:[self uploadUrlWithObj:obj error:error]];
             NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:
                                             NSURLRequestReloadIgnoringLocalCacheData   timeoutInterval:5];
             request.HTTPMethod = @"GET";
@@ -334,6 +329,24 @@
         } @finally {
         }
     }
+}
+
+- (NSString *)uploadUrlWithObj:(NSString *)obj error:(NSError *)error
+{
+    NSString *urlString = obj;
+    NSTimeInterval timeStamp = [[NSDate dateWithTimeIntervalSinceNow:0] timeIntervalSince1970] * 1000;
+    urlString = [urlString stringByReplacingOccurrencesOfString:@"__TIME__" withString:[NSString stringWithFormat:@"%0.0f", timeStamp]];
+    if (error) {
+        
+        if ([error.domain isEqualToString:@"com.bytedance.buadsdk"]) {// 穿山甲sdk报错
+            return [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=err_csj_%ld&track_time",(long)error.code]];
+        } else if ([error.domain isEqualToString:@"GDTAdErrorDomain"]) {// 广点通
+            return [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=err_gdt_%ld&track_time",(long)error.code]];
+        } else {// 倍业
+            return urlString;
+        }
+    }
+    return urlString;
 }
 
 // MARK: ======================= Private =======================
