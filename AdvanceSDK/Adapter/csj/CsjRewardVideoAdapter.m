@@ -68,7 +68,7 @@
 
 /// 广告加载失败回调
 - (void)nativeExpressRewardedVideoAdViewRenderFail:(BUNativeExpressRewardedVideoAd *)rewardedVideoAd error:(NSError *)error {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded error:error];
     _csj_ad = nil;
     if ([self.delegate respondsToSelector:@selector(advanceRewardVideoOnAdFailedWithSdkId:error:)]) {
         [self.delegate advanceRewardVideoOnAdFailedWithSdkId:_supplier.identifier error:error];
@@ -120,4 +120,24 @@
     }
 }
 
+- (void)nativeExpressRewardedVideoAdServerRewardDidFail:(BUNativeExpressRewardedVideoAd *)rewardedVideoAd error:(NSError *)error
+{
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded error:error];
+    _csj_ad = nil;
+    if ([self.delegate respondsToSelector:@selector(advanceRewardVideoOnAdFailedWithSdkId:error:)]) {
+        [self.delegate advanceRewardVideoOnAdFailedWithSdkId:_supplier.identifier error:error];
+    }
+
+}
+
+// 加载错误
+- (void)nativeExpressRewardedVideoAd:(BUNativeExpressRewardedVideoAd *)rewardedVideoAd didFailWithError:(NSError *_Nullable)error
+{
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded error:error];
+    _csj_ad = nil;
+    if ([self.delegate respondsToSelector:@selector(advanceRewardVideoOnAdFailedWithSdkId:error:)]) {
+        [self.delegate advanceRewardVideoOnAdFailedWithSdkId:_supplier.identifier error:error];
+    }
+
+}
 @end
