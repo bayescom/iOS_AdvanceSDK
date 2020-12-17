@@ -57,7 +57,7 @@
 
 /// 广告加载失败回调
 - (void)gdt_rewardVideoAd:(GDTRewardVideoAd *)rewardedVideoAd didFailWithError:(NSError *)error {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded error:error];
     _gdt_ad = nil;
     if ([self.delegate respondsToSelector:@selector(advanceRewardVideoOnAdFailedWithSdkId:error:)]) {
         [self.delegate advanceRewardVideoOnAdFailedWithSdkId:_supplier.identifier error:error];
