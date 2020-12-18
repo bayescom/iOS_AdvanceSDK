@@ -72,7 +72,7 @@
 
 /// 拉取原生模板广告失败
 - (void)mercury_nativeExpressAdFailToLoadWithError:(NSError *)error {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded error:error];
     _mercury_ad = nil;
     if ([self.delegate respondsToSelector:@selector(advanceNativeExpressOnAdFailedWithSdkId:error:)]) {
         [self.delegate advanceNativeExpressOnAdFailedWithSdkId:_supplier.identifier error:error];
@@ -88,6 +88,7 @@
 
 /// 原生模板广告渲染失败
 - (void)mercury_nativeExpressAdViewRenderFail:(MercuryNativeExpressAdView *)nativeExpressAdView {
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded error:[NSError errorWithDomain:@"广告素材渲染失败" code:301 userInfo:@{@"msg": @"广告素材渲染失败"}]];
     if ([self.delegate respondsToSelector:@selector(advanceNativeExpressOnAdRenderFail:)]) {
         [self.delegate advanceNativeExpressOnAdRenderFail:nativeExpressAdView];
     }
