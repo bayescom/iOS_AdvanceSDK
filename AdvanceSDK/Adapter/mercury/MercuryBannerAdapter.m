@@ -60,7 +60,7 @@
 
 // 请求广告数据失败后调用
 - (void)mercury_bannerViewFailToReceived:(NSError *)error {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded error:error];
     [_mercury_ad removeFromSuperview];
     _mercury_ad = nil;
     if ([self.delegate respondsToSelector:@selector(advanceBannerOnAdFailedWithSdkId:error:)]) {
