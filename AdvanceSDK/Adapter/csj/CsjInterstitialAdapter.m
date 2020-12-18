@@ -59,7 +59,7 @@
 
 /// 插屏广告预加载失败回调，当接收服务器返回的广告数据失败后调用该函数
 - (void)nativeExpresInterstitialAd:(BUNativeExpressInterstitialAd *)interstitialAd didFailWithError:(NSError *)error {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded error:error];
     _csj_ad = nil;
     if ([self.delegate respondsToSelector:@selector(advanceInterstitialOnAdFailedWithSdkId:error:)]) {
         [self.delegate advanceInterstitialOnAdFailedWithSdkId:_supplier.identifier error:error];
@@ -68,7 +68,7 @@
 
 /// 插屏广告渲染失败
 - (void)nativeExpresInterstitialAdRenderFail:(BUNativeExpressInterstitialAd *)interstitialAd error:(NSError *)error {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded error:error];
     _csj_ad = nil;
     if ([self.delegate respondsToSelector:@selector(advanceInterstitialOnAdRenderFailed)]) {
         [self.delegate advanceInterstitialOnAdRenderFailed];
