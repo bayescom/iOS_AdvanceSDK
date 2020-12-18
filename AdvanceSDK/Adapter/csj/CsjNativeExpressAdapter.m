@@ -71,7 +71,7 @@
 }
 
 - (void)nativeExpressAdFailToLoad:(BUNativeExpressAdManager *)nativeExpressAd error:(NSError *)error {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded error:error];
     if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdFailedWithSdkId:error:)]) {
         [_delegate advanceNativeExpressOnAdFailedWithSdkId:_supplier.identifier error:error];
     }
@@ -85,7 +85,7 @@
 }
 
 - (void)nativeExpressAdViewRenderFail:(BUNativeExpressAdView *)nativeExpressAdView error:(NSError *)error {
-    [_adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
+    [_adspot reportWithType:AdvanceSdkSupplierRepoFaileded error:error];
     if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdRenderFail:)]) {
         [_delegate advanceNativeExpressOnAdRenderFail:nativeExpressAdView];
     }
@@ -106,7 +106,13 @@
     }
 }
 
-- (void)nativeExpressAdViewPlayerDidPlayFinish:(BUNativeExpressAdView *)nativeExpressAdView error:(NSError *)error {}
+- (void)nativeExpressAdViewPlayerDidPlayFinish:(BUNativeExpressAdView *)nativeExpressAdView error:(NSError *)error {
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded error:error];
+    if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdFailedWithSdkId:error:)]) {
+        [_delegate advanceNativeExpressOnAdFailedWithSdkId:_supplier.identifier error:error];
+    }
+    _csj_ad = nil;
+}
 
 - (void)nativeExpressAdView:(BUNativeExpressAdView *)nativeExpressAdView dislikeWithReason:(NSArray<BUDislikeWords *> *)filterWords {
     if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdClosed:)]) {
