@@ -33,11 +33,11 @@
 - (void)loadAdBtn1Action {
     if (![self checkAdspotId]) { return; }
     
-    self.advanceFullScreenVideo = [[AdvanceFullScreenVideo alloc] initWithAdspotId:@"11111112"
-                                                                    viewController:self];
-
-//    self.advanceFullScreenVideo = [[AdvanceFullScreenVideo alloc] initWithAdspotId:self.adspotId
+//    self.advanceFullScreenVideo = [[AdvanceFullScreenVideo alloc] initWithAdspotId:@"11111112"
 //                                                                    viewController:self];
+
+    self.advanceFullScreenVideo = [[AdvanceFullScreenVideo alloc] initWithAdspotId:self.adspotId
+                                                                    viewController:self];
     
 //    self.advanceFullScreenVideo = [[AdvanceFullScreenVideo alloc] initWithAdspotId:self.adspotId
 //                                                                         customExt:@{@"test" : @"测试自定义拓展参数"}

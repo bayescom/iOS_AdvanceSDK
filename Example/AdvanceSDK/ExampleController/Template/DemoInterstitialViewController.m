@@ -32,11 +32,11 @@
 - (void)loadAdBtn1Action {
     if (![self checkAdspotId]) { return; }
     
-    self.advanceInterstitial = [[AdvanceInterstitial alloc] initWithAdspotId:@"11111112"
-                                                              viewController:self];
-
-//    self.advanceInterstitial = [[AdvanceInterstitial alloc] initWithAdspotId:self.adspotId
+//    self.advanceInterstitial = [[AdvanceInterstitial alloc] initWithAdspotId:@"11111112"
 //                                                              viewController:self];
+
+    self.advanceInterstitial = [[AdvanceInterstitial alloc] initWithAdspotId:self.adspotId
+                                                              viewController:self];
     
 //    self.advanceInterstitial = [[AdvanceInterstitial alloc] initWithAdspotId:self.adspotId
 //                                                                   customExt:@{@"test" : @"测试自定义拓展参数"}
