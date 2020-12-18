@@ -343,7 +343,7 @@
         } else if ([error.domain isEqualToString:@"GDTAdErrorDomain"]) {// 广点通
             return [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=err_gdt_%ld&track_time",(long)error.code]];
         } else {// 倍业
-            return urlString;
+            return [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=err_mer_%ld&track_time",(long)error.code]];
         }
     }
     return urlString;
