@@ -31,11 +31,11 @@
 
 - (void)loadAdBtn1Action {
     if (![self checkAdspotId]) { return; }
-//    self.advanceSplash = [[AdvanceSplash alloc] initWithAdspotId:@"10002619"
-//                                                  viewController:self];
-
-    self.advanceSplash = [[AdvanceSplash alloc] initWithAdspotId:self.adspotId
+    self.advanceSplash = [[AdvanceSplash alloc] initWithAdspotId:@"11111112"
                                                   viewController:self];
+
+//    self.advanceSplash = [[AdvanceSplash alloc] initWithAdspotId:self.adspotId
+//                                                  viewController:self];
 //    self.advanceSplash = [[AdvanceSplash alloc] initWithAdspotId:self.adspotId
 //                                                       customExt:@{@"test" : @"自定义拓展参数"}
 //                                                  viewController:self];
