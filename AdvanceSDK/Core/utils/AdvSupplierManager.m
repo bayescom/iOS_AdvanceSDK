@@ -32,6 +32,7 @@
 /// 是否是走的本地的渠道
 @property (nonatomic, assign) BOOL isLoadLocalSupplier;
 
+@property (nonatomic, assign) NSTimeInterval serverTime;
 @end
 
 @implementation AdvSupplierManager
@@ -52,7 +53,7 @@
     self.mediaId = mediaId;
     self.adspotId = adspotId;
     self.ext = [ext mutableCopy];
-    
+    self.serverTime = [[NSDate date] timeIntervalSince1970]*1000;
     // 获取本地数据
     _model = [AdvSupplierModel loadDataWithMediaId:mediaId adspotId:adspotId];
     
@@ -207,9 +208,9 @@
 //    NSLog(@"请求参数 %@", deviceInfo);
     NSError *parseError = nil;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:deviceInfo options:NSJSONWritingPrettyPrinted error:&parseError];
-//    NSURL *url = [NSURL URLWithString:AdvanceSdkRequestUrl];
+    NSURL *url = [NSURL URLWithString:AdvanceSdkRequestUrl];
 //    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@?adspotid=%@", AdvanceSdkRequestUrl, _adspotId]];
-    NSURL *url = [NSURL URLWithString:@"https://mock.yonyoucloud.com/mock/2650/api/v3/eleven"];
+//    NSURL *url = [NSURL URLWithString:@"https://mock.yonyoucloud.com/mock/2650/api/v3/eleven"];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:self.fetchTime];
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     request.HTTPBody = jsonData;
@@ -218,6 +219,7 @@
     NSURLSessionDataTask *dataTask = [sharedSession dataTaskWithRequest:request
                                                       completionHandler:^(NSData *_Nullable data, NSURLResponse *_Nullable response, NSError *_Nullable error) {
         dispatch_async(dispatch_get_main_queue(), ^{
+            self.serverTime = [[NSDate date] timeIntervalSince1970]*1000 - self.serverTime;
             [self doResultData:data response:response error:error saveOnly:saveOnly];
         });
     }];
@@ -333,19 +335,17 @@
 }
 
 #pragma failedtk 的参数拼接
-- (NSMutableArray *)failedtkUrlWithArr:(NSArray<NSString *> *)uploadArr error:(NSError *)error
-{
+- (NSMutableArray *)failedtkUrlWithArr:(NSArray<NSString *> *)uploadArr error:(NSError *)error {
     NSMutableArray *temp = [NSMutableArray arrayWithCapacity:uploadArr.count];
     for (id obj in uploadArr.mutableCopy) {
-        NSString *failed = [self uploadUrlWithObj:obj error:error];
+        NSString *failed = [self joinFailedUrlWithObj:obj error:error];
         [temp addObject:failed];
     }
     return temp;
 }
 
 #pragma 错误码参数拼接
-- (NSString *)uploadUrlWithObj:(NSString *)urlString error:(NSError *)error
-{
+- (NSString *)joinFailedUrlWithObj:(NSString *)urlString error:(NSError *)error {
     ADVLog(@"UPLOAD error: %@", error);
     if (error) {
         if ([error.domain isEqualToString:@"com.bytedance.buadsdk"]) {// 穿山甲sdk报错
@@ -358,6 +358,25 @@
     }
     return urlString;
 }
+
+#pragma loadedtk 的参数拼接
+- (NSMutableArray *)loadedtkUrlWithArr:(NSArray<NSString *> *)uploadArr {
+    NSMutableArray *temp = [NSMutableArray arrayWithCapacity:uploadArr.count];
+    for (id obj in uploadArr.mutableCopy) {
+        NSString *loadedtk = [self joinLoadedtkUrlWithObj:obj];
+        [temp addObject:loadedtk];
+    }
+    return temp;
+}
+
+#pragma loadedtk 拼接时间戳
+- (NSString *)joinLoadedtkUrlWithObj:(NSString *)urlString {
+    if (self.serverTime > 0) {
+        return [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=%.0f&track_time",self.serverTime]];
+    }
+    return urlString;
+}
+
 
 // MARK: ======================= Private =======================
 - (void)sortSupplierMByPriority {
@@ -381,7 +400,7 @@
     NSArray<NSString *> *uploadArr = nil;
     /// 按照类型判断上报地址
     if (repoType == AdvanceSdkSupplierRepoLoaded) {
-        uploadArr = _currSupplier.loadedtk;
+        uploadArr = [self loadedtkUrlWithArr:_currSupplier.loadedtk];
     } else if (repoType == AdvanceSdkSupplierRepoClicked) {
         uploadArr =  _currSupplier.clicktk;
     } else if (repoType == AdvanceSdkSupplierRepoSucceeded) {
