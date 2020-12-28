@@ -21,7 +21,11 @@
 - (instancetype)initWithAdspotId:(NSString *)adspotid
                  viewController:(UIViewController *)viewController
                          adSize:(CGSize)size {
-    return [self initWithMediaId:nil adspotId:adspotid customExt:nil];
+    if (self = [super initWithMediaId:nil adspotId:adspotid customExt:nil]) {
+        _viewController = viewController;
+        _adSize = size;
+    }
+    return self;
 }
 
 - (instancetype)initWithAdspotId:(NSString *)adspotid
