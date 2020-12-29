@@ -152,6 +152,7 @@
         _bgImgV = [[UIImageView alloc] initWithImage:_backgroundImage];
     }
     _bgImgV.frame = [UIScreen mainScreen].bounds;
+    _bgImgV.userInteractionEnabled = YES;
     return _bgImgV;
 }
 
