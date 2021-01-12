@@ -16,15 +16,15 @@ PODS:
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - MercurySDK
-  - Bytedance-UnionAD (3.3.0.5)
-  - GDTMobSDK (4.11.12):
-    - GDTMobSDK/GDTMobSDK (= 4.11.12)
-  - GDTMobSDK/GDTMobSDK (4.11.12)
+  - Bytedance-UnionAD (3.3.6.2)
+  - GDTMobSDK (4.12.1):
+    - GDTMobSDK/GDTMobSDK (= 4.12.1)
+  - GDTMobSDK/GDTMobSDK (4.12.1)
   - Masonry (1.1.0)
-  - MercurySDK (3.1.5.2)
-  - SDWebImage (5.9.5):
-    - SDWebImage/Core (= 5.9.5)
-  - SDWebImage/Core (5.9.5)
+  - MercurySDK (3.1.5.5)
+  - SDWebImage (5.10.1):
+    - SDWebImage/Core (= 5.10.1)
+  - SDWebImage/Core (5.10.1)
 
 DEPENDENCIES:
   - AdvanceSDK (from `../`)
@@ -32,6 +32,7 @@ DEPENDENCIES:
   - AdvanceSDK/GDT (from `../`)
   - AdvanceSDK/Mercury (from `../`)
   - Masonry
+  - MercurySDK (~> 3.1.5.5)
   - SDWebImage
 
 SPEC REPOS:
@@ -48,12 +49,12 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   AdvanceSDK: 9afe4ed1691c77be1d0fda65e51f40b0fef202f6
-  Bytedance-UnionAD: 7fc15b173b44303a548b25ec534e4c1b04263b21
-  GDTMobSDK: 8362cf73fdd4656428cc2cb2ea379c18d56e78ae
+  Bytedance-UnionAD: e9f83939e2a5d857e104f6a91035bbf504b603e5
+  GDTMobSDK: 8153fd4ed7f16be4786923226487ff60f0344a4f
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
-  MercurySDK: 95870529a8c8aa6cbd81cb120d93019c18134b4b
-  SDWebImage: 0b2ba0d56479bf6a45ecddbfd5558bea93150d25
+  MercurySDK: edf72a3f878e333b4b2cf10c74b365939b90b333
+  SDWebImage: f66a16b95183b92ed6b965ad21d33167bc07612d
 
-PODFILE CHECKSUM: 38e0e8acb454284244bb5b8382b8574303f581be
+PODFILE CHECKSUM: 57a46f45972e346b22861e8217e32b4c793ed8fe
 
 COCOAPODS: 1.10.0
