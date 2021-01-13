@@ -80,8 +80,8 @@
 /// 插屏广告曝光回调
 - (void)mercury_interstitialWillExposure {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoImped];
-    if ([self.delegate respondsToSelector:@selector(advanceInterstitialOnAdShow)]) {
-        [self.delegate advanceInterstitialOnAdShow];
+    if ([self.delegate respondsToSelector:@selector(advanceExposured)]) {
+        [self.delegate advanceExposured];
     }
 }
 

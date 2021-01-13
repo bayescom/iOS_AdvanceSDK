@@ -16,7 +16,7 @@
 - (void)advanceRewardVideoOnAdReady;
 
 /// 广告曝光
-- (void)advanceRewardVideoOnAdShow;
+//- (void)advanceRewardVideoOnAdShow;
 
 /// 广告点击
 - (void)advanceRewardVideoOnAdClicked;

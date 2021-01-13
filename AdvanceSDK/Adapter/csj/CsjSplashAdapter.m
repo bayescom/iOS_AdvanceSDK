@@ -104,8 +104,8 @@
  */
 - (void)splashAdWillVisible:(BUSplashAdView *)splashAd {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoImped];
-    if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdShow)]) {
-        [self.delegate advanceSplashOnAdShow];
+    if ([self.delegate respondsToSelector:@selector(advanceExposured)]) {
+        [self.delegate advanceExposured];
     }
 }
 

@@ -16,7 +16,7 @@
 - (void)advanceBannerOnAdReceived;
 
 /// 广告曝光回调
-- (void)advanceBannerOnAdShow;
+//- (void)advanceBannerOnAdShow;
 
 /// 广告点击回调
 - (void)advanceBannerOnAdClicked;

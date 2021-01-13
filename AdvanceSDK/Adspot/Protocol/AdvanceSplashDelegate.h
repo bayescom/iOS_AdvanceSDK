@@ -15,7 +15,7 @@
 - (void)advanceSplashOnAdReceived;
 
 /// 广告曝光成功
-- (void)advanceSplashOnAdShow;
+//- (void)advanceSplashOnAdShow;
 
 /// 广告渲染成功
 - (void)advanceSplashOnAdRenderFailed;

@@ -16,7 +16,7 @@
 - (void)advanceInterstitialOnAdReceived;
 
 /// 广告曝光成功
-- (void)advanceInterstitialOnAdShow;
+//- (void)advanceInterstitialOnAdShow;
 
 /// 广告点击
 - (void)advanceInterstitialOnAdClicked;

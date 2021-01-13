@@ -58,8 +58,7 @@
     NSLog(@"广告数据拉取成功回调");
 }
 
-/// banner条曝光回调
-- (void)advanceBannerOnAdShow {
+- (void)advanceExposured {
     NSLog(@"广告曝光回调");
 }
 

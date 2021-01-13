@@ -22,6 +22,9 @@
 /// 策略请求失败
 - (void)advanceOnAdNotFilled:(NSError *)error;
 
+/// 广告曝光成功
+- (void)advanceExposured;
+
 @end
 
 #endif /* AdvanceBaseDelegate_h */

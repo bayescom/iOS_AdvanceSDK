@@ -16,7 +16,7 @@
 - (void)advanceFullScreenVideoOnAdReceived;
 
 /// 广告曝光成功
-- (void)advanceFullScreenVideoOnAdShow;
+//- (void)advanceFullScreenVideoOnAdShow;
 
 /// 广告点击
 - (void)advanceFullScreenVideoOnAdClicked;
