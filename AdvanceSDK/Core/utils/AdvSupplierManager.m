@@ -53,7 +53,7 @@
     self.mediaId = mediaId;
     self.adspotId = adspotId;
     self.ext = [ext mutableCopy];
-    self.serverTime = [[NSDate date] timeIntervalSince1970]*1000;
+    
     // 获取本地数据
     _model = [AdvSupplierModel loadDataWithMediaId:mediaId adspotId:adspotId];
     
@@ -216,10 +216,10 @@
     request.HTTPBody = jsonData;
     request.HTTPMethod = @"POST";
     NSURLSession *sharedSession = [NSURLSession sharedSession];
+    self.serverTime = [[NSDate date] timeIntervalSince1970]*1000;
     NSURLSessionDataTask *dataTask = [sharedSession dataTaskWithRequest:request
                                                       completionHandler:^(NSData *_Nullable data, NSURLResponse *_Nullable response, NSError *_Nullable error) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            self.serverTime = [[NSDate date] timeIntervalSince1970]*1000 - self.serverTime;
             [self doResultData:data response:response error:error saveOnly:saveOnly];
         });
     }];
@@ -351,7 +351,26 @@
         if ([error.domain isEqualToString:@"com.bytedance.buadsdk"]) {// 穿山甲sdk报错
             return [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=err_csj_%ld&track_time",(long)error.code]];
         } else if ([error.domain isEqualToString:@"GDTAdErrorDomain"]) {// 广点通
-            return [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=err_gdt_%ld&track_time",(long)error.code]];
+            NSString *url = nil;
+            if (error.code == 6000 && error.localizedDescription != nil) {
+                
+                @try {
+                    //过滤字符串前后的空格
+                    NSString *errorDescription = [error.localizedDescription stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+                    //过滤字符串中间的空格
+                    errorDescription = [errorDescription stringByReplacingOccurrencesOfString:@" " withString:@""];
+                    ////匹配error.localizedDescription当中的"详细码:"得到的下标
+                    NSRange range = [errorDescription rangeOfString:@"详细码:"];
+                    // 截取"详细码:"后6位字符串
+                    NSString *subCodeString = [errorDescription substringWithRange:NSMakeRange(range.location + range.length, 6)];
+                    url = [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=err_gdt_%ld_%@&track_time",(long)error.code, subCodeString]];
+                } @catch (NSException *exception) {
+                    url = [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=err_gdt_%ld&track_time",(long)error.code]];
+                }
+            } else {
+                url = [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=err_gdt_%ld&track_time",(long)error.code]];
+            }
+            return url;
         } else {// 倍业
             return [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=err_mer_%ld&track_time",(long)error.code]];
         }
@@ -371,8 +390,9 @@
 
 #pragma loadedtk 拼接时间戳
 - (NSString *)joinLoadedtkUrlWithObj:(NSString *)urlString {
-    if (self.serverTime > 0) {
-        return [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=%.0f&track_time",self.serverTime]];
+    NSTimeInterval serverTime = [[NSDate date] timeIntervalSince1970]*1000 - self.serverTime;
+    if (serverTime > 0) {
+        return [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=l_%.0f&track_time",serverTime]];
     }
     return urlString;
 }
