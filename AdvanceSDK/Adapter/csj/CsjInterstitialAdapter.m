@@ -87,8 +87,8 @@
 /// 插屏广告点击回调
 - (void)nativeExpresInterstitialAdDidClick:(BUNativeExpressInterstitialAd *)interstitialAd {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked];
-    if ([self.delegate respondsToSelector:@selector(advanceInterstitialOnAdClicked)]) {
-        [self.delegate advanceInterstitialOnAdClicked];
+    if ([self.delegate respondsToSelector:@selector(advanceClicked)]) {
+        [self.delegate advanceClicked];
     }
 }
 

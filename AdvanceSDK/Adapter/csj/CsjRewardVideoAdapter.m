@@ -104,8 +104,8 @@
 /// 视频广告信息点击回调
 - (void)nativeExpressRewardedVideoAdDidClick:(BUNativeExpressRewardedVideoAd *)rewardedVideoAd {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked];
-    if ([self.delegate respondsToSelector:@selector(advanceRewardVideoOnAdClicked)]) {
-        [self.delegate advanceRewardVideoOnAdClicked];
+    if ([self.delegate respondsToSelector:@selector(advanceClicked)]) {
+        [self.delegate advanceClicked];
     }
 }
 

@@ -85,8 +85,8 @@
 
 - (void)mercury_splashAdClicked:(MercurySplashAd *)splashAd {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked];
-    if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdClicked)]) {
-        [self.delegate advanceSplashOnAdClicked];
+    if ([self.delegate respondsToSelector:@selector(advanceClicked)]) {
+        [self.delegate advanceClicked];
     }
 }
 

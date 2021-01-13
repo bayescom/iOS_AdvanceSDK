@@ -88,8 +88,8 @@
 /// 插屏广告点击回调
 - (void)mercury_interstitialClicked {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked];
-    if ([self.delegate respondsToSelector:@selector(advanceInterstitialOnAdClicked)]) {
-        [self.delegate advanceInterstitialOnAdClicked];
+    if ([self.delegate respondsToSelector:@selector(advanceClicked)]) {
+        [self.delegate advanceClicked];
     }
 }
 

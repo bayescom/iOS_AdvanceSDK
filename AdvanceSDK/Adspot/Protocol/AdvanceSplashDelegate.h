@@ -24,7 +24,7 @@
 - (void)advanceSplashOnAdFailedWithSdkId:(NSString *)sdkId error:(NSError *)error;
 
 /// 广告点击
-- (void)advanceSplashOnAdClicked;
+//- (void)advanceSplashOnAdClicked;
 
 /// 广告点击跳过
 - (void)advanceSplashOnAdSkipClicked;

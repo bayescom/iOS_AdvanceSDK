@@ -19,7 +19,7 @@
 //- (void)advanceBannerOnAdShow;
 
 /// 广告点击回调
-- (void)advanceBannerOnAdClicked;
+//- (void)advanceBannerOnAdClicked;
 
 /// 广告展示失败
 - (void)advanceBannerOnAdFailedWithSdkId:(NSString *)sdkId error:(NSError *)error;

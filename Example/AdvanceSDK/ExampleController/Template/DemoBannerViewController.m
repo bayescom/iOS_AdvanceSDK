@@ -58,13 +58,14 @@
     NSLog(@"广告数据拉取成功回调");
 }
 
+/// 广告曝光
 - (void)advanceExposured {
     NSLog(@"广告曝光回调");
 }
 
-/// 广告点击回调
-- (void)advanceBannerOnAdClicked {
-    NSLog(@"广告点击回调");
+/// 广告点击
+- (void)advanceClicked {
+    NSLog(@"广告点击 %s", __func__);
 }
 
 /// 请求广告数据失败后调用

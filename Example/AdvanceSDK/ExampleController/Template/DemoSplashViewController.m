@@ -61,8 +61,8 @@
 }
 
 /// 广告曝光成功
-- (void)advanceSplashOnAdShow {
-    NSLog(@"广告曝光成功");
+- (void)advanceExposured {
+    NSLog(@"广告曝光成功 %s", __func__);
 }
 
 /// 广告展示失败
@@ -71,8 +71,8 @@
 }
 
 /// 广告点击
-- (void)advanceSplashOnAdClicked {
-    NSLog(@"广告点击");
+- (void)advanceClicked {
+    NSLog(@"广告点击 %s", __func__);
 }
 
 /// 广告点击跳过

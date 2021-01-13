@@ -24,7 +24,7 @@
     
     self.initDefSubviewsFlag = YES;
     self.adspotIdsArr = @[
-        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10000559"},
+        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10003014"},
         @{@"addesc": @"Mock 渠道错误", @"adspotId": @"100255-10000001"},
     ];
     self.btn1Title = @"加载广告";
@@ -75,14 +75,14 @@
     NSLog(@"广告渲染失败");
 }
 
-/// 广告曝光成功
-- (void)advanceFullScreenVideoOnAdShow {
-    NSLog(@"广告曝光成功");
+/// 广告曝光
+- (void)advanceExposured {
+    NSLog(@"广告曝光回调 %s", __func__);
 }
 
 /// 广告点击
-- (void)advanceFullScreenVideoOnAdClicked {
-    NSLog(@"广告点击");
+- (void)advanceClicked {
+    NSLog(@"广告点击 %s", __func__);
 }
 
 /// 广告拉取失败

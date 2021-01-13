@@ -19,7 +19,7 @@
 //- (void)advanceInterstitialOnAdShow;
 
 /// 广告点击
-- (void)advanceInterstitialOnAdClicked;
+//- (void)advanceInterstitialOnAdClicked;
 
 /// 广告渲染失败
 - (void)advanceInterstitialOnAdRenderFailed;

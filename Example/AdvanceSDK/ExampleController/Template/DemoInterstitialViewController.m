@@ -73,14 +73,14 @@
     NSLog(@"广告渲染失败");
 }
 
-/// 广告曝光成功
-- (void)advanceInterstitialOnAdShow {
-    NSLog(@"广告曝光成功");
+/// 广告曝光
+- (void)advanceExposured {
+    NSLog(@"广告曝光回调");
 }
 
 /// 广告点击
-- (void)advanceInterstitialOnAdClicked {
-    NSLog(@"广告点击");
+- (void)advanceClicked {
+    NSLog(@"广告点击 %s", __func__);
 }
 
 /// 广告拉取失败

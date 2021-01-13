@@ -78,8 +78,14 @@
     NSLog(@"广告渲染失败");
 }
 
-- (void)advanceRewardVideoOnAdClicked {
-    NSLog(@"广告点击");
+/// 广告曝光
+- (void)advanceExposured {
+    NSLog(@"广告曝光回调 %s", __func__);
+}
+
+/// 广告点击
+- (void)advanceClicked {
+    NSLog(@"广告点击 %s", __func__);
 }
 
 - (void)advanceRewardVideoOnAdFailedWithSdkId:(NSString *)sdkId error:(NSError *)error {
@@ -87,9 +93,6 @@
     [JDStatusBarNotification showWithStatus:@"广告加载失败" dismissAfter:1.5];
 }
 
-- (void)advanceRewardVideoOnAdShow {
-    NSLog(@"广告展示");
-}
 
 - (void)advanceRewardVideoOnAdClosed {
     NSLog(@"广告关闭");

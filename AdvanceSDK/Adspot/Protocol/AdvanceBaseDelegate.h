@@ -25,6 +25,9 @@
 /// 广告曝光成功
 - (void)advanceExposured;
 
+/// 广告点击回调
+- (void)advanceClicked;
+
 @end
 
 #endif /* AdvanceBaseDelegate_h */

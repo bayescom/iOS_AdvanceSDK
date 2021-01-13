@@ -81,8 +81,8 @@
  */
 - (void)nativeExpressBannerAdViewDidClick:(BUNativeExpressBannerView *)bannerAdView {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked];
-    if ([self.delegate respondsToSelector:@selector(advanceBannerOnAdClicked)]) {
-        [self.delegate advanceBannerOnAdClicked];
+    if ([self.delegate respondsToSelector:@selector(advanceClicked)]) {
+        [self.delegate advanceClicked];
     }
 }
 

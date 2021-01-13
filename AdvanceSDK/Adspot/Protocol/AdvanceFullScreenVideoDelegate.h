@@ -19,7 +19,7 @@
 //- (void)advanceFullScreenVideoOnAdShow;
 
 /// 广告点击
-- (void)advanceFullScreenVideoOnAdClicked;
+//- (void)advanceFullScreenVideoOnAdClicked;
 
 /// 广告渲染失败
 - (void)advanceFullScreenVideoOnAdRenderFailed;
