@@ -35,12 +35,12 @@
 //    self.advanceInterstitial = [[AdvanceInterstitial alloc] initWithAdspotId:@"11111112"
 //                                                              viewController:self];
 
-    self.advanceInterstitial = [[AdvanceInterstitial alloc] initWithAdspotId:self.adspotId
-                                                              viewController:self];
-    
 //    self.advanceInterstitial = [[AdvanceInterstitial alloc] initWithAdspotId:self.adspotId
-//                                                                   customExt:@{@"test" : @"测试自定义拓展参数"}
 //                                                              viewController:self];
+    
+    self.advanceInterstitial = [[AdvanceInterstitial alloc] initWithAdspotId:self.adspotId
+                                                                   customExt:self.ext
+                                                              viewController:self];
     self.advanceInterstitial.delegate = self;
     [self.advanceInterstitial setDefaultAdvSupplierWithMediaId:@"100255"
                                                       adspotId:@"10000559"
@@ -96,7 +96,7 @@
 
 /// 策略请求成功
 - (void)advanceOnAdReceived:(NSString *)reqId {
-    NSLog(@"策略id:%@", reqId);
+    NSLog(@"%s 策略id为: %@",__func__ , reqId);
 }
 
 

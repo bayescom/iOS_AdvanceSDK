@@ -43,8 +43,8 @@
 - (void)loadBtnAction:(id)sender {
     _dataArrM = [NSMutableArray arrayWithArray:[CellBuilder dataFromJsonFile:@"cell01"]];
 //    _advanceFeed = [[AdvanceNativeExpress alloc] initWithAdspotId:@"11111112" viewController:self adSize:CGSizeMake(self.view.bounds.size.width, 300)];
-    _advanceFeed = [[AdvanceNativeExpress alloc] initWithAdspotId:self.adspotId viewController:self adSize:CGSizeMake(self.view.bounds.size.width, 300)];
-//    _advanceFeed = [[AdvanceNativeExpress alloc] initWithAdspotId:self.adspotId customExt:@{@"test" : @"测试自定义拓展参数"} viewController:self adSize:CGSizeMake(self.view.bounds.size.width, 300)];
+//    _advanceFeed = [[AdvanceNativeExpress alloc] initWithAdspotId:self.adspotId viewController:self adSize:CGSizeMake(self.view.bounds.size.width, 300)];
+    _advanceFeed = [[AdvanceNativeExpress alloc] initWithAdspotId:self.adspotId customExt:@{@"test" : @"测试自定义拓展参数"} viewController:self adSize:CGSizeMake(self.view.bounds.size.width, 300)];
 
     _advanceFeed.delegate = self;
     [_advanceFeed setDefaultAdvSupplierWithMediaId:@"100255"
@@ -97,7 +97,7 @@
 
 - (void)advanceOnAdReceived:(NSString *)reqId
 {
-    NSLog(@"信息流广告策略加载成功:%@", reqId);
+    NSLog(@"%s 策略id为: %@",__func__ , reqId);
 }
 
 - (void)advanceOnAdNotFilled:(NSError *)error

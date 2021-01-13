@@ -34,11 +34,11 @@
 //    self.advanceSplash = [[AdvanceSplash alloc] initWithAdspotId:@"11111112"
 //                                                  viewController:self];
 
-    self.advanceSplash = [[AdvanceSplash alloc] initWithAdspotId:self.adspotId
-                                                  viewController:self];
 //    self.advanceSplash = [[AdvanceSplash alloc] initWithAdspotId:self.adspotId
-//                                                       customExt:@{@"test" : @"自定义拓展参数"}
 //                                                  viewController:self];
+    self.advanceSplash = [[AdvanceSplash alloc] initWithAdspotId:self.adspotId
+                                                       customExt:self.ext
+                                                  viewController:self];
 
     self.advanceSplash.delegate = self;
 //    self.advanceSplash.showLogoRequire = YES;
@@ -93,7 +93,7 @@
 // 策略请求成功
 - (void)advanceOnAdReceived:(NSString *)reqId
 {
-    NSLog(@"策略id为: %@", reqId);
+    NSLog(@"%s 策略id为: %@",__func__ , reqId);
 }
 
 @end

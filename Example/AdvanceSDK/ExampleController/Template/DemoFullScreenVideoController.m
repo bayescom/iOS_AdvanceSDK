@@ -36,12 +36,12 @@
 //    self.advanceFullScreenVideo = [[AdvanceFullScreenVideo alloc] initWithAdspotId:@"11111112"
 //                                                                    viewController:self];
 
-    self.advanceFullScreenVideo = [[AdvanceFullScreenVideo alloc] initWithAdspotId:self.adspotId
-                                                                    viewController:self];
-    
 //    self.advanceFullScreenVideo = [[AdvanceFullScreenVideo alloc] initWithAdspotId:self.adspotId
-//                                                                         customExt:@{@"test" : @"测试自定义拓展参数"}
 //                                                                    viewController:self];
+    
+    self.advanceFullScreenVideo = [[AdvanceFullScreenVideo alloc] initWithAdspotId:self.adspotId
+                                                                         customExt:self.ext
+                                                                    viewController:self];
     self.advanceFullScreenVideo.delegate = self;
     [self.advanceFullScreenVideo setDefaultAdvSupplierWithMediaId:@"100255"
                                                       adspotId:@"10000559"
@@ -108,7 +108,7 @@
 
 - (void)advanceOnAdReceived:(NSString *)reqId
 {
-    NSLog(@"全屏广告策略请求成功:%@", reqId);
+    NSLog(@"%s 策略id为: %@",__func__ , reqId);
 }
 
 @end

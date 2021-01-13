@@ -34,11 +34,11 @@
 //    self.advanceRewardVideo = [[AdvanceRewardVideo alloc] initWithAdspotId:@"11111112"
 //                                                           viewController:self];
 
-    self.advanceRewardVideo = [[AdvanceRewardVideo alloc] initWithAdspotId:self.adspotId
-                                                           viewController:self];
 //    self.advanceRewardVideo = [[AdvanceRewardVideo alloc] initWithAdspotId:self.adspotId
-//                                                                 customExt:@{@"test" : @"测试自定义拓展字段"}
-//                                                            viewController:self];
+//                                                           viewController:self];
+    self.advanceRewardVideo = [[AdvanceRewardVideo alloc] initWithAdspotId:self.adspotId
+                                                                 customExt:self.ext
+                                                            viewController:self];
     self.advanceRewardVideo.delegate=self;
     [self.advanceRewardVideo setDefaultAdvSupplierWithMediaId:@"100255"
                                                      adspotId:@"10002595"
@@ -100,7 +100,7 @@
 
 - (void)advanceOnAdReceived:(NSString *)reqId
 {
-    NSLog(@"策略加载成功: %@", reqId);
+    NSLog(@"%s 策略id为: %@",__func__ , reqId);
 }
 
 - (void)advanceOnAdNotFilled:(NSError *)error

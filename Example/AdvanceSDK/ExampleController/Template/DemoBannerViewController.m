@@ -39,8 +39,8 @@
     self.adShowView.hidden = NO;
 
 //    self.advanceBanner = [[AdvanceBanner alloc] initWithAdspotId:@"11111112" adContainer:self.contentV viewController:self];
-    self.advanceBanner = [[AdvanceBanner alloc] initWithAdspotId:self.adspotId adContainer:self.contentV viewController:self];
-//    self.advanceBanner = [[AdvanceBanner alloc] initWithAdspotId:self.adspotId adContainer:self.contentV customExt:@{@"test" : @"自定义拓展参数"} viewController:self];
+//    self.advanceBanner = [[AdvanceBanner alloc] initWithAdspotId:self.adspotId adContainer:self.contentV viewController:self];
+    self.advanceBanner = [[AdvanceBanner alloc] initWithAdspotId:self.adspotId adContainer:self.contentV customExt:self.ext viewController:self];
     self.advanceBanner.delegate = self;
     [self.advanceBanner setDefaultAdvSupplierWithMediaId:@"100255"
                                                 adspotId:@"10000558"
@@ -79,7 +79,7 @@
 
 /// 策略请求成功
 - (void)advanceOnAdReceived:(NSString *)reqId {
-    NSLog(@"策略id:%@", reqId);
+    NSLog(@"%s 策略id为: %@",__func__ , reqId);
 }
 
 /// 策略请求失败
