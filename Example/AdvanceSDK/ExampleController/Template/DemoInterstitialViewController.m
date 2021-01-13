@@ -90,9 +90,9 @@
 
 }
 
-/// 广告关闭
-- (void)advanceInterstitialOnAdClosed {
-    NSLog(@"广告关闭");
+/// 广告关闭了
+- (void)advanceDidClose {
+    NSLog(@"广告关闭了 %s", __func__);
 }
 
 /// 策略请求成功

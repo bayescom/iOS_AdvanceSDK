@@ -108,6 +108,10 @@
         if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdSkipClicked)]) {
             [self.delegate advanceSplashOnAdSkipClicked];
         }
+    } else {
+        if ([self.delegate respondsToSelector:@selector(advanceDidClose)]) {
+            [self.delegate advanceDidClose];
+        }
     }
 }
 

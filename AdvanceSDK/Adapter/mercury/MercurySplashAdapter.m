@@ -102,4 +102,10 @@
     }
 }
 
+- (void)mercury_splashAdClosed:(MercurySplashAd *)splashAd {
+    if ([self.delegate respondsToSelector:@selector(advanceDidClose)]) {
+        [self.delegate advanceDidClose];
+    }
+}
+
 @end

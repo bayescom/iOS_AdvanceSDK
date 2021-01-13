@@ -95,6 +95,12 @@
     NSLog(@"广告渲染失败");
 }
 
+/// 广告关闭
+- (void)advanceDidClose {
+    NSLog(@"广告关闭了 %s", __func__);
+}
+
+
 - (void)advanceOnAdReceived:(NSString *)reqId
 {
     NSLog(@"%s 策略id为: %@",__func__ , reqId);

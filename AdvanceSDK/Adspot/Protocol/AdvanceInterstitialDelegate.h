@@ -28,7 +28,7 @@
 - (void)advanceInterstitialOnAdFailedWithSdkId:(NSString *)sdkId error:(NSError *)error;
 
 /// 广告关闭
-- (void)advanceInterstitialOnAdClosed;
+//- (void)advanceInterstitialOnAdClosed;
 
 /// 广告可以调用show方法
 - (void)advanceInterstitialOnReadyToShow;

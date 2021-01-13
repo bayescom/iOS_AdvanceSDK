@@ -31,7 +31,8 @@
 /// 广告数据请求成功后调用
 - (void)advanceUnifiedViewDidLoad;
 
-
+/// 广告关闭的回调
+- (void)advanceDidClose;
 
 @end
 

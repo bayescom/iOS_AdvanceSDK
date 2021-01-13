@@ -92,8 +92,8 @@
 }
 
 /// 广告关闭
-- (void)advanceFullScreenVideoOnAdClosed {
-    NSLog(@"广告关闭");
+- (void)advanceDidClose {
+    NSLog(@"广告关闭了 %s", __func__);
 }
 
 /// 广告播放完成

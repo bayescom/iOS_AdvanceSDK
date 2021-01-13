@@ -28,7 +28,7 @@
 - (void)advanceRewardVideoOnAdFailedWithSdkId:(NSString *)sdkId error:(NSError *)error;
 
 /// 广告关闭
-- (void)advanceRewardVideoOnAdClosed;
+//- (void)advanceRewardVideoOnAdClosed;
 
 /// 广告视频缓存完成
 - (void)advanceRewardVideoOnAdVideoCached;

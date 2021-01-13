@@ -88,8 +88,8 @@
 - (void)mercury_bannerViewWillClose {
     [_mercury_ad removeFromSuperview];
     _mercury_ad = nil;
-    if ([self.delegate respondsToSelector:@selector(advanceBannerOnAdClosed)]) {
-        [self.delegate advanceBannerOnAdClosed];
+    if ([self.delegate respondsToSelector:@selector(advanceDidClose)]) {
+        [self.delegate advanceDidClose];
     }
 }
 

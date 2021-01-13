@@ -96,8 +96,8 @@
 - (void)unifiedBannerViewWillClose:(GDTUnifiedBannerView *)unifiedBannerView {
     [_gdt_ad removeFromSuperview];
     _gdt_ad = nil;
-    if ([self.delegate respondsToSelector:@selector(advanceBannerOnAdClosed)]) {
-        [self.delegate advanceBannerOnAdClosed];
+    if ([self.delegate respondsToSelector:@selector(advanceDidClose)]) {
+        [self.delegate advanceDidClose];
     }
 }
 

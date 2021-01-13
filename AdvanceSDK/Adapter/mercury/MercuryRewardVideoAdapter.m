@@ -85,8 +85,8 @@
 
 /// 视频播放页关闭回调
 - (void)mercury_rewardVideoAdDidClose {
-    if ([self.delegate respondsToSelector:@selector(advanceRewardVideoOnAdClosed)]) {
-        [self.delegate advanceRewardVideoOnAdClosed];
+    if ([self.delegate respondsToSelector:@selector(advanceDidClose)]) {
+        [self.delegate advanceDidClose];
     }
 }
 

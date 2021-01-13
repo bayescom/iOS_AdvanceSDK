@@ -94,8 +94,9 @@
 }
 
 
-- (void)advanceRewardVideoOnAdClosed {
-    NSLog(@"广告关闭");
+/// 广告关闭
+- (void)advanceDidClose {
+    NSLog(@"广告关闭了 %s", __func__);
 }
 
 - (void)advanceRewardVideoAdDidPlayFinish {

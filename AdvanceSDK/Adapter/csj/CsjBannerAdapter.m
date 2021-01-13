@@ -92,8 +92,8 @@
 - (void)nativeExpressBannerAdView:(BUNativeExpressBannerView *)bannerAdView dislikeWithReason:(NSArray<BUDislikeWords *> *_Nullable)filterwords {
     [_csj_ad removeFromSuperview];
     _csj_ad = nil;
-    if ([self.delegate respondsToSelector:@selector(advanceBannerOnAdClosed)]) {
-        [self.delegate advanceBannerOnAdClosed];
+    if ([self.delegate respondsToSelector:@selector(advanceDidClose)]) {
+        [self.delegate advanceDidClose];
     }
 }
 

@@ -74,8 +74,8 @@
 }
 
 /// 广告关闭回调
-- (void)advanceBannerOnAdClosed {
-    NSLog(@"广告关闭回调");
+- (void)advanceDidClose {
+    NSLog(@"广告关闭了 %s", __func__);
 }
 
 /// 策略请求成功

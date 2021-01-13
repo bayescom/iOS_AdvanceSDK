@@ -89,8 +89,8 @@
 
 /// 插屏广告曝光结束回调，插屏广告曝光结束回调该函数
 - (void)unifiedInterstitialDidDismissScreen:(id)unifiedInterstitial {
-    if ([self.delegate respondsToSelector:@selector(advanceInterstitialOnAdClosed)]) {
-        [self.delegate advanceInterstitialOnAdClosed];
+    if ([self.delegate respondsToSelector:@selector(advanceDidClose)]) {
+        [self.delegate advanceDidClose];
     }
 }
 

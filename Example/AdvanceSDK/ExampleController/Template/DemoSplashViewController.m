@@ -74,14 +74,19 @@
     NSLog(@"广告点击 %s", __func__);
 }
 
-/// 广告点击跳过
-- (void)advanceSplashOnAdSkipClicked {
-    NSLog(@"广告点击跳过");
+/// 广告关闭
+- (void)advanceDidClose {
+    NSLog(@"广告关闭了 %s", __func__);
 }
 
 /// 广告倒计时结束
 - (void)advanceSplashOnAdCountdownToZero {
     NSLog(@"广告倒计时结束");
+}
+
+/// 点击了跳过
+- (void)advanceSplashOnAdSkipClicked {
+    NSLog(@"点击了跳过 %s", __func__);
 }
 
 // 策略请求失败

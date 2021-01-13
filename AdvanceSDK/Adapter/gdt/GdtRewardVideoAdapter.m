@@ -85,8 +85,8 @@
 
 /// 视频播放页关闭回调
 - (void)gdt_rewardVideoAdDidClose:(GDTRewardVideoAd *)rewardedVideoAd {
-    if ([self.delegate respondsToSelector:@selector(advanceRewardVideoOnAdClosed)]) {
-        [self.delegate advanceRewardVideoOnAdClosed];
+    if ([self.delegate respondsToSelector:@selector(advanceDidClose)]) {
+        [self.delegate advanceDidClose];
     }
 }
 

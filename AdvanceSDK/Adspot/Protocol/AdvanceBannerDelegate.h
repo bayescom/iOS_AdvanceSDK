@@ -25,7 +25,7 @@
 - (void)advanceBannerOnAdFailedWithSdkId:(NSString *)sdkId error:(NSError *)error;
 
 /// 广告关闭回调
-- (void)advanceBannerOnAdClosed;
+//- (void)advanceBannerOnAdClosed;
 
 @end
 

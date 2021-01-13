@@ -124,6 +124,9 @@
  */
 - (void)splashAdDidClose:(BUSplashAdView *)splashAd {
     [_csj_ad removeFromSuperview];
+    if ([self.delegate respondsToSelector:@selector(advanceDidClose)]) {
+        [self.delegate advanceDidClose];
+    }
 //    _csj_ad = nil;
 }
 

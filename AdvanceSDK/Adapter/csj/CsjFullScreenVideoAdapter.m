@@ -92,8 +92,8 @@
 
 /// 广告曝光结束回调
 - (void)nativeExpressFullscreenVideoAdDidClose:(BUNativeExpressFullscreenVideoAd *)fullscreenVideoAd {
-    if ([self.delegate respondsToSelector:@selector(advanceFullScreenVideoOnAdClosed)]) {
-        [self.delegate advanceFullScreenVideoOnAdClosed];
+    if ([self.delegate respondsToSelector:@selector(advanceDidClose)]) {
+        [self.delegate advanceDidClose];
     }
 }
 
