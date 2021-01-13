@@ -13,7 +13,7 @@
 @optional
 
 /// 广告准备完成
-- (void)advanceRewardVideoOnAdReady;
+//- (void)advanceRewardVideoOnAdReady;
 
 /// 广告曝光
 //- (void)advanceRewardVideoOnAdShow;

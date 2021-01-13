@@ -54,8 +54,8 @@
 /// 插屏广告预加载成功回调，当接收服务器返回的广告数据成功且预加载后调用该函数
 - (void)unifiedInterstitialSuccessToLoadAd:(GDTUnifiedInterstitialAd *)unifiedInterstitial {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded];
-    if ([self.delegate respondsToSelector:@selector(advanceInterstitialOnAdReceived)]) {
-        [self.delegate advanceInterstitialOnAdReceived];
+    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
+        [self.delegate advanceUnifiedViewDidLoad];
     }
     if ([self.delegate respondsToSelector:@selector(advanceInterstitialOnReadyToShow)]) {
         [self.delegate advanceInterstitialOnReadyToShow];

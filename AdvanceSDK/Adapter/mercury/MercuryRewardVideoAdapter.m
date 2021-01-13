@@ -50,8 +50,8 @@
 /// 广告数据加载成功回调
 - (void)mercury_rewardVideoAdDidLoad {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded];
-    if ([self.delegate respondsToSelector:@selector(advanceRewardVideoOnAdReady)]) {
-        [self.delegate advanceRewardVideoOnAdReady];
+    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
+        [self.delegate advanceUnifiedViewDidLoad];
     }
 }
 

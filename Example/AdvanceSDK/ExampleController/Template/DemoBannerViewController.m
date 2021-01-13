@@ -54,8 +54,8 @@
 
 // MARK: ======================= AdvanceBannerDelegate =======================
 /// 广告数据拉取成功回调
-- (void)advanceBannerOnAdReceived {
-    NSLog(@"广告数据拉取成功回调");
+- (void)advanceUnifiedViewDidLoad {
+    NSLog(@"广告数据拉取成功 %s", __func__);
 }
 
 /// 广告曝光

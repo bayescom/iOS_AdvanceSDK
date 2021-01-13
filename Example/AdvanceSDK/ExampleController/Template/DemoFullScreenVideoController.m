@@ -63,11 +63,10 @@
 // MARK: ======================= AdvanceFullScreenVideoDelegate =======================
 
 /// 请求广告数据成功后调用
-- (void)advanceFullScreenVideoOnAdReceived {
-    NSLog(@"请求广告数据成功后调用");
+- (void)advanceUnifiedViewDidLoad {
+    NSLog(@"请求广告数据成功后调用 %s", __func__);
     _isAdLoaded=true;
     [JDStatusBarNotification showWithStatus:@"广告加载成功" dismissAfter:1.5];
-
 }
 
 /// 广告渲染失败

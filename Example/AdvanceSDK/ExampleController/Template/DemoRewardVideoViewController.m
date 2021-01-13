@@ -57,8 +57,8 @@
 }
 
 // MARK: ======================= AdvanceRewardVideoDelegate =======================
-- (void)advanceRewardVideoOnAdReady {
-    NSLog(@"广告数据加载成功");
+- (void)advanceUnifiedViewDidLoad {
+    NSLog(@"广告数据加载成功 %s", __func__);
     _isAdLoaded=true;
     [JDStatusBarNotification showWithStatus:@"广告加载成功" dismissAfter:1.5];
 }

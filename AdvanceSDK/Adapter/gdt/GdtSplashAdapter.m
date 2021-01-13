@@ -58,8 +58,8 @@
 // MARK: ======================= GDTSplashAdDelegate =======================
 - (void)splashAdSuccessPresentScreen:(GDTSplashAd *)splashAd {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded];
-    if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdReceived)]) {
-        [self.delegate advanceSplashOnAdReceived];
+    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
+        [self.delegate advanceUnifiedViewDidLoad];
     }
 }
 

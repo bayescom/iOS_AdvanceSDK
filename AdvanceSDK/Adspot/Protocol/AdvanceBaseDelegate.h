@@ -28,6 +28,11 @@
 /// 广告点击回调
 - (void)advanceClicked;
 
+/// 广告数据请求成功后调用
+- (void)advanceUnifiedViewDidLoad;
+
+
+
 @end
 
 #endif /* AdvanceBaseDelegate_h */

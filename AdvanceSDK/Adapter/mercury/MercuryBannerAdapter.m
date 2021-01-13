@@ -53,8 +53,8 @@
 // 广告数据拉取成功回调
 - (void)mercury_bannerViewDidReceived {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded];
-    if ([self.delegate respondsToSelector:@selector(advanceBannerOnAdReceived)]) {
-        [self.delegate advanceBannerOnAdReceived];
+    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
+        [self.delegate advanceUnifiedViewDidLoad];
     }
 }
 

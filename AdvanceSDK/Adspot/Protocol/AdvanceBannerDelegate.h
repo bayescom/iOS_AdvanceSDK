@@ -13,7 +13,7 @@
 @optional
 
 /// 请求广告数据成功后调用
-- (void)advanceBannerOnAdReceived;
+//- (void)advanceBannerOnAdReceived;
 
 /// 广告曝光回调
 //- (void)advanceBannerOnAdShow;

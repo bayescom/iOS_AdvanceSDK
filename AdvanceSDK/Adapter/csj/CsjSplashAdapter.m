@@ -70,8 +70,8 @@
  */
 - (void)splashAdDidLoad:(BUSplashAdView *)splashAd {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded];
-    if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdReceived)]) {
-        [self.delegate advanceSplashOnAdReceived];
+    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
+        [self.delegate advanceUnifiedViewDidLoad];
     }
     if (_adspot.showLogoRequire) {
         // 添加Logo

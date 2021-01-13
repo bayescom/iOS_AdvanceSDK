@@ -12,7 +12,7 @@
 @protocol AdvanceSplashDelegate <AdvanceBaseDelegate>
 @optional
 /// 广告数据拉取成功
-- (void)advanceSplashOnAdReceived;
+//- (void)advanceSplashOnAdReceived;
 
 /// 广告曝光成功
 //- (void)advanceSplashOnAdShow;

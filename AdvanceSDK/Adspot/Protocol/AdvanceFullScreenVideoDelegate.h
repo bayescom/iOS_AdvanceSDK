@@ -13,7 +13,7 @@
 @optional
 
 /// 请求广告数据成功后调用
-- (void)advanceFullScreenVideoOnAdReceived;
+//- (void)advanceFullScreenVideoOnAdReceived;
 
 /// 广告曝光成功
 //- (void)advanceFullScreenVideoOnAdShow;
