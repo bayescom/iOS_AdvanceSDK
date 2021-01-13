@@ -26,6 +26,7 @@
     self.initDefSubviewsFlag = YES;
     self.adspotIdsArr = @[
         @{@"addesc": @"Banner", @"adspotId": @"100255-10000558"},
+        @{@"addesc": @"Mock 渠道错误", @"adspotId": @"100255-10000001"},
     ];
     self.btn1Title = @"加载并显示广告";
 }
@@ -38,7 +39,7 @@
     [self.adShowView addSubview:self.contentV];
     self.adShowView.hidden = NO;
 
-//    self.advanceBanner = [[AdvanceBanner alloc] initWithAdspotId:@"11111112" adContainer:self.contentV viewController:self];
+//    self.advanceBanner = [[AdvanceBanner alloc] initWithAdspotId:@"11111113" adContainer:self.contentV viewController:self];
 //    self.advanceBanner = [[AdvanceBanner alloc] initWithAdspotId:self.adspotId adContainer:self.contentV viewController:self];
     self.advanceBanner = [[AdvanceBanner alloc] initWithAdspotId:self.adspotId adContainer:self.contentV customExt:self.ext viewController:self];
     self.advanceBanner.delegate = self;

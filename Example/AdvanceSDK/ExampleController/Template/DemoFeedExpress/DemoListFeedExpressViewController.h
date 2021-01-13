@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) NSInteger count;
 @property (nonatomic, copy) NSString *mediaId;
 @property (nonatomic, copy) NSString *adspotId;
-
+@property (nonatomic, strong) NSDictionary *ext;
 @end
 
 NS_ASSUME_NONNULL_END

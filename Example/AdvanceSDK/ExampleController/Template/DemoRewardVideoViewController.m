@@ -24,6 +24,7 @@
     self.initDefSubviewsFlag = YES;
     self.adspotIdsArr = @[
         @{@"addesc": @"激励视频", @"adspotId": @"100255-10002595"},
+        @{@"addesc": @"Mock 渠道错误", @"adspotId": @"100255-10000001"},
     ];
     self.btn1Title = @"加载广告";
     self.btn2Title = @"显示广告";
