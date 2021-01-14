@@ -63,9 +63,9 @@
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded error:error];
     [_mercury_ad removeFromSuperview];
     _mercury_ad = nil;
-    if ([self.delegate respondsToSelector:@selector(advanceBannerOnAdFailedWithSdkId:error:)]) {
-        [self.delegate advanceBannerOnAdFailedWithSdkId:_supplier.identifier error:error];
-    }
+//    if ([self.delegate respondsToSelector:@selector(advanceBannerOnAdFailedWithSdkId:error:)]) {
+//        [self.delegate advanceBannerOnAdFailedWithSdkId:_supplier.identifier error:error];
+//    }
 }
 
 // 曝光回调

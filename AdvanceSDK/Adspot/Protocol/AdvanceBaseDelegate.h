@@ -34,6 +34,11 @@
 /// 广告关闭的回调
 - (void)advanceDidClose;
 
+/// 广告请求失败
+- (void)advanceFailedWithError:(NSError *)error;
+
+/// 内部渠道开始加载时调用
+- (void)advanceSupplierWillLoad:(NSString *)supplierId;
 @end
 
 #endif /* AdvanceBaseDelegate_h */

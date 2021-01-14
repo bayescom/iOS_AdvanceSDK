@@ -35,6 +35,7 @@
 }
 
 - (void)loadAd {
+    
     CGRect rect = CGRectMake(0, 0, _adspot.adContainer.frame.size.width, _adspot.adContainer.frame.size.height);
     _gdt_ad = [[GDTUnifiedBannerView alloc] initWithFrame:rect placementId:_supplier.adspotid viewController:_adspot.viewController];
     _gdt_ad.animated = YES;
@@ -63,9 +64,9 @@
 
 - (void)unifiedBannerViewFailedToLoad:(GDTUnifiedBannerView *)unifiedBannerView error:(NSError *)error {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded error:error];
-    if ([self.delegate respondsToSelector:@selector(advanceBannerOnAdFailedWithSdkId:error:)]) {
-        [self.delegate advanceBannerOnAdFailedWithSdkId:_supplier.identifier error:error];
-    }
+//    if ([self.delegate respondsToSelector:@selector(advanceBannerOnAdFailedWithSdkId:error:)]) {
+//        [self.delegate advanceBannerOnAdFailedWithSdkId:_supplier.identifier error:error];
+//    }
     [_gdt_ad removeFromSuperview];
     _gdt_ad = nil;
 }

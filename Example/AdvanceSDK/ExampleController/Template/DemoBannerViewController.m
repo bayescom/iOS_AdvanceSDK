@@ -43,7 +43,7 @@
 //    self.advanceBanner = [[AdvanceBanner alloc] initWithAdspotId:self.adspotId adContainer:self.contentV viewController:self];
     self.advanceBanner = [[AdvanceBanner alloc] initWithAdspotId:self.adspotId adContainer:self.contentV customExt:self.ext viewController:self];
     self.advanceBanner.delegate = self;
-    [self.advanceBanner setDefaultAdvSupplierWithMediaId:@"100255"
+    [self.advanceBanner setDefaultAdvSupplierWithMediaId:@"10025512"
                                                 adspotId:@"10000558"
                                                 mediaKey:@"757d5119466abe3d771a211cc1278df7"
                                                   sdkId:SDK_ID_MERCURY];
@@ -58,6 +58,18 @@
     NSLog(@"广告数据拉取成功 %s", __func__);
 }
 
+/// 广告加载失败
+- (void)advanceFailedWithError:(NSError *)error {
+    NSLog(@"广告展示失败 %s  error: %@", __func__, error);
+
+}
+
+/// 内部渠道开始加载时调用
+- (void)advanceSupplierWillLoad:(NSString *)supplierId {
+    NSLog(@"内部渠道开始加载 %s  supplierId: %@", __func__, supplierId);
+
+}
+
 /// 广告曝光
 - (void)advanceExposured {
     NSLog(@"广告曝光回调");
@@ -66,11 +78,6 @@
 /// 广告点击
 - (void)advanceClicked {
     NSLog(@"广告点击 %s", __func__);
-}
-
-/// 请求广告数据失败后调用
-- (void)advanceBannerOnAdFailedWithSdkId:(NSString *)sdkId error:(NSError *)error {
-    NSLog(@"请求广告数据失败后调用");
 }
 
 /// 广告关闭回调
