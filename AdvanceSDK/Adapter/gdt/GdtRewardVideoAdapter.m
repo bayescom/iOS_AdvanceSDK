@@ -59,9 +59,9 @@
 - (void)gdt_rewardVideoAd:(GDTRewardVideoAd *)rewardedVideoAd didFailWithError:(NSError *)error {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded error:error];
     _gdt_ad = nil;
-    if ([self.delegate respondsToSelector:@selector(advanceRewardVideoOnAdFailedWithSdkId:error:)]) {
-        [self.delegate advanceRewardVideoOnAdFailedWithSdkId:_supplier.identifier error:error];
-    }
+//    if ([self.delegate respondsToSelector:@selector(advanceRewardVideoOnAdFailedWithSdkId:error:)]) {
+//        [self.delegate advanceRewardVideoOnAdFailedWithSdkId:_supplier.identifier error:error];
+//    }
 }
 
 //视频缓存成功回调

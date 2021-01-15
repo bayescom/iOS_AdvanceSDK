@@ -88,10 +88,19 @@
     NSLog(@"广告点击 %s", __func__);
 }
 
-- (void)advanceRewardVideoOnAdFailedWithSdkId:(NSString *)sdkId error:(NSError *)error {
-    NSLog(@"广告拉取失败");
+/// 广告加载失败
+- (void)advanceFailedWithError:(NSError *)error {
+    NSLog(@"广告展示失败 %s  error: %@", __func__, error);
     [JDStatusBarNotification showWithStatus:@"广告加载失败" dismissAfter:1.5];
+
 }
+
+/// 内部渠道开始加载时调用
+- (void)advanceSupplierWillLoad:(NSString *)supplierId {
+    NSLog(@"内部渠道开始加载 %s  supplierId: %@", __func__, supplierId);
+
+}
+
 
 
 /// 广告关闭

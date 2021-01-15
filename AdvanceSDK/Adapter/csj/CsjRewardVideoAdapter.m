@@ -70,9 +70,9 @@
 - (void)nativeExpressRewardedVideoAdViewRenderFail:(BUNativeExpressRewardedVideoAd *)rewardedVideoAd error:(NSError *)error {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded error:error];
     _csj_ad = nil;
-    if ([self.delegate respondsToSelector:@selector(advanceRewardVideoOnAdFailedWithSdkId:error:)]) {
-        [self.delegate advanceRewardVideoOnAdFailedWithSdkId:_supplier.identifier error:error];
-    }
+//    if ([self.delegate respondsToSelector:@selector(advanceRewardVideoOnAdFailedWithSdkId:error:)]) {
+//        [self.delegate advanceRewardVideoOnAdFailedWithSdkId:_supplier.identifier error:error];
+//    }
 }
 
 //视频缓存成功回调
@@ -124,9 +124,9 @@
 {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded error:error];
     _csj_ad = nil;
-    if ([self.delegate respondsToSelector:@selector(advanceRewardVideoOnAdFailedWithSdkId:error:)]) {
-        [self.delegate advanceRewardVideoOnAdFailedWithSdkId:_supplier.identifier error:error];
-    }
+//    if ([self.delegate respondsToSelector:@selector(advanceRewardVideoOnAdFailedWithSdkId:error:)]) {
+//        [self.delegate advanceRewardVideoOnAdFailedWithSdkId:_supplier.identifier error:error];
+//    }
 
 }
 
@@ -135,9 +135,9 @@
 {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded error:error];
     _csj_ad = nil;
-    if ([self.delegate respondsToSelector:@selector(advanceRewardVideoOnAdFailedWithSdkId:error:)]) {
-        [self.delegate advanceRewardVideoOnAdFailedWithSdkId:_supplier.identifier error:error];
-    }
+//    if ([self.delegate respondsToSelector:@selector(advanceRewardVideoOnAdFailedWithSdkId:error:)]) {
+//        [self.delegate advanceRewardVideoOnAdFailedWithSdkId:_supplier.identifier error:error];
+//    }
 
 }
 @end

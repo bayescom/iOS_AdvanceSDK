@@ -25,7 +25,7 @@
 - (void)advanceRewardVideoOnAdRenderFailed;
 
 /// 广告拉取失败
-- (void)advanceRewardVideoOnAdFailedWithSdkId:(NSString *)sdkId error:(NSError *)error;
+//- (void)advanceRewardVideoOnAdFailedWithSdkId:(NSString *)sdkId error:(NSError *)error;
 
 /// 广告关闭
 //- (void)advanceRewardVideoOnAdClosed;
