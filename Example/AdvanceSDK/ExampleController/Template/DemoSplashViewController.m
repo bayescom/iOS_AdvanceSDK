@@ -64,11 +64,17 @@
     NSLog(@"广告曝光成功 %s", __func__);
 }
 
-/// 广告展示失败
-- (void)advanceSplashOnAdFailedWithSdkId:(NSString *)sdkId error:(NSError *)error {
-    NSLog(@"广告展示失败(%@):%@", sdkId, error);
+/// 广告加载失败
+- (void)advanceFailedWithError:(NSError *)error {
+    NSLog(@"广告展示失败 %s  error: %@", __func__, error);
+
 }
 
+/// 内部渠道开始加载时调用
+- (void)advanceSupplierWillLoad:(NSString *)supplierId {
+    NSLog(@"内部渠道开始加载 %s  supplierId: %@", __func__, supplierId);
+
+}
 /// 广告点击
 - (void)advanceClicked {
     NSLog(@"广告点击 %s", __func__);

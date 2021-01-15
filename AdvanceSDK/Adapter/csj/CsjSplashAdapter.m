@@ -92,9 +92,9 @@
  */
 - (void)splashAd:(BUSplashAdView *)splashAd didFailWithError:(NSError * _Nullable)error {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded error:error];
-    if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdFailedWithSdkId:error:)]) {
-        [self.delegate advanceSplashOnAdFailedWithSdkId:_adspot.adspotid error:error];
-    }
+//    if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdFailedWithSdkId:error:)]) {
+//        [self.delegate advanceSplashOnAdFailedWithSdkId:_adspot.adspotid error:error];
+//    }
     [_csj_ad removeFromSuperview];
 //    _csj_ad = nil;
 }
