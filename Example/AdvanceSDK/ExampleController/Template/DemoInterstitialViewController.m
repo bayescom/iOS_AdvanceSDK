@@ -83,10 +83,16 @@
     NSLog(@"广告点击 %s", __func__);
 }
 
-/// 广告拉取失败
-- (void)advanceInterstitialOnAdFailedWithSdkId:(NSString *)sdkId error:(NSError *)error {
-    NSLog(@"广告拉取失败");
+/// 广告加载失败
+- (void)advanceFailedWithError:(NSError *)error {
     [JDStatusBarNotification showWithStatus:@"广告加载失败" dismissAfter:1.5];
+    NSLog(@"广告展示失败 %s  error: %@", __func__, error);
+
+}
+
+/// 内部渠道开始加载时调用
+- (void)advanceSupplierWillLoad:(NSString *)supplierId {
+    NSLog(@"内部渠道开始加载 %s  supplierId: %@", __func__, supplierId);
 
 }
 

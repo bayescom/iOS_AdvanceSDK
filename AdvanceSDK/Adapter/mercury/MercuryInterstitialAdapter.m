@@ -64,9 +64,9 @@
 - (void)mercury_interstitialFailError:(NSError *)error {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded error:error];
     _mercury_ad = nil;
-    if ([self.delegate respondsToSelector:@selector(advanceInterstitialOnAdFailedWithSdkId:error:)]) {
-        [self.delegate advanceInterstitialOnAdFailedWithSdkId:_supplier.identifier error:error];
-    }
+//    if ([self.delegate respondsToSelector:@selector(advanceInterstitialOnAdFailedWithSdkId:error:)]) {
+//        [self.delegate advanceInterstitialOnAdFailedWithSdkId:_supplier.identifier error:error];
+//    }
 }
 
 /// 插屏广告视图曝光失败回调，插屏广告曝光失败回调该函数

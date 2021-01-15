@@ -61,9 +61,9 @@
 - (void)nativeExpresInterstitialAd:(BUNativeExpressInterstitialAd *)interstitialAd didFailWithError:(NSError *)error {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded error:error];
     _csj_ad = nil;
-    if ([self.delegate respondsToSelector:@selector(advanceInterstitialOnAdFailedWithSdkId:error:)]) {
-        [self.delegate advanceInterstitialOnAdFailedWithSdkId:_supplier.identifier error:error];
-    }
+//    if ([self.delegate respondsToSelector:@selector(advanceInterstitialOnAdFailedWithSdkId:error:)]) {
+//        [self.delegate advanceInterstitialOnAdFailedWithSdkId:_supplier.identifier error:error];
+//    }
 }
 
 /// 插屏广告渲染失败

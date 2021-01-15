@@ -66,9 +66,9 @@
 - (void)unifiedInterstitialFailToLoadAd:(GDTUnifiedInterstitialAd *)unifiedInterstitial error:(NSError *)error {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded error:error];
     _gdt_ad = nil;
-    if ([self.delegate respondsToSelector:@selector(advanceInterstitialOnAdFailedWithSdkId:error:)]) {
-        [self.delegate advanceInterstitialOnAdFailedWithSdkId:_supplier.identifier error:error];
-    }
+//    if ([self.delegate respondsToSelector:@selector(advanceInterstitialOnAdFailedWithSdkId:error:)]) {
+//        [self.delegate advanceInterstitialOnAdFailedWithSdkId:_supplier.identifier error:error];
+//    }
 }
 
 /// 插屏广告曝光回调

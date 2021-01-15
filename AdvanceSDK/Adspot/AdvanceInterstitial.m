@@ -68,8 +68,16 @@
     // 返回渠道有问题 则不用再执行下面的渠道了
     if (error) {
         ADVLog(@"%@", error);
+        if (self.delegate != nil && [self.delegate respondsToSelector:@selector(advanceFailedWithError:)]) {
+            [self.delegate advanceFailedWithError:error];
+        }
         return;
     }
+    // 开始加载渠道前通知调用者
+    if ([self.delegate respondsToSelector:@selector(advanceSupplierWillLoad:)]) {
+        [self.delegate advanceSupplierWillLoad:supplier.identifier];
+    }
+
     // 根据渠道id自定义初始化
     NSString *clsName = @"";
     if ([supplier.identifier isEqualToString:SDK_ID_GDT]) {
