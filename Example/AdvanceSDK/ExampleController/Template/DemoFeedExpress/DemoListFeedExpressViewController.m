@@ -90,9 +90,16 @@
     [self.tableView reloadData];
 }
 
-/// 广告渲染失败
-- (void)advanceNativeExpressOnAdRenderFail:(UIView *)adView {
-    NSLog(@"广告渲染失败");
+/// 广告加载失败
+- (void)advanceFailedWithError:(NSError *)error {
+    NSLog(@"广告展示失败 %s  error: %@", __func__, error);
+
+}
+
+/// 内部渠道开始加载时调用
+- (void)advanceSupplierWillLoad:(NSString *)supplierId {
+    NSLog(@"内部渠道开始加载 %s  supplierId: %@", __func__, supplierId);
+
 }
 
 /// 广告关闭
