@@ -70,10 +70,10 @@
     [_timeoutCheckTimer invalidate];
     _timeoutCheckTimer = nil;
     _timeout_stamp = 0;
-    if([_delegate respondsToSelector:@selector(advanceOnAdNotFilled:)]) {
-        [_delegate advanceOnAdNotFilled:[AdvError errorWithCode:AdvErrorCode_115].toNSError];
-        [_adapter performSelector:@selector(deallocAdapter)];
-    }
+//    if([_delegate respondsToSelector:@selector(advanceOnAdNotFilled:)]) {
+//        [_delegate advanceOnAdNotFilled:[AdvError errorWithCode:AdvErrorCode_115].toNSError];
+//        [_adapter performSelector:@selector(deallocAdapter)];
+//    }
     _delegate = nil;
 }
 
@@ -88,7 +88,7 @@
 // 执行了打底渠道
 - (void)advSupplierLoadDefaultSuppluer:(AdvSupplier *)supplier
 {
-    ADVLog(@"执行了打底渠道: %@", supplier.sdktag);
+//    ADVLog(@"执行了打底渠道: %@", supplier.sdktag);
     [self advanceOnAdReceivedWithReqId:supplier.sdktag];
 }
 
@@ -109,8 +109,8 @@
 
 /// 加载策略Model失败
 - (void)advanceBaseAdapterLoadError:(nullable NSError *)error {
-    if ([_delegate respondsToSelector:@selector(advanceOnAdNotFilled:)]) {
-        [_delegate advanceOnAdNotFilled:error];
+    if ([_delegate respondsToSelector:@selector(advanceFailedWithError:)]) {
+        [_delegate advanceFailedWithError:error];
     }
 //    [self deallocSelf]; // 注释掉 是因为在执行打底渠道
 }

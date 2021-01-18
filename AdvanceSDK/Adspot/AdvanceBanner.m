@@ -65,8 +65,8 @@
 
 /// 加载策略Model失败
 - (void)advanceBaseAdapterLoadError:(nullable NSError *)error {
-    if ([_delegate respondsToSelector:@selector(advanceOnAdNotFilled:)]) {
-        [_delegate advanceOnAdNotFilled:error];
+    if ([_delegate respondsToSelector:@selector(advanceFailedWithError:)]) {
+        [_delegate advanceFailedWithError:error];
     }
 }
 
