@@ -118,7 +118,7 @@
 
     // 加载渠道
     if ([_baseDelegate respondsToSelector:@selector(advSupplierLoadSuppluer:error:)]) {
-        NSLog(@"xxxxerror: %@   clsName: %@", error, clsName);
+//        NSLog(@"xxxxerror: %@   clsName: %@", error, clsName);
         [_baseDelegate advanceBaseAdapterLoadSuppluer:supplier error:error];
     }
 }

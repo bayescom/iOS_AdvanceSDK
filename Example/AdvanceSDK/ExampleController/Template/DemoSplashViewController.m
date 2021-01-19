@@ -26,6 +26,7 @@
         @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-100024364312"},
         @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10002619"},
         @{@"addesc": @"Mock 渠道错误", @"adspotId": @"100255-10000001"},
+        @{@"addesc": @"Mock code200", @"adspotId": @"100255-10003321"},
     ];
     self.btn1Title = @"加载并显示广告";
 }
@@ -87,18 +88,12 @@
 
 /// 广告倒计时结束
 - (void)advanceSplashOnAdCountdownToZero {
-    NSLog(@"广告倒计时结束");
+    NSLog(@"广告倒计时结束 %s", __func__);
 }
 
 /// 点击了跳过
 - (void)advanceSplashOnAdSkipClicked {
     NSLog(@"点击了跳过 %s", __func__);
-}
-
-// 策略请求失败
-- (void)advanceOnAdNotFilled:(NSError *)error
-{
-    NSLog(@"策略加载失败....");
 }
 
 // 策略请求成功

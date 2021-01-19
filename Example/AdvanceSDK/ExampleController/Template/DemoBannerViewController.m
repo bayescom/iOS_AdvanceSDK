@@ -27,6 +27,7 @@
     self.adspotIdsArr = @[
         @{@"addesc": @"Banner", @"adspotId": @"100255-10000558"},
         @{@"addesc": @"Mock 渠道错误", @"adspotId": @"100255-10000001"},
+        @{@"addesc": @"Mock code200", @"adspotId": @"100255-10003321"},
     ];
     self.btn1Title = @"加载并显示广告";
 }
