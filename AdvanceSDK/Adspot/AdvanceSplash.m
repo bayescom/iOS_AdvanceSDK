@@ -32,7 +32,7 @@
 }
 
 - (instancetype)initWithAdspotId:(NSString *)adspotid customExt:(NSDictionary *)ext viewController:(UIViewController *)viewController {
-    if (self = [super initWithMediaId:nil adspotId:adspotid customExt:ext]) {
+    if (self = [super initWithMediaId:@"" adspotId:adspotid customExt:ext]) {
         _viewController = viewController;
     }
     return self;

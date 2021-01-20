@@ -31,7 +31,7 @@
                      adContainer:(UIView *)adContainer
                        customExt:(NSDictionary * _Nonnull)ext
                   viewController:(nonnull UIViewController *)viewController {
-    if (self = [super initWithMediaId:nil adspotId:adspotid customExt:ext]) {
+    if (self = [super initWithMediaId:@"" adspotId:adspotid customExt:ext]) {
         _adContainer = adContainer;
         _viewController = viewController;
         _refreshInterval = 30;

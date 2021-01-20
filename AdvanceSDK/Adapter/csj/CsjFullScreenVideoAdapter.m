@@ -50,7 +50,7 @@
 // MARK: ======================= BUNativeExpressFullscreenVideoAdDelegate =======================
 /// 广告预加载成功回调
 - (void)nativeExpressFullscreenVideoAdDidLoad:(BUNativeExpressFullscreenVideoAd *)fullscreenVideoAd {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded error:nil];
     if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
         [self.delegate advanceUnifiedViewDidLoad];
     }
@@ -58,7 +58,7 @@
 
 /// 广告预加载失败回调
 - (void)nativeExpressFullscreenVideoAd:(BUNativeExpressFullscreenVideoAd *)fullscreenVideoAd didFailWithError:(NSError *_Nullable)error {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded error:error];
     _csj_ad = nil;
 //    if ([self.delegate respondsToSelector:@selector(advanceFullScreenVideoOnAdFailedWithSdkId:error:)]) {
 //        [self.delegate advanceFullScreenVideoOnAdFailedWithSdkId:_supplier.identifier error:error];
@@ -67,7 +67,7 @@
 
 /// 渲染失败
 - (void)nativeExpressFullscreenVideoAdViewRenderFail:(BUNativeExpressFullscreenVideoAd *)rewardedVideoAd error:(NSError *_Nullable)error {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded error:error];
     _csj_ad = nil;
 //    if ([self.delegate respondsToSelector:@selector(advanceFullScreenVideoOnAdFailedWithSdkId:error:)]) {
 //        [self.delegate advanceFullScreenVideoOnAdFailedWithSdkId:_supplier.identifier error:error];
@@ -76,7 +76,7 @@
 
 /// 广告曝光回调
 - (void)nativeExpressFullscreenVideoAdDidVisible:(BUNativeExpressFullscreenVideoAd *)fullscreenVideoAd {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoImped];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoImped error:nil];
     if ([self.delegate respondsToSelector:@selector(advanceExposured)]) {
         [self.delegate advanceExposured];
     }
@@ -84,7 +84,7 @@
 
 /// 广告点击回调
 - (void)nativeExpressFullscreenVideoAdDidClick:(BUNativeExpressFullscreenVideoAd *)fullscreenVideoAd {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked error:nil];
     if ([self.delegate respondsToSelector:@selector(advanceClicked)]) {
         [self.delegate advanceClicked];
     }
