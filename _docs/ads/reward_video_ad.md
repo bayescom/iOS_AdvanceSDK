@@ -43,43 +43,60 @@
 }
 
 // MARK: ======================= AdvanceRewardVideoDelegate =======================
-- (void)advanceRewardVideoOnAdReady {
-    [DemoUtils showToast:@"广告数据加载成功"];
+/// 广告数据加载成功
+- (void)advanceUnifiedViewDidLoad {
+    NSLog(@"广告数据加载成功 %s", __func__);
 }
 
-- (void)advanceRewardVideoOnAdVideoCached
-{
-    [DemoUtils showToast:@"视频缓存成功"];
+/// 视频缓存成功
+- (void)advanceRewardVideoOnAdVideoCached {
+    NSLog(@"视频缓存成功 %s", __func__);
 }
 
+/// 到达激励时间
 - (void)advanceRewardVideoAdDidRewardEffective {
-    [DemoUtils showToast:@"到达激励时间"];
+    NSLog(@"到达激励时间 %s", __func__);
 }
 
-- (void)advanceRewardVideoOnAdRenderFailed {
-    [DemoUtils showToast:@"广告渲染失败"];
+/// 广告曝光
+- (void)advanceExposured {
+    NSLog(@"广告曝光回调 %s", __func__);
 }
 
-- (void)advanceRewardVideoOnAdClicked {
-    [DemoUtils showToast:@"广告点击"];
+/// 广告点击
+- (void)advanceClicked {
+    NSLog(@"广告点击 %s", __func__);
 }
 
-- (void)advanceRewardVideoOnAdFailedWithSdkId:(NSString *)sdkId error:(NSError *)error {
-    [DemoUtils showToast:@"广告拉取失败"];
+/// 广告加载失败
+- (void)advanceFailedWithError:(NSError *)error {
+    NSLog(@"广告展示失败 %s  error: %@", __func__, error);
 }
 
-- (void)advanceRewardVideoOnAdShow {
-    [DemoUtils showToast:@"广告展示"];
+/// 内部渠道开始加载时调用
+- (void)advanceSupplierWillLoad:(NSString *)supplierId {
+    NSLog(@"内部渠道开始加载 %s  supplierId: %@", __func__, supplierId);
 }
 
-- (void)advanceRewardVideoOnAdClosed {
-    [DemoUtils showToast:@"广告关闭"];
+/// 广告关闭
+- (void)advanceDidClose {
+    NSLog(@"广告关闭了 %s", __func__);
 }
 
+/// 播放完成
 - (void)advanceRewardVideoAdDidPlayFinish {
-    [DemoUtils showToast:@"播放完成"];
+    NSLog(@"播放完成 %s", __func__);
 }
 
+/// 策略请求成功
+- (void)advanceOnAdReceived:(NSString *)reqId {
+    NSLog(@"%s 策略id为: %@",__func__ , reqId);
+}
+
+/// 广告可以被调用
+- (void)advanceRewardVideoIsReadyToShow {
+    NSLog(@"广告可以被调用了 %s", __func__);
+}
 @end
 
 
