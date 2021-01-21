@@ -21,9 +21,6 @@
 /// 广告点击
 //- (void)advanceFullScreenVideoOnAdClicked;
 
-/// 广告渲染失败
-- (void)advanceFullScreenVideoOnAdRenderFailed;
-
 /// 广告拉取失败
 //- (void)advanceFullScreenVideoOnAdFailedWithSdkId:(NSString *)sdkId error:(NSError *)error;
 

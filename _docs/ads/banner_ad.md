@@ -46,35 +46,41 @@
 
 // MARK: ======================= AdvanceBannerDelegate =======================
 /// 广告数据拉取成功回调
-- (void)advanceBannerOnAdReceived {
-    [DemoUtils showToast:@"广告数据拉取成功回调"];
+- (void)advanceUnifiedViewDidLoad {
+    NSLog(@"广告数据拉取成功 %s", __func__);
 }
 
-/// banner条曝光回调
-- (void)advanceBannerOnAdShow {
-    [DemoUtils showToast:@"广告曝光回调"];
+/// 广告加载失败
+- (void)advanceFailedWithError:(NSError *)error {
+    NSLog(@"广告展示失败 %s  error: %@", __func__, error);
+
 }
 
-/// 广告渲染失败
-- (void)advanceBannerOnAdRenderFailed {
-    [DemoUtils showToast:@"广告渲染失败"];
+/// 内部渠道开始加载时调用
+- (void)advanceSupplierWillLoad:(NSString *)supplierId {
+    NSLog(@"内部渠道开始加载 %s  supplierId: %@", __func__, supplierId);
+
 }
 
-/// 广告点击回调
-- (void)advanceBannerOnAdClicked {
-    [DemoUtils showToast:@"广告点击回调"];
+/// 广告曝光
+- (void)advanceExposured {
+    NSLog(@"广告曝光回调 %s", __func__);
 }
 
-/// 请求广告数据失败后调用
-- (void)advanceBannerOnAdFailedWithSdkId:(nullable NSString *)sdkId error:(nullable NSError *)error {
-    [DemoUtils showToast:@"请求广告数据失败后调用"];
+/// 广告点击
+- (void)advanceClicked {
+    NSLog(@"广告点击 %s", __func__);
 }
 
 /// 广告关闭回调
-- (void)advanceBannerOnAdClosed {
-    [DemoUtils showToast:@"广告关闭回调"];
+- (void)advanceDidClose {
+    NSLog(@"广告关闭了 %s", __func__);
 }
 
+/// 策略请求成功
+- (void)advanceOnAdReceived:(NSString *)reqId {
+    NSLog(@"%s 策略id为: %@",__func__ , reqId);
+}
 @end
 
 ```

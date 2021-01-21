@@ -60,40 +60,54 @@
         [self.tableView reloadData];
     }
 }
-
 /// 广告曝光
 - (void)advanceNativeExpressOnAdShow:(UIView *)adView {
-    NSLog(@"广告曝光");
+    NSLog(@"广告曝光 %s", __func__);
 }
 
 /// 广告点击
 - (void)advanceNativeExpressOnAdClicked:(UIView *)adView {
-    NSLog(@"广告点击");
+    NSLog(@"广告点击 %s", __func__);
 }
 
 /// 广告渲染成功
 - (void)advanceNativeExpressOnAdRenderSuccess:(UIView *)adView {
+    NSLog(@"广告渲染成功 %s", __func__);
     [self.tableView reloadData];
 }
 
-/// 广告渲染失败
-- (void)advanceNativeExpressOnAdRenderFail:(UIView *)adView {
-    NSLog(@"广告渲染失败");
+/// 广告加载失败
+- (void)advanceFailedWithError:(NSError *)error {
+    NSLog(@"广告展示失败 %s  error: %@", __func__, error);
+
+}
+
+/// 内部渠道开始加载时调用
+- (void)advanceSupplierWillLoad:(NSString *)supplierId {
+    NSLog(@"内部渠道开始加载 %s  supplierId: %@", __func__, supplierId);
+
+}
+
+/// 广告关闭
+- (void)advanceDidClose {
+    NSLog(@"广告关闭了 %s", __func__);
+}
+
+/// 加载策略成功
+- (void)advanceOnAdReceived:(NSString *)reqId
+{
+    NSLog(@"%s 策略id为: %@",__func__ , reqId);
 }
 
 /// 广告被关闭
 - (void)advanceNativeExpressOnAdClosed:(UIView *)adView {
     //需要从tableview中删除
-    NSLog(@"广告关闭");
+    NSLog(@"广告关闭 %s", __func__);
     [_dataArrM removeObject: adView];
     [adView removeFromSuperview];
     [self.tableView reloadData];
 }
 
-/// 广告数据拉取失败
-- (void)advanceNativeExpressOnAdFailedWithSdkId:(nullable NSString *)sdkId error:(nullable NSError *)error {
-    NSLog(@"广告拉取失败");
-}
 
 // MARK: ======================= UITableViewDelegate, UITableViewDataSource =======================
 

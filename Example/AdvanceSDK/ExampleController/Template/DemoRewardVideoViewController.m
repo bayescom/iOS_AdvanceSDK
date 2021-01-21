@@ -43,7 +43,7 @@
                                                             viewController:self];
     self.advanceRewardVideo.delegate=self;
     [self.advanceRewardVideo setDefaultAdvSupplierWithMediaId:@"100255"
-                                                     adspotId:@"10002595"
+                                                     adspotId:@"10002595323"
                                                      mediaKey:@"757d5119466abe3d771a211cc1278df7"
                                                      sdkId:SDK_ID_MERCURY];
     _isAdLoaded=false;
@@ -58,25 +58,24 @@
 }
 
 // MARK: ======================= AdvanceRewardVideoDelegate =======================
+/// 广告数据加载成功
 - (void)advanceUnifiedViewDidLoad {
     NSLog(@"广告数据加载成功 %s", __func__);
     _isAdLoaded=true;
     [JDStatusBarNotification showWithStatus:@"广告加载成功" dismissAfter:1.5];
 }
 
+/// 视频缓存成功
 - (void)advanceRewardVideoOnAdVideoCached
 {
-    NSLog(@"视频缓存成功");
+    NSLog(@"视频缓存成功 %s", __func__);
     [JDStatusBarNotification showWithStatus:@"视频缓存成功" dismissAfter:1.5];
 
 }
 
+/// 到达激励时间
 - (void)advanceRewardVideoAdDidRewardEffective {
-    NSLog(@"到达激励时间");
-}
-
-- (void)advanceRewardVideoOnAdRenderFailed {
-    NSLog(@"广告渲染失败");
+    NSLog(@"到达激励时间 %s", __func__);
 }
 
 /// 广告曝光
@@ -99,31 +98,27 @@
 /// 内部渠道开始加载时调用
 - (void)advanceSupplierWillLoad:(NSString *)supplierId {
     NSLog(@"内部渠道开始加载 %s  supplierId: %@", __func__, supplierId);
-
 }
-
-
 
 /// 广告关闭
 - (void)advanceDidClose {
     NSLog(@"广告关闭了 %s", __func__);
 }
 
+/// 播放完成
 - (void)advanceRewardVideoAdDidPlayFinish {
-    NSLog(@"播放完成");
+    NSLog(@"播放完成 %s", __func__);
 }
 
+/// 策略请求成功
 - (void)advanceOnAdReceived:(NSString *)reqId
 {
     NSLog(@"%s 策略id为: %@",__func__ , reqId);
 }
 
-- (void)advanceOnAdNotFilled:(NSError *)error
-{
-    NSLog(@"策略加载失败");
-}
-
+/// 广告可以被调用
 - (void)advanceRewardVideoIsReadyToShow {
+    NSLog(@"广告可以被调用了 %s", __func__);
     if (!_isAdLoaded) {
        [JDStatusBarNotification showWithStatus:@"请先加载广告" dismissAfter:1.5];
     }

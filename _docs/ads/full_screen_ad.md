@@ -41,41 +41,57 @@
 
 // MARK: ======================= AdvanceFullScreenVideoDelegate =======================
 
+
 /// 请求广告数据成功后调用
-- (void)advanceFullScreenVideoOnAdReceived {
-    NSLog(@"请求广告数据成功后调用");
+- (void)advanceUnifiedViewDidLoad {
+    NSLog(@"请求广告数据成功后调用 %s", __func__);
+    _isAdLoaded=true;
+    [JDStatusBarNotification showWithStatus:@"广告加载成功" dismissAfter:1.5];
 }
 
 /// 广告渲染失败
 - (void)advanceFullScreenVideoOnAdRenderFailed {
-    NSLog(@"广告渲染失败");
+    NSLog(@"广告渲染失败 %s", __func__);
 }
 
-/// 广告曝光成功
-- (void)advanceFullScreenVideoOnAdShow {
-    NSLog(@"广告曝光成功");
+/// 广告曝光
+- (void)advanceExposured {
+    NSLog(@"广告曝光回调 %s", __func__);
 }
 
 /// 广告点击
-- (void)advanceFullScreenVideoOnAdClicked {
-    NSLog(@"广告点击");
+- (void)advanceClicked {
+    NSLog(@"广告点击 %s", __func__);
 }
 
-/// 广告拉取失败
-- (void)advanceFullScreenVideoOnAdFailedWithSdkId:(NSString *)sdkId error:(NSError *)error {
-    NSLog(@"广告拉取失败");
+/// 广告加载失败
+- (void)advanceFailedWithError:(NSError *)error {
+    [JDStatusBarNotification showWithStatus:@"广告加载失败" dismissAfter:1.5];
+    NSLog(@"广告展示失败 %s  error: %@", __func__, error);
+
+}
+
+/// 内部渠道开始加载时调用
+- (void)advanceSupplierWillLoad:(NSString *)supplierId {
+    NSLog(@"内部渠道开始加载 %s  supplierId: %@", __func__, supplierId);
+
 }
 
 /// 广告关闭
-- (void)advanceFullScreenVideoOnAdClosed {
-    NSLog(@"广告关闭");
+- (void)advanceDidClose {
+    NSLog(@"广告关闭了 %s", __func__);
 }
 
 /// 广告播放完成
 - (void)advanceFullScreenVideoOnAdPlayFinish {
-    NSLog(@"广告播放完成");
+    NSLog(@"广告播放完成 %s", __func__);
 }
 
+/// 策略加载成功
+- (void)advanceOnAdReceived:(NSString *)reqId
+{
+    NSLog(@"%s 策略id为: %@",__func__ , reqId);
+}
 @end
 
 ```
