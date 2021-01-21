@@ -72,7 +72,7 @@
 
 /// 广告渲染失败
 - (void)advanceFullScreenVideoOnAdRenderFailed {
-    NSLog(@"广告渲染失败");
+    NSLog(@"广告渲染失败 %s", __func__);
 }
 
 /// 广告曝光
@@ -98,7 +98,6 @@
 
 }
 
-
 /// 广告关闭
 - (void)advanceDidClose {
     NSLog(@"广告关闭了 %s", __func__);
@@ -106,14 +105,10 @@
 
 /// 广告播放完成
 - (void)advanceFullScreenVideoOnAdPlayFinish {
-    NSLog(@"广告播放完成");
+    NSLog(@"广告播放完成 %s", __func__);
 }
 
-- (void)advanceOnAdNotFilled:(NSError *)error
-{
-    NSLog(@"策略加载失败");
-}
-
+/// 策略加载成功
 - (void)advanceOnAdReceived:(NSString *)reqId
 {
     NSLog(@"%s 策略id为: %@",__func__ , reqId);
