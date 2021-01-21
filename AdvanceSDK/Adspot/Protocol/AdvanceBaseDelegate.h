@@ -7,9 +7,9 @@
 
 #ifndef AdvanceBaseDelegate_h
 #define AdvanceBaseDelegate_h
-#import "AdvanceFaildDelegate.h"
+#import "AdvanceCommonDelegate.h"
 // 策略相关的代理
-@protocol AdvanceBaseDelegate <AdvanceFaildDelegate>
+@protocol AdvanceBaseDelegate <AdvanceCommonDelegate>
 
 @optional
 

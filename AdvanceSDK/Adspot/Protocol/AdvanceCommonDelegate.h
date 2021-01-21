@@ -1,15 +1,15 @@
 //
-//  AdvanceFaildDelegate.h
+//  AdvanceCommonDelegate.h
 //  Pods
 //
 //  Created by MS on 2021/1/16.
 //
 
-#ifndef AdvanceFaildDelegate_h
-#define AdvanceFaildDelegate_h
+#ifndef AdvanceCommonDelegate_h
+#define AdvanceCommonDelegate_h
 
 // 策略相关的代理
-@protocol AdvanceFaildDelegate <NSObject>
+@protocol AdvanceCommonDelegate <NSObject>
 
 @optional
 

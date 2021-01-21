@@ -8,8 +8,8 @@
 
 #ifndef AdvanceNativeExpressProtocol_h
 #define AdvanceNativeExpressProtocol_h
-#import "AdvanceFaildDelegate.h"
-@protocol AdvanceNativeExpressDelegate <AdvanceFaildDelegate>
+#import "AdvanceCommonDelegate.h"
+@protocol AdvanceNativeExpressDelegate <AdvanceCommonDelegate>
 @optional
 /// 广告数据拉取成功
 - (void)advanceNativeExpressOnAdLoadSuccess:(nullable NSArray<UIView *> *)views;
