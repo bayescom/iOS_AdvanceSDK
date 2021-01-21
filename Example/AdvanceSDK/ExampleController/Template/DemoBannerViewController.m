@@ -73,7 +73,7 @@
 
 /// 广告曝光
 - (void)advanceExposured {
-    NSLog(@"广告曝光回调");
+    NSLog(@"广告曝光回调 %s", __func__);
 }
 
 /// 广告点击
@@ -89,11 +89,6 @@
 /// 策略请求成功
 - (void)advanceOnAdReceived:(NSString *)reqId {
     NSLog(@"%s 策略id为: %@",__func__ , reqId);
-}
-
-/// 策略请求失败
-- (void)advanceOnAdNotFilled:(NSError *)error {
-    NSLog(@"策略请求失败");
 }
 
 @end
