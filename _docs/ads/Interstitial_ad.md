@@ -47,39 +47,53 @@
 // MARK: ======================= AdvanceInterstitialDelegate =======================
 
 /// 请求广告数据成功后调用
-- (void)advanceInterstitialOnAdReceived {
-    [DemoUtils showToast:@"请求广告数据成功后调用"];
+- (void)advanceUnifiedViewDidLoad {
+    NSLog(@"广告数据拉取成功 %s", __func__);
 }
 
-/// 广告准备就绪
-- (void)advanceInterstitialOnAdReady {
-    [DemoUtils showToast:@"广告准备就绪"];
-}
 
 /// 广告渲染失败
 - (void)advanceInterstitialOnAdRenderFailed {
-    [DemoUtils showToast:@"广告渲染失败"];
+    NSLog(@"广告渲染失败 %s", __func__);
 }
 
-/// 广告曝光成功
-- (void)advanceInterstitialOnAdShow {
-    [DemoUtils showToast:@"广告曝光成功"];
+/// 广告曝光
+- (void)advanceExposured {
+    NSLog(@"广告曝光回调 %s", __func__);
 }
 
 /// 广告点击
-- (void)advanceInterstitialOnAdClicked {
-    [DemoUtils showToast:@"广告点击"];
+- (void)advanceClicked {
+    NSLog(@"广告点击 %s", __func__);
 }
 
-/// 广告拉取失败
-- (void)advanceInterstitialOnAdFailedWithSdkId:(nullable NSString *)sdkId error:(nullable NSError *)error {
-    [DemoUtils showToast:@"广告拉取失败"];
+/// 广告加载失败
+- (void)advanceFailedWithError:(NSError *)error {
+    NSLog(@"广告展示失败 %s  error: %@", __func__, error);
+
 }
 
-/// 广告关闭
-- (void)advanceInterstitialOnAdClosed {
-    [DemoUtils showToast:@"广告关闭"];
+/// 内部渠道开始加载时调用
+- (void)advanceSupplierWillLoad:(NSString *)supplierId {
+    NSLog(@"内部渠道开始加载 %s  supplierId: %@", __func__, supplierId);
+
 }
+
+/// 广告关闭了
+- (void)advanceDidClose {
+    NSLog(@"广告关闭了 %s", __func__);
+}
+
+/// 策略请求成功
+- (void)advanceOnAdReceived:(NSString *)reqId {
+    NSLog(@"%s 策略id为: %@",__func__ , reqId);
+}
+
+/// 广告可以show了
+- (void)advanceInterstitialOnReadyToShow {
+    NSLog(@"广告可以show了 %s",__func__);
+}
+
 
 @end
 

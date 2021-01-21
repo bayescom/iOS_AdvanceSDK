@@ -71,12 +71,12 @@
 
 /// 广告渲染失败
 - (void)advanceInterstitialOnAdRenderFailed {
-    NSLog(@"广告渲染失败");
+    NSLog(@"广告渲染失败 %s", __func__);
 }
 
 /// 广告曝光
 - (void)advanceExposured {
-    NSLog(@"广告曝光回调");
+    NSLog(@"广告曝光回调 %s", __func__);
 }
 
 /// 广告点击
@@ -107,8 +107,9 @@
     NSLog(@"%s 策略id为: %@",__func__ , reqId);
 }
 
-
+/// 广告可以show了
 - (void)advanceInterstitialOnReadyToShow {
+    NSLog(@"广告可以show了 %s",__func__);
     if (!_isAdLoaded) {
        [JDStatusBarNotification showWithStatus:@"请先加载广告" dismissAfter:1.5];
     }
