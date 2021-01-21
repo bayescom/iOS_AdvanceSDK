@@ -52,23 +52,23 @@
 /// 插屏广告预加载成功回调，当接收服务器返回的广告数据成功且预加载后调用该函数
 - (void)nativeExpresInterstitialAdDidLoad:(BUNativeExpressInterstitialAd *)interstitialAd {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded];
-    if ([self.delegate respondsToSelector:@selector(advanceInterstitialOnAdReceived)]) {
-        [self.delegate advanceInterstitialOnAdReceived];
+    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
+        [self.delegate advanceUnifiedViewDidLoad];
     }
 }
 
 /// 插屏广告预加载失败回调，当接收服务器返回的广告数据失败后调用该函数
 - (void)nativeExpresInterstitialAd:(BUNativeExpressInterstitialAd *)interstitialAd didFailWithError:(NSError *)error {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded error:error];
     _csj_ad = nil;
-    if ([self.delegate respondsToSelector:@selector(advanceInterstitialOnAdFailedWithSdkId:error:)]) {
-        [self.delegate advanceInterstitialOnAdFailedWithSdkId:_supplier.identifier error:error];
-    }
+//    if ([self.delegate respondsToSelector:@selector(advanceInterstitialOnAdFailedWithSdkId:error:)]) {
+//        [self.delegate advanceInterstitialOnAdFailedWithSdkId:_supplier.identifier error:error];
+//    }
 }
 
 /// 插屏广告渲染失败
 - (void)nativeExpresInterstitialAdRenderFail:(BUNativeExpressInterstitialAd *)interstitialAd error:(NSError *)error {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded error:error];
     _csj_ad = nil;
     if ([self.delegate respondsToSelector:@selector(advanceInterstitialOnAdRenderFailed)]) {
         [self.delegate advanceInterstitialOnAdRenderFailed];
@@ -79,23 +79,23 @@
 /// 插屏广告曝光回调
 - (void)nativeExpresInterstitialAdWillVisible:(BUNativeExpressInterstitialAd *)interstitialAd {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoImped];
-    if ([self.delegate respondsToSelector:@selector(advanceInterstitialOnAdShow)]) {
-        [self.delegate advanceInterstitialOnAdShow];
+    if ([self.delegate respondsToSelector:@selector(advanceExposured)]) {
+        [self.delegate advanceExposured];
     }
 }
 
 /// 插屏广告点击回调
 - (void)nativeExpresInterstitialAdDidClick:(BUNativeExpressInterstitialAd *)interstitialAd {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked];
-    if ([self.delegate respondsToSelector:@selector(advanceInterstitialOnAdClicked)]) {
-        [self.delegate advanceInterstitialOnAdClicked];
+    if ([self.delegate respondsToSelector:@selector(advanceClicked)]) {
+        [self.delegate advanceClicked];
     }
 }
 
 /// 插屏广告曝光结束回调，插屏广告曝光结束回调该函数
 - (void)nativeExpresInterstitialAdDidClose:(BUNativeExpressInterstitialAd *)interstitialAd {
-    if ([self.delegate respondsToSelector:@selector(advanceInterstitialOnAdClosed)]) {
-        [self.delegate advanceInterstitialOnAdClosed];
+    if ([self.delegate respondsToSelector:@selector(advanceDidClose)]) {
+        [self.delegate advanceDidClose];
     }
 }
 

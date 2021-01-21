@@ -147,6 +147,10 @@
     return __txtF02.text;
 }
 
+- (NSDictionary *)ext {
+    return @{@"test" : @"自定义拓展参数"};
+}
+
 - (UIView *)cusView {
     return __cusV;
 }

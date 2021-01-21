@@ -26,10 +26,13 @@
 @property (nonatomic, copy) NSString *mediaId;
 /// 广告位id
 @property (nonatomic, copy) NSString *adspotId;
+/// 自定义拓展字段
+@property (nonatomic, strong) NSDictionary *ext;
 
 /// 是否是走的本地的渠道
 @property (nonatomic, assign) BOOL isLoadLocalSupplier;
 
+@property (nonatomic, assign) NSTimeInterval serverTime;
 @end
 
 @implementation AdvSupplierManager
@@ -44,9 +47,12 @@
  * 如果本地存在有效数据，直接加载本地数据
  * 数据不存在则同步数据
  */
-- (void)loadDataWithMediaId:(NSString *)mediaId adspotId:(NSString *)adspotId {
+- (void)loadDataWithMediaId:(NSString *)mediaId
+                   adspotId:(NSString *)adspotId
+                  customExt:(NSDictionary * _Nonnull)ext {
     self.mediaId = mediaId;
     self.adspotId = adspotId;
+    self.ext = [ext mutableCopy];
     
     // 获取本地数据
     _model = [AdvSupplierModel loadDataWithMediaId:mediaId adspotId:adspotId];
@@ -123,7 +129,7 @@
         }
         
         _currSupplier = targetSupplier;
-        [self reportWithType:AdvanceSdkSupplierRepoLoaded];
+        [self reportWithType:AdvanceSdkSupplierRepoLoaded error:nil];
         if ([_delegate respondsToSelector:@selector(advSupplierLoadSuppluer:error:)]) {
             [_delegate advSupplierLoadSuppluer:targetSupplier error:nil];
         }
@@ -153,7 +159,7 @@
     
     _currSupplier = supplier;
     [_supplierM removeObject:_currSupplier];
-    [self reportWithType:AdvanceSdkSupplierRepoLoaded];
+    [self reportWithType:AdvanceSdkSupplierRepoLoaded error:nil];
     if ([_delegate respondsToSelector:@selector(advSupplierLoadSuppluer:error:)]) {
         [_delegate advSupplierLoadSuppluer:supplier error:error];
     }
@@ -183,7 +189,7 @@
         return;
     }
     _currSupplier = _baseSupplier;
-    [self reportWithType:AdvanceSdkSupplierRepoLoaded];
+    [self reportWithType:AdvanceSdkSupplierRepoLoaded error:nil];
     if ([_delegate respondsToSelector:@selector(advSupplierLoadSuppluer:error:)]) {
         [_delegate advSupplierLoadSuppluer:_baseSupplier error:nil];
     }
@@ -193,17 +199,23 @@
 // MARK: ======================= Net Work =======================
 /// 拉取线上数据 如果是仅仅储存 不会触发任何回调，仅存储策略信息
 - (void)fetchData:(BOOL)saveOnly {
-    _mediaId = @"";
     NSMutableDictionary *deviceInfo = [AdvDeviceInfoUtil getDeviceInfoWithMediaId:_mediaId adspotId:_adspotId];
+    if (self.ext) {
+        [deviceInfo setValue:self.ext forKey:@"ext"];
+    }
+//    [deviceInfo setValue:@"" forKey:@"adspotid"];
+//    NSLog(@"请求参数 %@", deviceInfo);
     NSError *parseError = nil;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:deviceInfo options:NSJSONWritingPrettyPrinted error:&parseError];
     NSURL *url = [NSURL URLWithString:AdvanceSdkRequestUrl];
 //    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@?adspotid=%@", AdvanceSdkRequestUrl, _adspotId]];
+//    NSURL *url = [NSURL URLWithString:@"https://mock.yonyoucloud.com/mock/2650/api/v3/eleven"];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:self.fetchTime];
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     request.HTTPBody = jsonData;
     request.HTTPMethod = @"POST";
     NSURLSession *sharedSession = [NSURLSession sharedSession];
+    self.serverTime = [[NSDate date] timeIntervalSince1970]*1000;
     NSURLSessionDataTask *dataTask = [sharedSession dataTaskWithRequest:request
                                                       completionHandler:^(NSData *_Nullable data, NSURLResponse *_Nullable response, NSError *_Nullable error) {
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -234,9 +246,10 @@
     NSHTTPURLResponse *httpResp = (NSHTTPURLResponse *)response;
     if (httpResp.statusCode != 200) {
         // code no statusCode
-        if (!saveOnly && [_delegate respondsToSelector:@selector(advSupplierManagerLoadError:)]) {
-            [_delegate advSupplierManagerLoadError:[AdvError errorWithCode:AdvErrorCode_103].toNSError];
-        }
+        // 策略失败回调和渠道失败回调统一, 当策略失败 但是打底渠道成功时 则不抛错误
+//        if (!saveOnly && [_delegate respondsToSelector:@selector(advSupplierManagerLoadError:)]) {
+//            [_delegate advSupplierManagerLoadError:[AdvError errorWithCode:AdvErrorCode_103].toNSError];
+//        }
         
         // 默认走打底
         ADVLog(@"statusCode != 200，执行打底");
@@ -258,9 +271,10 @@
     
     if (a_model.code != 200) {
         // result code not 200
-        if (!saveOnly && [_delegate respondsToSelector:@selector(advSupplierManagerLoadError:)]) {
-            [_delegate advSupplierManagerLoadError:[AdvError errorWithCode:AdvErrorCode_105].toNSError];
-        }
+        // 策略失败回调和渠道失败回调统一, 当策略失败 但是打底渠道成功时 则不抛错误
+//        if (!saveOnly && [_delegate respondsToSelector:@selector(advSupplierManagerLoadError:)]) {
+//            [_delegate advSupplierManagerLoadError:[AdvError errorWithCode:AdvErrorCode_105].toNSError];
+//        }
         
         // 默认走打底
         ADVLog(@"model.code != 200，执行打底");
@@ -299,7 +313,7 @@
 }
 
 /// 数据上报
-- (void)reportWithUploadArr:(NSArray<NSString *> *)uploadArr {
+- (void)reportWithUploadArr:(NSArray<NSString *> *)uploadArr error:(NSError *)error{
     for (id obj in uploadArr) {
         @try {
             NSString *urlString = obj;
@@ -321,6 +335,70 @@
     }
 }
 
+#pragma failedtk 的参数拼接
+- (NSMutableArray *)failedtkUrlWithArr:(NSArray<NSString *> *)uploadArr error:(NSError *)error {
+    NSMutableArray *temp = [NSMutableArray arrayWithCapacity:uploadArr.count];
+    for (id obj in uploadArr.mutableCopy) {
+        NSString *failed = [self joinFailedUrlWithObj:obj error:error];
+        [temp addObject:failed];
+    }
+    return temp;
+}
+
+#pragma 错误码参数拼接
+- (NSString *)joinFailedUrlWithObj:(NSString *)urlString error:(NSError *)error {
+    ADVLog(@"UPLOAD error: %@", error);
+    if (error) {
+        if ([error.domain isEqualToString:@"com.bytedance.buadsdk"]) {// 穿山甲sdk报错
+            return [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=err_csj_%ld&track_time",(long)error.code]];
+        } else if ([error.domain isEqualToString:@"GDTAdErrorDomain"]) {// 广点通
+            NSString *url = nil;
+            if (error.code == 6000 && error.localizedDescription != nil) {
+                
+                @try {
+                    //过滤字符串前后的空格
+                    NSString *errorDescription = [error.localizedDescription stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+                    //过滤字符串中间的空格
+                    errorDescription = [errorDescription stringByReplacingOccurrencesOfString:@" " withString:@""];
+                    ////匹配error.localizedDescription当中的"详细码:"得到的下标
+                    NSRange range = [errorDescription rangeOfString:@"详细码:"];
+                    // 截取"详细码:"后6位字符串
+                    NSString *subCodeString = [errorDescription substringWithRange:NSMakeRange(range.location + range.length, 6)];
+                    url = [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=err_gdt_%ld_%@&track_time",(long)error.code, subCodeString]];
+                } @catch (NSException *exception) {
+                    url = [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=err_gdt_%ld&track_time",(long)error.code]];
+                }
+            } else {
+                url = [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=err_gdt_%ld&track_time",(long)error.code]];
+            }
+            return url;
+        } else {// 倍业
+            return [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=err_mer_%ld&track_time",(long)error.code]];
+        }
+    }
+    return urlString;
+}
+
+#pragma loadedtk 的参数拼接
+- (NSMutableArray *)loadedtkUrlWithArr:(NSArray<NSString *> *)uploadArr {
+    NSMutableArray *temp = [NSMutableArray arrayWithCapacity:uploadArr.count];
+    for (id obj in uploadArr.mutableCopy) {
+        NSString *loadedtk = [self joinLoadedtkUrlWithObj:obj];
+        [temp addObject:loadedtk];
+    }
+    return temp;
+}
+
+#pragma loadedtk 拼接时间戳
+- (NSString *)joinLoadedtkUrlWithObj:(NSString *)urlString {
+    NSTimeInterval serverTime = [[NSDate date] timeIntervalSince1970]*1000 - self.serverTime;
+    if (serverTime > 0) {
+        return [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=l_%.0f&track_time",serverTime]];
+    }
+    return urlString;
+}
+
+
 // MARK: ======================= Private =======================
 - (void)sortSupplierMByPriority {
     if (_supplierM.count > 1) {
@@ -339,11 +417,11 @@
 }
 
 // MARK: ======================= 上报 =======================
-- (void)reportWithType:(AdvanceSdkSupplierRepoType)repoType {
+- (void)reportWithType:(AdvanceSdkSupplierRepoType)repoType error:(nonnull NSError *)error{
     NSArray<NSString *> *uploadArr = nil;
     /// 按照类型判断上报地址
     if (repoType == AdvanceSdkSupplierRepoLoaded) {
-        uploadArr = _currSupplier.loadedtk;
+        uploadArr = [self loadedtkUrlWithArr:_currSupplier.loadedtk];
     } else if (repoType == AdvanceSdkSupplierRepoClicked) {
         uploadArr =  _currSupplier.clicktk;
     } else if (repoType == AdvanceSdkSupplierRepoSucceeded) {
@@ -356,14 +434,14 @@
     } else if (repoType == AdvanceSdkSupplierRepoImped) {
         uploadArr =  _currSupplier.imptk;
     } else if (repoType == AdvanceSdkSupplierRepoFaileded) {
-        uploadArr =  _currSupplier.failedtk;
+        uploadArr =  [self failedtkUrlWithArr:_currSupplier.failedtk error:error];
     }
     if (!uploadArr || uploadArr.count <= 0) {
         // TODO: 上报地址不存在
         return;
     }
     // 执行上报请求
-    [self reportWithUploadArr:uploadArr];
+    [self reportWithUploadArr:uploadArr error:error];
     ADVLog(@"%@ = 上报(impid: %@)", ADVStringFromNAdvanceSdkSupplierRepoType(repoType), _currSupplier.name);
 }
 

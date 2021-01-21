@@ -335,7 +335,7 @@ NSString *_Nullable AdvSupplierModelToJSON(AdvSupplierModel *supplierModel, NSSt
     supplier.mediaid = mediaId;
     supplier.adspotid = adspotid;
     supplier.mediakey = mediakey;
-    supplier.sdktag = @"default";
+    supplier.sdktag = @"bottom_default";
     supplier.identifier = sdkid;
     supplier.name = @"打底SDK";
     supplier.priority = 1;

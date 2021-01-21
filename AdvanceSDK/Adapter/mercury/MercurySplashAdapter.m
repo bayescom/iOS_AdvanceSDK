@@ -64,29 +64,29 @@
 // MARK: ======================= MercurySplashAdDelegate =======================
 - (void)mercury_splashAdDidLoad:(MercurySplashAd *)splashAd {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded];
-    if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdReceived)]) {
-        [self.delegate advanceSplashOnAdReceived];
+    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
+        [self.delegate advanceUnifiedViewDidLoad];
     }
 }
 
 - (void)mercury_splashAdExposured:(MercurySplashAd *)splashAd {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoImped];
-    if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdShow)]) {
-        [self.delegate advanceSplashOnAdShow];
+    if ([self.delegate respondsToSelector:@selector(advanceExposured)]) {
+        [self.delegate advanceExposured];
     }
 }
 
 - (void)mercury_splashAdFailError:(nullable NSError *)error {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
-    if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdFailedWithSdkId:error:)]) {
-        [self.delegate advanceSplashOnAdFailedWithSdkId:_supplier.identifier error:error];
-    }
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded error:error];
+//    if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdFailedWithSdkId:error:)]) {
+//        [self.delegate advanceSplashOnAdFailedWithSdkId:_supplier.identifier error:error];
+//    }
 }
 
 - (void)mercury_splashAdClicked:(MercurySplashAd *)splashAd {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked];
-    if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdClicked)]) {
-        [self.delegate advanceSplashOnAdClicked];
+    if ([self.delegate respondsToSelector:@selector(advanceClicked)]) {
+        [self.delegate advanceClicked];
     }
 }
 
@@ -99,6 +99,12 @@
 - (void)mercury_splashAdSkipClicked:(MercurySplashAd *)splashAd {
     if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdSkipClicked)]) {
         [self.delegate advanceSplashOnAdSkipClicked];
+    }
+}
+
+- (void)mercury_splashAdClosed:(MercurySplashAd *)splashAd {
+    if ([self.delegate respondsToSelector:@selector(advanceDidClose)]) {
+        [self.delegate advanceDidClose];
     }
 }
 

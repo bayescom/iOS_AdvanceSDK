@@ -28,7 +28,11 @@
 @implementation AdvanceSplash
 
 - (instancetype)initWithAdspotId:(NSString *)adspotid viewController:(nonnull UIViewController *)viewController {
-    if (self = [super initWithMediaId:nil adspotId:adspotid]) {
+    return [self initWithAdspotId:adspotid customExt:nil viewController:viewController];
+}
+
+- (instancetype)initWithAdspotId:(NSString *)adspotid customExt:(NSDictionary *)ext viewController:(UIViewController *)viewController {
+    if (self = [super initWithMediaId:@"" adspotId:adspotid customExt:ext]) {
         _viewController = viewController;
     }
     return self;
@@ -66,10 +70,10 @@
     [_timeoutCheckTimer invalidate];
     _timeoutCheckTimer = nil;
     _timeout_stamp = 0;
-    if([_delegate respondsToSelector:@selector(advanceOnAdNotFilled:)]) {
-        [_delegate advanceOnAdNotFilled:[AdvError errorWithCode:AdvErrorCode_115].toNSError];
-        [_adapter performSelector:@selector(deallocAdapter)];
-    }
+//    if([_delegate respondsToSelector:@selector(advanceOnAdNotFilled:)]) {
+//        [_delegate advanceOnAdNotFilled:[AdvError errorWithCode:AdvErrorCode_115].toNSError];
+//        [_adapter performSelector:@selector(deallocAdapter)];
+//    }
     _delegate = nil;
 }
 
@@ -81,20 +85,34 @@
     }
 }
 
+// 执行了打底渠道
+- (void)advSupplierLoadDefaultSuppluer:(AdvSupplier *)supplier
+{
+//    ADVLog(@"执行了打底渠道: %@", supplier.sdktag);
+    [self advanceOnAdReceivedWithReqId:supplier.sdktag];
+}
+
+// 返回策略id
+- (void)advanceOnAdReceivedWithReqId:(NSString *)reqId
+{
+    if ([_delegate respondsToSelector:@selector(advanceOnAdReceived:)]) {
+        [_delegate advanceOnAdReceived:reqId];
+    }
+}
+
 // MARK: ======================= AdvanceSupplierDelegate =======================
 /// 加载策略Model成功
 - (void)advanceBaseAdapterLoadSuccess:(nonnull AdvSupplierModel *)model {
-//    if ([_delegate respondsToSelector:@selector(advanceSplashOnAdReceived)]) {
-//        [_delegate advanceSplashOnAdReceived];
-//    }
+    // 返回策略id
+    [self advanceOnAdReceivedWithReqId:model.reqid];
 }
 
 /// 加载策略Model失败
 - (void)advanceBaseAdapterLoadError:(nullable NSError *)error {
-    if ([_delegate respondsToSelector:@selector(advanceOnAdNotFilled:)]) {
-        [_delegate advanceOnAdNotFilled:error];
+    if ([_delegate respondsToSelector:@selector(advanceFailedWithError:)]) {
+        [_delegate advanceFailedWithError:error];
     }
-    [self deallocSelf];
+//    [self deallocSelf]; // 注释掉 是因为在执行打底渠道
 }
 
 /// 返回下一个渠道的参数
@@ -102,10 +120,18 @@
     // 返回渠道有问题 则不用再执行下面的渠道了
     if (error) {
         ADVLog(@"%@", error);
+        if (self.delegate != nil && [self.delegate respondsToSelector:@selector(advanceFailedWithError:)]) {
+            [self.delegate advanceFailedWithError:error];
+        }
         [self deallocSelf];
         return;
     }
     
+    // 开始加载渠道前通知调用者
+    if ([self.delegate respondsToSelector:@selector(advanceSupplierWillLoad:)]) {
+        [self.delegate advanceSupplierWillLoad:supplier.identifier];
+    }
+
     // 根据渠道id自定义初始化
     NSString *clsName = @"";
     if ([supplier.identifier isEqualToString:SDK_ID_GDT]) {
@@ -155,5 +181,6 @@
     _bgImgV.userInteractionEnabled = YES;
     return _bgImgV;
 }
+
 
 @end

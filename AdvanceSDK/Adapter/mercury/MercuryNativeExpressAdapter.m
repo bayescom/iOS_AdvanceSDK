@@ -53,10 +53,10 @@
 - (void)mercury_nativeExpressAdSuccessToLoad:(id)nativeExpressAd views:(NSArray<UIView *> *)views {
     if (views == nil || views.count == 0) {
         [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
-        if ([self.delegate respondsToSelector:@selector(advanceNativeExpressOnAdFailedWithSdkId:error:)]) {
-            [self.delegate advanceNativeExpressOnAdFailedWithSdkId:_supplier.identifier
-                                                                 error:[NSError errorWithDomain:@"" code:100000 userInfo:@{@"msg": @"无广告返回"}]];
-        }
+//        if ([self.delegate respondsToSelector:@selector(advanceNativeExpressOnAdFailedWithSdkId:error:)]) {
+//            [self.delegate advanceNativeExpressOnAdFailedWithSdkId:_supplier.identifier
+//                                                                 error:[NSError errorWithDomain:@"" code:100000 userInfo:@{@"msg": @"无广告返回"}]];
+//        }
     } else if (self.adspot) {
         for (UIView *view in views) {
             if ([view isKindOfClass:NSClassFromString(@"MercuryNativeExpressAdView")]) {
@@ -72,11 +72,11 @@
 
 /// 拉取原生模板广告失败
 - (void)mercury_nativeExpressAdFailToLoadWithError:(NSError *)error {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded error:error];
     _mercury_ad = nil;
-    if ([self.delegate respondsToSelector:@selector(advanceNativeExpressOnAdFailedWithSdkId:error:)]) {
-        [self.delegate advanceNativeExpressOnAdFailedWithSdkId:_supplier.identifier error:error];
-    }
+//    if ([self.delegate respondsToSelector:@selector(advanceNativeExpressOnAdFailedWithSdkId:error:)]) {
+//        [self.delegate advanceNativeExpressOnAdFailedWithSdkId:_supplier.identifier error:error];
+//    }
 }
 
 /// 原生模板广告渲染成功, 此时的 nativeExpressAdView.size.height 根据 size.width 完成了动态更新。
@@ -88,6 +88,7 @@
 
 /// 原生模板广告渲染失败
 - (void)mercury_nativeExpressAdViewRenderFail:(MercuryNativeExpressAdView *)nativeExpressAdView {
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded error:[NSError errorWithDomain:@"广告素材渲染失败" code:301 userInfo:@{@"msg": @"广告素材渲染失败"}]];
     if ([self.delegate respondsToSelector:@selector(advanceNativeExpressOnAdRenderFail:)]) {
         [self.delegate advanceNativeExpressOnAdRenderFail:nativeExpressAdView];
     }

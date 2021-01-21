@@ -9,6 +9,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+// 策略相关
 typedef NS_ENUM(NSUInteger, AdvErrorCode) {
     AdvErrorCode_101    =    101,
     AdvErrorCode_102    =    102,

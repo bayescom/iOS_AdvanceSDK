@@ -24,6 +24,8 @@
     self.initDefSubviewsFlag = YES;
     self.adspotIdsArr = @[
         @{@"addesc": @"激励视频", @"adspotId": @"100255-10002595"},
+        @{@"addesc": @"Mock 渠道错误", @"adspotId": @"100255-10000001"},
+        @{@"addesc": @"Mock code200", @"adspotId": @"100255-10003321"},
     ];
     self.btn1Title = @"加载广告";
     self.btn2Title = @"显示广告";
@@ -31,8 +33,14 @@
 
 - (void)loadAdBtn1Action {
     if (![self checkAdspotId]) { return; }
+//    self.advanceRewardVideo = [[AdvanceRewardVideo alloc] initWithAdspotId:@"11111112"
+//                                                           viewController:self];
+
+//    self.advanceRewardVideo = [[AdvanceRewardVideo alloc] initWithAdspotId:self.adspotId
+//                                                           viewController:self];
     self.advanceRewardVideo = [[AdvanceRewardVideo alloc] initWithAdspotId:self.adspotId
-                                                           viewController:self];
+                                                                 customExt:self.ext
+                                                            viewController:self];
     self.advanceRewardVideo.delegate=self;
     [self.advanceRewardVideo setDefaultAdvSupplierWithMediaId:@"100255"
                                                      adspotId:@"10002595"
@@ -50,8 +58,8 @@
 }
 
 // MARK: ======================= AdvanceRewardVideoDelegate =======================
-- (void)advanceRewardVideoOnAdReady {
-    NSLog(@"广告数据加载成功");
+- (void)advanceUnifiedViewDidLoad {
+    NSLog(@"广告数据加载成功 %s", __func__);
     _isAdLoaded=true;
     [JDStatusBarNotification showWithStatus:@"广告加载成功" dismissAfter:1.5];
 }
@@ -71,25 +79,48 @@
     NSLog(@"广告渲染失败");
 }
 
-- (void)advanceRewardVideoOnAdClicked {
-    NSLog(@"广告点击");
+/// 广告曝光
+- (void)advanceExposured {
+    NSLog(@"广告曝光回调 %s", __func__);
 }
 
-- (void)advanceRewardVideoOnAdFailedWithSdkId:(NSString *)sdkId error:(NSError *)error {
-    NSLog(@"广告拉取失败");
+/// 广告点击
+- (void)advanceClicked {
+    NSLog(@"广告点击 %s", __func__);
+}
+
+/// 广告加载失败
+- (void)advanceFailedWithError:(NSError *)error {
+    NSLog(@"广告展示失败 %s  error: %@", __func__, error);
     [JDStatusBarNotification showWithStatus:@"广告加载失败" dismissAfter:1.5];
+
 }
 
-- (void)advanceRewardVideoOnAdShow {
-    NSLog(@"广告展示");
+/// 内部渠道开始加载时调用
+- (void)advanceSupplierWillLoad:(NSString *)supplierId {
+    NSLog(@"内部渠道开始加载 %s  supplierId: %@", __func__, supplierId);
+
 }
 
-- (void)advanceRewardVideoOnAdClosed {
-    NSLog(@"广告关闭");
+
+
+/// 广告关闭
+- (void)advanceDidClose {
+    NSLog(@"广告关闭了 %s", __func__);
 }
 
 - (void)advanceRewardVideoAdDidPlayFinish {
     NSLog(@"播放完成");
+}
+
+- (void)advanceOnAdReceived:(NSString *)reqId
+{
+    NSLog(@"%s 策略id为: %@",__func__ , reqId);
+}
+
+- (void)advanceOnAdNotFilled:(NSError *)error
+{
+    NSLog(@"策略加载失败");
 }
 
 - (void)advanceRewardVideoIsReadyToShow {

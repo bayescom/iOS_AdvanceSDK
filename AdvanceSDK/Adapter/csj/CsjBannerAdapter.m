@@ -48,8 +48,8 @@
  */
 - (void)nativeExpressBannerAdViewDidLoad:(BUNativeExpressBannerView *)bannerAdView {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded];
-    if ([self.delegate respondsToSelector:@selector(advanceBannerOnAdReceived)]) {
-        [self.delegate advanceBannerOnAdReceived];
+    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
+        [self.delegate advanceUnifiedViewDidLoad];
     }
 }
 
@@ -58,10 +58,10 @@
  *  当接收服务器返回的广告数据失败后调用该函数
  */
 - (void)nativeExpressBannerAdView:(BUNativeExpressBannerView *)bannerAdView didLoadFailWithError:(NSError *)error {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
-    if ([self.delegate respondsToSelector:@selector(advanceBannerOnAdFailedWithSdkId:error:)]) {
-        [self.delegate advanceBannerOnAdFailedWithSdkId:_supplier.identifier error:error];
-    }
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded error:error];
+//    if ([self.delegate respondsToSelector:@selector(advanceBannerOnAdFailedWithSdkId:error:)]) {
+//        [self.delegate advanceBannerOnAdFailedWithSdkId:_supplier.identifier error:error];
+//    }
     [_csj_ad removeFromSuperview];
     _csj_ad = nil;
 }
@@ -71,8 +71,8 @@
  */
 - (void)nativeExpressBannerAdViewWillBecomVisible:(BUNativeExpressBannerView *)bannerAdView {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoImped];
-    if ([self.delegate respondsToSelector:@selector(advanceBannerOnAdShow)]) {
-        [self.delegate advanceBannerOnAdShow];
+    if ([self.delegate respondsToSelector:@selector(advanceExposured)]) {
+        [self.delegate advanceExposured];
     }
 }
 
@@ -81,8 +81,8 @@
  */
 - (void)nativeExpressBannerAdViewDidClick:(BUNativeExpressBannerView *)bannerAdView {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked];
-    if ([self.delegate respondsToSelector:@selector(advanceBannerOnAdClicked)]) {
-        [self.delegate advanceBannerOnAdClicked];
+    if ([self.delegate respondsToSelector:@selector(advanceClicked)]) {
+        [self.delegate advanceClicked];
     }
 }
 
@@ -92,8 +92,8 @@
 - (void)nativeExpressBannerAdView:(BUNativeExpressBannerView *)bannerAdView dislikeWithReason:(NSArray<BUDislikeWords *> *_Nullable)filterwords {
     [_csj_ad removeFromSuperview];
     _csj_ad = nil;
-    if ([self.delegate respondsToSelector:@selector(advanceBannerOnAdClosed)]) {
-        [self.delegate advanceBannerOnAdClosed];
+    if ([self.delegate respondsToSelector:@selector(advanceDidClose)]) {
+        [self.delegate advanceDidClose];
     }
 }
 

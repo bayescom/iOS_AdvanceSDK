@@ -53,34 +53,34 @@
 // 广告数据拉取成功回调
 - (void)mercury_bannerViewDidReceived {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded];
-    if ([self.delegate respondsToSelector:@selector(advanceBannerOnAdReceived)]) {
-        [self.delegate advanceBannerOnAdReceived];
+    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
+        [self.delegate advanceUnifiedViewDidLoad];
     }
 }
 
 // 请求广告数据失败后调用
 - (void)mercury_bannerViewFailToReceived:(NSError *)error {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded error:error];
     [_mercury_ad removeFromSuperview];
     _mercury_ad = nil;
-    if ([self.delegate respondsToSelector:@selector(advanceBannerOnAdFailedWithSdkId:error:)]) {
-        [self.delegate advanceBannerOnAdFailedWithSdkId:_supplier.identifier error:error];
-    }
+//    if ([self.delegate respondsToSelector:@selector(advanceBannerOnAdFailedWithSdkId:error:)]) {
+//        [self.delegate advanceBannerOnAdFailedWithSdkId:_supplier.identifier error:error];
+//    }
 }
 
 // 曝光回调
 - (void)mercury_bannerViewWillExposure {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoImped];
-    if ([self.delegate respondsToSelector:@selector(advanceBannerOnAdShow)]) {
-        [self.delegate advanceBannerOnAdShow];
+    if ([self.delegate respondsToSelector:@selector(advanceExposured)]) {
+        [self.delegate advanceExposured];
     }
 }
 
 // 点击回调
 - (void)mercury_bannerViewClicked {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked];
-    if ([self.delegate respondsToSelector:@selector(advanceBannerOnAdClicked)]) {
-        [self.delegate advanceBannerOnAdClicked];
+    if ([self.delegate respondsToSelector:@selector(advanceClicked)]) {
+        [self.delegate advanceClicked];
     }
 }
 
@@ -88,8 +88,8 @@
 - (void)mercury_bannerViewWillClose {
     [_mercury_ad removeFromSuperview];
     _mercury_ad = nil;
-    if ([self.delegate respondsToSelector:@selector(advanceBannerOnAdClosed)]) {
-        [self.delegate advanceBannerOnAdClosed];
+    if ([self.delegate respondsToSelector:@selector(advanceDidClose)]) {
+        [self.delegate advanceDidClose];
     }
 }
 

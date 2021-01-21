@@ -42,8 +42,10 @@
 
 - (void)loadBtnAction:(id)sender {
     _dataArrM = [NSMutableArray arrayWithArray:[CellBuilder dataFromJsonFile:@"cell01"]];
-    _advanceFeed = [[AdvanceNativeExpress alloc] initWithAdspotId:self.adspotId viewController:self adSize:CGSizeMake(self.view.bounds.size.width, 300)];
-    
+//    _advanceFeed = [[AdvanceNativeExpress alloc] initWithAdspotId:@"11111112" viewController:self adSize:CGSizeMake(self.view.bounds.size.width, 300)];
+//    _advanceFeed = [[AdvanceNativeExpress alloc] initWithAdspotId:self.adspotId viewController:self adSize:CGSizeMake(self.view.bounds.size.width, 300)];
+    _advanceFeed = [[AdvanceNativeExpress alloc] initWithAdspotId:self.adspotId customExt:self.ext viewController:self adSize:CGSizeMake(self.view.bounds.size.width, 300)];
+
     _advanceFeed.delegate = self;
     [_advanceFeed setDefaultAdvSupplierWithMediaId:@"100255"
                                           adspotId:@"10002698"
@@ -88,9 +90,32 @@
     [self.tableView reloadData];
 }
 
-/// 广告渲染失败
-- (void)advanceNativeExpressOnAdRenderFail:(UIView *)adView {
-    NSLog(@"广告渲染失败");
+/// 广告加载失败
+- (void)advanceFailedWithError:(NSError *)error {
+    NSLog(@"广告展示失败 %s  error: %@", __func__, error);
+
+}
+
+/// 内部渠道开始加载时调用
+- (void)advanceSupplierWillLoad:(NSString *)supplierId {
+    NSLog(@"内部渠道开始加载 %s  supplierId: %@", __func__, supplierId);
+
+}
+
+/// 广告关闭
+- (void)advanceDidClose {
+    NSLog(@"广告关闭了 %s", __func__);
+}
+
+
+- (void)advanceOnAdReceived:(NSString *)reqId
+{
+    NSLog(@"%s 策略id为: %@",__func__ , reqId);
+}
+
+- (void)advanceOnAdNotFilled:(NSError *)error
+{
+    NSLog(@"策略加载失败");
 }
 
 /// 广告被关闭

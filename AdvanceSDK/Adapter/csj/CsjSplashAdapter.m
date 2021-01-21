@@ -70,8 +70,8 @@
  */
 - (void)splashAdDidLoad:(BUSplashAdView *)splashAd {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded];
-    if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdReceived)]) {
-        [self.delegate advanceSplashOnAdReceived];
+    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
+        [self.delegate advanceUnifiedViewDidLoad];
     }
     if (_adspot.showLogoRequire) {
         // 添加Logo
@@ -91,10 +91,10 @@
  @param error : the reason of error
  */
 - (void)splashAd:(BUSplashAdView *)splashAd didFailWithError:(NSError * _Nullable)error {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
-    if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdFailedWithSdkId:error:)]) {
-        [self.delegate advanceSplashOnAdFailedWithSdkId:_adspot.adspotid error:error];
-    }
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded error:error];
+//    if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdFailedWithSdkId:error:)]) {
+//        [self.delegate advanceSplashOnAdFailedWithSdkId:_adspot.adspotid error:error];
+//    }
     [_csj_ad removeFromSuperview];
 //    _csj_ad = nil;
 }
@@ -104,8 +104,8 @@
  */
 - (void)splashAdWillVisible:(BUSplashAdView *)splashAd {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoImped];
-    if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdShow)]) {
-        [self.delegate advanceSplashOnAdShow];
+    if ([self.delegate respondsToSelector:@selector(advanceExposured)]) {
+        [self.delegate advanceExposured];
     }
 }
 
@@ -114,8 +114,8 @@
  */
 - (void)splashAdDidClick:(BUSplashAdView *)splashAd {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked];
-    if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdClicked)]) {
-        [self.delegate advanceSplashOnAdClicked];
+    if ([self.delegate respondsToSelector:@selector(advanceClicked)]) {
+        [self.delegate advanceClicked];
     }
 }
 
@@ -124,6 +124,9 @@
  */
 - (void)splashAdDidClose:(BUSplashAdView *)splashAd {
     [_csj_ad removeFromSuperview];
+    if ([self.delegate respondsToSelector:@selector(advanceDidClose)]) {
+        [self.delegate advanceDidClose];
+    }
 //    _csj_ad = nil;
 }
 

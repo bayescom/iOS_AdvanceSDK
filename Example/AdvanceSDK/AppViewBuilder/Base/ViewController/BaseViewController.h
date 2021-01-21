@@ -17,6 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) BOOL initDefSubviewsFlag;
 @property (nonatomic, copy, readonly) NSString *mediaId;
 @property (nonatomic, copy, readonly) NSString *adspotId;
+@property (nonatomic, strong, readonly) NSDictionary<NSString *, NSString *> *ext;
 @property (nonatomic, strong, readonly) UIView *adShowView;
 @property (nonatomic, strong, readonly) UIView *cusView;
 

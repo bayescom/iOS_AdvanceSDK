@@ -21,6 +21,9 @@
     self.initDefSubviewsFlag = YES;
     self.adspotIdsArr = @[
         @{@"addesc": @"图片信息流", @"adspotId": @"100255-10002698"},
+        @{@"addesc": @"图片信息流", @"adspotId": @"100996-10003898"},
+        @{@"addesc": @"Mock 渠道错误", @"adspotId": @"100255-10000001"},
+        @{@"addesc": @"Mock code200", @"adspotId": @"100255-10003321"},
     ];
     self.btn1Title = @"展示广告";
 }
@@ -31,6 +34,7 @@
     vc.count = 1;
     vc.mediaId = self.mediaId;
     vc.adspotId = self.adspotId;
+    vc.ext = self.ext;
     [self.navigationController pushViewController:vc animated:YES];
 }
 

@@ -22,10 +22,29 @@
 @implementation AdvanceInterstitial
 
 - (instancetype)initWithAdspotId:(NSString *)adspotid viewController:(nonnull UIViewController *)viewController {
-    if (self = [super initWithMediaId:nil adspotId:adspotid]) {
+    return [self initWithAdspotId:adspotid customExt:nil viewController:viewController];
+}
+
+- (instancetype)initWithAdspotId:(NSString *)adspotid customExt:(NSDictionary * _Nonnull)ext viewController:(nonnull UIViewController *)viewController{
+    if (self = [super initWithMediaId:@"" adspotId:adspotid customExt:ext]) {
         _viewController = viewController;
     }
     return self;
+}
+
+// 执行了打底渠道
+- (void)advSupplierLoadDefaultSuppluer:(AdvSupplier *)supplier
+{
+    ADVLog(@"执行了打底渠道: %@", supplier.sdktag);
+    [self advanceOnAdReceivedWithReqId:supplier.sdktag];
+}
+
+// 返回策略id
+- (void)advanceOnAdReceivedWithReqId:(NSString *)reqId
+{
+    if ([_delegate respondsToSelector:@selector(advanceOnAdReceived:)]) {
+        [_delegate advanceOnAdReceived:reqId];
+    }
 }
 
 // MARK: ======================= AdvanceSupplierDelegate =======================
@@ -34,12 +53,13 @@
 //    if ([_delegate respondsToSelector:@selector(advanceSplashOnAdReceived)]) {
 //        [_delegate advanceSplashOnAdReceived];
 //    }
+    [self advanceOnAdReceivedWithReqId:model.reqid];
 }
 
 /// 加载策略Model失败
 - (void)advanceBaseAdapterLoadError:(nullable NSError *)error {
-    if ([_delegate respondsToSelector:@selector(advanceOnAdNotFilled:)]) {
-        [_delegate advanceOnAdNotFilled:error];
+    if ([_delegate respondsToSelector:@selector(advanceFailedWithError:)]) {
+        [_delegate advanceFailedWithError:error];
     }
 }
 
@@ -48,8 +68,16 @@
     // 返回渠道有问题 则不用再执行下面的渠道了
     if (error) {
         ADVLog(@"%@", error);
+        if (self.delegate != nil && [self.delegate respondsToSelector:@selector(advanceFailedWithError:)]) {
+            [self.delegate advanceFailedWithError:error];
+        }
         return;
     }
+    // 开始加载渠道前通知调用者
+    if ([self.delegate respondsToSelector:@selector(advanceSupplierWillLoad:)]) {
+        [self.delegate advanceSupplierWillLoad:supplier.identifier];
+    }
+
     // 根据渠道id自定义初始化
     NSString *clsName = @"";
     if ([supplier.identifier isEqualToString:SDK_ID_GDT]) {

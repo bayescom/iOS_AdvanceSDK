@@ -24,6 +24,8 @@
     self.initDefSubviewsFlag = YES;
     self.adspotIdsArr = @[
         @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10000559"},
+        @{@"addesc": @"Mock 渠道错误", @"adspotId": @"100255-10000001"},
+        @{@"addesc": @"Mock code200", @"adspotId": @"100255-10003321"},
     ];
     self.btn1Title = @"加载广告";
     self.btn2Title = @"显示广告";
@@ -31,13 +33,21 @@
 
 - (void)loadAdBtn1Action {
     if (![self checkAdspotId]) { return; }
+    
+//    self.advanceInterstitial = [[AdvanceInterstitial alloc] initWithAdspotId:@"11111112"
+//                                                              viewController:self];
+
+//    self.advanceInterstitial = [[AdvanceInterstitial alloc] initWithAdspotId:self.adspotId
+//                                                              viewController:self];
+    
     self.advanceInterstitial = [[AdvanceInterstitial alloc] initWithAdspotId:self.adspotId
+                                                                   customExt:self.ext
                                                               viewController:self];
     self.advanceInterstitial.delegate = self;
     [self.advanceInterstitial setDefaultAdvSupplierWithMediaId:@"100255"
                                                       adspotId:@"10000559"
                                                       mediaKey:@"757d5119466abe3d771a211cc1278df7"
-                                                        sdkId:SDK_ID_MERCURY];
+                                                         sdkId:SDK_ID_MERCURY];
     _isAdLoaded=false;
     [self.advanceInterstitial loadAd];
 }
@@ -52,39 +62,51 @@
 // MARK: ======================= AdvanceInterstitialDelegate =======================
 
 /// 请求广告数据成功后调用
-- (void)advanceInterstitialOnAdReceived {
-    NSLog(@"请求广告数据成功后调用");
+- (void)advanceUnifiedViewDidLoad {
+    NSLog(@"广告数据拉取成功 %s", __func__);
     _isAdLoaded=true;
     [JDStatusBarNotification showWithStatus:@"广告加载成功" dismissAfter:1.5];
-
 }
+
 
 /// 广告渲染失败
 - (void)advanceInterstitialOnAdRenderFailed {
     NSLog(@"广告渲染失败");
 }
 
-/// 广告曝光成功
-- (void)advanceInterstitialOnAdShow {
-    NSLog(@"广告曝光成功");
+/// 广告曝光
+- (void)advanceExposured {
+    NSLog(@"广告曝光回调");
 }
 
 /// 广告点击
-- (void)advanceInterstitialOnAdClicked {
-    NSLog(@"广告点击");
+- (void)advanceClicked {
+    NSLog(@"广告点击 %s", __func__);
 }
 
-/// 广告拉取失败
-- (void)advanceInterstitialOnAdFailedWithSdkId:(NSString *)sdkId error:(NSError *)error {
-    NSLog(@"广告拉取失败");
+/// 广告加载失败
+- (void)advanceFailedWithError:(NSError *)error {
     [JDStatusBarNotification showWithStatus:@"广告加载失败" dismissAfter:1.5];
+    NSLog(@"广告展示失败 %s  error: %@", __func__, error);
 
 }
 
-/// 广告关闭
-- (void)advanceInterstitialOnAdClosed {
-    NSLog(@"广告关闭");
+/// 内部渠道开始加载时调用
+- (void)advanceSupplierWillLoad:(NSString *)supplierId {
+    NSLog(@"内部渠道开始加载 %s  supplierId: %@", __func__, supplierId);
+
 }
+
+/// 广告关闭了
+- (void)advanceDidClose {
+    NSLog(@"广告关闭了 %s", __func__);
+}
+
+/// 策略请求成功
+- (void)advanceOnAdReceived:(NSString *)reqId {
+    NSLog(@"%s 策略id为: %@",__func__ , reqId);
+}
+
 
 - (void)advanceInterstitialOnReadyToShow {
     if (!_isAdLoaded) {

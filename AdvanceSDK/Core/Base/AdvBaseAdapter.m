@@ -21,15 +21,22 @@
 
 -  (instancetype)initWithMediaId:(NSString *)mediaId
                         adspotId:(NSString *)adspotid {
+    return [self initWithMediaId:mediaId adspotId:adspotid customExt:nil];
+}
+
+- (instancetype)initWithMediaId:(NSString *)mediaId
+                       adspotId:(NSString *)adspotid
+                      customExt:(NSDictionary *)ext {
     if (self = [super init]) {
         _mediaId = mediaId;
         _adspotid = adspotid;
+        _ext = [ext mutableCopy];
     }
     return self;
 }
 
 - (void)loadAd {
-    [self.mgr loadDataWithMediaId:_mediaId adspotId:_adspotid];
+    [self.mgr loadDataWithMediaId:_mediaId adspotId:_adspotid customExt:_ext];
 }
 
 - (void)loadNextSupplierIfHas {
@@ -37,7 +44,11 @@
 }
 
 - (void)reportWithType:(AdvanceSdkSupplierRepoType)repoType {
-    [_mgr reportWithType:repoType];
+    [self reportWithType:repoType error:nil];
+}
+
+- (void)reportWithType:(AdvanceSdkSupplierRepoType)repoType error:(NSError *)error {
+    [_mgr reportWithType:repoType error:error];
     if (repoType == AdvanceSdkSupplierRepoFaileded) {
         [_mgr loadNextSupplierIfHas];
     }
@@ -100,8 +111,14 @@
         });
     }
     
+    // 如果执行了打底渠道 则执行此方法
+    if ([supplier.sdktag isEqualToString:@"bottom_default"]) {
+        [self advSupplierLoadDefaultSuppluer:supplier];
+    }
+
     // 加载渠道
     if ([_baseDelegate respondsToSelector:@selector(advSupplierLoadSuppluer:error:)]) {
+//        NSLog(@"xxxxerror: %@   clsName: %@", error, clsName);
         [_baseDelegate advanceBaseAdapterLoadSuppluer:supplier error:error];
     }
 }

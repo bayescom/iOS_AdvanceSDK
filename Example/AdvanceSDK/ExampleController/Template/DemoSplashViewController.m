@@ -23,16 +23,25 @@
     
     self.initDefSubviewsFlag = YES;
     self.adspotIdsArr = @[
-        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10002436"},
+        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-100024364312"},
         @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10002619"},
+        @{@"addesc": @"Mock 渠道错误", @"adspotId": @"100255-10000001"},
+        @{@"addesc": @"Mock code200", @"adspotId": @"100255-10003321"},
     ];
     self.btn1Title = @"加载并显示广告";
 }
 
 - (void)loadAdBtn1Action {
     if (![self checkAdspotId]) { return; }
+//    self.advanceSplash = [[AdvanceSplash alloc] initWithAdspotId:@"11111112"
+//                                                  viewController:self];
+
+//    self.advanceSplash = [[AdvanceSplash alloc] initWithAdspotId:self.adspotId
+//                                                  viewController:self];
     self.advanceSplash = [[AdvanceSplash alloc] initWithAdspotId:self.adspotId
+                                                       customExt:self.ext
                                                   viewController:self];
+
     self.advanceSplash.delegate = self;
 //    self.advanceSplash.showLogoRequire = YES;
     self.advanceSplash.logoImage = [UIImage imageNamed:@"app_logo"];
@@ -47,34 +56,50 @@
 
 // MARK: ======================= AdvanceSplashDelegate =======================
 /// 广告数据拉取成功
-- (void)advanceSplashOnAdReceived {
-//    NSLog(@"广告数据拉取成功"];
-    NSLog(@"广告数据拉取成功");
+- (void)advanceUnifiedViewDidLoad {
+    NSLog(@"广告数据拉取成功 %s", __func__);
 }
 
 /// 广告曝光成功
-- (void)advanceSplashOnAdShow {
-    NSLog(@"广告曝光成功");
+- (void)advanceExposured {
+    NSLog(@"广告曝光成功 %s", __func__);
 }
 
-/// 广告展示失败
-- (void)advanceSplashOnAdFailedWithSdkId:(NSString *)sdkId error:(NSError *)error {
-    NSLog(@"广告展示失败(%@):%@", sdkId, error);
+/// 广告加载失败
+- (void)advanceFailedWithError:(NSError *)error {
+    NSLog(@"广告展示失败 %s  error: %@", __func__, error);
+
 }
 
+/// 内部渠道开始加载时调用
+- (void)advanceSupplierWillLoad:(NSString *)supplierId {
+    NSLog(@"内部渠道开始加载 %s  supplierId: %@", __func__, supplierId);
+
+}
 /// 广告点击
-- (void)advanceSplashOnAdClicked {
-    NSLog(@"广告点击");
+- (void)advanceClicked {
+    NSLog(@"广告点击 %s", __func__);
 }
 
-/// 广告点击跳过
-- (void)advanceSplashOnAdSkipClicked {
-    NSLog(@"广告点击跳过");
+/// 广告关闭
+- (void)advanceDidClose {
+    NSLog(@"广告关闭了 %s", __func__);
 }
 
 /// 广告倒计时结束
 - (void)advanceSplashOnAdCountdownToZero {
-    NSLog(@"广告倒计时结束");
+    NSLog(@"广告倒计时结束 %s", __func__);
+}
+
+/// 点击了跳过
+- (void)advanceSplashOnAdSkipClicked {
+    NSLog(@"点击了跳过 %s", __func__);
+}
+
+// 策略请求成功
+- (void)advanceOnAdReceived:(NSString *)reqId
+{
+    NSLog(@"%s 策略id为: %@",__func__ , reqId);
 }
 
 @end

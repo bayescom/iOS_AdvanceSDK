@@ -26,6 +26,8 @@
     self.initDefSubviewsFlag = YES;
     self.adspotIdsArr = @[
         @{@"addesc": @"Banner", @"adspotId": @"100255-10000558"},
+        @{@"addesc": @"Mock 渠道错误", @"adspotId": @"100255-10000001"},
+        @{@"addesc": @"Mock code200", @"adspotId": @"100255-10003321"},
     ];
     self.btn1Title = @"加载并显示广告";
 }
@@ -38,9 +40,11 @@
     [self.adShowView addSubview:self.contentV];
     self.adShowView.hidden = NO;
 
-    self.advanceBanner = [[AdvanceBanner alloc] initWithAdspotId:self.adspotId adContainer:self.contentV viewController:self];
+//    self.advanceBanner = [[AdvanceBanner alloc] initWithAdspotId:@"11111113" adContainer:self.contentV viewController:self];
+//    self.advanceBanner = [[AdvanceBanner alloc] initWithAdspotId:self.adspotId adContainer:self.contentV viewController:self];
+    self.advanceBanner = [[AdvanceBanner alloc] initWithAdspotId:self.adspotId adContainer:self.contentV customExt:self.ext viewController:self];
     self.advanceBanner.delegate = self;
-    [self.advanceBanner setDefaultAdvSupplierWithMediaId:@"100255"
+    [self.advanceBanner setDefaultAdvSupplierWithMediaId:@"10025512"
                                                 adspotId:@"10000558"
                                                 mediaKey:@"757d5119466abe3d771a211cc1278df7"
                                                   sdkId:SDK_ID_MERCURY];
@@ -51,28 +55,45 @@
 
 // MARK: ======================= AdvanceBannerDelegate =======================
 /// 广告数据拉取成功回调
-- (void)advanceBannerOnAdReceived {
-    NSLog(@"广告数据拉取成功回调");
+- (void)advanceUnifiedViewDidLoad {
+    NSLog(@"广告数据拉取成功 %s", __func__);
 }
 
-/// banner条曝光回调
-- (void)advanceBannerOnAdShow {
+/// 广告加载失败
+- (void)advanceFailedWithError:(NSError *)error {
+    NSLog(@"广告展示失败 %s  error: %@", __func__, error);
+
+}
+
+/// 内部渠道开始加载时调用
+- (void)advanceSupplierWillLoad:(NSString *)supplierId {
+    NSLog(@"内部渠道开始加载 %s  supplierId: %@", __func__, supplierId);
+
+}
+
+/// 广告曝光
+- (void)advanceExposured {
     NSLog(@"广告曝光回调");
 }
 
-/// 广告点击回调
-- (void)advanceBannerOnAdClicked {
-    NSLog(@"广告点击回调");
-}
-
-/// 请求广告数据失败后调用
-- (void)advanceBannerOnAdFailedWithSdkId:(NSString *)sdkId error:(NSError *)error {
-    NSLog(@"请求广告数据失败后调用");
+/// 广告点击
+- (void)advanceClicked {
+    NSLog(@"广告点击 %s", __func__);
 }
 
 /// 广告关闭回调
-- (void)advanceBannerOnAdClosed {
-    NSLog(@"广告关闭回调");
+- (void)advanceDidClose {
+    NSLog(@"广告关闭了 %s", __func__);
+}
+
+/// 策略请求成功
+- (void)advanceOnAdReceived:(NSString *)reqId {
+    NSLog(@"%s 策略id为: %@",__func__ , reqId);
+}
+
+/// 策略请求失败
+- (void)advanceOnAdNotFilled:(NSError *)error {
+    NSLog(@"策略请求失败");
 }
 
 @end

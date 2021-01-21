@@ -18,9 +18,22 @@ NS_ASSUME_NONNULL_BEGIN
 /// 聚合广告位Id
 @property (nonatomic, copy) NSString *adspotid;
 
+/// 自定义拓展参数
+@property (nonatomic, strong) NSDictionary *ext;
+
+
 /// 初始化渠道
 - (instancetype)initWithMediaId:(nullable NSString *)mediaId
                        adspotId:(nullable NSString *)adspotid;
+
+/// 初始化渠道
+/// @param mediaId mediaId
+/// @param adspotid adspotid
+/// @param ext 自定义拓展参数
+- (instancetype)initWithMediaId:(nullable NSString *)mediaId
+                       adspotId:(nullable NSString *)adspotid
+                      customExt:(NSDictionary *_Nonnull)ext;
+
 
 /// 设置打底渠道
 - (void)setDefaultAdvSupplierWithMediaId:(NSString *)mediaId
@@ -36,10 +49,14 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)loadNextSupplierIfHas;
 
-/// 上报
+/// 上报 (将来会被废弃)
 - (void)reportWithType:(AdvanceSdkSupplierRepoType)repoType;
 
+/// 上报
+- (void)reportWithType:(AdvanceSdkSupplierRepoType)repoType error:(NSError *)error;
 
+/// 执行了打底渠道
+- (void)advSupplierLoadDefaultSuppluer:(AdvSupplier *)supplier;
 @end
 
 NS_ASSUME_NONNULL_END

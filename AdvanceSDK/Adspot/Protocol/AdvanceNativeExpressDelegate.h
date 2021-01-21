@@ -8,8 +8,8 @@
 
 #ifndef AdvanceNativeExpressProtocol_h
 #define AdvanceNativeExpressProtocol_h
-
-@protocol AdvanceNativeExpressDelegate <NSObject>
+#import "AdvanceCommonDelegate.h"
+@protocol AdvanceNativeExpressDelegate <AdvanceCommonDelegate>
 @optional
 /// 广告数据拉取成功
 - (void)advanceNativeExpressOnAdLoadSuccess:(nullable NSArray<UIView *> *)views;
@@ -30,10 +30,7 @@
 - (void)advanceNativeExpressOnAdClosed:(nullable UIView *)adView;
 
 /// 广告拉取失败
-- (void)advanceNativeExpressOnAdFailedWithSdkId:(nullable NSString *)sdkId error:(nullable NSError *)error;
-
-/// 策略请求失败
-- (void)advanceOnAdNotFilled:(NSError *)error;
+//- (void)advanceNativeExpressOnAdFailedWithSdkId:(nullable NSString *)sdkId error:(nullable NSError *)error;
 
 @end
 

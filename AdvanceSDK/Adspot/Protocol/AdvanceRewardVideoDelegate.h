@@ -8,27 +8,27 @@
 
 #ifndef AdvanceRewardVideoProtocol_h
 #define AdvanceRewardVideoProtocol_h
-
-@protocol AdvanceRewardVideoDelegate <NSObject>
+#import "AdvanceBaseDelegate.h"
+@protocol AdvanceRewardVideoDelegate <AdvanceBaseDelegate>
 @optional
 
 /// 广告准备完成
-- (void)advanceRewardVideoOnAdReady;
+//- (void)advanceRewardVideoOnAdReady;
 
 /// 广告曝光
-- (void)advanceRewardVideoOnAdShow;
+//- (void)advanceRewardVideoOnAdShow;
 
 /// 广告点击
-- (void)advanceRewardVideoOnAdClicked;
+//- (void)advanceRewardVideoOnAdClicked;
 
 /// 广告渲染失败
 - (void)advanceRewardVideoOnAdRenderFailed;
 
 /// 广告拉取失败
-- (void)advanceRewardVideoOnAdFailedWithSdkId:(NSString *)sdkId error:(NSError *)error;
+//- (void)advanceRewardVideoOnAdFailedWithSdkId:(NSString *)sdkId error:(NSError *)error;
 
 /// 广告关闭
-- (void)advanceRewardVideoOnAdClosed;
+//- (void)advanceRewardVideoOnAdClosed;
 
 /// 广告视频缓存完成
 - (void)advanceRewardVideoOnAdVideoCached;
@@ -41,9 +41,6 @@
 
 /// 激励视频可以调用show方法
 - (void)advanceRewardVideoIsReadyToShow;
-
-/// 策略请求失败
-- (void)advanceOnAdNotFilled:(NSError *)error;
 
 @end
 

@@ -50,18 +50,18 @@
 /// 广告数据加载成功回调
 - (void)mercury_rewardVideoAdDidLoad {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded];
-    if ([self.delegate respondsToSelector:@selector(advanceRewardVideoOnAdReady)]) {
-        [self.delegate advanceRewardVideoOnAdReady];
+    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
+        [self.delegate advanceUnifiedViewDidLoad];
     }
 }
 
 /// 广告加载失败回调
 - (void)mercury_rewardAdFailError:(nullable NSError *)error {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded error:error];
     _mercury_ad = nil;
-    if ([self.delegate respondsToSelector:@selector(advanceRewardVideoOnAdFailedWithSdkId:error:)]) {
-        [self.delegate advanceRewardVideoOnAdFailedWithSdkId:_supplier.identifier error:error];
-    }
+//    if ([self.delegate respondsToSelector:@selector(advanceRewardVideoOnAdFailedWithSdkId:error:)]) {
+//        [self.delegate advanceRewardVideoOnAdFailedWithSdkId:_supplier.identifier error:error];
+//    }
 }
 
 //视频缓存成功回调
@@ -78,23 +78,23 @@
 /// 视频广告曝光回调
 - (void)mercury_rewardVideoAdDidExposed {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoImped];
-    if ([self.delegate respondsToSelector:@selector(advanceRewardVideoOnAdShow)]) {
-        [self.delegate advanceRewardVideoOnAdShow];
+    if ([self.delegate respondsToSelector:@selector(advanceExposured)]) {
+        [self.delegate advanceExposured];
     }
 }
 
 /// 视频播放页关闭回调
 - (void)mercury_rewardVideoAdDidClose {
-    if ([self.delegate respondsToSelector:@selector(advanceRewardVideoOnAdClosed)]) {
-        [self.delegate advanceRewardVideoOnAdClosed];
+    if ([self.delegate respondsToSelector:@selector(advanceDidClose)]) {
+        [self.delegate advanceDidClose];
     }
 }
 
 /// 视频广告信息点击回调
 - (void)mercury_rewardVideoAdDidClicked {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked];
-    if ([self.delegate respondsToSelector:@selector(advanceRewardVideoOnAdClicked)]) {
-        [self.delegate advanceRewardVideoOnAdClicked];
+    if ([self.delegate respondsToSelector:@selector(advanceClicked)]) {
+        [self.delegate advanceClicked];
     }
 }
 

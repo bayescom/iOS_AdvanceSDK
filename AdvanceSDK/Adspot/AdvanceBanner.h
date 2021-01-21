@@ -26,6 +26,17 @@ NS_ASSUME_NONNULL_BEGIN
                   viewController:(UIViewController *)viewController;
 
 
+/// 构造函数
+/// @param adspotid adspotid
+/// @param adContainer adContainer
+/// @param ext 自定义拓展参数
+/// @param viewController viewController
+- (instancetype)initWithAdspotId:(NSString *)adspotid
+                     adContainer:(UIView *)adContainer
+                       customExt:(NSDictionary *_Nonnull)ext
+                  viewController:(UIViewController *)viewController;
+
+
 @end
 
 NS_ASSUME_NONNULL_END

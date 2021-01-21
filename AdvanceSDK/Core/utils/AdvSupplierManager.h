@@ -50,10 +50,11 @@ NS_ASSUME_NONNULL_BEGIN
  * 数据不存在则同步数据
  * @param mediaId 媒体id
  * @param adspotId 广告位id
+ * @param ext 自定义拓展字段
  */
 - (void)loadDataWithMediaId:(NSString *)mediaId
-                   adspotId:(NSString *)adspotId;
-
+                   adspotId:(NSString *)adspotId
+                  customExt:(NSDictionary *_Nonnull)ext;
 /**
  * 加载下个渠道
  * 回调 advSupplierLoadSuppluer: error:
@@ -62,7 +63,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// 数据上报
 /// @param repoType 上报的类型
-- (void)reportWithType:(AdvanceSdkSupplierRepoType)repoType;
+- (void)reportWithType:(AdvanceSdkSupplierRepoType)repoType error:(NSError *)error;
 
 @end
 

@@ -58,8 +58,8 @@
 // MARK: ======================= GDTSplashAdDelegate =======================
 - (void)splashAdSuccessPresentScreen:(GDTSplashAd *)splashAd {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded];
-    if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdReceived)]) {
-        [self.delegate advanceSplashOnAdReceived];
+    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
+        [self.delegate advanceUnifiedViewDidLoad];
     }
 }
 
@@ -82,22 +82,22 @@
 
 - (void)splashAdExposured:(GDTSplashAd *)splashAd {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoImped];
-    if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdShow)]) {
-        [self.delegate advanceSplashOnAdShow];
+    if ([self.delegate respondsToSelector:@selector(advanceExposured)]) {
+        [self.delegate advanceExposured];
     }
 }
 
 - (void)splashAdFailToPresent:(GDTSplashAd *)splashAd withError:(NSError *)error {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
-    if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdFailedWithSdkId:error:)]) {
-        [self.delegate advanceSplashOnAdFailedWithSdkId:_adspot.adspotid error:error];
-    }
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded error:error];
+//    if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdFailedWithSdkId:error:)]) {
+//        [self.delegate advanceSplashOnAdFailedWithSdkId:_adspot.adspotid error:error];
+//    }
 }
 
 - (void)splashAdClicked:(GDTSplashAd *)splashAd {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked];
-    if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdClicked)]) {
-        [self.delegate advanceSplashOnAdClicked];
+    if ([self.delegate respondsToSelector:@selector(advanceClicked)]) {
+        [self.delegate advanceClicked];
     }
     _isClick = YES;
 }
@@ -107,6 +107,10 @@
     if (_leftTime > 0 && !_isClick) {
         if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdSkipClicked)]) {
             [self.delegate advanceSplashOnAdSkipClicked];
+        }
+    } else {
+        if ([self.delegate respondsToSelector:@selector(advanceDidClose)]) {
+            [self.delegate advanceDidClose];
         }
     }
 }
