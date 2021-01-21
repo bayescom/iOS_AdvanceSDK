@@ -77,16 +77,17 @@
 
 /// 广告曝光
 - (void)advanceNativeExpressOnAdShow:(UIView *)adView {
-    NSLog(@"广告曝光");
+    NSLog(@"广告曝光 %s", __func__);
 }
 
 /// 广告点击
 - (void)advanceNativeExpressOnAdClicked:(UIView *)adView {
-    NSLog(@"广告点击");
+    NSLog(@"广告点击 %s", __func__);
 }
 
 /// 广告渲染成功
 - (void)advanceNativeExpressOnAdRenderSuccess:(UIView *)adView {
+    NSLog(@"广告渲染成功 %s", __func__);
     [self.tableView reloadData];
 }
 
@@ -107,29 +108,19 @@
     NSLog(@"广告关闭了 %s", __func__);
 }
 
-
+/// 加载策略成功
 - (void)advanceOnAdReceived:(NSString *)reqId
 {
     NSLog(@"%s 策略id为: %@",__func__ , reqId);
 }
 
-- (void)advanceOnAdNotFilled:(NSError *)error
-{
-    NSLog(@"策略加载失败");
-}
-
 /// 广告被关闭
 - (void)advanceNativeExpressOnAdClosed:(UIView *)adView {
     //需要从tableview中删除
-    NSLog(@"广告关闭");
+    NSLog(@"广告关闭 %s", __func__);
     [_dataArrM removeObject: adView];
     [adView removeFromSuperview];
     [self.tableView reloadData];
-}
-
-/// 广告数据拉取失败
-- (void)advanceNativeExpressOnAdFailedWithSdkId:(nullable NSString *)sdkId error:(nullable NSError *)error {
-    NSLog(@"广告拉取失败");
 }
 
 // MARK: ======================= UITableViewDelegate, UITableViewDataSource =======================
