@@ -61,7 +61,10 @@
 }
 
 - (void)deallocAdapter {
-    [_csj_ad removeFromSuperview];
+    if (self.csj_ad) {
+        [self.csj_ad removeFromSuperview];
+        self.csj_ad = nil;
+    }
 }
 
 // MARK: ======================= BUSplashAdDelegate =======================
@@ -91,12 +94,11 @@
  @param error : the reason of error
  */
 - (void)splashAd:(BUSplashAdView *)splashAd didFailWithError:(NSError * _Nullable)error {
+    [self deallocAdapter];
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded error:error];
 //    if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdFailedWithSdkId:error:)]) {
 //        [self.delegate advanceSplashOnAdFailedWithSdkId:_adspot.adspotid error:error];
 //    }
-    [_csj_ad removeFromSuperview];
-//    _csj_ad = nil;
 }
 
 /**
@@ -113,6 +115,7 @@
  This method is called when splash ad is clicked.
  */
 - (void)splashAdDidClick:(BUSplashAdView *)splashAd {
+    [self deallocAdapter];
     [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked];
     if ([self.delegate respondsToSelector:@selector(advanceClicked)]) {
         [self.delegate advanceClicked];
@@ -134,6 +137,7 @@
  This method is called when spalashAd skip button  is clicked.
  */
 - (void)splashAdDidClickSkip:(BUSplashAdView *)splashAd {
+    [self deallocAdapter];
     if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdSkipClicked)]) {
         [self.delegate advanceSplashOnAdSkipClicked];
     }
@@ -143,9 +147,13 @@
  This method is called when spalashAd countdown equals to zero
  */
 - (void)splashAdCountdownToZero:(BUSplashAdView *)splashAd {
+    [self deallocAdapter];
     if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdCountdownToZero)]) {
         [self.delegate advanceSplashOnAdCountdownToZero];
     }
 }
 
+- (void)splashAdDidCloseOtherController:(BUSplashAdView *)splashAd interactionType:(BUInteractionType)interactionType {
+    [self deallocAdapter];
+}
 @end
