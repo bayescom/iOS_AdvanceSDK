@@ -11,7 +11,7 @@
 #import "AdvSupplierModel.h"
 #import "AdvError.h"
 #import "AdvLog.h"
-
+#import "AdvSupplierQueue.h"
 @interface AdvSupplierManager ()
 @property (nonatomic, strong) AdvSupplierModel *model;
 
@@ -33,6 +33,8 @@
 @property (nonatomic, assign) BOOL isLoadLocalSupplier;
 
 @property (nonatomic, assign) NSTimeInterval serverTime;
+
+@property (nonatomic, strong) NSMutableArray *queues;
 @end
 
 @implementation AdvSupplierManager
@@ -306,7 +308,6 @@
             [_delegate advSupplierManagerLoadSuccess:self.model];
         }
         
-        // 开始执行策略
         [self loadNextSupplier];
     }
     [a_model save];
@@ -453,4 +454,10 @@
     return _fetchTime;
 }
 
+- (NSMutableArray *)queues {
+    if (!_queues) {
+        _queues = [NSMutableArray array];
+    }
+    return _queues;
+}
 @end

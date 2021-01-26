@@ -47,6 +47,11 @@ NSString *const DEFAULT_LOADEDTK = @"http://cruiser.bayescom.cn/loaded?action=lo
 - (NSDictionary *)JSONDictionary;
 @end
 
+@interface AdvPriorityMap (JSONConversion)
++ (instancetype)fromJSONDictionary:(NSDictionary *)dict;
+- (NSDictionary *)JSONDictionary;
+@end
+
 @interface AdvSupplier (JSONConversion)
 + (instancetype)fromJSONDictionary:(NSDictionary *)dict;
 - (NSDictionary *)JSONDictionary;
@@ -218,8 +223,8 @@ NSString *_Nullable AdvSupplierModelToJSON(AdvSupplierModel *supplierModel, NSSt
         @"cpt_start": @"cptStart",
         @"cpt_end": @"cptEnd",
         @"cpt_supplier": @"cptSupplier",
+        @"priority_map": @"priorityMap",
         @"parallel_ids": @"parallelIDS",
-        @"cacheTime": @"cacheTime",
     };
 }
 
@@ -232,6 +237,7 @@ NSString *_Nullable AdvSupplierModelToJSON(AdvSupplierModel *supplierModel, NSSt
 {
     if (self = [super init]) {
         [self setValuesForKeysWithDictionary:dict];
+        _priorityMap = map(_priorityMap, λ(id x, [AdvPriorityMap fromJSONDictionary:x]));
     }
     return self;
 }
@@ -252,6 +258,7 @@ NSString *_Nullable AdvSupplierModelToJSON(AdvSupplierModel *supplierModel, NSSt
 {
     id dict = [[self dictionaryWithValuesForKeys:AdvSetting.properties.allValues] mutableCopy];
 
+    // Rewrite property names that differ in JSON
     for (id jsonName in AdvSetting.properties) {
         id propertyName = AdvSetting.properties[jsonName];
         if (![jsonName isEqualToString:propertyName]) {
@@ -260,7 +267,53 @@ NSString *_Nullable AdvSupplierModelToJSON(AdvSupplierModel *supplierModel, NSSt
         }
     }
 
+    // Map values that need translation
+    [dict addEntriesFromDictionary:@{
+        @"priority_map": map(_priorityMap, λ(id x, [x JSONDictionary])),
+    }];
+
     return dict;
+}
+@end
+
+@implementation AdvPriorityMap
++ (NSDictionary<NSString *, NSString *> *)properties
+{
+    static NSDictionary<NSString *, NSString *> *properties;
+    return properties = properties ? properties : @{
+        @"supid": @"supid",
+        @"priority": @"priority",
+    };
+}
+
++ (instancetype)fromJSONDictionary:(NSDictionary *)dict
+{
+    return dict ? [[AdvPriorityMap alloc] initWithJSONDictionary:dict] : nil;
+}
+
+- (instancetype)initWithJSONDictionary:(NSDictionary *)dict
+{
+    if (self = [super init]) {
+        [self setValuesForKeysWithDictionary:dict];
+    }
+    return self;
+}
+
+- (void)setValue:(nullable id)value forKey:(NSString *)key
+{
+    id resolved = AdvPriorityMap.properties[key];
+    if (resolved) [super setValue:value forKey:resolved];
+}
+
+- (void)setNilValueForKey:(NSString *)key
+{
+    id resolved = AdvPriorityMap.properties[key];
+    if (resolved) [super setValue:@(0) forKey:resolved];
+}
+
+- (NSDictionary *)JSONDictionary
+{
+    return [self dictionaryWithValuesForKeys:AdvPriorityMap.properties.allValues];
 }
 @end
 

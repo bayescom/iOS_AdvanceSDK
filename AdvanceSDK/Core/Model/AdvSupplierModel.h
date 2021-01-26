@@ -10,7 +10,7 @@
 @class AdvSupplierModel;
 @class AdvSetting;
 @class AdvSupplier;
-
+@class AdvPriorityMap;
 typedef NS_ENUM(NSUInteger, AdvanceSdkSupplierRepoType) {
     /// 发起加载请求上报
     AdvanceSdkSupplierRepoLoaded,
@@ -63,9 +63,14 @@ NSString * ADVStringFromNAdvanceSdkSupplierRepoType(AdvanceSdkSupplierRepoType t
 @property (nonatomic, copy)   NSString *cptEnd;
 @property (nonatomic, copy)   NSString *cptSupplier;
 @property (nonatomic, copy)   NSArray<NSString *> *parallelIDS;
-
+@property (nonatomic, copy)   NSArray<AdvPriorityMap *> *priorityMap;
 @property (nonatomic, assign) NSTimeInterval cacheTime;
 
+@end
+
+@interface AdvPriorityMap : NSObject
+@property (nonatomic, assign) NSInteger priority;
+@property (nonatomic, copy)   NSString *identifier;
 @end
 
 @interface AdvSupplier : NSObject
