@@ -318,6 +318,7 @@
             // 1.按照priorityMap分组
             AdvSupplierQueue *parallelOperations = [[AdvSupplierQueue alloc]init];
 
+            NSLog(@"并行策略: %@", parallelOperations);
             __weak __typeof__(self) weakSelf = self;
             [_supplierM enumerateObjectsUsingBlock:^(AdvSupplier * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 if (idx == 0) {// 优先级最高的那个 先添加进并行渠道队列
@@ -341,7 +342,7 @@
                 
                 // 如果 parallelOperations的count 和 setting.parallelIDS 的count+1 相等 则并行分组完毕 添加到整体队列中
                 if (parallelOperations.inQueueSuppliers.count == _model.setting.priorityMap.count + 1) {
-                    [weakSelf.queues addObject:parallelOperations];
+                    [weakSelf.queues insertObject:parallelOperations atIndex:0];
                 }
                 
             }];
