@@ -70,7 +70,7 @@ NSString * ADVStringFromNAdvanceSdkSupplierRepoType(AdvanceSdkSupplierRepoType t
 
 @interface AdvPriorityMap : NSObject
 @property (nonatomic, assign) NSInteger priority;
-@property (nonatomic, copy)   NSString *identifier;
+@property (nonatomic, copy)   NSString *supid;
 @end
 
 @interface AdvSupplier : NSObject

@@ -8,5 +8,11 @@
 #import "AdvSupplierQueue.h"
 
 @implementation AdvSupplierQueue
-
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        self.inQueueSuppliers = [NSMutableArray array];
+    }
+    return self;
+}
 @end
