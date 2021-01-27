@@ -10,7 +10,7 @@
 
 @class AdvSupplierModel;
 @class AdvSupplier;
-
+@class AdvSupplierQueue;
 @protocol AdvanceSupplierDelegate <NSObject>
 
 @optional
@@ -27,6 +27,8 @@
 /// @param error 异常信息
 - (void)advanceBaseAdapterLoadSuppluer:(nullable AdvSupplier *)supplier error:(nullable NSError *)error;
 
+/// 返回下一个渠道的参数(并行)
+- (void)advanceBaseAdapterLoadSuppluerxxxxxx:(nullable AdvSupplier *)supplier queue:(AdvSupplierQueue *_Nonnull)queue error:(nullable NSError *)error;
 @end
 
 #endif /* AdvanceSupplierDelegate_h */

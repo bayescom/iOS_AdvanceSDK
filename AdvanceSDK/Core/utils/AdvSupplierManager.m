@@ -182,6 +182,7 @@
                 
                 // 如果 parallelOperations的count 和 setting.parallelIDS 的count+1 相等 则并行分组完毕 添加到整体队列中
                 if (parallelOperations.inQueueSuppliers.count == _model.setting.priorityMap.count + 1) {
+                    NSLog(@"并行队列: %@", parallelOperations);
                     [weakSelf.queues insertObject:parallelOperations atIndex:0];
                 }
                 
@@ -189,7 +190,13 @@
         }
         
         NSLog(@"队列s : %@", self.queues);
-        
+        for (NSInteger i = 0 ; i < self.queues.count; i++) {
+
+            for (NSInteger j = 0; j < [[self.queues[i] inQueueSuppliers] count]; j ++) {
+                AdvSupplier *temp = [self.queues[i] inQueueSuppliers][j];
+                NSLog(@"队列element: %@ %@", temp, temp.sdktag);
+            }
+        }
         
         
         
@@ -218,18 +225,39 @@
             // 且每个queue当中的inQueueSuppliers个数可能不一样 个数不为1的是并行请求
         }
         */
+        
+        [self notCPTLoadNextSuppluerParallel:self.queues[0] error:nil];
         /* * * * * * * * * * * * * * * 待整理代码 * * * * * * * * * * *  * * * * * * * * */
 
 
-        
+    
         
         
         
         
         // 执行非CPT渠道逻辑
-        [self notCPTLoadNextSuppluer:_supplierM.firstObject error:nil];
+//        [self notCPTLoadNextSuppluer:_supplierM.firstObject error:nil];
     }
 }
+/* * * * * * * * * * * * * * * 待整理代码 * * * * * * * * * * *  * * * * * * * * */
+
+- (void)notCPTLoadNextSuppluerParallel:(AdvSupplierQueue *)queue error:(nullable NSError *)error {
+    NSArray *temp = [queue.inQueueSuppliers mutableCopy];
+    for (NSInteger i = 0; i < temp.count; i++) {
+        AdvSupplier *supplier = temp[i];
+        NSLog(@"aaaaa ---%@", [NSThread currentThread]); // 打印当前线程
+        [self notCPTLoadNextSuppluerParallelAction:supplier queue:queue error:nil];
+    }
+}
+
+- (void)notCPTLoadNextSuppluerParallelAction:(nullable AdvSupplier *)supplier queue:(AdvSupplierQueue *)queue error:(nullable NSError *)error {
+    if ([_delegate respondsToSelector:@selector(advSupplierLoadSupplueryyyyy:queue:error:)]) {
+        [_delegate advSupplierLoadSupplueryyyyy:supplier queue:queue error:error];
+    }
+
+}
+
+/* * * * * * * * * * * * * * * 待整理代码 * * * * * * * * * * *  * * * * * * * * */
 
 /// 非 CPT 执行下个渠道
 - (void)notCPTLoadNextSuppluer:(nullable AdvSupplier *)supplier error:(nullable NSError *)error {

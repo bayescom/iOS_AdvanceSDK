@@ -58,6 +58,7 @@
 // MARK: ======================= GDTSplashAdDelegate =======================
 - (void)splashAdSuccessPresentScreen:(GDTSplashAd *)splashAd {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded];
+    NSLog(@"广点通开屏拉取成功");
     if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
         [self.delegate advanceUnifiedViewDidLoad];
     }

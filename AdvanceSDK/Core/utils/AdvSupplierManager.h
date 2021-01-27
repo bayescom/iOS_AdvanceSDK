@@ -9,7 +9,7 @@
 #import "AdvSupplierModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
-
+@class AdvSupplierQueue;
 @protocol AdvSupplierManagerDelegate <NSObject>
 
 // MARK: ======================= 策略回调 =======================
@@ -23,6 +23,8 @@ NS_ASSUME_NONNULL_BEGIN
 /// 返回下一个渠道的参数
 - (void)advSupplierLoadSuppluer:(nullable AdvSupplier *)supplier error:(nullable NSError *)error;
 
+/// 返回下一个渠道参数(并行)
+- (void)advSupplierLoadSupplueryyyyy:(nullable AdvSupplier *)supplier queue:(AdvSupplierQueue *)queue error:(nullable NSError *)error;
 
 @end
 

@@ -73,6 +73,7 @@
  */
 - (void)splashAdDidLoad:(BUSplashAdView *)splashAd {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded];
+    NSLog(@"穿山甲开屏拉取成功");
     if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
         [self.delegate advanceUnifiedViewDidLoad];
     }
