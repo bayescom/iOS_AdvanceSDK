@@ -143,6 +143,89 @@
             return;
         }
         
+        
+        
+        
+        
+        
+        
+        /* * * * * * * * * * * * * * * 待整理代码 * * * * * * * * * * * * * * * * * * * * */
+        // 开始执行策略
+        
+        // 如果priorityMap不为空 则并行请求priorityMap中的渠道
+        // priorityMap: 该字段中的渠道和第一优先级渠道并行请求
+        if (_model.setting.priorityMap.count > 0) {
+            // 1.按照priorityMap分组
+            AdvSupplierQueue *parallelOperations = [[AdvSupplierQueue alloc]init];
+
+            NSLog(@"并行策略: %@", parallelOperations);
+            __weak __typeof__(self) weakSelf = self;
+            [_supplierM enumerateObjectsUsingBlock:^(AdvSupplier * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                if (idx == 0) {// 优先级最高的那个 先添加进并行渠道队列
+                    [parallelOperations.inQueueSuppliers addObject:obj];
+                } else {
+                    // 其他渠道的需要判断是否添加进并行渠道队列
+                    [_model.setting.priorityMap enumerateObjectsUsingBlock:^(AdvPriorityMap * _Nonnull map, NSUInteger mapIdx, BOOL * _Nonnull stop) {
+                        // 如果优先级和id 都一样 切并行队列里没有该元素的时候(主要是去重) 则添加进并行渠道
+                        if ([map.supid isEqualToString:obj.identifier] &&
+                            map.priority == obj.priority &&
+                            ![parallelOperations.inQueueSuppliers containsObject:obj]) {
+                            
+                            [parallelOperations.inQueueSuppliers addObject:obj];
+                        } else {
+                            AdvSupplierQueue *queue = [[AdvSupplierQueue alloc]init];
+                            [queue.inQueueSuppliers addObject:obj];
+                            [weakSelf.queues addObject:queue];
+                        }
+                    }];
+                }
+                
+                // 如果 parallelOperations的count 和 setting.parallelIDS 的count+1 相等 则并行分组完毕 添加到整体队列中
+                if (parallelOperations.inQueueSuppliers.count == _model.setting.priorityMap.count + 1) {
+                    [weakSelf.queues insertObject:parallelOperations atIndex:0];
+                }
+                
+            }];
+        }
+        
+        NSLog(@"队列s : %@", self.queues);
+        
+        
+        
+        
+        /*
+        if (_model.setting.parallelIDS.count > 0) {
+            // 1. 按照 parallelIDS 分组
+            AdvSupplierQueue *parallelOperations = [[AdvSupplierQueue alloc]init];
+            
+            [_supplierM enumerateObjectsUsingBlock:^(AdvSupplier * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                // 如果 parallelIDS 包含 obj的id 则添加进并行对象里
+                if ([_model.setting.parallelIDS containsObject:obj.identifier]) {
+                    [parallelOperations.inQueueSuppliers addObject:obj];
+
+                    // 如果 parallelOperations的count 和 setting.parallelIDS 的count 相等 则并行分组完毕 添加到整体队列中
+                    if (parallelOperations.inQueueSuppliers.count == _model.setting.parallelIDS.count) {
+                        [self.queues addObject:parallelOperations];
+                    }
+                } else {
+                    // 如果不包含则直接 添加进队列里串行执行
+                    AdvSupplierQueue *operation = [[AdvSupplierQueue alloc] init];
+                    [operation.inQueueSuppliers addObject:obj];
+                    [self.queues addObject:parallelOperations];
+                }
+            }];
+            // 排序完成后 self.queue结构为 [AdvSupplierQueue,AdvSupplierQueue,AdvSupplierQueue]
+            // 且每个queue当中的inQueueSuppliers个数可能不一样 个数不为1的是并行请求
+        }
+        */
+        /* * * * * * * * * * * * * * * 待整理代码 * * * * * * * * * * *  * * * * * * * * */
+
+
+        
+        
+        
+        
+        
         // 执行非CPT渠道逻辑
         [self notCPTLoadNextSuppluer:_supplierM.firstObject error:nil];
     }
@@ -309,78 +392,6 @@
         }
         
         // 开始执行策略
-        /* * * * * * * * * * * * * * * 待整理代码 * * * * * * * * * * * * * * * * * * * * */
-        // 开始执行策略
-        
-        // 如果priorityMap不为空 则并行请求priorityMap中的渠道
-        // priorityMap: 该字段中的渠道和第一优先级渠道并行请求
-        if (_model.setting.priorityMap.count > 0) {
-            // 1.按照priorityMap分组
-            AdvSupplierQueue *parallelOperations = [[AdvSupplierQueue alloc]init];
-
-            NSLog(@"并行策略: %@", parallelOperations);
-            __weak __typeof__(self) weakSelf = self;
-            [_supplierM enumerateObjectsUsingBlock:^(AdvSupplier * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                if (idx == 0) {// 优先级最高的那个 先添加进并行渠道队列
-                    [parallelOperations.inQueueSuppliers addObject:obj];
-                } else {
-                    // 其他渠道的需要判断是否添加进并行渠道队列
-                    [_model.setting.priorityMap enumerateObjectsUsingBlock:^(AdvPriorityMap * _Nonnull map, NSUInteger mapIdx, BOOL * _Nonnull stop) {
-                        // 如果优先级和id 都一样 切并行队列里没有该元素的时候(主要是去重) 则添加进并行渠道
-                        if ([map.supid isEqualToString:obj.identifier] &&
-                            map.priority == obj.priority &&
-                            ![parallelOperations.inQueueSuppliers containsObject:obj]) {
-                            
-                            [parallelOperations.inQueueSuppliers addObject:obj];
-                        } else {
-                            AdvSupplierQueue *queue = [[AdvSupplierQueue alloc]init];
-                            [queue.inQueueSuppliers addObject:obj];
-                            [weakSelf.queues addObject:queue];
-                        }
-                    }];
-                }
-                
-                // 如果 parallelOperations的count 和 setting.parallelIDS 的count+1 相等 则并行分组完毕 添加到整体队列中
-                if (parallelOperations.inQueueSuppliers.count == _model.setting.priorityMap.count + 1) {
-                    [weakSelf.queues insertObject:parallelOperations atIndex:0];
-                }
-                
-            }];
-        }
-        
-        NSLog(@"队列s : %@", self.queues);
-        
-        
-        
-        
-        /*
-        if (_model.setting.parallelIDS.count > 0) {
-            // 1. 按照 parallelIDS 分组
-            AdvSupplierQueue *parallelOperations = [[AdvSupplierQueue alloc]init];
-            
-            [_supplierM enumerateObjectsUsingBlock:^(AdvSupplier * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                // 如果 parallelIDS 包含 obj的id 则添加进并行对象里
-                if ([_model.setting.parallelIDS containsObject:obj.identifier]) {
-                    [parallelOperations.inQueueSuppliers addObject:obj];
-
-                    // 如果 parallelOperations的count 和 setting.parallelIDS 的count 相等 则并行分组完毕 添加到整体队列中
-                    if (parallelOperations.inQueueSuppliers.count == _model.setting.parallelIDS.count) {
-                        [self.queues addObject:parallelOperations];
-                    }
-                } else {
-                    // 如果不包含则直接 添加进队列里串行执行
-                    AdvSupplierQueue *operation = [[AdvSupplierQueue alloc] init];
-                    [operation.inQueueSuppliers addObject:obj];
-                    [self.queues addObject:parallelOperations];
-                }
-            }];
-            // 排序完成后 self.queue结构为 [AdvSupplierQueue,AdvSupplierQueue,AdvSupplierQueue]
-            // 且每个queue当中的inQueueSuppliers个数可能不一样 个数不为1的是并行请求
-        }
-        */
-        /* * * * * * * * * * * * * * * 待整理代码 * * * * * * * * * * *  * * * * * * * * */
-
-
         [self loadNextSupplier];
     }
     [a_model save];
