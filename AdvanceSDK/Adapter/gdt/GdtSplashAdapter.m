@@ -57,7 +57,7 @@
 
 // MARK: ======================= GDTSplashAdDelegate =======================
 - (void)splashAdSuccessPresentScreen:(GDTSplashAd *)splashAd {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
     NSLog(@"广点通开屏拉取成功");
     if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
         [self.delegate advanceUnifiedViewDidLoad];
@@ -82,21 +82,21 @@
 }
 
 - (void)splashAdExposured:(GDTSplashAd *)splashAd {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoImped];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(advanceExposured)]) {
         [self.delegate advanceExposured];
     }
 }
 
 - (void)splashAdFailToPresent:(GDTSplashAd *)splashAd withError:(NSError *)error {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded error:error];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
 //    if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdFailedWithSdkId:error:)]) {
 //        [self.delegate advanceSplashOnAdFailedWithSdkId:_adspot.adspotid error:error];
 //    }
 }
 
 - (void)splashAdClicked:(GDTSplashAd *)splashAd {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(advanceClicked)]) {
         [self.delegate advanceClicked];
     }

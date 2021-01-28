@@ -55,12 +55,12 @@
 // MARK: ======================= BUNativeExpressAdViewDelegate =======================
 - (void)nativeExpressAdSuccessToLoad:(id)nativeExpressAd views:(nonnull NSArray<__kindof BUNativeExpressAdView *> *)views {
     if (views == nil || views.count == 0) {
-        [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded error:[NSError errorWithDomain:@"" code:100000 userInfo:@{@"msg":@"无广告返回"}]];
+        [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:[NSError errorWithDomain:@"" code:100000 userInfo:@{@"msg":@"无广告返回"}]];
 //        if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdFailedWithSdkId:error:)]) {
 //            [_delegate advanceNativeExpressOnAdFailedWithSdkId:_supplier.identifier error:[NSError errorWithDomain:@"" code:100000 userInfo:@{@"msg":@"无广告返回"}]];
 //        }
     } else {
-        [_adspot reportWithType:AdvanceSdkSupplierRepoSucceeded];
+        [_adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
         for (BUNativeExpressAdView *view in views) {
             view.rootViewController = _adspot.viewController;
         }
@@ -71,7 +71,7 @@
 }
 
 - (void)nativeExpressAdFailToLoad:(BUNativeExpressAdManager *)nativeExpressAd error:(NSError *)error {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded error:error];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
 //    if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdFailedWithSdkId:error:)]) {
 //        [_delegate advanceNativeExpressOnAdFailedWithSdkId:_supplier.identifier error:error];
 //    }
@@ -85,7 +85,7 @@
 }
 
 - (void)nativeExpressAdViewRenderFail:(BUNativeExpressAdView *)nativeExpressAdView error:(NSError *)error {
-    [_adspot reportWithType:AdvanceSdkSupplierRepoFaileded error:error];
+    [_adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
     if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdRenderFail:)]) {
         [_delegate advanceNativeExpressOnAdRenderFail:nativeExpressAdView];
     }
@@ -93,21 +93,21 @@
 }
 
 - (void)nativeExpressAdViewWillShow:(BUNativeExpressAdView *)nativeExpressAdView {
-    [_adspot reportWithType:AdvanceSdkSupplierRepoImped];
+    [_adspot reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
     if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdShow:)]) {
         [_delegate advanceNativeExpressOnAdShow:nativeExpressAdView];
     }
 }
 
 - (void)nativeExpressAdViewDidClick:(BUNativeExpressAdView *)nativeExpressAdView {
-    [_adspot reportWithType:AdvanceSdkSupplierRepoClicked];
+    [_adspot reportWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
     if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdClicked:)]) {
         [_delegate advanceNativeExpressOnAdClicked:nativeExpressAdView];
     }
 }
 
 - (void)nativeExpressAdViewPlayerDidPlayFinish:(BUNativeExpressAdView *)nativeExpressAdView error:(NSError *)error {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded error:error];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
 //    if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdFailedWithSdkId:error:)]) {
 //        [_delegate advanceNativeExpressOnAdFailedWithSdkId:_supplier.identifier error:error];
 //    }

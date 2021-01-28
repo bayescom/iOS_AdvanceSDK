@@ -54,8 +54,8 @@
     [super loadAd];
 }
 
-- (void)reportWithType:(AdvanceSdkSupplierRepoType)repoType {
-    [super reportWithType:repoType];
+- (void)reportWithType:(AdvanceSdkSupplierRepoType)repoType supplier:(nonnull AdvSupplier *)supplier error:(nonnull NSError *)error {
+    [super reportWithType:repoType supplier:supplier error:error];
     if (repoType == AdvanceSdkSupplierRepoImped) {
         [_timeoutCheckTimer invalidate];
         _timeoutCheckTimer = nil;

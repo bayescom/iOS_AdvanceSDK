@@ -269,11 +269,15 @@ NSString *_Nullable AdvSupplierModelToJSON(AdvSupplierModel *supplierModel, NSSt
         }
     }
 
-    // Map values that need translation
-    [dict addEntriesFromDictionary:@{
-        @"priority_map": map(_priorityMap, λ(id x, [x JSONDictionary])),
-    }];
-
+    if (_priorityMap && ![_priorityMap isEqual:[NSNull null]]) {
+        [dict addEntriesFromDictionary:@{
+            @"priority_map": map(_priorityMap, λ(id x, [x JSONDictionary])),
+        }];
+    } else {
+        [dict addEntriesFromDictionary:@{
+            @"priority_map": @[],
+        }];
+    }
     return dict;
 }
 @end

@@ -52,7 +52,7 @@
 // MARK: ======================= MercuryBannerAdViewDelegate =======================
 // 广告数据拉取成功回调
 - (void)mercury_bannerViewDidReceived {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
         [self.delegate advanceUnifiedViewDidLoad];
     }
@@ -60,7 +60,7 @@
 
 // 请求广告数据失败后调用
 - (void)mercury_bannerViewFailToReceived:(NSError *)error {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded error:error];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded  supplier:_supplier error:error];
     [_mercury_ad removeFromSuperview];
     _mercury_ad = nil;
 //    if ([self.delegate respondsToSelector:@selector(advanceBannerOnAdFailedWithSdkId:error:)]) {
@@ -70,7 +70,7 @@
 
 // 曝光回调
 - (void)mercury_bannerViewWillExposure {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoImped];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(advanceExposured)]) {
         [self.delegate advanceExposured];
     }
@@ -78,7 +78,7 @@
 
 // 点击回调
 - (void)mercury_bannerViewClicked {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(advanceClicked)]) {
         [self.delegate advanceClicked];
     }

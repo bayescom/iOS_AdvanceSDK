@@ -59,12 +59,12 @@
  */
 - (void)nativeExpressAdSuccessToLoad:(GDTNativeExpressAd *)nativeExpressAd views:(NSArray<__kindof GDTNativeExpressAdView *> *)views {
     if (views == nil || views.count == 0) {
-        [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
+        [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:nil];
 //        if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdFailedWithSdkId:error:)]) {
 //            [_delegate advanceNativeExpressOnAdFailedWithSdkId:_supplier.identifier error:[NSError errorWithDomain:@"" code:100000 userInfo:@{@"msg":@"无广告返回"}]];
 //        }
     } else {
-        [_adspot reportWithType:AdvanceSdkSupplierRepoSucceeded];
+        [_adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
         for (GDTNativeExpressAdView *view in views) {
             view.controller = _adspot.viewController;
         }
@@ -78,7 +78,7 @@
  * 拉取广告失败的回调
  */
 - (void)nativeExpressAdFailToLoad:(GDTNativeExpressAd *)nativeExpressAd error:(NSError *)error {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded error:error];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
 //    if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdFailedWithSdkId:error:)]) {
 //        [_delegate advanceNativeExpressOnAdFailedWithSdkId:_supplier.identifier error:error];
 //    }
@@ -89,7 +89,7 @@
  * 渲染原生模板广告失败
  */
 - (void)nativeExpressAdViewRenderFail:(GDTNativeExpressAdView *)nativeExpressAdView {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:nil];
 //    if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdFailedWithSdkId:error:)]) {
 //        [_delegate advanceNativeExpressOnAdFailedWithSdkId:_supplier.identifier error:[NSError errorWithDomain:@"" code:10000 userInfo:@{@"msg": @"渲染原生模板广告失败"}]];
 //    }
@@ -103,7 +103,7 @@
 }
 
 - (void)nativeExpressAdViewClicked:(GDTNativeExpressAdView *)nativeExpressAdView {
-    [_adspot reportWithType:AdvanceSdkSupplierRepoClicked];
+    [_adspot reportWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
     if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdClicked:)]) {
         [_delegate advanceNativeExpressOnAdClicked:nativeExpressAdView];
     }
@@ -116,7 +116,7 @@
 }
 
 - (void)nativeExpressAdViewExposure:(GDTNativeExpressAdView *)nativeExpressAdView {
-    [_adspot reportWithType:AdvanceSdkSupplierRepoImped];
+    [_adspot reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
     if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdShow:)]) {
         [_delegate advanceNativeExpressOnAdShow:nativeExpressAdView];
     }

@@ -52,7 +52,7 @@
 /// 拉取原生模板广告成功 | (注意: nativeExpressAdView在此方法执行结束不被强引用，nativeExpressAd中的对象会被自动释放)
 - (void)mercury_nativeExpressAdSuccessToLoad:(id)nativeExpressAd views:(NSArray<UIView *> *)views {
     if (views == nil || views.count == 0) {
-        [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
+        [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:nil];
 //        if ([self.delegate respondsToSelector:@selector(advanceNativeExpressOnAdFailedWithSdkId:error:)]) {
 //            [self.delegate advanceNativeExpressOnAdFailedWithSdkId:_supplier.identifier
 //                                                                 error:[NSError errorWithDomain:@"" code:100000 userInfo:@{@"msg": @"无广告返回"}]];
@@ -63,7 +63,7 @@
                 ((MercuryNativeExpressAdView *)view).controller = _controller;
             }
         }
-        [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded];
+        [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
         if ([self.delegate respondsToSelector:@selector(advanceNativeExpressOnAdLoadSuccess:)]) {
             [self.delegate advanceNativeExpressOnAdLoadSuccess:views];
         }
@@ -72,7 +72,7 @@
 
 /// 拉取原生模板广告失败
 - (void)mercury_nativeExpressAdFailToLoadWithError:(NSError *)error {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded error:error];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
     _mercury_ad = nil;
 //    if ([self.delegate respondsToSelector:@selector(advanceNativeExpressOnAdFailedWithSdkId:error:)]) {
 //        [self.delegate advanceNativeExpressOnAdFailedWithSdkId:_supplier.identifier error:error];
@@ -88,7 +88,7 @@
 
 /// 原生模板广告渲染失败
 - (void)mercury_nativeExpressAdViewRenderFail:(MercuryNativeExpressAdView *)nativeExpressAdView {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded error:[NSError errorWithDomain:@"广告素材渲染失败" code:301 userInfo:@{@"msg": @"广告素材渲染失败"}]];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:[NSError errorWithDomain:@"广告素材渲染失败" code:301 userInfo:@{@"msg": @"广告素材渲染失败"}]];
     if ([self.delegate respondsToSelector:@selector(advanceNativeExpressOnAdRenderFail:)]) {
         [self.delegate advanceNativeExpressOnAdRenderFail:nativeExpressAdView];
     }
@@ -96,7 +96,7 @@
 
 /// 原生模板广告曝光回调
 - (void)mercury_nativeExpressAdViewExposure:(MercuryNativeExpressAdView *)nativeExpressAdView {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoImped];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(advanceNativeExpressOnAdShow:)]) {
         [self.delegate advanceNativeExpressOnAdShow:nativeExpressAdView];
     }
@@ -104,7 +104,7 @@
 
 /// 原生模板广告点击回调
 - (void)mercury_nativeExpressAdViewClicked:(MercuryNativeExpressAdView *)nativeExpressAdView {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(advanceNativeExpressOnAdClicked:)]) {
         [self.delegate advanceNativeExpressOnAdClicked:nativeExpressAdView];
     }

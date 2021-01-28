@@ -65,7 +65,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// 数据上报
 /// @param repoType 上报的类型
-- (void)reportWithType:(AdvanceSdkSupplierRepoType)repoType error:(NSError *)error;
+- (void)reportWithType:(AdvanceSdkSupplierRepoType)repoType supplier:(AdvSupplier *)supplier error:(NSError *)error;
 
 @end
 
