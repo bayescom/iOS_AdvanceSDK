@@ -52,7 +52,14 @@
     _adspot.viewController.modalPresentationStyle = 0;
     // 设置 backgroundImage
     _gdt_ad.backgroundImage = _adspot.backgroundImage;
-    [_gdt_ad loadAd];
+    if (_supplier.state == AdvanceSdkSupplierStateSuccess) {// 并行请求保存的状态 再次轮到该渠道加载的时候 直接show
+        [self showAd];
+    } else if (_supplier.state == AdvanceSdkSupplierStateFailed) { //失败的话直接对外抛出回调
+        [self deallocAdapter];
+    } else {
+        [_gdt_ad loadAd];
+    }
+
 }
 
 // MARK: ======================= GDTSplashAdDelegate =======================
@@ -68,7 +75,7 @@
     _gdt_ad = nil;
 }
 
-- (void)splashAdDidLoad:(GDTSplashAd *)splashAd {
+- (void)showAd {
     // 设置logo
     UIImageView *imgV;
     if (_adspot.logoImage) {
@@ -79,6 +86,13 @@
         imgV.image = _adspot.logoImage;
     }
     [_gdt_ad showAdInWindow:[UIApplication sharedApplication].adv_getCurrentWindow withBottomView:_adspot.showLogoRequire?imgV:nil skipView:nil];
+}
+
+- (void)splashAdDidLoad:(GDTSplashAd *)splashAd {
+    if (_supplier.isParallel == YES) {
+        return;
+    }
+    [self showAd];
 }
 
 - (void)splashAdExposured:(GDTSplashAd *)splashAd {

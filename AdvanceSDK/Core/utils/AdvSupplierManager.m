@@ -92,7 +92,10 @@
 
 - (void)loadNextSupplierIfHas {
     // 执行非CPT渠道逻辑
-    [self notCPTLoadNextSuppluer:_supplierM.firstObject error:nil];
+    AdvSupplier *supplier = _supplierM.firstObject;
+    // 不管是不是并行渠道, 到了该执行的时候 必须要按照串行渠道的逻辑去执行
+    supplier.isParallel = NO;
+    [self notCPTLoadNextSuppluer:supplier error:nil];
 }
 
 - (void)loadNextSupplier {
@@ -161,6 +164,7 @@
 //            __weak __typeof__(self) weakSelf = self;
 //            [_supplierM enumerateObjectsUsingBlock:^(AdvSupplier * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
 //                if (idx == 0) {// 优先级最高的那个 先添加进并行渠道队列
+//                    obj.isParallel = YES;
 //                    [parallelOperations.inQueueSuppliers addObject:obj];
 //                } else {
 //                    // 其他渠道的需要判断是否添加进并行渠道队列
@@ -170,9 +174,12 @@
 //                            map.priority == obj.priority &&
 //                            ![parallelOperations.inQueueSuppliers containsObject:obj]) {
 //
+//                            obj.isParallel = YES;
 //                            [parallelOperations.inQueueSuppliers addObject:obj];
 //                        } else {
 //                            AdvSupplierQueue *queue = [[AdvSupplierQueue alloc]init];
+//
+//                            obj.isParallel = NO;
 //                            [queue.inQueueSuppliers addObject:obj];
 //                            [weakSelf.queues addObject:queue];
 //                        }
@@ -187,7 +194,7 @@
 //
 //            }];
 //        }
-//
+
 //        NSLog(@"队列s : %@", self.queues);
 //        for (NSInteger i = 0 ; i < self.queues.count; i++) {
 //
@@ -198,44 +205,44 @@
 //        }
         
         
-        
-        /*
-        if (_model.setting.parallelIDS.count > 0) {
-            // 1. 按照 parallelIDS 分组
-            AdvSupplierQueue *parallelOperations = [[AdvSupplierQueue alloc]init];
-            
-            [_supplierM enumerateObjectsUsingBlock:^(AdvSupplier * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                // 如果 parallelIDS 包含 obj的id 则添加进并行对象里
-                if ([_model.setting.parallelIDS containsObject:obj.identifier]) {
-                    [parallelOperations.inQueueSuppliers addObject:obj];
-
-                    // 如果 parallelOperations的count 和 setting.parallelIDS 的count 相等 则并行分组完毕 添加到整体队列中
-                    if (parallelOperations.inQueueSuppliers.count == _model.setting.parallelIDS.count) {
-                        [self.queues addObject:parallelOperations];
-                    }
-                } else {
-                    // 如果不包含则直接 添加进队列里串行执行
-                    AdvSupplierQueue *operation = [[AdvSupplierQueue alloc] init];
-                    [operation.inQueueSuppliers addObject:obj];
-                    [self.queues addObject:parallelOperations];
-                }
-            }];
-            // 排序完成后 self.queue结构为 [AdvSupplierQueue,AdvSupplierQueue,AdvSupplierQueue]
-            // 且每个queue当中的inQueueSuppliers个数可能不一样 个数不为1的是并行请求
-        }
-        */
-        
+                
 //        [self notCPTLoadNextSuppluerParallel:self.queues[0] error:nil];
         /* * * * * * * * * * * * * * * 待整理代码 * * * * * * * * * * *  * * * * * * * * */
 
 
-    
-        
+        NSMutableArray *temp = [NSMutableArray array];
+        if (_model.setting.priorityMap.count > 0) {
+            // 1.按照priorityMap分组
+            
+            __weak __typeof__(self) weakSelf = self;
+            [_supplierM enumerateObjectsUsingBlock:^(AdvSupplier * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                obj.state = AdvanceSdkSupplierStateReady;
+                // 其他渠道的需要判断是否添加进并行渠道队列
+                [_model.setting.priorityMap enumerateObjectsUsingBlock:^(AdvPriorityMap * _Nonnull map, NSUInteger mapIdx, BOOL * _Nonnull stop) {
+                    // 如果优先级和id 都一样 切并行队列里没有该元素的时候(主要是去重) 则添加进并行渠道
+                    if ([map.supid isEqualToString:obj.identifier] &&
+                        map.priority == obj.priority &&
+                        ![temp containsObject:obj] &&
+                        idx != 0) {// 第一个 是第一优先级 马上执行 所以不用 标记并行
+                        
+                        obj.isParallel = YES;
+                        [temp addObject:obj];
+                    } else {
+                        obj.isParallel = NO;
+                    }
+                }];
+                
+            }];
+            
+        }
         
         
         
         // 执行非CPT渠道逻辑
         [self notCPTLoadNextSuppluer:_supplierM.firstObject error:nil];
+        for (AdvSupplier *supplier in temp) {
+            [self notCPTLoadNextSuppluer:supplier error:nil];
+        }
     }
 }
 /* * * * * * * * * * * * * * * 待整理代码 * * * * * * * * * * *  * * * * * * * * */
@@ -269,7 +276,13 @@
         return;
     }
     
-    [_supplierM removeObject:supplier];
+    if (supplier.isParallel) {
+        
+    } else {
+        [_supplierM removeObject:supplier];
+    }
+    
+    supplier.state = AdvanceSdkSupplierStateInHand;
     
     [self reportWithType:AdvanceSdkSupplierRepoLoaded supplier:supplier error:nil];
     if ([_delegate respondsToSelector:@selector(advSupplierLoadSuppluer:error:)]) {

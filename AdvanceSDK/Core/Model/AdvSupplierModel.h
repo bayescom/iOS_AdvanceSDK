@@ -24,6 +24,20 @@ typedef NS_ENUM(NSUInteger, AdvanceSdkSupplierRepoType) {
     AdvanceSdkSupplierRepoFaileded,
 };
 
+typedef NS_ENUM(NSUInteger, AdvanceSdkSupplierState) {
+    /// 未知
+    AdvanceSdkSupplierStateUnknown,
+    /// 准备就绪
+    AdvanceSdkSupplierStateReady,
+    /// 渠道请求成功(只是请求成功 不是曝光成功)
+    AdvanceSdkSupplierStateSuccess,
+    /// 渠道请求失败
+    AdvanceSdkSupplierStateFailed,
+    /// 渠道进行中
+    AdvanceSdkSupplierStateInHand,
+};
+
+
 NS_ASSUME_NONNULL_BEGIN
 
 NSString * ADVStringFromNAdvanceSdkSupplierRepoType(AdvanceSdkSupplierRepoType type);
@@ -82,6 +96,8 @@ NSString * ADVStringFromNAdvanceSdkSupplierRepoType(AdvanceSdkSupplierRepoType t
 @property (nonatomic, copy)   NSString *name;
 @property (nonatomic, copy)   NSString *mediaid;
 @property (nonatomic, assign) NSInteger priority;
+@property (nonatomic, assign) BOOL isParallel;// 是否并行
+@property (nonatomic, assign) AdvanceSdkSupplierState state;// 渠道状态
 @property (nonatomic, copy)   NSArray<NSString *> *clicktk;
 @property (nonatomic, copy)   NSArray<NSString *> *loadedtk;
 @property (nonatomic, copy)   NSArray<NSString *> *imptk;

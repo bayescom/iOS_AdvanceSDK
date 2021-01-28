@@ -35,6 +35,7 @@
 }
 
 - (void)loadAd {
+    
     CGRect adFrame = [UIApplication sharedApplication].keyWindow.bounds;
     // 设置logo
     if (_adspot.logoImage && _adspot.showLogoRequire) {
@@ -51,13 +52,15 @@
 
     _csj_ad.delegate = self;
 
-    [_csj_ad loadAdData];
+    if (_supplier.state == AdvanceSdkSupplierStateSuccess) {// 并行请求保存的状态 再次轮到该渠道加载的时候 直接show
+        [self showAd];
+    } else if (_supplier.state == AdvanceSdkSupplierStateFailed) { //失败的话直接对外抛出回调
+        [self deallocAdapter];
+    } else {
+        [_csj_ad loadAdData];
+    }
 
-    [[UIApplication sharedApplication].keyWindow addSubview:_csj_ad];
-    [[UIApplication sharedApplication].keyWindow bringSubviewToFront:[_adspot performSelector:@selector(bgImgV)]];
 
-    _csj_ad.backgroundColor = [UIColor clearColor];
-    _csj_ad.rootViewController = _adspot.viewController;
 }
 
 - (void)deallocAdapter {
@@ -67,16 +70,13 @@
     }
 }
 
-// MARK: ======================= BUSplashAdDelegate =======================
-/**
- This method is called when splash ad material loaded successfully.
- */
-- (void)splashAdDidLoad:(BUSplashAdView *)splashAd {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
-    NSLog(@"穿山甲开屏拉取成功");
-    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
-        [self.delegate advanceUnifiedViewDidLoad];
-    }
+- (void)showAd {
+    [[UIApplication sharedApplication].keyWindow addSubview:_csj_ad];
+    [[UIApplication sharedApplication].keyWindow bringSubviewToFront:[_adspot performSelector:@selector(bgImgV)]];
+    
+    _csj_ad.backgroundColor = [UIColor clearColor];
+    _csj_ad.rootViewController = _adspot.viewController;
+    
     if (_adspot.showLogoRequire) {
         // 添加Logo
         CGFloat real_w = [UIScreen mainScreen].bounds.size.width;
@@ -88,6 +88,24 @@
             [_csj_ad addSubview:imgV];
         }
     }
+
+}
+// MARK: ======================= BUSplashAdDelegate =======================
+/**
+ This method is called when splash ad material loaded successfully.
+ */
+- (void)splashAdDidLoad:(BUSplashAdView *)splashAd {
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
+    NSLog(@"穿山甲开屏拉取成功");
+    _supplier.state = AdvanceSdkSupplierStateSuccess;
+    if (_supplier.isParallel == YES) {
+        return;
+    }
+    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
+        [self.delegate advanceUnifiedViewDidLoad];
+    }
+    
+    [self showAd];
 }
 
 /**
@@ -97,6 +115,11 @@
 - (void)splashAd:(BUSplashAdView *)splashAd didFailWithError:(NSError * _Nullable)error {
     [self deallocAdapter];
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
+    _supplier.state = AdvanceSdkSupplierStateFailed;
+    if (_supplier.isParallel == YES) {
+        return;
+    }
+
 //    if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdFailedWithSdkId:error:)]) {
 //        [self.delegate advanceSplashOnAdFailedWithSdkId:_adspot.adspotid error:error];
 //    }
