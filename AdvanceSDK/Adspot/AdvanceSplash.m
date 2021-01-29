@@ -22,6 +22,7 @@
 
 @property (nonatomic, assign) NSInteger timeout_stamp;
 @property (nonatomic, strong) CADisplayLink *timeoutCheckTimer;
+@property (nonatomic, strong) NSMutableArray * arrParallelSupplier;
 
 @end
 
@@ -152,10 +153,29 @@
         if (NSClassFromString(clsName)) {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wundeclared-selector"
-            [_adapter performSelector:@selector(deallocAdapter)];
-            _adapter = ((id (*)(id, SEL, id, id))objc_msgSend)((id)[NSClassFromString(clsName) alloc], @selector(initWithSupplier:adspot:), supplier, self);
-            ((void (*)(id, SEL, id))objc_msgSend)((id)_adapter, @selector(setDelegate:), _delegate);
-            ((void (*)(id, SEL))objc_msgSend)((id)_adapter, @selector(loadAd));
+            if (supplier.isParallel) {
+                id adapter = ((id (*)(id, SEL, id, id))objc_msgSend)((id)[NSClassFromString(clsName) alloc], @selector(initWithSupplier:adspot:), supplier, self);
+                // 标记当前的adapter 为了让当串行执行到的时候 获取这个adapter
+                ((void (*)(id, SEL, id))objc_msgSend)((id)adapter, @selector(setAdspotid:), supplier.adspotid);
+                ((void (*)(id, SEL))objc_msgSend)((id)adapter, @selector(loadAd));
+                
+                if (adapter) {
+                    // 存储并行的adapter
+
+                    [self.arrParallelSupplier addObject:adapter];
+                }
+
+            } else {
+                // :先看看当前执行的串行渠道 是不是之前的并行渠道
+                [_adapter performSelector:@selector(deallocAdapter)];
+                _adapter = [self adapterInParallelsWithSupplier:supplier];
+                if (!_adapter) {
+                    _adapter = ((id (*)(id, SEL, id, id))objc_msgSend)((id)[NSClassFromString(clsName) alloc], @selector(initWithSupplier:adspot:), supplier, self);
+                }
+                ((void (*)(id, SEL, id))objc_msgSend)((id)_adapter, @selector(setDelegate:), _delegate);
+                ((void (*)(id, SEL))objc_msgSend)((id)_adapter, @selector(loadAd));
+
+            }
 #pragma clang diagnostic pop
         } else {
             NSString *msg = [NSString stringWithFormat:@"%@ 不存在", clsName];
@@ -163,6 +183,20 @@
             [self loadNextSupplierIfHas];
         }
     }
+}
+
+- (id)adapterInParallelsWithSupplier:(AdvSupplier *)supplier {
+    id adapterT;
+    for (NSInteger i = 0 ; i < self.arrParallelSupplier.count; i++) {
+        
+        id temp = self.arrParallelSupplier[i];
+        NSString *adspotid = ((NSString* (*)(id, SEL))objc_msgSend)((id)temp, @selector(adspotid));
+
+        if ([adspotid isEqualToString:supplier.adspotid]) {
+            adapterT = temp;
+        }
+    }
+    return adapterT;
 }
 
 /// 返回下一个渠道的参数
@@ -232,5 +266,10 @@
     return _bgImgV;
 }
 
-
+- (NSMutableDictionary *)arrParallelSupplier {
+    if (!_arrParallelSupplier) {
+        _arrParallelSupplier = [NSMutableArray array];
+    }
+    return _arrParallelSupplier;
+}
 @end
