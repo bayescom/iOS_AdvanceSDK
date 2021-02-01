@@ -12,7 +12,7 @@
 @protocol AdvanceBannerDelegate <AdvanceBaseDelegate>
 @optional
 
-#pragma 以下方法已被废弃, 请移步AdvanceBaseDelegate
+#pragma 以下方法已被废弃, 请移步AdvanceBaseDelegate 和 AdvanceCommonDelegate
 
 /// 请求广告数据成功后调用
 //- (void)advanceBannerOnAdReceived;

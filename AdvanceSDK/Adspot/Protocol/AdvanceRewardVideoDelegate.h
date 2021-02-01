@@ -11,24 +11,8 @@
 #import "AdvanceBaseDelegate.h"
 @protocol AdvanceRewardVideoDelegate <AdvanceBaseDelegate>
 @optional
-
-/// 广告准备完成
-//- (void)advanceRewardVideoOnAdReady;
-
-/// 广告曝光
-//- (void)advanceRewardVideoOnAdShow;
-
-/// 广告点击
-//- (void)advanceRewardVideoOnAdClicked;
-
 /// 广告渲染失败
 - (void)advanceRewardVideoOnAdRenderFailed;
-
-/// 广告拉取失败
-//- (void)advanceRewardVideoOnAdFailedWithSdkId:(NSString *)sdkId error:(NSError *)error;
-
-/// 广告关闭
-//- (void)advanceRewardVideoOnAdClosed;
 
 /// 广告视频缓存完成
 - (void)advanceRewardVideoOnAdVideoCached;
@@ -41,6 +25,22 @@
 
 /// 激励视频可以调用show方法
 - (void)advanceRewardVideoIsReadyToShow;
+
+#pragma 以下方法已被废弃, 请移步AdvanceBaseDelegate 和 AdvanceCommonDelegate
+/// 广告准备完成
+//- (void)advanceRewardVideoOnAdReady;
+
+/// 广告曝光
+//- (void)advanceRewardVideoOnAdShow;
+
+/// 广告点击
+//- (void)advanceRewardVideoOnAdClicked;
+
+/// 广告拉取失败
+//- (void)advanceRewardVideoOnAdFailedWithSdkId:(NSString *)sdkId error:(NSError *)error;
+
+/// 广告关闭
+//- (void)advanceRewardVideoOnAdClosed;
 
 @end
 

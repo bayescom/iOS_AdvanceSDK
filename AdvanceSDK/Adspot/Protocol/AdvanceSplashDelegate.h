@@ -11,26 +11,27 @@
 #import "AdvanceBaseDelegate.h"
 @protocol AdvanceSplashDelegate <AdvanceBaseDelegate>
 @optional
-/// 广告数据拉取成功
-//- (void)advanceSplashOnAdReceived;
-
-/// 广告曝光成功
-//- (void)advanceSplashOnAdShow;
-
 /// 广告渲染成功
 - (void)advanceSplashOnAdRenderFailed;
-
-/// 广告展示失败
-//- (void)advanceSplashOnAdFailedWithSdkId:(NSString *)sdkId error:(NSError *)error;
-
-/// 广告点击
-//- (void)advanceSplashOnAdClicked;
 
 /// 广告点击跳过
 - (void)advanceSplashOnAdSkipClicked;
 
 /// 广告倒计时结束回调
 - (void)advanceSplashOnAdCountdownToZero;
+
+#pragma 以下方法已被废弃, 请移步AdvanceBaseDelegate 和 AdvanceCommonDelegate
+/// 广告数据拉取成功
+//- (void)advanceSplashOnAdReceived;
+
+/// 广告曝光成功
+//- (void)advanceSplashOnAdShow;
+
+/// 广告展示失败
+//- (void)advanceSplashOnAdFailedWithSdkId:(NSString *)sdkId error:(NSError *)error;
+
+/// 广告点击
+//- (void)advanceSplashOnAdClicked;
 
 
 @end
