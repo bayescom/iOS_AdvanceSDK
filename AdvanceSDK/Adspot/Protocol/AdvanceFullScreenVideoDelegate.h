@@ -11,7 +11,10 @@
 #import "AdvanceBaseDelegate.h"
 @protocol AdvanceFullScreenVideoDelegate <AdvanceBaseDelegate>
 @optional
+/// 视频播放完成
+- (void)advanceFullScreenVideoOnAdPlayFinish;
 
+#pragma 以下方法已被废弃, 请移步AdvanceBaseDelegate 和 AdvanceCommonDelegate
 /// 请求广告数据成功后调用
 //- (void)advanceFullScreenVideoOnAdReceived;
 
@@ -27,8 +30,7 @@
 /// 广告关闭
 //- (void)advanceFullScreenVideoOnAdClosed;
 
-/// 视频播放完成
-- (void)advanceFullScreenVideoOnAdPlayFinish;
+
 
 
 @end

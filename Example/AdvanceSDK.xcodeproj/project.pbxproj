@@ -500,7 +500,7 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-AdvanceSDK_Example/Pods-AdvanceSDK_Example-resources.sh",
-				"${PODS_ROOT}/Bytedance-UnionAD/Bytedance-UnionAd/Frameworks/BUAdSDK.bundle",
+				"${PODS_ROOT}/Ads-CN/PangleSDK/BUAdSDK.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (

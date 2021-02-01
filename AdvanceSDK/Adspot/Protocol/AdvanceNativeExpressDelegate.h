@@ -29,6 +29,7 @@
 /// 广告被关闭
 - (void)advanceNativeExpressOnAdClosed:(nullable UIView *)adView;
 
+#pragma 以下方法已被废弃, 请移步 AdvanceCommonDelegate
 /// 广告拉取失败
 //- (void)advanceNativeExpressOnAdFailedWithSdkId:(nullable NSString *)sdkId error:(nullable NSError *)error;
 

@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
   s.name             = 'AdvanceSDK'
 
-  s.version          = '3.2.3.4'
+  s.version          = '3.2.3.5'
   s.ios.deployment_target = '9.0'
   s.platform     = :ios, "9.0" 
   s.requires_arc = true
@@ -59,10 +59,11 @@ Blink倍联——免费透明的流量变现神器 
   s.subspec 'CSJ' do |csj|
     csj.dependency 'AdvanceSDK/Core'
     csj.dependency 'AdvanceSDK/Adspot'
-    csj.dependency 'Bytedance-UnionAD'
+    csj.dependency 'Ads-CN'
     csj.source_files = 'AdvanceSDK/Adapter/csj/**/*.{h,m}'
-    csj.frameworks = 'UIKit', 'MapKit', 'WebKit', 'MediaPlayer', 'CoreLocation', 'AdSupport', 'CoreMedia', 'AVFoundation', 'CoreTelephony', 'StoreKit', 'SystemConfiguration', 'MobileCoreServices', 'CoreMotion', 'Accelerate'
-    csj.libraries  = 'c++', 'resolv', 'z', 'sqlite3'
+    csj.frameworks = 'UIKit', 'MapKit', 'WebKit', 'MediaPlayer', 'CoreLocation', 'AdSupport', 'CoreMedia', 'AVFoundation', 'CoreTelephony', 'StoreKit', 'SystemConfiguration', 'MobileCoreServices', 'CoreMotion', 'Accelerate','AudioToolbox','JavaScriptCore','Security'
+    csj.libraries = 'c++', 'resolv', 'z', 'sqlite3', 'bz2', 'xml2', 'iconv'
+
   end
 
   s.subspec 'GDT' do |gdt|
