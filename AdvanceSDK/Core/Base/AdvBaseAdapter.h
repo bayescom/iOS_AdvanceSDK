@@ -57,6 +57,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// 执行了打底渠道
 - (void)advSupplierLoadDefaultSuppluer:(AdvSupplier *)supplier;
+
+
+/// 取消当前策略请求
+- (void)deallocAdapter;
 @end
 
 NS_ASSUME_NONNULL_END

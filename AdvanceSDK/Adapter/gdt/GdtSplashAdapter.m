@@ -77,12 +77,14 @@
         imgV.userInteractionEnabled = YES;
         imgV.image = _adspot.logoImage;
     }
-    [_gdt_ad showAdInWindow:[UIApplication sharedApplication].adv_getCurrentWindow withBottomView:_adspot.showLogoRequire?imgV:nil skipView:nil];
+    if (self.gdt_ad) {
+        [_gdt_ad showAdInWindow:[UIApplication sharedApplication].adv_getCurrentWindow withBottomView:_adspot.showLogoRequire?imgV:nil skipView:nil];
+    }
 }
 
 - (void)splashAdExposured:(GDTSplashAd *)splashAd {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoImped];
-    if ([self.delegate respondsToSelector:@selector(advanceExposured)]) {
+    if ([self.delegate respondsToSelector:@selector(advanceExposured)] && self.gdt_ad) {
         [self.delegate advanceExposured];
     }
 }

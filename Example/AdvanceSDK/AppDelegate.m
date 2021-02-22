@@ -40,7 +40,7 @@
         });
         
         //初始化开屏广告
-        [self loadSplash];
+//        [self loadSplash];
     }];
     
     // 热启动 监听

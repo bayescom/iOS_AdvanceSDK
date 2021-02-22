@@ -54,7 +54,12 @@
     }
 }
 
-- (void)deallocAdapter {}
+- (void)deallocAdapter {
+    [self.mgr cacelDataTask];
+    self.mgr = nil;
+    self.baseDelegate = nil;
+    
+}
 
 - (void)setDefaultAdvSupplierWithMediaId:(NSString *)mediaId
                                 adspotId:(NSString *)adspotid
@@ -101,7 +106,7 @@
         // 穿山甲SDK
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
-            [NSClassFromString(clsName) performSelector:@selector(setAppID:) withObject:supplier.mediaid];
+            [NSClassFromString(clsName) performSelector:@selector(setAppID:) withObject:supplier.mediaid];//
         });
     } else if ([supplier.identifier isEqualToString:SDK_ID_MERCURY]) {
         // MercurySDK

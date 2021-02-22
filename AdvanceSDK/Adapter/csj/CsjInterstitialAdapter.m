@@ -70,9 +70,9 @@
 - (void)nativeExpresInterstitialAdRenderFail:(BUNativeExpressInterstitialAd *)interstitialAd error:(NSError *)error {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded error:error];
     _csj_ad = nil;
-    if ([self.delegate respondsToSelector:@selector(advanceInterstitialOnAdRenderFailed)]) {
-        [self.delegate advanceInterstitialOnAdRenderFailed];
-    }
+//    if ([self.delegate respondsToSelector:@selector(advanceInterstitialOnAdRenderFailed)]) {
+//        [self.delegate advanceInterstitialOnAdRenderFailed];
+//    }
 }
 
 
