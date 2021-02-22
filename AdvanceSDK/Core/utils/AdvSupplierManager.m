@@ -33,6 +33,9 @@
 @property (nonatomic, assign) BOOL isLoadLocalSupplier;
 
 @property (nonatomic, assign) NSTimeInterval serverTime;
+@property (nonatomic, strong) NSURLSessionDataTask *dataTask;
+
+
 @end
 
 @implementation AdvSupplierManager
@@ -216,13 +219,19 @@
     request.HTTPMethod = @"POST";
     NSURLSession *sharedSession = [NSURLSession sharedSession];
     self.serverTime = [[NSDate date] timeIntervalSince1970]*1000;
-    NSURLSessionDataTask *dataTask = [sharedSession dataTaskWithRequest:request
+    self.dataTask = [sharedSession dataTaskWithRequest:request
                                                       completionHandler:^(NSData *_Nullable data, NSURLResponse *_Nullable response, NSError *_Nullable error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [self doResultData:data response:response error:error saveOnly:saveOnly];
         });
     }];
-    [dataTask resume];
+    [self.dataTask resume];
+}
+
+- (void)cacelDataTask {
+    if (self.dataTask) {
+        [self.dataTask cancel];
+    }
 }
 
 /// 处理返回的数据
@@ -349,7 +358,9 @@
 - (NSString *)joinFailedUrlWithObj:(NSString *)urlString error:(NSError *)error {
     ADVLog(@"UPLOAD error: %@", error);
     if (error) {
-        if ([error.domain isEqualToString:@"com.bytedance.buadsdk"]) {// 穿山甲sdk报错
+        if ([error.domain isEqualToString:@"com.pangle.buadsdk"]) { // 新版穿山甲sdk报错
+            return [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=err_csj_%ld&track_time",(long)error.code]];
+        } else if ([error.domain isEqualToString:@"com.bytedance.buadsdk"]) {// 穿山甲sdk报错
             return [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=err_csj_%ld&track_time",(long)error.code]];
         } else if ([error.domain isEqualToString:@"GDTAdErrorDomain"]) {// 广点通
             NSString *url = nil;

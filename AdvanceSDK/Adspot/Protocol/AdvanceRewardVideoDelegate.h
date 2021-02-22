@@ -11,8 +11,6 @@
 #import "AdvanceBaseDelegate.h"
 @protocol AdvanceRewardVideoDelegate <AdvanceBaseDelegate>
 @optional
-/// 广告渲染失败
-- (void)advanceRewardVideoOnAdRenderFailed;
 
 /// 广告视频缓存完成
 - (void)advanceRewardVideoOnAdVideoCached;
