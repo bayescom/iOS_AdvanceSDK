@@ -20,6 +20,12 @@
 #import <AdvanceSDK/AdvanceSplash.h>
 #import <AdvSdkConfig.h>
 
+#define kPublicKey  @"用文本编辑打开pub_for_sdk.cer即可获取"
+
+#define kPublicForApiKey @"用文本编辑打开public_for_api.pem即可获取"
+
+#define kDevId @""
+
 @interface AppDelegate () <AdvanceSplashDelegate>
 @property(strong,nonatomic) AdvanceSplash *advanceSplash;
 
@@ -30,6 +36,12 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [AdvSdkConfig shareInstance].isDebug = YES;
     [AdvSdkConfig shareInstance].appId = @"100255";
+
+    [AdvSdkConfig shareInstance].caidConfig = @{AdvSdkConfigCAID:@"",
+                                                AdvSdkConfigCAIDPublicKey:kPublicKey,
+                                                AdvSdkConfigCAIDPublicForApiKey:kPublicForApiKey,
+                                                AdvSdkConfigCAIDDevId:kDevId};
+    
     // 冷启动 监听
     [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidFinishLaunchingNotification object:nil queue:nil usingBlock:^(NSNotification * _Nonnull note) {
         

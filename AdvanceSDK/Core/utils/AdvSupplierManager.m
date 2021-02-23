@@ -206,6 +206,15 @@
     if (self.ext) {
         [deviceInfo setValue:self.ext forKey:@"ext"];
     }
+    
+    // caid 有就传没有就不穿
+    NSDictionary *config = [AdvSdkConfig shareInstance].caidConfig;
+    if (config) {
+        NSString *caid = [config valueForKey:AdvSdkConfigCAID];
+        if (caid) {
+            [deviceInfo setValue:caid forKey:@"caid"];
+        }
+    }
 //    [deviceInfo setValue:@"" forKey:@"adspotid"];
 //    NSLog(@"请求参数 %@", deviceInfo);
     NSError *parseError = nil;
