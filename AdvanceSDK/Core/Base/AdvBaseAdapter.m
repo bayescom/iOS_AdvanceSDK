@@ -9,6 +9,8 @@
 #import "AdvSupplierManager.h"
 #import "AdvanceSupplierDelegate.h"
 #import "AdvSdkConfig.h"
+#import <objc/runtime.h>
+#import <objc/message.h>
 
 @interface AdvBaseAdapter ()  <AdvSupplierManagerDelegate, AdvanceSupplierDelegate>
 @property (nonatomic, strong) AdvSupplierManager *mgr;
@@ -112,7 +114,7 @@
         // MercurySDK
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
-            [NSClassFromString(clsName) performSelector:@selector(setAppID:mediaKey:) withObject:supplier.mediaid withObject:supplier.mediakey];
+            ((void (*)(id, SEL, id, id, id))objc_msgSend)((id)NSClassFromString(clsName), @selector(setAppID:mediaKey:config:), supplier.mediaid, supplier.mediakey, [AdvSdkConfig shareInstance].caidConfig);
         });
     }
     

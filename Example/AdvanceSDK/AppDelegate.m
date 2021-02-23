@@ -30,6 +30,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [AdvSdkConfig shareInstance].isDebug = YES;
     [AdvSdkConfig shareInstance].appId = @"100255";
+    [AdvSdkConfig shareInstance].caidConfig = @{AdvSdkConfigCAID:@"3j2h3ljk21h3jlk21hlkj32lh1kjh3lj21h3jk"};
     // 冷启动 监听
     [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidFinishLaunchingNotification object:nil queue:nil usingBlock:^(NSNotification * _Nonnull note) {
         

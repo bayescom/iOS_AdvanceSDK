@@ -23,6 +23,11 @@ NSString *const SDK_ID_GDT=@"2";
 NSString *const SDK_ID_CSJ=@"3";
 NSString *const SDK_ID_BAIDU=@"4";
 
+NSString * const AdvSdkConfigCAID = @"kMercuryConfigCAIDKey";
+NSString * const AdvSdkConfigCAIDPublicKey = @"kMercuryConfigCAIDPublicKey-Key";
+NSString * const AdvSdkConfigCAIDPublicForApiKey = @"kMercuryConfigCAIDPublicForApiKey-Key";
+NSString * const AdvSdkConfigCAIDDevId = @"kMercuryConfigCAIDDevIdKey";
+
 
 int const ADVANCE_RECEIVED = 0;
 int const ADVANCE_ERROR = 1;
@@ -90,4 +95,7 @@ static AdvSdkConfig *instance = nil;
     _isDebug = isDebug;
 }
 
+- (void)setCaidConfig:(NSDictionary *)caidConfig {
+    _caidConfig = caidConfig;
+}
 @end
