@@ -114,7 +114,9 @@
         // MercurySDK
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
-            ((void (*)(id, SEL, id, id, id))objc_msgSend)((id)NSClassFromString(clsName), @selector(setAppID:mediaKey:config:), supplier.mediaid, supplier.mediakey, [AdvSdkConfig shareInstance].caidConfig);
+            id configMgr = NSClassFromString(clsName);
+            ((void (*)(id, SEL, id, id, id))objc_msgSend)(configMgr, @selector(setAppID:mediaKey:config:), supplier.mediaid, supplier.mediakey, [AdvSdkConfig shareInstance].caidConfig);
+//            ((void (*)(id, SEL, id))objc_msgSend)(configMgr, @selector(openDebug:), @1);
         });
     }
     
