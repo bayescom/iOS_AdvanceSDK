@@ -68,6 +68,7 @@ static AdvSdkConfig *instance = nil;
     dispatch_once(&onceToken, ^{
         instance = [[super allocWithZone:NULL] init];
         instance.isDebug = NO;
+        instance.isAdTrack = YES;
     });
     return instance;
 }

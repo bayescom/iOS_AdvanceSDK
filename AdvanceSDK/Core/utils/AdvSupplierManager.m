@@ -203,6 +203,7 @@
 /// 拉取线上数据 如果是仅仅储存 不会触发任何回调，仅存储策略信息
 - (void)fetchData:(BOOL)saveOnly {
     NSMutableDictionary *deviceInfo = [AdvDeviceInfoUtil getDeviceInfoWithMediaId:_mediaId adspotId:_adspotId];
+    
     if (self.ext) {
         [deviceInfo setValue:self.ext forKey:@"ext"];
     }
@@ -215,8 +216,12 @@
             [deviceInfo setValue:caid forKey:@"caid"];
         }
     }
+    
+    // 个性化广告推送开关
+    [deviceInfo setValue:[AdvSdkConfig shareInstance].isAdTrack ? @"0" : @"1" forKey:@"donottrack"];
+
 //    [deviceInfo setValue:@"" forKey:@"adspotid"];
-//    NSLog(@"请求参数 %@", deviceInfo);
+    NSLog(@"请求参数 %@", deviceInfo);
     NSError *parseError = nil;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:deviceInfo options:NSJSONWritingPrettyPrinted error:&parseError];
     NSURL *url = [NSURL URLWithString:AdvanceSdkRequestUrl];
