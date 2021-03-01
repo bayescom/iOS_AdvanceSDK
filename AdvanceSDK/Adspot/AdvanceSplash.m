@@ -51,7 +51,6 @@
 
     _timeoutCheckTimer = [CADisplayLink displayLinkWithTarget:self selector:@selector(timeoutCheckTimerAction)];
     [_timeoutCheckTimer addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
-    
     [super loadAd];
 }
 
@@ -71,18 +70,23 @@
     [_timeoutCheckTimer invalidate];
     _timeoutCheckTimer = nil;
     _timeout_stamp = 0;
-//    if([_delegate respondsToSelector:@selector(advanceOnAdNotFilled:)]) {
-//        [_delegate advanceOnAdNotFilled:[AdvError errorWithCode:AdvErrorCode_115].toNSError];
-//        [_adapter performSelector:@selector(deallocAdapter)];
-//    }
+}
+
+- (void)deallocDelegate:(BOOL)execute {
+    
+    if([_delegate respondsToSelector:@selector(advanceFailedWithError:)] && execute) {
+        [_delegate advanceFailedWithError:[AdvError errorWithCode:AdvErrorCode_115].toNSError];
+        [_adapter performSelector:@selector(deallocAdapter)];
+        [self deallocAdapter];
+    }
     _delegate = nil;
 }
 
+// 无论怎样到达超时时间时  都必须移除开屏广告
 - (void)timeoutCheckTimerAction {
     if ([[NSDate date] timeIntervalSince1970]*1000 > _timeout_stamp) {
+        [self deallocDelegate:YES];
         [self deallocSelf];
-        [_timeoutCheckTimer invalidate];
-        _timeoutCheckTimer = nil;
     }
 }
 
@@ -124,6 +128,7 @@
             [self.delegate advanceFailedWithError:error];
         }
         [self deallocSelf];
+        [self deallocDelegate:NO];
         return;
     }
     
@@ -147,7 +152,8 @@
     // 请求超时了
     NSTimeInterval now = [[NSDate date] timeIntervalSince1970]*1000;
     if ((_timeout_stamp > 0) && (now+500 > _timeout_stamp)) {
-        [self deallocSelf];
+        [self deallocSelf]; //清空view 重置解释器
+        [self deallocDelegate:YES];// 向外回调错误
     } else {
         supplier.timeout = (_timeout_stamp - now) >= 5000 ? 5000 : (_timeout_stamp - now);
         if (NSClassFromString(clsName)) {

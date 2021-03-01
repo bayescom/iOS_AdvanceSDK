@@ -67,6 +67,10 @@ NS_ASSUME_NONNULL_BEGIN
 /// @param repoType 上报的类型
 - (void)reportWithType:(AdvanceSdkSupplierRepoType)repoType supplier:(AdvSupplier *)supplier error:(NSError *)error;
 
+
+/// 取消正在进行的策略请求
+- (void)cacelDataTask;
+
 @end
 
 NS_ASSUME_NONNULL_END

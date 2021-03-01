@@ -72,9 +72,11 @@
 /// 插屏广告视图曝光失败回调，插屏广告曝光失败回调该函数
 - (void)mercury_interstitialFailToPresent {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:[NSError errorWithDomain:@"广告素材渲染失败" code:301 userInfo:@{@"msg": @"广告素材渲染失败"}]];
-    if ([self.delegate respondsToSelector:@selector(advanceInterstitialOnAdRenderFailed)]) {
-        [self.delegate advanceInterstitialOnAdRenderFailed];
-    }
+    _mercury_ad = nil;
+//    if ([self.delegate respondsToSelector:@selector(advanceInterstitialOnAdRenderFailed)]) {
+//        [self.delegate advanceInterstitialOnAdRenderFailed];
+//    }
+    
 }
 
 /// 插屏广告曝光回调

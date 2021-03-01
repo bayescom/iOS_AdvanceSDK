@@ -11,7 +11,70 @@
 
 目前聚合SDK聚合的SDK有：Mercury，广点通，穿山甲，请在对接的时候使用支持相应sdk管理的AdvanceSDK。
 
-目前AdvanceSDK支持统一管理的广告位类型为：
+### [注意事项](https://www.pangle.cn/union/media/union/download/detail?id=16&docId=5f327098d44dc5000e1d45d5&osType=ios):
+
+- AdvanceSDK(version:3.2.3.5) 将穿山甲依赖库由Bytedance-UnionAD更新为Ads-CN
+- App Tracking Transparency（ATT）适用于请求用户授权，访问与应用相关的数据以跟踪用户或设备。 访问 https://developer.apple.com/documentation/apptrackingtransparency 了解更多信息。
+- SKAdNetwork（SKAN）是 Apple 的归因解决方案，可帮助广告客户在保持用户隐私的同时衡量广告活动。 使用 Apple 的 SKAdNetwork 后，即使 IDFA 不可用，广告网络也可以正确获得应用安装的归因结果。 访问 https://developer.apple.com/documentation/storekit/skadnetwork 了解更多信息。
+
+### Checklist
+- 应用编译环境升级至 Xcode 12.0 及以上版本
+- 升级穿山甲 iOS SDK 3.2.5.0 及以上版本，穿山甲提供了 iOS 14 与 SKAdNetwork 支持
+- 将穿山甲的 SKAdNetwork ID 添加到 info.plist 中，以保证 SKAdNetwork 的正确运行
+
+```
+<key>SKAdNetworkItems</key>
+  <array>
+    <dict>
+      <key>SKAdNetworkIdentifier</key>
+      <string>238da6jt44.skadnetwork</string>
+    </dict>
+    <dict>
+      <key>SKAdNetworkIdentifier</key>
+      <string>22mmun2rn5.skadnetwork</string>
+    </dict>
+  </array>
+```
+
+- 支持苹果 ATT：从 iOS 14 开始，若开发者设置 App Tracking Transparency 向用户申请跟踪授权，在用户授权之前IDFA 将不可用。 如果用户拒绝此请求，应用获取到的 IDFA 将自动清零，可能会导致您的广告收入的降低
+- 要获取 App Tracking Transparency 权限，请更新您的 Info.plist，添加 NSUserTrackingUsageDescription 字段和自定义文案描述。代码示例：
+
+```
+<key>NSUserTrackingUsageDescription</key>
+<string>该标识符将用于向您投放个性化广告</string>
+```
+
+**关于CAID**</br>
+苹果在iOS14中限制了开发者获取idfa的权限, 因此市面上出现了一些替代品, 这些替代品的大多数原理都是通过采集苹果的非隐私系统参数, 再经过算法生成的, 为了方便开发者快速的获取这些参数, 我们维护了一份文档,[详见此处](http://www.bayescom.com/docsify/docs/#/bayescom/important/api3_0_demo_code_ios?id=_6ios14%e9%83%a8%e5%88%86%e7%b3%bb%e7%bb%9f%e5%8f%82%e6%95%b0%e8%8e%b7%e5%8f%96%e7%a4%ba%e4%be%8b)
+
+
+##### SDK全局配置
+
+```
+// 设置appid
+[AdvSdkConfig shareInstance].appId = @"100255";
+// 设置caid
+[AdvSdkConfig shareInstance].caidConfig = @{AdvSdkConfigCAID:@"your caid",
+                                            AdvSdkConfigCAIDPublicKey:@"your public key",
+                                            AdvSdkConfigCAIDPublicForApiKey:@"your [ublic for api key",
+                                            AdvSdkConfigCAIDDevId:@"your devid"};
+```
+
+**注意** </br>
+
+
+1. CAID不是必须设置的, 但是当用户限制的idfa的获取权限, 会导致上游渠道无法对设备进行归因, 从而会影响收益</br>
+
+2. 如果设置了AdvSdkConfigCAID  这不需要再传 AdvSdkConfigCAIDPublicKey, AdvSdkConfigCAIDPublicForApiKey, AdvSdkConfigCAIDDevId </br>
+ 
+3. 若没有设置AdvSdkConfigCAID  则必须要传 AdvSdkConfigCAIDPublicKey, AdvSdkConfigCAIDPublicForApiKey, AdvSdkConfigCAIDDevId  否则可能会影响收益</br>
+ 
+4. 同时设置, 则只有 AdvSdkConfigCAID 生效</br>
+
+5. 这四个字段类型必须为字符串类型</br>
+
+
+##### 目前AdvanceSDK支持统一管理的广告位类型为：
 
 - [开屏广告位(Splash)](./_docs/ads/splash_ad.md)
 - [横幅广告位(Banner)](./_docs/ads/banner_ad.md)
@@ -58,7 +121,7 @@ platform :ios, '9.0'
 target '你的项目名称' do
   # use_frameworks!
   # Pods for 你的项目名称
-  pod 'AdvanceSDK', '~> 3.2.3.4' # 可指定你想要的版本号
+  pod 'AdvanceSDK', '~> 3.2.3.7' # 可指定你想要的版本号
   pod 'AdvanceSDK/CSJ', 	# 如果需要导入穿山甲SDK
   pod 'AdvanceSDK/GDT', 	# 如果需要导入广点通SDK
   pod 'AdvanceSDK/Mercury' # 如果需要导入MercurySDK
@@ -102,9 +165,9 @@ $ pod install
 指定SDK版本前，请先确保repo库为最新版本，参考上一小节内容进行更新。如果需要指定SDK版本，需要在Podfile文件中，pod那一行指定版本号：
 
 ```
-  pod 'AdvanceSDK', '~> 3.2.3.4' # 可指定你想要的版本号
-  pod 'AdvanceSDK/CSJ', '~> 3.2.3.4'	# 如果需要导入穿山甲SDK
-  pod 'AdvanceSDK/GDT', '~> 3.2.3.4'	# 如果需要导入广点通SDK
+  pod 'AdvanceSDK', '~> 3.2.3.7' # 可指定你想要的版本号
+  pod 'AdvanceSDK/CSJ', '~> 3.2.3.7'	# 如果需要导入穿山甲SDK
+  pod 'AdvanceSDK/GDT', '~> 3.2.3.7'	# 如果需要导入广点通SDK
 
 ```
 之后运行命令：

@@ -129,8 +129,9 @@
  This method is called when splash ad slot will be showing.
  */
 - (void)splashAdWillVisible:(BUSplashAdView *)splashAd {
+    
     [self.adspot reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
-    if ([self.delegate respondsToSelector:@selector(advanceExposured)]) {
+    if ([self.delegate respondsToSelector:@selector(advanceExposured)] && self.csj_ad) {
         [self.delegate advanceExposured];
     }
 }

@@ -35,7 +35,7 @@
 - (void)loadAdBtn1Action {
     if (![self checkAdspotId]) { return; }
     if (!_contentV) {
-        _contentV = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.width/6.4)];
+        _contentV = [[UIView alloc] initWithFrame:CGRectMake(20, 0, self.view.bounds.size.width - 40, 200)];
     }
     [self.adShowView addSubview:self.contentV];
     self.adShowView.hidden = NO;

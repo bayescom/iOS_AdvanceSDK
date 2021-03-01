@@ -20,6 +20,11 @@ extern NSString *const SDK_ID_GDT;
 extern NSString *const SDK_ID_CSJ;
 extern NSString *const SDK_ID_BAIDU;
 
+extern NSString *const AdvSdkConfigCAID;
+extern NSString *const AdvSdkConfigCAIDPublicKey;
+extern NSString *const AdvSdkConfigCAIDPublicForApiKey;
+extern NSString *const AdvSdkConfigCAIDDevId;
+
 extern int const ADVANCE_RECEIVED;
 extern int const ADVANCE_ERROR;
 
@@ -35,6 +40,12 @@ extern int const ADVANCE_ERROR;
 
 /// appid 从平台获取
 @property (nonatomic, copy) NSString *appId;
+
+/// 是否允许个性化广告推送 默认为允许
+@property (nonatomic, assign) BOOL isAdTrack;
+
+// caid设置
+@property (nonatomic, strong) NSDictionary *caidConfig;
 
 @end
 

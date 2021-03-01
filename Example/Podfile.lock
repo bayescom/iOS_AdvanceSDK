@@ -1,27 +1,33 @@
 PODS:
-  - AdvanceSDK (3.2.3.4):
-    - AdvanceSDK/Core (= 3.2.3.4)
-  - AdvanceSDK/Adspot (3.2.3.4):
+  - Ads-CN (3.4.1.1):
+    - Ads-CN/BUAdSDK (= 3.4.1.1)
+  - Ads-CN/BUAdSDK (3.4.1.1):
+    - Ads-CN/BUFoundation
+    - Ads-CN/Domestic
+  - Ads-CN/BUFoundation (3.4.1.1)
+  - Ads-CN/Domestic (3.4.1.1)
+  - AdvanceSDK (3.2.3.7):
+    - AdvanceSDK/Core (= 3.2.3.7)
+  - AdvanceSDK/Adspot (3.2.3.7):
     - AdvanceSDK/Core
-  - AdvanceSDK/Core (3.2.3.4)
-  - AdvanceSDK/CSJ (3.2.3.4):
+  - AdvanceSDK/Core (3.2.3.7)
+  - AdvanceSDK/CSJ (3.2.3.7):
+    - Ads-CN
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
-    - Bytedance-UnionAD
-  - AdvanceSDK/GDT (3.2.3.4):
+  - AdvanceSDK/GDT (3.2.3.7):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - GDTMobSDK
-  - AdvanceSDK/Mercury (3.2.3.4):
+  - AdvanceSDK/Mercury (3.2.3.7):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - MercurySDK
-  - Bytedance-UnionAD (3.3.6.2)
   - GDTMobSDK (4.12.1):
     - GDTMobSDK/GDTMobSDK (= 4.12.1)
   - GDTMobSDK/GDTMobSDK (4.12.1)
   - Masonry (1.1.0)
-  - MercurySDK (3.1.5.5)
+  - MercurySDK (3.1.5.6)
   - SDWebImage (5.10.1):
     - SDWebImage/Core (= 5.10.1)
   - SDWebImage/Core (5.10.1)
@@ -36,7 +42,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
-    - Bytedance-UnionAD
+    - Ads-CN
     - GDTMobSDK
     - Masonry
     - MercurySDK
@@ -47,13 +53,13 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  AdvanceSDK: 5ddee6fcd0f8d0a9eb3dc7736cd92bd3eabc2392
-  Bytedance-UnionAD: e9f83939e2a5d857e104f6a91035bbf504b603e5
+  Ads-CN: 734b95efc84481b958ad4cf6efca68f828c73b5b
+  AdvanceSDK: e2b077e5846c6e5008975ec2f6535ceda77c1240
   GDTMobSDK: 8153fd4ed7f16be4786923226487ff60f0344a4f
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
-  MercurySDK: edf72a3f878e333b4b2cf10c74b365939b90b333
+  MercurySDK: e66a4deea27d5682e85601f0dbb4720c78f90d46
   SDWebImage: f66a16b95183b92ed6b965ad21d33167bc07612d
 
-PODFILE CHECKSUM: 38e0e8acb454284244bb5b8382b8574303f581be
+PODFILE CHECKSUM: 3b468010a648a0f7676f63c775faa81734be9957
 
 COCOAPODS: 1.10.0

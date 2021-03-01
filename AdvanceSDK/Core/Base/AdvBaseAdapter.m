@@ -9,6 +9,8 @@
 #import "AdvSupplierManager.h"
 #import "AdvanceSupplierDelegate.h"
 #import "AdvSdkConfig.h"
+#import <objc/runtime.h>
+#import <objc/message.h>
 
 @interface AdvBaseAdapter ()  <AdvSupplierManagerDelegate, AdvanceSupplierDelegate>
 @property (nonatomic, strong) AdvSupplierManager *mgr;
@@ -50,7 +52,12 @@
     }
 }
 
-- (void)deallocAdapter {}
+- (void)deallocAdapter {
+    [self.mgr cacelDataTask];
+    self.mgr = nil;
+    self.baseDelegate = nil;
+    
+}
 
 - (void)setDefaultAdvSupplierWithMediaId:(NSString *)mediaId
                                 adspotId:(NSString *)adspotid
@@ -97,13 +104,15 @@
         // 穿山甲SDK
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
-            [NSClassFromString(clsName) performSelector:@selector(setAppID:) withObject:supplier.mediaid];
+            [NSClassFromString(clsName) performSelector:@selector(setAppID:) withObject:supplier.mediaid];//
         });
     } else if ([supplier.identifier isEqualToString:SDK_ID_MERCURY]) {
         // MercurySDK
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
-            [NSClassFromString(clsName) performSelector:@selector(setAppID:mediaKey:) withObject:supplier.mediaid withObject:supplier.mediakey];
+            id configMgr = NSClassFromString(clsName);
+            ((void (*)(id, SEL, id, id, id))objc_msgSend)(configMgr, @selector(setAppID:mediaKey:config:), supplier.mediaid, supplier.mediakey, [AdvSdkConfig shareInstance].caidConfig);
+//            ((void (*)(id, SEL, id))objc_msgSend)(configMgr, @selector(openDebug:), @1);
         });
     }
     

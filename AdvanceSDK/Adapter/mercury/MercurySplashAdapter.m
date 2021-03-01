@@ -18,6 +18,9 @@
 #import "AdvanceSplash.h"
 #import "AdvLog.h"
 
+#import <objc/runtime.h>
+#import <objc/message.h>
+
 @interface MercurySplashAdapter () <MercurySplashAdDelegate>
 @property (nonatomic, strong) MercurySplashAd *mercury_ad;
 @property (nonatomic, strong) AdvSupplier *supplier;
@@ -47,7 +50,6 @@
         }
     }
     _mercury_ad.delegate = self;
-//    _mercury_ad.showType = MercurySplashAdShowCutBottom;
     _mercury_ad.controller = _adspot.viewController;
 
     [_mercury_ad loadAdAndShow];
@@ -58,7 +60,23 @@
 }
 
 - (void)deallocAdapter {
+    
+    id timer0 = [_mercury_ad performSelector:@selector(timer0)];
+    [timer0 performSelector:@selector(stopTimer)];
+
+    
+    id timer = [_mercury_ad performSelector:@selector(timer)];
+    [timer performSelector:@selector(stopTimer)];
+    
+    UIViewController *vc = [_mercury_ad performSelector:@selector(splashVC)];
+    [vc dismissViewControllerAnimated:NO completion:nil];
+    [vc.view removeFromSuperview];
+    
+    self.delegate = nil;
+    _mercury_ad.delegate = nil;
     _mercury_ad = nil;
+
+        
 }
 
 // MARK: ======================= MercurySplashAdDelegate =======================
@@ -70,8 +88,10 @@
 }
 
 - (void)mercury_splashAdExposured:(MercurySplashAd *)splashAd {
+
     [self.adspot reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
-    if ([self.delegate respondsToSelector:@selector(advanceExposured)]) {
+    if ([self.delegate respondsToSelector:@selector(advanceExposured)] && self.mercury_ad) {
+
         [self.delegate advanceExposured];
     }
 }

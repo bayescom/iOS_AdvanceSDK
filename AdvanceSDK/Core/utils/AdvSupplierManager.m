@@ -34,7 +34,13 @@
 
 @property (nonatomic, assign) NSTimeInterval serverTime;
 
+
 @property (nonatomic, strong) NSMutableArray *queues;
+
+@property (nonatomic, strong) NSURLSessionDataTask *dataTask;
+
+
+
 @end
 
 @implementation AdvSupplierManager
@@ -326,11 +332,25 @@
 /// 拉取线上数据 如果是仅仅储存 不会触发任何回调，仅存储策略信息
 - (void)fetchData:(BOOL)saveOnly {
     NSMutableDictionary *deviceInfo = [AdvDeviceInfoUtil getDeviceInfoWithMediaId:_mediaId adspotId:_adspotId];
+    
     if (self.ext) {
         [deviceInfo setValue:self.ext forKey:@"ext"];
     }
+    
+    // caid 有就传没有就不穿
+    NSDictionary *config = [AdvSdkConfig shareInstance].caidConfig;
+    if (config) {
+        NSString *caid = [config valueForKey:AdvSdkConfigCAID];
+        if (caid) {
+            [deviceInfo setValue:caid forKey:@"caid"];
+        }
+    }
+    
+    // 个性化广告推送开关
+    [deviceInfo setValue:[AdvSdkConfig shareInstance].isAdTrack ? @"0" : @"1" forKey:@"donottrack"];
+
 //    [deviceInfo setValue:@"" forKey:@"adspotid"];
-//    NSLog(@"请求参数 %@", deviceInfo);
+    NSLog(@"请求参数 %@", deviceInfo);
     NSError *parseError = nil;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:deviceInfo options:NSJSONWritingPrettyPrinted error:&parseError];
 //    NSURL *url = [NSURL URLWithString:AdvanceSdkRequestUrl];
@@ -342,13 +362,19 @@
     request.HTTPMethod = @"POST";
     NSURLSession *sharedSession = [NSURLSession sharedSession];
     self.serverTime = [[NSDate date] timeIntervalSince1970]*1000;
-    NSURLSessionDataTask *dataTask = [sharedSession dataTaskWithRequest:request
+    self.dataTask = [sharedSession dataTaskWithRequest:request
                                                       completionHandler:^(NSData *_Nullable data, NSURLResponse *_Nullable response, NSError *_Nullable error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [self doResultData:data response:response error:error saveOnly:saveOnly];
         });
     }];
-    [dataTask resume];
+    [self.dataTask resume];
+}
+
+- (void)cacelDataTask {
+    if (self.dataTask) {
+        [self.dataTask cancel];
+    }
 }
 
 /// 处理返回的数据
@@ -475,7 +501,9 @@
 - (NSString *)joinFailedUrlWithObj:(NSString *)urlString error:(NSError *)error {
     ADVLog(@"UPLOAD error: %@", error);
     if (error) {
-        if ([error.domain isEqualToString:@"com.bytedance.buadsdk"]) {// 穿山甲sdk报错
+        if ([error.domain isEqualToString:@"com.pangle.buadsdk"]) { // 新版穿山甲sdk报错
+            return [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=err_csj_%ld&track_time",(long)error.code]];
+        } else if ([error.domain isEqualToString:@"com.bytedance.buadsdk"]) {// 穿山甲sdk报错
             return [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=err_csj_%ld&track_time",(long)error.code]];
         } else if ([error.domain isEqualToString:@"GDTAdErrorDomain"]) {// 广点通
             NSString *url = nil;
