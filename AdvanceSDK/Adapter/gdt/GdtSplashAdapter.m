@@ -63,9 +63,12 @@
     } else if (_supplier.state == AdvanceSdkSupplierStateFailed) { //失败的话直接对外抛出回调
         NSLog(@"广点通 失败");
         [self deallocAdapter];
+    } else if (_supplier.state == AdvanceSdkSupplierStateInPull) { // 正在请求广告时 什么都不用做等待就行
+        NSLog(@"广点通 正在加载中");
     } else {
         NSLog(@"广点通 load ad");
         [_gdt_ad loadAd];
+        _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
     }
 
 }

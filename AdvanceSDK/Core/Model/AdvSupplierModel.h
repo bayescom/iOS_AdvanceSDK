@@ -33,8 +33,12 @@ typedef NS_ENUM(NSUInteger, AdvanceSdkSupplierState) {
     AdvanceSdkSupplierStateSuccess,
     /// 渠道请求失败
     AdvanceSdkSupplierStateFailed,
-    /// 渠道进行中
+    /// 渠道进行中(广告发起请求前)
     AdvanceSdkSupplierStateInHand,
+    
+    /// 广告请求进行中(广告发起请求后到结果确定前)
+    AdvanceSdkSupplierStateInPull,
+
 };
 
 

@@ -228,7 +228,6 @@
                 // 其他渠道的需要判断是否添加进并行渠道队列
                 [_model.setting.priorityMap enumerateObjectsUsingBlock:^(AdvPriorityMap * _Nonnull map, NSUInteger mapIdx, BOOL * _Nonnull stop) {
                     // 如果优先级和id 都一样  且并行队列里没有该元素的时候(主要是去重) 则添加进并行渠道
-                    NSLog(@"map.supid: %@, obj.identifier: %@, map.priority: %ld, obj.priority: %ld", map.supid, obj.identifier, (long)map.priority, (long)obj.priority);
                     if ([map.supid isEqualToString:obj.identifier] &&
                         map.priority == obj.priority &&
                         ![temp containsObject:obj] &&
@@ -292,7 +291,8 @@
     }
     
     // 如果成功或者失败 就意味着 该并行渠道有结果了, 所以不需要改变状态了
-    if (supplier.state == AdvanceSdkSupplierStateFailed || supplier.state == AdvanceSdkSupplierStateSuccess) {
+    // 正在加载中的时候 表明并行渠道正在加载 只要等待就可以了所以也不需要改变状态
+    if (supplier.state == AdvanceSdkSupplierStateFailed || supplier.state == AdvanceSdkSupplierStateSuccess || supplier.state == AdvanceSdkSupplierStateInPull) {
         // 只有并行的渠道才有可能走到这里
         
         

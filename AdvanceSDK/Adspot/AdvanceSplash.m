@@ -179,8 +179,8 @@
             } else {
                 // :先看看当前执行的串行渠道 是不是之前的并行渠道
                 if (!_testII) {
-                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 3 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-                        NSLog(@"延时模拟串行%@", _adapter);
+//                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+//                        NSLog(@"延时模拟串行%@", _adapter);
                         [_adapter performSelector:@selector(deallocAdapter)];
                         _adapter = [self adapterInParallelsWithSupplier:supplier];
                         if (!_adapter) {
@@ -191,7 +191,7 @@
                         ((void (*)(id, SEL, id))objc_msgSend)((id)_adapter, @selector(setDelegate:), _delegate);
                         ((void (*)(id, SEL))objc_msgSend)((id)_adapter, @selector(loadAd));
 
-                    });
+//                    });
                     _testII = YES;
                 } else {
                     NSLog(@"串行%@", _adapter);
