@@ -139,7 +139,4 @@
     }
 }
 
-- (NSString *)adspotid {
-    return self.adspotid;
-}
 @end

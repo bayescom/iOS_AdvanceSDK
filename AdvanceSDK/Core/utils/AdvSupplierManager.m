@@ -98,10 +98,12 @@
 
 - (void)loadNextSupplierIfHas {
     // 执行非CPT渠道逻辑
+    NSLog(@"执行串行");
     AdvSupplier *supplier = _supplierM.firstObject;
     // 不管是不是并行渠道, 到了该执行的时候 必须要按照串行渠道的逻辑去执行
     supplier.isParallel = NO;
     [self notCPTLoadNextSuppluer:supplier error:nil];
+    
 }
 
 - (void)loadNextSupplier {
@@ -217,6 +219,7 @@
 
 
         NSMutableArray *temp = [NSMutableArray array];
+        NSLog(@"_supplierM: %@", _supplierM);
         if (_model.setting.priorityMap.count > 0) {
             // 1.按照priorityMap分组
             
@@ -225,11 +228,12 @@
                 obj.state = AdvanceSdkSupplierStateReady;
                 // 其他渠道的需要判断是否添加进并行渠道队列
                 [_model.setting.priorityMap enumerateObjectsUsingBlock:^(AdvPriorityMap * _Nonnull map, NSUInteger mapIdx, BOOL * _Nonnull stop) {
-                    // 如果优先级和id 都一样 切并行队列里没有该元素的时候(主要是去重) 则添加进并行渠道
+                    // 如果优先级和id 都一样  且并行队列里没有该元素的时候(主要是去重) 则添加进并行渠道
+                    NSLog(@"map.supid: %@, obj.identifier: %@, map.priority: %ld, obj.priority: %ld", map.supid, obj.identifier, (long)map.priority, (long)obj.priority);
                     if ([map.supid isEqualToString:obj.identifier] &&
                         map.priority == obj.priority &&
                         ![temp containsObject:obj] &&
-                        idx != 0) {// 第一个 是第一优先级 马上执行 所以不用 标记并行
+                        idx != 0) {// 第一个 是第一优先级 马上执行 所以不用标记并行
                         
                         obj.isParallel = YES;
                         [temp addObject:obj];

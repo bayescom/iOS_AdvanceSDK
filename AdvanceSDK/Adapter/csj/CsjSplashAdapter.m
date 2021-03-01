@@ -65,6 +65,7 @@
 
 - (void)deallocAdapter {
     if (self.csj_ad) {
+        NSLog(@"穿山甲 释放了");
         [self.csj_ad removeFromSuperview];
         self.csj_ad = nil;
     }
@@ -181,4 +182,5 @@
 - (void)splashAdDidCloseOtherController:(BUSplashAdView *)splashAd interactionType:(BUInteractionType)interactionType {
     [self deallocAdapter];
 }
+
 @end

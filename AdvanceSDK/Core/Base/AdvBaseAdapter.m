@@ -42,12 +42,17 @@
 }
 
 - (void)loadNextSupplierIfHas {
+    NSLog(@"aaaaaaaaa");
     [_mgr loadNextSupplierIfHas];
 }
 
 - (void)reportWithType:(AdvanceSdkSupplierRepoType)repoType supplier:(AdvSupplier *)supplier error:(NSError *)error {
+    // 有错误正常上报
     [_mgr reportWithType:repoType supplier:supplier error:error];
-    if (repoType == AdvanceSdkSupplierRepoFaileded) {
+    
+    // 失败了 并且不是并行才会走下一个渠道
+    if (repoType == AdvanceSdkSupplierRepoFaileded && !supplier.isParallel) {
+        NSLog(@"bbbbbbbbbb %@  %@",supplier.sdktag, error);
         [_mgr loadNextSupplierIfHas];
     }
 }

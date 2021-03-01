@@ -120,6 +120,9 @@
 //    [self deallocSelf]; // 注释掉 是因为在执行打底渠道
 }
 
+
+
+
 - (void)advanceBaseAdapterLoadSuppluer:(nullable AdvSupplier *)supplier error:(nullable NSError *)error {
     // 返回渠道有问题 则不用再执行下面的渠道了
     if (error) {
@@ -131,14 +134,14 @@
         [self deallocDelegate:NO];
         return;
     }
-    
+
     if (supplier.isParallel == NO) {// 只有当优先级执行该渠道时 才会回调用代理 并行渠道不调用该代理
         // 开始加载渠道前通知调用者
         if ([self.delegate respondsToSelector:@selector(advanceSupplierWillLoad:)]) {
             [self.delegate advanceSupplierWillLoad:supplier.identifier];
         }
     }
-    
+
     // 根据渠道id自定义初始化
     NSString *clsName = @"";
     if ([supplier.identifier isEqualToString:SDK_ID_GDT]) {
@@ -164,7 +167,8 @@
                 // 标记当前的adapter 为了让当串行执行到的时候 获取这个adapter
                 ((void (*)(id, SEL, id))objc_msgSend)((id)adapter, @selector(setAdspotid:), supplier.adspotid);
                 ((void (*)(id, SEL))objc_msgSend)((id)adapter, @selector(loadAd));
-                
+                NSLog(@"并行行%@", adapter);
+
                 if (adapter) {
                     // 存储并行的adapter
 
@@ -173,11 +177,14 @@
 
             } else {
                 // :先看看当前执行的串行渠道 是不是之前的并行渠道
+                NSLog(@"串行%@", _adapter);
                 [_adapter performSelector:@selector(deallocAdapter)];
                 _adapter = [self adapterInParallelsWithSupplier:supplier];
                 if (!_adapter) {
                     _adapter = ((id (*)(id, SEL, id, id))objc_msgSend)((id)[NSClassFromString(clsName) alloc], @selector(initWithSupplier:adspot:), supplier, self);
                 }
+                NSLog(@"串行11%@", _adapter);
+
                 ((void (*)(id, SEL, id))objc_msgSend)((id)_adapter, @selector(setDelegate:), _delegate);
                 ((void (*)(id, SEL))objc_msgSend)((id)_adapter, @selector(loadAd));
 
@@ -193,10 +200,12 @@
 
 - (id)adapterInParallelsWithSupplier:(AdvSupplier *)supplier {
     id adapterT;
+    ADVLog(@"并行队列中的 adspotid1111: %@", self.arrParallelSupplier);
     for (NSInteger i = 0 ; i < self.arrParallelSupplier.count; i++) {
         
         id temp = self.arrParallelSupplier[i];
         NSString *adspotid = ((NSString* (*)(id, SEL))objc_msgSend)((id)temp, @selector(adspotid));
+        ADVLog(@"并行队列中的 adspotid: %@", adspotid);
 
         if ([adspotid isEqualToString:supplier.adspotid]) {
             adapterT = temp;
@@ -272,7 +281,7 @@
     return _bgImgV;
 }
 
-- (NSMutableDictionary *)arrParallelSupplier {
+- (NSMutableArray *)arrParallelSupplier {
     if (!_arrParallelSupplier) {
         _arrParallelSupplier = [NSMutableArray array];
     }
