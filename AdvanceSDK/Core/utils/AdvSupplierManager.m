@@ -98,7 +98,6 @@
 
 - (void)loadNextSupplierIfHas {
     // 执行非CPT渠道逻辑
-    NSLog(@"执行串行");
     AdvSupplier *supplier = _supplierM.firstObject;
     // 不管是不是并行渠道, 到了该执行的时候 必须要按照串行渠道的逻辑去执行
     supplier.isParallel = NO;
@@ -292,7 +291,14 @@
         [_supplierM removeObject:supplier];
     }
     
-    supplier.state = AdvanceSdkSupplierStateInHand;
+    // 如果成功或者失败 就意味着 该并行渠道有结果了, 所以不需要改变状态了
+    if (supplier.state == AdvanceSdkSupplierStateFailed || supplier.state == AdvanceSdkSupplierStateSuccess) {
+        // 只有并行的渠道才有可能走到这里
+        
+        
+    } else {
+        supplier.state = AdvanceSdkSupplierStateInHand;
+    }
     
     [self reportWithType:AdvanceSdkSupplierRepoLoaded supplier:supplier error:nil];
     if ([_delegate respondsToSelector:@selector(advSupplierLoadSuppluer:error:)]) {

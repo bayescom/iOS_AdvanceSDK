@@ -23,6 +23,7 @@
 @property (nonatomic, assign) NSInteger timeout_stamp;
 @property (nonatomic, strong) CADisplayLink *timeoutCheckTimer;
 @property (nonatomic, strong) NSMutableArray * arrParallelSupplier;
+@property (nonatomic, assign) BOOL testII;
 
 @end
 
@@ -47,10 +48,10 @@
     // 记录过期的时间
     _timeout_stamp = ([[NSDate date] timeIntervalSince1970] + _timeout)*1000;
     // 开启定时器监听过期
-    [_timeoutCheckTimer invalidate];
-
-    _timeoutCheckTimer = [CADisplayLink displayLinkWithTarget:self selector:@selector(timeoutCheckTimerAction)];
-    [_timeoutCheckTimer addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
+//    [_timeoutCheckTimer invalidate];
+//
+//    _timeoutCheckTimer = [CADisplayLink displayLinkWithTarget:self selector:@selector(timeoutCheckTimerAction)];
+//    [_timeoutCheckTimer addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
     [super loadAd];
 }
 
@@ -177,17 +178,33 @@
 
             } else {
                 // :先看看当前执行的串行渠道 是不是之前的并行渠道
-                NSLog(@"串行%@", _adapter);
-                [_adapter performSelector:@selector(deallocAdapter)];
-                _adapter = [self adapterInParallelsWithSupplier:supplier];
-                if (!_adapter) {
-                    _adapter = ((id (*)(id, SEL, id, id))objc_msgSend)((id)[NSClassFromString(clsName) alloc], @selector(initWithSupplier:adspot:), supplier, self);
+                if (!_testII) {
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 3 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+                        NSLog(@"延时模拟串行%@", _adapter);
+                        [_adapter performSelector:@selector(deallocAdapter)];
+                        _adapter = [self adapterInParallelsWithSupplier:supplier];
+                        if (!_adapter) {
+                            _adapter = ((id (*)(id, SEL, id, id))objc_msgSend)((id)[NSClassFromString(clsName) alloc], @selector(initWithSupplier:adspot:), supplier, self);
+                        }
+                        NSLog(@"串行11%@", _adapter);
+
+                        ((void (*)(id, SEL, id))objc_msgSend)((id)_adapter, @selector(setDelegate:), _delegate);
+                        ((void (*)(id, SEL))objc_msgSend)((id)_adapter, @selector(loadAd));
+
+                    });
+                    _testII = YES;
+                } else {
+                    NSLog(@"串行%@", _adapter);
+                    [_adapter performSelector:@selector(deallocAdapter)];
+                    _adapter = [self adapterInParallelsWithSupplier:supplier];
+                    if (!_adapter) {
+                        _adapter = ((id (*)(id, SEL, id, id))objc_msgSend)((id)[NSClassFromString(clsName) alloc], @selector(initWithSupplier:adspot:), supplier, self);
+                    }
+                    NSLog(@"串行11%@", _adapter);
+
+                    ((void (*)(id, SEL, id))objc_msgSend)((id)_adapter, @selector(setDelegate:), _delegate);
+                    ((void (*)(id, SEL))objc_msgSend)((id)_adapter, @selector(loadAd));
                 }
-                NSLog(@"串行11%@", _adapter);
-
-                ((void (*)(id, SEL, id))objc_msgSend)((id)_adapter, @selector(setDelegate:), _delegate);
-                ((void (*)(id, SEL))objc_msgSend)((id)_adapter, @selector(loadAd));
-
             }
 #pragma clang diagnostic pop
         } else {
@@ -200,13 +217,10 @@
 
 - (id)adapterInParallelsWithSupplier:(AdvSupplier *)supplier {
     id adapterT;
-    ADVLog(@"并行队列中的 adspotid1111: %@", self.arrParallelSupplier);
     for (NSInteger i = 0 ; i < self.arrParallelSupplier.count; i++) {
         
         id temp = self.arrParallelSupplier[i];
         NSString *adspotid = ((NSString* (*)(id, SEL))objc_msgSend)((id)temp, @selector(adspotid));
-        ADVLog(@"并行队列中的 adspotid: %@", adspotid);
-
         if ([adspotid isEqualToString:supplier.adspotid]) {
             adapterT = temp;
         }

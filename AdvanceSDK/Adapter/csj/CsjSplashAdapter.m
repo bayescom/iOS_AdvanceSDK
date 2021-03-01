@@ -114,9 +114,9 @@
  @param error : the reason of error
  */
 - (void)splashAd:(BUSplashAdView *)splashAd didFailWithError:(NSError * _Nullable)error {
-    [self deallocAdapter];
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
     _supplier.state = AdvanceSdkSupplierStateFailed;
+    [self deallocAdapter];
     if (_supplier.isParallel == YES) {
         return;
     }
