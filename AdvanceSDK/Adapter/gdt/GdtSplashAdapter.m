@@ -16,7 +16,7 @@
 
 #import "AdvanceSplash.h"
 #import "UIApplication+Adv.h"
-
+#import "AdvLog.h"
 @interface GdtSplashAdapter () <GDTSplashAdDelegate>
 @property (nonatomic, strong) GDTSplashAd *gdt_ad;
 @property (nonatomic, weak) AdvanceSplash *adspot;
@@ -56,17 +56,17 @@
     _adspot.viewController.modalPresentationStyle = 0;
     // 设置 backgroundImage
     _gdt_ad.backgroundImage = _adspot.backgroundImage;
-    NSLog(@"加载观点通 supplier: %@", _supplier);
+    ADVLog(@"加载观点通 supplier: %@", _supplier);
     if (_supplier.state == AdvanceSdkSupplierStateSuccess) {// 并行请求保存的状态 再次轮到该渠道加载的时候 直接show
-        NSLog(@"广点通 成功");
+        ADVLog(@"广点通 成功");
         [self showAd];
     } else if (_supplier.state == AdvanceSdkSupplierStateFailed) { //失败的话直接对外抛出回调
-        NSLog(@"广点通 失败");
+        ADVLog(@"广点通 失败");
         [self deallocAdapter];
     } else if (_supplier.state == AdvanceSdkSupplierStateInPull) { // 正在请求广告时 什么都不用做等待就行
-        NSLog(@"广点通 正在加载中");
+        ADVLog(@"广点通 正在加载中");
     } else {
-        NSLog(@"广点通 load ad");
+        ADVLog(@"广点通 load ad");
         [_gdt_ad loadAd];
         _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
     }

@@ -52,7 +52,7 @@
     
     // 失败了 并且不是并行才会走下一个渠道
     if (repoType == AdvanceSdkSupplierRepoFaileded && !supplier.isParallel) {
-        NSLog(@"bbbbbbbbbb %@  %@",supplier.sdktag, error);
+        NSLog(@"%@  %@",supplier.sdktag, error);
         [_mgr loadNextSupplierIfHas];
     }
 }
@@ -85,54 +85,6 @@
         [_baseDelegate advanceBaseAdapterLoadError:error];
     }
 }
-
-/// 返回下一个渠道的参数
-- (void)advSupplierLoadSupplueryyyyy:(AdvSupplier *)supplier queue:(AdvSupplierQueue *)queue error:(NSError *)error {
-
-    // 初始化渠道参数
-    NSString *clsName = @"";
-    if ([supplier.identifier isEqualToString:SDK_ID_GDT]) {
-        clsName = @"GDTSDKConfig";
-    } else if ([supplier.identifier isEqualToString:SDK_ID_CSJ]) {
-        clsName = @"BUAdSDKManager";
-    } else if ([supplier.identifier isEqualToString:SDK_ID_MERCURY]) {
-        clsName = @"MercuryConfigManager";
-    }
-    
-    if ([supplier.identifier isEqualToString:SDK_ID_GDT]) {
-        // 广点通SDK
-        static dispatch_once_t onceToken;
-        dispatch_once(&onceToken, ^{
-            [NSClassFromString(clsName) performSelector:@selector(registerAppId:) withObject:supplier.mediaid];
-        });
-    } else if ([supplier.identifier isEqualToString:SDK_ID_CSJ]) {
-        // 穿山甲SDK
-        static dispatch_once_t onceToken;
-        dispatch_once(&onceToken, ^{
-            [NSClassFromString(clsName) performSelector:@selector(setAppID:) withObject:supplier.mediaid];//
-        });
-    } else if ([supplier.identifier isEqualToString:SDK_ID_MERCURY]) {
-        // MercurySDK
-        static dispatch_once_t onceToken;
-        dispatch_once(&onceToken, ^{
-            id configMgr = NSClassFromString(clsName);
-            ((void (*)(id, SEL, id, id, id))objc_msgSend)(configMgr, @selector(setAppID:mediaKey:config:), supplier.mediaid, supplier.mediakey, [AdvSdkConfig shareInstance].caidConfig);
-//            ((void (*)(id, SEL, id))objc_msgSend)(configMgr, @selector(openDebug:), @1);
-        });
-    }
-    
-    // 如果执行了打底渠道 则执行此方法
-    if ([supplier.sdktag isEqualToString:@"bottom_default"]) {
-        [self advSupplierLoadDefaultSuppluer:supplier];
-    }
-
-    // 加载渠道
-    if ([_baseDelegate respondsToSelector:@selector(advanceBaseAdapterLoadSuppluerxxxxxx:queue:error:)]) {
-//        NSLog(@"xxxxerror: %@   clsName: %@", error, clsName);
-        [_baseDelegate advanceBaseAdapterLoadSuppluerxxxxxx:supplier queue:queue error:error];
-    }
-}
-
 
 /// 返回下一个渠道的参数
 - (void)advSupplierLoadSuppluer:(nullable AdvSupplier *)supplier error:(nullable NSError *)error {
@@ -174,7 +126,6 @@
 
     // 加载渠道
     if ([_baseDelegate respondsToSelector:@selector(advanceBaseAdapterLoadSuppluer:error:)]) {
-//        NSLog(@"xxxxerror: %@   clsName: %@", error, clsName);
         [_baseDelegate advanceBaseAdapterLoadSuppluer:supplier error:error];
     }
 }

@@ -151,74 +151,9 @@
             [self doBaseSupplierIfHas];
             return;
         }
-        
-        
-        
-        
-        
-        
-        
-        /* * * * * * * * * * * * * * * 待整理代码 * * * * * * * * * * * * * * * * * * * * */
-        // 开始执行策略
-        
-        // 如果priorityMap不为空 则并行请求priorityMap中的渠道
-        // priorityMap: 该字段中的渠道和第一优先级渠道并行请求
-//        if (_model.setting.priorityMap.count > 0) {
-//            // 1.按照priorityMap分组
-//            AdvSupplierQueue *parallelOperations = [[AdvSupplierQueue alloc]init];
-//
-//            NSLog(@"并行策略: %@", parallelOperations);
-//            __weak __typeof__(self) weakSelf = self;
-//            [_supplierM enumerateObjectsUsingBlock:^(AdvSupplier * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-//                if (idx == 0) {// 优先级最高的那个 先添加进并行渠道队列
-//                    obj.isParallel = YES;
-//                    [parallelOperations.inQueueSuppliers addObject:obj];
-//                } else {
-//                    // 其他渠道的需要判断是否添加进并行渠道队列
-//                    [_model.setting.priorityMap enumerateObjectsUsingBlock:^(AdvPriorityMap * _Nonnull map, NSUInteger mapIdx, BOOL * _Nonnull stop) {
-//                        // 如果优先级和id 都一样 切并行队列里没有该元素的时候(主要是去重) 则添加进并行渠道
-//                        if ([map.supid isEqualToString:obj.identifier] &&
-//                            map.priority == obj.priority &&
-//                            ![parallelOperations.inQueueSuppliers containsObject:obj]) {
-//
-//                            obj.isParallel = YES;
-//                            [parallelOperations.inQueueSuppliers addObject:obj];
-//                        } else {
-//                            AdvSupplierQueue *queue = [[AdvSupplierQueue alloc]init];
-//
-//                            obj.isParallel = NO;
-//                            [queue.inQueueSuppliers addObject:obj];
-//                            [weakSelf.queues addObject:queue];
-//                        }
-//                    }];
-//                }
-//
-//                // 如果 parallelOperations的count 和 setting.parallelIDS 的count+1 相等 则并行分组完毕 添加到整体队列中
-//                if (parallelOperations.inQueueSuppliers.count == _model.setting.priorityMap.count + 1) {
-//                    NSLog(@"并行队列: %@", parallelOperations);
-//                    [weakSelf.queues insertObject:parallelOperations atIndex:0];
-//                }
-//
-//            }];
-//        }
-
-//        NSLog(@"队列s : %@", self.queues);
-//        for (NSInteger i = 0 ; i < self.queues.count; i++) {
-//
-//            for (NSInteger j = 0; j < [[self.queues[i] inQueueSuppliers] count]; j ++) {
-//                AdvSupplier *temp = [self.queues[i] inQueueSuppliers][j];
-//                NSLog(@"队列element: %@ %@", temp, temp.sdktag);
-//            }
-//        }
-        
-        
-                
-//        [self notCPTLoadNextSuppluerParallel:self.queues[0] error:nil];
-        /* * * * * * * * * * * * * * * 待整理代码 * * * * * * * * * * *  * * * * * * * * */
-
 
         NSMutableArray *temp = [NSMutableArray array];
-        NSLog(@"_supplierM: %@", _supplierM);
+        ADVLog(@"_supplierM: %@", _supplierM);
         if (_model.setting.priorityMap.count > 0) {
             // 1.按照priorityMap分组
             
@@ -253,25 +188,6 @@
         }
     }
 }
-/* * * * * * * * * * * * * * * 待整理代码 * * * * * * * * * * *  * * * * * * * * */
-
-- (void)notCPTLoadNextSuppluerParallel:(AdvSupplierQueue *)queue error:(nullable NSError *)error {
-    NSArray *temp = [queue.inQueueSuppliers mutableCopy];
-    for (NSInteger i = 0; i < temp.count; i++) {
-        AdvSupplier *supplier = temp[i];
-        NSLog(@"aaaaa ---%@", [NSThread currentThread]); // 打印当前线程
-        [self notCPTLoadNextSuppluerParallelAction:supplier queue:queue error:nil];
-    }
-}
-
-- (void)notCPTLoadNextSuppluerParallelAction:(nullable AdvSupplier *)supplier queue:(AdvSupplierQueue *)queue error:(nullable NSError *)error {
-    if ([_delegate respondsToSelector:@selector(advSupplierLoadSupplueryyyyy:queue:error:)]) {
-        [_delegate advSupplierLoadSupplueryyyyy:supplier queue:queue error:error];
-    }
-
-}
-
-/* * * * * * * * * * * * * * * 待整理代码 * * * * * * * * * * *  * * * * * * * * */
 
 /// 非 CPT 执行下个渠道
 - (void)notCPTLoadNextSuppluer:(nullable AdvSupplier *)supplier error:(nullable NSError *)error {
@@ -363,9 +279,9 @@
     NSLog(@"请求参数 %@", deviceInfo);
     NSError *parseError = nil;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:deviceInfo options:NSJSONWritingPrettyPrinted error:&parseError];
-//    NSURL *url = [NSURL URLWithString:AdvanceSdkRequestUrl];
+    NSURL *url = [NSURL URLWithString:AdvanceSdkRequestUrl];
 //    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@?adspotid=%@", AdvanceSdkRequestUrl, _adspotId]];
-    NSURL *url = [NSURL URLWithString:@"https://mock.yonyoucloud.com/mock/2650/api/v3/eleven"];
+//    NSURL *url = [NSURL URLWithString:@"https://mock.yonyoucloud.com/mock/2650/api/v3/eleven"];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:self.fetchTime];
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     request.HTTPBody = jsonData;

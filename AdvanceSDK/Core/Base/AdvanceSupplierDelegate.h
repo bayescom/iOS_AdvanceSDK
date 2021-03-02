@@ -26,9 +26,6 @@
 /// @param supplier 被加载的渠道
 /// @param error 异常信息
 - (void)advanceBaseAdapterLoadSuppluer:(nullable AdvSupplier *)supplier error:(nullable NSError *)error;
-
-/// 返回下一个渠道的参数(并行)
-- (void)advanceBaseAdapterLoadSuppluerxxxxxx:(nullable AdvSupplier *)supplier queue:(AdvSupplierQueue *_Nonnull)queue error:(nullable NSError *)error;
 @end
 
 #endif /* AdvanceSupplierDelegate_h */

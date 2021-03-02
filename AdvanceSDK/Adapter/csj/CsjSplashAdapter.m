@@ -16,7 +16,7 @@
 
 #import "AdvanceSplash.h"
 #import "UIApplication+Adv.h"
-
+#import "AdvLog.h"
 @interface CsjSplashAdapter ()  <BUSplashAdDelegate>
 
 @property (nonatomic, strong) BUSplashAdView *csj_ad;
@@ -55,16 +55,16 @@
     
     NSLog(@"加载穿山甲 supplier: %@", _supplier);
     if (_supplier.state == AdvanceSdkSupplierStateSuccess) {// 并行请求保存的状态 再次轮到该渠道加载的时候 直接show
-        NSLog(@"穿山甲 成功");
+        ADVLog(@"穿山甲 成功");
         [self showAd];
     } else if (_supplier.state == AdvanceSdkSupplierStateFailed) { //失败的话直接对外抛出回调
-        NSLog(@"穿山甲 失败");
+        ADVLog(@"穿山甲 失败");
         [self.adspot loadNextSupplierIfHas];
         [self deallocAdapter];
     } else if (_supplier.state == AdvanceSdkSupplierStateInPull) { // 正在请求广告时 什么都不用做等待就行
-        NSLog(@"穿山甲 正在加载中");
+        ADVLog(@"穿山甲 正在加载中");
     } else {
-        NSLog(@"穿山甲 load ad");
+        ADVLog(@"穿山甲 load ad");
         [self.csj_ad loadAdData];
         _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
     }
