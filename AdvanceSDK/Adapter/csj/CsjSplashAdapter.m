@@ -30,20 +30,21 @@
     if (self = [super init]) {
         _adspot = adspot;
         _supplier = supplier;
+        CGRect adFrame = [UIApplication sharedApplication].keyWindow.bounds;
+        // 设置logo
+        if (_adspot.logoImage && _adspot.showLogoRequire) {
+            CGFloat real_w = [UIScreen mainScreen].bounds.size.width;
+            CGFloat real_h = _adspot.logoImage.size.height*(real_w/_adspot.logoImage.size.width);
+            adFrame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height-real_h);
+        }
+        _csj_ad = [[BUSplashAdView alloc] initWithSlotID:_supplier.adspotid frame:adFrame];
+
     }
     return self;
 }
 
 - (void)loadAd {
     
-    CGRect adFrame = [UIApplication sharedApplication].keyWindow.bounds;
-    // 设置logo
-    if (_adspot.logoImage && _adspot.showLogoRequire) {
-        CGFloat real_w = [UIScreen mainScreen].bounds.size.width;
-        CGFloat real_h = _adspot.logoImage.size.height*(real_w/_adspot.logoImage.size.width);
-        adFrame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height-real_h);
-    }
-    _csj_ad = [[BUSplashAdView alloc] initWithSlotID:_supplier.adspotid frame:adFrame];
     if (self.adspot.timeout) {
         if (self.adspot.timeout > 500) {
             _csj_ad.tolerateTimeout = _adspot.timeout / 1000.0;
@@ -51,14 +52,23 @@
     }
 
     _csj_ad.delegate = self;
-
+    
+    NSLog(@"加载穿山甲 supplier: %@", _supplier);
     if (_supplier.state == AdvanceSdkSupplierStateSuccess) {// 并行请求保存的状态 再次轮到该渠道加载的时候 直接show
+        NSLog(@"穿山甲 成功");
         [self showAd];
     } else if (_supplier.state == AdvanceSdkSupplierStateFailed) { //失败的话直接对外抛出回调
+        NSLog(@"穿山甲 失败");
+        [self.adspot loadNextSupplierIfHas];
         [self deallocAdapter];
+    } else if (_supplier.state == AdvanceSdkSupplierStateInPull) { // 正在请求广告时 什么都不用做等待就行
+        NSLog(@"穿山甲 正在加载中");
     } else {
-        [_csj_ad loadAdData];
+        NSLog(@"穿山甲 load ad");
+        [self.csj_ad loadAdData];
+        _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
     }
+
 
 
 }
@@ -116,9 +126,12 @@
 - (void)splashAd:(BUSplashAdView *)splashAd didFailWithError:(NSError * _Nullable)error {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
     _supplier.state = AdvanceSdkSupplierStateFailed;
-    [self deallocAdapter];
-    if (_supplier.isParallel == YES) {
+    
+    if (_supplier.isParallel == YES) { // 并行不释放 只上报
+        
         return;
+    } else { //
+        [self deallocAdapter];
     }
 
 //    if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdFailedWithSdkId:error:)]) {
@@ -130,7 +143,10 @@
  This method is called when splash ad slot will be showing.
  */
 - (void)splashAdWillVisible:(BUSplashAdView *)splashAd {
-    
+    if (_supplier.isParallel) { // 如果是并行 先不要释放, 需要等到串行执行到这个渠道的时候才可以释放
+        [self deallocAdapter];
+    }
+
     [self.adspot reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(advanceExposured)] && self.csj_ad) {
         [self.delegate advanceExposured];
