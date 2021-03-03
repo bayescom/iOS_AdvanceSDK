@@ -60,6 +60,15 @@ NSString * const AdvSdkConfigGDTEnableGPS = @"AdvSdkConfigGDTEnableGPS";
 NSString * const AdvSdkConfigGDTChannel = @"AdvSdkConfigGDTChannel";
 NSString * const AdvSdkConfigGDTSdkSrc = @"AdvSdkConfigGDTSdkSrc";
 NSString * const AdvSdkConfigGDTSdkType = @"AdvSdkConfigGDTSdkType";
+
+// MARK: ======================= 广告位类型名称 =======================
+NSString * const AdvSdkTypeAdName = @"ADNAME";
+NSString * const AdvSdkTypeAdNameSplash = @"SPLASH_AD";
+NSString * const AdvSdkTypeAdNameBanner = @"BANNER_AD";
+NSString * const AdvSdkTypeAdNameInterstitial = @"INTERSTAITIAL_AD";
+NSString * const AdvSdkTypeAdNameFullScreenVideo = @"FULLSCREENVIDEO_AD";
+NSString * const AdvSdkTypeAdNameNativeExpress = @"NATIVEEXPRESS_AD";
+NSString * const AdvSdkTypeAdNameRewardVideo = @"REWARDVIDEO_AD";
 static AdvSdkConfig *instance = nil;
 
 + (instancetype)shareInstance {

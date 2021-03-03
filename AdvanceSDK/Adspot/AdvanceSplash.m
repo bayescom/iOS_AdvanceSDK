@@ -22,8 +22,6 @@
 
 @property (nonatomic, assign) NSInteger timeout_stamp;
 @property (nonatomic, strong) CADisplayLink *timeoutCheckTimer;
-@property (nonatomic, strong) NSMutableArray * arrParallelSupplier;
-@property (nonatomic, assign) BOOL testII;
 
 @end
 
@@ -34,6 +32,11 @@
 }
 
 - (instancetype)initWithAdspotId:(NSString *)adspotid customExt:(NSDictionary *)ext viewController:(UIViewController *)viewController {
+    ext = [ext mutableCopy];
+    if (!ext) {
+        ext = [NSMutableDictionary dictionary];
+    }
+    [ext setValue:AdvSdkTypeAdName forKey:AdvSdkTypeAdNameSplash];
     if (self = [super initWithMediaId:@"" adspotId:adspotid customExt:ext]) {
         _viewController = viewController;
     }
@@ -215,20 +218,6 @@
     }
 }
 
-// 查找一下 容器里有没有并行的渠道
-- (id)adapterInParallelsWithSupplier:(AdvSupplier *)supplier {
-    id adapterT;
-    for (NSInteger i = 0 ; i < self.arrParallelSupplier.count; i++) {
-        
-        id temp = self.arrParallelSupplier[i];
-        NSString *adspotid = ((NSString* (*)(id, SEL))objc_msgSend)((id)temp, @selector(adspotid));
-        if ([adspotid isEqualToString:supplier.adspotid]) {
-            adapterT = temp;
-        }
-    }
-    return adapterT;
-}
-
 // MARK: ======================= get =======================
 - (UIViewController *)viewController {
     if (_viewController) {
@@ -247,10 +236,4 @@
     return _bgImgV;
 }
 
-- (NSMutableArray *)arrParallelSupplier {
-    if (!_arrParallelSupplier) {
-        _arrParallelSupplier = [NSMutableArray array];
-    }
-    return _arrParallelSupplier;
-}
 @end

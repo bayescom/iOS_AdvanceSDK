@@ -17,6 +17,7 @@
 
 @property (nonatomic, weak) id<AdvanceSupplierDelegate> baseDelegate;
 
+
 @end
 
 @implementation AdvBaseAdapter
@@ -42,7 +43,6 @@
 }
 
 - (void)loadNextSupplierIfHas {
-    NSLog(@"aaaaaaaaa");
     [_mgr loadNextSupplierIfHas];
 }
 
@@ -139,5 +139,27 @@
     }
     return _mgr;
 }
+
+- (NSMutableArray *)arrParallelSupplier {
+    if (!_arrParallelSupplier) {
+        _arrParallelSupplier = [NSMutableArray array];
+    }
+    return _arrParallelSupplier;
+}
+
+// 查找一下 容器里有没有并行的渠道
+- (id)adapterInParallelsWithSupplier:(AdvSupplier *)supplier {
+    id adapterT;
+    for (NSInteger i = 0 ; i < self.arrParallelSupplier.count; i++) {
+        
+        id temp = self.arrParallelSupplier[i];
+        NSString *adspotid = ((NSString* (*)(id, SEL))objc_msgSend)((id)temp, @selector(adspotid));
+        if ([adspotid isEqualToString:supplier.adspotid]) {
+            adapterT = temp;
+        }
+    }
+    return adapterT;
+}
+
 
 @end
