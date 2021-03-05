@@ -6,20 +6,20 @@ PODS:
     - Ads-CN/Domestic
   - Ads-CN/BUFoundation (3.4.1.1)
   - Ads-CN/Domestic (3.4.1.1)
-  - AdvanceSDK (3.2.3.6):
-    - AdvanceSDK/Core (= 3.2.3.6)
-  - AdvanceSDK/Adspot (3.2.3.6):
+  - AdvanceSDK (3.2.3.7):
+    - AdvanceSDK/Core (= 3.2.3.7)
+  - AdvanceSDK/Adspot (3.2.3.7):
     - AdvanceSDK/Core
-  - AdvanceSDK/Core (3.2.3.6)
-  - AdvanceSDK/CSJ (3.2.3.6):
+  - AdvanceSDK/Core (3.2.3.7)
+  - AdvanceSDK/CSJ (3.2.3.7):
     - Ads-CN
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
-  - AdvanceSDK/GDT (3.2.3.6):
+  - AdvanceSDK/GDT (3.2.3.7):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - GDTMobSDK
-  - AdvanceSDK/Mercury (3.2.3.6):
+  - AdvanceSDK/Mercury (3.2.3.7):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - MercurySDK
@@ -54,7 +54,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Ads-CN: 734b95efc84481b958ad4cf6efca68f828c73b5b
-  AdvanceSDK: d7d69562accdf8dc50cc21947b8dffd10b0f9794
+  AdvanceSDK: e2b077e5846c6e5008975ec2f6535ceda77c1240
   GDTMobSDK: 8153fd4ed7f16be4786923226487ff60f0344a4f
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   MercurySDK: e66a4deea27d5682e85601f0dbb4720c78f90d46
