@@ -1,5 +1,5 @@
 //
-//  GdtNativeExpress2_0Adapter.h
+//  GdtNativeExpressProAdapter.h
 //  AdvanceSDK
 //
 //  Created by MS on 2021/3/5.
@@ -14,7 +14,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface GdtNativeExpress2_0Adapter : NSObject
+@interface GdtNativeExpressProAdapter : NSObject
 @property (nonatomic, weak) id<AdvanceNativeExpressDelegate> delegate;
 
 - (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(AdvanceNativeExpress *)adspot;

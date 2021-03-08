@@ -1,11 +1,11 @@
 //
-//  GdtNativeExpress2_0Adapter.m
+//  GdtNativeExpressProAdapter.m
 //  AdvanceSDK
 //
 //  Created by MS on 2021/3/5.
 //
 
-#import "GdtNativeExpress2_0Adapter.h"
+#import "GdtNativeExpressProAdapter.h"
 #if __has_include(<GDTNativeExpressProAdManager.h>)
 #import <GDTNativeExpressProAdManager.h>
 #else
@@ -21,7 +21,7 @@
 #import "AdvanceNativeExpress.h"
 #import "AdvLog.h"
 
-@interface GdtNativeExpress2_0Adapter ()<GDTNativeExpressProAdManagerDelegate, GDTNativeExpressProAdViewDelegate>
+@interface GdtNativeExpressProAdapter ()<GDTNativeExpressProAdManagerDelegate, GDTNativeExpressProAdViewDelegate>
 @property (nonatomic, strong) GDTNativeExpressProAdManager *gdt_ad;
 @property (nonatomic, weak) AdvanceNativeExpress *adspot;
 @property (nonatomic, weak) UIViewController *controller;
@@ -30,7 +30,7 @@
 
 @end
 
-@implementation GdtNativeExpress2_0Adapter
+@implementation GdtNativeExpressProAdapter
 - (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(AdvanceNativeExpress *)adspot {
     if (self = [super init]) {
         _adspot = adspot;
