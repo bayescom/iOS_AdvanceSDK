@@ -57,7 +57,7 @@
 // MARK: ======================= AdvanceNativeExpressDelegate =======================
 /// 广告数据拉取成功
 - (void)advanceNativeExpressOnAdLoadSuccess:(NSArray<UIView *> *)views {
-    NSLog(@"拉取数据成功 ");
+    NSLog(@"拉取数据成功  %@",views);
     for (NSInteger i=0; i<views.count;i++) {
         if ([views[i] isKindOfClass:NSClassFromString(@"BUNativeExpressFeedVideoAdView")] ||
             [views[i] isKindOfClass:NSClassFromString(@"BUNativeExpressAdView")]) {
@@ -66,10 +66,15 @@
         } else if ([views[i] isKindOfClass:NSClassFromString(@"MercuryNativeExpressAdView")]) {
             [views[i] performSelector:@selector(setController:) withObject:self];
             [views[i] performSelector:@selector(render)];
-        } else if ([views[i] isKindOfClass:NSClassFromString(@"GDTNativeExpressAdView")]) {
+        } else if ([views[i] isKindOfClass:NSClassFromString(@"GDTNativeExpressAdView")]) {// 广点通旧版信息流
+            [views[i] performSelector:@selector(setController:) withObject:self];
+            [views[i] performSelector:@selector(render)];
+        } else if ([views[i] isKindOfClass:NSClassFromString(@"GDTNativeExpressProAdView")]) {// 广点通新版信息流
             [views[i] performSelector:@selector(setController:) withObject:self];
             [views[i] performSelector:@selector(render)];
         }
+        
+        
         [_dataArrM insertObject:views[i] atIndex:1];
     }
     [self.tableView reloadData];
@@ -101,11 +106,6 @@
 - (void)advanceSupplierWillLoad:(NSString *)supplierId {
     NSLog(@"内部渠道开始加载 %s  supplierId: %@", __func__, supplierId);
 
-}
-
-/// 广告关闭
-- (void)advanceDidClose {
-    NSLog(@"广告关闭了 %s", __func__);
 }
 
 /// 加载策略成功
