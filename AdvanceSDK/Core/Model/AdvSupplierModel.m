@@ -282,6 +282,7 @@ NSString *_Nullable AdvSupplierModelToJSON(AdvSupplierModel *supplierModel, NSSt
         @"succeedtk": @"succeedtk",
         @"failedtk": @"failedtk",
         @"id": @"identifier",
+        @"versionTag": @"versionTag",
     };
 }
 
