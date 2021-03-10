@@ -18,6 +18,7 @@
 
 @property(strong,nonatomic) AdvanceNativeExpress *advanceFeed;
 @property (nonatomic, strong) NSMutableArray *dataArrM;
+@property (nonatomic, strong) NSMutableArray *arrViewsM;
 
 @end
 
@@ -58,24 +59,25 @@
 /// 广告数据拉取成功
 - (void)advanceNativeExpressOnAdLoadSuccess:(NSArray<UIView *> *)views {
     NSLog(@"拉取数据成功  %@",views);
-    for (NSInteger i=0; i<views.count;i++) {
-        if ([views[i] isKindOfClass:NSClassFromString(@"BUNativeExpressFeedVideoAdView")] ||
-            [views[i] isKindOfClass:NSClassFromString(@"BUNativeExpressAdView")]) {
-            [views[i] performSelector:@selector(setRootViewController:) withObject:self];
-            [views[i] performSelector:@selector(render)];
-        } else if ([views[i] isKindOfClass:NSClassFromString(@"MercuryNativeExpressAdView")]) {
-            [views[i] performSelector:@selector(setController:) withObject:self];
-            [views[i] performSelector:@selector(render)];
-        } else if ([views[i] isKindOfClass:NSClassFromString(@"GDTNativeExpressAdView")]) {// 广点通旧版信息流
-            [views[i] performSelector:@selector(setController:) withObject:self];
-            [views[i] performSelector:@selector(render)];
-        } else if ([views[i] isKindOfClass:NSClassFromString(@"GDTNativeExpressProAdView")]) {// 广点通新版信息流
-            [views[i] performSelector:@selector(setController:) withObject:self];
-            [views[i] performSelector:@selector(render)];
+    self.arrViewsM = [views mutableCopy];
+    for (NSInteger i=0; i<self.arrViewsM.count;i++) {
+        if ([self.arrViewsM[i] isKindOfClass:NSClassFromString(@"BUNativeExpressFeedVideoAdView")] ||
+            [self.arrViewsM[i] isKindOfClass:NSClassFromString(@"BUNativeExpressAdView")]) {
+            [self.arrViewsM[i] performSelector:@selector(setRootViewController:) withObject:self];
+            [self.arrViewsM[i] performSelector:@selector(render)];
+        } else if ([self.arrViewsM[i] isKindOfClass:NSClassFromString(@"MercuryNativeExpressAdView")]) {
+            [self.arrViewsM[i] performSelector:@selector(setController:) withObject:self];
+            [self.arrViewsM[i] performSelector:@selector(render)];
+        } else if ([self.arrViewsM[i] isKindOfClass:NSClassFromString(@"GDTNativeExpressAdView")]) {// 广点通旧版信息流
+            [self.arrViewsM[i] performSelector:@selector(setController:) withObject:self];
+            [self.arrViewsM[i] performSelector:@selector(render)];
+        } else if ([self.arrViewsM[i] isKindOfClass:NSClassFromString(@"GDTNativeExpressProAdView")]) {// 广点通新版信息流
+            [self.arrViewsM[i] performSelector:@selector(setController:) withObject:self];
+            [self.arrViewsM[i] performSelector:@selector(render)];
         }
         
         
-        [_dataArrM insertObject:views[i] atIndex:1];
+        [_dataArrM insertObject:self.arrViewsM[i] atIndex:1];
     }
     [self.tableView reloadData];
 }
@@ -91,12 +93,29 @@
 }
 
 /// 广告渲染成功
+/// 注意和广告数据拉取成功的区别  广告数据拉取成功, 但是渲染可能会失败
+/// 广告加载失败 是广点通 穿山甲 mercury 在拉取广告的时候就全部失败了
+/// 该回调的含义是: 比如: 广点通拉取广告成功了并返回了一组view  但是其中某个view的渲染失败了
+/// 该回调会触发多次
 - (void)advanceNativeExpressOnAdRenderSuccess:(UIView *)adView {
-    NSLog(@"广告渲染成功 %s", __func__);
+    NSLog(@"广告渲染成功 %s %@", __func__, adView);
+    [self.tableView reloadData];
+}
+
+/// 广告渲染失败
+/// 注意和广告加载失败的区别  广告数据拉取成功, 但是渲染可能会失败
+/// 广告加载失败 是广点通 穿山甲 mercury 在拉取广告的时候就全部失败了
+/// 该回调的含义是: 比如: 广点通拉取广告成功了并返回了一组view  但是其中某个view的渲染失败了
+/// 该回调会触发多次
+- (void)advanceNativeExpressOnAdRenderFail:(UIView *)adView {
+    NSLog(@"广告渲染失败 %s %@", __func__, adView);
+    [_dataArrM removeObject: adView];
+    [adView removeFromSuperview];
     [self.tableView reloadData];
 }
 
 /// 广告加载失败
+/// 该回调只会触发一次
 - (void)advanceFailedWithError:(NSError *)error {
     NSLog(@"广告展示失败 %s  error: %@", __func__, error);
 

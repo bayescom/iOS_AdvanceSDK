@@ -96,6 +96,9 @@
  */
 - (void)gdt_NativeExpressProAdViewRenderFail:(GDTNativeExpressProAdView *)nativeExpressProAdView {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded];
+    if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdRenderFail:)]) {
+        [_delegate advanceNativeExpressOnAdRenderFail:nativeExpressProAdView];
+    }
 //    if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdFailedWithSdkId:error:)]) {
 //        [_delegate advanceNativeExpressOnAdFailedWithSdkId:_supplier.identifier error:[NSError errorWithDomain:@"" code:10000 userInfo:@{@"msg": @"渲染原生模板广告失败"}]];
 //    }
