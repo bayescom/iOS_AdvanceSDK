@@ -27,7 +27,7 @@ PODS:
     - GDTMobSDK/GDTMobSDK (= 4.12.1)
   - GDTMobSDK/GDTMobSDK (4.12.1)
   - Masonry (1.1.0)
-  - MercurySDK (3.1.5.6)
+  - MercurySDK (3.1.5.9)
   - SDWebImage (5.10.1):
     - SDWebImage/Core (= 5.10.1)
   - SDWebImage/Core (5.10.1)
@@ -38,6 +38,7 @@ DEPENDENCIES:
   - AdvanceSDK/GDT (from `../`)
   - AdvanceSDK/Mercury (from `../`)
   - Masonry
+  - MercurySDK (~> 3.1.5.9)
   - SDWebImage
 
 SPEC REPOS:
@@ -57,9 +58,9 @@ SPEC CHECKSUMS:
   AdvanceSDK: e2b077e5846c6e5008975ec2f6535ceda77c1240
   GDTMobSDK: 8153fd4ed7f16be4786923226487ff60f0344a4f
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
-  MercurySDK: e66a4deea27d5682e85601f0dbb4720c78f90d46
+  MercurySDK: 9560f3a86f275a21e02160a48e912db34af66412
   SDWebImage: f66a16b95183b92ed6b965ad21d33167bc07612d
 
-PODFILE CHECKSUM: 3b468010a648a0f7676f63c775faa81734be9957
+PODFILE CHECKSUM: aaa8b133db6acfc1df3d8dc143b7d6457d9dc016
 
 COCOAPODS: 1.10.0
