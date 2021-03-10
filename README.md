@@ -13,6 +13,8 @@
 
 ### [注意事项](https://www.pangle.cn/union/media/union/download/detail?id=16&docId=5f327098d44dc5000e1d45d5&osType=ios):
 
+- AdvanceSDK(version:3.2.3.8) 支持了广点通平台模板(信息流)2.0广告位, 如果想使用广点通信息流2.0广告位, 广点通SDK需升级至4.11.12 [详见此处](https://developers.adnet.qq.com/doc/ios/union/union_native_express_pro)
+
 - AdvanceSDK(version:3.2.3.5) 将穿山甲依赖库由Bytedance-UnionAD更新为Ads-CN
 - App Tracking Transparency（ATT）适用于请求用户授权，访问与应用相关的数据以跟踪用户或设备。 访问 https://developer.apple.com/documentation/apptrackingtransparency 了解更多信息。
 - SKAdNetwork（SKAN）是 Apple 的归因解决方案，可帮助广告客户在保持用户隐私的同时衡量广告活动。 使用 Apple 的 SKAdNetwork 后，即使 IDFA 不可用，广告网络也可以正确获得应用安装的归因结果。 访问 https://developer.apple.com/documentation/storekit/skadnetwork 了解更多信息。
@@ -74,6 +76,8 @@
 5. 这四个字段类型必须为字符串类型</br>
 
 
+
+
 ##### 目前AdvanceSDK支持统一管理的广告位类型为：
 
 - [开屏广告位(Splash)](./_docs/ads/splash_ad.md)
@@ -121,7 +125,7 @@ platform :ios, '9.0'
 target '你的项目名称' do
   # use_frameworks!
   # Pods for 你的项目名称
-  pod 'AdvanceSDK', '~> 3.2.3.7' # 可指定你想要的版本号
+  pod 'AdvanceSDK', '~> 3.2.3.8' # 可指定你想要的版本号
   pod 'AdvanceSDK/CSJ', 	# 如果需要导入穿山甲SDK
   pod 'AdvanceSDK/GDT', 	# 如果需要导入广点通SDK
   pod 'AdvanceSDK/Mercury' # 如果需要导入MercurySDK
@@ -165,9 +169,9 @@ $ pod install
 指定SDK版本前，请先确保repo库为最新版本，参考上一小节内容进行更新。如果需要指定SDK版本，需要在Podfile文件中，pod那一行指定版本号：
 
 ```
-  pod 'AdvanceSDK', '~> 3.2.3.7' # 可指定你想要的版本号
-  pod 'AdvanceSDK/CSJ', '~> 3.2.3.7'	# 如果需要导入穿山甲SDK
-  pod 'AdvanceSDK/GDT', '~> 3.2.3.7'	# 如果需要导入广点通SDK
+  pod 'AdvanceSDK', '~> 3.2.3.8' # 可指定你想要的版本号
+  pod 'AdvanceSDK/CSJ', '~> 3.2.3.8'	# 如果需要导入穿山甲SDK
+  pod 'AdvanceSDK/GDT', '~> 3.2.3.8'	# 如果需要导入广点通SDK
 
 ```
 之后运行命令：
