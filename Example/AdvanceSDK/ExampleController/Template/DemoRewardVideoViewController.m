@@ -23,7 +23,7 @@
     
     self.initDefSubviewsFlag = YES;
     self.adspotIdsArr = @[
-        @{@"addesc": @"激励视频", @"adspotId": @"100255-10002595"},
+        @{@"addesc": @"激励视频", @"adspotId": @"101309-10004142"},
         @{@"addesc": @"Mock 渠道错误", @"adspotId": @"100255-10000001"},
         @{@"addesc": @"Mock code200", @"adspotId": @"100255-10003321"},
     ];
@@ -36,11 +36,11 @@
 //    self.advanceRewardVideo = [[AdvanceRewardVideo alloc] initWithAdspotId:@"11111112"
 //                                                           viewController:self];
 
-//    self.advanceRewardVideo = [[AdvanceRewardVideo alloc] initWithAdspotId:self.adspotId
-//                                                           viewController:self];
     self.advanceRewardVideo = [[AdvanceRewardVideo alloc] initWithAdspotId:self.adspotId
-                                                                 customExt:self.ext
-                                                            viewController:self];
+                                                           viewController:self];
+//    self.advanceRewardVideo = [[AdvanceRewardVideo alloc] initWithAdspotId:self.adspotId
+//                                                                 customExt:self.ext
+//                                                            viewController:self];
     self.advanceRewardVideo.delegate=self;
     [self.advanceRewardVideo setDefaultAdvSupplierWithMediaId:@"100255"
                                                      adspotId:@"10002595323"

@@ -35,7 +35,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [AdvSdkConfig shareInstance].isDebug = YES;
-    [AdvSdkConfig shareInstance].appId = @"100255";
+    [AdvSdkConfig shareInstance].appId = @"101309";
     [AdvSdkConfig shareInstance].isAdTrack = NO;
 
     [AdvSdkConfig shareInstance].caidConfig = @{AdvSdkConfigCAID:@"",
