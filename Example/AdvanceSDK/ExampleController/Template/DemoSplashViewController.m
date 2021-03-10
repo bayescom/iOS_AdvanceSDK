@@ -39,11 +39,11 @@
 //    self.advanceSplash = [[AdvanceSplash alloc] initWithAdspotId:@"11111112"
 //                                                  viewController:self];
 
-//    self.advanceSplash = [[AdvanceSplash alloc] initWithAdspotId:self.adspotId
-//                                                  viewController:self];
     self.advanceSplash = [[AdvanceSplash alloc] initWithAdspotId:self.adspotId
-                                                       customExt:self.ext
                                                   viewController:self];
+//    self.advanceSplash = [[AdvanceSplash alloc] initWithAdspotId:self.adspotId
+//                                                       customExt:self.ext
+//                                                  viewController:self];
 
     self.advanceSplash.delegate = self;
 //    self.advanceSplash.showLogoRequire = YES;
