@@ -343,6 +343,7 @@ NSString *_Nullable AdvSupplierModelToJSON(AdvSupplierModel *supplierModel, NSSt
         @"id": @"identifier",
         @"isParallel":@"isParallel",
         @"state":@"state",
+        @"versionTag": @"versionTag",
     };
 }
 

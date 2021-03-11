@@ -39,12 +39,12 @@
 //    self.advanceFullScreenVideo = [[AdvanceFullScreenVideo alloc] initWithAdspotId:@"11111112"
 //                                                                    viewController:self];
 
-//    self.advanceFullScreenVideo = [[AdvanceFullScreenVideo alloc] initWithAdspotId:self.adspotId
-//                                                                    viewController:self];
-    
     self.advanceFullScreenVideo = [[AdvanceFullScreenVideo alloc] initWithAdspotId:self.adspotId
-                                                                         customExt:self.ext
                                                                     viewController:self];
+    
+//    self.advanceFullScreenVideo = [[AdvanceFullScreenVideo alloc] initWithAdspotId:self.adspotId
+//                                                                         customExt:self.ext
+//                                                                    viewController:self];
     self.advanceFullScreenVideo.delegate = self;
     [self.advanceFullScreenVideo setDefaultAdvSupplierWithMediaId:@"100255"
                                                       adspotId:@"10000559"

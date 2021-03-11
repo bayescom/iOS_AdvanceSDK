@@ -94,6 +94,7 @@ NSString * ADVStringFromNAdvanceSdkSupplierRepoType(AdvanceSdkSupplierRepoType t
 @interface AdvSupplier : NSObject
 @property (nonatomic, copy)   NSString *identifier;
 @property (nonatomic, copy)   NSString *sdktag;
+@property (nonatomic, assign) NSInteger versionTag;
 @property (nonatomic, copy)   NSString *mediakey;
 @property (nonatomic, assign) NSInteger timeout;
 @property (nonatomic, copy)   NSString *adspotid;

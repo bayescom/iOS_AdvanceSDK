@@ -37,12 +37,12 @@
 //    self.advanceInterstitial = [[AdvanceInterstitial alloc] initWithAdspotId:@"11111112"
 //                                                              viewController:self];
 
-//    self.advanceInterstitial = [[AdvanceInterstitial alloc] initWithAdspotId:self.adspotId
-//                                                              viewController:self];
-    
     self.advanceInterstitial = [[AdvanceInterstitial alloc] initWithAdspotId:self.adspotId
-                                                                   customExt:self.ext
                                                               viewController:self];
+    
+//    self.advanceInterstitial = [[AdvanceInterstitial alloc] initWithAdspotId:self.adspotId
+//                                                                   customExt:self.ext
+//                                                              viewController:self];
     self.advanceInterstitial.delegate = self;
     [self.advanceInterstitial setDefaultAdvSupplierWithMediaId:@"100255"
                                                       adspotId:@"10000559"

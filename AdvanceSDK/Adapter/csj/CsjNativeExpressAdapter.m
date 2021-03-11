@@ -85,11 +85,11 @@
 }
 
 - (void)nativeExpressAdViewRenderFail:(BUNativeExpressAdView *)nativeExpressAdView error:(NSError *)error {
-    [_adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
+//    [_adspot reportWithType:AdvanceSdkSupplierRepoFaileded error:error];
     if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdRenderFail:)]) {
         [_delegate advanceNativeExpressOnAdRenderFail:nativeExpressAdView];
     }
-    _csj_ad = nil;
+//    _csj_ad = nil;
 }
 
 - (void)nativeExpressAdViewWillShow:(BUNativeExpressAdView *)nativeExpressAdView {
