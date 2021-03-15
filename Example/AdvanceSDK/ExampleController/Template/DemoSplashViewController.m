@@ -29,7 +29,7 @@
         @{@"addesc": @"mediaId-adspotId", @"adspotId": @"101245-10003940"},
         @{@"addesc": @"Mock 渠道错误", @"adspotId": @"100255-10000001"},
         @{@"addesc": @"Mock code200", @"adspotId": @"100255-10003321"},
-        
+        @{@"addesc": @"Mock code200", @"adspotId": @"100255-10009879"},
     ];
     self.btn1Title = @"加载并显示广告";
 }

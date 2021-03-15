@@ -12,6 +12,7 @@
 #import "AdvError.h"
 #import "AdvLog.h"
 #import "AdvSupplierQueue.h"
+#import "AdvAdsportInfoUtil.h"
 @interface AdvSupplierManager ()
 @property (nonatomic, strong) AdvSupplierModel *model;
 
@@ -156,27 +157,37 @@
         ADVLog(@"_supplierM: %@", _supplierM);
         if (_model.setting.priorityMap.count > 0) {
             // 1.按照priorityMap分组
-            
+            NSDictionary *ext = [self.ext mutableCopy];
             __weak __typeof__(self) weakSelf = self;
             [_supplierM enumerateObjectsUsingBlock:^(AdvSupplier * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 obj.state = AdvanceSdkSupplierStateReady;
+                NSString *adTypeName = [ext valueForKey:AdvSdkTypeAdName];
+                BOOL isSupportParallel = [AdvAdsportInfoUtil isSupportParallelWithAdTypeName:adTypeName supplierId:obj.identifier];
+                NSLog(@"是否支持并行 %@ %@  %d", adTypeName, obj.identifier, isSupportParallel);
+
                 // 其他渠道的需要判断是否添加进并行渠道队列
                 [_model.setting.priorityMap enumerateObjectsUsingBlock:^(AdvPriorityMap * _Nonnull map, NSUInteger mapIdx, BOOL * _Nonnull stop) {
                     // 如果优先级和id 都一样  且并行队列里没有该元素的时候(主要是去重) 则添加进并行渠道
+                    
                     if ([map.supid isEqualToString:obj.identifier] &&
                         map.priority == obj.priority &&
                         ![temp containsObject:obj] &&
+                        isSupportParallel && // 该广告位要支持并行
                         idx != 0) {// 第一个 是第一优先级 马上执行 所以不用标记并行
                         
                         obj.isParallel = YES;
+                        NSLog(@"aa  %@", obj.sdktag);
                         [temp addObject:obj];
                     } else {
-                        obj.isParallel = NO;
+                        // 如果已经包含在并行渠道里 则不用变化isParallel
+                        if (![temp containsObject:obj]) {
+                            NSLog(@"a1a  %@", obj.sdktag);
+                            obj.isParallel = NO;
+                        }
                     }
                 }];
                 
             }];
-            
         }
         
         

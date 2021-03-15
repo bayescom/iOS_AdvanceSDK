@@ -36,7 +36,7 @@
     if (!ext) {
         ext = [NSMutableDictionary dictionary];
     }
-    [ext setValue:AdvSdkTypeAdName forKey:AdvSdkTypeAdNameSplash];
+    [ext setValue:AdvSdkTypeAdNameSplash forKey: AdvSdkTypeAdName];
     if (self = [super initWithMediaId:@"" adspotId:adspotid customExt:ext]) {
         _viewController = viewController;
     }
