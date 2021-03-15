@@ -82,6 +82,7 @@ NSString * ADVStringFromNAdvanceSdkSupplierRepoType(AdvanceSdkSupplierRepoType t
 @property (nonatomic, copy)   NSString *cptSupplier;
 @property (nonatomic, copy)   NSArray<NSString *> *parallelIDS;
 @property (nonatomic, copy)   NSArray<AdvPriorityMap *> *priorityMap;
+@property (nonatomic, strong) NSMutableArray<NSMutableArray<NSNumber *> *> *parallelGroup;
 @property (nonatomic, assign) NSTimeInterval cacheTime;
 
 @end

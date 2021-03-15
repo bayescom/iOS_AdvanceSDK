@@ -227,6 +227,7 @@ NSString *_Nullable AdvSupplierModelToJSON(AdvSupplierModel *supplierModel, NSSt
         @"cpt_supplier": @"cptSupplier",
         @"priority_map": @"priorityMap",
         @"parallel_ids": @"parallelIDS",
+        @"parallel_group": @"parallelGroup",
     };
 }
 
@@ -278,6 +279,13 @@ NSString *_Nullable AdvSupplierModelToJSON(AdvSupplierModel *supplierModel, NSSt
             @"priority_map": @[],
         }];
     }
+    
+    if (!_priorityGroup || [_priorityGroup isEqual:[NSNull null]]) {
+        [dict addEntriesFromDictionary:@{
+            @"parallel_group": @[].mutableCopy,
+        }];
+    }
+
     return dict;
 }
 @end

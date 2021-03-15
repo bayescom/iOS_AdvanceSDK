@@ -155,6 +155,67 @@
 
         NSMutableArray *temp = [NSMutableArray array];
         ADVLog(@"_supplierM: %@", _supplierM);
+        /*
+        if (_model.setting.priorityGroup.count > 0) {
+            // 1.按照priorityGroup分组
+            NSDictionary *ext = [self.ext mutableCopy];
+            __weak __typeof__(self) weakSelf = self;
+            [_supplierM enumerateObjectsUsingBlock:^(AdvSupplier * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                obj.state = AdvanceSdkSupplierStateReady;
+                NSString *adTypeName = [ext valueForKey:AdvSdkTypeAdName];
+                BOOL isSupportParallel = [AdvAdsportInfoUtil isSupportParallelWithAdTypeName:adTypeName supplierId:obj.identifier];
+                NSLog(@"是否支持并行 %@ %@  %d", adTypeName, obj.identifier, isSupportParallel);
+
+                [_model.setting.priorityGroup enumerateObjectsUsingBlock:^(NSArray<NSNumber *> * _Nonnull prioritys, NSUInteger index, BOOL * _Nonnull stop) {
+                    // 如果优先级和id 都一样  且并行队列里没有该元素的时候(主要是去重) 则添加进并行渠道
+                    for (NSInteger i = 0; i < prioritys.count; i++) {
+                        NSInteger priority = [prioritys[i] integerValue];
+                        
+                        // 如果优先级和id 都一样  且并行队列里没有该元素的时候(主要是去重) 则添加进并行渠道
+                        if (priority == obj.priority &&
+                            ![temp containsObject:obj] &&
+                            isSupportParallel &&
+                            idx !=0) {
+                            
+                        }
+                        
+                    }
+                    
+                }];
+                
+                
+                // 其他渠道的需要判断是否添加进并行渠道队列
+                [_model.setting.priorityMap enumerateObjectsUsingBlock:^(AdvPriorityMap * _Nonnull map, NSUInteger mapIdx, BOOL * _Nonnull stop) {
+                    // 如果优先级和id 都一样  且并行队列里没有该元素的时候(主要是去重) 则添加进并行渠道
+                    
+                    if ([map.supid isEqualToString:obj.identifier] &&
+                        map.priority == obj.priority &&
+                        ![temp containsObject:obj] &&
+                        isSupportParallel && // 该广告位要支持并行
+                        idx != 0) {// 第一个 是第一优先级 马上执行 所以不用标记并行
+                        
+                        obj.isParallel = YES;
+                        NSLog(@"aa  %@", obj.sdktag);
+                        [temp addObject:obj];
+                    } else {
+                        // 如果已经包含在并行渠道里 则不用变化isParallel
+                        if (![temp containsObject:obj]) {
+                            NSLog(@"a1a  %@", obj.sdktag);
+                            obj.isParallel = NO;
+                        }
+                    }
+                }];
+                
+            }];
+        }
+        
+        
+        
+        
+        
+        
+        
+        
         if (_model.setting.priorityMap.count > 0) {
             // 1.按照priorityMap分组
             NSDictionary *ext = [self.ext mutableCopy];
@@ -191,13 +252,67 @@
         }
         
         
-        
+        */
         // 执行非CPT渠道逻辑
-        [self notCPTLoadNextSuppluer:_supplierM.firstObject error:nil];
+        AdvSupplier *currentSupplier = _supplierM.firstObject;
+        [self notCPTLoadNextSuppluer:currentSupplier error:nil];
+        
+        NSNumber *currentPriority = [NSNumber numberWithInteger:currentSupplier.priority];
+        NSDictionary *ext = [self.ext mutableCopy];
+        NSString *adTypeName = [ext valueForKey:AdvSdkTypeAdName];
+
+        NSMutableArray *groupM = [self.model.setting.priorityGroup mutableCopy];
+        if (_model.setting.priorityGroup.count > 0) {
+            // 利用currentPriority 匹配priorityGroup 看看当中有没有需要和当前的supplier 并发的渠道
+            __weak typeof(self) _self = self;
+            [groupM enumerateObjectsUsingBlock:^(NSMutableArray<NSNumber *> * _Nonnull prioritys, NSUInteger idx, BOOL * _Nonnull stop) {
+                __strong typeof(_self) self = _self;
+                if (!self) {
+                    return;
+                }
+                // 如果这个优先级组里 包含了当前渠道的优先级 则循环执行 然后删除这个组
+                if ([prioritys containsObject:currentPriority]) {
+                    for (NSInteger i = 0; i < prioritys.count; i++) {
+                        NSInteger priority = [prioritys[i] integerValue];
+                        AdvSupplier *parallelSupplier = [self getSupplierByPriority:priority];
+                        
+                        BOOL isSupportParallel = [AdvAdsportInfoUtil isSupportParallelWithAdTypeName:adTypeName supplierId:parallelSupplier.identifier];
+                        NSLog(@"是否支持并行 %@ %@  %d", adTypeName, parallelSupplier.identifier, isSupportParallel);
+
+                        if (isSupportParallel && // 该广告位支持并行
+                            parallelSupplier.priority != [currentPriority integerValue]) {// 并且不是currentSupplier
+                            parallelSupplier.isParallel = YES;
+                            [self notCPTLoadNextSuppluer:parallelSupplier error:nil];
+                        }
+                    }
+                    
+                    // 删除 这个优先级组  避免重复并行
+                    NSLog(@"22222 %@", self.model.setting.parallelGroup);
+
+                    [self.model.setting.parallelGroup removeObject:prioritys];
+
+                    stop = YES;
+                }
+            }];
+        }
+        
         for (AdvSupplier *supplier in temp) {
+            
+            
             [self notCPTLoadNextSuppluer:supplier error:nil];
         }
     }
+}
+
+// 根据优先级查询_supplierM中的渠道
+- (AdvSupplier *)getSupplierByPriority:(NSInteger)priority {
+    for (NSInteger i = 0 ; i < _supplierM.count; i++) {
+        AdvSupplier *supplier = _supplierM[i];
+        if (supplier.priority == priority) {
+            return supplier;
+        }
+    }
+    return nil;
 }
 
 /// 非 CPT 执行下个渠道
@@ -395,6 +510,7 @@
             [_delegate advSupplierManagerLoadSuccess:self.model];
         }
         
+        ADVLog(@"TEST %@", a_model.setting.parallelGroup);
         // 开始执行策略
         [self loadNextSupplier];
     }
