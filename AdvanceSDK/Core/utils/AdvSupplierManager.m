@@ -261,8 +261,8 @@
         NSDictionary *ext = [self.ext mutableCopy];
         NSString *adTypeName = [ext valueForKey:AdvSdkTypeAdName];
 
-        NSMutableArray *groupM = [self.model.setting.priorityGroup mutableCopy];
-        if (_model.setting.priorityGroup.count > 0) {
+        NSMutableArray *groupM = [self.model.setting.parallelGroup mutableCopy];
+        if (_model.setting.parallelGroup.count > 0) {
             // 利用currentPriority 匹配priorityGroup 看看当中有没有需要和当前的supplier 并发的渠道
             __weak typeof(self) _self = self;
             [groupM enumerateObjectsUsingBlock:^(NSMutableArray<NSNumber *> * _Nonnull prioritys, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -274,6 +274,7 @@
                 if ([prioritys containsObject:currentPriority]) {
                     for (NSInteger i = 0; i < prioritys.count; i++) {
                         NSInteger priority = [prioritys[i] integerValue];
+                        NSLog(@"优先级: %ld", (long)priority);
                         AdvSupplier *parallelSupplier = [self getSupplierByPriority:priority];
                         
                         BOOL isSupportParallel = [AdvAdsportInfoUtil isSupportParallelWithAdTypeName:adTypeName supplierId:parallelSupplier.identifier];
@@ -287,20 +288,21 @@
                     }
                     
                     // 删除 这个优先级组  避免重复并行
-                    NSLog(@"22222 %@", self.model.setting.parallelGroup);
+//                    NSLog(@"22222 %@", self.model.setting.parallelGroup);
 
                     [self.model.setting.parallelGroup removeObject:prioritys];
+//                    NSLog(@"1321321321 %@", self.model.setting.parallelGroup);
 
                     stop = YES;
                 }
             }];
         }
         
-        for (AdvSupplier *supplier in temp) {
-            
-            
-            [self notCPTLoadNextSuppluer:supplier error:nil];
-        }
+//        for (AdvSupplier *supplier in temp) {
+//
+//
+//            [self notCPTLoadNextSuppluer:supplier error:nil];
+//        }
     }
 }
 

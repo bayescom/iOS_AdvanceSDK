@@ -177,9 +177,9 @@
                 id adapter = ((id (*)(id, SEL, id, id))objc_msgSend)((id)[NSClassFromString(clsName) alloc], @selector(initWithSupplier:adspot:), supplier, self);
                 // 标记当前的adapter 为了让当串行执行到的时候 获取这个adapter
                 // 没有设置代理
+                ADVLog(@"并行: %@", adapter);
                 ((void (*)(id, SEL, id))objc_msgSend)((id)adapter, @selector(setAdspotid:), supplier.adspotid);
                 ((void (*)(id, SEL))objc_msgSend)((id)adapter, @selector(loadAd));
-                ADVLog(@"并行: %@", adapter);
 
                 if (adapter) {
                     // 存储并行的adapter
@@ -195,19 +195,43 @@
                     supplier.timeout = (_timeout_stamp - now) >= 5000 ? 5000 : (_timeout_stamp - now);
                 }
                 
-                // 1. 先移除上一个失败的渠道
-                // 2. 先看看当前执行的串行渠道 是不是之前的并行渠道
-                // 3. 如果不是之前的并行渠道 则为 其他串行渠道
-                // 4. 如果是之前的并行渠道, 直接载入
-                [_adapter performSelector:@selector(deallocAdapter)];
-                _adapter = [self adapterInParallelsWithSupplier:supplier];
-                if (!_adapter) {
-                    _adapter = ((id (*)(id, SEL, id, id))objc_msgSend)((id)[NSClassFromString(clsName) alloc], @selector(initWithSupplier:adspot:), supplier, self);
+                if ([supplier.identifier isEqualToString:SDK_ID_GDT]) {
+                    ADVLog(@"延时串行开始 %@", _adapter);
+                    dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC));
+                    dispatch_after(delayTime, dispatch_get_main_queue(), ^{
+                        // 1. 先移除上一个失败的渠道
+                        // 2. 先看看当前执行的串行渠道 是不是之前的并行渠道
+                        // 3. 如果不是之前的并行渠道 则为 其他串行渠道
+                        // 4. 如果是之前的并行渠道, 直接载入
+                        [_adapter performSelector:@selector(deallocAdapter)];
+                        _adapter = [self adapterInParallelsWithSupplier:supplier];
+                        if (!_adapter) {
+                            _adapter = ((id (*)(id, SEL, id, id))objc_msgSend)((id)[NSClassFromString(clsName) alloc], @selector(initWithSupplier:adspot:), supplier, self);
+                        }
+                        ADVLog(@"延时串行 %@", _adapter);
+                        // 设置代理
+                        ((void (*)(id, SEL, id))objc_msgSend)((id)_adapter, @selector(setDelegate:), _delegate);
+                        ((void (*)(id, SEL))objc_msgSend)((id)_adapter, @selector(loadAd));
+
+                    });
+                } else {
+                    // 1. 先移除上一个失败的渠道
+                    // 2. 先看看当前执行的串行渠道 是不是之前的并行渠道
+                    // 3. 如果不是之前的并行渠道 则为 其他串行渠道
+                    // 4. 如果是之前的并行渠道, 直接载入
+                    [_adapter performSelector:@selector(deallocAdapter)];
+                    _adapter = [self adapterInParallelsWithSupplier:supplier];
+                    if (!_adapter) {
+                        _adapter = ((id (*)(id, SEL, id, id))objc_msgSend)((id)[NSClassFromString(clsName) alloc], @selector(initWithSupplier:adspot:), supplier, self);
+                    }
+                    ADVLog(@"串行 %@", _adapter);
+                    // 设置代理
+                    ((void (*)(id, SEL, id))objc_msgSend)((id)_adapter, @selector(setDelegate:), _delegate);
+                    ((void (*)(id, SEL))objc_msgSend)((id)_adapter, @selector(loadAd));
+
                 }
-                ADVLog(@"串行 %@", _adapter);
-                // 设置代理
-                ((void (*)(id, SEL, id))objc_msgSend)((id)_adapter, @selector(setDelegate:), _delegate);
-                ((void (*)(id, SEL))objc_msgSend)((id)_adapter, @selector(loadAd));
+
+                
             }
 #pragma clang diagnostic pop
         } else {

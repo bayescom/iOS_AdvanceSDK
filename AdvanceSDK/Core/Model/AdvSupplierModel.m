@@ -219,7 +219,8 @@ NSString *_Nullable AdvSupplierModelToJSON(AdvSupplierModel *supplierModel, NSSt
 + (NSDictionary<NSString *, NSString *> *)properties
 {
     static NSDictionary<NSString *, NSString *> *properties;
-    return properties = properties ? properties : @{
+
+     properties = properties ? properties : @{
         @"use_cache": @"useCache",
         @"cache_dur": @"cacheDur",
         @"cpt_start": @"cptStart",
@@ -229,6 +230,21 @@ NSString *_Nullable AdvSupplierModelToJSON(AdvSupplierModel *supplierModel, NSSt
         @"parallel_ids": @"parallelIDS",
         @"parallel_group": @"parallelGroup",
     };
+    
+    
+    
+    return properties;
+    
+//    return properties = properties ? properties : @{
+//        @"use_cache": @"useCache",
+//        @"cache_dur": @"cacheDur",
+//        @"cpt_start": @"cptStart",
+//        @"cpt_end": @"cptEnd",
+//        @"cpt_supplier": @"cptSupplier",
+//        @"priority_map": @"priorityMap",
+//        @"parallel_ids": @"parallelIDS",
+//        @"parallel_group": @"parallelGroup",
+//    };
 }
 
 + (instancetype)fromJSONDictionary:(NSDictionary *)dict
@@ -240,6 +256,8 @@ NSString *_Nullable AdvSupplierModelToJSON(AdvSupplierModel *supplierModel, NSSt
 {
     if (self = [super init]) {
         [self setValuesForKeysWithDictionary:dict];
+        self.parallelIDS = [self.parallelIDS mutableCopy];
+        self.parallelGroup = [self.parallelGroup mutableCopy];
         _priorityMap = map(_priorityMap, λ(id x, [AdvPriorityMap fromJSONDictionary:x]));
     }
     return self;
@@ -280,7 +298,7 @@ NSString *_Nullable AdvSupplierModelToJSON(AdvSupplierModel *supplierModel, NSSt
         }];
     }
     
-    if (!_priorityGroup || [_priorityGroup isEqual:[NSNull null]]) {
+    if (!_parallelGroup || [_parallelGroup isEqual:[NSNull null]]) {
         [dict addEntriesFromDictionary:@{
             @"parallel_group": @[].mutableCopy,
         }];
