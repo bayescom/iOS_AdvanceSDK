@@ -99,10 +99,14 @@
 
 - (void)loadNextSupplierIfHas {
     // 执行非CPT渠道逻辑
-    AdvSupplier *supplier = _supplierM.firstObject;
+    AdvSupplier *currentSupplier = _supplierM.firstObject;
     // 不管是不是并行渠道, 到了该执行的时候 必须要按照串行渠道的逻辑去执行
-    supplier.isParallel = NO;
-    [self notCPTLoadNextSuppluer:supplier error:nil];
+    currentSupplier.isParallel = NO;
+    [self notCPTLoadNextSuppluer:currentSupplier error:nil];
+    
+    // 并行执行
+    [self parallelActionWithCurrentSupplier:currentSupplier];
+
     
 }
 
@@ -257,53 +261,54 @@
         AdvSupplier *currentSupplier = _supplierM.firstObject;
         [self notCPTLoadNextSuppluer:currentSupplier error:nil];
         
-        NSNumber *currentPriority = [NSNumber numberWithInteger:currentSupplier.priority];
-        NSDictionary *ext = [self.ext mutableCopy];
-        NSString *adTypeName = [ext valueForKey:AdvSdkTypeAdName];
+        // 并行执行
+        [self parallelActionWithCurrentSupplier:currentSupplier];
+    }
+}
 
-        NSMutableArray *groupM = [self.model.setting.parallelGroup mutableCopy];
-        if (_model.setting.parallelGroup.count > 0) {
-            // 利用currentPriority 匹配priorityGroup 看看当中有没有需要和当前的supplier 并发的渠道
-            __weak typeof(self) _self = self;
-            [groupM enumerateObjectsUsingBlock:^(NSMutableArray<NSNumber *> * _Nonnull prioritys, NSUInteger idx, BOOL * _Nonnull stop) {
-                __strong typeof(_self) self = _self;
-                if (!self) {
-                    return;
-                }
-                // 如果这个优先级组里 包含了当前渠道的优先级 则循环执行 然后删除这个组
-                if ([prioritys containsObject:currentPriority]) {
-                    for (NSInteger i = 0; i < prioritys.count; i++) {
-                        NSInteger priority = [prioritys[i] integerValue];
-                        NSLog(@"优先级: %ld", (long)priority);
-                        AdvSupplier *parallelSupplier = [self getSupplierByPriority:priority];
-                        
-                        BOOL isSupportParallel = [AdvAdsportInfoUtil isSupportParallelWithAdTypeName:adTypeName supplierId:parallelSupplier.identifier];
-                        NSLog(@"是否支持并行 %@ %@  %d", adTypeName, parallelSupplier.identifier, isSupportParallel);
+// 并行执行
+- (void)parallelActionWithCurrentSupplier:(AdvSupplier *)currentSupplier {
+    NSNumber *currentPriority = [NSNumber numberWithInteger:currentSupplier.priority];
+    NSDictionary *ext = [self.ext mutableCopy];
+    NSString *adTypeName = [ext valueForKey:AdvSdkTypeAdName];
 
-                        if (isSupportParallel && // 该广告位支持并行
-                            parallelSupplier.priority != [currentPriority integerValue]) {// 并且不是currentSupplier
-                            parallelSupplier.isParallel = YES;
-                            [self notCPTLoadNextSuppluer:parallelSupplier error:nil];
-                        }
-                    }
+    NSMutableArray *groupM = [self.model.setting.parallelGroup mutableCopy];
+    if (_model.setting.parallelGroup.count > 0) {
+        // 利用currentPriority 匹配priorityGroup 看看当中有没有需要和当前的supplier 并发的渠道
+        __weak typeof(self) _self = self;
+        [groupM enumerateObjectsUsingBlock:^(NSMutableArray<NSNumber *> * _Nonnull prioritys, NSUInteger idx, BOOL * _Nonnull stop) {
+            __strong typeof(_self) self = _self;
+            if (!self) {
+                return;
+            }
+            // 如果这个优先级组里 包含了当前渠道的优先级 则循环执行 然后删除这个组
+            if ([prioritys containsObject:currentPriority]) {
+                for (NSInteger i = 0; i < prioritys.count; i++) {
+                    NSInteger priority = [prioritys[i] integerValue];
+                    NSLog(@"优先级: %ld", (long)priority);
+                    AdvSupplier *parallelSupplier = [self getSupplierByPriority:priority];
                     
-                    // 删除 这个优先级组  避免重复并行
+                    BOOL isSupportParallel = [AdvAdsportInfoUtil isSupportParallelWithAdTypeName:adTypeName supplierId:parallelSupplier.identifier];
+                    NSLog(@"是否支持并行 %@ %@  %d", adTypeName, parallelSupplier.identifier, isSupportParallel);
+
+                    if (isSupportParallel && // 该广告位支持并行
+                        parallelSupplier.priority != [currentPriority integerValue]) {// 并且不是currentSupplier
+                        parallelSupplier.isParallel = YES;
+                        [self notCPTLoadNextSuppluer:parallelSupplier error:nil];
+                    }
+                }
+                
+                // 删除 这个优先级组  避免重复并行
 //                    NSLog(@"22222 %@", self.model.setting.parallelGroup);
 
-                    [self.model.setting.parallelGroup removeObject:prioritys];
+                [self.model.setting.parallelGroup removeObject:prioritys];
 //                    NSLog(@"1321321321 %@", self.model.setting.parallelGroup);
 
-                    stop = YES;
-                }
-            }];
-        }
-        
-//        for (AdvSupplier *supplier in temp) {
-//
-//
-//            [self notCPTLoadNextSuppluer:supplier error:nil];
-//        }
+                stop = YES;
+            }
+        }];
     }
+
 }
 
 // 根据优先级查询_supplierM中的渠道
