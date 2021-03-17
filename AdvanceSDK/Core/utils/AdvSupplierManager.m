@@ -157,106 +157,7 @@
             return;
         }
 
-        NSMutableArray *temp = [NSMutableArray array];
-        ADVLog(@"_supplierM: %@", _supplierM);
-        /*
-        if (_model.setting.priorityGroup.count > 0) {
-            // 1.按照priorityGroup分组
-            NSDictionary *ext = [self.ext mutableCopy];
-            __weak __typeof__(self) weakSelf = self;
-            [_supplierM enumerateObjectsUsingBlock:^(AdvSupplier * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                obj.state = AdvanceSdkSupplierStateReady;
-                NSString *adTypeName = [ext valueForKey:AdvSdkTypeAdName];
-                BOOL isSupportParallel = [AdvAdsportInfoUtil isSupportParallelWithAdTypeName:adTypeName supplierId:obj.identifier];
-                NSLog(@"是否支持并行 %@ %@  %d", adTypeName, obj.identifier, isSupportParallel);
-
-                [_model.setting.priorityGroup enumerateObjectsUsingBlock:^(NSArray<NSNumber *> * _Nonnull prioritys, NSUInteger index, BOOL * _Nonnull stop) {
-                    // 如果优先级和id 都一样  且并行队列里没有该元素的时候(主要是去重) 则添加进并行渠道
-                    for (NSInteger i = 0; i < prioritys.count; i++) {
-                        NSInteger priority = [prioritys[i] integerValue];
-                        
-                        // 如果优先级和id 都一样  且并行队列里没有该元素的时候(主要是去重) 则添加进并行渠道
-                        if (priority == obj.priority &&
-                            ![temp containsObject:obj] &&
-                            isSupportParallel &&
-                            idx !=0) {
-                            
-                        }
-                        
-                    }
-                    
-                }];
-                
-                
-                // 其他渠道的需要判断是否添加进并行渠道队列
-                [_model.setting.priorityMap enumerateObjectsUsingBlock:^(AdvPriorityMap * _Nonnull map, NSUInteger mapIdx, BOOL * _Nonnull stop) {
-                    // 如果优先级和id 都一样  且并行队列里没有该元素的时候(主要是去重) 则添加进并行渠道
-                    
-                    if ([map.supid isEqualToString:obj.identifier] &&
-                        map.priority == obj.priority &&
-                        ![temp containsObject:obj] &&
-                        isSupportParallel && // 该广告位要支持并行
-                        idx != 0) {// 第一个 是第一优先级 马上执行 所以不用标记并行
-                        
-                        obj.isParallel = YES;
-                        NSLog(@"aa  %@", obj.sdktag);
-                        [temp addObject:obj];
-                    } else {
-                        // 如果已经包含在并行渠道里 则不用变化isParallel
-                        if (![temp containsObject:obj]) {
-                            NSLog(@"a1a  %@", obj.sdktag);
-                            obj.isParallel = NO;
-                        }
-                    }
-                }];
-                
-            }];
-        }
         
-        
-        
-        
-        
-        
-        
-        
-        if (_model.setting.priorityMap.count > 0) {
-            // 1.按照priorityMap分组
-            NSDictionary *ext = [self.ext mutableCopy];
-            __weak __typeof__(self) weakSelf = self;
-            [_supplierM enumerateObjectsUsingBlock:^(AdvSupplier * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                obj.state = AdvanceSdkSupplierStateReady;
-                NSString *adTypeName = [ext valueForKey:AdvSdkTypeAdName];
-                BOOL isSupportParallel = [AdvAdsportInfoUtil isSupportParallelWithAdTypeName:adTypeName supplierId:obj.identifier];
-                NSLog(@"是否支持并行 %@ %@  %d", adTypeName, obj.identifier, isSupportParallel);
-
-                // 其他渠道的需要判断是否添加进并行渠道队列
-                [_model.setting.priorityMap enumerateObjectsUsingBlock:^(AdvPriorityMap * _Nonnull map, NSUInteger mapIdx, BOOL * _Nonnull stop) {
-                    // 如果优先级和id 都一样  且并行队列里没有该元素的时候(主要是去重) 则添加进并行渠道
-                    
-                    if ([map.supid isEqualToString:obj.identifier] &&
-                        map.priority == obj.priority &&
-                        ![temp containsObject:obj] &&
-                        isSupportParallel && // 该广告位要支持并行
-                        idx != 0) {// 第一个 是第一优先级 马上执行 所以不用标记并行
-                        
-                        obj.isParallel = YES;
-                        NSLog(@"aa  %@", obj.sdktag);
-                        [temp addObject:obj];
-                    } else {
-                        // 如果已经包含在并行渠道里 则不用变化isParallel
-                        if (![temp containsObject:obj]) {
-                            NSLog(@"a1a  %@", obj.sdktag);
-                            obj.isParallel = NO;
-                        }
-                    }
-                }];
-                
-            }];
-        }
-        
-        
-        */
         // 执行非CPT渠道逻辑
         AdvSupplier *currentSupplier = _supplierM.firstObject;
         [self notCPTLoadNextSuppluer:currentSupplier error:nil];
@@ -285,11 +186,9 @@
             if ([prioritys containsObject:currentPriority]) {
                 for (NSInteger i = 0; i < prioritys.count; i++) {
                     NSInteger priority = [prioritys[i] integerValue];
-//                    NSLog(@"优先级: %ld", (long)priority);
                     AdvSupplier *parallelSupplier = [self getSupplierByPriority:priority];
                     
                     BOOL isSupportParallel = [AdvAdsportInfoUtil isSupportParallelWithAdTypeName:adTypeName supplierId:parallelSupplier.identifier];
-//                    NSLog(@"是否支持并行 %@ %@  %d", adTypeName, parallelSupplier.identifier, isSupportParallel);
 
                     if (isSupportParallel && // 该广告位支持并行
                         parallelSupplier.priority != [currentPriority integerValue]) {// 并且不是currentSupplier
@@ -298,13 +197,9 @@
                     }
                 }
                 
-                // 删除 这个优先级组  避免重复并行
-//                    NSLog(@"22222 %@", self.model.setting.parallelGroup);
-
                 [self.model.setting.parallelGroup removeObject:prioritys];
-//                    NSLog(@"1321321321 %@", self.model.setting.parallelGroup);
-
-                stop = YES;
+                
+                *stop = YES;
             }
         }];
     }
@@ -337,12 +232,12 @@
     if (supplier.isParallel) {
         
     } else {
-        NSLog(@"展示队列优先级: %ld", (long)supplier.priority);
+//        NSLog(@"展示队列优先级: %ld", (long)supplier.priority);
         [_supplierM removeObject:supplier];
-        NSLog(@"展示队列: %@", _supplierM);
+//        NSLog(@"展示队列: %@", _supplierM);
     }
     
-    NSLog(@"当前执行的渠道:%@ 是否并行:%d 优先级:%ld name:%@", supplier, supplier.isParallel, (long)supplier.priority, supplier.name);
+    ADVLog(@"当前执行的渠道:%@ 是否并行:%d 优先级:%ld name:%@", supplier, supplier.isParallel, (long)supplier.priority, supplier.name);
 
     
     // 如果成功或者失败 就意味着 该并行渠道有结果了, 所以不需要改变状态了
@@ -415,7 +310,7 @@
     [deviceInfo setValue:[AdvSdkConfig shareInstance].isAdTrack ? @"0" : @"1" forKey:@"donottrack"];
 
 //    [deviceInfo setValue:@"" forKey:@"adspotid"];
-    NSLog(@"请求参数 %@", deviceInfo);
+    ADVLog(@"请求参数 %@", deviceInfo);
     NSError *parseError = nil;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:deviceInfo options:NSJSONWritingPrettyPrinted error:&parseError];
 //    NSURL *url = [NSURL URLWithString:AdvanceSdkRequestUrl];
