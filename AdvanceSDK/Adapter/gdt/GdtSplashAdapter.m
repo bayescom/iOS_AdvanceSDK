@@ -61,7 +61,8 @@
         ADVLog(@"广点通 成功");
         [self showAd];
     } else if (_supplier.state == AdvanceSdkSupplierStateFailed) { //失败的话直接对外抛出回调
-        ADVLog(@"广点通 失败");
+        ADVLog(@"广点通 失败 %@", _supplier);
+        [self.adspot loadNextSupplierIfHas];
         [self deallocAdapter];
     } else if (_supplier.state == AdvanceSdkSupplierStateInPull) { // 正在请求广告时 什么都不用做等待就行
         ADVLog(@"广点通 正在加载中");
@@ -126,9 +127,11 @@
 - (void)splashAdFailToPresent:(GDTSplashAd *)splashAd withError:(NSError *)error {
     
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
+//    NSLog(@"gdt ========>>>>>>>> %ld %@", (long)_supplier.priority, error);
     if (_supplier.isParallel == YES) {
         _supplier.state = AdvanceSdkSupplierStateFailed;
         return;
+    } else {
     }
 
 //    if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdFailedWithSdkId:error:)]) {

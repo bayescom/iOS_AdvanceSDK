@@ -285,11 +285,11 @@
             if ([prioritys containsObject:currentPriority]) {
                 for (NSInteger i = 0; i < prioritys.count; i++) {
                     NSInteger priority = [prioritys[i] integerValue];
-                    NSLog(@"优先级: %ld", (long)priority);
+//                    NSLog(@"优先级: %ld", (long)priority);
                     AdvSupplier *parallelSupplier = [self getSupplierByPriority:priority];
                     
                     BOOL isSupportParallel = [AdvAdsportInfoUtil isSupportParallelWithAdTypeName:adTypeName supplierId:parallelSupplier.identifier];
-                    NSLog(@"是否支持并行 %@ %@  %d", adTypeName, parallelSupplier.identifier, isSupportParallel);
+//                    NSLog(@"是否支持并行 %@ %@  %d", adTypeName, parallelSupplier.identifier, isSupportParallel);
 
                     if (isSupportParallel && // 该广告位支持并行
                         parallelSupplier.priority != [currentPriority integerValue]) {// 并且不是currentSupplier
@@ -333,11 +333,17 @@
         return;
     }
     
+    
     if (supplier.isParallel) {
         
     } else {
+        NSLog(@"展示队列优先级: %ld", (long)supplier.priority);
         [_supplierM removeObject:supplier];
+        NSLog(@"展示队列: %@", _supplierM);
     }
+    
+    NSLog(@"当前执行的渠道:%@ 是否并行:%d 优先级:%ld name:%@", supplier, supplier.isParallel, (long)supplier.priority, supplier.name);
+
     
     // 如果成功或者失败 就意味着 该并行渠道有结果了, 所以不需要改变状态了
     // 正在加载中的时候 表明并行渠道正在加载 只要等待就可以了所以也不需要改变状态

@@ -178,7 +178,7 @@
                 // 标记当前的adapter 为了让当串行执行到的时候 获取这个adapter
                 // 没有设置代理
                 ADVLog(@"并行: %@", adapter);
-                ((void (*)(id, SEL, id))objc_msgSend)((id)adapter, @selector(setAdspotid:), supplier.adspotid);
+                ((void (*)(id, SEL, NSInteger))objc_msgSend)((id)adapter, @selector(setTag:), supplier.priority);
                 ((void (*)(id, SEL))objc_msgSend)((id)adapter, @selector(loadAd));
 
                 if (adapter) {
@@ -195,7 +195,7 @@
                     supplier.timeout = (_timeout_stamp - now) >= 5000 ? 5000 : (_timeout_stamp - now);
                 }
                 
-                if ([supplier.identifier isEqualToString:SDK_ID_GDT]) {
+                if ([supplier.identifier isEqualToString:@"00000000"]) {
                     ADVLog(@"延时串行开始 %@", _adapter);
                     dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC));
                     dispatch_after(delayTime, dispatch_get_main_queue(), ^{
@@ -208,7 +208,7 @@
                         if (!_adapter) {
                             _adapter = ((id (*)(id, SEL, id, id))objc_msgSend)((id)[NSClassFromString(clsName) alloc], @selector(initWithSupplier:adspot:), supplier, self);
                         }
-                        ADVLog(@"延时串行 %@", _adapter);
+                        ADVLog(@"延时串行 %@ %ld", _adapter, (long)[_adapter tag]);
                         // 设置代理
                         ((void (*)(id, SEL, id))objc_msgSend)((id)_adapter, @selector(setDelegate:), _delegate);
                         ((void (*)(id, SEL))objc_msgSend)((id)_adapter, @selector(loadAd));
@@ -224,7 +224,7 @@
                     if (!_adapter) {
                         _adapter = ((id (*)(id, SEL, id, id))objc_msgSend)((id)[NSClassFromString(clsName) alloc], @selector(initWithSupplier:adspot:), supplier, self);
                     }
-                    ADVLog(@"串行 %@", _adapter);
+                    ADVLog(@"串行 %@ %ld", _adapter, (long)[_adapter tag]);
                     // 设置代理
                     ((void (*)(id, SEL, id))objc_msgSend)((id)_adapter, @selector(setDelegate:), _delegate);
                     ((void (*)(id, SEL))objc_msgSend)((id)_adapter, @selector(loadAd));

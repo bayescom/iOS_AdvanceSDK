@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface CsjSplashAdapter : NSObject
 
-@property (nonatomic, copy)   NSString *adspotid;// 标记并行渠道为了找到响应的adapter
+@property (nonatomic, assign) NSInteger tag;// 标记并行渠道为了找到响应的adapter
 
 @property (nonatomic, weak) id<AdvanceSplashDelegate> delegate;
 
