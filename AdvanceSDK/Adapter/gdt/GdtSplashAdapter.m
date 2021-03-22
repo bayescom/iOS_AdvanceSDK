@@ -68,8 +68,8 @@
         ADVLog(@"广点通 正在加载中");
     } else {
         ADVLog(@"广点通 load ad");
-        [_gdt_ad loadAd];
         _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
+        [_gdt_ad loadAd];
     }
 
 }
