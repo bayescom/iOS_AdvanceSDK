@@ -65,8 +65,8 @@
         ADVLog(@"穿山甲 正在加载中");
     } else {
         ADVLog(@"穿山甲 load ad");
-        [self.csj_ad loadAdData];
         _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
+        [self.csj_ad loadAdData];
     }
 
 

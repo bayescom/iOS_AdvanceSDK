@@ -19,7 +19,10 @@
         } else if ([ID isEqualToString:SDK_ID_CSJ]) {
             parallel = YES;
         }
-    } else {
+    } else if (([adTypeName isEqualToString:AdvSdkTypeAdNameRewardVideo])) {
+        return YES;
+    }
+    else {
         return NO;
     }
     return parallel;

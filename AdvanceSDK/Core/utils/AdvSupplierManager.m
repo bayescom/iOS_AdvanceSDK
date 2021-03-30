@@ -191,7 +191,8 @@
                     BOOL isSupportParallel = [AdvAdsportInfoUtil isSupportParallelWithAdTypeName:adTypeName supplierId:parallelSupplier.identifier];
 
                     if (isSupportParallel && // 该广告位支持并行
-                        parallelSupplier.priority != [currentPriority integerValue]) {// 并且不是currentSupplier
+                        parallelSupplier.priority != [currentPriority integerValue] &&// 并且不是currentSupplier
+                        parallelSupplier) {
                         parallelSupplier.isParallel = YES;
                         [self notCPTLoadNextSuppluer:parallelSupplier error:nil];
                     }

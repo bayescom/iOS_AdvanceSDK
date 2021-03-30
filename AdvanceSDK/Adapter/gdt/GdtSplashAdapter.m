@@ -83,7 +83,7 @@
 }
 
 - (void)deallocAdapter {
-    _gdt_ad = nil;
+//    _gdt_ad = nil;
 }
 
 - (void)showAd {
@@ -131,7 +131,6 @@
     if (_supplier.isParallel == YES) {
         _supplier.state = AdvanceSdkSupplierStateFailed;
         return;
-    } else {
     }
 
 //    if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdFailedWithSdkId:error:)]) {

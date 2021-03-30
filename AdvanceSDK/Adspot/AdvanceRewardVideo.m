@@ -29,10 +29,21 @@
 - (instancetype)initWithAdspotId:(NSString *)adspotid
                        customExt:(NSDictionary * _Nonnull)ext
                   viewController:(nonnull UIViewController *)viewController {
+    ext = [ext mutableCopy];
+    if (!ext) {
+        ext = [NSMutableDictionary dictionary];
+    }
+    [ext setValue:AdvSdkTypeAdNameRewardVideo forKey: AdvSdkTypeAdName];
+
     if (self = [super initWithMediaId:@"" adspotId:adspotid customExt:ext]) {
+
         _viewController = viewController;
     }
     return self;
+}
+
+- (void)reportWithType:(AdvanceSdkSupplierRepoType)repoType supplier:(nonnull AdvSupplier *)supplier error:(nonnull NSError *)error {
+    [super reportWithType:repoType supplier:supplier error:error];
 }
 
 
@@ -72,6 +83,7 @@
 - (void)advanceBaseAdapterLoadSuppluer:(nullable AdvSupplier *)supplier error:(nullable NSError *)error {
     // 返回渠道有问题 则不用再执行下面的渠道了
     if (error) {
+        NSLog(@"11111111 %@ ", supplier);
         // 错误回调只调用一次
         if (self.delegate != nil && [self.delegate respondsToSelector:@selector(advanceFailedWithError:)]) {
             [self.delegate advanceFailedWithError:error];
@@ -117,7 +129,7 @@
             if (!_adapter) {
                 _adapter = ((id (*)(id, SEL, id, id))objc_msgSend)((id)[NSClassFromString(clsName) alloc], @selector(initWithSupplier:adspot:), supplier, self);
             }
-            ADVLog(@"串行 %@ %ld", _adapter, (long)[_adapter tag]);
+            ADVLog(@"串行 %@ %ld %ld", _adapter, (long)[_adapter tag], supplier.priority);
             // 设置代理
             ((void (*)(id, SEL, id))objc_msgSend)((id)_adapter, @selector(setDelegate:), _delegate);
             ((void (*)(id, SEL))objc_msgSend)((id)_adapter, @selector(loadAd));
