@@ -8,7 +8,7 @@ target 'AdvanceSDK_Example' do
   pod 'AdvanceSDK/Mercury', :path => '../'
   pod 'AdvanceSDK/CSJ', :path => '../'
   pod 'AdvanceSDK/GDT', :path => '../'
-  pod 'MercurySDK', '~> 3.1.5.9'
+  pod 'MercurySDK', '~> 3.1.6.1'
   pod 'SDWebImage'
   pod 'Masonry'
 #  pod "STDebugConsole"
