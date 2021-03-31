@@ -52,7 +52,7 @@
         if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
             [self.delegate advanceUnifiedViewDidLoad];
         }
-        [self showAd];
+//        [self showAd];
     } else if (_supplier.state == AdvanceSdkSupplierStateFailed) { //失败的话直接对外抛出回调
         ADVLog(@"穿山甲 失败");
         [self.adspot loadNextSupplierIfHas];

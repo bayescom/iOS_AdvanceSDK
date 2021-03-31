@@ -42,7 +42,7 @@
         if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
             [self.delegate advanceUnifiedViewDidLoad];
         }
-        [self showAd];
+//        [self showAd];
     } else if (_supplier.state == AdvanceSdkSupplierStateFailed) { //失败的话直接对外抛出回调
         ADVLog(@"广点通 失败 %@", _supplier);
         [self.adspot loadNextSupplierIfHas];
@@ -101,10 +101,6 @@
 - (void)mercury_rewardVideoAdVideoDidLoad {
     if ([self.delegate respondsToSelector:@selector(advanceRewardVideoOnAdVideoCached)]) {
         [self.delegate advanceRewardVideoOnAdVideoCached];
-    }
-    /// 视频广告视频可以调用Show方法
-    if ([self.delegate respondsToSelector:@selector(advanceRewardVideoIsReadyToShow)]) {
-        [self.delegate advanceRewardVideoIsReadyToShow];
     }
 }
 
