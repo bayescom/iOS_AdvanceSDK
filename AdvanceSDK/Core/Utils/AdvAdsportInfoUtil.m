@@ -24,7 +24,11 @@
     } else if ([adTypeName isEqualToString:AdvSdkTypeAdNameInterstitial]){
         return YES;
     } else if ([adTypeName isEqualToString:AdvSdkTypeAdNameFullScreenVideo]){
-        return YES;
+        if (ID isEqualToString:SDK_ID_MERCURY) {
+            return NO;
+        } else {
+            return YES;
+        }
     }
     return parallel;
 }
