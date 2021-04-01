@@ -83,7 +83,6 @@
 - (void)advanceBaseAdapterLoadSuppluer:(nullable AdvSupplier *)supplier error:(nullable NSError *)error {
     // 返回渠道有问题 则不用再执行下面的渠道了
     if (error) {
-        NSLog(@"11111111 %@ ", supplier);
         // 错误回调只调用一次
         if (self.delegate != nil && [self.delegate respondsToSelector:@selector(advanceFailedWithError:)]) {
             [self.delegate advanceFailedWithError:error];

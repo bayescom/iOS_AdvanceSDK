@@ -76,12 +76,15 @@
         if (self.delegate != nil && [self.delegate respondsToSelector:@selector(advanceFailedWithError:)]) {
             [self.delegate advanceFailedWithError:error];
         }
+        [self deallocDelegate:NO];
         return;
     }
     
-    // 开始加载渠道前通知调用者
-    if ([self.delegate respondsToSelector:@selector(advanceSupplierWillLoad:)]) {
-        [self.delegate advanceSupplierWillLoad:supplier.identifier];
+    if (supplier.isParallel == NO) {// 只有当串行队列执行该渠道时 才会回调用代理 并行渠道不调用该代理
+        // 开始加载渠道前通知调用者
+        if ([self.delegate respondsToSelector:@selector(advanceSupplierWillLoad:)]) {
+            [self.delegate advanceSupplierWillLoad:supplier.identifier];
+        }
     }
     // 根据渠道id自定义初始化b
     NSString *clsName = @"";
@@ -93,14 +96,46 @@
     if (NSClassFromString(clsName)) {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wundeclared-selector"
-        _adapter = ((id (*)(id, SEL, id, id))objc_msgSend)((id)[NSClassFromString(clsName) alloc], @selector(initWithSupplier:adspot:), supplier, self);
-        ((void (*)(id, SEL, id))objc_msgSend)((id)_adapter, @selector(setDelegate:), _delegate);
-        ((void (*)(id, SEL))objc_msgSend)((id)_adapter, @selector(loadAd));
+        if (supplier.isParallel) {
+            id adapter = ((id (*)(id, SEL, id, id))objc_msgSend)((id)[NSClassFromString(clsName) alloc], @selector(initWithSupplier:adspot:), supplier, self);
+            // 标记当前的adapter 为了让当串行执行到的时候 获取这个adapter
+            // 没有设置代理
+            ADVLog(@"并行: %@", adapter);
+            ((void (*)(id, SEL, NSInteger))objc_msgSend)((id)adapter, @selector(setTag:), supplier.priority);
+            ((void (*)(id, SEL))objc_msgSend)((id)adapter, @selector(loadAd));
+            if (adapter) {
+                // 存储并行的adapter
+                [self.arrParallelSupplier addObject:adapter];
+            }
+        } else {
+//            [_adapter performSelector:@selector(deallocAdapter)];
+            _adapter = [self adapterInParallelsWithSupplier:supplier];
+            if (!_adapter) {
+                _adapter = ((id (*)(id, SEL, id, id))objc_msgSend)((id)[NSClassFromString(clsName) alloc], @selector(initWithSupplier:adspot:), supplier, self);
+            }
+            ADVLog(@"串行 %@ %ld %ld", _adapter, (long)[_adapter tag], supplier.priority);
+            // 设置代理
+            ((void (*)(id, SEL, id))objc_msgSend)((id)_adapter, @selector(setDelegate:), _delegate);
+            ((void (*)(id, SEL))objc_msgSend)((id)_adapter, @selector(loadAd));
+
+        }
+
+//        _adapter = ((id (*)(id, SEL, id, id))objc_msgSend)((id)[NSClassFromString(clsName) alloc], @selector(initWithSupplier:adspot:), supplier, self);
+//        ((void (*)(id, SEL, id))objc_msgSend)((id)_adapter, @selector(setDelegate:), _delegate);
+//        ((void (*)(id, SEL))objc_msgSend)((id)_adapter, @selector(loadAd));
 #pragma clang diagnostic pop
     } else {
         ADVLog(@"%@ 不存在", clsName);
         [self loadNextSupplierIfHas];
     }
+}
+
+- (void)deallocDelegate:(BOOL)execute {
+    if(execute) {
+//        [_adapter performSelector:@selector(deallocAdapter)];
+        [self deallocAdapter];
+    }
+    _delegate = nil;
 }
 
 - (void)showAd {
