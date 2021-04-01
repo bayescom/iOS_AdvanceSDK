@@ -55,6 +55,7 @@
 - (void)loadAdBtn2Action {
     if (!_isAdLoaded) {
        [JDStatusBarNotification showWithStatus:@"请先加载广告" dismissAfter:1.5];
+        return;
     }
     [self.advanceInterstitial showAd];
 }
@@ -99,15 +100,6 @@
 /// 策略请求成功
 - (void)advanceOnAdReceived:(NSString *)reqId {
     NSLog(@"%s 策略id为: %@",__func__ , reqId);
-}
-
-/// 广告可以show了
-- (void)advanceInterstitialOnReadyToShow {
-    NSLog(@"广告可以show了 %s",__func__);
-    if (!_isAdLoaded) {
-       [JDStatusBarNotification showWithStatus:@"请先加载广告" dismissAfter:1.5];
-    }
-    [self.advanceInterstitial showAd];
 }
 
 
