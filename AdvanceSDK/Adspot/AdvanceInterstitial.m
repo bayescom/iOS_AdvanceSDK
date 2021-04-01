@@ -26,6 +26,11 @@
 }
 
 - (instancetype)initWithAdspotId:(NSString *)adspotid customExt:(NSDictionary * _Nonnull)ext viewController:(nonnull UIViewController *)viewController{
+    ext = [ext mutableCopy];
+    if (!ext) {
+        ext = [NSMutableDictionary dictionary];
+    }
+    [ext setValue:AdvSdkTypeAdNameInterstitial forKey: AdvSdkTypeAdName];
     if (self = [super initWithMediaId:@"" adspotId:adspotid customExt:ext]) {
         _viewController = viewController;
     }
