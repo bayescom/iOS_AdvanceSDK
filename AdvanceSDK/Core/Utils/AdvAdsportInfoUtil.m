@@ -23,6 +23,8 @@
         return YES;
     } else if ([adTypeName isEqualToString:AdvSdkTypeAdNameInterstitial]){
         return YES;
+    } else if ([adTypeName isEqualToString:AdvSdkTypeAdNameFullScreenVideo]){
+        return YES;
     }
     return parallel;
 }
