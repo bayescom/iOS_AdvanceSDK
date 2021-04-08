@@ -21,6 +21,7 @@
     self.initDefSubviewsFlag = YES;
     self.adspotIdsArr = @[
         @{@"addesc": @"图片信息流", @"adspotId": @"100255-10002698"},
+        @{@"addesc": @"图片信息流", @"adspotId": @"100255-100026981"},
         @{@"addesc": @"图片信息流", @"adspotId": @"100996-10003898"},
         @{@"addesc": @"图片信息流", @"adspotId": @"101361-10004249"},
         @{@"addesc": @"Mock 渠道错误", @"adspotId": @"100255-10000001"},
