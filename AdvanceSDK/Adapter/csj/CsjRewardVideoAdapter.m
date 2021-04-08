@@ -160,7 +160,6 @@
 {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
     _supplier.state = AdvanceSdkSupplierStateFailed;
-    NSLog(@"aaaaa %@", error);
     if (_supplier.isParallel == YES) { // 并行不释放 只上报
         return;
     }

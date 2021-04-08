@@ -29,6 +29,8 @@
         } else {
             return YES;
         }
+    } else if ([adTypeName isEqualToString:AdvSdkTypeAdNameNativeExpress]) {
+        return YES;
     }
     return parallel;
 }
