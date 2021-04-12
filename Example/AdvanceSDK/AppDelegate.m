@@ -52,7 +52,7 @@
         });
         
         //初始化开屏广告
-        [self loadSplash];
+//        [self loadSplash];
     }];
     
     // 热启动 监听
@@ -65,14 +65,14 @@
 }
 
 - (void)loadSplash {
-    self.advanceSplash = [[AdvanceSplash alloc] initWithAdspotId:@"101361"
+    self.advanceSplash = [[AdvanceSplash alloc] initWithAdspotId:@"100255"
 //    self.advanceSplash = [[AdvanceSplash alloc] initWithAdspotId:@"20000003"
                                                   viewController:self.window.rootViewController];
     self.advanceSplash.delegate = self;
 //    self.advanceSplash.showLogoRequire = YES;
     self.advanceSplash.logoImage = [UIImage imageNamed:@"app_logo"];
     self.advanceSplash.backgroundImage = [UIImage imageNamed:@"LaunchImage_img"];
-    [self.advanceSplash setDefaultAdvSupplierWithMediaId:@"101361"
+    [self.advanceSplash setDefaultAdvSupplierWithMediaId:@"100255"
                                                 adspotId:@"10004237"
                                                 mediaKey:@"c6f80c078b7956821ebdaad72779cffc"
                                                   sdkId:SDK_ID_CSJ];
