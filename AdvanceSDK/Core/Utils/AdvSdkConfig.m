@@ -15,7 +15,7 @@
 
 @implementation AdvSdkConfig
 NSString *const AdvanceSdkAPIVersion = @"3.0";
-NSString *const AdvanceSdkVersion = @"3.2.3.8";
+NSString *const AdvanceSdkVersion = @"3.2.3.9";
 NSString *const AdvanceSdkRequestUrl = @"http://cruiser.bayescom.cn/eleven";
 NSString *const AdvanceReportDataUrl = @"http://cruiser.bayescom.cn/native";
 NSString *const SDK_ID_MERCURY =@"1";
@@ -23,10 +23,10 @@ NSString *const SDK_ID_GDT=@"2";
 NSString *const SDK_ID_CSJ=@"3";
 NSString *const SDK_ID_BAIDU=@"4";
 
-NSString * const AdvSdkConfigCAID = @"kMercuryConfigCAIDKey";
-NSString * const AdvSdkConfigCAIDPublicKey = @"kMercuryConfigCAIDPublicKey-Key";
-NSString * const AdvSdkConfigCAIDPublicForApiKey = @"kMercuryConfigCAIDPublicForApiKey-Key";
-NSString * const AdvSdkConfigCAIDDevId = @"kMercuryConfigCAIDDevIdKey";
+//NSString * const AdvSdkConfigCAID = @"kMercuryConfigCAIDKey";
+//NSString * const AdvSdkConfigCAIDPublicKey = @"kMercuryConfigCAIDPublicKey-Key";
+//NSString * const AdvSdkConfigCAIDPublicForApiKey = @"kMercuryConfigCAIDPublicForApiKey-Key";
+//NSString * const AdvSdkConfigCAIDDevId = @"kMercuryConfigCAIDDevIdKey";
 
 
 int const ADVANCE_RECEIVED = 0;

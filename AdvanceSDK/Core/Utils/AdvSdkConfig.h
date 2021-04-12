@@ -20,10 +20,10 @@ extern NSString *const SDK_ID_GDT;
 extern NSString *const SDK_ID_CSJ;
 extern NSString *const SDK_ID_BAIDU;
 
-extern NSString *const AdvSdkConfigCAID;
-extern NSString *const AdvSdkConfigCAIDPublicKey;
-extern NSString *const AdvSdkConfigCAIDPublicForApiKey;
-extern NSString *const AdvSdkConfigCAIDDevId;
+//extern NSString *const AdvSdkConfigCAID;
+//extern NSString *const AdvSdkConfigCAIDPublicKey;
+//extern NSString *const AdvSdkConfigCAIDPublicForApiKey;
+//extern NSString *const AdvSdkConfigCAIDDevId;
 
 extern NSString *const AdvSdkTypeAdName;
 extern NSString *const AdvSdkTypeAdNameSplash;
