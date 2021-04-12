@@ -20,10 +20,18 @@ extern NSString *const SDK_ID_GDT;
 extern NSString *const SDK_ID_CSJ;
 extern NSString *const SDK_ID_BAIDU;
 
-extern NSString *const AdvSdkConfigCAID;
-extern NSString *const AdvSdkConfigCAIDPublicKey;
-extern NSString *const AdvSdkConfigCAIDPublicForApiKey;
-extern NSString *const AdvSdkConfigCAIDDevId;
+//extern NSString *const AdvSdkConfigCAID;
+//extern NSString *const AdvSdkConfigCAIDPublicKey;
+//extern NSString *const AdvSdkConfigCAIDPublicForApiKey;
+//extern NSString *const AdvSdkConfigCAIDDevId;
+
+extern NSString *const AdvSdkTypeAdName;
+extern NSString *const AdvSdkTypeAdNameSplash;
+extern NSString *const AdvSdkTypeAdNameBanner;
+extern NSString *const AdvSdkTypeAdNameInterstitial;
+extern NSString *const AdvSdkTypeAdNameFullScreenVideo;
+extern NSString *const AdvSdkTypeAdNameNativeExpress;
+extern NSString *const AdvSdkTypeAdNameRewardVideo;
 
 extern int const ADVANCE_RECEIVED;
 extern int const ADVANCE_ERROR;

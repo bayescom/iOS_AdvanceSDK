@@ -51,7 +51,7 @@
  *  当接收服务器返回的广告数据成功后调用该函数
  */
 - (void)unifiedBannerViewDidLoad:(GDTUnifiedBannerView *)unifiedBannerView {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
         [self.delegate advanceUnifiedViewDidLoad];
     }
@@ -63,7 +63,7 @@
  */
 
 - (void)unifiedBannerViewFailedToLoad:(GDTUnifiedBannerView *)unifiedBannerView error:(NSError *)error {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded error:error];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded  supplier:_supplier error:error];
 //    if ([self.delegate respondsToSelector:@selector(advanceBannerOnAdFailedWithSdkId:error:)]) {
 //        [self.delegate advanceBannerOnAdFailedWithSdkId:_supplier.identifier error:error];
 //    }
@@ -75,7 +75,7 @@
  *  banner2.0曝光回调
  */
 - (void)unifiedBannerViewWillExpose:(GDTUnifiedBannerView *)unifiedBannerView {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoImped];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(advanceExposured)]) {
         [self.delegate advanceExposured];
     }
@@ -85,7 +85,7 @@
  *  banner2.0点击回调
  */
 - (void)unifiedBannerViewClicked:(GDTUnifiedBannerView *)unifiedBannerView {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(advanceClicked)]) {
         [self.delegate advanceClicked];
     }

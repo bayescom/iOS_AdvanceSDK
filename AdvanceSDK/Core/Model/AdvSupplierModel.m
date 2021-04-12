@@ -37,12 +37,19 @@ NSString *const DEFAULT_SUCCEEDTK = @"http://cruiser.bayescom.cn/succeed?action=
 NSString *const DEFAULT_FAILEDTK = @"http://cruiser.bayescom.cn/failed?action=failed&adspotid=__ADSPOTID__&appid=__APPID__&idfa=__IDFA__&os=1&supplierid=__SUPPLIERID__&track_time=__TIME__&auction_id=__AUCTION_ID__&supplier_adspotid=__SUPPLIER_ADSPOT_ID__&is_bottom=1";
 NSString *const DEFAULT_LOADEDTK = @"http://cruiser.bayescom.cn/loaded?action=loaded&adspotid=__ADSPOTID__&appid=__APPID__&idfa=__IDFA__&os=1&supplierid=__SUPPLIERID__&track_time=__TIME__&auction_id=__AUCTION_ID__&supplier_adspotid=__SUPPLIER_ADSPOT_ID__&is_bottom=1";
 
+#pragma mark - Private model interfaces
+
 @interface AdvSupplierModel (JSONConversion)
 + (instancetype)fromJSONDictionary:(NSDictionary *)dict;
 - (NSDictionary *)JSONDictionary;
 @end
 
 @interface AdvSetting (JSONConversion)
++ (instancetype)fromJSONDictionary:(NSDictionary *)dict;
+- (NSDictionary *)JSONDictionary;
+@end
+
+@interface AdvPriorityMap (JSONConversion)
 + (instancetype)fromJSONDictionary:(NSDictionary *)dict;
 - (NSDictionary *)JSONDictionary;
 @end
@@ -212,15 +219,32 @@ NSString *_Nullable AdvSupplierModelToJSON(AdvSupplierModel *supplierModel, NSSt
 + (NSDictionary<NSString *, NSString *> *)properties
 {
     static NSDictionary<NSString *, NSString *> *properties;
-    return properties = properties ? properties : @{
+
+     properties = properties ? properties : @{
         @"use_cache": @"useCache",
         @"cache_dur": @"cacheDur",
         @"cpt_start": @"cptStart",
         @"cpt_end": @"cptEnd",
         @"cpt_supplier": @"cptSupplier",
+        @"priority_map": @"priorityMap",
         @"parallel_ids": @"parallelIDS",
-        @"cacheTime": @"cacheTime",
+        @"parallel_group": @"parallelGroup",
     };
+    
+    
+    
+    return properties;
+    
+//    return properties = properties ? properties : @{
+//        @"use_cache": @"useCache",
+//        @"cache_dur": @"cacheDur",
+//        @"cpt_start": @"cptStart",
+//        @"cpt_end": @"cptEnd",
+//        @"cpt_supplier": @"cptSupplier",
+//        @"priority_map": @"priorityMap",
+//        @"parallel_ids": @"parallelIDS",
+//        @"parallel_group": @"parallelGroup",
+//    };
 }
 
 + (instancetype)fromJSONDictionary:(NSDictionary *)dict
@@ -232,6 +256,9 @@ NSString *_Nullable AdvSupplierModelToJSON(AdvSupplierModel *supplierModel, NSSt
 {
     if (self = [super init]) {
         [self setValuesForKeysWithDictionary:dict];
+        self.parallelIDS = [self.parallelIDS mutableCopy];
+        self.parallelGroup = [self.parallelGroup mutableCopy];
+        _priorityMap = map(_priorityMap, λ(id x, [AdvPriorityMap fromJSONDictionary:x]));
     }
     return self;
 }
@@ -252,6 +279,7 @@ NSString *_Nullable AdvSupplierModelToJSON(AdvSupplierModel *supplierModel, NSSt
 {
     id dict = [[self dictionaryWithValuesForKeys:AdvSetting.properties.allValues] mutableCopy];
 
+    // Rewrite property names that differ in JSON
     for (id jsonName in AdvSetting.properties) {
         id propertyName = AdvSetting.properties[jsonName];
         if (![jsonName isEqualToString:propertyName]) {
@@ -260,7 +288,64 @@ NSString *_Nullable AdvSupplierModelToJSON(AdvSupplierModel *supplierModel, NSSt
         }
     }
 
+    if (_priorityMap && ![_priorityMap isEqual:[NSNull null]]) {
+        [dict addEntriesFromDictionary:@{
+            @"priority_map": map(_priorityMap, λ(id x, [x JSONDictionary])),
+        }];
+    } else {
+        [dict addEntriesFromDictionary:@{
+            @"priority_map": @[],
+        }];
+    }
+    
+    if (!_parallelGroup || [_parallelGroup isEqual:[NSNull null]]) {
+        [dict addEntriesFromDictionary:@{
+            @"parallel_group": @[].mutableCopy,
+        }];
+    }
+
     return dict;
+}
+@end
+
+@implementation AdvPriorityMap
++ (NSDictionary<NSString *, NSString *> *)properties
+{
+    static NSDictionary<NSString *, NSString *> *properties;
+    return properties = properties ? properties : @{
+        @"supid": @"supid",
+        @"priority": @"priority",
+    };
+}
+
++ (instancetype)fromJSONDictionary:(NSDictionary *)dict
+{
+    return dict ? [[AdvPriorityMap alloc] initWithJSONDictionary:dict] : nil;
+}
+
+- (instancetype)initWithJSONDictionary:(NSDictionary *)dict
+{
+    if (self = [super init]) {
+        [self setValuesForKeysWithDictionary:dict];
+    }
+    return self;
+}
+
+- (void)setValue:(nullable id)value forKey:(NSString *)key
+{
+    id resolved = AdvPriorityMap.properties[key];
+    if (resolved) [super setValue:value forKey:resolved];
+}
+
+- (void)setNilValueForKey:(NSString *)key
+{
+    id resolved = AdvPriorityMap.properties[key];
+    if (resolved) [super setValue:@(0) forKey:resolved];
+}
+
+- (NSDictionary *)JSONDictionary
+{
+    return [self dictionaryWithValuesForKeys:AdvPriorityMap.properties.allValues];
 }
 @end
 
@@ -282,6 +367,8 @@ NSString *_Nullable AdvSupplierModelToJSON(AdvSupplierModel *supplierModel, NSSt
         @"succeedtk": @"succeedtk",
         @"failedtk": @"failedtk",
         @"id": @"identifier",
+        @"isParallel":@"isParallel",
+        @"state":@"state",
         @"versionTag": @"versionTag",
     };
 }

@@ -10,7 +10,7 @@
 
 @class AdvSupplierModel;
 @class AdvSupplier;
-
+@class AdvSupplierQueue;
 @protocol AdvanceSupplierDelegate <NSObject>
 
 @optional
@@ -26,7 +26,6 @@
 /// @param supplier 被加载的渠道
 /// @param error 异常信息
 - (void)advanceBaseAdapterLoadSuppluer:(nullable AdvSupplier *)supplier error:(nullable NSError *)error;
-
 @end
 
 #endif /* AdvanceSupplierDelegate_h */

@@ -13,7 +13,8 @@
 
 @interface DemoRewardVideoViewController () <AdvanceRewardVideoDelegate>
 @property (nonatomic, strong) AdvanceRewardVideo *advanceRewardVideo;
-@property (nonatomic) bool isAdLoaded;
+@property (nonatomic) bool isAdLoaded; // 激励视频播放器 采用的是边下边播的方式, 理论上拉取数据成功 即可展示, 但如果网速慢导致缓冲速度慢, 则激励视频会出现卡顿
+                                       // 广点通推荐在 advanceRewardVideoOnAdVideoCached 视频缓冲完成后 在掉用showad
 @end
 
 @implementation DemoRewardVideoViewController
@@ -52,7 +53,8 @@
 
 - (void)loadAdBtn2Action {
     if (!_isAdLoaded) {
-       [JDStatusBarNotification showWithStatus:@"请先加载广告" dismissAfter:1.5];
+       [JDStatusBarNotification showWithStatus:@"广告物料还没加载好" dismissAfter:1.5];
+        return;;
     }
     [self.advanceRewardVideo showAd];
 }
@@ -116,14 +118,5 @@
     NSLog(@"%s 策略id为: %@",__func__ , reqId);
 }
 
-/// 广告可以被调用
-- (void)advanceRewardVideoIsReadyToShow {
-    NSLog(@"广告可以被调用了 %s", __func__);
-    if (!_isAdLoaded) {
-       [JDStatusBarNotification showWithStatus:@"请先加载广告" dismissAfter:1.5];
-    }
-    NSLog(@"播放可以Show");
-    [self.advanceRewardVideo showAd];
-}
 
 @end

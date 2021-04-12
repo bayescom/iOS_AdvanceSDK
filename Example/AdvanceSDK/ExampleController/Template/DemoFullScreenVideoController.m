@@ -26,6 +26,7 @@
     self.adspotIdsArr = @[
         @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10003014"},
         @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10004765"},
+        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10004567"},
         @{@"addesc": @"Mock 渠道错误", @"adspotId": @"100255-10000001"},
         @{@"addesc": @"Mock code200", @"adspotId": @"100255-10003321"},
     ];

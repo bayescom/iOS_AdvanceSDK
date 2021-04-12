@@ -9,7 +9,7 @@
 #import "AdvSupplierModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
-
+@class AdvSupplierQueue;
 @protocol AdvSupplierManagerDelegate <NSObject>
 
 // MARK: ======================= 策略回调 =======================
@@ -22,7 +22,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// 返回下一个渠道的参数
 - (void)advSupplierLoadSuppluer:(nullable AdvSupplier *)supplier error:(nullable NSError *)error;
-
 
 @end
 
@@ -63,7 +62,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// 数据上报
 /// @param repoType 上报的类型
-- (void)reportWithType:(AdvanceSdkSupplierRepoType)repoType error:(NSError *)error;
+- (void)reportWithType:(AdvanceSdkSupplierRepoType)repoType supplier:(AdvSupplier *)supplier error:(NSError *)error;
 
 
 /// 取消正在进行的策略请求

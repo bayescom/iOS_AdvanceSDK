@@ -10,7 +10,7 @@
 @class AdvSupplierModel;
 @class AdvSetting;
 @class AdvSupplier;
-
+@class AdvPriorityMap;
 typedef NS_ENUM(NSUInteger, AdvanceSdkSupplierRepoType) {
     /// 发起加载请求上报
     AdvanceSdkSupplierRepoLoaded,
@@ -23,6 +23,24 @@ typedef NS_ENUM(NSUInteger, AdvanceSdkSupplierRepoType) {
     /// 失败上报
     AdvanceSdkSupplierRepoFaileded,
 };
+
+typedef NS_ENUM(NSUInteger, AdvanceSdkSupplierState) {
+    /// 未知
+    AdvanceSdkSupplierStateUnknown,
+    /// 准备就绪
+    AdvanceSdkSupplierStateReady,
+    /// 渠道请求成功(只是请求成功 不是曝光成功)
+    AdvanceSdkSupplierStateSuccess,
+    /// 渠道请求失败
+    AdvanceSdkSupplierStateFailed,
+    /// 渠道进行中(广告发起请求前)
+    AdvanceSdkSupplierStateInHand,
+    
+    /// 广告请求进行中(广告发起请求后到结果确定前)
+    AdvanceSdkSupplierStateInPull,
+
+};
+
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -63,9 +81,15 @@ NSString * ADVStringFromNAdvanceSdkSupplierRepoType(AdvanceSdkSupplierRepoType t
 @property (nonatomic, copy)   NSString *cptEnd;
 @property (nonatomic, copy)   NSString *cptSupplier;
 @property (nonatomic, copy)   NSArray<NSString *> *parallelIDS;
-
+@property (nonatomic, copy)   NSArray<AdvPriorityMap *> *priorityMap;
+@property (nonatomic, strong) NSMutableArray<NSMutableArray<NSNumber *> *> *parallelGroup;
 @property (nonatomic, assign) NSTimeInterval cacheTime;
 
+@end
+
+@interface AdvPriorityMap : NSObject
+@property (nonatomic, assign) NSInteger priority;
+@property (nonatomic, copy)   NSString *supid;
 @end
 
 @interface AdvSupplier : NSObject
@@ -78,6 +102,8 @@ NSString * ADVStringFromNAdvanceSdkSupplierRepoType(AdvanceSdkSupplierRepoType t
 @property (nonatomic, copy)   NSString *name;
 @property (nonatomic, copy)   NSString *mediaid;
 @property (nonatomic, assign) NSInteger priority;
+@property (nonatomic, assign) BOOL isParallel;// 是否并行
+@property (nonatomic, assign) AdvanceSdkSupplierState state;// 渠道状态
 @property (nonatomic, copy)   NSArray<NSString *> *clicktk;
 @property (nonatomic, copy)   NSArray<NSString *> *loadedtk;
 @property (nonatomic, copy)   NSArray<NSString *> *imptk;

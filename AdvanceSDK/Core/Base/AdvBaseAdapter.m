@@ -17,6 +17,7 @@
 
 @property (nonatomic, weak) id<AdvanceSupplierDelegate> baseDelegate;
 
+
 @end
 
 @implementation AdvBaseAdapter
@@ -45,13 +46,14 @@
     [_mgr loadNextSupplierIfHas];
 }
 
-- (void)reportWithType:(AdvanceSdkSupplierRepoType)repoType {
-    [self reportWithType:repoType error:nil];
-}
-
-- (void)reportWithType:(AdvanceSdkSupplierRepoType)repoType error:(NSError *)error {
-    [_mgr reportWithType:repoType error:error];
-    if (repoType == AdvanceSdkSupplierRepoFaileded) {
+- (void)reportWithType:(AdvanceSdkSupplierRepoType)repoType supplier:(AdvSupplier *)supplier error:(NSError *)error {
+    // 有错误正常上报
+    NSLog(@"|||--- %@ %ld %@",supplier.sdktag, (long)supplier.priority, supplier);
+    [_mgr reportWithType:repoType supplier:supplier error:error];
+    
+    // 失败了 并且不是并行才会走下一个渠道
+    if (repoType == AdvanceSdkSupplierRepoFaileded && !supplier.isParallel) {
+        NSLog(@"%@ |||   %ld %@",supplier.sdktag, (long)supplier.priority, supplier);
         [_mgr loadNextSupplierIfHas];
     }
 }
@@ -97,7 +99,7 @@
     } else if ([supplier.identifier isEqualToString:SDK_ID_MERCURY]) {
         clsName = @"MercuryConfigManager";
     }
-    
+
     if ([supplier.identifier isEqualToString:SDK_ID_GDT]) {
         // 广点通SDK
         static dispatch_once_t onceToken;
@@ -108,26 +110,23 @@
         // 穿山甲SDK
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
-            [NSClassFromString(clsName) performSelector:@selector(setAppID:) withObject:supplier.mediaid];//
+            [NSClassFromString(clsName) performSelector:@selector(setAppID:) withObject:supplier.mediaid];
         });
     } else if ([supplier.identifier isEqualToString:SDK_ID_MERCURY]) {
         // MercurySDK
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
-            id configMgr = NSClassFromString(clsName);
-            ((void (*)(id, SEL, id, id, id))objc_msgSend)(configMgr, @selector(setAppID:mediaKey:config:), supplier.mediaid, supplier.mediakey, [AdvSdkConfig shareInstance].caidConfig);
-//            ((void (*)(id, SEL, id))objc_msgSend)(configMgr, @selector(openDebug:), @1);
+            [NSClassFromString(clsName) performSelector:@selector(setAppID:mediaKey:) withObject:supplier.mediaid withObject:supplier.mediakey];
         });
     }
-    
+
     // 如果执行了打底渠道 则执行此方法
     if ([supplier.sdktag isEqualToString:@"bottom_default"]) {
         [self advSupplierLoadDefaultSuppluer:supplier];
     }
 
     // 加载渠道
-    if ([_baseDelegate respondsToSelector:@selector(advSupplierLoadSuppluer:error:)]) {
-//        NSLog(@"xxxxerror: %@   clsName: %@", error, clsName);
+    if ([_baseDelegate respondsToSelector:@selector(advanceBaseAdapterLoadSuppluer:error:)]) {
         [_baseDelegate advanceBaseAdapterLoadSuppluer:supplier error:error];
     }
 }
@@ -141,5 +140,27 @@
     }
     return _mgr;
 }
+
+- (NSMutableArray *)arrParallelSupplier {
+    if (!_arrParallelSupplier) {
+        _arrParallelSupplier = [NSMutableArray array];
+    }
+    return _arrParallelSupplier;
+}
+
+// 查找一下 容器里有没有并行的渠道
+- (id)adapterInParallelsWithSupplier:(AdvSupplier *)supplier {
+    id adapterT;
+    for (NSInteger i = 0 ; i < self.arrParallelSupplier.count; i++) {
+        
+        id temp = self.arrParallelSupplier[i];
+        NSInteger tag = ((NSInteger (*)(id, SEL))objc_msgSend)((id)temp, @selector(tag));
+        if (tag == supplier.priority) {
+            adapterT = temp;
+        }
+    }
+    return adapterT;
+}
+
 
 @end

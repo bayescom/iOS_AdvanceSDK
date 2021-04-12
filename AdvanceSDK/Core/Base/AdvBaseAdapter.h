@@ -12,6 +12,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface AdvBaseAdapter : NSObject
 
+/// 并行渠道容器
+@property (nonatomic, strong) NSMutableArray * arrParallelSupplier;
+
+
 /// 聚合媒体Id
 @property (nonatomic, copy) NSString *mediaId;
 
@@ -49,11 +53,11 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)loadNextSupplierIfHas;
 
-/// 上报 (将来会被废弃)
-- (void)reportWithType:(AdvanceSdkSupplierRepoType)repoType;
+/// 上报 (已经被废弃)
+//- (void)reportWithType:(AdvanceSdkSupplierRepoType)repoType;
 
 /// 上报
-- (void)reportWithType:(AdvanceSdkSupplierRepoType)repoType error:(NSError *)error;
+- (void)reportWithType:(AdvanceSdkSupplierRepoType)repoType supplier:(AdvSupplier *)supplier error:(NSError *)error;
 
 /// 执行了打底渠道
 - (void)advSupplierLoadDefaultSuppluer:(AdvSupplier *)supplier;
@@ -61,6 +65,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// 取消当前策略请求
 - (void)deallocAdapter;
+
+/// 查找一下 容器里有没有并行的渠道
+- (id)adapterInParallelsWithSupplier:(AdvSupplier *)supplier;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -81,28 +81,30 @@
 
 // MARK: ======================= MercurySplashAdDelegate =======================
 - (void)mercury_splashAdDidLoad:(MercurySplashAd *)splashAd {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
         [self.delegate advanceUnifiedViewDidLoad];
     }
 }
 
 - (void)mercury_splashAdExposured:(MercurySplashAd *)splashAd {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoImped];
+
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(advanceExposured)] && self.mercury_ad) {
+
         [self.delegate advanceExposured];
     }
 }
 
 - (void)mercury_splashAdFailError:(nullable NSError *)error {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded error:error];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
 //    if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdFailedWithSdkId:error:)]) {
 //        [self.delegate advanceSplashOnAdFailedWithSdkId:_supplier.identifier error:error];
 //    }
 }
 
 - (void)mercury_splashAdClicked:(MercurySplashAd *)splashAd {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(advanceClicked)]) {
         [self.delegate advanceClicked];
     }
