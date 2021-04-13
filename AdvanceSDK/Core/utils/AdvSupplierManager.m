@@ -11,7 +11,6 @@
 #import "AdvSupplierModel.h"
 #import "AdvError.h"
 #import "AdvLog.h"
-#import "AdvSupplierQueue.h"
 #import "AdvAdsportInfoUtil.h"
 @interface AdvSupplierManager ()
 @property (nonatomic, strong) AdvSupplierModel *model;
