@@ -8,8 +8,7 @@
 #import "AdvSupplierModel.h"
 #import "AdvDeviceInfoUtil.h"
 #import "AdvLog.h"
-
-#define λ(decl, expr) (^(decl) { return (expr); })
+#import "AdvModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -39,83 +38,16 @@ NSString *const DEFAULT_LOADEDTK = @"http://cruiser.bayescom.cn/loaded?action=lo
 
 #pragma mark - Private model interfaces
 
-@interface AdvSupplierModel (JSONConversion)
-+ (instancetype)fromJSONDictionary:(NSDictionary *)dict;
-- (NSDictionary *)JSONDictionary;
-@end
-
-@interface AdvSetting (JSONConversion)
-+ (instancetype)fromJSONDictionary:(NSDictionary *)dict;
-- (NSDictionary *)JSONDictionary;
-@end
-
-@interface AdvPriorityMap (JSONConversion)
-+ (instancetype)fromJSONDictionary:(NSDictionary *)dict;
-- (NSDictionary *)JSONDictionary;
-@end
-
-@interface AdvSupplier (JSONConversion)
-+ (instancetype)fromJSONDictionary:(NSDictionary *)dict;
-- (NSDictionary *)JSONDictionary;
-@end
-
-static id map(id collection, id (^f)(id value)) {
-    id result = nil;
-    if ([collection isKindOfClass:NSArray.class]) {
-        result = [NSMutableArray arrayWithCapacity:[collection count]];
-        for (id x in collection) [result addObject:f(x)];
-    } else if ([collection isKindOfClass:NSDictionary.class]) {
-        result = [NSMutableDictionary dictionaryWithCapacity:[collection count]];
-        for (id key in collection) [result setObject:f([collection objectForKey:key]) forKey:key];
-    }
-    return result;
-}
-
-#pragma mark - JSON serialization
-
-AdvSupplierModel *_Nullable AdvSupplierModelFromData(NSData *data, NSError **error)
-{
-    @try {
-        id json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:error];
-        return *error ? nil : [AdvSupplierModel fromJSONDictionary:json];
-    } @catch (NSException *exception) {
-        *error = [NSError errorWithDomain:@"JSONSerialization" code:-1 userInfo:@{ @"exception": exception }];
-        return nil;
-    }
-}
-
-AdvSupplierModel *_Nullable AdvSupplierModelFromJSON(NSString *json, NSStringEncoding encoding, NSError **error)
-{
-    return AdvSupplierModelFromData([json dataUsingEncoding:encoding], error);
-}
-
-NSData *_Nullable AdvSupplierModelToData(AdvSupplierModel *supplierModel, NSError **error)
-{
-    @try {
-        id json = [supplierModel JSONDictionary];
-        NSData *data = [NSJSONSerialization dataWithJSONObject:json options:kNilOptions error:error];
-        return *error ? nil : data;
-    } @catch (NSException *exception) {
-        *error = [NSError errorWithDomain:@"JSONSerialization" code:-1 userInfo:@{ @"exception": exception }];
-        return nil;
-    }
-}
-
-NSString *_Nullable AdvSupplierModelToJSON(AdvSupplierModel *supplierModel, NSStringEncoding encoding, NSError **error)
-{
-    NSData *data = AdvSupplierModelToData(supplierModel, error);
-    return data ? [[NSString alloc] initWithData:data encoding:encoding] : nil;
-}
 
 @implementation AdvSupplierModel
 
 + (instancetype)loadDataWithMediaId:(NSString *)mediaId adspotId:(NSString *)adspotId {
     NSString *key = [NSString stringWithFormat:@"%@_%@_%@", NSStringFromClass(AdvSupplierModel.class), mediaId, adspotId];
-    NSDictionary *dic = [[NSUserDefaults standardUserDefaults] objectForKey:key];
-    if (!dic) {
+    NSData *data = [[NSUserDefaults standardUserDefaults] objectForKey:key];
+    if (!data) {
         return nil;
     }
-    AdvSupplierModel *model = [AdvSupplierModel fromJSONDictionary:dic];
+    AdvSupplierModel *model = [AdvSupplierModel adv_modelWithJSON:data];
     if (model) {
         model.advMediaId = mediaId;
         model.advAdspotId = adspotId;
@@ -129,288 +61,44 @@ NSString *_Nullable AdvSupplierModelToJSON(AdvSupplierModel *supplierModel, NSSt
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
-- (void)save {
+- (void)saveData:(NSData *)data{
 //    if (self.suppliers.count > 0) {
         NSString *key = [NSString stringWithFormat:@"%@_%@_%@", NSStringFromClass(AdvSupplierModel.class), self.advMediaId, self.advAdspotId];
-        [[NSUserDefaults standardUserDefaults] setObject:[self JSONDictionary] forKey:key];
+        [[NSUserDefaults standardUserDefaults] setObject:data forKey:key];
         [[NSUserDefaults standardUserDefaults] synchronize];
 //    }
 }
 
-+ (NSDictionary<NSString *, NSString *> *)properties
-{
-    static NSDictionary<NSString *, NSString *> *properties;
-    return properties = properties ? properties : @{
-        @"setting": @"setting",
-        @"suppliers": @"suppliers",
-        @"msg": @"msg",
-        @"code": @"code",
-        @"reqid": @"reqid",
-    };
+
++ (NSDictionary *)modelContainerPropertyGenericClass {
+    return @{@"suppliers" : [AdvSupplier class]};
 }
 
-+ (_Nullable instancetype)fromData:(NSData *)data error:(NSError *_Nullable *)error
-{
-    return AdvSupplierModelFromData(data, error);
-}
 
-+ (_Nullable instancetype)fromJSON:(NSString *)json encoding:(NSStringEncoding)encoding error:(NSError *_Nullable *)error
-{
-    return AdvSupplierModelFromJSON(json, encoding, error);
-}
-
-+ (instancetype)fromJSONDictionary:(NSDictionary *)dict
-{
-    return dict ? [[AdvSupplierModel alloc] initWithJSONDictionary:dict] : nil;
-}
-
-- (instancetype)initWithJSONDictionary:(NSDictionary *)dict
-{
-    if (self = [super init]) {
-        [self setValuesForKeysWithDictionary:dict];
-        _setting = [AdvSetting fromJSONDictionary:(id)_setting];
-        _suppliers = map(_suppliers, λ(id x, [AdvSupplier fromJSONDictionary:x]));
-    }
-    return self;
-}
-
-- (void)setValue:(nullable id)value forKey:(NSString *)key
-{
-    id resolved = AdvSupplierModel.properties[key];
-    if (resolved) [super setValue:value forKey:resolved];
-}
-
-- (void)setNilValueForKey:(NSString *)key
-{
-    id resolved = AdvSupplierModel.properties[key];
-    if (resolved) [super setValue:@(0) forKey:resolved];
-}
-
-- (NSDictionary *)JSONDictionary
-{
-    @try {
-        id dict = [[self dictionaryWithValuesForKeys:AdvSupplierModel.properties.allValues] mutableCopy];
-        [dict addEntriesFromDictionary:@{
-            @"setting": [_setting JSONDictionary],
-            @"suppliers": map(_suppliers, λ(id x, [x JSONDictionary])),
-        }];
-        
-        return dict;
-    } @catch (NSException *exception) {
-        ADVLog(@"setting or suppliers 为空");
-    } @finally {
-        
-    }
-    return nil;
-}
-
-- (NSData *_Nullable)toData:(NSError *_Nullable *)error
-{
-    return AdvSupplierModelToData(self, error);
-}
-
-- (NSString *_Nullable)toJSON:(NSStringEncoding)encoding error:(NSError *_Nullable *)error
-{
-    return AdvSupplierModelToJSON(self, encoding, error);
-}
 @end
 
 @implementation AdvSetting
-+ (NSDictionary<NSString *, NSString *> *)properties
-{
-    static NSDictionary<NSString *, NSString *> *properties;
-
-     properties = properties ? properties : @{
-        @"use_cache": @"useCache",
-        @"cache_dur": @"cacheDur",
-        @"cpt_start": @"cptStart",
-        @"cpt_end": @"cptEnd",
-        @"cpt_supplier": @"cptSupplier",
-        @"priority_map": @"priorityMap",
-        @"parallel_ids": @"parallelIDS",
-        @"parallel_group": @"parallelGroup",
++ (NSDictionary *)modelCustomPropertyMapper {
+    return @{
+        @"useCache": @"use_cache",
+        @"cacheDur": @"cache_dur",
+        @"cptStart": @"cpt_start",
+        @"cptEnd": @"cpt_end",
+        @"cptSupplier": @"cpt_supplier",
+        @"priorityMap": @"priority_map",
+        @"parallelIDS": @"parallel_ids",
+        @"parallelGroup": @"parallel_group",
     };
-    
-    
-    
-    return properties;
-    
-//    return properties = properties ? properties : @{
-//        @"use_cache": @"useCache",
-//        @"cache_dur": @"cacheDur",
-//        @"cpt_start": @"cptStart",
-//        @"cpt_end": @"cptEnd",
-//        @"cpt_supplier": @"cptSupplier",
-//        @"priority_map": @"priorityMap",
-//        @"parallel_ids": @"parallelIDS",
-//        @"parallel_group": @"parallelGroup",
-//    };
-}
-
-+ (instancetype)fromJSONDictionary:(NSDictionary *)dict
-{
-    return dict ? [[AdvSetting alloc] initWithJSONDictionary:dict] : nil;
-}
-
-- (instancetype)initWithJSONDictionary:(NSDictionary *)dict
-{
-    if (self = [super init]) {
-        [self setValuesForKeysWithDictionary:dict];
-        self.parallelIDS = [self.parallelIDS mutableCopy];
-        self.parallelGroup = [self.parallelGroup mutableCopy];
-        _priorityMap = map(_priorityMap, λ(id x, [AdvPriorityMap fromJSONDictionary:x]));
-    }
-    return self;
-}
-
-- (void)setValue:(nullable id)value forKey:(NSString *)key
-{
-    id resolved = AdvSetting.properties[key];
-    if (resolved) [super setValue:value forKey:resolved];
-}
-
-- (void)setNilValueForKey:(NSString *)key
-{
-    id resolved = AdvSetting.properties[key];
-    if (resolved) [super setValue:@(0) forKey:resolved];
-}
-
-- (NSDictionary *)JSONDictionary
-{
-    id dict = [[self dictionaryWithValuesForKeys:AdvSetting.properties.allValues] mutableCopy];
-
-    // Rewrite property names that differ in JSON
-    for (id jsonName in AdvSetting.properties) {
-        id propertyName = AdvSetting.properties[jsonName];
-        if (![jsonName isEqualToString:propertyName]) {
-            dict[jsonName] = dict[propertyName];
-            [dict removeObjectForKey:propertyName];
-        }
-    }
-
-    if (_priorityMap && ![_priorityMap isEqual:[NSNull null]]) {
-        [dict addEntriesFromDictionary:@{
-            @"priority_map": map(_priorityMap, λ(id x, [x JSONDictionary])),
-        }];
-    } else {
-        [dict addEntriesFromDictionary:@{
-            @"priority_map": @[],
-        }];
-    }
-    
-    if (!_parallelGroup || [_parallelGroup isEqual:[NSNull null]]) {
-        [dict addEntriesFromDictionary:@{
-            @"parallel_group": @[].mutableCopy,
-        }];
-    }
-
-    return dict;
 }
 @end
 
-@implementation AdvPriorityMap
-+ (NSDictionary<NSString *, NSString *> *)properties
-{
-    static NSDictionary<NSString *, NSString *> *properties;
-    return properties = properties ? properties : @{
-        @"supid": @"supid",
-        @"priority": @"priority",
-    };
-}
-
-+ (instancetype)fromJSONDictionary:(NSDictionary *)dict
-{
-    return dict ? [[AdvPriorityMap alloc] initWithJSONDictionary:dict] : nil;
-}
-
-- (instancetype)initWithJSONDictionary:(NSDictionary *)dict
-{
-    if (self = [super init]) {
-        [self setValuesForKeysWithDictionary:dict];
-    }
-    return self;
-}
-
-- (void)setValue:(nullable id)value forKey:(NSString *)key
-{
-    id resolved = AdvPriorityMap.properties[key];
-    if (resolved) [super setValue:value forKey:resolved];
-}
-
-- (void)setNilValueForKey:(NSString *)key
-{
-    id resolved = AdvPriorityMap.properties[key];
-    if (resolved) [super setValue:@(0) forKey:resolved];
-}
-
-- (NSDictionary *)JSONDictionary
-{
-    return [self dictionaryWithValuesForKeys:AdvPriorityMap.properties.allValues];
-}
-@end
 
 @implementation AdvSupplier
-+ (NSDictionary<NSString *, NSString *> *)properties
-{
-    static NSDictionary<NSString *, NSString *> *properties;
-    return properties = properties ? properties : @{
-        @"sdktag": @"sdktag",
-        @"mediakey": @"mediakey",
-        @"timeout": @"timeout",
-        @"adspotid": @"adspotid",
-        @"name": @"name",
-        @"imptk": @"imptk",
-        @"priority": @"priority",
-        @"clicktk": @"clicktk",
-        @"loadedtk": @"loadedtk",
-        @"mediaid": @"mediaid",
-        @"succeedtk": @"succeedtk",
-        @"failedtk": @"failedtk",
-        @"id": @"identifier",
-        @"isParallel":@"isParallel",
-        @"state":@"state",
-        @"versionTag": @"versionTag",
+
++ (NSDictionary *)modelCustomPropertyMapper {
+    return @{
+        @"identifier": @"id",
     };
-}
-
-+ (instancetype)fromJSONDictionary:(NSDictionary *)dict
-{
-    return dict ? [[AdvSupplier alloc] initWithJSONDictionary:dict] : nil;
-}
-
-- (instancetype)initWithJSONDictionary:(NSDictionary *)dict
-{
-    if (self = [super init]) {
-        [self setValuesForKeysWithDictionary:dict];
-    }
-    return self;
-}
-
-- (void)setValue:(nullable id)value forKey:(NSString *)key
-{
-    id resolved = AdvSupplier.properties[key];
-    if (resolved) [super setValue:value forKey:resolved];
-}
-
-- (void)setNilValueForKey:(NSString *)key
-{
-    id resolved = AdvSupplier.properties[key];
-    if (resolved) [super setValue:@(0) forKey:resolved];
-}
-
-- (NSDictionary *)JSONDictionary
-{
-    id dict = [[self dictionaryWithValuesForKeys:AdvSupplier.properties.allValues] mutableCopy];
-
-    for (id jsonName in AdvSupplier.properties) {
-        id propertyName = AdvSupplier.properties[jsonName];
-        if (![jsonName isEqualToString:propertyName]) {
-            dict[jsonName] = dict[propertyName];
-            [dict removeObjectForKey:propertyName];
-        }
-    }
-
-    return dict;
 }
 
 // MARK: ======================= 构建打底渠道 =======================

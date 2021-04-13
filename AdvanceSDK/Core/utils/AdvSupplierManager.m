@@ -11,6 +11,7 @@
 #import "AdvSupplierModel.h"
 #import "AdvError.h"
 #import "AdvLog.h"
+#import "AdvModel.h"
 #import "AdvAdsportInfoUtil.h"
 @interface AdvSupplierManager ()
 @property (nonatomic, strong) AdvSupplierModel *model;
@@ -370,7 +371,7 @@
     }
     
     NSError *parseErr = nil;
-    AdvSupplierModel *a_model = [AdvSupplierModel fromData:data error:&parseErr];
+    AdvSupplierModel *a_model = [AdvSupplierModel adv_modelWithJSON:data];
 //    ADVLog(@"[JSON]%@", [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil]);
     ADVLogJSONData(data);
     if (parseErr || !a_model) {
@@ -422,7 +423,7 @@
         // 开始执行策略
         [self loadNextSupplier];
     }
-    [a_model save];
+    [a_model saveData:data];
 }
 
 /// 数据上报
