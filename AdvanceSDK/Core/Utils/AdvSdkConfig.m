@@ -105,7 +105,7 @@ static AdvSdkConfig *instance = nil;
     _isDebug = isDebug;
 }
 
-- (void)setCaidConfig:(NSDictionary *)caidConfig {
-    _caidConfig = caidConfig;
-}
+//- (void)setCaidConfig:(NSDictionary *)caidConfig {
+//    _caidConfig = caidConfig;
+//}
 @end
