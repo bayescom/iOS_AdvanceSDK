@@ -97,10 +97,10 @@
     // 根据渠道id自定义初始化
     NSString *clsName = @"";
     if ([supplier.identifier isEqualToString:SDK_ID_GDT]) {
-        if (supplier.versionTag == 0 || supplier.versionTag == 2) {
-            clsName = @"GdtNativeExpressProAdapter";
-        } else {
+        if (supplier.versionTag == 1) {
             clsName = @"GdtNativeExpressAdapter";
+        } else {
+            clsName = @"GdtNativeExpressProAdapter";
         }
     } else if ([supplier.identifier isEqualToString:SDK_ID_CSJ]) {
         clsName = @"CsjNativeExpressAdapter";
