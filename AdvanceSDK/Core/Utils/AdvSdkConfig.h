@@ -53,7 +53,7 @@ extern int const ADVANCE_ERROR;
 @property (nonatomic, assign) BOOL isAdTrack;
 
 // caid设置
-@property (nonatomic, strong) NSDictionary *caidConfig;
+//@property (nonatomic, strong) NSDictionary *caidConfig;
 
 @end
 

@@ -1,25 +1,25 @@
 PODS:
-  - Ads-CN (3.4.1.1):
-    - Ads-CN/BUAdSDK (= 3.4.1.1)
-  - Ads-CN/BUAdSDK (3.4.1.1):
+  - Ads-CN (3.5.1.0):
+    - Ads-CN/BUAdSDK (= 3.5.1.0)
+  - Ads-CN/BUAdSDK (3.5.1.0):
     - Ads-CN/BUFoundation
     - Ads-CN/Domestic
-  - Ads-CN/BUFoundation (3.4.1.1)
-  - Ads-CN/Domestic (3.4.1.1)
-  - AdvanceSDK (3.2.3.8):
-    - AdvanceSDK/Core (= 3.2.3.8)
-  - AdvanceSDK/Adspot (3.2.3.8):
+  - Ads-CN/BUFoundation (3.5.1.0)
+  - Ads-CN/Domestic (3.5.1.0)
+  - AdvanceSDK (3.2.3.9):
+    - AdvanceSDK/Core (= 3.2.3.9)
+  - AdvanceSDK/Adspot (3.2.3.9):
     - AdvanceSDK/Core
-  - AdvanceSDK/Core (3.2.3.8)
-  - AdvanceSDK/CSJ (3.2.3.8):
+  - AdvanceSDK/Core (3.2.3.9)
+  - AdvanceSDK/CSJ (3.2.3.9):
     - Ads-CN
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
-  - AdvanceSDK/GDT (3.2.3.8):
+  - AdvanceSDK/GDT (3.2.3.9):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - GDTMobSDK
-  - AdvanceSDK/Mercury (3.2.3.8):
+  - AdvanceSDK/Mercury (3.2.3.9):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - MercurySDK
@@ -54,8 +54,8 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  Ads-CN: 734b95efc84481b958ad4cf6efca68f828c73b5b
-  AdvanceSDK: fcebb8f1b15f2a35d13c254db80589821ea6a52b
+  Ads-CN: a5985f7d9705941e1bd0c026947367ee05ee9ecd
+  AdvanceSDK: 07e8975f5d975d4c741e659a482d2d5bad77bd65
   GDTMobSDK: 8153fd4ed7f16be4786923226487ff60f0344a4f
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   MercurySDK: 4903c1b625f395da6f6e7b858ab2b7833c49b4f9
@@ -63,4 +63,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: d1293a8db5055a75653eae8601273e1fc4e89bcc
 
-COCOAPODS: 1.10.0
+COCOAPODS: 1.10.1

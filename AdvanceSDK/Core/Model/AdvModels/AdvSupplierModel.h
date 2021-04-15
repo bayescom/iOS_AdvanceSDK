@@ -41,7 +41,6 @@ typedef NS_ENUM(NSUInteger, AdvanceSdkSupplierState) {
 
 };
 
-
 NS_ASSUME_NONNULL_BEGIN
 
 NSString * ADVStringFromNAdvanceSdkSupplierRepoType(AdvanceSdkSupplierRepoType type);
@@ -58,10 +57,6 @@ NSString * ADVStringFromNAdvanceSdkSupplierRepoType(AdvanceSdkSupplierRepoType t
 @property (nonatomic, copy)   NSString *advMediaId;
 @property (nonatomic, copy)   NSString *advAdspotId;
 
-+ (_Nullable instancetype)fromJSON:(NSString *)json encoding:(NSStringEncoding)encoding error:(NSError *_Nullable *)error;
-+ (_Nullable instancetype)fromData:(NSData *)data error:(NSError *_Nullable *)error;
-- (NSString *_Nullable)toJSON:(NSStringEncoding)encoding error:(NSError *_Nullable *)error;
-- (NSData *_Nullable)toData:(NSError *_Nullable *)error;
 
 /// 从本地查找数据
 + (instancetype)loadDataWithMediaId:(NSString *)mediaId adspotId:(NSString *)adspotId;
@@ -70,7 +65,7 @@ NSString * ADVStringFromNAdvanceSdkSupplierRepoType(AdvanceSdkSupplierRepoType t
 - (void)clearLocalModel;
 
 /// 存储到本地
-- (void)save;
+- (void)saveData:(NSData *)data;
 
 @end
 
@@ -81,21 +76,15 @@ NSString * ADVStringFromNAdvanceSdkSupplierRepoType(AdvanceSdkSupplierRepoType t
 @property (nonatomic, copy)   NSString *cptEnd;
 @property (nonatomic, copy)   NSString *cptSupplier;
 @property (nonatomic, copy)   NSArray<NSString *> *parallelIDS;
-@property (nonatomic, copy)   NSArray<AdvPriorityMap *> *priorityMap;
 @property (nonatomic, strong) NSMutableArray<NSMutableArray<NSNumber *> *> *parallelGroup;
 @property (nonatomic, assign) NSTimeInterval cacheTime;
 
 @end
 
-@interface AdvPriorityMap : NSObject
-@property (nonatomic, assign) NSInteger priority;
-@property (nonatomic, copy)   NSString *supid;
-@end
-
 @interface AdvSupplier : NSObject
 @property (nonatomic, copy)   NSString *identifier;
 @property (nonatomic, copy)   NSString *sdktag;
-@property (nonatomic, assign) NSInteger versionTag;
+@property (nonatomic, assign) NSInteger versionTag;// 默认0或者-1是最新的   2是最新的 1是旧版本 
 @property (nonatomic, copy)   NSString *mediakey;
 @property (nonatomic, assign) NSInteger timeout;
 @property (nonatomic, copy)   NSString *adspotid;

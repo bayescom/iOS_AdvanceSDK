@@ -11,7 +11,7 @@
 #import "AdvSupplierModel.h"
 #import "AdvError.h"
 #import "AdvLog.h"
-#import "AdvSupplierQueue.h"
+#import "AdvModel.h"
 #import "AdvAdsportInfoUtil.h"
 @interface AdvSupplierManager ()
 @property (nonatomic, strong) AdvSupplierModel *model;
@@ -323,9 +323,11 @@
     request.HTTPMethod = @"POST";
     NSURLSession *sharedSession = [NSURLSession sharedSession];
     self.serverTime = [[NSDate date] timeIntervalSince1970]*1000;
+    ADVLog(@"开始请求 %f", [[NSDate date] timeIntervalSince1970]);
     self.dataTask = [sharedSession dataTaskWithRequest:request
                                                       completionHandler:^(NSData *_Nullable data, NSURLResponse *_Nullable response, NSError *_Nullable error) {
         dispatch_async(dispatch_get_main_queue(), ^{
+            ADVLog(@"请求完成 %f", [[NSDate date] timeIntervalSince1970]);
             [self doResultData:data response:response error:error saveOnly:saveOnly];
         });
     }];
@@ -371,7 +373,7 @@
     }
     
     NSError *parseErr = nil;
-    AdvSupplierModel *a_model = [AdvSupplierModel fromData:data error:&parseErr];
+    AdvSupplierModel *a_model = [AdvSupplierModel adv_modelWithJSON:data];
 //    ADVLog(@"[JSON]%@", [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil]);
     ADVLogJSONData(data);
     if (parseErr || !a_model) {
@@ -408,7 +410,7 @@
     
     // 记录缓存过期时间
     a_model.setting.cacheTime = [[NSDate date] timeIntervalSince1970] + a_model.setting.cacheDur;
-    
+    ADVLog(@"---------");
     if (!saveOnly) {
         _model = a_model;
         
@@ -423,7 +425,7 @@
         // 开始执行策略
         [self loadNextSupplier];
     }
-    [a_model save];
+    [a_model saveData:data];
 }
 
 /// 数据上报

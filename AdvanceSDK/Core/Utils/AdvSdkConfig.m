@@ -15,7 +15,7 @@
 
 @implementation AdvSdkConfig
 NSString *const AdvanceSdkAPIVersion = @"3.0";
-NSString *const AdvanceSdkVersion = @"3.2.3.9";
+NSString *const AdvanceSdkVersion = @"3.2.4.0";
 NSString *const AdvanceSdkRequestUrl = @"http://cruiser.bayescom.cn/eleven";
 NSString *const AdvanceReportDataUrl = @"http://cruiser.bayescom.cn/native";
 NSString *const SDK_ID_MERCURY =@"1";
@@ -105,7 +105,7 @@ static AdvSdkConfig *instance = nil;
     _isDebug = isDebug;
 }
 
-- (void)setCaidConfig:(NSDictionary *)caidConfig {
-    _caidConfig = caidConfig;
-}
+//- (void)setCaidConfig:(NSDictionary *)caidConfig {
+//    _caidConfig = caidConfig;
+//}
 @end
