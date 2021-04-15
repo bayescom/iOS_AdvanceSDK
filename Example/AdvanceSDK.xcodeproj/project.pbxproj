@@ -500,10 +500,12 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-AdvanceSDK_Example/Pods-AdvanceSDK_Example-resources.sh",
+				"${PODS_ROOT}/Ads-CN/PangleSDK/LICENSE",
 				"${PODS_ROOT}/Ads-CN/PangleSDK/BUAdSDK.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/LICENSE",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/BUAdSDK.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
