@@ -98,7 +98,11 @@
         clsName = @"BUAdSDKManager";
     } else if ([supplier.identifier isEqualToString:SDK_ID_MERCURY]) {
         clsName = @"MercuryConfigManager";
+    } else if ([supplier.identifier isEqualToString:SDK_ID_KS]) {
+        clsName = @"KSAdSDKManager";
     }
+    
+    
 
     if ([supplier.identifier isEqualToString:SDK_ID_GDT]) {
         // 广点通SDK
@@ -118,6 +122,13 @@
         dispatch_once(&onceToken, ^{
             [NSClassFromString(clsName) performSelector:@selector(setAppID:mediaKey:) withObject:supplier.mediaid withObject:supplier.mediakey];
         });
+    } else if ([supplier.identifier isEqualToString:SDK_ID_KS]) {
+        // 快手
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+            [NSClassFromString(clsName) performSelector:@selector(setAppId:) withObject:supplier.mediaid];
+        });
+
     }
 
     // 如果执行了打底渠道 则执行此方法
