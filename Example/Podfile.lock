@@ -1,11 +1,11 @@
 PODS:
-  - Ads-CN (3.5.1.0):
-    - Ads-CN/BUAdSDK (= 3.5.1.0)
-  - Ads-CN/BUAdSDK (3.5.1.0):
+  - Ads-CN (3.5.1.2):
+    - Ads-CN/BUAdSDK (= 3.5.1.2)
+  - Ads-CN/BUAdSDK (3.5.1.2):
     - Ads-CN/BUFoundation
     - Ads-CN/Domestic
-  - Ads-CN/BUFoundation (3.5.1.0)
-  - Ads-CN/Domestic (3.5.1.0)
+  - Ads-CN/BUFoundation (3.5.1.2)
+  - Ads-CN/Domestic (3.5.1.2)
   - AdvanceSDK (3.2.4.0):
     - AdvanceSDK/Core (= 3.2.4.0)
   - AdvanceSDK/Adspot (3.2.4.0):
@@ -60,7 +60,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  Ads-CN: a5985f7d9705941e1bd0c026947367ee05ee9ecd
+  Ads-CN: c9f347beb4f9f3894ba1955eee224dd47c3da722
   AdvanceSDK: 28e05e2922cd939527d41faf670c9243aae97580
   GDTMobSDK: 8153fd4ed7f16be4786923226487ff60f0344a4f
   KSAdSDK: 84595687b76786babf09c53f46d6c1492a6f8b4b
