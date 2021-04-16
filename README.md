@@ -21,7 +21,7 @@
 
 ### Checklist
 - 应用编译环境升级至 Xcode 12.0 及以上版本
-- 升级穿山甲 iOS SDK 3.2.5.0 及以上版本，穿山甲提供了 iOS 14 与 SKAdNetwork 支持
+- 升级穿山甲 iOS SDK 3.4.2.3 及以上版本，穿山甲提供了 iOS 14 与 SKAdNetwork 支持
 - 将穿山甲的 SKAdNetwork ID 添加到 info.plist 中，以保证 SKAdNetwork 的正确运行
 
 ```
@@ -44,6 +44,42 @@
 ```
 <key>NSUserTrackingUsageDescription</key>
 <string>该标识符将用于向您投放个性化广告</string>
+```
+
+-  穿山甲在3.5.1.1及以上版本 适配的 iOS14.5 强烈建议更新 更新方法如下 <br>
+   1: 先将AdvanceSDK升级到3.2.4.0或以上版本(该版本添加新版穿山甲所依赖的工具库),否则更新完成将报编译错误<br>
+   2:  Podfile中添加 pod 'Ads-CN', '~> 3.5.1.2'  并在 终端里执行 pod update Ads-CN
+      
+
+- 如果您已经集成了AdvanceSDK, 并且想对 广点通, 穿山甲, mercurySDK, 进行单独升级, 升级方法如下
+
+```
+use_frameworks!
+
+platform :ios, '9.0'
+source 'https://github.com/CocoaPods/Specs.git'
+target 'AdvanceSDK_Example' do
+
+  pod 'AdvanceSDK'
+  pod 'AdvanceSDK/Mercury' #必须添加
+  pod 'AdvanceSDK/CSJ' #如果想集成穿山甲,则添加
+  pod 'AdvanceSDK/GDT' #如果想集成广点通,则添加
+    
+        # 如果想单独升级MercurySDK 则需要指明升级的版本号 例如:
+# pod 'MercurySDK', '~> 3.1.6.1'
+  终端里执行 pod update MercurySDK
+
+      # 如果想单独升级穿山甲 则需要指明升级的版本号 例如:
+#  pod 'Ads-CN', '~> 3.5.1.2'
+  终端里执行 pod update Ads-CN
+
+    # 如果想单独升级广点通 则需要指明升级的版本号 例如:
+# pod 'GDTMobSDK', '~> 4.12.1'
+  终端里执行 pod update GDTMobSDK
+
+
+end
+
 ```
 
 
