@@ -8,6 +8,7 @@ target 'AdvanceSDK_Example' do
   pod 'AdvanceSDK/Mercury', :path => '../'
   pod 'AdvanceSDK/CSJ', :path => '../'
   pod 'AdvanceSDK/GDT', :path => '../'
+  pod 'AdvanceSDK/KS', :path => '../'
 #  pod 'Ads-CN', '~> 3.5.1.1'
   pod 'SDWebImage'
   pod 'Masonry'

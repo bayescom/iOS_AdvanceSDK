@@ -75,6 +75,16 @@ Blink倍联——免费透明的流量变现神器 
     gdt.frameworks = 'AdSupport', 'CoreLocation', 'QuartzCore', 'SystemConfiguration', 'CoreTelephony', 'Security', 'StoreKit', 'AVFoundation', 'WebKit'
     gdt.libraries     = 'xml2', 'z'
   end
+  
+  s.subspec 'KS' do |ks|
+    ks.dependency 'AdvanceSDK/Core'
+    ks.dependency 'AdvanceSDK/Adspot'
+    ks.dependency 'KSAdSDK'
+    ks.source_files =  'AdvanceSDK/Adapter/ks/**/*.{h,m}'
+    ks.frameworks = 'Foundation', 'UIKit', 'MobileCoreServices', 'CoreGraphics', 'Security','SystemConfiguration', 'CoreTelephony', 'AdSupport', 'CoreData','StoreKit', 'AVFoundation', 'MediaPlayer', 'CoreMedia', 'WebKit','Accelerate', 'CoreLocation', 'AVKit','MessageUI','QuickLook','AddressBook'
+    ks.libraries     = 'resolv.9', 'sqlite3','c++','c++abi','z.tbd'
+  end
+
 
   s.xcconfig = {
     'VALID_ARCHS' =>  valid_archs.join(' '),
