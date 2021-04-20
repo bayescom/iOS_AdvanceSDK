@@ -30,7 +30,10 @@
         @{@"addesc": @"Mock 渠道错误", @"adspotId": @"100255-10000001"},
         @{@"addesc": @"Mock code200", @"adspotId": @"100255-10003321"},
         @{@"addesc": @"Mock code200", @"adspotId": @"100255-10009879"},
+        @{@"addesc": @"haoxueche", @"adspotId": @"101361-10004237"},
         @{@"addesc": @"快手开屏", @"adspotId": @"100255-10004411"},
+        @{@"addesc": @"快手开屏", @"adspotId": @"101394-10004333"},
+        
     ];
     self.btn1Title = @"加载并显示广告";
 }
