@@ -314,9 +314,9 @@
     ADVLog(@"请求参数 %@", deviceInfo);
     NSError *parseError = nil;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:deviceInfo options:NSJSONWritingPrettyPrinted error:&parseError];
-    NSURL *url = [NSURL URLWithString:AdvanceSdkRequestUrl];
+//    NSURL *url = [NSURL URLWithString:AdvanceSdkRequestUrl];
 //    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@?adspotid=%@", AdvanceSdkRequestUrl, _adspotId]];
-//    NSURL *url = [NSURL URLWithString:@"https://mock.yonyoucloud.com/mock/2650/api/v3/eleven"];
+    NSURL *url = [NSURL URLWithString:@"https://mock.yonyoucloud.com/mock/2650/api/v3/eleven"];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:self.fetchTime];
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     request.HTTPBody = jsonData;
@@ -466,7 +466,9 @@
 - (NSString *)joinFailedUrlWithObj:(NSString *)urlString error:(NSError *)error {
     ADVLog(@"UPLOAD error: %@", error);
     if (error) {
-        if ([error.domain isEqualToString:@"com.pangle.buadsdk"]) { // 新版穿山甲sdk报错
+        if ([error.domain isEqualToString:@"KSADErrorDomain"]) { // 快手SDK
+            return [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=err_ks_%ld&track_time",(long)error.code]];
+        } else if ([error.domain isEqualToString:@"com.pangle.buadsdk"]) { // 新版穿山甲sdk报错
             return [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=err_csj_%ld&track_time",(long)error.code]];
         } else if ([error.domain isEqualToString:@"com.bytedance.buadsdk"]) {// 穿山甲sdk报错
             return [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=err_csj_%ld&track_time",(long)error.code]];

@@ -44,7 +44,7 @@
 #pragma 开始集成前 请务必阅读README.md文档中的注意事项及Checklist
 #pragma 开始集成前 请务必阅读README.md文档中的注意事项及Checklist
     [AdvSdkConfig shareInstance].isDebug = YES;
-    [[AdvSdkConfig shareInstance] setAppId:@"101394"] ;
+    [[AdvSdkConfig shareInstance] setAppId:@"100255"] ;
     
     // 冷启动 监听
     [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidFinishLaunchingNotification object:nil queue:nil usingBlock:^(NSNotification * _Nonnull note) {

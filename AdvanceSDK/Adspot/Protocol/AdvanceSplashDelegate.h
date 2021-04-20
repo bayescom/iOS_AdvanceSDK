@@ -11,8 +11,6 @@
 #import "AdvanceBaseDelegate.h"
 @protocol AdvanceSplashDelegate <AdvanceBaseDelegate>
 @optional
-/// 广告渲染成功
-- (void)advanceSplashOnAdRenderFailed;
 
 /// 广告点击跳过
 - (void)advanceSplashOnAdSkipClicked;
