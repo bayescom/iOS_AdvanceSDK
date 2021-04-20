@@ -18,6 +18,8 @@
             parallel = YES;
         } else if ([ID isEqualToString:SDK_ID_CSJ]) {
             parallel = YES;
+        } else if ([ID isEqualToString:SDK_ID_KS]) {
+            parallel = YES;
         }
     } else if ([adTypeName isEqualToString:AdvSdkTypeAdNameRewardVideo]) {
         return YES;
