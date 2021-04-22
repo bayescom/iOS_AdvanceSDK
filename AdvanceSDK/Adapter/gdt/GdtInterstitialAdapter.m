@@ -35,6 +35,10 @@
     return self;
 }
 
+- (void)deallocAdapter {
+    
+}
+
 
 - (void)loadAd {
     _gdt_ad.delegate = self;
