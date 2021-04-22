@@ -121,7 +121,6 @@
             // 2. 先看看当前执行的串行渠道 是不是之前的并行渠道
             // 3. 如果不是之前的并行渠道 则为 其他串行渠道
             // 4. 如果是之前的并行渠道, 直接载入
-            [_adapter performSelector:@selector(deallocAdapter)];
             _adapter = [self adapterInParallelsWithSupplier:supplier];
             if (!_adapter) {
                 _adapter = ((id (*)(id, SEL, id, id))objc_msgSend)((id)[NSClassFromString(clsName) alloc], @selector(initWithSupplier:adspot:), supplier, self);

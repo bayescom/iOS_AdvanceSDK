@@ -35,6 +35,10 @@
     return self;
 }
 
+- (void)deallocAdapter {
+    
+}
+
 - (void)loadAd {
     _csj_ad.delegate = self;
     NSLog(@"加载穿山甲 supplier: %@ -- %ld", _supplier, (long)_supplier.priority);

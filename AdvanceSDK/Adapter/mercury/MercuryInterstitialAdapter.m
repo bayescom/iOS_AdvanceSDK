@@ -35,6 +35,10 @@
     return self;
 }
 
+- (void)deallocAdapter {
+    
+}
+
 
 - (void)loadAd {
     ADVLog(@"加载Mercury supplier: %@", _supplier);
