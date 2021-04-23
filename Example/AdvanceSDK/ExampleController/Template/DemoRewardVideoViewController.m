@@ -27,6 +27,7 @@
         @{@"addesc": @"激励视频", @"adspotId": @"100255-10002595"},
         @{@"addesc": @"Mock 渠道错误", @"adspotId": @"100255-10000001"},
         @{@"addesc": @"Mock code200", @"adspotId": @"100255-10003321"},
+        @{@"addesc": @"Mock code200", @"adspotId": @"100255-10009988"},
     ];
     self.btn1Title = @"加载广告";
     self.btn2Title = @"显示广告";

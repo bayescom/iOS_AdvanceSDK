@@ -56,6 +56,9 @@
     NSLog(@"加载穿山甲 supplier: %@ -- %ld", _supplier, (long)_supplier.priority);
     if (_supplier.state == AdvanceSdkSupplierStateSuccess) {// 并行请求保存的状态 再次轮到该渠道加载的时候 直接show
         ADVLog(@"穿山甲 成功");
+        if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
+            [self.delegate advanceUnifiedViewDidLoad];
+        }
         [self showAd];
     } else if (_supplier.state == AdvanceSdkSupplierStateFailed) { //失败的话直接对外抛出回调
         ADVLog(@"穿山甲 失败");

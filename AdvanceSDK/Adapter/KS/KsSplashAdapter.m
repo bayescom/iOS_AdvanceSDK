@@ -260,7 +260,7 @@
         return;
     }
     _ks_ad.frame = [UIScreen mainScreen].bounds;
-    [_adspot.viewController.view addSubview:_ks_ad];
+    [[UIApplication sharedApplication].adv_getCurrentWindow addSubview:_ks_ad];
 }
 
 //- (void)ksad_splashAdDismiss:(BOOL)converted {

@@ -59,6 +59,9 @@
     ADVLog(@"加载观点通 supplier: %@", _supplier);
     if (_supplier.state == AdvanceSdkSupplierStateSuccess) {// 并行请求保存的状态 再次轮到该渠道加载的时候 直接show
         ADVLog(@"广点通 成功");
+        if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
+            [self.delegate advanceUnifiedViewDidLoad];
+        }
         [self showAd];
     } else if (_supplier.state == AdvanceSdkSupplierStateFailed) { //失败的话直接对外抛出回调
         ADVLog(@"广点通 失败 %@", _supplier);
@@ -76,10 +79,6 @@
 
 // MARK: ======================= GDTSplashAdDelegate =======================
 - (void)splashAdSuccessPresentScreen:(GDTSplashAd *)splashAd {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
-    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
-        [self.delegate advanceUnifiedViewDidLoad];
-    }
 }
 
 - (void)deallocAdapter {
@@ -108,12 +107,18 @@
 }
 
 - (void)splashAdDidLoad:(GDTSplashAd *)splashAd {
-    NSLog(@"广点通开屏拉取成功 %@ %d",self.gdt_ad ,[self.gdt_ad isAdValid]);
+//    NSLog(@"广点通开屏拉取成功 %@ %d",self.gdt_ad ,[self.gdt_ad isAdValid]);
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
+
     if (_supplier.isParallel == YES) {
-        NSLog(@"修改状态: %@", _supplier);
+//        NSLog(@"修改状态: %@", _supplier);
         _supplier.state = AdvanceSdkSupplierStateSuccess;
         return;
     }
+    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
+        [self.delegate advanceUnifiedViewDidLoad];
+    }
+
     [self showAd];
 }
 
