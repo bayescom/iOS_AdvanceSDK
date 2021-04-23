@@ -27,11 +27,11 @@
     if (self = [super init]) {
         _adspot = adspot;
         _supplier = supplier;
-//        KSRewardedVideoModel *model = [KSRewardedVideoModel new];
-//        model.userId = @"123234";
-//        model.extra = @"test extra";
-//        _ks_ad = [[KSRewardedVideoAd alloc] initWithPosId:supplier.adspotid rewardedVideoModel:model];
-//        _ks_ad.showDirection = KSAdShowDirection_Vertical;
+        KSRewardedVideoModel *model = [KSRewardedVideoModel new];
+        model.userId = @"123234";
+        model.extra = @"test extra";
+        _ks_ad = [[KSRewardedVideoAd alloc] initWithPosId:supplier.adspotid rewardedVideoModel:model];
+        _ks_ad.showDirection = KSAdShowDirection_Vertical;
 
     }
     return self;
@@ -55,12 +55,7 @@
     } else {
         ADVLog(@"快手 load ad");
         _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
-        KSRewardedVideoModel *model = [KSRewardedVideoModel new];
-        model.userId = @"123234";
-        model.extra = @"test extra";
-        self.ks_ad = [[KSRewardedVideoAd alloc] initWithPosId:_supplier.adspotid rewardedVideoModel:model];
         self.ks_ad.delegate = self;
-        self.ks_ad.showDirection = KSAdShowDirection_Vertical;
         [self.ks_ad loadAdData];
 
 //        [_ks_ad loadAdData];
