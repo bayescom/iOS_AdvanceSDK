@@ -1,45 +1,40 @@
 //
-//  KsRewardVideoAdapter.m
+//  KsFullScreenVideoAdapter.m
 //  AdvanceSDK
 //
 //  Created by MS on 2021/4/23.
 //
 
-#import "KsRewardVideoAdapter.h"
+#import "KsFullScreenVideoAdapter.h"
 #if __has_include(<KSAdSDK/KSAdSDK.h>)
 #import <KSAdSDK/KSAdSDK.h>
 #else
 #import "KSAdSDK.h"
 #endif
 
-#import "AdvanceRewardVideo.h"
+#import "AdvanceFullScreenVideo.h"
 #import "UIApplication+Adv.h"
 #import "AdvLog.h"
-@interface KsRewardVideoAdapter ()<KSRewardedVideoAdDelegate>
-@property (nonatomic, strong) KSRewardedVideoAd *ks_ad;
-@property (nonatomic, weak) AdvanceRewardVideo *adspot;
+@interface KsFullScreenVideoAdapter ()<KSFullscreenVideoAdDelegate>
+@property (nonatomic, strong) KSFullscreenVideoAd *ks_ad;
+@property (nonatomic, weak) AdvanceFullScreenVideo *adspot;
 @property (nonatomic, strong) AdvSupplier *supplier;
 
 @end
 
-@implementation KsRewardVideoAdapter
-- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(AdvanceRewardVideo *)adspot {
+@implementation KsFullScreenVideoAdapter
+
+- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(AdvanceFullScreenVideo *)adspot {
     if (self = [super init]) {
         _adspot = adspot;
         _supplier = supplier;
-        KSRewardedVideoModel *model = [KSRewardedVideoModel new];
-        model.userId = @"123234";
-        model.extra = @"test extra";
-        _ks_ad = [[KSRewardedVideoAd alloc] initWithPosId:supplier.adspotid rewardedVideoModel:model];
+        _ks_ad = [[KSFullscreenVideoAd alloc] initWithPosId:@"1"];
         _ks_ad.showDirection = KSAdShowDirection_Vertical;
-
     }
     return self;
 }
 
 - (void)loadAd {
-    
-    _ks_ad.delegate = self;
     ADVLog(@"加载快手 supplier: %@", _supplier);
     if (_supplier.state == AdvanceSdkSupplierStateSuccess) {// 并行请求保存的状态 再次轮到该渠道加载的时候 直接show
         ADVLog(@"快手 成功");
@@ -55,10 +50,8 @@
     } else {
         ADVLog(@"快手 load ad");
         _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
-        self.ks_ad.delegate = self;
-        [self.ks_ad loadAdData];
-
-//        [_ks_ad loadAdData];
+        _ks_ad.delegate = self;
+        [_ks_ad loadAdData];
     }
 }
 
@@ -69,12 +62,8 @@
         }
     });
 
+//    [_gdt_ad presentFullScreenAdFromRootViewController:_adspot.viewController];
 }
-
-- (void)deallocAdapter {
-    self.ks_ad = nil;
-}
-
 
 - (void)dealloc {
     ADVLog(@"%s", __func__);
@@ -83,12 +72,11 @@
 /**
  This method is called when video ad material loaded successfully.
  */
-- (void)rewardedVideoAdDidLoad:(KSRewardedVideoAd *)rewardedVideoAd {
+- (void)fullscreenVideoAdDidLoad:(KSFullscreenVideoAd *)fullscreenVideoAd {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
-    
-    NSLog(@"广点通激励视频拉取成功 %@",self.ks_ad);
+    ADVLog(@"快手全屏视频拉取成功 %@",self.ks_ad);
     if (_supplier.isParallel == YES) {
-        NSLog(@"修改状态: %@", _supplier);
+//        NSLog(@"修改状态: %@", _supplier);
         _supplier.state = AdvanceSdkSupplierStateSuccess;
         return;
     }
@@ -102,32 +90,29 @@
  This method is called when video ad materia failed to load.
  @param error : the reason of error
  */
-- (void)rewardedVideoAd:(KSRewardedVideoAd *)rewardedVideoAd didFailWithError:(NSError *_Nullable)error {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
+- (void)fullscreenVideoAd:(KSFullscreenVideoAd *)fullscreenVideoAd didFailWithError:(NSError *_Nullable)error {
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded  supplier:_supplier error:error];
     if (_supplier.isParallel == YES) {
         _supplier.state = AdvanceSdkSupplierStateFailed;
         return;
     }
-
 }
 /**
  This method is called when cached successfully.
  */
-- (void)rewardedVideoAdVideoDidLoad:(KSRewardedVideoAd *)rewardedVideoAd {
-    if ([self.delegate respondsToSelector:@selector(advanceRewardVideoOnAdVideoCached)]) {
-        [self.delegate advanceRewardVideoOnAdVideoCached];
-    }
+- (void)fullscreenVideoAdVideoDidLoad:(KSFullscreenVideoAd *)fullscreenVideoAd {
+    
 }
 /**
  This method is called when video ad slot will be showing.
  */
-- (void)rewardedVideoAdWillVisible:(KSRewardedVideoAd *)rewardedVideoAd {
+- (void)fullscreenVideoAdWillVisible:(KSFullscreenVideoAd *)fullscreenVideoAd {
     
 }
 /**
  This method is called when video ad slot has been shown.
  */
-- (void)rewardedVideoAdDidVisible:(KSRewardedVideoAd *)rewardedVideoAd {
+- (void)fullscreenVideoAdDidVisible:(KSFullscreenVideoAd *)fullscreenVideoAd {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(advanceExposured)]) {
         [self.delegate advanceExposured];
@@ -136,13 +121,13 @@
 /**
  This method is called when video ad is about to close.
  */
-- (void)rewardedVideoAdWillClose:(KSRewardedVideoAd *)rewardedVideoAd {
+- (void)fullscreenVideoAdWillClose:(KSFullscreenVideoAd *)fullscreenVideoAd {
     
 }
 /**
  This method is called when video ad is closed.
  */
-- (void)rewardedVideoAdDidClose:(KSRewardedVideoAd *)rewardedVideoAd {
+- (void)fullscreenVideoAdDidClose:(KSFullscreenVideoAd *)fullscreenVideoAd {
     if ([self.delegate respondsToSelector:@selector(advanceDidClose)]) {
         [self.delegate advanceDidClose];
     }
@@ -151,7 +136,7 @@
 /**
  This method is called when video ad is clicked.
  */
-- (void)rewardedVideoAdDidClick:(KSRewardedVideoAd *)rewardedVideoAd  {
+- (void)fullscreenVideoAdDidClick:(KSFullscreenVideoAd *)fullscreenVideoAd {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(advanceClicked)]) {
         [self.delegate advanceClicked];
@@ -161,34 +146,24 @@
  This method is called when video ad play completed or an error occurred.
  @param error : the reason of error
  */
-- (void)rewardedVideoAdDidPlayFinish:(KSRewardedVideoAd *)rewardedVideoAd didFailWithError:(NSError *_Nullable)error {
+- (void)fullscreenVideoAdDidPlayFinish:(KSFullscreenVideoAd *)fullscreenVideoAd didFailWithError:(NSError *_Nullable)error {
     if (!error) {
-        if ([self.delegate respondsToSelector:@selector(advanceRewardVideoAdDidPlayFinish)]) {
-            [self.delegate advanceRewardVideoAdDidPlayFinish];
+        if ([self.delegate respondsToSelector:@selector(advanceFullScreenVideoOnAdPlayFinish)]) {
+            [self.delegate advanceFullScreenVideoOnAdPlayFinish];
         }
     }
-}
-/**
- This method is called when the user clicked skip button.
- */
-- (void)rewardedVideoAdDidClickSkip:(KSRewardedVideoAd *)rewardedVideoAd {
-    
 }
 /**
  This method is called when the video begin to play.
  */
-- (void)rewardedVideoAdStartPlay:(KSRewardedVideoAd *)rewardedVideoAd {
+- (void)fullscreenVideoAdStartPlay:(KSFullscreenVideoAd *)fullscreenVideoAd {
     
 }
 /**
- This method is called when the user close video ad.
+ This method is called when the user clicked skip button.
  */
-- (void)rewardedVideoAd:(KSRewardedVideoAd *)rewardedVideoAd hasReward:(BOOL)hasReward {
-    if (hasReward) {
-        if ([self.delegate respondsToSelector:@selector(advanceRewardVideoAdDidRewardEffective)]) {
-            [self.delegate advanceRewardVideoAdDidRewardEffective];
-        }
-    }
+- (void)fullscreenVideoAdDidClickSkip:(KSFullscreenVideoAd *)fullscreenVideoAd {
+    
 }
 
 

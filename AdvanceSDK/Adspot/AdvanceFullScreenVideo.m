@@ -92,7 +92,11 @@
         clsName = @"GdtFullScreenVideoAdapter";
     } else if ([supplier.identifier isEqualToString:SDK_ID_CSJ]) {
         clsName = @"CsjFullScreenVideoAdapter";
+    } else if ([supplier.identifier isEqualToString:SDK_ID_KS]) {
+        clsName = @"KsFullScreenVideoAdapter";
     }
+    
+    
     if (NSClassFromString(clsName)) {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wundeclared-selector"
