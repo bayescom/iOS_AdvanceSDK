@@ -74,9 +74,9 @@
         } else if ([self.arrViewsM[i] isKindOfClass:NSClassFromString(@"GDTNativeExpressProAdView")]) {// 广点通新版信息流
             [self.arrViewsM[i] performSelector:@selector(setController:) withObject:self];
             [self.arrViewsM[i] performSelector:@selector(render)];
+        } else {
+            
         }
-        
-        
         [_dataArrM insertObject:self.arrViewsM[i] atIndex:1];
     }
     [self.tableView reloadData];
