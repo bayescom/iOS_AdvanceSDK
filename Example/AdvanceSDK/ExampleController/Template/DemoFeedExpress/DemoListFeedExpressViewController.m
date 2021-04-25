@@ -82,6 +82,7 @@
     [self.tableView reloadData];
 }
 
+
 /// 广告曝光
 - (void)advanceNativeExpressOnAdShow:(UIView *)adView {
     NSLog(@"广告曝光 %s", __func__);
@@ -154,7 +155,9 @@
     if ([_dataArrM[indexPath.row] isKindOfClass:[BYExamCellModelElement class]]) {
         return ((BYExamCellModelElement *)_dataArrM[indexPath.row]).cellh;
     } else {
-        return ((UIView *)_dataArrM[indexPath.row]).frame.size.height;
+        CGFloat height = ((UIView *)_dataArrM[indexPath.row]).frame.size.height;
+        NSLog(@"aaa height:%f",height);
+        return height;
     }
 }
 

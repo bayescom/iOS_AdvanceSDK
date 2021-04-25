@@ -32,7 +32,7 @@
         _adspot = adspot;
         _supplier = supplier;
         
-        _ks_ad = [[KSFeedAdsManager alloc] initWithPosId:_supplier.adspotid size:CGSizeMake(0, 0)];
+        _ks_ad = [[KSFeedAdsManager alloc] initWithPosId:_supplier.adspotid size:_adspot.adSize];
 
     }
     return self;
@@ -84,6 +84,7 @@
         NSMutableArray *temp = [NSMutableArray array];
         for (KSFeedAd *ad in feedAdDataArray) {
             ad.delegate = self;
+            [ad setVideoSoundEnable:NO];
             [temp addObject:ad.feedView];
         }
         self.views = [temp copy];
