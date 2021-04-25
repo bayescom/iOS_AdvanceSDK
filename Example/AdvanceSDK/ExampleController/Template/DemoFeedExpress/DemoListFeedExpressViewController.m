@@ -74,7 +74,7 @@
         } else if ([self.arrViewsM[i] isKindOfClass:NSClassFromString(@"GDTNativeExpressProAdView")]) {// 广点通新版信息流
             [self.arrViewsM[i] performSelector:@selector(setController:) withObject:self];
             [self.arrViewsM[i] performSelector:@selector(render)];
-        } else {
+        } else { // 快手
             
         }
         [_dataArrM insertObject:self.arrViewsM[i] atIndex:1];
@@ -154,7 +154,7 @@
     if ([_dataArrM[indexPath.row] isKindOfClass:[BYExamCellModelElement class]]) {
         return ((BYExamCellModelElement *)_dataArrM[indexPath.row]).cellh;
     } else {
-        return ((UIView *)_dataArrM[indexPath.row]).bounds.size.height;
+        return ((UIView *)_dataArrM[indexPath.row]).frame.size.height;
     }
 }
 

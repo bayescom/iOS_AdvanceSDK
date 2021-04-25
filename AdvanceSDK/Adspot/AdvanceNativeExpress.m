@@ -106,6 +106,8 @@
         clsName = @"CsjNativeExpressAdapter";
     } else if ([supplier.identifier isEqualToString:SDK_ID_MERCURY]) {
         clsName = @"MercuryNativeExpressAdapter";
+    } else if ([supplier.identifier isEqualToString:SDK_ID_KS]) {
+        clsName = @"KsNativeExpressAdapter";
     }
     if (NSClassFromString(clsName)) {
 #pragma clang diagnostic push

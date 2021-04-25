@@ -28,8 +28,6 @@
         _adspot = adspot;
         _supplier = supplier;
         KSRewardedVideoModel *model = [KSRewardedVideoModel new];
-        model.userId = @"123234";
-        model.extra = @"test extra";
         _ks_ad = [[KSRewardedVideoAd alloc] initWithPosId:supplier.adspotid rewardedVideoModel:model];
         _ks_ad.showDirection = KSAdShowDirection_Vertical;
 
