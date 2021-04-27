@@ -102,7 +102,12 @@
     // 根据渠道id自定义初始化
     NSString *clsName = @"";
     if ([supplier.identifier isEqualToString:SDK_ID_GDT]) {
-        clsName = @"GdtRewardVideoAdapter";
+        if (supplier.versionTag == 1) {
+            clsName = @"GdtRewardVideoAdapter";
+        } else {
+            clsName = @"GdtRewardVideoProAdapter";
+        }
+
     } else if ([supplier.identifier isEqualToString:SDK_ID_CSJ]) {
         clsName = @"CsjRewardVideoAdapter";
     } else if ([supplier.identifier isEqualToString:SDK_ID_MERCURY]) {
