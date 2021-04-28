@@ -25,6 +25,8 @@
 #define kPublicForApiKey @"用文本编辑打开public_for_api.pem即可获取"
 
 #define kDevId @""
+#import <AppTrackingTransparency/AppTrackingTransparency.h>
+#import <AdSupport/AdSupport.h>
 
 @interface AppDelegate () <AdvanceSplashDelegate>
 @property(strong,nonatomic) AdvanceSplash *advanceSplash;
@@ -43,42 +45,41 @@
 #pragma 开始集成前 请务必阅读文档中的注意事项及Checklist https://github.com/bayescom/AdvanceSDK
 #pragma 开始集成前 请务必阅读文档中的注意事项及Checklist https://github.com/bayescom/AdvanceSDK
 #pragma 开始集成前 请务必阅读文档中的注意事项及Checklist https://github.com/bayescom/AdvanceSDK
-    [AdvSdkConfig shareInstance].isDebug = YES;
-    [AdvSdkConfig shareInstance].appId = @"100255";
-    
-    // 冷启动 监听
-    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidFinishLaunchingNotification object:nil queue:nil usingBlock:^(NSNotification * _Nonnull note) {
-        
-        // DEBUG
-        static dispatch_once_t onceToken;
-        dispatch_once(&onceToken, ^{
-//            [self debugConf];
-        });
-        
-        //初始化开屏广告
-//        [self loadSplash];
-    }];
-    
-    // 热启动 监听
-    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillEnterForegroundNotification object:nil queue:nil usingBlock:^(NSNotification * _Nonnull note) {
-        //初始化开屏广告
-//        [self loadSplash];
-    }];
-    
+
+    __block NSString *idfa = @"";
+    ASIdentifierManager *manager = [ASIdentifierManager sharedManager];
+    if (@available(iOS 14, *)) {
+        [ATTrackingManager requestTrackingAuthorizationWithCompletionHandler:^(ATTrackingManagerAuthorizationStatus status) {
+            if (status == ATTrackingManagerAuthorizationStatusAuthorized) {
+                idfa = [[manager advertisingIdentifier] UUIDString];
+            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                // do something
+                [self loadSplash];
+            });
+        }];
+    }else{
+        if ([manager isAdvertisingTrackingEnabled]) {
+            idfa = [[manager advertisingIdentifier] UUIDString];
+            [self loadSplash];
+        }
+
+    }
+
     return YES;
 }
 
 - (void)loadSplash {
-    self.advanceSplash = [[AdvanceSplash alloc] initWithAdspotId:@"100255"
+    self.advanceSplash = [[AdvanceSplash alloc] initWithAdspotId:@"10004314"
 //    self.advanceSplash = [[AdvanceSplash alloc] initWithAdspotId:@"20000003"
                                                   viewController:self.window.rootViewController];
     self.advanceSplash.delegate = self;
 //    self.advanceSplash.showLogoRequire = YES;
     self.advanceSplash.logoImage = [UIImage imageNamed:@"app_logo"];
     self.advanceSplash.backgroundImage = [UIImage imageNamed:@"LaunchImage_img"];
-    [self.advanceSplash setDefaultAdvSupplierWithMediaId:@"100255"
-                                                adspotId:@"10004237"
-                                                mediaKey:@"c6f80c078b7956821ebdaad72779cffc"
+    [self.advanceSplash setDefaultAdvSupplierWithMediaId:@"1111672708"
+                                                adspotId:@"3001177798101307"
+                                                mediaKey:@""
                                                   sdkId:SDK_ID_CSJ];
     self.advanceSplash.timeout = 5;
     [self.advanceSplash loadAd];
