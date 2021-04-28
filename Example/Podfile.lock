@@ -23,9 +23,9 @@ PODS:
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - MercurySDK
-  - GDTMobSDK (4.12.1):
-    - GDTMobSDK/GDTMobSDK (= 4.12.1)
-  - GDTMobSDK/GDTMobSDK (4.12.1)
+  - GDTMobSDK (4.12.61):
+    - GDTMobSDK/GDTMobSDK (= 4.12.61)
+  - GDTMobSDK/GDTMobSDK (4.12.61)
   - Masonry (1.1.0)
   - MercurySDK (3.1.6.1)
   - SDWebImage (5.10.1):
@@ -55,7 +55,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Ads-CN: a5985f7d9705941e1bd0c026947367ee05ee9ecd
   AdvanceSDK: 42afb8dc373bdfb802a237dc0fb73a6ba79f4057
-  GDTMobSDK: 8153fd4ed7f16be4786923226487ff60f0344a4f
+  GDTMobSDK: 63a094e9c02bb01213902d7cdf2389c149660a03
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   MercurySDK: 4903c1b625f395da6f6e7b858ab2b7833c49b4f9
   SDWebImage: f66a16b95183b92ed6b965ad21d33167bc07612d
