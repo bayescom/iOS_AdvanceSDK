@@ -48,12 +48,12 @@
 
 - (void)reportWithType:(AdvanceSdkSupplierRepoType)repoType supplier:(AdvSupplier *)supplier error:(NSError *)error {
     // 有错误正常上报
-    NSLog(@"|||--- %@ %ld %@",supplier.sdktag, (long)supplier.priority, supplier);
+//    NSLog(@"|||--- %@ %ld %@",supplier.sdktag, (long)supplier.priority, supplier);
     [_mgr reportWithType:repoType supplier:supplier error:error];
     
     // 失败了 并且不是并行才会走下一个渠道
     if (repoType == AdvanceSdkSupplierRepoFaileded && !supplier.isParallel) {
-        NSLog(@"%@ |||   %ld %@",supplier.sdktag, (long)supplier.priority, supplier);
+//        NSLog(@"%@ |||   %ld %@",supplier.sdktag, (long)supplier.priority, supplier);
         [_mgr loadNextSupplierIfHas];
     }
 }

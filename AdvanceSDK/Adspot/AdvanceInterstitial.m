@@ -89,7 +89,11 @@
     // 根据渠道id自定义初始化
     NSString *clsName = @"";
     if ([supplier.identifier isEqualToString:SDK_ID_GDT]) {
-        clsName = @"GdtInterstitialAdapter";
+        if (supplier.versionTag == 1) {
+            clsName = @"GdtInterstitialAdapter";
+        } else {
+            clsName = @"GdtInterstitialProAdapter";
+        }
     } else if ([supplier.identifier isEqualToString:SDK_ID_CSJ]) {
         clsName = @"CsjInterstitialAdapter";
     } else if ([supplier.identifier isEqualToString:SDK_ID_MERCURY]) {
