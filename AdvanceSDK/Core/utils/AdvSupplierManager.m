@@ -103,14 +103,14 @@
     AdvSupplier *currentSupplier = _supplierM.firstObject;
     // 不管是不是并行渠道, 到了该执行的时候 必须要按照串行渠道的逻辑去执行
     currentSupplier.isParallel = NO;
+    NSInteger currentPriority = currentSupplier.priority;
+
     [self notCPTLoadNextSuppluer:currentSupplier error:nil];
 
-    if (_supplierM.count == 0) {
-        return;
+    if (self.model.setting.parallelGroup.count > 0) {
+        // 并行执行
+        [self parallelActionWithCurrentPriority:currentPriority];
     }
-
-    // 并行执行
-    [self parallelActionWithCurrentSupplier:currentSupplier];
 }
 
 - (void)loadNextSupplier {
@@ -163,16 +163,20 @@
         
         // 执行非CPT渠道逻辑
         AdvSupplier *currentSupplier = _supplierM.firstObject;
+        NSInteger currentPriority = currentSupplier.priority;
+        
         [self notCPTLoadNextSuppluer:currentSupplier error:nil];
         
-        // 并行执行
-        [self parallelActionWithCurrentSupplier:currentSupplier];
+        if (self.model.setting.parallelGroup.count > 0) {
+            // 并行执行
+            [self parallelActionWithCurrentPriority:currentPriority];
+        }
     }
 }
 
 // 并行执行
-- (void)parallelActionWithCurrentSupplier:(AdvSupplier *)currentSupplier {
-    NSNumber *currentPriority = [NSNumber numberWithInteger:currentSupplier.priority];
+- (void)parallelActionWithCurrentPriority:(NSInteger)priority {
+    NSNumber *currentPriority = [NSNumber numberWithInteger:priority];
     NSDictionary *ext = [self.ext mutableCopy];
     NSString *adTypeName = [ext valueForKey:AdvSdkTypeAdName];
 

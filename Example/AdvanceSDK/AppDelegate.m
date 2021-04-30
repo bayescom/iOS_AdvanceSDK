@@ -46,6 +46,11 @@
 #pragma 开始集成前 请务必阅读文档中的注意事项及Checklist https://github.com/bayescom/AdvanceSDK
 #pragma 开始集成前 请务必阅读文档中的注意事项及Checklist https://github.com/bayescom/AdvanceSDK
 
+    // 请现在 plist 文件中配置 NSUserTrackingUsageDescription
+    /*
+     <key>NSUserTrackingUsageDescription</key>
+     <string>该ID将用于向您推送个性化广告</string>
+     */
     __block NSString *idfa = @"";
     ASIdentifierManager *manager = [ASIdentifierManager sharedManager];
     if (@available(iOS 14, *)) {
@@ -74,6 +79,7 @@
 }
 
 - (void)loadSplash {
+    // 测试使用 很容易不出广告
     self.advanceSplash = [[AdvanceSplash alloc] initWithAdspotId:@"10004314"
 //    self.advanceSplash = [[AdvanceSplash alloc] initWithAdspotId:@"20000003"
                                                   viewController:self.window.rootViewController];
