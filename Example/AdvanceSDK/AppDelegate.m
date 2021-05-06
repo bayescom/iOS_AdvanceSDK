@@ -61,7 +61,7 @@
          <true/>
      </dict>
      */
-    // 调试阶段尽量中真机, 以便获取idfa, 如果获取不到idfa, 则打开idfa开关
+    // 调试阶段尽量用真机, 以便获取idfa, 如果获取不到idfa, 则打开idfa开关
     // iphone 打开idfa 开关的的过程:设置 -> 隐私 -> 跟踪 -> 允许App请求跟踪
     __block NSString *idfa = @"";
     ASIdentifierManager *manager = [ASIdentifierManager sharedManager];
