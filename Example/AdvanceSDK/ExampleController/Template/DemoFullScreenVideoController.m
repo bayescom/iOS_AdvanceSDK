@@ -72,11 +72,6 @@
     [JDStatusBarNotification showWithStatus:@"广告加载成功" dismissAfter:1.5];
 }
 
-/// 广告渲染失败
-- (void)advanceFullScreenVideoOnAdRenderFailed {
-    NSLog(@"广告渲染失败 %s", __func__);
-}
-
 /// 广告曝光
 - (void)advanceExposured {
     NSLog(@"广告曝光回调 %s", __func__);

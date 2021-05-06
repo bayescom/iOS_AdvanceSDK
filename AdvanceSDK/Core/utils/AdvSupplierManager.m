@@ -39,6 +39,7 @@
 @property (nonatomic, strong) NSMutableArray *queues;
 
 @property (nonatomic, strong) NSURLSessionDataTask *dataTask;
+@property (nonatomic, strong) NSLock *lock;
 
 
 
@@ -102,12 +103,14 @@
     AdvSupplier *currentSupplier = _supplierM.firstObject;
     // 不管是不是并行渠道, 到了该执行的时候 必须要按照串行渠道的逻辑去执行
     currentSupplier.isParallel = NO;
-    [self notCPTLoadNextSuppluer:currentSupplier error:nil];
-    
-    // 并行执行
-    [self parallelActionWithCurrentSupplier:currentSupplier];
+    NSInteger currentPriority = currentSupplier.priority;
 
-    
+    [self notCPTLoadNextSuppluer:currentSupplier error:nil];
+
+    if (self.model.setting.parallelGroup.count > 0) {
+        // 并行执行
+        [self parallelActionWithCurrentPriority:currentPriority];
+    }
 }
 
 - (void)loadNextSupplier {
@@ -160,16 +163,20 @@
         
         // 执行非CPT渠道逻辑
         AdvSupplier *currentSupplier = _supplierM.firstObject;
+        NSInteger currentPriority = currentSupplier.priority;
+        
         [self notCPTLoadNextSuppluer:currentSupplier error:nil];
         
-        // 并行执行
-        [self parallelActionWithCurrentSupplier:currentSupplier];
+        if (self.model.setting.parallelGroup.count > 0) {
+            // 并行执行
+            [self parallelActionWithCurrentPriority:currentPriority];
+        }
     }
 }
 
 // 并行执行
-- (void)parallelActionWithCurrentSupplier:(AdvSupplier *)currentSupplier {
-    NSNumber *currentPriority = [NSNumber numberWithInteger:currentSupplier.priority];
+- (void)parallelActionWithCurrentPriority:(NSInteger)priority {
+    NSNumber *currentPriority = [NSNumber numberWithInteger:priority];
     NSDictionary *ext = [self.ext mutableCopy];
     NSString *adTypeName = [ext valueForKey:AdvSdkTypeAdName];
 
@@ -234,7 +241,9 @@
         
     } else {
 //        NSLog(@"展示队列优先级: %ld", (long)supplier.priority);
+        [self.lock lock];
         [_supplierM removeObject:supplier];
+        [self.lock unlock];
 //        NSLog(@"展示队列: %@", _supplierM);
     }
     
@@ -571,10 +580,10 @@
     return _fetchTime;
 }
 
-- (NSMutableArray *)queues {
-    if (!_queues) {
-        _queues = [NSMutableArray array];
+- (NSLock *)lock {
+    if (!_lock) {
+        _lock = [NSLock new];
     }
-    return _queues;
+    return _lock;
 }
 @end
