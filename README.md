@@ -47,7 +47,7 @@
 ```
 
 -  穿山甲在3.5.1.1及以上版本 适配的 iOS14.5 强烈建议更新 更新方法如下 <br>
-   1: 先将AdvanceSDK升级到3.2.4.0或以上版本(该版本添加新版穿山甲所依赖的工具库),否则更新完成将报编译错误<br>
+   1: 先将AdvanceSDK升级到3.2.4.2或以上版本(该版本添加新版穿山甲所依赖的工具库),否则更新完成将报编译错误<br>
    2:  Podfile中添加 pod 'Ads-CN', '~> 3.5.1.2'  并在 终端里执行 pod update Ads-CN
       
 
@@ -141,7 +141,7 @@ platform :ios, '9.0'
 target '你的项目名称' do
   # use_frameworks!
   # Pods for 你的项目名称
-  pod 'AdvanceSDK', '~> 3.2.4.2' # 可指定你想要的版本号
+  pod 'AdvanceSDK', '~> 3.2.4.3' # 可指定你想要的版本号
   pod 'AdvanceSDK/CSJ', 	# 如果需要导入穿山甲SDK
   pod 'AdvanceSDK/GDT', 	# 如果需要导入广点通SDK
   pod 'AdvanceSDK/Mercury' # 如果需要导入MercurySDK
@@ -185,7 +185,7 @@ $ pod install
 指定SDK版本前，请先确保repo库为最新版本，参考上一小节内容进行更新。如果需要指定SDK版本，需要在Podfile文件中，pod那一行指定版本号：
 
 ```
-  pod 'AdvanceSDK', '~> 3.2.4.2' # 可指定你想要的版本号
+  pod 'AdvanceSDK', '~> 3.2.4.3' # 可指定你想要的版本号
   pod 'AdvanceSDK/CSJ'
   pod 'AdvanceSDK/GDT'
 
