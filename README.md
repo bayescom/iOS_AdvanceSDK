@@ -21,8 +21,10 @@
 
 ### Checklist
 - 应用编译环境升级至 Xcode 12.0 及以上版本
-- 升级穿山甲 iOS SDK 3.4.2.3 及以上版本，穿山甲提供了 iOS 14 与 SKAdNetwork 支持
-- 将穿山甲的 SKAdNetwork ID 添加到 info.plist 中，以保证 SKAdNetwork 的正确运行
+- 升级穿山甲 iOS SDK 3.5.1.0 及以上版本，穿山甲提供了 iOS 14 与 SKAdNetwork 支持
+-  升级广点通  iOS SDK  4.12.60 及以上版本, 该版本适配了SKAdNetwork,并删除了CAID相关的内容
+- 将穿山甲和广点通的 SKAdNetwork ID 添加到 info.plist 中，以保证 SKAdNetwork 的正确运行
+- 调试阶段尽量中真机, 以便获取idfa, 如果获取不到idfa, 则打开idfa开关, iphone 打开idfa 开关的的过程:设置 -> 隐私 -> 跟踪 -> 允许App请求跟踪
 
 ```
 <key>SKAdNetworkItems</key>
@@ -34,6 +36,10 @@
     <dict>
       <key>SKAdNetworkIdentifier</key>
       <string>22mmun2rn5.skadnetwork</string>
+    </dict>
+    <dict>
+      <key>SKAdNetworkIdentifier</key>
+      <string>f7s53z58qe.skadnetwork</string>
     </dict>
   </array>
 ```
@@ -74,7 +80,7 @@ target 'AdvanceSDK_Example' do
   终端里执行 pod update Ads-CN
 
     # 如果想单独升级广点通 则需要指明升级的版本号 例如:
-# pod 'GDTMobSDK', '~> 4.12.1'
+# pod 'GDTMobSDK', '~> 4.12.60'
   终端里执行 pod update GDTMobSDK
 
 
