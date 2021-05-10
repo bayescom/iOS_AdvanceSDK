@@ -10,7 +10,6 @@
 
 @class AdvSupplierModel;
 @class AdvSupplier;
-@class AdvSupplierQueue;
 @protocol AdvanceSupplierDelegate <NSObject>
 
 @optional

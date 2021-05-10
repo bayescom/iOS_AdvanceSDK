@@ -69,7 +69,7 @@
                                 adspotId:(NSString *)adspotid
                                 mediaKey:(NSString *)mediakey
                                    sdkId:(nonnull NSString *)sdkid {
-    [self.mgr setDefaultAdvSupplierWithMediaId:mediaId adspotId:adspotid mediaKey:mediakey sdkId:sdkid];
+//    [self.mgr setDefaultAdvSupplierWithMediaId:mediaId adspotId:adspotid mediaKey:mediakey sdkId:sdkid];
 }
 
 // MARK: ======================= AdvSupplierManagerDelegate =======================

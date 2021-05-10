@@ -51,6 +51,7 @@
         @(AdvErrorCode_113) : @"非CPT本地无策略",
         @(AdvErrorCode_114) : @"非CPT本地策略都执行失败",
         @(AdvErrorCode_115) : @"请求超出设定总时长",
+        @(AdvErrorCode_116) : @"策略中未配置渠道",
     };
     return [codeMap objectForKey:@(code)];
 }

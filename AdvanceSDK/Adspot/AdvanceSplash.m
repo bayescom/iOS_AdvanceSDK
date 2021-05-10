@@ -122,7 +122,8 @@
     if ([_delegate respondsToSelector:@selector(advanceFailedWithError:)]) {
         [_delegate advanceFailedWithError:error];
     }
-//    [self deallocSelf]; // 注释掉 是因为在执行打底渠道
+    [self deallocSelf];
+    [self deallocDelegate:NO];
 }
 
 

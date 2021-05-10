@@ -102,25 +102,25 @@ NSString *const DEFAULT_LOADEDTK = @"http://cruiser.bayescom.cn/loaded?action=lo
 }
 
 // MARK: ======================= 构建打底渠道 =======================
-+ (instancetype)supplierWithMediaId:(NSString *)mediaId
-                           adspotId:(NSString *)adspotid
-                           mediaKey:(NSString *)mediakey
-                              sdkId:(nonnull NSString *)sdkid {
-    AdvSupplier *supplier = [[AdvSupplier alloc] init];
-    
-    supplier.mediaid = mediaId;
-    supplier.adspotid = adspotid;
-    supplier.mediakey = mediakey;
-    supplier.sdktag = @"bottom_default";
-    supplier.identifier = sdkid;
-    supplier.name = @"打底SDK";
-    supplier.priority = 1;
-    supplier.timeout = 5000;
-    
-    [supplier addDefaultSdkSupplierTK];
-    
-    return supplier;
-}
+//+ (instancetype)supplierWithMediaId:(NSString *)mediaId
+//                           adspotId:(NSString *)adspotid
+//                           mediaKey:(NSString *)mediakey
+//                              sdkId:(nonnull NSString *)sdkid {
+//    AdvSupplier *supplier = [[AdvSupplier alloc] init];
+//    
+//    supplier.mediaid = mediaId;
+//    supplier.adspotid = adspotid;
+//    supplier.mediakey = mediakey;
+//    supplier.sdktag = @"bottom_default";
+//    supplier.identifier = sdkid;
+//    supplier.name = @"打底SDK";
+//    supplier.priority = 1;
+//    supplier.timeout = 5000;
+//
+//    [supplier addDefaultSdkSupplierTK];
+//
+//    return supplier;
+//}
 
 - (void)addDefaultSdkSupplierTK {
     NSString *idfa = [AdvDeviceInfoUtil getIdfa];

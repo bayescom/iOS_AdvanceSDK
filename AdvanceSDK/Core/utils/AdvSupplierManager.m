@@ -19,7 +19,7 @@
 // 可执行渠道
 @property (nonatomic, strong) NSMutableArray<AdvSupplier *> *supplierM;
 // 打底渠道
-@property (nonatomic, strong) AdvSupplier *baseSupplier;
+//@property (nonatomic, strong) AdvSupplier *baseSupplier;
 // 当前加载的渠道
 //@property (nonatomic, weak) AdvSupplier *currSupplier;
 
@@ -116,7 +116,12 @@
 - (void)loadNextSupplier {
     if (_model == nil) {
         // 执行打底渠道
-        [self doBaseSupplierIfHas];
+//        [self doBaseSupplierIfHas];
+        if ([_delegate respondsToSelector:@selector(advSupplierManagerLoadError:)]) {
+            [_delegate advSupplierManagerLoadError:[AdvError errorWithCode:AdvErrorCode_102].toNSError];
+        }
+
+
         return;
     }
     // 判断是否在CPT时间段
@@ -156,7 +161,10 @@
         // 非包天 model无渠道信息
         if (_model.suppliers.count <= 0) {
             // 执行打底渠道
-            [self doBaseSupplierIfHas];
+            if ([_delegate respondsToSelector:@selector(advSupplierManagerLoadError:)]) {
+                [_delegate advSupplierManagerLoadError:[AdvError errorWithCode:AdvErrorCode_116].toNSError];
+            }
+
             return;
         }
 
@@ -267,22 +275,22 @@
 }
 
 /// 设置打底渠道
-- (void)setDefaultAdvSupplierWithMediaId:(NSString *)mediaId
-                                adspotId:(NSString *)adspotid
-                                mediaKey:(NSString *)mediakey
-                                   sdkId:(nonnull NSString *)sdkid {
-    _baseSupplier = [AdvSupplier supplierWithMediaId:mediaId adspotId:adspotid mediaKey:mediakey sdkId:sdkid];
-}
+//- (void)setDefaultAdvSupplierWithMediaId:(NSString *)mediaId
+//                                adspotId:(NSString *)adspotid
+//                                mediaKey:(NSString *)mediakey
+//                                   sdkId:(nonnull NSString *)sdkid {
+//    _baseSupplier = [AdvSupplier supplierWithMediaId:mediaId adspotId:adspotid mediaKey:mediakey sdkId:sdkid];
+//}
 
 /// 执行兜底渠道
-- (void)doBaseSupplierIfHas {
-    if (_baseSupplier == nil) {
-        // 未设置打底渠道
-        if ([_delegate respondsToSelector:@selector(advSupplierLoadSuppluer:error:)]) {
-            [_delegate advSupplierLoadSuppluer:nil error:[AdvError errorWithCode:AdvErrorCode_110].toNSError];
-        }
-        return;
-    }
+//- (void)doBaseSupplierIfHas {
+//    if (_baseSupplier == nil) {
+//        // 未设置打底渠道
+//        if ([_delegate respondsToSelector:@selector(advSupplierLoadSuppluer:error:)]) {
+//            [_delegate advSupplierLoadSuppluer:nil error:[AdvError errorWithCode:AdvErrorCode_110].toNSError];
+//        }
+//        return;
+//    }
 //    else if (_currSupplier == _baseSupplier) {
 //        // 当前执行了打底渠道了 则报错
 //        if ([_delegate respondsToSelector:@selector(advSupplierLoadSuppluer:error:)]) {
@@ -291,12 +299,12 @@
 //        return;
 //    }
 //    _currSupplier = _baseSupplier;
-    [self reportWithType:AdvanceSdkSupplierRepoLoaded supplier:_baseSupplier error:nil];
-    if ([_delegate respondsToSelector:@selector(advSupplierLoadSuppluer:error:)]) {
-        [_delegate advSupplierLoadSuppluer:_baseSupplier error:nil];
-    }
+//    [self reportWithType:AdvanceSdkSupplierRepoLoaded supplier:_baseSupplier error:nil];
+//    if ([_delegate respondsToSelector:@selector(advSupplierLoadSuppluer:error:)]) {
+//        [_delegate advSupplierLoadSuppluer:_baseSupplier error:nil];
+//    }
 //    [_supplierM removeObject:_currSupplier];
-}
+//}
 
 // MARK: ======================= Net Work =======================
 /// 拉取线上数据 如果是仅仅储存 不会触发任何回调，仅存储策略信息
@@ -370,14 +378,14 @@
     NSHTTPURLResponse *httpResp = (NSHTTPURLResponse *)response;
     if (httpResp.statusCode != 200) {
         // code no statusCode
-        // 策略失败回调和渠道失败回调统一, 当策略失败 但是打底渠道成功时 则不抛错误
-//        if (!saveOnly && [_delegate respondsToSelector:@selector(advSupplierManagerLoadError:)]) {
-//            [_delegate advSupplierManagerLoadError:[AdvError errorWithCode:AdvErrorCode_103].toNSError];
-//        }
-        
+        if (!saveOnly && [_delegate respondsToSelector:@selector(advSupplierManagerLoadError:)]) {
+            [_delegate advSupplierManagerLoadError:[AdvError errorWithCode:AdvErrorCode_103 obj:error].toNSError];
+        }
+
+
         // 默认走打底
-        ADVLog(@"statusCode != 200，执行打底");
-        [self doBaseSupplierIfHas];
+//        ADVLog(@"statusCode != 200，执行打底");
+//        [self doBaseSupplierIfHas];
         return;
     }
     
@@ -396,13 +404,17 @@
     if (a_model.code != 200) {
         // result code not 200
         // 策略失败回调和渠道失败回调统一, 当策略失败 但是打底渠道成功时 则不抛错误
+        if (!saveOnly && [_delegate respondsToSelector:@selector(advSupplierManagerLoadError:)]) {
+            [_delegate advSupplierManagerLoadError:[AdvError errorWithCode:AdvErrorCode_105 obj:error].toNSError];
+        }
+
 //        if (!saveOnly && [_delegate respondsToSelector:@selector(advSupplierManagerLoadError:)]) {
 //            [_delegate advSupplierManagerLoadError:[AdvError errorWithCode:AdvErrorCode_105].toNSError];
 //        }
         
         // 默认走打底
-        ADVLog(@"model.code != 200，执行打底");
-        [self doBaseSupplierIfHas];
+//        ADVLog(@"model.code != 200，执行打底");
+//        [self doBaseSupplierIfHas];
         return;
     }
     

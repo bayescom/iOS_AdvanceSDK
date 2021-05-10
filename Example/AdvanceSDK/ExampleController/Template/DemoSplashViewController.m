@@ -53,7 +53,7 @@
                                                 adspotId:@"10002436"
                                                 mediaKey:@"757d5119466abe3d771a211cc1278df7"
                                                   sdkId:SDK_ID_MERCURY];
-    self.advanceSplash.timeout = 30;
+    self.advanceSplash.timeout = 5;
     [self.advanceSplash loadAd];
 }
 
