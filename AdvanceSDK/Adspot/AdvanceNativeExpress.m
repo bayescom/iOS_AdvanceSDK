@@ -45,14 +45,6 @@
     return self;
 }
 
-
-// 执行了打底渠道
-- (void)advSupplierLoadDefaultSuppluer:(AdvSupplier *)supplier
-{
-    ADVLog(@"执行了打底渠道: %@", supplier.sdktag);
-    [self advanceOnAdReceivedWithReqId:supplier.sdktag];
-}
-
 // 返回策略id
 - (void)advanceOnAdReceivedWithReqId:(NSString *)reqId
 {
