@@ -21,22 +21,6 @@
 /// 广告到达激励时间
 - (void)advanceRewardVideoAdDidRewardEffective;
 
-#pragma 以下方法已被废弃, 请移步AdvanceBaseDelegate 和 AdvanceCommonDelegate
-/// 广告准备完成
-//- (void)advanceRewardVideoOnAdReady;
-
-/// 广告曝光
-//- (void)advanceRewardVideoOnAdShow;
-
-/// 广告点击
-//- (void)advanceRewardVideoOnAdClicked;
-
-/// 广告拉取失败
-//- (void)advanceRewardVideoOnAdFailedWithSdkId:(NSString *)sdkId error:(NSError *)error;
-
-/// 广告关闭
-//- (void)advanceRewardVideoOnAdClosed;
-
 @end
 
 #endif

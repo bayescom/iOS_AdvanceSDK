@@ -196,7 +196,7 @@
                     supplier.timeout = (_timeout_stamp - now) >= 5000 ? 5000 : (_timeout_stamp - now);
                 }
                 
-                if ([supplier.identifier isEqualToString:@"00000000"]) {
+                if ([supplier.identifier isEqualToString:@"00000000"]) {// 测试专用
                     ADVLog(@"延时串行开始 %@", _adapter);
                     dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC));
                     dispatch_after(delayTime, dispatch_get_main_queue(), ^{

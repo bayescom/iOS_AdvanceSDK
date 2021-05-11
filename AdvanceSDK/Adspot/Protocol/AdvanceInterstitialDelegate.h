@@ -12,29 +12,7 @@
 @protocol AdvanceInterstitialDelegate <AdvanceBaseDelegate>
 @optional
 
-#pragma 以下方法已被废弃, 请移步AdvanceBaseDelegate 和 AdvanceCommonDelegate
-/// 广告可以调用show方法
-//- (void)advanceInterstitialOnReadyToShow;
-
-///// 广告渲染失败
-//- (void)advanceInterstitialOnAdRenderFailed;
-
-/// 请求广告数据成功后调用
-//- (void)advanceInterstitialOnAdReceived;
-
-/// 广告曝光成功
-//- (void)advanceInterstitialOnAdShow;
-
-/// 广告点击
-//- (void)advanceInterstitialOnAdClicked;
-
-/// 广告拉取失败
-//- (void)advanceInterstitialOnAdFailedWithSdkId:(NSString *)sdkId error:(NSError *)error;
-
-/// 广告关闭
-//- (void)advanceInterstitialOnAdClosed;
-
-
+#pragma 请移步AdvanceBaseDelegate 和 AdvanceCommonDelegate
 
 @end
 
