@@ -63,9 +63,9 @@
 
 /// 加载策略Model失败
 - (void)advanceBaseAdapterLoadError:(nullable NSError *)error {
-//    if ([_delegate respondsToSelector:@selector(advanceFailedWithError:)]) {
-//        [_delegate advanceFailedWithError:error];
-//    }
+    if ([_delegate respondsToSelector:@selector(advanceFailedWithError:)]) {
+        [_delegate advanceFailedWithError:error];
+    }
 }
 
 /// 返回下一个渠道的参数
@@ -73,10 +73,10 @@
     // 返回渠道有问题 则不用再执行下面的渠道了
     if (error) {
         // 错误回调只调用一次
-//        if (self.delegate != nil && [self.delegate respondsToSelector:@selector(advanceFailedWithError:)]) {
-//            [self.delegate advanceFailedWithError:error];
-//        }
-//        [self deallocDelegate:NO];
+        if (self.delegate != nil && [self.delegate respondsToSelector:@selector(advanceFailedWithError:)]) {
+            [self.delegate advanceFailedWithError:error];
+        }
+        [self deallocDelegate:NO];
         return;
     }
     

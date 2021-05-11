@@ -120,11 +120,6 @@
         });
     }
 
-    // 如果执行了打底渠道 则执行此方法
-    if ([supplier.sdktag isEqualToString:@"bottom_default"]) {
-        [self advSupplierLoadDefaultSuppluer:supplier];
-    }
-
     // 加载渠道
     if ([_baseDelegate respondsToSelector:@selector(advanceBaseAdapterLoadSuppluer:error:)]) {
         [_baseDelegate advanceBaseAdapterLoadSuppluer:supplier error:error];
