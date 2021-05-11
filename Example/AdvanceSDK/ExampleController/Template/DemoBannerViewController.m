@@ -44,10 +44,6 @@
 //    self.advanceBanner = [[AdvanceBanner alloc] initWithAdspotId:self.adspotId adContainer:self.contentV viewController:self];
     self.advanceBanner = [[AdvanceBanner alloc] initWithAdspotId:self.adspotId adContainer:self.contentV customExt:self.ext viewController:self];
     self.advanceBanner.delegate = self;
-    [self.advanceBanner setDefaultAdvSupplierWithMediaId:@"10025512"
-                                                adspotId:@"10000558"
-                                                mediaKey:@"757d5119466abe3d771a211cc1278df7"
-                                                  sdkId:SDK_ID_MERCURY];
     
     [self.advanceBanner loadAd];
     

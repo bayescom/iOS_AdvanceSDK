@@ -39,12 +39,6 @@ NS_ASSUME_NONNULL_BEGIN
                       customExt:(NSDictionary *_Nonnull)ext;
 
 
-/// 设置打底渠道
-- (void)setDefaultAdvSupplierWithMediaId:(NSString *)mediaId
-                                adspotId:(NSString *)adspotid
-                                mediaKey:(NSString *)mediakey
-                                   sdkId:(nonnull NSString *)sdkid;
-
 /// 加载策略
 - (void)loadAd;
 

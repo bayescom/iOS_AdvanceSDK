@@ -99,10 +99,6 @@
 //    self.advanceSplash.showLogoRequire = YES;
     self.advanceSplash.logoImage = [UIImage imageNamed:@"app_logo"];
     self.advanceSplash.backgroundImage = [UIImage imageNamed:@"LaunchImage_img"];
-    [self.advanceSplash setDefaultAdvSupplierWithMediaId:@"1111672708"
-                                                adspotId:@"3001177798101307"
-                                                mediaKey:@""
-                                                  sdkId:SDK_ID_CSJ];
     self.advanceSplash.timeout = 5;
     [self.advanceSplash loadAd];
 }
