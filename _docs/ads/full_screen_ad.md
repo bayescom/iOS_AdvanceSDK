@@ -2,7 +2,9 @@
 全屏视频视频分为广告数据加载，视频缓存，以及展示阶段，当视频缓存成功回调后可以调用展示方法展示激励视频，激励视频在展示的过程可以被关闭。
 
 ```objective-c
-#import "AdvanceSDK.h"
+#import "DemoFullScreenVideoController.h"
+#import "DemoUtils.h"
+#import <AdvanceSDK/AdvanceFullScreenVideo.h>
 
 @interface DemoFullScreenVideoController () <AdvanceFullScreenVideoDelegate>
 @property (nonatomic, strong) AdvanceFullScreenVideo *advanceFullScreenVideo;
@@ -28,10 +30,6 @@
                                                                    adspotId:self.adspotId
                                                              viewController:self];
     self.advanceFullScreenVideo.delegate = self;
-    [self.advanceFullScreenVideo setDefaultSdkSupplierWithMediaId:@"100255"
-                                                      adspotId:@"10000559"
-                                                      mediaKey:@"757d5119466abe3d771a211cc1278df7"
-                                                        sdkId:SDK_ID_MERCURY];
     [self.advanceFullScreenVideo loadAd];
 }
 

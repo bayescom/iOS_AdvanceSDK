@@ -7,7 +7,7 @@
 #import "DemoBannerViewController.h"
 #import "ViewBuilder.h"
 
-#import <AdvanceSDK/AdvanceSDK.h>
+#import <AdvanceSDK/AdvanceBanner.h>
 
 @interface DemoBannerViewController () <AdvanceBannerDelegate>
 @property (nonatomic, strong) AdvanceBanner *advanceBanner;
@@ -37,10 +37,6 @@
     
     self.advanceBanner = [[AdvanceBanner alloc] initWithMediaId:self.mediaId adspotId:self.adspotId adContainer:self.contentV viewController:self];
     self.advanceBanner.delegate = self;
-    [self.advanceBanner setDefaultSdkSupplierWithMediaId:@"100255"
-                                                adspotId:@"10000558"
-                                                mediaKey:@"757d5119466abe3d771a211cc1278df7"
-                                                  sdkId:SDK_ID_MERCURY];
     [self.advanceBanner loadAd];
 }
 
