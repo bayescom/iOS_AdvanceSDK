@@ -7,7 +7,7 @@
 #import "DemoInterstitialViewController.h"
 #import "DemoUtils.h"
 
-#import <AdvanceSDK/AdvanceSDK.h>
+#import <AdvanceSDK/AdvanceInterstitial.h>
 
 @interface DemoInterstitialViewController () <AdvanceInterstitialDelegate>
 @property (nonatomic, strong) AdvanceInterstitial *advanceInterstitial;
@@ -33,10 +33,6 @@
                                                                    adspotId:self.adspotId
                                                              viewController:self];
     self.advanceInterstitial.delegate=self;
-    [self.advanceInterstitial setDefaultSdkSupplierWithMediaId:@"100255"
-                                                      adspotId:@"10000559"
-                                                      mediaKey:@"757d5119466abe3d771a211cc1278df7"
-                                                        sdkId:SDK_ID_MERCURY];
     [self.advanceInterstitial loadAd];
 }
 

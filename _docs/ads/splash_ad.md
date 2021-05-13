@@ -6,7 +6,7 @@
 
 #import "DemoSplashViewController.h"
 #import "DemoUtils.h"
-#import <AdvanceSDK/AdvanceSDK.h>
+#import <AdvanceSDK/AdvanceSplash.h>
 
 @interface DemoSplashViewController () <AdvanceSplashDelegate>
 @property(strong,nonatomic) AdvanceSplash *advanceSplash;
@@ -32,10 +32,6 @@
     self.advanceSplash.delegate=self;
     self.advanceSplash.logoImage= [UIImage imageNamed:@"640-100"];
     self.advanceSplash.backgroundImage= [UIImage imageNamed:@"LaunchImage_img"];
-    [self.advanceSplash setDefaultSdkSupplierWithMediaId:@"100255"
-                                                adspotId:@"10002436"
-                                                mediaKey:@"757d5119466abe3d771a211cc1278df7"
-                                                  sdkTag:SDK_ID_MERCURY];
     [self.advanceSplash loadAd];
 }
 

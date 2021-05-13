@@ -99,10 +99,6 @@
 //    self.advanceSplash.showLogoRequire = YES;
     self.advanceSplash.logoImage = [UIImage imageNamed:@"app_logo"];
     self.advanceSplash.backgroundImage = [UIImage imageNamed:@"LaunchImage_img"];
-    [self.advanceSplash setDefaultAdvSupplierWithMediaId:@"1111672708"
-                                                adspotId:@"3001177798101307"
-                                                mediaKey:@""
-                                                  sdkId:SDK_ID_CSJ];
     self.advanceSplash.timeout = 5;
     [self.advanceSplash loadAd];
 }
@@ -154,29 +150,5 @@
 {
     NSLog(@"%s 策略id为: %@",__func__ , reqId);
 }
-
-
-// MARK: ======================= Debug =======================
-//- (void)debugConf {
-//    [STDebugConsole setModel:STDebugConsoleModelRedirect];
-//
-//    UIButton *logBtn = [[UIButton alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width-50-8, [UIScreen mainScreen].bounds.size.height-50-28, 50, 50)];
-//    logBtn.backgroundColor = [UIColor colorWithRed:0.44 green:0.81 blue:0.89 alpha:1.00];
-//    [logBtn setTitle:@"日志" forState:UIControlStateNormal];
-//    [logBtn setTitleColor:[UIColor colorWithWhite:0.1 alpha:0.3] forState:UIControlStateNormal];
-//    logBtn.layer.cornerRadius = 25;
-//    [[UIApplication sharedApplication].keyWindow addSubview:logBtn];
-//
-//    [logBtn addTarget:self action:@selector(showDebug) forControlEvents:UIControlEventTouchUpInside];
-//}
-//
-//- (void)showDebug {
-//    STDebugConsoleViewController *vc = [[STDebugConsoleViewController alloc] init];
-//    UINavigationController *navc = [[UINavigationController alloc] initWithRootViewController:vc];
-////    navc.navigationBarHidden = YES;
-//    [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:navc animated:YES completion:nil];
-//
-//    [[JPFPSStatus sharedInstance] open];
-//}
 
 @end

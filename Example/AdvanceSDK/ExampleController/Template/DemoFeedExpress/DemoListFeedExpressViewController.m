@@ -48,10 +48,6 @@
     _advanceFeed = [[AdvanceNativeExpress alloc] initWithAdspotId:self.adspotId customExt:self.ext viewController:self adSize:CGSizeMake(self.view.bounds.size.width, 0)];
 
     _advanceFeed.delegate = self;
-    [_advanceFeed setDefaultAdvSupplierWithMediaId:@"100255"
-                                          adspotId:@"10002698"
-                                          mediaKey:@"757d5119466abe3d771a211cc1278df7"
-                                            sdkId:SDK_ID_MERCURY];
     [_advanceFeed loadAd];
 }
 

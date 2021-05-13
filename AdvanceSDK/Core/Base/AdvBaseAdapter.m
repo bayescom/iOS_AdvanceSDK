@@ -65,12 +65,12 @@
     
 }
 
-- (void)setDefaultAdvSupplierWithMediaId:(NSString *)mediaId
-                                adspotId:(NSString *)adspotid
-                                mediaKey:(NSString *)mediakey
-                                   sdkId:(nonnull NSString *)sdkid {
-    [self.mgr setDefaultAdvSupplierWithMediaId:mediaId adspotId:adspotid mediaKey:mediakey sdkId:sdkid];
-}
+//- (void)setDefaultAdvSupplierWithMediaId:(NSString *)mediaId
+//                                adspotId:(NSString *)adspotid
+//                                mediaKey:(NSString *)mediakey
+//                                   sdkId:(nonnull NSString *)sdkid {
+//    [self.mgr setDefaultAdvSupplierWithMediaId:mediaId adspotId:adspotid mediaKey:mediakey sdkId:sdkid];
+//}
 
 // MARK: ======================= AdvSupplierManagerDelegate =======================
 /// 加载策略Model成功
@@ -118,11 +118,6 @@
         dispatch_once(&onceToken, ^{
             [NSClassFromString(clsName) performSelector:@selector(setAppID:mediaKey:) withObject:supplier.mediaid withObject:supplier.mediakey];
         });
-    }
-
-    // 如果执行了打底渠道 则执行此方法
-    if ([supplier.sdktag isEqualToString:@"bottom_default"]) {
-        [self advSupplierLoadDefaultSuppluer:supplier];
     }
 
     // 加载渠道

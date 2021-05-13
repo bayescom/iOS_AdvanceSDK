@@ -101,10 +101,10 @@ NSString * ADVStringFromNAdvanceSdkSupplierRepoType(AdvanceSdkSupplierRepoType t
 
 
 /// 构建打底渠道
-+ (instancetype)supplierWithMediaId:(NSString *)mediaId
-                           adspotId:(NSString *)adspotid
-                           mediaKey:(NSString *)mediakey
-                              sdkId:(nonnull NSString *)sdkid;
+//+ (instancetype)supplierWithMediaId:(NSString *)mediaId
+//                           adspotId:(NSString *)adspotid
+//                           mediaKey:(NSString *)mediakey
+//                              sdkId:(nonnull NSString *)sdkid;
 
 @end
 

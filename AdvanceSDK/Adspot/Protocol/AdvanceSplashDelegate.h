@@ -20,19 +20,6 @@
 /// 广告倒计时结束回调
 - (void)advanceSplashOnAdCountdownToZero;
 
-#pragma 以下方法已被废弃, 请移步AdvanceBaseDelegate 和 AdvanceCommonDelegate
-/// 广告数据拉取成功
-//- (void)advanceSplashOnAdReceived;
-
-/// 广告曝光成功
-//- (void)advanceSplashOnAdShow;
-
-/// 广告展示失败
-//- (void)advanceSplashOnAdFailedWithSdkId:(NSString *)sdkId error:(NSError *)error;
-
-/// 广告点击
-//- (void)advanceSplashOnAdClicked;
-
 
 @end
 
