@@ -64,6 +64,7 @@
     NSLog(@"广告数据拉取成功 %s", __func__);
     _isAdLoaded=true;
     [JDStatusBarNotification showWithStatus:@"广告加载成功" dismissAfter:1.5];
+    [self loadAdBtn2Action];
 }
 
 /// 广告曝光
