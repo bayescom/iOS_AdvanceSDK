@@ -61,6 +61,7 @@
     NSLog(@"广告数据加载成功 %s", __func__);
     _isAdLoaded=true;
     [JDStatusBarNotification showWithStatus:@"广告加载成功" dismissAfter:1.5];
+//    [self loadAdBtn2Action];
 }
 
 /// 视频缓存成功
@@ -69,6 +70,7 @@
     NSLog(@"视频缓存成功 %s", __func__);
     [JDStatusBarNotification showWithStatus:@"视频缓存成功" dismissAfter:1.5];
 
+    [self loadAdBtn2Action];
 }
 
 /// 到达激励时间

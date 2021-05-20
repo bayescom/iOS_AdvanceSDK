@@ -27,6 +27,8 @@
 @property (nonatomic, copy) NSString *mediaId;
 /// 广告位id
 @property (nonatomic, copy) NSString *adspotId;
+/// reqid
+@property (nonatomic, copy) NSString *reqid;
 /// 自定义拓展字段
 @property (nonatomic, strong) NSDictionary *ext;
 
@@ -326,9 +328,12 @@
     
     // 个性化广告推送开关
     [deviceInfo setValue:[AdvSdkConfig shareInstance].isAdTrack ? @"0" : @"1" forKey:@"donottrack"];
+    self.reqid = [AdvDeviceInfoUtil getAuctionId];
+    if (self.reqid) {
+        [deviceInfo setValue:self.reqid forKey:@"reqid"];
+    }
 
-//    [deviceInfo setValue:@"" forKey:@"adspotid"];
-    ADVLog(@"请求参数 %@", deviceInfo);
+    ADVLog(@"请求参数 %@   uuid:%@", deviceInfo, [AdvDeviceInfoUtil getAuctionId]);
     NSError *parseError = nil;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:deviceInfo options:NSJSONWritingPrettyPrinted error:&parseError];
     NSURL *url = [NSURL URLWithString:AdvanceSdkRequestUrl];
@@ -454,6 +459,7 @@
     for (id obj in uploadArr) {
         @try {
             NSString *urlString = obj;
+            urlString = [self paramValueOfUrl:obj withParam:@"&reqid"];
             NSTimeInterval timeStamp = [[NSDate dateWithTimeIntervalSinceNow:0] timeIntervalSince1970] * 1000;
             urlString = [urlString stringByReplacingOccurrencesOfString:@"__TIME__" withString:[NSString stringWithFormat:@"%0.0f", timeStamp]];
             NSURL *url = [NSURL URLWithString:urlString];
@@ -532,9 +538,33 @@
 - (NSString *)joinLoadedtkUrlWithObj:(NSString *)urlString {
     NSTimeInterval serverTime = [[NSDate date] timeIntervalSince1970]*1000 - self.serverTime;
     if (serverTime > 0) {
-        return [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=l_%.0f&track_time",serverTime]];
+        NSString *url = [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=l_%.0f&track_time",serverTime]];
+        return url;
     }
     return urlString;
+}
+
+- (NSString *)paramValueOfUrl:(NSString *)url withParam:(NSString *)param {
+    @try {
+        if ([url containsString:param]) {
+            NSRange range =  [url rangeOfString:param];
+            
+            // 定义要删除按的reqid
+            NSString *reqidValue = [NSString stringWithFormat:@"reqid=%@", self.reqid];
+            
+            // 找到原url当中 reqid=balabalabala
+            NSRange rangeReq = NSMakeRange(range.location + 1, 38);
+            NSString * parametersString = [url substringWithRange:rangeReq];
+    //        [url  substringFromIndex:range.location];
+            if ([parametersString containsString:@"&"]) { // reqid=balabalabala 包含了& 说明截取不准确返回的url有问题 则不进行替换工作
+                return url;
+            }
+            url = [url stringByReplacingOccurrencesOfString:parametersString withString:reqidValue];
+        }
+    } @catch (NSException *exception) {
+        return url;
+    }
+    return url;
 }
 
 
