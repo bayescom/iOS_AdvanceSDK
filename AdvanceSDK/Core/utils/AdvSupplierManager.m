@@ -534,18 +534,33 @@
 - (NSMutableArray *)loadedtkUrlWithArr:(NSArray<NSString *> *)uploadArr {
     NSMutableArray *temp = [NSMutableArray arrayWithCapacity:uploadArr.count];
     for (id obj in uploadArr.mutableCopy) {
-        NSString *loadedtk = [self joinLoadedtkUrlWithObj:obj];
+        NSString *loadedtk = [self joinTimeUrlWithObj:obj type:AdvanceSdkSupplierRepoLoaded];
         [temp addObject:loadedtk];
     }
     return temp;
 }
 
-#pragma loadedtk 拼接时间戳
-- (NSString *)joinLoadedtkUrlWithObj:(NSString *)urlString {
+#pragma imptk 的参数拼接
+- (NSMutableArray *)imptkUrlWithArr:(NSArray<NSString *> *)uploadArr {
+    NSMutableArray *temp = [NSMutableArray arrayWithCapacity:uploadArr.count];
+    for (id obj in uploadArr.mutableCopy) {
+        NSString *loadedtk = [self joinTimeUrlWithObj:obj type:AdvanceSdkSupplierRepoImped];
+        [temp addObject:loadedtk];
+    }
+    return temp;
+}
+
+/// 拼接时间戳
+/// @param urlString url
+/// @param type AdvanceSdkSupplierRepoType
+- (NSString *)joinTimeUrlWithObj:(NSString *)urlString type:(AdvanceSdkSupplierRepoType)repoType {
     NSTimeInterval serverTime = [[NSDate date] timeIntervalSince1970]*1000 - self.serverTime;
     if (serverTime > 0) {
-        NSString *url = [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=l_%.0f&track_time",serverTime]];
-        return url;
+        if (repoType == AdvanceSdkSupplierRepoLoaded) {
+            return [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=l_%.0f&track_time",serverTime]];
+        } else if (repoType == AdvanceSdkSupplierRepoImped) {
+            return [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=tt_%.0f&track_time",serverTime]];
+        }
     }
     return urlString;
 }
@@ -607,7 +622,7 @@
             [self fetchData:YES];
         }
     } else if (repoType == AdvanceSdkSupplierRepoImped) {
-        uploadArr =  supplier.imptk;
+        uploadArr =  [self imptkUrlWithArr:supplier.imptk];
     } else if (repoType == AdvanceSdkSupplierRepoFaileded) {
         uploadArr =  [self failedtkUrlWithArr:supplier.failedtk error:error];
     }
