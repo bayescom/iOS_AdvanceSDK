@@ -314,6 +314,12 @@
     NSMutableDictionary *deviceInfo = [AdvDeviceInfoUtil getDeviceInfoWithMediaId:_mediaId adspotId:_adspotId];
     
     if (self.ext) {
+        
+        // 如果是缓存渠道 请求的时候要标记一下
+        if (_isLoadLocalSupplier) {
+            [self.ext setValue:@"1" forKey:@"cache_effect"];
+        }
+        
         [deviceInfo setValue:self.ext forKey:@"ext"];
     }
     
