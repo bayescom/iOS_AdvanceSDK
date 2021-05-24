@@ -27,6 +27,8 @@
 @property (nonatomic, copy) NSString *mediaId;
 /// 广告位id
 @property (nonatomic, copy) NSString *adspotId;
+/// reqid
+@property (nonatomic, copy) NSString *reqid;
 /// 自定义拓展字段
 @property (nonatomic, strong) NSDictionary *ext;
 
@@ -312,6 +314,12 @@
     NSMutableDictionary *deviceInfo = [AdvDeviceInfoUtil getDeviceInfoWithMediaId:_mediaId adspotId:_adspotId];
     
     if (self.ext) {
+        
+        // 如果是缓存渠道 请求的时候要标记一下
+        if (_isLoadLocalSupplier) {
+            [self.ext setValue:@"1" forKey:@"cache_effect"];
+        }
+        
         [deviceInfo setValue:self.ext forKey:@"ext"];
     }
     
@@ -326,9 +334,12 @@
     
     // 个性化广告推送开关
     [deviceInfo setValue:[AdvSdkConfig shareInstance].isAdTrack ? @"0" : @"1" forKey:@"donottrack"];
+    self.reqid = [AdvDeviceInfoUtil getAuctionId];
+    if (self.reqid) {
+        [deviceInfo setValue:self.reqid forKey:@"reqid"];
+    }
 
-//    [deviceInfo setValue:@"" forKey:@"adspotid"];
-    ADVLog(@"请求参数 %@", deviceInfo);
+    ADVLog(@"请求参数 %@   uuid:%@", deviceInfo, [AdvDeviceInfoUtil getAuctionId]);
     NSError *parseError = nil;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:deviceInfo options:NSJSONWritingPrettyPrinted error:&parseError];
     NSURL *url = [NSURL URLWithString:AdvanceSdkRequestUrl];
@@ -454,6 +465,7 @@
     for (id obj in uploadArr) {
         @try {
             NSString *urlString = obj;
+            urlString = [self paramValueOfUrl:obj withParam:@"&reqid"];
             NSTimeInterval timeStamp = [[NSDate dateWithTimeIntervalSinceNow:0] timeIntervalSince1970] * 1000;
             urlString = [urlString stringByReplacingOccurrencesOfString:@"__TIME__" withString:[NSString stringWithFormat:@"%0.0f", timeStamp]];
             NSURL *url = [NSURL URLWithString:urlString];
@@ -522,19 +534,58 @@
 - (NSMutableArray *)loadedtkUrlWithArr:(NSArray<NSString *> *)uploadArr {
     NSMutableArray *temp = [NSMutableArray arrayWithCapacity:uploadArr.count];
     for (id obj in uploadArr.mutableCopy) {
-        NSString *loadedtk = [self joinLoadedtkUrlWithObj:obj];
+        NSString *loadedtk = [self joinTimeUrlWithObj:obj type:AdvanceSdkSupplierRepoLoaded];
         [temp addObject:loadedtk];
     }
     return temp;
 }
 
-#pragma loadedtk 拼接时间戳
-- (NSString *)joinLoadedtkUrlWithObj:(NSString *)urlString {
+#pragma imptk 的参数拼接
+- (NSMutableArray *)imptkUrlWithArr:(NSArray<NSString *> *)uploadArr {
+    NSMutableArray *temp = [NSMutableArray arrayWithCapacity:uploadArr.count];
+    for (id obj in uploadArr.mutableCopy) {
+        NSString *loadedtk = [self joinTimeUrlWithObj:obj type:AdvanceSdkSupplierRepoImped];
+        [temp addObject:loadedtk];
+    }
+    return temp;
+}
+
+/// 拼接时间戳
+/// @param urlString url
+/// @param type AdvanceSdkSupplierRepoType
+- (NSString *)joinTimeUrlWithObj:(NSString *)urlString type:(AdvanceSdkSupplierRepoType)repoType {
     NSTimeInterval serverTime = [[NSDate date] timeIntervalSince1970]*1000 - self.serverTime;
     if (serverTime > 0) {
-        return [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=l_%.0f&track_time",serverTime]];
+        if (repoType == AdvanceSdkSupplierRepoLoaded) {
+            return [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=l_%.0f&track_time",serverTime]];
+        } else if (repoType == AdvanceSdkSupplierRepoImped) {
+            return [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=tt_%.0f&track_time",serverTime]];
+        }
     }
     return urlString;
+}
+
+- (NSString *)paramValueOfUrl:(NSString *)url withParam:(NSString *)param {
+    @try {
+        if ([url containsString:param]) {
+            NSRange range =  [url rangeOfString:param];
+            
+            // 定义要删除按的reqid
+            NSString *reqidValue = [NSString stringWithFormat:@"reqid=%@", self.reqid];
+            
+            // 找到原url当中 reqid=balabalabala
+            NSRange rangeReq = NSMakeRange(range.location + 1, 38);
+            NSString * parametersString = [url substringWithRange:rangeReq];
+    //        [url  substringFromIndex:range.location];
+            if ([parametersString containsString:@"&"]) { // reqid=balabalabala 包含了& 说明截取不准确返回的url有问题 则不进行替换工作
+                return url;
+            }
+            url = [url stringByReplacingOccurrencesOfString:parametersString withString:reqidValue];
+        }
+    } @catch (NSException *exception) {
+        return url;
+    }
+    return url;
 }
 
 
@@ -571,7 +622,7 @@
             [self fetchData:YES];
         }
     } else if (repoType == AdvanceSdkSupplierRepoImped) {
-        uploadArr =  supplier.imptk;
+        uploadArr =  [self imptkUrlWithArr:supplier.imptk];
     } else if (repoType == AdvanceSdkSupplierRepoFaileded) {
         uploadArr =  [self failedtkUrlWithArr:supplier.failedtk error:error];
     }
