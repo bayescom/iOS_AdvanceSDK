@@ -104,6 +104,8 @@
         clsName = @"CsjRewardVideoAdapter";
     } else if ([supplier.identifier isEqualToString:SDK_ID_MERCURY]) {
         clsName = @"MercuryRewardVideoAdapter";
+    } else if ([supplier.identifier isEqualToString:SDK_ID_BAIDU]) {
+        clsName = @"BdRewardVideoAdapter";
     }
     if (NSClassFromString(clsName)) {
 #pragma clang diagnostic push

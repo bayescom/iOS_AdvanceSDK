@@ -114,7 +114,7 @@
 }
 
 - (void)loadNextSupplier {
-    if (_model == nil) {
+    if (self.model == nil) {
         // 执行打底渠道
 //        [self doBaseSupplierIfHas];
         if ([_delegate respondsToSelector:@selector(advSupplierManagerLoadError:)]) {
@@ -126,7 +126,7 @@
     }
     // 判断是否在CPT时间段
     NSTimeInterval curTime = [[NSDate date] timeIntervalSince1970]*1000.0;
-    if ([_model.setting.cptStart floatValue] < curTime && [_model.setting.cptEnd floatValue] > curTime) {
+    if ([self.model.setting.cptStart floatValue] < curTime && [self.model.setting.cptEnd floatValue] > curTime) {
         
         // CPT 无渠道
         if (_supplierM.count <= 0) {
@@ -139,7 +139,7 @@
         
         AdvSupplier *targetSupplier = nil;
         for (AdvSupplier *supplier in _supplierM) {
-            if (supplier.identifier == _model.setting.cptSupplier) {
+            if (supplier.identifier == self.model.setting.cptSupplier) {
                 targetSupplier = supplier;
             }
         }
@@ -159,7 +159,7 @@
         }
     } else {
         // 非包天 model无渠道信息
-        if (_model.suppliers.count <= 0) {
+        if (self.model.suppliers.count <= 0) {
             // 执行打底渠道
             if ([_delegate respondsToSelector:@selector(advSupplierManagerLoadError:)]) {
                 [_delegate advSupplierManagerLoadError:[AdvError errorWithCode:AdvErrorCode_116].toNSError];
@@ -189,7 +189,7 @@
     NSString *adTypeName = [ext valueForKey:AdvSdkTypeAdName];
 
     NSMutableArray *groupM = [self.model.setting.parallelGroup mutableCopy];
-    if (_model.setting.parallelGroup.count > 0) {
+    if (self.model.setting.parallelGroup.count > 0) {
         // 利用currentPriority 匹配priorityGroup 看看当中有没有需要和当前的supplier 并发的渠道
         __weak typeof(self) _self = self;
         [groupM enumerateObjectsUsingBlock:^(NSMutableArray<NSNumber *> * _Nonnull prioritys, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -337,6 +337,7 @@
         [deviceInfo setValue:self.reqid forKey:@"reqid"];
     }
 
+    sleep(4.5);
     ADVLog(@"请求参数 %@   uuid:%@", deviceInfo, [AdvDeviceInfoUtil getAuctionId]);
     NSError *parseError = nil;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:deviceInfo options:NSJSONWritingPrettyPrinted error:&parseError];
@@ -444,7 +445,7 @@
     a_model.setting.cacheTime = [[NSDate date] timeIntervalSince1970] + a_model.setting.cacheDur;
     ADVLog(@"---------");
     if (!saveOnly) {
-        _model = a_model;
+        self.model = a_model;
         
         _supplierM = [_model.suppliers mutableCopy];
         [self sortSupplierMByPriority];
@@ -498,7 +499,9 @@
 - (NSString *)joinFailedUrlWithObj:(NSString *)urlString error:(NSError *)error {
     ADVLog(@"UPLOAD error: %@", error);
     if (error) {
-        if ([error.domain isEqualToString:@"com.pangle.buadsdk"]) { // 新版穿山甲sdk报错
+        if ([error.domain isEqualToString:@"BDAdErrorDomain"]) {
+            return [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=err_bd_%ld&track_time",(long)error.code]];
+        } else if ([error.domain isEqualToString:@"com.pangle.buadsdk"]) { // 新版穿山甲sdk报错
             return [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=err_csj_%ld&track_time",(long)error.code]];
         } else if ([error.domain isEqualToString:@"com.bytedance.buadsdk"]) {// 穿山甲sdk报错
             return [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=err_csj_%ld&track_time",(long)error.code]];
@@ -652,8 +655,11 @@
 
 - (void)setModel:(AdvSupplierModel *)model {
     if (_model != model) {
+        ADVLog(@"%@ -- %@", _model, model);
         _model = nil;
+        ADVLog(@"%@ -- %@", _model, model);
         _model = model;
+        ADVLog(@"model赋值 %@ %@", _model, model);
     }
 }
 @end

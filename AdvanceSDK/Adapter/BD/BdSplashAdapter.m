@@ -106,7 +106,7 @@
     if (self.bd_ad) {
         [window addSubview:self.customSplashView];
         self.customSplashView.frame = CGRectMake(window.frame.origin.x, window.frame.origin.y, window.frame.size.width, window.frame.size.height - self.imgV.frame.size.height);
-        self.customSplashView.backgroundColor = [UIColor redColor];
+        self.customSplashView.backgroundColor = [UIColor whiteColor];
         [self.bd_ad showInContainerView:self.customSplashView];
     
         NSLog(@"百度开屏展示%@",self.bd_ad);
@@ -116,6 +116,7 @@
 - (UIView *)customSplashView {
     if (!_customSplashView) {
         _customSplashView = [[UIView alloc]initWithFrame:[UIApplication sharedApplication].adv_getCurrentWindow.frame];
+        _customSplashView.hidden = YES;
     }
     return _customSplashView;
 }
@@ -147,6 +148,7 @@
 
 - (void)splashSuccessPresentScreen:(BaiduMobAdSplash *)splash {
     NSLog(@"开屏广告展示成功");
+    self.customSplashView.hidden = NO;
     self.imgV.hidden = NO;
 }
 
@@ -165,10 +167,14 @@
 
 - (void)splashAdLoadSuccess:(BaiduMobAdSplash *)splash {
     NSLog(@"百度开屏拉取成功 %@",self.bd_ad);
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
     if (_supplier.isParallel == YES) {
         NSLog(@"修改状态: %@", _supplier);
         _supplier.state = AdvanceSdkSupplierStateSuccess;
         return;
+    }
+    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
+        [self.delegate advanceUnifiedViewDidLoad];
     }
 
     [self showAd];
@@ -176,7 +182,8 @@
 
 - (void)splashAdLoadFail:(BaiduMobAdSplash *)splash {
     NSLog(@"开屏广告请求失败");
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:nil];
+    NSError *error = [[NSError alloc]initWithDomain:@"BDAdErrorDomain" code:1000000 userInfo:@{@"desc":@"百度广告请求错误"}];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
 //    NSLog(@"gdt ========>>>>>>>> %ld %@", (long)_supplier.priority, error);
     if (_supplier.isParallel == YES) {
         _supplier.state = AdvanceSdkSupplierStateFailed;
