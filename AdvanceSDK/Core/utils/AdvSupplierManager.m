@@ -38,8 +38,6 @@
 @property (nonatomic, assign) NSTimeInterval serverTime;
 
 
-@property (nonatomic, strong) NSMutableArray *queues;
-
 @property (nonatomic, strong) NSURLSessionDataTask *dataTask;
 @property (nonatomic, strong) NSLock *lock;
 
@@ -342,9 +340,9 @@
     ADVLog(@"请求参数 %@   uuid:%@", deviceInfo, [AdvDeviceInfoUtil getAuctionId]);
     NSError *parseError = nil;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:deviceInfo options:NSJSONWritingPrettyPrinted error:&parseError];
-    NSURL *url = [NSURL URLWithString:AdvanceSdkRequestUrl];
+//    NSURL *url = [NSURL URLWithString:AdvanceSdkRequestUrl];
 //    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@?adspotid=%@", AdvanceSdkRequestUrl, _adspotId]];
-//    NSURL *url = [NSURL URLWithString:@"https://mock.yonyoucloud.com/mock/2650/api/v3/eleven"];
+    NSURL *url = [NSURL URLWithString:@"https://mock.yonyoucloud.com/mock/2650/api/v3/eleven"];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:self.fetchTime];
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     request.HTTPBody = jsonData;
@@ -366,7 +364,9 @@
     if (self.dataTask) {
         [self.dataTask cancel];
     }
+    self.model = nil;
 }
+
 
 /// 处理返回的数据
 - (void)doResultData:(NSData * )data response:(NSURLResponse *)response error:(NSError *)error saveOnly:(BOOL)saveOnly {
@@ -648,5 +648,12 @@
         _lock = [NSLock new];
     }
     return _lock;
+}
+
+- (void)setModel:(AdvSupplierModel *)model {
+    if (_model != model) {
+        _model = nil;
+        _model = model;
+    }
 }
 @end
