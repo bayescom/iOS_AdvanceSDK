@@ -87,7 +87,11 @@
         clsName = @"CsjBannerAdapter";
     } else if ([supplier.identifier isEqualToString:SDK_ID_MERCURY]) {
         clsName = @"MercuryBannerAdapter";
+    } else if ([supplier.identifier isEqualToString:SDK_ID_BAIDU]) {
+        clsName = @"BdBannerAdapter";
     }
+    
+    
     ADVLog(@"%@ | %@", supplier.name, clsName);
 
     if (NSClassFromString(clsName)) {
