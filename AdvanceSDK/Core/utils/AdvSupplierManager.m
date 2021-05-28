@@ -107,14 +107,14 @@
 
     [self notCPTLoadNextSuppluer:currentSupplier error:nil];
 
-    if (self.model.setting.parallelGroup.count > 0) {
+    if (_model.setting.parallelGroup.count > 0) {
         // 并行执行
         [self parallelActionWithCurrentPriority:currentPriority];
     }
 }
 
 - (void)loadNextSupplier {
-    if (self.model == nil) {
+    if (_model == nil) {
         // 执行打底渠道
 //        [self doBaseSupplierIfHas];
         if ([_delegate respondsToSelector:@selector(advSupplierManagerLoadError:)]) {
@@ -126,7 +126,7 @@
     }
     // 判断是否在CPT时间段
     NSTimeInterval curTime = [[NSDate date] timeIntervalSince1970]*1000.0;
-    if ([self.model.setting.cptStart floatValue] < curTime && [self.model.setting.cptEnd floatValue] > curTime) {
+    if ([_model.setting.cptStart floatValue] < curTime && [_model.setting.cptEnd floatValue] > curTime) {
         
         // CPT 无渠道
         if (_supplierM.count <= 0) {
@@ -139,7 +139,7 @@
         
         AdvSupplier *targetSupplier = nil;
         for (AdvSupplier *supplier in _supplierM) {
-            if (supplier.identifier == self.model.setting.cptSupplier) {
+            if (supplier.identifier == _model.setting.cptSupplier) {
                 targetSupplier = supplier;
             }
         }
@@ -159,7 +159,7 @@
         }
     } else {
         // 非包天 model无渠道信息
-        if (self.model.suppliers.count <= 0) {
+        if (_model.suppliers.count <= 0) {
             // 执行打底渠道
             if ([_delegate respondsToSelector:@selector(advSupplierManagerLoadError:)]) {
                 [_delegate advSupplierManagerLoadError:[AdvError errorWithCode:AdvErrorCode_116].toNSError];
@@ -175,7 +175,7 @@
         
         [self notCPTLoadNextSuppluer:currentSupplier error:nil];
         
-        if (self.model.setting.parallelGroup.count > 0) {
+        if (_model.setting.parallelGroup.count > 0) {
             // 并行执行
             [self parallelActionWithCurrentPriority:currentPriority];
         }
@@ -188,8 +188,8 @@
     NSDictionary *ext = [self.ext mutableCopy];
     NSString *adTypeName = [ext valueForKey:AdvSdkTypeAdName];
 
-    NSMutableArray *groupM = [self.model.setting.parallelGroup mutableCopy];
-    if (self.model.setting.parallelGroup.count > 0) {
+    NSMutableArray *groupM = [_model.setting.parallelGroup mutableCopy];
+    if (_model.setting.parallelGroup.count > 0) {
         // 利用currentPriority 匹配priorityGroup 看看当中有没有需要和当前的supplier 并发的渠道
         __weak typeof(self) _self = self;
         [groupM enumerateObjectsUsingBlock:^(NSMutableArray<NSNumber *> * _Nonnull prioritys, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -213,7 +213,7 @@
                     }
                 }
                 
-                [self.model.setting.parallelGroup removeObject:prioritys];
+                [_model.setting.parallelGroup removeObject:prioritys];
                 
                 *stop = YES;
             }
@@ -661,5 +661,11 @@
         _model = model;
         ADVLog(@"model赋值 %@ %@", _model, model);
     }
+}
+
+- (void)dealloc
+{
+    ADVLog(@"mgr 释放啦");
+    self.model = nil;
 }
 @end
