@@ -337,7 +337,6 @@
         [deviceInfo setValue:self.reqid forKey:@"reqid"];
     }
 
-    sleep(4.5);
     ADVLog(@"请求参数 %@   uuid:%@", deviceInfo, [AdvDeviceInfoUtil getAuctionId]);
     NSError *parseError = nil;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:deviceInfo options:NSJSONWritingPrettyPrinted error:&parseError];
