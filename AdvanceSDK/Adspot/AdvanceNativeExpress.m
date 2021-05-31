@@ -98,7 +98,11 @@
         clsName = @"CsjNativeExpressAdapter";
     } else if ([supplier.identifier isEqualToString:SDK_ID_MERCURY]) {
         clsName = @"MercuryNativeExpressAdapter";
+    } else if ([supplier.identifier isEqualToString:SDK_ID_BAIDU]) {
+        clsName = @"BdNativeExpressAdapter";
     }
+    
+    
     if (NSClassFromString(clsName)) {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wundeclared-selector"

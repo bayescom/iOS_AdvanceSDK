@@ -26,7 +26,7 @@
 /// 广告渲染失败
 - (void)advanceNativeExpressOnAdRenderFail:(nullable UIView *)adView;
 
-/// 广告被关闭
+/// 广告被关闭 (注: 百度广告(百青藤), 不支持该回调, 若使用百青藤,则该回到功能请自行实现)
 - (void)advanceNativeExpressOnAdClosed:(nullable UIView *)adView;
 
 @end

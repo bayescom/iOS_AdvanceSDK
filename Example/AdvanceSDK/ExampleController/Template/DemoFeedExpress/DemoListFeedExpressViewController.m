@@ -70,10 +70,11 @@
         } else if ([self.arrViewsM[i] isKindOfClass:NSClassFromString(@"GDTNativeExpressProAdView")]) {// 广点通新版信息流
             [self.arrViewsM[i] performSelector:@selector(setController:) withObject:self];
             [self.arrViewsM[i] performSelector:@selector(render)];
+        } else if ([self.arrViewsM[i] isKindOfClass:NSClassFromString(@"BaiduMobAdSmartFeedView")]) {// 百度
+            [self.arrViewsM[i] performSelector:@selector(render)];
         }
         
-        
-        [_dataArrM insertObject:self.arrViewsM[i] atIndex:1];
+        [_dataArrM insertObject:self.arrViewsM[i] atIndex:8];
     }
     [self.tableView reloadData];
 }
