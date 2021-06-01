@@ -29,6 +29,7 @@
         @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10004567"},
         @{@"addesc": @"Mock 渠道错误", @"adspotId": @"100255-10000001"},
         @{@"addesc": @"Mock code200", @"adspotId": @"100255-10003321"},
+        @{@"addesc": @"Mock code200", @"adspotId": @"100255-100070001"},
     ];
     self.btn1Title = @"加载广告";
     self.btn2Title = @"显示广告";
@@ -66,6 +67,7 @@
     NSLog(@"请求广告数据成功后调用 %s", __func__);
     _isAdLoaded=true;
     [JDStatusBarNotification showWithStatus:@"广告加载成功" dismissAfter:1.5];
+    [self loadAdBtn2Action];
 }
 
 /// 广告曝光
