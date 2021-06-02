@@ -74,7 +74,7 @@
 #pragma mark - expressFullVideoDelegate
 
 - (void)fullScreenVideoAdLoaded:(BaiduMobAdExpressFullScreenVideo *)video {
-    ADVLog(@"百度全屏视频缓存成功");
+//    ADVLog(@"百度全屏视频缓存成功");
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
     if (_supplier.isParallel == YES) {
         ADVLog(@"修改状态: %@", _supplier);
@@ -88,7 +88,7 @@
 }
 
 - (void)fullScreenVideoAdLoadFailed:(BaiduMobAdExpressFullScreenVideo *)video withError:(BaiduMobFailReason)reason {
-    ADVLog(@"全屏视频缓存失败，failReason：%d", reason);
+//    ADVLog(@"全屏视频缓存失败，failReason：%d", reason);
     NSError *error = [[NSError alloc]initWithDomain:@"BDAdErrorDomain" code:1000030 + reason userInfo:@{@"desc":@"百度广告拉取失败"}];
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded  supplier:_supplier error:error];
     if (_supplier.isParallel == YES) {
