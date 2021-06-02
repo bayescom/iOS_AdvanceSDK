@@ -8,6 +8,12 @@
 #import "AdvBaseAdapter.h"
 #import "AdvSupplierManager.h"
 #import "AdvanceSupplierDelegate.h"
+#if __has_include(<BaiduMobAdSDK/BaiduMobAdSetting.h>)
+#import <BaiduMobAdSDK/BaiduMobAdSetting.h>
+#else
+#import "BaiduMobAdSDK/BaiduMobAdSetting.h"
+#endif
+
 #import "AdvSdkConfig.h"
 #import <objc/runtime.h>
 #import <objc/message.h>
@@ -98,6 +104,8 @@
         clsName = @"BUAdSDKManager";
     } else if ([supplier.identifier isEqualToString:SDK_ID_MERCURY]) {
         clsName = @"MercuryConfigManager";
+    } else if ([supplier.identifier isEqualToString:SDK_ID_BAIDU]){
+        clsName = @"BaiduMobAdSetting";
     }
 
     if ([supplier.identifier isEqualToString:SDK_ID_GDT]) {
@@ -118,6 +126,14 @@
         dispatch_once(&onceToken, ^{
             [NSClassFromString(clsName) performSelector:@selector(setAppID:mediaKey:) withObject:supplier.mediaid withObject:supplier.mediakey];
         });
+    } else if ([supplier.identifier isEqualToString:SDK_ID_BAIDU]) {
+        // 百度
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+            [BaiduMobAdSetting sharedInstance].supportHttps = NO;
+        });
+    } else {
+        
     }
 
     // 加载渠道

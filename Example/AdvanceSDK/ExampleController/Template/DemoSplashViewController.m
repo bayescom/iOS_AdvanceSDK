@@ -30,6 +30,7 @@
         @{@"addesc": @"Mock 渠道错误", @"adspotId": @"100255-10000001"},
         @{@"addesc": @"Mock code200", @"adspotId": @"100255-10003321"},
         @{@"addesc": @"Mock code200", @"adspotId": @"100255-10009879"},
+        @{@"addesc": @"百度", @"adspotId": @"100255-100050001"},
     ];
     self.btn1Title = @"加载并显示广告";
 }
@@ -46,7 +47,7 @@
 //                                                  viewController:self];
 
     self.advanceSplash.delegate = self;
-//    self.advanceSplash.showLogoRequire = YES;
+    self.advanceSplash.showLogoRequire = YES;
     self.advanceSplash.logoImage = [UIImage imageNamed:@"app_logo"];
     self.advanceSplash.backgroundImage = [UIImage imageNamed:@"LaunchImage_img"];
     self.advanceSplash.timeout = 5;

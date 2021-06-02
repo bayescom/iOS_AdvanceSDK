@@ -6,23 +6,28 @@ PODS:
     - Ads-CN/Domestic
   - Ads-CN/BUFoundation (3.6.1.1)
   - Ads-CN/Domestic (3.6.1.1)
-  - AdvanceSDK (3.2.4.4):
-    - AdvanceSDK/Core (= 3.2.4.4)
-  - AdvanceSDK/Adspot (3.2.4.4):
+  - AdvanceSDK (3.2.4.5):
+    - AdvanceSDK/Core (= 3.2.4.5)
+  - AdvanceSDK/Adspot (3.2.4.5):
     - AdvanceSDK/Core
-  - AdvanceSDK/Core (3.2.4.4)
-  - AdvanceSDK/CSJ (3.2.4.4):
+  - AdvanceSDK/BD (3.2.4.5):
+    - AdvanceSDK/Adspot
+    - AdvanceSDK/Core
+    - BaiduMobAdSDK
+  - AdvanceSDK/Core (3.2.4.5)
+  - AdvanceSDK/CSJ (3.2.4.5):
     - Ads-CN
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
-  - AdvanceSDK/GDT (3.2.4.4):
+  - AdvanceSDK/GDT (3.2.4.5):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - GDTMobSDK
-  - AdvanceSDK/Mercury (3.2.4.4):
+  - AdvanceSDK/Mercury (3.2.4.5):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - MercurySDK
+  - BaiduMobAdSDK (4.771)
   - GDTMobSDK (4.12.61):
     - GDTMobSDK/GDTMobSDK (= 4.12.61)
   - GDTMobSDK/GDTMobSDK (4.12.61)
@@ -35,6 +40,7 @@ PODS:
 DEPENDENCIES:
   - Ads-CN (~> 3.6.1.1)
   - AdvanceSDK (from `../`)
+  - AdvanceSDK/BD (from `../`)
   - AdvanceSDK/CSJ (from `../`)
   - AdvanceSDK/GDT (from `../`)
   - AdvanceSDK/Mercury (from `../`)
@@ -44,6 +50,7 @@ DEPENDENCIES:
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
     - Ads-CN
+    - BaiduMobAdSDK
     - GDTMobSDK
     - Masonry
     - MercurySDK
@@ -55,12 +62,13 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Ads-CN: 4b08d1457d869b1e4ae6173f2fd06b7f38152ff7
-  AdvanceSDK: 6c6c5c460072a203f8c590e767f0950f9f790807
+  AdvanceSDK: 71adae83c6b96ca1cb274bd186b87b940b8ede2b
+  BaiduMobAdSDK: b6bd114a7b4ccc21efb9b5b7d735682b986ada10
   GDTMobSDK: 63a094e9c02bb01213902d7cdf2389c149660a03
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   MercurySDK: 4903c1b625f395da6f6e7b858ab2b7833c49b4f9
   SDWebImage: f66a16b95183b92ed6b965ad21d33167bc07612d
 
-PODFILE CHECKSUM: 0df782beb12fbb239c188f52f84228f085c0e0c9
+PODFILE CHECKSUM: 104c00a95fdfac1a757202c3e51b51f7761b3e83
 
 COCOAPODS: 1.10.1

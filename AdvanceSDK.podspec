@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
   s.name             = 'AdvanceSDK'
 
-  s.version          = '3.2.4.5'
+  s.version          = '3.2.4.6'
   s.ios.deployment_target = '9.0'
   s.platform     = :ios, "9.0" 
   s.requires_arc = true
@@ -75,6 +75,16 @@ Blink倍联——免费透明的流量变现神器 
     gdt.frameworks = 'AdSupport', 'CoreLocation', 'QuartzCore', 'SystemConfiguration', 'CoreTelephony', 'Security', 'StoreKit', 'AVFoundation', 'WebKit'
     gdt.libraries     = 'xml2', 'z'
   end
+  
+  s.subspec 'BD' do |bd|
+    bd.dependency 'AdvanceSDK/Core'
+    bd.dependency 'AdvanceSDK/Adspot'
+    bd.dependency 'BaiduMobAdSDK'
+    bd.source_files =  'AdvanceSDK/Adapter/bd/**/*.{h,m}'
+    bd.frameworks = 'CoreLocation', 'SystemConfiguration', 'CoreGraphics', 'CoreMotion', 'CoreTelephony', 'AdSupport', 'SystemConfiguration', 'QuartzCore', 'WebKit', 'MessageUI','SafariServices','AVFoundation','EventKit','QuartzCore','CoreMedia','StoreKit'
+    bd.libraries     = 'c++'
+  end
+
 
   s.xcconfig = {
     'VALID_ARCHS' =>  valid_archs.join(' '),

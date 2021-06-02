@@ -37,6 +37,7 @@
     self.navigationItem.rightBarButtonItem = settingItem;
 }
 
+
 - (BOOL)checkAdspotId {
     if (__txtF01.text.length > 0) {
         return YES;

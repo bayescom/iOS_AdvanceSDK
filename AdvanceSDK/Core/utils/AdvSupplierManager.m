@@ -38,8 +38,6 @@
 @property (nonatomic, assign) NSTimeInterval serverTime;
 
 
-@property (nonatomic, strong) NSMutableArray *queues;
-
 @property (nonatomic, strong) NSURLSessionDataTask *dataTask;
 @property (nonatomic, strong) NSLock *lock;
 
@@ -109,7 +107,7 @@
 
     [self notCPTLoadNextSuppluer:currentSupplier error:nil];
 
-    if (self.model.setting.parallelGroup.count > 0) {
+    if (_model.setting.parallelGroup.count > 0) {
         // 并行执行
         [self parallelActionWithCurrentPriority:currentPriority];
     }
@@ -177,7 +175,7 @@
         
         [self notCPTLoadNextSuppluer:currentSupplier error:nil];
         
-        if (self.model.setting.parallelGroup.count > 0) {
+        if (_model.setting.parallelGroup.count > 0) {
             // 并行执行
             [self parallelActionWithCurrentPriority:currentPriority];
         }
@@ -190,7 +188,7 @@
     NSDictionary *ext = [self.ext mutableCopy];
     NSString *adTypeName = [ext valueForKey:AdvSdkTypeAdName];
 
-    NSMutableArray *groupM = [self.model.setting.parallelGroup mutableCopy];
+    NSMutableArray *groupM = [_model.setting.parallelGroup mutableCopy];
     if (_model.setting.parallelGroup.count > 0) {
         // 利用currentPriority 匹配priorityGroup 看看当中有没有需要和当前的supplier 并发的渠道
         __weak typeof(self) _self = self;
@@ -215,7 +213,7 @@
                     }
                 }
                 
-                [self.model.setting.parallelGroup removeObject:prioritys];
+                [_model.setting.parallelGroup removeObject:prioritys];
                 
                 *stop = YES;
             }
@@ -366,7 +364,9 @@
     if (self.dataTask) {
         [self.dataTask cancel];
     }
+    self.model = nil;
 }
+
 
 /// 处理返回的数据
 - (void)doResultData:(NSData * )data response:(NSURLResponse *)response error:(NSError *)error saveOnly:(BOOL)saveOnly {
@@ -444,7 +444,7 @@
     a_model.setting.cacheTime = [[NSDate date] timeIntervalSince1970] + a_model.setting.cacheDur;
     ADVLog(@"---------");
     if (!saveOnly) {
-        _model = a_model;
+        self.model = a_model;
         
         _supplierM = [_model.suppliers mutableCopy];
         [self sortSupplierMByPriority];
@@ -498,7 +498,9 @@
 - (NSString *)joinFailedUrlWithObj:(NSString *)urlString error:(NSError *)error {
     ADVLog(@"UPLOAD error: %@", error);
     if (error) {
-        if ([error.domain isEqualToString:@"com.pangle.buadsdk"]) { // 新版穿山甲sdk报错
+        if ([error.domain isEqualToString:@"BDAdErrorDomain"]) {
+            return [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=err_bd_%ld&track_time",(long)error.code]];
+        } else if ([error.domain isEqualToString:@"com.pangle.buadsdk"]) { // 新版穿山甲sdk报错
             return [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=err_csj_%ld&track_time",(long)error.code]];
         } else if ([error.domain isEqualToString:@"com.bytedance.buadsdk"]) {// 穿山甲sdk报错
             return [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=err_csj_%ld&track_time",(long)error.code]];
@@ -648,5 +650,21 @@
         _lock = [NSLock new];
     }
     return _lock;
+}
+
+- (void)setModel:(AdvSupplierModel *)model {
+    if (_model != model) {
+        ADVLog(@"%@ -- %@", _model, model);
+        _model = nil;
+        ADVLog(@"%@ -- %@", _model, model);
+        _model = model;
+        ADVLog(@"model赋值 %@ %@", _model, model);
+    }
+}
+
+- (void)dealloc
+{
+    ADVLog(@"mgr 释放啦");
+    self.model = nil;
 }
 @end
