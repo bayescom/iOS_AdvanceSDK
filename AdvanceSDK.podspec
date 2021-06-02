@@ -84,6 +84,9 @@ Blink倍联——免费透明的流量变现神器 
     bd.frameworks = 'CoreLocation', 'SystemConfiguration', 'CoreGraphics', 'CoreMotion', 'CoreTelephony', 'AdSupport', 'SystemConfiguration', 'QuartzCore', 'WebKit', 'MessageUI','SafariServices','AVFoundation','EventKit','QuartzCore','CoreMedia','StoreKit'
     bd.libraries     = 'c++'
     valid_archs = ['armv7', 'i386', 'x86_64', 'arm64']
+    bd.weak_frameworks = "WebKit"
+    valid_archs = ['armv7', 'armv7s', 'x86_64', 'arm64']
+
   end
 
 
