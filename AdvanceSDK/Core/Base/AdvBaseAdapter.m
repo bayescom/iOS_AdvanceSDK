@@ -8,11 +8,6 @@
 #import "AdvBaseAdapter.h"
 #import "AdvSupplierManager.h"
 #import "AdvanceSupplierDelegate.h"
-#if __has_include(<BaiduMobAdSDK/BaiduMobAdSetting.h>)
-#import <BaiduMobAdSDK/BaiduMobAdSetting.h>
-#else
-#import "BaiduMobAdSDK/BaiduMobAdSetting.h"
-#endif
 
 #import "AdvSdkConfig.h"
 #import <objc/runtime.h>
@@ -130,7 +125,9 @@
         // 百度
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
-            [BaiduMobAdSetting sharedInstance].supportHttps = NO;
+            id bdSetting = ((id(*)(id,SEL))objc_msgSend)(NSClassFromString(clsName), @selector(sharedInstance));
+            [bdSetting performSelector:@selector(setSupportHttps:) withObject:NO];
+
         });
     } else {
         

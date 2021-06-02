@@ -6,31 +6,31 @@ PODS:
     - Ads-CN/Domestic
   - Ads-CN/BUFoundation (3.6.1.1)
   - Ads-CN/Domestic (3.6.1.1)
-  - AdvanceSDK (3.2.4.5):
-    - AdvanceSDK/Core (= 3.2.4.5)
-  - AdvanceSDK/Adspot (3.2.4.5):
+  - AdvanceSDK (3.2.4.6):
+    - AdvanceSDK/Core (= 3.2.4.6)
+  - AdvanceSDK/Adspot (3.2.4.6):
     - AdvanceSDK/Core
-  - AdvanceSDK/BD (3.2.4.5):
+  - AdvanceSDK/BD (3.2.4.6):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - BaiduMobAdSDK
-  - AdvanceSDK/Core (3.2.4.5)
-  - AdvanceSDK/CSJ (3.2.4.5):
+  - AdvanceSDK/Core (3.2.4.6)
+  - AdvanceSDK/CSJ (3.2.4.6):
     - Ads-CN
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
-  - AdvanceSDK/GDT (3.2.4.5):
+  - AdvanceSDK/GDT (3.2.4.6):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - GDTMobSDK
-  - AdvanceSDK/Mercury (3.2.4.5):
+  - AdvanceSDK/Mercury (3.2.4.6):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - MercurySDK
   - BaiduMobAdSDK (4.771)
-  - GDTMobSDK (4.12.61):
-    - GDTMobSDK/GDTMobSDK (= 4.12.61)
-  - GDTMobSDK/GDTMobSDK (4.12.61)
+  - GDTMobSDK (4.12.71):
+    - GDTMobSDK/GDTMobSDK (= 4.12.71)
+  - GDTMobSDK/GDTMobSDK (4.12.71)
   - Masonry (1.1.0)
   - MercurySDK (3.1.6.1)
   - SDWebImage (5.10.1):
@@ -62,9 +62,9 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Ads-CN: 4b08d1457d869b1e4ae6173f2fd06b7f38152ff7
-  AdvanceSDK: 71adae83c6b96ca1cb274bd186b87b940b8ede2b
+  AdvanceSDK: c158769dcace87b24884a92ffa8298e8d0e1fc47
   BaiduMobAdSDK: b6bd114a7b4ccc21efb9b5b7d735682b986ada10
-  GDTMobSDK: 63a094e9c02bb01213902d7cdf2389c149660a03
+  GDTMobSDK: fceb169aff9a901bccd33e892c0851d42aceca24
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   MercurySDK: 4903c1b625f395da6f6e7b858ab2b7833c49b4f9
   SDWebImage: f66a16b95183b92ed6b965ad21d33167bc07612d
