@@ -46,14 +46,6 @@
     [super reportWithType:repoType supplier:supplier error:error];
 }
 
-
-// 执行了打底渠道
-- (void)advSupplierLoadDefaultSuppluer:(AdvSupplier *)supplier
-{
-    ADVLog(@"执行了打底渠道: %@", supplier.sdktag);
-    [self advanceOnAdReceivedWithReqId:supplier.sdktag];
-}
-
 // 返回策略id
 - (void)advanceOnAdReceivedWithReqId:(NSString *)reqId
 {
@@ -102,13 +94,20 @@
     // 根据渠道id自定义初始化
     NSString *clsName = @"";
     if ([supplier.identifier isEqualToString:SDK_ID_GDT]) {
-        clsName = @"GdtRewardVideoAdapter";
+        if (supplier.versionTag == 1) {
+            clsName = @"GdtRewardVideoAdapter";
+        } else {
+            clsName = @"GdtRewardVideoProAdapter";
+        }
+
     } else if ([supplier.identifier isEqualToString:SDK_ID_CSJ]) {
         clsName = @"CsjRewardVideoAdapter";
     } else if ([supplier.identifier isEqualToString:SDK_ID_MERCURY]) {
         clsName = @"MercuryRewardVideoAdapter";
     } else if ([supplier.identifier isEqualToString:SDK_ID_KS]) {
         clsName = @"KsRewardVideoAdapter";
+    } else if ([supplier.identifier isEqualToString:SDK_ID_BAIDU]) {
+        clsName = @"BdRewardVideoAdapter";
     }
     
     if (NSClassFromString(clsName)) {

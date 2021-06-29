@@ -13,7 +13,7 @@
 
 ### [注意事项](https://www.pangle.cn/union/media/union/download/detail?id=16&docId=5f327098d44dc5000e1d45d5&osType=ios):
 
-- AdvanceSDK(version:3.2.3.8) 支持了广点通平台模板(信息流)2.0广告位, 如果想使用广点通信息流2.0广告位, 广点通SDK需升级至4.11.12 [详见此处](https://developers.adnet.qq.com/doc/ios/union/union_native_express_pro)
+- AdvanceSDK(version:3.2.4.3) 支持了广点通平台所有广告位的2.0, 建议将广点通SDK版本升至4.12.60及以上版本 [详见此处](https://developers.adnet.qq.com/doc/ios/union/union_native_express_pro)
 
 - AdvanceSDK(version:3.2.3.5) 将穿山甲依赖库由Bytedance-UnionAD更新为Ads-CN
 - App Tracking Transparency（ATT）适用于请求用户授权，访问与应用相关的数据以跟踪用户或设备。 访问 https://developer.apple.com/documentation/apptrackingtransparency 了解更多信息。
@@ -21,8 +21,10 @@
 
 ### Checklist
 - 应用编译环境升级至 Xcode 12.0 及以上版本
-- 升级穿山甲 iOS SDK 3.4.2.3 及以上版本，穿山甲提供了 iOS 14 与 SKAdNetwork 支持
-- 将穿山甲的 SKAdNetwork ID 添加到 info.plist 中，以保证 SKAdNetwork 的正确运行
+- 升级穿山甲 iOS SDK 3.5.1.0 及以上版本，穿山甲提供了 iOS 14 与 SKAdNetwork 支持
+-  升级广点通  iOS SDK  4.12.60 及以上版本, 该版本适配了SKAdNetwork,并删除了CAID相关的内容
+- 将穿山甲和广点通的 SKAdNetwork ID 添加到 info.plist 中，以保证 SKAdNetwork 的正确运行
+- 调试阶段尽量中真机, 以便获取idfa, 如果获取不到idfa, 则打开idfa开关, iphone 打开idfa 开关的的过程:设置 -> 隐私 -> 跟踪 -> 允许App请求跟踪
 
 ```
 <key>SKAdNetworkItems</key>
@@ -34,6 +36,10 @@
     <dict>
       <key>SKAdNetworkIdentifier</key>
       <string>22mmun2rn5.skadnetwork</string>
+    </dict>
+    <dict>
+      <key>SKAdNetworkIdentifier</key>
+      <string>f7s53z58qe.skadnetwork</string>
     </dict>
   </array>
 ```
@@ -47,7 +53,7 @@
 ```
 
 -  穿山甲在3.5.1.1及以上版本 适配的 iOS14.5 强烈建议更新 更新方法如下 <br>
-   1: 先将AdvanceSDK升级到3.2.4.0或以上版本(该版本添加新版穿山甲所依赖的工具库),否则更新完成将报编译错误<br>
+   1: 先将AdvanceSDK升级到3.2.4.2或以上版本(该版本添加新版穿山甲所依赖的工具库),否则更新完成将报编译错误<br>
    2:  Podfile中添加 pod 'Ads-CN', '~> 3.5.1.2'  并在 终端里执行 pod update Ads-CN
       
 
@@ -62,21 +68,23 @@ target 'AdvanceSDK_Example' do
 
   pod 'AdvanceSDK'
   pod 'AdvanceSDK/Mercury' #必须添加
-  pod 'AdvanceSDK/CSJ' #如果想集成穿山甲,则添加
-  pod 'AdvanceSDK/GDT' #如果想集成广点通,则添加
+  pod 'AdvanceSDK/CSJ' #如果想集成穿山甲,则添加 如果不需要则不添加
+  pod 'AdvanceSDK/GDT' #如果想集成广点通,则添加 如果不需要则不添加
+  pod 'AdvanceSDK/BD' #如果想集成广点通,则添加 如果不需要则不添加
     
-        # 如果想单独升级MercurySDK 则需要指明升级的版本号 例如:
+# 如果想单独升级MercurySDK 则需要指明升级的版本号 例如:
 # pod 'MercurySDK', '~> 3.1.6.1'
   终端里执行 pod update MercurySDK
 
-      # 如果想单独升级穿山甲 则需要指明升级的版本号 例如:
+# 如果想单独升级穿山甲 则需要指明升级的版本号 例如:
 #  pod 'Ads-CN', '~> 3.5.1.2'
   终端里执行 pod update Ads-CN
 
-    # 如果想单独升级广点通 则需要指明升级的版本号 例如:
-# pod 'GDTMobSDK', '~> 4.12.1'
+# 如果想单独升级广点通 则需要指明升级的版本号 例如:
+# pod 'GDTMobSDK', '~> 4.12.60'
   终端里执行 pod update GDTMobSDK
 
+# 建议添加 CSJ和GDT, BD看需求
 
 end
 
@@ -103,7 +111,6 @@ end
 - [原生模板信息流广告位(NativeExpress)](./_docs/ads/native_express_ad.md)
 - [全屏视频视频(FullScreenVideo)](./_docs/ads/full_screen_ad.md)
 
-> 如开发者已经集成过渠道SDK，不想再次开发，或需要管理其他类型广告位，可参考[自定义开](./_docs/ads/custom_ad.md)发纳入AdvanceSDK管理
 
 ## SDK项目部署
 
@@ -141,10 +148,11 @@ platform :ios, '9.0'
 target '你的项目名称' do
   # use_frameworks!
   # Pods for 你的项目名称
-  pod 'AdvanceSDK', '~> 3.2.4.2' # 可指定你想要的版本号
-  pod 'AdvanceSDK/CSJ', 	# 如果需要导入穿山甲SDK
-  pod 'AdvanceSDK/GDT', 	# 如果需要导入广点通SDK
-  pod 'AdvanceSDK/Mercury' # 如果需要导入MercurySDK
+  pod 'AdvanceSDK', '~> 3.2.4.6' # 可指定你想要的版本号
+  pod 'AdvanceSDK/CSJ', 	# 如果需要导入穿山甲SDK 如果不需要则不添加
+  pod 'AdvanceSDK/GDT', 	# 如果需要导入广点通SDK 如果不需要则不添加
+  pod 'AdvanceSDK/Mercury' # 如果需要导入MercurySDK 如果不需要则不添加
+  pod 'AdvanceSDK/BD' # 如果需要导入百青藤SDK 如果不需要则不添加
 end
 ```
 
@@ -185,7 +193,7 @@ $ pod install
 指定SDK版本前，请先确保repo库为最新版本，参考上一小节内容进行更新。如果需要指定SDK版本，需要在Podfile文件中，pod那一行指定版本号：
 
 ```
-  pod 'AdvanceSDK', '~> 3.2.4.2' # 可指定你想要的版本号
+  pod 'AdvanceSDK', '~> 3.2.4.6' # 可指定你想要的版本号
   pod 'AdvanceSDK/CSJ'
   pod 'AdvanceSDK/GDT'
 

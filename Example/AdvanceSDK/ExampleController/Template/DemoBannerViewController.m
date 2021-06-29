@@ -9,8 +9,7 @@
 #import "DemoBannerViewController.h"
 #import "ViewBuilder.h"
 #import "AdvSdkConfig.h"
-#import "AdvanceBanner.h"
-
+#import <AdvanceSDK/AdvanceBanner.h>
 
 @interface DemoBannerViewController () <AdvanceBannerDelegate>
 @property (nonatomic, strong) AdvanceBanner *advanceBanner;
@@ -28,7 +27,11 @@
         @{@"addesc": @"Banner", @"adspotId": @"100255-10000558"},
         @{@"addesc": @"Mock 渠道错误", @"adspotId": @"100255-10000001"},
         @{@"addesc": @"Mock code200", @"adspotId": @"100255-10003321"},
+<<<<<<< HEAD
         @{@"addesc": @"Mock 快手", @"adspotId": @"100255-10004411"},
+=======
+        @{@"addesc": @"Mock code200", @"adspotId": @"100255-100060001"},
+>>>>>>> master
     ];
     self.btn1Title = @"加载并显示广告";
 }
@@ -45,10 +48,6 @@
 //    self.advanceBanner = [[AdvanceBanner alloc] initWithAdspotId:self.adspotId adContainer:self.contentV viewController:self];
     self.advanceBanner = [[AdvanceBanner alloc] initWithAdspotId:self.adspotId adContainer:self.contentV customExt:self.ext viewController:self];
     self.advanceBanner.delegate = self;
-    [self.advanceBanner setDefaultAdvSupplierWithMediaId:@"10025512"
-                                                adspotId:@"10000558"
-                                                mediaKey:@"757d5119466abe3d771a211cc1278df7"
-                                                  sdkId:SDK_ID_MERCURY];
     
     [self.advanceBanner loadAd];
     

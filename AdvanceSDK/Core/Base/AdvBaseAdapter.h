@@ -39,12 +39,6 @@ NS_ASSUME_NONNULL_BEGIN
                       customExt:(NSDictionary *_Nonnull)ext;
 
 
-/// 设置打底渠道
-- (void)setDefaultAdvSupplierWithMediaId:(NSString *)mediaId
-                                adspotId:(NSString *)adspotid
-                                mediaKey:(NSString *)mediakey
-                                   sdkId:(nonnull NSString *)sdkid;
-
 /// 加载策略
 - (void)loadAd;
 
@@ -58,9 +52,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// 上报
 - (void)reportWithType:(AdvanceSdkSupplierRepoType)repoType supplier:(AdvSupplier *)supplier error:(NSError *)error;
-
-/// 执行了打底渠道
-- (void)advSupplierLoadDefaultSuppluer:(AdvSupplier *)supplier;
 
 
 /// 取消当前策略请求

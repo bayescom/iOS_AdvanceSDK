@@ -6,10 +6,12 @@
 
 #import "DemoRewardVideoViewController.h"
 #import "DemoUtils.h"
-#import <AdvanceSDK/AdvanceSDK.h>
+#import <AdvanceSDK/AdvanceRewardVideo.h>
 
 @interface DemoRewardVideoViewController () <AdvanceRewardVideoDelegate>
 @property (nonatomic, strong) AdvanceRewardVideo *advanceRewardVideo;
+@property (nonatomic) bool isAdLoaded; // 激励视频播放器 采用的是边下边播的方式, 理论上拉取数据成功 即可展示, 但如果网速慢导致缓冲速度慢, 则激励视频会出现卡顿
+                                       // 广点通推荐在 advanceRewardVideoOnAdVideoCached 视频缓冲完成后 在掉用showad
 @end
 
 @implementation DemoRewardVideoViewController
@@ -26,19 +28,17 @@
 }
 
 - (void)loadAdBtn1Action {
-    if (![self checkAdspotId]) { return; }
-    self.advanceRewardVideo = [[AdvanceRewardVideo alloc] initWithMediaId:self.mediaId
-                                                                 adspotId:self.adspotId
+    self.advanceRewardVideo = [[AdvanceRewardVideo alloc] initWithAdspotId:self.adspotId
                                                            viewController:self];
     self.advanceRewardVideo.delegate=self;
-    [self.advanceRewardVideo setDefaultSdkSupplierWithMediaId:@"100255"
-                                                     adspotId:@"10002595"
-                                                     mediaKey:@"757d5119466abe3d771a211cc1278df7"
-                                                       sdkId:SDK_ID_MERCURY];
+    _isAdLoaded=false;
     [self.advanceRewardVideo loadAd];
 }
 
 - (void)loadAdBtn2Action {
+    if (!_isAdLoaded) {
+        return;
+    }
     [self.advanceRewardVideo showAd];
 }
 
@@ -46,11 +46,15 @@
 /// 广告数据加载成功
 - (void)advanceUnifiedViewDidLoad {
     NSLog(@"广告数据加载成功 %s", __func__);
+    _isAdLoaded=true;
+    [JDStatusBarNotification showWithStatus:@"广告加载成功" dismissAfter:1.5];
 }
 
 /// 视频缓存成功
-- (void)advanceRewardVideoOnAdVideoCached {
+- (void)advanceRewardVideoOnAdVideoCached
+{
     NSLog(@"视频缓存成功 %s", __func__);
+
 }
 
 /// 到达激励时间
@@ -71,6 +75,7 @@
 /// 广告加载失败
 - (void)advanceFailedWithError:(NSError *)error {
     NSLog(@"广告展示失败 %s  error: %@", __func__, error);
+
 }
 
 /// 内部渠道开始加载时调用
@@ -89,13 +94,9 @@
 }
 
 /// 策略请求成功
-- (void)advanceOnAdReceived:(NSString *)reqId {
+- (void)advanceOnAdReceived:(NSString *)reqId
+{
     NSLog(@"%s 策略id为: %@",__func__ , reqId);
-}
-
-/// 广告可以被调用
-- (void)advanceRewardVideoIsReadyToShow {
-    NSLog(@"广告可以被调用了 %s", __func__);
 }
 @end
 

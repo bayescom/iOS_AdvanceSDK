@@ -19,7 +19,7 @@
 // 可执行渠道
 @property (nonatomic, strong) NSMutableArray<AdvSupplier *> *supplierM;
 // 打底渠道
-@property (nonatomic, strong) AdvSupplier *baseSupplier;
+//@property (nonatomic, strong) AdvSupplier *baseSupplier;
 // 当前加载的渠道
 //@property (nonatomic, weak) AdvSupplier *currSupplier;
 
@@ -27,6 +27,8 @@
 @property (nonatomic, copy) NSString *mediaId;
 /// 广告位id
 @property (nonatomic, copy) NSString *adspotId;
+/// reqid
+@property (nonatomic, copy) NSString *reqid;
 /// 自定义拓展字段
 @property (nonatomic, strong) NSDictionary *ext;
 
@@ -36,9 +38,8 @@
 @property (nonatomic, assign) NSTimeInterval serverTime;
 
 
-@property (nonatomic, strong) NSMutableArray *queues;
-
 @property (nonatomic, strong) NSURLSessionDataTask *dataTask;
+@property (nonatomic, strong) NSLock *lock;
 
 
 
@@ -102,18 +103,25 @@
     AdvSupplier *currentSupplier = _supplierM.firstObject;
     // 不管是不是并行渠道, 到了该执行的时候 必须要按照串行渠道的逻辑去执行
     currentSupplier.isParallel = NO;
-    [self notCPTLoadNextSuppluer:currentSupplier error:nil];
-    
-    // 并行执行
-    [self parallelActionWithCurrentSupplier:currentSupplier];
+    NSInteger currentPriority = currentSupplier.priority;
 
-    
+    [self notCPTLoadNextSuppluer:currentSupplier error:nil];
+
+    if (_model.setting.parallelGroup.count > 0) {
+        // 并行执行
+        [self parallelActionWithCurrentPriority:currentPriority];
+    }
 }
 
 - (void)loadNextSupplier {
     if (_model == nil) {
         // 执行打底渠道
-        [self doBaseSupplierIfHas];
+//        [self doBaseSupplierIfHas];
+        if ([_delegate respondsToSelector:@selector(advSupplierManagerLoadError:)]) {
+            [_delegate advSupplierManagerLoadError:[AdvError errorWithCode:AdvErrorCode_102].toNSError];
+        }
+
+
         return;
     }
     // 判断是否在CPT时间段
@@ -153,27 +161,34 @@
         // 非包天 model无渠道信息
         if (_model.suppliers.count <= 0) {
             // 执行打底渠道
-            [self doBaseSupplierIfHas];
+            if ([_delegate respondsToSelector:@selector(advSupplierManagerLoadError:)]) {
+                [_delegate advSupplierManagerLoadError:[AdvError errorWithCode:AdvErrorCode_116].toNSError];
+            }
+
             return;
         }
 
         
         // 执行非CPT渠道逻辑
         AdvSupplier *currentSupplier = _supplierM.firstObject;
+        NSInteger currentPriority = currentSupplier.priority;
+        
         [self notCPTLoadNextSuppluer:currentSupplier error:nil];
         
-        // 并行执行
-        [self parallelActionWithCurrentSupplier:currentSupplier];
+        if (_model.setting.parallelGroup.count > 0) {
+            // 并行执行
+            [self parallelActionWithCurrentPriority:currentPriority];
+        }
     }
 }
 
 // 并行执行
-- (void)parallelActionWithCurrentSupplier:(AdvSupplier *)currentSupplier {
-    NSNumber *currentPriority = [NSNumber numberWithInteger:currentSupplier.priority];
+- (void)parallelActionWithCurrentPriority:(NSInteger)priority {
+    NSNumber *currentPriority = [NSNumber numberWithInteger:priority];
     NSDictionary *ext = [self.ext mutableCopy];
     NSString *adTypeName = [ext valueForKey:AdvSdkTypeAdName];
 
-    NSMutableArray *groupM = [self.model.setting.parallelGroup mutableCopy];
+    NSMutableArray *groupM = [_model.setting.parallelGroup mutableCopy];
     if (_model.setting.parallelGroup.count > 0) {
         // 利用currentPriority 匹配priorityGroup 看看当中有没有需要和当前的supplier 并发的渠道
         __weak typeof(self) _self = self;
@@ -198,7 +213,7 @@
                     }
                 }
                 
-                [self.model.setting.parallelGroup removeObject:prioritys];
+                [_model.setting.parallelGroup removeObject:prioritys];
                 
                 *stop = YES;
             }
@@ -234,7 +249,9 @@
         
     } else {
 //        NSLog(@"展示队列优先级: %ld", (long)supplier.priority);
+        [self.lock lock];
         [_supplierM removeObject:supplier];
+        [self.lock unlock];
 //        NSLog(@"展示队列: %@", _supplierM);
     }
     
@@ -258,22 +275,22 @@
 }
 
 /// 设置打底渠道
-- (void)setDefaultAdvSupplierWithMediaId:(NSString *)mediaId
-                                adspotId:(NSString *)adspotid
-                                mediaKey:(NSString *)mediakey
-                                   sdkId:(nonnull NSString *)sdkid {
-    _baseSupplier = [AdvSupplier supplierWithMediaId:mediaId adspotId:adspotid mediaKey:mediakey sdkId:sdkid];
-}
+//- (void)setDefaultAdvSupplierWithMediaId:(NSString *)mediaId
+//                                adspotId:(NSString *)adspotid
+//                                mediaKey:(NSString *)mediakey
+//                                   sdkId:(nonnull NSString *)sdkid {
+//    _baseSupplier = [AdvSupplier supplierWithMediaId:mediaId adspotId:adspotid mediaKey:mediakey sdkId:sdkid];
+//}
 
 /// 执行兜底渠道
-- (void)doBaseSupplierIfHas {
-    if (_baseSupplier == nil) {
-        // 未设置打底渠道
-        if ([_delegate respondsToSelector:@selector(advSupplierLoadSuppluer:error:)]) {
-            [_delegate advSupplierLoadSuppluer:nil error:[AdvError errorWithCode:AdvErrorCode_110].toNSError];
-        }
-        return;
-    }
+//- (void)doBaseSupplierIfHas {
+//    if (_baseSupplier == nil) {
+//        // 未设置打底渠道
+//        if ([_delegate respondsToSelector:@selector(advSupplierLoadSuppluer:error:)]) {
+//            [_delegate advSupplierLoadSuppluer:nil error:[AdvError errorWithCode:AdvErrorCode_110].toNSError];
+//        }
+//        return;
+//    }
 //    else if (_currSupplier == _baseSupplier) {
 //        // 当前执行了打底渠道了 则报错
 //        if ([_delegate respondsToSelector:@selector(advSupplierLoadSuppluer:error:)]) {
@@ -282,12 +299,12 @@
 //        return;
 //    }
 //    _currSupplier = _baseSupplier;
-    [self reportWithType:AdvanceSdkSupplierRepoLoaded supplier:_baseSupplier error:nil];
-    if ([_delegate respondsToSelector:@selector(advSupplierLoadSuppluer:error:)]) {
-        [_delegate advSupplierLoadSuppluer:_baseSupplier error:nil];
-    }
+//    [self reportWithType:AdvanceSdkSupplierRepoLoaded supplier:_baseSupplier error:nil];
+//    if ([_delegate respondsToSelector:@selector(advSupplierLoadSuppluer:error:)]) {
+//        [_delegate advSupplierLoadSuppluer:_baseSupplier error:nil];
+//    }
 //    [_supplierM removeObject:_currSupplier];
-}
+//}
 
 // MARK: ======================= Net Work =======================
 /// 拉取线上数据 如果是仅仅储存 不会触发任何回调，仅存储策略信息
@@ -295,6 +312,12 @@
     NSMutableDictionary *deviceInfo = [AdvDeviceInfoUtil getDeviceInfoWithMediaId:_mediaId adspotId:_adspotId];
     
     if (self.ext) {
+        
+        // 如果是缓存渠道 请求的时候要标记一下
+        if (_isLoadLocalSupplier) {
+            [self.ext setValue:@"1" forKey:@"cache_effect"];
+        }
+        
         [deviceInfo setValue:self.ext forKey:@"ext"];
     }
     
@@ -309,9 +332,12 @@
     
     // 个性化广告推送开关
     [deviceInfo setValue:[AdvSdkConfig shareInstance].isAdTrack ? @"0" : @"1" forKey:@"donottrack"];
+    self.reqid = [AdvDeviceInfoUtil getAuctionId];
+    if (self.reqid) {
+        [deviceInfo setValue:self.reqid forKey:@"reqid"];
+    }
 
-//    [deviceInfo setValue:@"" forKey:@"adspotid"];
-    ADVLog(@"请求参数 %@", deviceInfo);
+    ADVLog(@"请求参数 %@   uuid:%@", deviceInfo, [AdvDeviceInfoUtil getAuctionId]);
     NSError *parseError = nil;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:deviceInfo options:NSJSONWritingPrettyPrinted error:&parseError];
 //    NSURL *url = [NSURL URLWithString:AdvanceSdkRequestUrl];
@@ -338,7 +364,9 @@
     if (self.dataTask) {
         [self.dataTask cancel];
     }
+    self.model = nil;
 }
+
 
 /// 处理返回的数据
 - (void)doResultData:(NSData * )data response:(NSURLResponse *)response error:(NSError *)error saveOnly:(BOOL)saveOnly {
@@ -362,14 +390,14 @@
     NSHTTPURLResponse *httpResp = (NSHTTPURLResponse *)response;
     if (httpResp.statusCode != 200) {
         // code no statusCode
-        // 策略失败回调和渠道失败回调统一, 当策略失败 但是打底渠道成功时 则不抛错误
-//        if (!saveOnly && [_delegate respondsToSelector:@selector(advSupplierManagerLoadError:)]) {
-//            [_delegate advSupplierManagerLoadError:[AdvError errorWithCode:AdvErrorCode_103].toNSError];
-//        }
-        
+        if (!saveOnly && [_delegate respondsToSelector:@selector(advSupplierManagerLoadError:)]) {
+            [_delegate advSupplierManagerLoadError:[AdvError errorWithCode:AdvErrorCode_103 obj:error].toNSError];
+        }
+
+
         // 默认走打底
-        ADVLog(@"statusCode != 200，执行打底");
-        [self doBaseSupplierIfHas];
+//        ADVLog(@"statusCode != 200，执行打底");
+//        [self doBaseSupplierIfHas];
         return;
     }
     
@@ -388,13 +416,17 @@
     if (a_model.code != 200) {
         // result code not 200
         // 策略失败回调和渠道失败回调统一, 当策略失败 但是打底渠道成功时 则不抛错误
+        if (!saveOnly && [_delegate respondsToSelector:@selector(advSupplierManagerLoadError:)]) {
+            [_delegate advSupplierManagerLoadError:[AdvError errorWithCode:AdvErrorCode_105 obj:error].toNSError];
+        }
+
 //        if (!saveOnly && [_delegate respondsToSelector:@selector(advSupplierManagerLoadError:)]) {
 //            [_delegate advSupplierManagerLoadError:[AdvError errorWithCode:AdvErrorCode_105].toNSError];
 //        }
         
         // 默认走打底
-        ADVLog(@"model.code != 200，执行打底");
-        [self doBaseSupplierIfHas];
+//        ADVLog(@"model.code != 200，执行打底");
+//        [self doBaseSupplierIfHas];
         return;
     }
     
@@ -413,7 +445,7 @@
     a_model.setting.cacheTime = [[NSDate date] timeIntervalSince1970] + a_model.setting.cacheDur;
     ADVLog(@"---------");
     if (!saveOnly) {
-        _model = a_model;
+        self.model = a_model;
         
         _supplierM = [_model.suppliers mutableCopy];
         [self sortSupplierMByPriority];
@@ -434,6 +466,7 @@
     for (id obj in uploadArr) {
         @try {
             NSString *urlString = obj;
+            urlString = [self paramValueOfUrl:obj withParam:@"&reqid"];
             NSTimeInterval timeStamp = [[NSDate dateWithTimeIntervalSinceNow:0] timeIntervalSince1970] * 1000;
             urlString = [urlString stringByReplacingOccurrencesOfString:@"__TIME__" withString:[NSString stringWithFormat:@"%0.0f", timeStamp]];
             NSURL *url = [NSURL URLWithString:urlString];
@@ -466,8 +499,12 @@
 - (NSString *)joinFailedUrlWithObj:(NSString *)urlString error:(NSError *)error {
     ADVLog(@"UPLOAD error: %@", error);
     if (error) {
+
         if ([error.domain isEqualToString:@"KSADErrorDomain"]) { // 快手SDK
             return [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=err_ks_%ld&track_time",(long)error.code]];
+        } else if ([error.domain isEqualToString:@"BDAdErrorDomain"]) {
+            return [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=err_bd_%ld&track_time",(long)error.code]];
+
         } else if ([error.domain isEqualToString:@"com.pangle.buadsdk"]) { // 新版穿山甲sdk报错
             return [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=err_csj_%ld&track_time",(long)error.code]];
         } else if ([error.domain isEqualToString:@"com.bytedance.buadsdk"]) {// 穿山甲sdk报错
@@ -504,19 +541,58 @@
 - (NSMutableArray *)loadedtkUrlWithArr:(NSArray<NSString *> *)uploadArr {
     NSMutableArray *temp = [NSMutableArray arrayWithCapacity:uploadArr.count];
     for (id obj in uploadArr.mutableCopy) {
-        NSString *loadedtk = [self joinLoadedtkUrlWithObj:obj];
+        NSString *loadedtk = [self joinTimeUrlWithObj:obj type:AdvanceSdkSupplierRepoLoaded];
         [temp addObject:loadedtk];
     }
     return temp;
 }
 
-#pragma loadedtk 拼接时间戳
-- (NSString *)joinLoadedtkUrlWithObj:(NSString *)urlString {
+#pragma imptk 的参数拼接
+- (NSMutableArray *)imptkUrlWithArr:(NSArray<NSString *> *)uploadArr {
+    NSMutableArray *temp = [NSMutableArray arrayWithCapacity:uploadArr.count];
+    for (id obj in uploadArr.mutableCopy) {
+        NSString *loadedtk = [self joinTimeUrlWithObj:obj type:AdvanceSdkSupplierRepoImped];
+        [temp addObject:loadedtk];
+    }
+    return temp;
+}
+
+/// 拼接时间戳
+/// @param urlString url
+/// @param type AdvanceSdkSupplierRepoType
+- (NSString *)joinTimeUrlWithObj:(NSString *)urlString type:(AdvanceSdkSupplierRepoType)repoType {
     NSTimeInterval serverTime = [[NSDate date] timeIntervalSince1970]*1000 - self.serverTime;
     if (serverTime > 0) {
-        return [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=l_%.0f&track_time",serverTime]];
+        if (repoType == AdvanceSdkSupplierRepoLoaded) {
+            return [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=l_%.0f&track_time",serverTime]];
+        } else if (repoType == AdvanceSdkSupplierRepoImped) {
+            return [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=tt_%.0f&track_time",serverTime]];
+        }
     }
     return urlString;
+}
+
+- (NSString *)paramValueOfUrl:(NSString *)url withParam:(NSString *)param {
+    @try {
+        if ([url containsString:param]) {
+            NSRange range =  [url rangeOfString:param];
+            
+            // 定义要删除按的reqid
+            NSString *reqidValue = [NSString stringWithFormat:@"reqid=%@", self.reqid];
+            
+            // 找到原url当中 reqid=balabalabala
+            NSRange rangeReq = NSMakeRange(range.location + 1, 38);
+            NSString * parametersString = [url substringWithRange:rangeReq];
+    //        [url  substringFromIndex:range.location];
+            if ([parametersString containsString:@"&"]) { // reqid=balabalabala 包含了& 说明截取不准确返回的url有问题 则不进行替换工作
+                return url;
+            }
+            url = [url stringByReplacingOccurrencesOfString:parametersString withString:reqidValue];
+        }
+    } @catch (NSException *exception) {
+        return url;
+    }
+    return url;
 }
 
 
@@ -553,7 +629,7 @@
             [self fetchData:YES];
         }
     } else if (repoType == AdvanceSdkSupplierRepoImped) {
-        uploadArr =  supplier.imptk;
+        uploadArr =  [self imptkUrlWithArr:supplier.imptk];
     } else if (repoType == AdvanceSdkSupplierRepoFaileded) {
         uploadArr =  [self failedtkUrlWithArr:supplier.failedtk error:error];
     }
@@ -574,10 +650,26 @@
     return _fetchTime;
 }
 
-- (NSMutableArray *)queues {
-    if (!_queues) {
-        _queues = [NSMutableArray array];
+- (NSLock *)lock {
+    if (!_lock) {
+        _lock = [NSLock new];
     }
-    return _queues;
+    return _lock;
+}
+
+- (void)setModel:(AdvSupplierModel *)model {
+    if (_model != model) {
+        ADVLog(@"%@ -- %@", _model, model);
+        _model = nil;
+        ADVLog(@"%@ -- %@", _model, model);
+        _model = model;
+        ADVLog(@"model赋值 %@ %@", _model, model);
+    }
+}
+
+- (void)dealloc
+{
+    ADVLog(@"mgr 释放啦");
+    self.model = nil;
 }
 @end

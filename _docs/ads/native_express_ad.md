@@ -9,7 +9,7 @@
 #import "BYExamCellModel.h"
 
 #import "DemoUtils.h"
-#import <AdvanceSDK/AdvanceSDK.h>
+#import <AdvanceSDK/AdvanceNativeExpress.h>
 
 @interface FeedExpressViewController () <UITableViewDelegate, UITableViewDataSource>
 @property (strong, nonatomic) UITableView *tableView;
@@ -43,23 +43,36 @@
     _advanceFeed = [[AdvanceNativeExpress alloc] initWithMediaId:self.mediaId adspotId:self.adspotId viewController:self adSize:CGSizeMake(self.view.bounds.size.width, 300)];
     
     _advanceFeed.delegate = self;
-    [_advanceFeed setDefaultSdkSupplierWithMediaId:@"100255"
-                                          adspotId:@"10002698"
-                                          mediaKey:@"757d5119466abe3d771a211cc1278df7"
-                                            sdkId:SDK_ID_MERCURY];
     [_advanceFeed loadAd];
 }
 
 // MARK: ======================= AdvanceNativeExpressDelegate =======================
 /// 广告数据拉取成功
 - (void)advanceNativeExpressOnAdLoadSuccess:(NSArray<UIView *> *)views {
-    NSLog(@"拉取数据成功 ");
-    for (NSInteger i=0; i<views.count;i++) {
-        [views[i] performSelector:@selector(render)];
-        [_dataArrM insertObject:views[i] atIndex:1];
-        [self.tableView reloadData];
+    NSLog(@"拉取数据成功  %@",views);
+    self.arrViewsM = [views mutableCopy];
+    for (NSInteger i=0; i<self.arrViewsM.count;i++) {
+        if ([self.arrViewsM[i] isKindOfClass:NSClassFromString(@"BUNativeExpressFeedVideoAdView")] ||
+            [self.arrViewsM[i] isKindOfClass:NSClassFromString(@"BUNativeExpressAdView")]) {
+            [self.arrViewsM[i] performSelector:@selector(setRootViewController:) withObject:self];
+            [self.arrViewsM[i] performSelector:@selector(render)];
+        } else if ([self.arrViewsM[i] isKindOfClass:NSClassFromString(@"MercuryNativeExpressAdView")]) {
+            [self.arrViewsM[i] performSelector:@selector(setController:) withObject:self];
+            [self.arrViewsM[i] performSelector:@selector(render)];
+        } else if ([self.arrViewsM[i] isKindOfClass:NSClassFromString(@"GDTNativeExpressAdView")]) {// 广点通旧版信息流
+            [self.arrViewsM[i] performSelector:@selector(setController:) withObject:self];
+            [self.arrViewsM[i] performSelector:@selector(render)];
+        } else if ([self.arrViewsM[i] isKindOfClass:NSClassFromString(@"GDTNativeExpressProAdView")]) {// 广点通新版信息流
+            [self.arrViewsM[i] performSelector:@selector(setController:) withObject:self];
+            [self.arrViewsM[i] performSelector:@selector(render)];
+        }
+        
+        
+        [_dataArrM insertObject:self.arrViewsM[i] atIndex:1];
     }
+    [self.tableView reloadData];
 }
+
 /// 广告曝光
 - (void)advanceNativeExpressOnAdShow:(UIView *)adView {
     NSLog(@"广告曝光 %s", __func__);

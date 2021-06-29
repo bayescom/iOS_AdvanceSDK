@@ -27,8 +27,14 @@
         @{@"addesc": @"激励视频", @"adspotId": @"100255-10002595"},
         @{@"addesc": @"Mock 渠道错误", @"adspotId": @"100255-10000001"},
         @{@"addesc": @"Mock code200", @"adspotId": @"100255-10003321"},
+<<<<<<< HEAD
         @{@"addesc": @"Mock code200", @"adspotId": @"100255-10009988"},
+=======
+        @{@"addesc": @"Mock code200", @"adspotId": @"100255-10004405"},
+        @{@"addesc": @"Mock code200", @"adspotId": @"100255-100050002"},
+>>>>>>> master
     ];
+    
     self.btn1Title = @"加载广告";
     self.btn2Title = @"显示广告";
 }
@@ -44,10 +50,6 @@
 //                                                                 customExt:self.ext
 //                                                            viewController:self];
     self.advanceRewardVideo.delegate=self;
-    [self.advanceRewardVideo setDefaultAdvSupplierWithMediaId:@"100255"
-                                                     adspotId:@"10002595323"
-                                                     mediaKey:@"757d5119466abe3d771a211cc1278df7"
-                                                     sdkId:SDK_ID_MERCURY];
     _isAdLoaded=false;
     [self.advanceRewardVideo loadAd];
 }
@@ -64,8 +66,8 @@
 /// 广告数据加载成功
 - (void)advanceUnifiedViewDidLoad {
     NSLog(@"广告数据加载成功 %s", __func__);
-    _isAdLoaded=true;
     [JDStatusBarNotification showWithStatus:@"广告加载成功" dismissAfter:1.5];
+//    [self loadAdBtn2Action];
 }
 
 /// 视频缓存成功
@@ -73,7 +75,8 @@
 {
     NSLog(@"视频缓存成功 %s", __func__);
     [JDStatusBarNotification showWithStatus:@"视频缓存成功" dismissAfter:1.5];
-
+    _isAdLoaded=true;
+    [self loadAdBtn2Action];
 }
 
 /// 到达激励时间

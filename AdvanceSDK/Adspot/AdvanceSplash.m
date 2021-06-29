@@ -95,13 +95,6 @@
     }
 }
 
-// 执行了打底渠道
-- (void)advSupplierLoadDefaultSuppluer:(AdvSupplier *)supplier
-{
-//    ADVLog(@"执行了打底渠道: %@", supplier.sdktag);
-    [self advanceOnAdReceivedWithReqId:supplier.sdktag];
-}
-
 // 返回策略id
 - (void)advanceOnAdReceivedWithReqId:(NSString *)reqId
 {
@@ -122,7 +115,8 @@
     if ([_delegate respondsToSelector:@selector(advanceFailedWithError:)]) {
         [_delegate advanceFailedWithError:error];
     }
-//    [self deallocSelf]; // 注释掉 是因为在执行打底渠道
+    [self deallocSelf];
+    [self deallocDelegate:NO];
 }
 
 
@@ -157,6 +151,8 @@
         clsName = @"MercurySplashAdapter";
     } else if ([supplier.identifier isEqualToString:SDK_ID_KS]) {
         clsName = @"KsSplashAdapter";
+    } else if ([supplier.identifier isEqualToString:SDK_ID_BAIDU]) {
+        clsName = @"BdSplashAdapter";
     }
     ADVLog(@"%@ | %@", supplier.name, clsName);
     // 请求超时了
@@ -197,7 +193,7 @@
                     supplier.timeout = (_timeout_stamp - now) >= 5000 ? 5000 : (_timeout_stamp - now);
                 }
                 
-                if ([supplier.identifier isEqualToString:@"00000000"]) {
+                if ([supplier.identifier isEqualToString:@"00000000"]) {// 测试专用
                     ADVLog(@"延时串行开始 %@", _adapter);
                     dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC));
                     dispatch_after(delayTime, dispatch_get_main_queue(), ^{

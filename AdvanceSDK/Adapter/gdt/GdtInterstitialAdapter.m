@@ -75,7 +75,7 @@
 /// 插屏广告预加载成功回调，当接收服务器返回的广告数据成功且预加载后调用该函数
 - (void)unifiedInterstitialSuccessToLoadAd:(GDTUnifiedInterstitialAd *)unifiedInterstitial {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
-    NSLog(@"广点通激励视频拉取成功 %@",self.gdt_ad);
+    NSLog(@"广点通插屏拉取成功 %@",self.gdt_ad);
     if (_supplier.isParallel == YES) {
         NSLog(@"修改状态: %@", _supplier);
         _supplier.state = AdvanceSdkSupplierStateSuccess;

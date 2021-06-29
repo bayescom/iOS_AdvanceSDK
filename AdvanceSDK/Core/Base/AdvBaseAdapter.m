@@ -8,6 +8,7 @@
 #import "AdvBaseAdapter.h"
 #import "AdvSupplierManager.h"
 #import "AdvanceSupplierDelegate.h"
+
 #import "AdvSdkConfig.h"
 #import <objc/runtime.h>
 #import <objc/message.h>
@@ -48,12 +49,12 @@
 
 - (void)reportWithType:(AdvanceSdkSupplierRepoType)repoType supplier:(AdvSupplier *)supplier error:(NSError *)error {
     // 有错误正常上报
-    NSLog(@"|||--- %@ %ld %@",supplier.sdktag, (long)supplier.priority, supplier);
+//    NSLog(@"|||--- %@ %ld %@",supplier.sdktag, (long)supplier.priority, supplier);
     [_mgr reportWithType:repoType supplier:supplier error:error];
     
     // 失败了 并且不是并行才会走下一个渠道
     if (repoType == AdvanceSdkSupplierRepoFaileded && !supplier.isParallel) {
-        NSLog(@"%@ |||   %ld %@",supplier.sdktag, (long)supplier.priority, supplier);
+//        NSLog(@"%@ |||   %ld %@",supplier.sdktag, (long)supplier.priority, supplier);
         [_mgr loadNextSupplierIfHas];
     }
 }
@@ -65,12 +66,12 @@
     
 }
 
-- (void)setDefaultAdvSupplierWithMediaId:(NSString *)mediaId
-                                adspotId:(NSString *)adspotid
-                                mediaKey:(NSString *)mediakey
-                                   sdkId:(nonnull NSString *)sdkid {
-    [self.mgr setDefaultAdvSupplierWithMediaId:mediaId adspotId:adspotid mediaKey:mediakey sdkId:sdkid];
-}
+//- (void)setDefaultAdvSupplierWithMediaId:(NSString *)mediaId
+//                                adspotId:(NSString *)adspotid
+//                                mediaKey:(NSString *)mediakey
+//                                   sdkId:(nonnull NSString *)sdkid {
+//    [self.mgr setDefaultAdvSupplierWithMediaId:mediaId adspotId:adspotid mediaKey:mediakey sdkId:sdkid];
+//}
 
 // MARK: ======================= AdvSupplierManagerDelegate =======================
 /// 加载策略Model成功
@@ -100,6 +101,8 @@
         clsName = @"MercuryConfigManager";
     } else if ([supplier.identifier isEqualToString:SDK_ID_KS]) {
         clsName = @"KSAdSDKManager";
+    } else if ([supplier.identifier isEqualToString:SDK_ID_BAIDU]){
+        clsName = @"BaiduMobAdSetting";
     }
     
     
@@ -129,11 +132,16 @@
             [NSClassFromString(clsName) performSelector:@selector(setAppId:) withObject:supplier.mediaid];
         });
 
-    }
+    } else if ([supplier.identifier isEqualToString:SDK_ID_BAIDU]) {
+        // 百度
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+            id bdSetting = ((id(*)(id,SEL))objc_msgSend)(NSClassFromString(clsName), @selector(sharedInstance));
+            [bdSetting performSelector:@selector(setSupportHttps:) withObject:NO];
 
-    // 如果执行了打底渠道 则执行此方法
-    if ([supplier.sdktag isEqualToString:@"bottom_default"]) {
-        [self advSupplierLoadDefaultSuppluer:supplier];
+        });
+    } else {
+        
     }
 
     // 加载渠道

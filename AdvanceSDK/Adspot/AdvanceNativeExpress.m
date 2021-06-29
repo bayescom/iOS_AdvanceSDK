@@ -45,14 +45,6 @@
     return self;
 }
 
-
-// 执行了打底渠道
-- (void)advSupplierLoadDefaultSuppluer:(AdvSupplier *)supplier
-{
-    ADVLog(@"执行了打底渠道: %@", supplier.sdktag);
-    [self advanceOnAdReceivedWithReqId:supplier.sdktag];
-}
-
 // 返回策略id
 - (void)advanceOnAdReceivedWithReqId:(NSString *)reqId
 {
@@ -108,7 +100,11 @@
         clsName = @"MercuryNativeExpressAdapter";
     } else if ([supplier.identifier isEqualToString:SDK_ID_KS]) {
         clsName = @"KsNativeExpressAdapter";
+    } else if ([supplier.identifier isEqualToString:SDK_ID_BAIDU]) {
+        clsName = @"BdNativeExpressAdapter";
     }
+    
+    
     if (NSClassFromString(clsName)) {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wundeclared-selector"

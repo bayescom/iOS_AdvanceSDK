@@ -25,6 +25,8 @@
 #define kPublicForApiKey @"用文本编辑打开public_for_api.pem即可获取"
 
 #define kDevId @""
+#import <AppTrackingTransparency/AppTrackingTransparency.h>
+#import <AdSupport/AdSupport.h>
 
 @interface AppDelegate () <AdvanceSplashDelegate>
 @property(strong,nonatomic) AdvanceSplash *advanceSplash;
@@ -35,6 +37,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
+<<<<<<< HEAD
 #pragma 开始集成前 请务必阅读README.md文档中的注意事项及Checklist
 #pragma 开始集成前 请务必阅读README.md文档中的注意事项及Checklist
 #pragma 开始集成前 请务必阅读README.md文档中的注意事项及Checklist
@@ -64,22 +67,70 @@
         //初始化开屏广告
 //        [self loadSplash];
     }];
+=======
+#pragma 开始集成前 请务必阅读文档中的注意事项及Checklist https://github.com/bayescom/AdvanceSDK
+#pragma 开始集成前 请务必阅读文档中的注意事项及Checklist https://github.com/bayescom/AdvanceSDK
+#pragma 开始集成前 请务必阅读文档中的注意事项及Checklist https://github.com/bayescom/AdvanceSDK
+#pragma 开始集成前 请务必阅读文档中的注意事项及Checklist https://github.com/bayescom/AdvanceSDK
+#pragma 开始集成前 请务必阅读文档中的注意事项及Checklist https://github.com/bayescom/AdvanceSDK
+#pragma 开始集成前 请务必阅读文档中的注意事项及Checklist https://github.com/bayescom/AdvanceSDK
+#pragma 开始集成前 请务必阅读文档中的注意事项及Checklist https://github.com/bayescom/AdvanceSDK
+#pragma 开始集成前 请务必阅读文档中的注意事项及Checklist https://github.com/bayescom/AdvanceSDK
+#pragma Demo 中有许多内容为开发调试的内容, 仅作为开发者调试自己的账号使用, 不一定会出广告
+
+    // 请现在 plist 文件中配置 NSUserTrackingUsageDescription
+    /*
+     <key>NSUserTrackingUsageDescription</key>
+     <string>该ID将用于向您推送个性化广告</string>
+     */
+    // 项目需要适配http
+>>>>>>> master
     
+    /*
+     <key>NSAppTransportSecurity</key>
+     <dict>
+         <key>NSAllowsArbitraryLoads</key>
+         <true/>
+     </dict>
+     */
+    // 调试阶段尽量用真机, 以便获取idfa, 如果获取不到idfa, 则打开idfa开关
+    // iphone 打开idfa 开关的的过程:设置 -> 隐私 -> 跟踪 -> 允许App请求跟踪
+    __block NSString *idfa = @"";
+    ASIdentifierManager *manager = [ASIdentifierManager sharedManager];
+    if (@available(iOS 14, *)) {
+        [ATTrackingManager requestTrackingAuthorizationWithCompletionHandler:^(ATTrackingManagerAuthorizationStatus status) {
+            if (status == ATTrackingManagerAuthorizationStatusAuthorized) {
+                idfa = [[manager advertisingIdentifier] UUIDString];
+            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                // do something
+                [AdvSdkConfig shareInstance].isDebug = YES;
+//                [AdvSdkConfig shareInstance].appId = @"100255";
+//                [self loadSplash];
+            });
+        }];
+    }else{
+        if ([manager isAdvertisingTrackingEnabled]) {
+            idfa = [[manager advertisingIdentifier] UUIDString];
+            [AdvSdkConfig shareInstance].isDebug = YES;
+//            [AdvSdkConfig shareInstance].appId = @"100255";
+//            [self loadSplash];
+        }
+
+    }
+
     return YES;
 }
 
 - (void)loadSplash {
-    self.advanceSplash = [[AdvanceSplash alloc] initWithAdspotId:@"100255"
+    // 测试使用 很容易不出广告
+    self.advanceSplash = [[AdvanceSplash alloc] initWithAdspotId:@"10002619"
 //    self.advanceSplash = [[AdvanceSplash alloc] initWithAdspotId:@"20000003"
                                                   viewController:self.window.rootViewController];
     self.advanceSplash.delegate = self;
 //    self.advanceSplash.showLogoRequire = YES;
     self.advanceSplash.logoImage = [UIImage imageNamed:@"app_logo"];
     self.advanceSplash.backgroundImage = [UIImage imageNamed:@"LaunchImage_img"];
-    [self.advanceSplash setDefaultAdvSupplierWithMediaId:@"100255"
-                                                adspotId:@"10004237"
-                                                mediaKey:@"c6f80c078b7956821ebdaad72779cffc"
-                                                  sdkId:SDK_ID_CSJ];
     self.advanceSplash.timeout = 5;
     [self.advanceSplash loadAd];
 }
@@ -131,29 +182,5 @@
 {
     NSLog(@"%s 策略id为: %@",__func__ , reqId);
 }
-
-
-// MARK: ======================= Debug =======================
-//- (void)debugConf {
-//    [STDebugConsole setModel:STDebugConsoleModelRedirect];
-//
-//    UIButton *logBtn = [[UIButton alloc] initWithFrame:CGRectMake([UIScreen mainScreen].bounds.size.width-50-8, [UIScreen mainScreen].bounds.size.height-50-28, 50, 50)];
-//    logBtn.backgroundColor = [UIColor colorWithRed:0.44 green:0.81 blue:0.89 alpha:1.00];
-//    [logBtn setTitle:@"日志" forState:UIControlStateNormal];
-//    [logBtn setTitleColor:[UIColor colorWithWhite:0.1 alpha:0.3] forState:UIControlStateNormal];
-//    logBtn.layer.cornerRadius = 25;
-//    [[UIApplication sharedApplication].keyWindow addSubview:logBtn];
-//
-//    [logBtn addTarget:self action:@selector(showDebug) forControlEvents:UIControlEventTouchUpInside];
-//}
-//
-//- (void)showDebug {
-//    STDebugConsoleViewController *vc = [[STDebugConsoleViewController alloc] init];
-//    UINavigationController *navc = [[UINavigationController alloc] initWithRootViewController:vc];
-////    navc.navigationBarHidden = YES;
-//    [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:navc animated:YES completion:nil];
-//
-//    [[JPFPSStatus sharedInstance] open];
-//}
 
 @end

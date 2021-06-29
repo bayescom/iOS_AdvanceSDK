@@ -12,22 +12,7 @@
 @protocol AdvanceBannerDelegate <AdvanceBaseDelegate>
 @optional
 
-#pragma 以下方法已被废弃, 请移步AdvanceBaseDelegate 和 AdvanceCommonDelegate
-
-/// 请求广告数据成功后调用
-//- (void)advanceBannerOnAdReceived;
-
-/// 广告曝光回调
-//- (void)advanceBannerOnAdShow;
-
-/// 广告点击回调
-//- (void)advanceBannerOnAdClicked;
-
-/// 广告展示失败
-//- (void)advanceBannerOnAdFailedWithSdkId:(NSString *)sdkId error:(NSError *)error;
-
-/// 广告关闭回调
-//- (void)advanceBannerOnAdClosed;
+#pragma 请移步AdvanceBaseDelegate 和 AdvanceCommonDelegate
 
 @end
 

@@ -37,13 +37,6 @@
     return self;
 }
 
-// 执行了打底渠道
-- (void)advSupplierLoadDefaultSuppluer:(AdvSupplier *)supplier
-{
-    ADVLog(@"执行了打底渠道: %@", supplier.sdktag);
-    [self advanceOnAdReceivedWithReqId:supplier.sdktag];
-}
-
 // 返回策略id
 - (void)advanceOnAdReceivedWithReqId:(NSString *)reqId
 {
@@ -89,11 +82,17 @@
     // 根据渠道id自定义初始化b
     NSString *clsName = @"";
     if ([supplier.identifier isEqualToString:SDK_ID_GDT]) {
-        clsName = @"GdtFullScreenVideoAdapter";
+        if (supplier.versionTag == 1) {
+            clsName = @"GdtFullScreenVideoAdapter";
+        } else {
+            clsName = @"GDTFullScreenVideoProAdapter";
+        }
     } else if ([supplier.identifier isEqualToString:SDK_ID_CSJ]) {
         clsName = @"CsjFullScreenVideoAdapter";
     } else if ([supplier.identifier isEqualToString:SDK_ID_KS]) {
         clsName = @"KsFullScreenVideoAdapter";
+    } else if ([supplier.identifier isEqualToString:SDK_ID_BAIDU]) {
+        clsName = @"BdFullScreenVideoAdapter";
     }
     
     

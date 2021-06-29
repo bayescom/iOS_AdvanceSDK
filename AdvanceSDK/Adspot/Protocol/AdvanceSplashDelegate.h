@@ -11,25 +11,13 @@
 #import "AdvanceBaseDelegate.h"
 @protocol AdvanceSplashDelegate <AdvanceBaseDelegate>
 @optional
-
 /// 广告点击跳过
+#pragma 百度广告不支持该回调
 - (void)advanceSplashOnAdSkipClicked;
 
-/// 广告倒计时结束回调
+/// 广告倒计时结束回调 百度广告不支持该回调
+#pragma 百度广告不支持该回调
 - (void)advanceSplashOnAdCountdownToZero;
-
-#pragma 以下方法已被废弃, 请移步AdvanceBaseDelegate 和 AdvanceCommonDelegate
-/// 广告数据拉取成功
-//- (void)advanceSplashOnAdReceived;
-
-/// 广告曝光成功
-//- (void)advanceSplashOnAdShow;
-
-/// 广告展示失败
-//- (void)advanceSplashOnAdFailedWithSdkId:(NSString *)sdkId error:(NSError *)error;
-
-/// 广告点击
-//- (void)advanceSplashOnAdClicked;
 
 
 @end

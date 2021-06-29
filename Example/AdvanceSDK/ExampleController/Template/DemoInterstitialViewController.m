@@ -24,6 +24,7 @@
     self.initDefSubviewsFlag = YES;
     self.adspotIdsArr = @[
         @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10000559"},
+        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-40001111"},
         @{@"addesc": @"Mock 渠道错误", @"adspotId": @"100255-10000001"},
         @{@"addesc": @"Mock code200", @"adspotId": @"100255-10003321"},
         @{@"addesc": @"Mock code200", @"adspotId": @"100255-100004378"},
@@ -45,10 +46,6 @@
 //                                                                   customExt:self.ext
 //                                                              viewController:self];
     self.advanceInterstitial.delegate = self;
-    [self.advanceInterstitial setDefaultAdvSupplierWithMediaId:@"100255"
-                                                      adspotId:@"10000559"
-                                                      mediaKey:@"757d5119466abe3d771a211cc1278df7"
-                                                         sdkId:SDK_ID_MERCURY];
     _isAdLoaded=false;
     [self.advanceInterstitial loadAd];
 }
@@ -68,6 +65,7 @@
     NSLog(@"广告数据拉取成功 %s", __func__);
     _isAdLoaded=true;
     [JDStatusBarNotification showWithStatus:@"广告加载成功" dismissAfter:1.5];
+    [self loadAdBtn2Action];
 }
 
 /// 广告曝光

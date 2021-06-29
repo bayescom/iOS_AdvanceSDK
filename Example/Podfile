@@ -10,6 +10,8 @@ target 'AdvanceSDK_Example' do
   pod 'AdvanceSDK/GDT', :path => '../'
   pod 'AdvanceSDK/KS', :path => '../'
 #  pod 'Ads-CN', '~> 3.5.1.1'
+  pod 'AdvanceSDK/BD', :path => '../'
+  pod 'Ads-CN', '~> 3.6.1.1'
   pod 'SDWebImage'
   pod 'Masonry'
 #  pod "STDebugConsole"

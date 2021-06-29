@@ -29,8 +29,12 @@
         @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10004567"},
         @{@"addesc": @"Mock 渠道错误", @"adspotId": @"100255-10000001"},
         @{@"addesc": @"Mock code200", @"adspotId": @"100255-10003321"},
+<<<<<<< HEAD
         @{@"addesc": @"Mock code200", @"adspotId": @"100255-10004674"},
         
+=======
+        @{@"addesc": @"Mock code200", @"adspotId": @"100255-100070001"},
+>>>>>>> master
     ];
     self.btn1Title = @"加载广告";
     self.btn2Title = @"显示广告";
@@ -49,10 +53,6 @@
 //                                                                         customExt:self.ext
 //                                                                    viewController:self];
     self.advanceFullScreenVideo.delegate = self;
-    [self.advanceFullScreenVideo setDefaultAdvSupplierWithMediaId:@"100255"
-                                                      adspotId:@"10000559"
-                                                      mediaKey:@"757d5119466abe3d771a211cc1278df7"
-                                                        sdkId:SDK_ID_MERCURY];
     _isAdLoaded=false;
     [self.advanceFullScreenVideo loadAd];
 }
@@ -72,6 +72,10 @@
     NSLog(@"请求广告数据成功后调用 %s", __func__);
     _isAdLoaded=true;
     [JDStatusBarNotification showWithStatus:@"广告加载成功" dismissAfter:1.5];
+<<<<<<< HEAD
+=======
+    [self loadAdBtn2Action];
+>>>>>>> master
 }
 
 /// 广告曝光

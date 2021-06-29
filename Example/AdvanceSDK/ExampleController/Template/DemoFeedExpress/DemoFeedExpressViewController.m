@@ -27,8 +27,12 @@
         @{@"addesc": @"Mock 渠道错误", @"adspotId": @"100255-10000001"},
         @{@"addesc": @"Mock code200", @"adspotId": @"100255-10003321"},
         @{@"addesc": @"GDT2.0信息流", @"adspotId": @"100255-10002600"},
+<<<<<<< HEAD
         @{@"addesc": @"快手", @"adspotId": @"100255-10006758"},
 
+=======
+        @{@"addesc": @"百度信息流", @"adspotId": @"100255-100070001"},
+>>>>>>> master
     ];
     self.btn1Title = @"展示广告";
 }
