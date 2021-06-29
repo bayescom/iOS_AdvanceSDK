@@ -83,7 +83,8 @@ Blink倍联——免费透明的流量变现神器 
     ks.source_files =  'AdvanceSDK/Adapter/ks/**/*.{h,m}'
     ks.frameworks = 'Foundation', 'UIKit', 'MobileCoreServices', 'CoreGraphics', 'Security','SystemConfiguration', 'CoreTelephony', 'AdSupport', 'CoreData','StoreKit', 'AVFoundation', 'MediaPlayer', 'CoreMedia', 'WebKit','Accelerate', 'CoreLocation', 'AVKit','MessageUI','QuickLook','AddressBook'
     ks.libraries     = 'resolv.9', 'sqlite3','c++','c++abi','z'
-
+  end
+  
   s.subspec 'BD' do |bd|
     bd.dependency 'AdvanceSDK/Core'
     bd.dependency 'AdvanceSDK/Adspot'

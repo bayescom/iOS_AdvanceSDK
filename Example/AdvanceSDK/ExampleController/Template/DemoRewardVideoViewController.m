@@ -27,12 +27,9 @@
         @{@"addesc": @"激励视频", @"adspotId": @"100255-10002595"},
         @{@"addesc": @"Mock 渠道错误", @"adspotId": @"100255-10000001"},
         @{@"addesc": @"Mock code200", @"adspotId": @"100255-10003321"},
-<<<<<<< HEAD
         @{@"addesc": @"Mock code200", @"adspotId": @"100255-10009988"},
-=======
         @{@"addesc": @"Mock code200", @"adspotId": @"100255-10004405"},
         @{@"addesc": @"Mock code200", @"adspotId": @"100255-100050002"},
->>>>>>> master
     ];
     
     self.btn1Title = @"加载广告";

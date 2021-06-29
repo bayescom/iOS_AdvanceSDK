@@ -30,14 +30,11 @@
         @{@"addesc": @"Mock 渠道错误", @"adspotId": @"100255-10000001"},
         @{@"addesc": @"Mock code200", @"adspotId": @"100255-10003321"},
         @{@"addesc": @"Mock code200", @"adspotId": @"100255-10009879"},
-<<<<<<< HEAD
         @{@"addesc": @"haoxueche", @"adspotId": @"101361-10004237"},
         @{@"addesc": @"快手开屏", @"adspotId": @"100255-10004411"},
         @{@"addesc": @"快手开屏", @"adspotId": @"101394-10004333"},
-        
-=======
         @{@"addesc": @"百度", @"adspotId": @"100255-100050001"},
->>>>>>> master
+
     ];
     self.btn1Title = @"加载并显示广告";
 }
@@ -57,13 +54,6 @@
     self.advanceSplash.showLogoRequire = YES;
     self.advanceSplash.logoImage = [UIImage imageNamed:@"app_logo"];
     self.advanceSplash.backgroundImage = [UIImage imageNamed:@"LaunchImage_img"];
-<<<<<<< HEAD
-    [self.advanceSplash setDefaultAdvSupplierWithMediaId:@"100255"
-                                                adspotId:@"10002436"
-                                                mediaKey:@"757d5119466abe3d771a211cc1278df7"
-                                                  sdkId:SDK_ID_MERCURY];
-=======
->>>>>>> master
     self.advanceSplash.timeout = 5;
     [self.advanceSplash loadAd];
 }

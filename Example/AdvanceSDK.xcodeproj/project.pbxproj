@@ -754,11 +754,7 @@
 				INFOPLIST_FILE = "AdvanceSDK/AdvanceSDK-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MODULE_NAME = ExampleApp;
-<<<<<<< HEAD
-				PRODUCT_BUNDLE_IDENTIFIER = com.kwai.adsdk.beta;
-=======
 				PRODUCT_BUNDLE_IDENTIFIER = chydu.qingsheMember;
->>>>>>> master
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
@@ -780,11 +776,7 @@
 				INFOPLIST_FILE = "AdvanceSDK/AdvanceSDK-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MODULE_NAME = ExampleApp;
-<<<<<<< HEAD
-				PRODUCT_BUNDLE_IDENTIFIER = com.kwai.adsdk.beta;
-=======
 				PRODUCT_BUNDLE_IDENTIFIER = chydu.qingsheMember;
->>>>>>> master
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;

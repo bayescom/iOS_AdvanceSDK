@@ -37,37 +37,6 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
-<<<<<<< HEAD
-#pragma 开始集成前 请务必阅读README.md文档中的注意事项及Checklist
-#pragma 开始集成前 请务必阅读README.md文档中的注意事项及Checklist
-#pragma 开始集成前 请务必阅读README.md文档中的注意事项及Checklist
-#pragma 开始集成前 请务必阅读README.md文档中的注意事项及Checklist
-#pragma 开始集成前 请务必阅读README.md文档中的注意事项及Checklist
-#pragma 开始集成前 请务必阅读README.md文档中的注意事项及Checklist
-#pragma 开始集成前 请务必阅读README.md文档中的注意事项及Checklist
-#pragma 开始集成前 请务必阅读README.md文档中的注意事项及Checklist
-    [AdvSdkConfig shareInstance].isDebug = YES;
-    [[AdvSdkConfig shareInstance] setAppId:@"100255"] ;
-    
-    // 冷启动 监听
-    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidFinishLaunchingNotification object:nil queue:nil usingBlock:^(NSNotification * _Nonnull note) {
-        
-        // DEBUG
-        static dispatch_once_t onceToken;
-        dispatch_once(&onceToken, ^{
-//            [self debugConf];
-        });
-        
-        //初始化开屏广告
-//        [self loadSplash];
-    }];
-    
-    // 热启动 监听
-    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillEnterForegroundNotification object:nil queue:nil usingBlock:^(NSNotification * _Nonnull note) {
-        //初始化开屏广告
-//        [self loadSplash];
-    }];
-=======
 #pragma 开始集成前 请务必阅读文档中的注意事项及Checklist https://github.com/bayescom/AdvanceSDK
 #pragma 开始集成前 请务必阅读文档中的注意事项及Checklist https://github.com/bayescom/AdvanceSDK
 #pragma 开始集成前 请务必阅读文档中的注意事项及Checklist https://github.com/bayescom/AdvanceSDK
@@ -84,7 +53,6 @@
      <string>该ID将用于向您推送个性化广告</string>
      */
     // 项目需要适配http
->>>>>>> master
     
     /*
      <key>NSAppTransportSecurity</key>
