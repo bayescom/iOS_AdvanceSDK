@@ -76,6 +76,12 @@
  * interstitial ad data loaded
  */
 - (void)ksad_interstitialAdDidLoad:(KSInterstitialAd *)interstitialAd {
+
+}
+/**
+ * interstitial ad render success
+ */
+- (void)ksad_interstitialAdRenderSuccess:(KSInterstitialAd *)interstitialAd {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
     _isDidLoad = YES;
     ADVLog(@"快手插屏视频拉取成功");
@@ -87,13 +93,6 @@
     if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
         [self.delegate advanceUnifiedViewDidLoad];
     }
-
-}
-/**
- * interstitial ad render success
- */
-- (void)ksad_interstitialAdRenderSuccess:(KSInterstitialAd *)interstitialAd {
-    
 }
 /**
  * interstitial ad load or render failed
