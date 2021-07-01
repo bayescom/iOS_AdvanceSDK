@@ -76,9 +76,6 @@
             
         }
         [_dataArrM insertObject:self.arrViewsM[i] atIndex:1];
-
-        
-        [_dataArrM insertObject:self.arrViewsM[i] atIndex:8];
     }
     [self.tableView reloadData];
 }
@@ -177,9 +174,14 @@
             [subView removeFromSuperview];
         }
         UIView *view = _dataArrM[indexPath.row];
+
         view.tag = 1000;
         [cell.contentView addSubview:view];
         cell.accessibilityIdentifier = @"nativeTemp_ad";
+        [view mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.edges.equalTo(@0);
+        }];
+
         return cell;
     }
 }

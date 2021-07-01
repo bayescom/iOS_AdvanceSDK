@@ -1,0 +1,82 @@
+PODS:
+  - Ads-CN (3.6.1.4):
+    - Ads-CN/BUAdSDK (= 3.6.1.4)
+  - Ads-CN/BUAdSDK (3.6.1.4):
+    - Ads-CN/BUFoundation
+    - Ads-CN/Domestic
+  - Ads-CN/BUFoundation (3.6.1.4)
+  - Ads-CN/Domestic (3.6.1.4)
+  - AdvanceSDK (3.2.4.6):
+    - AdvanceSDK/Core (= 3.2.4.6)
+  - AdvanceSDK/Adspot (3.2.4.6):
+    - AdvanceSDK/Core
+  - AdvanceSDK/BD (3.2.4.6):
+    - AdvanceSDK/Adspot
+    - AdvanceSDK/Core
+    - BaiduMobAdSDK
+  - AdvanceSDK/Core (3.2.4.6)
+  - AdvanceSDK/CSJ (3.2.4.6):
+    - Ads-CN
+    - AdvanceSDK/Adspot
+    - AdvanceSDK/Core
+  - AdvanceSDK/GDT (3.2.4.6):
+    - AdvanceSDK/Adspot
+    - AdvanceSDK/Core
+    - GDTMobSDK
+  - AdvanceSDK/KS (3.2.4.6):
+    - AdvanceSDK/Adspot
+    - AdvanceSDK/Core
+    - KSAdSDK
+  - AdvanceSDK/Mercury (3.2.4.6):
+    - AdvanceSDK/Adspot
+    - AdvanceSDK/Core
+    - MercurySDK
+  - BaiduMobAdSDK (4.771)
+  - GDTMobSDK (4.12.71):
+    - GDTMobSDK/GDTMobSDK (= 4.12.71)
+  - GDTMobSDK/GDTMobSDK (4.12.71)
+  - KSAdSDK (3.3.10)
+  - Masonry (1.1.0)
+  - MercurySDK (3.1.6.1)
+  - SDWebImage (5.11.1):
+    - SDWebImage/Core (= 5.11.1)
+  - SDWebImage/Core (5.11.1)
+
+DEPENDENCIES:
+  - Ads-CN (~> 3.6.1.1)
+  - AdvanceSDK (from `../`)
+  - AdvanceSDK/BD (from `../`)
+  - AdvanceSDK/CSJ (from `../`)
+  - AdvanceSDK/GDT (from `../`)
+  - AdvanceSDK/KS (from `../`)
+  - AdvanceSDK/Mercury (from `../`)
+  - Masonry
+  - SDWebImage
+
+SPEC REPOS:
+  https://github.com/CocoaPods/Specs.git:
+    - Ads-CN
+    - BaiduMobAdSDK
+    - GDTMobSDK
+    - KSAdSDK
+    - Masonry
+    - MercurySDK
+    - SDWebImage
+
+EXTERNAL SOURCES:
+  AdvanceSDK:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  Ads-CN: 18dc029992580154213242b0c3ae68c66dfe3f21
+  AdvanceSDK: 5e593e5fecd4f8b303ffe17b27f1008dd8997880
+  BaiduMobAdSDK: b6bd114a7b4ccc21efb9b5b7d735682b986ada10
+  GDTMobSDK: fceb169aff9a901bccd33e892c0851d42aceca24
+  KSAdSDK: cfe4c08d5dc749f7d7ff175619b4eba161f41c4d
+  Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
+  MercurySDK: 4903c1b625f395da6f6e7b858ab2b7833c49b4f9
+  SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
+
+PODFILE CHECKSUM: d25cdd0669894bc7ba4d8d1ce11add10a8f9def8
+
+COCOAPODS: 1.10.1
