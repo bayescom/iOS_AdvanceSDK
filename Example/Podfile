@@ -16,7 +16,7 @@ target 'AdvanceSDK_Example' do
   pod 'Masonry'
 #  pod "STDebugConsole"
 #  pod 'JPFPSStatus'
- 
+
   target 'AdvanceSDK_Tests' do
     inherit! :search_paths
     
