@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
   s.name             = 'AdvanceSDK'
 
-  s.version          = '3.2.4.6'
+  s.version          = '3.2.4.7'
   s.ios.deployment_target = '9.0'
   s.platform     = :ios, "9.0" 
   s.requires_arc = true
@@ -76,6 +76,15 @@ Blink倍联——免费透明的流量变现神器 
     gdt.libraries     = 'xml2', 'z'
   end
   
+  s.subspec 'KS' do |ks|
+    ks.dependency 'AdvanceSDK/Core'
+    ks.dependency 'AdvanceSDK/Adspot'
+    ks.dependency 'KSAdSDK'
+    ks.source_files =  'AdvanceSDK/Adapter/ks/**/*.{h,m}'
+    ks.frameworks = 'Foundation', 'UIKit', 'MobileCoreServices', 'CoreGraphics', 'Security','SystemConfiguration', 'CoreTelephony', 'AdSupport', 'CoreData','StoreKit', 'AVFoundation', 'MediaPlayer', 'CoreMedia', 'WebKit','Accelerate', 'CoreLocation', 'AVKit','MessageUI','QuickLook','AddressBook'
+    ks.libraries     = 'resolv.9', 'sqlite3','c++','c++abi','z'
+  end
+  
   s.subspec 'BD' do |bd|
     bd.dependency 'AdvanceSDK/Core'
     bd.dependency 'AdvanceSDK/Adspot'
@@ -85,6 +94,7 @@ Blink倍联——免费透明的流量变现神器 
     bd.libraries     = 'c++'
     bd.weak_frameworks = "WebKit"
     valid_archs = ['armv7', 'armv7s', 'x86_64', 'arm64']
+
 
   end
 

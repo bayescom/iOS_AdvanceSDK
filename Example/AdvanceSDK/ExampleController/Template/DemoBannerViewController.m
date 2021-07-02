@@ -27,6 +27,7 @@
         @{@"addesc": @"Banner", @"adspotId": @"100255-10000558"},
         @{@"addesc": @"Mock 渠道错误", @"adspotId": @"100255-10000001"},
         @{@"addesc": @"Mock code200", @"adspotId": @"100255-10003321"},
+        @{@"addesc": @"Mock 快手", @"adspotId": @"100255-10004411"},
         @{@"addesc": @"Mock code200", @"adspotId": @"100255-100060001"},
     ];
     self.btn1Title = @"加载并显示广告";

@@ -98,6 +98,8 @@
         clsName = @"CsjNativeExpressAdapter";
     } else if ([supplier.identifier isEqualToString:SDK_ID_MERCURY]) {
         clsName = @"MercuryNativeExpressAdapter";
+    } else if ([supplier.identifier isEqualToString:SDK_ID_KS]) {
+        clsName = @"KsNativeExpressAdapter";
     } else if ([supplier.identifier isEqualToString:SDK_ID_BAIDU]) {
         clsName = @"BdNativeExpressAdapter";
     }

@@ -72,12 +72,14 @@
             [self.arrViewsM[i] performSelector:@selector(render)];
         } else if ([self.arrViewsM[i] isKindOfClass:NSClassFromString(@"BaiduMobAdSmartFeedView")]) {// 百度
             [self.arrViewsM[i] performSelector:@selector(render)];
+        } else { // 快手
+            
         }
-        
-        [_dataArrM insertObject:self.arrViewsM[i] atIndex:8];
+        [_dataArrM insertObject:self.arrViewsM[i] atIndex:1];
     }
     [self.tableView reloadData];
 }
+
 
 /// 广告曝光
 - (void)advanceNativeExpressOnAdShow:(UIView *)adView {
@@ -151,7 +153,9 @@
     if ([_dataArrM[indexPath.row] isKindOfClass:[BYExamCellModelElement class]]) {
         return ((BYExamCellModelElement *)_dataArrM[indexPath.row]).cellh;
     } else {
-        return ((UIView *)_dataArrM[indexPath.row]).bounds.size.height;
+        CGFloat height = ((UIView *)_dataArrM[indexPath.row]).frame.size.height;
+        NSLog(@"aaa height:%f",height);
+        return height;
     }
 }
 
@@ -170,9 +174,14 @@
             [subView removeFromSuperview];
         }
         UIView *view = _dataArrM[indexPath.row];
+
         view.tag = 1000;
         [cell.contentView addSubview:view];
         cell.accessibilityIdentifier = @"nativeTemp_ad";
+        [view mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.edges.equalTo(@0);
+        }];
+
         return cell;
     }
 }
