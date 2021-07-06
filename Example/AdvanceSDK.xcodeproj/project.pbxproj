@@ -116,7 +116,6 @@
 		31FE7BEF24482D2300CB2062 /* DemoSplashViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DemoSplashViewController.h; sourceTree = "<group>"; };
 		31FE7BF024482D2300CB2062 /* DemoRewardVideoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DemoRewardVideoViewController.h; sourceTree = "<group>"; };
 		31FE7BF124482D2300CB2062 /* DemoBannerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DemoBannerViewController.m; sourceTree = "<group>"; };
-		4E0A46C1269429FA007B19AD /* KSAdSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = KSAdSDK.framework; sourceTree = "<group>"; };
 		5AD1647B6E4DD4231AFEFF67 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		6003F58A195388D20070C39A /* AdvanceSDK_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AdvanceSDK_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F58D195388D20070C39A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -273,14 +272,6 @@
 			path = DemoFeedExpress;
 			sourceTree = "<group>";
 		};
-		4E0A46C0269429FA007B19AD /* Framework */ = {
-			isa = PBXGroup;
-			children = (
-				4E0A46C1269429FA007B19AD /* KSAdSDK.framework */,
-			);
-			path = Framework;
-			sourceTree = "<group>";
-		};
 		6003F581195388D10070C39A = {
 			isa = PBXGroup;
 			children = (
@@ -370,7 +361,6 @@
 		60FF7A9C1954A5C5007DD14C /* Podspec Metadata */ = {
 			isa = PBXGroup;
 			children = (
-				4E0A46C0269429FA007B19AD /* Framework */,
 				145849F14F3C5444A6FFC93D /* AdvanceSDK.podspec */,
 				E5B804D9A1812796B3A043CC /* README.md */,
 				5AD1647B6E4DD4231AFEFF67 /* LICENSE */,
