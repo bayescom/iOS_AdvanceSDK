@@ -1,11 +1,11 @@
 PODS:
-  - Ads-CN (3.6.1.4):
-    - Ads-CN/BUAdSDK (= 3.6.1.4)
-  - Ads-CN/BUAdSDK (3.6.1.4):
+  - Ads-CN (3.6.1.7):
+    - Ads-CN/BUAdSDK (= 3.6.1.7)
+  - Ads-CN/BUAdSDK (3.6.1.7):
     - Ads-CN/BUFoundation
     - Ads-CN/Domestic
-  - Ads-CN/BUFoundation (3.6.1.4)
-  - Ads-CN/Domestic (3.6.1.4)
+  - Ads-CN/BUFoundation (3.6.1.7)
+  - Ads-CN/Domestic (3.6.1.7)
   - AdvanceSDK (3.2.4.7):
     - AdvanceSDK/Core (= 3.2.4.7)
   - AdvanceSDK/Adspot (3.2.4.7):
@@ -32,12 +32,12 @@ PODS:
     - AdvanceSDK/Core
     - MercurySDK
   - BaiduMobAdSDK (4.771)
-  - GDTMobSDK (4.12.71):
-    - GDTMobSDK/GDTMobSDK (= 4.12.71)
-  - GDTMobSDK/GDTMobSDK (4.12.71)
-  - KSAdSDK (3.3.10)
+  - GDTMobSDK (4.12.81):
+    - GDTMobSDK/GDTMobSDK (= 4.12.81)
+  - GDTMobSDK/GDTMobSDK (4.12.81)
+  - KSAdSDK (3.3.11)
   - Masonry (1.1.0)
-  - MercurySDK (3.1.6.1)
+  - MercurySDK (3.1.6.2)
   - SDWebImage (5.11.1):
     - SDWebImage/Core (= 5.11.1)
   - SDWebImage/Core (5.11.1)
@@ -68,13 +68,13 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  Ads-CN: 18dc029992580154213242b0c3ae68c66dfe3f21
-  AdvanceSDK: 13e2dffced48506fc8d042cd09690e3c0b2d4085
+  Ads-CN: 6143a4aa52a1bf0fc5079dae40991255e717bda5
+  AdvanceSDK: e15568965ea34030b53e8f004d0926c754209903
   BaiduMobAdSDK: b6bd114a7b4ccc21efb9b5b7d735682b986ada10
-  GDTMobSDK: fceb169aff9a901bccd33e892c0851d42aceca24
-  KSAdSDK: cfe4c08d5dc749f7d7ff175619b4eba161f41c4d
+  GDTMobSDK: c82ee3362542a6c988a9ead9ee65cc84c5409e2b
+  KSAdSDK: 76772eee8f2bfb105f6bf833f343529dce35ac7b
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
-  MercurySDK: 4903c1b625f395da6f6e7b858ab2b7833c49b4f9
+  MercurySDK: 1e0f6adfbbbde86d9080403ff5ca567986810b4a
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
 
 PODFILE CHECKSUM: 0972b024823b66de073547509b51fa1882d2efca
