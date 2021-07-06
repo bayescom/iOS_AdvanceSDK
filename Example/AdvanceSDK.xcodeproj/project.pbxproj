@@ -56,6 +56,19 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		4E0A46352693F8C9007B19AD /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		0FB18A5DAA171A55502E9407 /* Pods-AdvanceSDK_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AdvanceSDK_Example.debug.xcconfig"; path = "Target Support Files/Pods-AdvanceSDK_Example/Pods-AdvanceSDK_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		145849F14F3C5444A6FFC93D /* AdvanceSDK.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = AdvanceSDK.podspec; path = ../AdvanceSDK.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
@@ -103,6 +116,7 @@
 		31FE7BEF24482D2300CB2062 /* DemoSplashViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DemoSplashViewController.h; sourceTree = "<group>"; };
 		31FE7BF024482D2300CB2062 /* DemoRewardVideoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DemoRewardVideoViewController.h; sourceTree = "<group>"; };
 		31FE7BF124482D2300CB2062 /* DemoBannerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DemoBannerViewController.m; sourceTree = "<group>"; };
+		4E0A46C1269429FA007B19AD /* KSAdSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = KSAdSDK.framework; sourceTree = "<group>"; };
 		5AD1647B6E4DD4231AFEFF67 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		6003F58A195388D20070C39A /* AdvanceSDK_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AdvanceSDK_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F58D195388D20070C39A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -259,6 +273,14 @@
 			path = DemoFeedExpress;
 			sourceTree = "<group>";
 		};
+		4E0A46C0269429FA007B19AD /* Framework */ = {
+			isa = PBXGroup;
+			children = (
+				4E0A46C1269429FA007B19AD /* KSAdSDK.framework */,
+			);
+			path = Framework;
+			sourceTree = "<group>";
+		};
 		6003F581195388D10070C39A = {
 			isa = PBXGroup;
 			children = (
@@ -348,6 +370,7 @@
 		60FF7A9C1954A5C5007DD14C /* Podspec Metadata */ = {
 			isa = PBXGroup;
 			children = (
+				4E0A46C0269429FA007B19AD /* Framework */,
 				145849F14F3C5444A6FFC93D /* AdvanceSDK.podspec */,
 				E5B804D9A1812796B3A043CC /* README.md */,
 				5AD1647B6E4DD4231AFEFF67 /* LICENSE */,
@@ -379,6 +402,7 @@
 				6003F588195388D20070C39A /* Resources */,
 				DD802C9B010FB5F799395DE7 /* [CP] Embed Pods Frameworks */,
 				303CFC7B25657435F364EEEB /* [CP] Copy Pods Resources */,
+				4E0A46352693F8C9007B19AD /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -748,11 +772,18 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = UH5VTU4BAJ;
+				EXCLUDED_ARCHS = "";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/AdvanceSDK/Framework",
+					"$(PROJECT_DIR)/AdvanceSDK",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/AdvanceSDK/PrefixHeader.pch";
 				INFOPLIST_FILE = "AdvanceSDK/AdvanceSDK-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = chydu.qingsheMember;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -771,10 +802,16 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = UH5VTU4BAJ;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/AdvanceSDK/Framework",
+					"$(PROJECT_DIR)/AdvanceSDK",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/AdvanceSDK/PrefixHeader.pch";
 				INFOPLIST_FILE = "AdvanceSDK/AdvanceSDK-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = chydu.qingsheMember;
 				PRODUCT_NAME = "$(TARGET_NAME)";

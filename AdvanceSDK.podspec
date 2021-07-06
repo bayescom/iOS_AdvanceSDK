@@ -83,8 +83,10 @@ Pod::Spec.new do |s|
         ks.source_files =  'AdvanceSDK/Adapter/ks/**/*.{h,m}'
         ks.frameworks = 'Foundation', 'UIKit', 'MobileCoreServices', 'CoreGraphics', 'Security', 'SystemConfiguration','CoreTelephony', 'AdSupport', 'CoreData', 'StoreKit', 'AVFoundation', 'MediaPlayer', 'CoreMedia','WebKit', 'Accelerate', 'CoreLocation', 'AVKit','MessageUI','QuickLook', 'AddressBook'
         ks.libraries =  'z','resolv.9', 'sqlite3','c++','c++abi'
-#        ks.ios.deployment_target    = '9.0'
-        ks.ios.vendored_frameworks = "KSAdSDK.xcframework"
+        ks.ios.source_files = 'AdvanceSDK/Adapter/ks/**/*.{h,m}'
+#        ks.ios.deployment_target    = '9.0'ios-arm64_armv7
+        ks.ios.vendored_frameworks = "Example/Framework/KSAdSDK.framework"
+        ks.vendored_frameworks = "KSAdSDK.xcframework"
 
     end
     
