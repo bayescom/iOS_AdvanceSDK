@@ -10,7 +10,7 @@
 #if __has_include(<KSAdSDK/KSAdSDK.h>)
 #import <KSAdSDK/KSAdSDK.h>
 #else
-#import "KSAdSDK.h"
+//#import "KSAdSDK.h"
 #endif
 
 #import "AdvanceSplash.h"
