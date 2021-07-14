@@ -57,8 +57,8 @@
 }
 
 /// 广告加载失败
-- (void)advanceFailedWithError:(NSError *)error {
-    NSLog(@"广告展示失败 %s  error: %@", __func__, error);
+- (void)advanceFailedWithError:(NSError *)error description:(NSDictionary *)description{
+    NSLog(@"广告展示失败 %s  error: %@ 详情:%@", __func__, error, description);
 
 }
 
