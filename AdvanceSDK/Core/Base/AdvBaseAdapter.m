@@ -48,14 +48,25 @@
 }
 
 - (void)reportWithType:(AdvanceSdkSupplierRepoType)repoType supplier:(AdvSupplier *)supplier error:(NSError *)error {
-    // 有错误正常上报
 //    NSLog(@"|||--- %@ %ld %@",supplier.sdktag, (long)supplier.priority, supplier);
     [_mgr reportWithType:repoType supplier:supplier error:error];
     
     // 失败了 并且不是并行才会走下一个渠道
     if (repoType == AdvanceSdkSupplierRepoFaileded && !supplier.isParallel) {
 //        NSLog(@"%@ |||   %ld %@",supplier.sdktag, (long)supplier.priority, supplier);
+        // 搜集各渠道的错误信息
+        [self collectErrorWithSupplier:supplier error:error];
+        
+        // 执行下一个渠道
         [_mgr loadNextSupplierIfHas];
+    }
+
+}
+- (void)collectErrorWithSupplier:(AdvSupplier *)supplier error:(NSError *)error {
+    // key: 渠道名-优先级
+    if (error) {
+        NSString *key = [NSString stringWithFormat:@"%@-%ld",supplier.name, supplier.priority];
+        [_errorDescriptions setObject:error forKey:key];
     }
 }
 
@@ -165,6 +176,13 @@
         _arrParallelSupplier = [NSMutableArray array];
     }
     return _arrParallelSupplier;
+}
+
+- (NSMutableDictionary *)errorDescriptions {
+    if (!_errorDescriptions) {
+        _errorDescriptions = [NSMutableDictionary dictionary];
+    }
+    return _errorDescriptions;;
 }
 
 // 查找一下 容器里有没有并行的渠道

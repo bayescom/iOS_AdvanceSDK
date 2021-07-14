@@ -79,8 +79,8 @@
 
 - (void)deallocDelegate:(BOOL)execute {
     
-    if([_delegate respondsToSelector:@selector(advanceFailedWithError:)] && execute) {
-        [_delegate advanceFailedWithError:[AdvError errorWithCode:AdvErrorCode_115].toNSError];
+    if([_delegate respondsToSelector:@selector(advanceFailedWithError:description:)] && execute) {
+        [_delegate advanceFailedWithError:[AdvError errorWithCode:AdvErrorCode_115].toNSError description:[self.errorDescriptions copy]];
         [_adapter performSelector:@selector(deallocAdapter)];
         [self deallocAdapter];
     }
@@ -112,8 +112,8 @@
 
 /// 加载策略Model失败
 - (void)advanceBaseAdapterLoadError:(nullable NSError *)error {
-    if ([_delegate respondsToSelector:@selector(advanceFailedWithError:)]) {
-        [_delegate advanceFailedWithError:error];
+    if ([_delegate respondsToSelector:@selector(advanceFailedWithError:description:)]) {
+        [_delegate advanceFailedWithError:error description:[self.errorDescriptions copy]];
     }
     [self deallocSelf];
     [self deallocDelegate:NO];
@@ -126,8 +126,8 @@
     // 返回渠道有问题 则不用再执行下面的渠道了
     if (error) {
         ADVLog(@"%@", error);
-        if (self.delegate != nil && [self.delegate respondsToSelector:@selector(advanceFailedWithError:)]) {
-            [self.delegate advanceFailedWithError:error];
+        if (self.delegate != nil && [self.delegate respondsToSelector:@selector(advanceFailedWithError:description:)]) {
+            [self.delegate advanceFailedWithError:error description:[self.errorDescriptions copy]];
         }
         [self deallocSelf];
         [self deallocDelegate:NO];

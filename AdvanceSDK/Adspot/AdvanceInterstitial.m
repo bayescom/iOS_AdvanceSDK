@@ -56,8 +56,8 @@
 
 /// 加载策略Model失败
 - (void)advanceBaseAdapterLoadError:(nullable NSError *)error {
-    if ([_delegate respondsToSelector:@selector(advanceFailedWithError:)]) {
-        [_delegate advanceFailedWithError:error];
+    if ([_delegate respondsToSelector:@selector(advanceFailedWithError:description:)]) {
+        [_delegate advanceFailedWithError:error description:[self.errorDescriptions copy]];
     }
 }
 
@@ -66,8 +66,8 @@
     // 返回渠道有问题 则不用再执行下面的渠道了
     if (error) {
         ADVLog(@"%@", error);
-        if (self.delegate != nil && [self.delegate respondsToSelector:@selector(advanceFailedWithError:)]) {
-            [self.delegate advanceFailedWithError:error];
+        if (self.delegate != nil && [self.delegate respondsToSelector:@selector(advanceFailedWithError:description:)]) {
+            [self.delegate advanceFailedWithError:error description:[self.errorDescriptions copy]];
         }
         [self deallocDelegate:NO];
         return;
