@@ -42,21 +42,21 @@
 
 
 - (void)loadAd {
-    ADVLog(@"加载百度 supplier: %@", _supplier);
+//    ADVLog(@"加载百度 supplier: %@", _supplier);
     if (_supplier.state == AdvanceSdkSupplierStateSuccess) {// 并行请求保存的状态 再次轮到该渠道加载的时候 直接show
-        ADVLog(@"百度 成功");
+//        ADVLog(@"百度 成功");
         if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
             [self.delegate advanceUnifiedViewDidLoad];
         }
 //        [self showAd];
     } else if (_supplier.state == AdvanceSdkSupplierStateFailed) { //失败的话直接对外抛出回调
-        ADVLog(@"百度 失败 %@", _supplier);
+//        ADVLog(@"百度 失败 %@", _supplier);
         _bd_ad = nil;
         [self.adspot loadNextSupplierIfHas];
     } else if (_supplier.state == AdvanceSdkSupplierStateInPull) { // 正在请求广告时 什么都不用做等待就行
-        ADVLog(@"百度 正在加载中");
+//        ADVLog(@"百度 正在加载中");
     } else {
-        ADVLog(@"百度 load ad");
+//        ADVLog(@"百度 load ad");
         _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
         [_bd_ad load];
     }
@@ -137,7 +137,7 @@
 }
 
 - (void)fullScreenVideoAdDidSkip:(BaiduMobAdExpressFullScreenVideo *)video withPlayingProgress:(CGFloat)progress{
-    NSLog(@"全屏视频点击跳过，progress:%f", progress);
+//    NSLog(@"全屏视频点击跳过，progress:%f", progress);
 
 }
 

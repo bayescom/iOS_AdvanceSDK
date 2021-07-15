@@ -46,20 +46,20 @@
     int adCount = 1;
 
     _csj_ad.delegate = self;
-    NSLog(@"加载穿山甲 supplier: %@ -- %ld", _supplier, (long)_supplier.priority);
+//    NSLog(@"加载穿山甲 supplier: %@ -- %ld", _supplier, (long)_supplier.priority);
     if (_supplier.state == AdvanceSdkSupplierStateSuccess) {// 并行请求保存的状态 再次轮到该渠道加载的时候 直接show
-        ADVLog(@"穿山甲 成功");
+//        ADVLog(@"穿山甲 成功");
         if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdLoadSuccess:)]) {
             [_delegate advanceNativeExpressOnAdLoadSuccess:self.views];
         }
 //        [self showAd];
     } else if (_supplier.state == AdvanceSdkSupplierStateFailed) { //失败的话直接对外抛出回调
-        ADVLog(@"穿山甲 失败");
+//        ADVLog(@"穿山甲 失败");
         [self.adspot loadNextSupplierIfHas];
     } else if (_supplier.state == AdvanceSdkSupplierStateInPull) { // 正在请求广告时 什么都不用做等待就行
-        ADVLog(@"穿山甲 正在加载中");
+//        ADVLog(@"穿山甲 正在加载中");
     } else {
-        ADVLog(@"穿山甲 load ad");
+//        ADVLog(@"穿山甲 load ad");
         _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
         [_csj_ad loadAdDataWithCount:adCount];
     }

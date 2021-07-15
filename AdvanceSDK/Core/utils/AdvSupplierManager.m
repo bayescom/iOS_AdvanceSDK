@@ -82,12 +82,12 @@
     
     // model不存在
     if (!_model) {
-        ADVLog(@"本地策略不可用，拉取线上策略");
+//        ADVLog(@"本地策略不可用，拉取线上策略");
         _isLoadLocalSupplier = NO;
         [self fetchData:NO];
     } else {
         _isLoadLocalSupplier = YES;
-        ADVLog(@"执行本地策略");
+//        ADVLog(@"执行本地策略");
         _supplierM = [_model.suppliers mutableCopy];
         [self sortSupplierMByPriority];
         if ([_delegate respondsToSelector:@selector(advSupplierManagerLoadSuccess:)]) {
@@ -255,7 +255,7 @@
 //        NSLog(@"展示队列: %@", _supplierM);
     }
     
-    ADVLog(@"当前执行的渠道:%@ 是否并行:%d 优先级:%ld name:%@", supplier, supplier.isParallel, (long)supplier.priority, supplier.name);
+//    ADVLog(@"当前执行的渠道:%@ 是否并行:%d 优先级:%ld name:%@", supplier, supplier.isParallel, (long)supplier.priority, supplier.name);
 
     
     // 如果成功或者失败 就意味着 该并行渠道有结果了, 所以不需要改变状态了
@@ -349,11 +349,11 @@
     request.HTTPMethod = @"POST";
     NSURLSession *sharedSession = [NSURLSession sharedSession];
     self.serverTime = [[NSDate date] timeIntervalSince1970]*1000;
-    ADVLog(@"开始请求 %f", [[NSDate date] timeIntervalSince1970]);
+//    ADVLog(@"开始请求 %f", [[NSDate date] timeIntervalSince1970]);
     self.dataTask = [sharedSession dataTaskWithRequest:request
                                                       completionHandler:^(NSData *_Nullable data, NSURLResponse *_Nullable response, NSError *_Nullable error) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            ADVLog(@"请求完成 %f", [[NSDate date] timeIntervalSince1970]);
+//            ADVLog(@"请求完成 %f", [[NSDate date] timeIntervalSince1970]);
             [self doResultData:data response:response error:error saveOnly:saveOnly];
         });
     }];
@@ -437,13 +437,13 @@
     // 当使用缓存 但未赋值默认缓存时间 赋值缓存时间为3天
     if (a_model.setting.cacheDur <= 0 && a_model.setting.useCache) {
         // 使用缓存，但未设置缓存时间(使用默认时间3day)
-        ADVLog(@"使用缓存，但未设置缓存时间(使用默认时间3day)");
+//        ADVLog(@"使用缓存，但未设置缓存时间(使用默认时间3day)");
         a_model.setting.cacheDur = 24 * 60 * 60 * 3;
     }
     
     // 记录缓存过期时间
     a_model.setting.cacheTime = [[NSDate date] timeIntervalSince1970] + a_model.setting.cacheDur;
-    ADVLog(@"---------");
+//    ADVLog(@"---------");
     if (!saveOnly) {
         self.model = a_model;
         
@@ -454,7 +454,7 @@
             [_delegate advSupplierManagerLoadSuccess:self.model];
         }
         
-        ADVLog(@"TEST %@", a_model.setting.parallelGroup);
+//        ADVLog(@"TEST %@", a_model.setting.parallelGroup);
         // 开始执行策略
         [self loadNextSupplier];
     }
@@ -497,7 +497,7 @@
 
 #pragma 错误码参数拼接
 - (NSString *)joinFailedUrlWithObj:(NSString *)urlString error:(NSError *)error {
-    ADVLog(@"UPLOAD error: %@", error);
+//    ADVLog(@"UPLOAD error: %@", error);
     if (error) {
 
         if ([error.domain isEqualToString:@"KSADErrorDomain"]) { // 快手SDK
@@ -625,7 +625,7 @@
         uploadArr =  supplier.succeedtk;
         // 曝光成功 更新本地策略
         if (_isLoadLocalSupplier) {
-            ADVLog(@"曝光成功 此次使用本地缓存 更新本地策略");
+//            ADVLog(@"曝光成功 此次使用本地缓存 更新本地策略");
             [self fetchData:YES];
         }
     } else if (repoType == AdvanceSdkSupplierRepoImped) {
@@ -639,7 +639,7 @@
     }
     // 执行上报请求
     [self reportWithUploadArr:uploadArr error:error];
-    ADVLog(@"%@ = 上报(impid: %@)", ADVStringFromNAdvanceSdkSupplierRepoType(repoType), supplier.name);
+//    ADVLog(@"%@ = 上报(impid: %@)", ADVStringFromNAdvanceSdkSupplierRepoType(repoType), supplier.name);
 }
 
 // MARK: ======================= get =======================
@@ -659,17 +659,17 @@
 
 - (void)setModel:(AdvSupplierModel *)model {
     if (_model != model) {
-        ADVLog(@"%@ -- %@", _model, model);
+//        ADVLog(@"%@ -- %@", _model, model);
         _model = nil;
-        ADVLog(@"%@ -- %@", _model, model);
+//        ADVLog(@"%@ -- %@", _model, model);
         _model = model;
-        ADVLog(@"model赋值 %@ %@", _model, model);
+//        ADVLog(@"model赋值 %@ %@", _model, model);
     }
 }
 
 - (void)dealloc
 {
-    ADVLog(@"mgr 释放啦");
+//    ADVLog(@"mgr 释放啦");
     self.model = nil;
 }
 @end

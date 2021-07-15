@@ -53,21 +53,21 @@
 
     _csj_ad.delegate = self;
     
-    NSLog(@"加载穿山甲 supplier: %@ -- %ld", _supplier, (long)_supplier.priority);
+//    NSLog(@"加载穿山甲 supplier: %@ -- %ld", _supplier, (long)_supplier.priority);
     if (_supplier.state == AdvanceSdkSupplierStateSuccess) {// 并行请求保存的状态 再次轮到该渠道加载的时候 直接show
-        ADVLog(@"穿山甲 成功");
+//        ADVLog(@"穿山甲 成功");
         if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
             [self.delegate advanceUnifiedViewDidLoad];
         }
         [self showAd];
     } else if (_supplier.state == AdvanceSdkSupplierStateFailed) { //失败的话直接对外抛出回调
-        ADVLog(@"穿山甲 失败");
+//        ADVLog(@"穿山甲 失败");
         [self.adspot loadNextSupplierIfHas];
         [self deallocAdapter];
     } else if (_supplier.state == AdvanceSdkSupplierStateInPull) { // 正在请求广告时 什么都不用做等待就行
-        ADVLog(@"穿山甲 正在加载中");
+//        ADVLog(@"穿山甲 正在加载中");
     } else {
-        ADVLog(@"穿山甲 load ad");
+//        ADVLog(@"穿山甲 load ad");
         _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
         [self.csj_ad loadAdData];
     }
@@ -113,7 +113,7 @@
 
 - (void)deallocAdapter {
     if (self.csj_ad) {
-        NSLog(@"穿山甲 释放了");
+//        NSLog(@"穿山甲 释放了");
         [self.csj_ad removeFromSuperview];
         self.csj_ad = nil;
     }
@@ -145,7 +145,7 @@
  */
 - (void)splashAdDidLoad:(BUSplashAdView *)splashAd {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
-    NSLog(@"穿山甲开屏拉取成功");
+//    NSLog(@"穿山甲开屏拉取成功");
     _supplier.state = AdvanceSdkSupplierStateSuccess;
     if (_supplier.isParallel == YES) {
         return;

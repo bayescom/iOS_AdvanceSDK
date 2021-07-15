@@ -106,7 +106,7 @@
             // 没有设置代理
             ((void (*)(id, SEL, id))objc_msgSend)((id)adapter, @selector(setAdspotid:), supplier.adspotid);
             ((void (*)(id, SEL))objc_msgSend)((id)adapter, @selector(loadAd));
-            ADVLog(@"并行: %@", adapter);
+//            ADVLog(@"并行: %@", adapter);
 
             if (adapter) {
                 // 存储并行的adapter
@@ -122,7 +122,7 @@
             if (!_adapter) {
                 _adapter = ((id (*)(id, SEL, id, id))objc_msgSend)((id)[NSClassFromString(clsName) alloc], @selector(initWithSupplier:adspot:), supplier, self);
             }
-            ADVLog(@"串行 %@", _adapter);
+//            ADVLog(@"串行 %@", _adapter);
             // 设置代理
             ((void (*)(id, SEL, id))objc_msgSend)((id)_adapter, @selector(setDelegate:), _delegate);
             ((void (*)(id, SEL))objc_msgSend)((id)_adapter, @selector(loadAd));
@@ -133,7 +133,7 @@
 #pragma clang diagnostic pop
     } else {
         NSString *msg = [NSString stringWithFormat:@"%@ 不存在", clsName];
-        ADVLog(@"%@", msg);
+//        ADVLog(@"%@", msg);
         [self loadNextSupplierIfHas];
     }
 }

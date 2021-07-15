@@ -55,18 +55,18 @@
         }
     }
     
-    ADVLog(@"加载百度 supplier: %@", _supplier);
+//    ADVLog(@"加载百度 supplier: %@", _supplier);
     if (_supplier.state == AdvanceSdkSupplierStateSuccess) {// 并行请求保存的状态 再次轮到该渠道加载的时候 直接show
-        ADVLog(@"百度 成功");
+//        ADVLog(@"百度 成功");
         [self showAd];
     } else if (_supplier.state == AdvanceSdkSupplierStateFailed) { //失败的话直接对外抛出回调
-        ADVLog(@"百度 失败 %@", _supplier);
+//        ADVLog(@"百度 失败 %@", _supplier);
         [self.adspot loadNextSupplierIfHas];
         [self deallocAdapter];
     } else if (_supplier.state == AdvanceSdkSupplierStateInPull) { // 正在请求广告时 什么都不用做等待就行
-        ADVLog(@"百度 正在加载中");
+//        ADVLog(@"百度 正在加载中");
     } else {
-        ADVLog(@"百度 load ad");
+//        ADVLog(@"百度 load ad");
         _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
         
         UIWindow *window = [UIApplication sharedApplication].adv_getCurrentWindow;
@@ -109,7 +109,7 @@
         self.customSplashView.backgroundColor = [UIColor whiteColor];
         [self.bd_ad showInContainerView:self.customSplashView];
     
-        NSLog(@"百度开屏展示%@",self.bd_ad);
+//        NSLog(@"百度开屏展示%@",self.bd_ad);
     }
 }
 
@@ -127,11 +127,11 @@
 }
 
 - (void)splashDidDismissLp:(BaiduMobAdSplash *)splash {
-    NSLog(@"开屏广告落地页被关闭");
+//    NSLog(@"开屏广告落地页被关闭");
 }
 
 - (void)splashDidDismissScreen:(BaiduMobAdSplash *)splash {
-    NSLog(@"开屏广告被移除");
+//    NSLog(@"开屏广告被移除");
     [self deallocAdapter];
     if ([self.delegate respondsToSelector:@selector(advanceDidClose)]) {
         [self.delegate advanceDidClose];
@@ -139,7 +139,7 @@
 }
 
 - (void)splashDidExposure:(BaiduMobAdSplash *)splash {
-    NSLog(@"开屏广告曝光成功");
+//    NSLog(@"开屏广告曝光成功");
     [self.adspot reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(advanceExposured)] && self.bd_ad) {
         [self.delegate advanceExposured];
@@ -147,18 +147,18 @@
 }
 
 - (void)splashSuccessPresentScreen:(BaiduMobAdSplash *)splash {
-    NSLog(@"开屏广告展示成功");
+//    NSLog(@"开屏广告展示成功");
     self.customSplashView.hidden = NO;
     self.imgV.hidden = NO;
 }
 
 - (void)splashlFailPresentScreen:(BaiduMobAdSplash *)splash withError:(BaiduMobFailReason)reason {
-    NSLog(@"开屏广告展示失败 withError %d", reason);
+//    NSLog(@"开屏广告展示失败 withError %d", reason);
     [self deallocAdapter];
 }
 
 - (void)splashDidClicked:(BaiduMobAdSplash *)splash {
-    NSLog(@"开屏广告被点击");
+//    NSLog(@"开屏广告被点击");
     [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(advanceClicked)]) {
         [self.delegate advanceClicked];
@@ -166,10 +166,10 @@
 }
 
 - (void)splashAdLoadSuccess:(BaiduMobAdSplash *)splash {
-    NSLog(@"百度开屏拉取成功 %@",self.bd_ad);
+//    NSLog(@"百度开屏拉取成功 %@",self.bd_ad);
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
     if (_supplier.isParallel == YES) {
-        NSLog(@"修改状态: %@", _supplier);
+//        NSLog(@"修改状态: %@", _supplier);
         _supplier.state = AdvanceSdkSupplierStateSuccess;
         return;
     }
@@ -181,7 +181,7 @@
 }
 
 - (void)splashAdLoadFail:(BaiduMobAdSplash *)splash {
-    NSLog(@"开屏广告请求失败");
+//    NSLog(@"开屏广告请求失败");
     NSError *error = [[NSError alloc]initWithDomain:@"BDAdErrorDomain" code:1000000 userInfo:@{@"desc":@"百度广告请求错误"}];
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
 //    NSLog(@"gdt ========>>>>>>>> %ld %@", (long)_supplier.priority, error);

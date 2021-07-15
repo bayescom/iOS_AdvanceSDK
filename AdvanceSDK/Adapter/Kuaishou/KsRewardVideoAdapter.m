@@ -38,20 +38,20 @@
 - (void)loadAd {
     
     _ks_ad.delegate = self;
-    ADVLog(@"加载快手 supplier: %@", _supplier);
+//    ADVLog(@"加载快手 supplier: %@", _supplier);
     if (_supplier.state == AdvanceSdkSupplierStateSuccess) {// 并行请求保存的状态 再次轮到该渠道加载的时候 直接show
-        ADVLog(@"快手 成功");
+//        ADVLog(@"快手 成功");
         if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
             [self.delegate advanceUnifiedViewDidLoad];
         }
 //        [self showAd];
     } else if (_supplier.state == AdvanceSdkSupplierStateFailed) { //失败的话直接对外抛出回调
-        ADVLog(@"快手 失败 %@", _supplier);
+//        ADVLog(@"快手 失败 %@", _supplier);
         [self.adspot loadNextSupplierIfHas];
     } else if (_supplier.state == AdvanceSdkSupplierStateInPull) { // 正在请求广告时 什么都不用做等待就行
-        ADVLog(@"快手 正在加载中");
+//        ADVLog(@"快手 正在加载中");
     } else {
-        ADVLog(@"快手 load ad");
+//        ADVLog(@"快手 load ad");
         _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
         self.ks_ad.delegate = self;
         [self.ks_ad loadAdData];
@@ -84,9 +84,9 @@
 - (void)rewardedVideoAdDidLoad:(KSRewardedVideoAd *)rewardedVideoAd {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
     
-    NSLog(@"广点通激励视频拉取成功 %@",self.ks_ad);
+//    NSLog(@"广点通激励视频拉取成功 %@",self.ks_ad);
     if (_supplier.isParallel == YES) {
-        NSLog(@"修改状态: %@", _supplier);
+//        NSLog(@"修改状态: %@", _supplier);
         _supplier.state = AdvanceSdkSupplierStateSuccess;
         return;
     }

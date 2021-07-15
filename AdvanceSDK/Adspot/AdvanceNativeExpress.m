@@ -113,7 +113,7 @@
             id adapter = ((id (*)(id, SEL, id, id))objc_msgSend)((id)[NSClassFromString(clsName) alloc], @selector(initWithSupplier:adspot:), supplier, self);
             // 标记当前的adapter 为了让当串行执行到的时候 获取这个adapter
             // 没有设置代理
-            ADVLog(@"并行: %@", adapter);
+//            ADVLog(@"并行: %@", adapter);
             ((void (*)(id, SEL, id))objc_msgSend)((id)_adapter, @selector(setController:), _viewController);
             ((void (*)(id, SEL, NSInteger))objc_msgSend)((id)adapter, @selector(setTag:), supplier.priority);
             ((void (*)(id, SEL))objc_msgSend)((id)adapter, @selector(loadAd));
@@ -127,7 +127,7 @@
             if (!_adapter) {
                 _adapter = ((id (*)(id, SEL, id, id))objc_msgSend)((id)[NSClassFromString(clsName) alloc], @selector(initWithSupplier:adspot:), supplier, self);
             }
-            ADVLog(@"串行 %@ %ld %ld", _adapter, (long)[_adapter tag], supplier.priority);
+//            ADVLog(@"串行 %@ %ld %ld", _adapter, (long)[_adapter tag], supplier.priority);
             // 设置代理
             ((void (*)(id, SEL, id))objc_msgSend)((id)_adapter, @selector(setController:), _viewController);
             ((void (*)(id, SEL, id))objc_msgSend)((id)_adapter, @selector(setDelegate:), _delegate);
@@ -141,7 +141,7 @@
 //        ((void (*)(id, SEL))objc_msgSend)((id)_adapter, @selector(loadAd));
 #pragma clang diagnostic pop
     } else {
-        ADVLog(@"%@ 不存在", clsName);
+//        ADVLog(@"%@ 不存在", clsName);
         [self loadNextSupplierIfHas];
     }
 }

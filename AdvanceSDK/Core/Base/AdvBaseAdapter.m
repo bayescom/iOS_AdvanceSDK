@@ -66,7 +66,7 @@
     // key: 渠道名-优先级
     if (error) {
         NSString *key = [NSString stringWithFormat:@"%@-%ld",supplier.name, supplier.priority];
-        [_errorDescriptions setObject:error forKey:key];
+        [self.errorDescriptions setObject:error forKey:key];
     }
 }
 
