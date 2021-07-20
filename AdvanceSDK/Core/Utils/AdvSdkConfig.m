@@ -7,7 +7,7 @@
 //
 
 #import "AdvSdkConfig.h"
-
+#import "AdvLog.h"
 @interface AdvSdkConfig ()
 @property (nonatomic, strong) NSDictionary *config;
 
@@ -104,6 +104,10 @@ static AdvSdkConfig *instance = nil;
 
 - (void)setIsDebug:(bool)isDebug {
     _isDebug = isDebug;
+}
+
+- (void)setLevel:(AdvLogLevel)level {
+    _level = level;
 }
 
 //- (void)setCaidConfig:(NSDictionary *)caidConfig {

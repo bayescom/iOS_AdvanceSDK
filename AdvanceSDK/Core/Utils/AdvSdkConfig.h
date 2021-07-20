@@ -10,6 +10,16 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef NS_ENUM(NSInteger,AdvLogLevel) {
+    AdvLogLevel_None = 0, // 不打印
+    AdvLogLevel_Fatal = 1 << 0,
+    AdvLogLevel_Error = 1 << 1,
+    AdvLogLevel_Warning = 1 << 2,
+    AdvLogLevel_Info = 1 << 3,
+    AdvLogLevel_Debug = 1 << 4,
+};
+
+
 // MARK: ======================= SDK =======================
 extern NSString *const AdvanceSdkAPIVersion;
 extern NSString *const AdvanceSdkVersion;
@@ -52,6 +62,16 @@ extern int const ADVANCE_ERROR;
 
 /// 是否允许个性化广告推送 默认为允许
 @property (nonatomic, assign) BOOL isAdTrack;
+
+
+/// 控制台log级别
+/// 0 不打印
+/// 1 打印fatal
+/// 2 fatal + error
+/// 3 fatal + error + warning
+/// 4 fatal + error + warning + info
+/// 5 全部打印
+@property (nonatomic, assign) AdvLogLevel level;
 
 // caid设置
 //@property (nonatomic, strong) NSDictionary *caidConfig;

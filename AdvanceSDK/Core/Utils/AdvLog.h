@@ -16,6 +16,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+
+
 @interface AdvLog : NSObject
 
 // 日志输出方法
@@ -24,6 +26,8 @@ NS_ASSUME_NONNULL_BEGIN
 // 记录data类型数据
 + (void)logJsonData:(NSData *)data;
 
+// 设置输出别
++ (void)logLevel:(AdvLogLevel)level;
 @end
 
 NS_ASSUME_NONNULL_END
