@@ -63,6 +63,13 @@
     self.mediaId = mediaId;
     self.adspotId = adspotId;
     self.ext = [ext mutableCopy];
+
+    
+    ADV_LEVEL_ERROR_LOG(@"----------测试 error");
+    ADV_LEVEL_FATAL_LOG(@"----------测试 fatal");
+    ADV_LEVEL_WARING_LOG(@"----------测试 waring");
+    ADV_LEVEL_INFO_LOG(@"----------测试 info");
+    ADV_LEVEL_DEBUG_LOG(@"----------测试 debug");
     
     // 获取本地数据
     _model = [AdvSupplierModel loadDataWithMediaId:mediaId adspotId:adspotId];

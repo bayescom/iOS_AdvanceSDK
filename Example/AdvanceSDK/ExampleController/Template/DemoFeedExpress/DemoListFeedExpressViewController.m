@@ -154,7 +154,6 @@
         return ((BYExamCellModelElement *)_dataArrM[indexPath.row]).cellh;
     } else {
         CGFloat height = ((UIView *)_dataArrM[indexPath.row]).frame.size.height;
-        NSLog(@"aaa height:%f",height);
         return height;
     }
 }

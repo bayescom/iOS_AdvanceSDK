@@ -11,12 +11,12 @@
 NS_ASSUME_NONNULL_BEGIN
 
 typedef NS_ENUM(NSInteger,AdvLogLevel) {
-    AdvLogLevel_None = 0, // 不打印
-    AdvLogLevel_Fatal = 1 << 0,
-    AdvLogLevel_Error = 1 << 1,
-    AdvLogLevel_Warning = 1 << 2,
-    AdvLogLevel_Info = 1 << 3,
-    AdvLogLevel_Debug = 1 << 4,
+    AdvLogLevel_None  = 0, // 不打印
+    AdvLogLevel_Fatal,
+    AdvLogLevel_Error,
+    AdvLogLevel_Warning,
+    AdvLogLevel_Info,
+    AdvLogLevel_Debug,
 };
 
 
