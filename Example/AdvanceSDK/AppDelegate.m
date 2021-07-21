@@ -72,7 +72,6 @@
             }
             dispatch_async(dispatch_get_main_queue(), ^{
                 // do something
-                [AdvSdkConfig shareInstance].isDebug = YES;
                 [AdvSdkConfig shareInstance].level = AdvLogLevel_Warning;
 //                [AdvSdkConfig shareInstance].appId = @"100255";
 //                [self loadSplash];
@@ -81,7 +80,6 @@
     }else{
         if ([manager isAdvertisingTrackingEnabled]) {
             idfa = [[manager advertisingIdentifier] UUIDString];
-            [AdvSdkConfig shareInstance].isDebug = YES;
 //            [AdvSdkConfig shareInstance].appId = @"100255";
 //            [self loadSplash];
         }

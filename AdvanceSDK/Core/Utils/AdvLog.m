@@ -74,15 +74,13 @@ NSString *const LOG_LEVEL_DEBUG_SCHEME  = @"ADV_LEVE_DEBUG";
 }
 
 + (void)customLogWithFunctionAction:(const char *)function lineNumber:(int)lineNumber formatString:(NSString *)formatString scheme:(NSString *)scheme {
-    if ([AdvSdkConfig shareInstance].isDebug) {
-        if ([formatString containsString:@"[JSON]"]) {
-            formatString = [formatString stringByReplacingOccurrencesOfString:@" " withString:@""];
-            formatString = [formatString stringByReplacingOccurrencesOfString:@"\n" withString:@""];
-            formatString = [formatString stringByReplacingOccurrencesOfString:@"\t" withString:@""];
-        }
-        NSLog(@"\n%s[line:%d][%@] %@", function, lineNumber, scheme, formatString);
+    if ([formatString containsString:@"[JSON]"]) {
+        formatString = [formatString stringByReplacingOccurrencesOfString:@" " withString:@""];
+        formatString = [formatString stringByReplacingOccurrencesOfString:@"\n" withString:@""];
+        formatString = [formatString stringByReplacingOccurrencesOfString:@"\t" withString:@""];
     }
-
+    NSLog(@"\n%s[line:%d][%@] %@", function, lineNumber, scheme, formatString);
+    
 }
 
 + (void)logJsonData:(NSData *)data {

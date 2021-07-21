@@ -77,7 +77,6 @@ static AdvSdkConfig *instance = nil;
     //dispatch_once （If called simultaneously from multiple threads, this function waits synchronously until the block has completed. 由官方解释，该函数是线程安全的）
     dispatch_once(&onceToken, ^{
         instance = [[super allocWithZone:NULL] init];
-        instance.isDebug = NO;
         instance.isAdTrack = YES;
     });
     return instance;
@@ -102,9 +101,6 @@ static AdvSdkConfig *instance = nil;
     return [AdvSdkConfig shareInstance];
 }
 
-- (void)setIsDebug:(bool)isDebug {
-    _isDebug = isDebug;
-}
 
 - (void)setLevel:(AdvLogLevel)level {
     _level = level;

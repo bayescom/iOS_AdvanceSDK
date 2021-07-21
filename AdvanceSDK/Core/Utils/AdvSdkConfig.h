@@ -54,9 +54,6 @@ extern int const ADVANCE_ERROR;
 
 + (instancetype)shareInstance;
 
-/// 是否是Debug
-@property(nonatomic) bool isDebug;
-
 /// appid 从平台获取
 @property (nonatomic, copy) NSString *appId;
 
