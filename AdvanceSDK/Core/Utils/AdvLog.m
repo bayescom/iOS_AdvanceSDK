@@ -89,7 +89,7 @@ NSString *const LOG_LEVEL_DEBUG_SCHEME  = @"ADV_LEVE_DEBUG";
     [[NSUserDefaults standardUserDefaults] setObject:data forKey:md5];
     
 //    ADVLog(@"[JSON][-%@-]", md5);
-    ADVLog(@"%@", res);
+    ADV_LEVEL_INFO_LOG(@"%@", res);
 }
 
 @end

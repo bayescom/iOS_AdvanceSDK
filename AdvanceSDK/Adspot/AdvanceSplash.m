@@ -32,6 +32,7 @@
 }
 
 - (instancetype)initWithAdspotId:(NSString *)adspotid customExt:(NSDictionary *)ext viewController:(UIViewController *)viewController {
+    ADV_LEVEL_INFO_LOG(@"==================== 初始化开屏广告, id: %@====================", adspotid);
     ext = [ext mutableCopy];
     if (!ext) {
         ext = [NSMutableDictionary dictionary];
@@ -125,7 +126,7 @@
 - (void)advanceBaseAdapterLoadSuppluer:(nullable AdvSupplier *)supplier error:(nullable NSError *)error {
     // 返回渠道有问题 则不用再执行下面的渠道了
     if (error) {
-//        ADVLog(@"%@", error);
+        ADV_LEVEL_ERROR_LOG(@"%@", error);
         if (self.delegate != nil && [self.delegate respondsToSelector:@selector(advanceFailedWithError:description:)]) {
             [self.delegate advanceFailedWithError:error description:[self.errorDescriptions copy]];
         }
@@ -154,7 +155,7 @@
     } else if ([supplier.identifier isEqualToString:SDK_ID_BAIDU]) {
         clsName = @"BdSplashAdapter";
     }
-    ADVLog(@"%@ | %@", supplier.name, clsName);
+    ADV_LEVEL_INFO_LOG(@"%@ | %@", supplier.name, clsName);
     // 请求超时了
     NSTimeInterval now = [[NSDate date] timeIntervalSince1970]*1000;
     if ((_timeout_stamp > 0) && (now+500 > _timeout_stamp)
@@ -234,7 +235,7 @@
 #pragma clang diagnostic pop
         } else {
             NSString *msg = [NSString stringWithFormat:@"%@ 不存在", clsName];
-//            ADVLog(@"%@", msg);
+            ADV_LEVEL_INFO_LOG(@"%@", msg);
             [self loadNextSupplierIfHas];
         }
     }
