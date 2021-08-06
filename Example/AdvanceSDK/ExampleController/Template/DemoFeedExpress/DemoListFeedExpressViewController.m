@@ -12,7 +12,7 @@
 
 #import "DemoUtils.h"
 #import <AdvanceSDK/AdvanceNativeExpress.h>
-
+#import <AdvanceSDK/AdvanceNativeExpressView.h>
 @interface DemoListFeedExpressViewController () <UITableViewDelegate, UITableViewDataSource, AdvanceNativeExpressDelegate>
 @property (strong, nonatomic) UITableView *tableView;
 
@@ -78,6 +78,17 @@
         [_dataArrM insertObject:self.arrViewsM[i] atIndex:1];
     }
     [self.tableView reloadData];
+}
+
+- (void)advanceNativeExpressOnAdLoadSuccess123:(NSArray<AdvanceNativeExpressView *> *)views {
+    self.arrViewsM = [views mutableCopy];
+    for (NSInteger i = 0; i < self.arrViewsM.count; i++) {
+        AdvanceNativeExpressView *view = self.arrViewsM[i];
+        [view render];
+        [_dataArrM insertObject:self.arrViewsM[i] atIndex:1];
+    }
+    [self.tableView reloadData];
+
 }
 
 

@@ -350,9 +350,9 @@
     ADV_LEVEL_INFO_LOG(@"请求参数 %@   uuid:%@", deviceInfo, [AdvDeviceInfoUtil getAuctionId]);
     NSError *parseError = nil;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:deviceInfo options:NSJSONWritingPrettyPrinted error:&parseError];
-    NSURL *url = [NSURL URLWithString:AdvanceSdkRequestUrl];
+//    NSURL *url = [NSURL URLWithString:AdvanceSdkRequestUrl];
 //    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@?adspotid=%@", AdvanceSdkRequestUrl, _adspotId]];
-//    NSURL *url = [NSURL URLWithString:@"https://mock.yonyoucloud.com/mock/2650/api/v3/eleven"];
+    NSURL *url = [NSURL URLWithString:@"https://mock.yonyoucloud.com/mock/2650/api/v3/eleven"];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:self.fetchTime];
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     request.HTTPBody = jsonData;
@@ -489,9 +489,9 @@
                                                               completionHandler:^(NSData *_Nullable data, NSURLResponse *_Nullable response, NSError *_Nullable error) {
                 
                 if (error == nil) {
-                    ADV_LEVEL_INFO_LOG(@"TK上报成功 : %@");
+                    ADV_LEVEL_INFO_LOG(@"TK上报成功 : %@", url);
                 } else {
-                    ADV_LEVEL_WARING_LOG(@"TK上报失败, 请排查原因, 或导致统计有误!")
+                    ADV_LEVEL_WARING_LOG(@"TK上报失败, 请排查原因, 或导致统计有误!");
                 }
             }];
             [dataTask resume];

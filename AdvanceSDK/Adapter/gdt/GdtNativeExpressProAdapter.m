@@ -20,13 +20,13 @@
 
 #import "AdvanceNativeExpress.h"
 #import "AdvLog.h"
-
+#import "AdvanceNativeExpressView.h"
 @interface GdtNativeExpressProAdapter ()<GDTNativeExpressProAdManagerDelegate, GDTNativeExpressProAdViewDelegate>
 @property (nonatomic, strong) GDTNativeExpressProAdManager *gdt_ad;
 @property (nonatomic, weak) AdvanceNativeExpress *adspot;
 @property (nonatomic, weak) UIViewController *controller;
 @property (nonatomic, strong) AdvSupplier *supplier;
-@property (nonatomic, strong) NSArray<__kindof GDTNativeExpressProAdView *> *views;
+@property (nonatomic, strong) NSArray *views;
 
 
 @end
@@ -90,22 +90,33 @@
 //        }
     } else {
         [_adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
+        NSMutableArray *temp = [NSMutableArray array];
         for (GDTNativeExpressProAdView *view in views) {
             view.controller = _adspot.viewController;
             view.delegate = self;
+            
+            AdvanceNativeExpressView *TT = [[AdvanceNativeExpressView alloc] init];
+            TT.expressView = view;
+            TT.identifier = _supplier.identifier;
+            [temp addObject:TT];
         }
         
         if (_supplier.isParallel == YES) {
 //            NSLog(@"修改状态: %@", _supplier);
             _supplier.state = AdvanceSdkSupplierStateSuccess;
-            self.views = views;
+            self.views = temp;
             return;
         }
 
         
-        if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdLoadSuccess:)]) {
-            [_delegate advanceNativeExpressOnAdLoadSuccess:views];
+//        if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdLoadSuccess:)]) {
+//            [_delegate advanceNativeExpressOnAdLoadSuccess:views];
+//        }
+        
+        if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdLoadSuccess123:)]) {
+            [_delegate advanceNativeExpressOnAdLoadSuccess123:temp];
         }
+
     }
 }
 
