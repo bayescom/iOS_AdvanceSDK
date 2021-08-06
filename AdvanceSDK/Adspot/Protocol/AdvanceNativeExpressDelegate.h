@@ -14,6 +14,7 @@
 @optional
 /// 广告数据拉取成功
 - (void)advanceNativeExpressOnAdLoadSuccess:(nullable NSArray<UIView *> *)views;
+/// 测试
 - (void)advanceNativeExpressOnAdLoadSuccess123:(nullable NSArray<AdvanceNativeExpressView *> *)views;
 
 /// 广告曝光
