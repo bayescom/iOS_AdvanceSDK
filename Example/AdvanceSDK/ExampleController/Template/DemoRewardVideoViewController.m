@@ -62,7 +62,7 @@
 // MARK: ======================= AdvanceRewardVideoDelegate =======================
 /// 广告数据加载成功
 - (void)advanceUnifiedViewDidLoad {
-    NSLog(@"广告数据加载成功 %s", __func__);
+    NSLog(@"广告数据拉取成功, 正在缓存... %s", __func__);
     [JDStatusBarNotification showWithStatus:@"广告加载成功" dismissAfter:1.5];
 //    [self loadAdBtn2Action];
 }
