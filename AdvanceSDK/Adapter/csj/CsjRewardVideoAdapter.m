@@ -170,4 +170,12 @@
 //    }
 
 }
+
+- (void)nativeExpressRewardedVideoAdCallback:(BUNativeExpressRewardedVideoAd *)rewardedVideoAd withType:(BUNativeExpressRewardedVideoAdType)nativeExpressVideoType {
+    // 据说能解决神奇的bug
+}
+
+- (void)nativeExpressRewardedVideoAdDidClickSkip:(BUNativeExpressRewardedVideoAd *)rewardedVideoAd {
+    // 跳过回调 穿山甲有 广点通没有
+}
 @end
