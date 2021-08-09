@@ -72,7 +72,7 @@
             }
             dispatch_async(dispatch_get_main_queue(), ^{
                 // do something
-                [AdvSdkConfig shareInstance].level = AdvLogLevel_Warning;
+                [AdvSdkConfig shareInstance].level = AdvLogLevel_Info;
 //                [AdvSdkConfig shareInstance].appId = @"100255";
 //                [self loadSplash];
             });

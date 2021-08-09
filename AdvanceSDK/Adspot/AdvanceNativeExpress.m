@@ -89,11 +89,14 @@
     // 根据渠道id自定义初始化
     NSString *clsName = @"";
     if ([supplier.identifier isEqualToString:SDK_ID_GDT]) {
-        if (supplier.versionTag == 1) {
-            clsName = @"GdtNativeExpressAdapter";
-        } else {
-            clsName = @"GdtNativeExpressProAdapter";
-        }
+        // 广点通 信息流1.0 2.0 已经合并 合并后统一走旧的回调
+        clsName = @"GdtNativeExpressAdapter";
+
+//        if (supplier.versionTag == 1) {
+//            clsName = @"GdtNativeExpressAdapter";
+//        } else {
+//            clsName = @"GdtNativeExpressProAdapter";
+//        }
     } else if ([supplier.identifier isEqualToString:SDK_ID_CSJ]) {
         clsName = @"CsjNativeExpressAdapter";
     } else if ([supplier.identifier isEqualToString:SDK_ID_MERCURY]) {
