@@ -55,18 +55,18 @@
         }
     }
     
-//    ADVLog(@"加载百度 supplier: %@", _supplier);
+    ADV_LEVEL_INFO_LOG(@"加载百度 supplier: %@", _supplier);
     if (_supplier.state == AdvanceSdkSupplierStateSuccess) {// 并行请求保存的状态 再次轮到该渠道加载的时候 直接show
-//        ADVLog(@"百度 成功");
+        ADV_LEVEL_INFO_LOG(@"百度 成功");
         [self showAd];
     } else if (_supplier.state == AdvanceSdkSupplierStateFailed) { //失败的话直接对外抛出回调
-//        ADVLog(@"百度 失败 %@", _supplier);
+        ADV_LEVEL_INFO_LOG(@"百度 失败 %@", _supplier);
         [self.adspot loadNextSupplierIfHas];
         [self deallocAdapter];
     } else if (_supplier.state == AdvanceSdkSupplierStateInPull) { // 正在请求广告时 什么都不用做等待就行
-//        ADVLog(@"百度 正在加载中");
+        ADV_LEVEL_INFO_LOG(@"百度 正在加载中");
     } else {
-//        ADVLog(@"百度 load ad");
+        ADV_LEVEL_INFO_LOG(@"百度 load ad");
         _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
         
         UIWindow *window = [UIApplication sharedApplication].adv_getCurrentWindow;
@@ -184,7 +184,6 @@
 //    NSLog(@"开屏广告请求失败");
     NSError *error = [[NSError alloc]initWithDomain:@"BDAdErrorDomain" code:1000000 userInfo:@{@"desc":@"百度广告请求错误"}];
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
-//    NSLog(@"gdt ========>>>>>>>> %ld %@", (long)_supplier.priority, error);
     if (_supplier.isParallel == YES) {
         _supplier.state = AdvanceSdkSupplierStateFailed;
         return;

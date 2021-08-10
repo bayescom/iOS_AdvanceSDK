@@ -42,7 +42,7 @@
 }
 
 - (NSString *)publisherId {
-    return  _supplier.mediaid; //@"your_own_app_id";注意，iOS和android的app请使用不同的app ID
+    return  _supplier.mediaid; //@"your_own_app_id";
 }
 
 - (void)willDisplayAd:(BaiduMobAdView *)adview {
@@ -86,5 +86,7 @@
     }
 }
 
-
+- (void)didDismissLandingPage {
+    
+}
 @end
