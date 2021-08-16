@@ -18,12 +18,13 @@
 
 #import "AdvanceNativeExpress.h"
 #import "AdvLog.h"
+#import "AdvanceNativeExpressView.h"
 @interface BdNativeExpressAdapter ()<BaiduMobAdNativeAdDelegate>
 @property (nonatomic, strong) BaiduMobAdNative *bd_ad;
 @property (nonatomic, weak) AdvanceNativeExpress *adspot;
 @property (nonatomic, weak) UIViewController *controller;
 @property (nonatomic, strong) AdvSupplier *supplier;
-@property (nonatomic, strong) NSMutableArray<__kindof BaiduMobAdSmartFeedView *> *views;
+@property (nonatomic, strong) NSMutableArray<__kindof AdvanceNativeExpressView *> *views;
 
 @end
 
@@ -79,14 +80,13 @@
 
     } else {
         [_adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
-        NSMutableArray *views = [NSMutableArray array];
+        NSMutableArray *temp = [NSMutableArray array];
         for (BaiduMobAdNativeAdObject *object in nativeAds) {
             if ([object isExpired]) {
                 continue;
             }
+            // BDview
             BaiduMobAdSmartFeedView *view = [[BaiduMobAdSmartFeedView alloc]initWithObject:object frame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, CGFLOAT_MIN)];
-            [views addObject:view];
-            
             UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapGesture:)];
             [view addGestureRecognizer:tapGesture];
 
@@ -94,8 +94,15 @@
             
 //            [view handleClick];
             [view trackImpression];
+            
+            // advanceView
+            AdvanceNativeExpressView *TT = [[AdvanceNativeExpressView alloc] initWithViewController:_adspot.viewController];
+            TT.expressView = view;
+            TT.identifier = _supplier.identifier;
+            [temp addObject:TT];
+
         }
-        self.views = views;
+        self.views = temp;
         if (_supplier.isParallel == YES) {
 //            NSLog(@"修改状态: %@", _supplier);
             _supplier.state = AdvanceSdkSupplierStateSuccess;
@@ -128,8 +135,13 @@
 - (void)nativeAdClicked:(UIView *)nativeAdView nativeAdDataObject:(BaiduMobAdNativeAdObject *)object {
 //    NSLog(@"信息流被点击:%@ - %@", nativeAdView, object);
     [_adspot reportWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
-    if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdClicked:)]) {
-        [_delegate advanceNativeExpressOnAdClicked:nativeAdView];
+    
+    AdvanceNativeExpressView *expressView = [self returnExpressViewWithAdView:nativeAdView];
+
+    if (expressView) {
+        if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdClicked:)]) {
+            [_delegate advanceNativeExpressOnAdClicked:expressView];
+        }
     }
 }
 
@@ -145,26 +157,36 @@
 //广告曝光成功
 - (void)nativeAdExposure:(UIView *)nativeAdView nativeAdDataObject:(BaiduMobAdNativeAdObject *)object {
 //    NSLog(@"信息流广告曝光成功:%@ - %@", nativeAdView, object);
-    if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdRenderSuccess:)]) {
-        [_delegate advanceNativeExpressOnAdRenderSuccess:nativeAdView];
+    AdvanceNativeExpressView *expressView = [self returnExpressViewWithAdView:nativeAdView];
+
+    if (expressView) {
+        if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdRenderSuccess:)]) {
+            [_delegate advanceNativeExpressOnAdRenderSuccess:expressView];
+        }
+        
+        [_adspot reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
+        if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdShow:)]) {
+            [_delegate advanceNativeExpressOnAdShow:expressView];
+        }
+
     }
     
-    [_adspot reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
-    if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdShow:)]) {
-        [_delegate advanceNativeExpressOnAdShow:nativeAdView];
-    }
-
 }
 
 //广告曝光失败
 - (void)nativeAdExposureFail:(UIView *)nativeAdView nativeAdDataObject:(BaiduMobAdNativeAdObject *)object failReason:(int)reason {
 //    NSLog(@"信息流广告曝光失败:%@ - %@，reason：%d", nativeAdView, object, reason);
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:nil];
-    if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdRenderFail:)]) {
-        [_delegate advanceNativeExpressOnAdRenderFail:nativeAdView];
+    
+    AdvanceNativeExpressView *expressView = [self returnExpressViewWithAdView:nativeAdView];
+
+    if (expressView) {
+        if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdRenderFail:)]) {
+            [_delegate advanceNativeExpressOnAdRenderFail:expressView];
+        }
+        [self.views removeObject:expressView];
     }
 
-    [self.views removeObject:nativeAdView];
 }
 
 // 联盟官网点击跳转
@@ -174,10 +196,6 @@
 
 - (void)tapGesture:(UIGestureRecognizer *)sender {
     UIView *view = sender.view ;
-    NSInteger index = [self.views indexOfObject:view];
-    if (self.views.count <= index) {
-        return;
-    }
 
     if ([view isKindOfClass:[BaiduMobAdSmartFeedView class]]) {
         BaiduMobAdSmartFeedView *adView = (BaiduMobAdSmartFeedView *)view;
@@ -186,6 +204,15 @@
     }
 }
 
+- (AdvanceNativeExpressView *)returnExpressViewWithAdView:(UIView *)adView {
+    for (NSInteger i = 0; i < self.views.count; i++) {
+        AdvanceNativeExpressView *temp = self.views[i];
+        if (temp.expressView == adView) {
+            return temp;
+        }
+    }
+    return nil;
+}
 
 
 @end
