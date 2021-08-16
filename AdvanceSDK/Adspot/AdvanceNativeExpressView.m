@@ -20,7 +20,7 @@
     return self;
 }
 - (void)render {
-    if (self.controller != nil && self.expressView != nil) {
+    if (self.controller == nil || self.expressView == nil) {
         return;
     }
     if ([self.expressView isKindOfClass:NSClassFromString(@"BUNativeExpressFeedVideoAdView")] ||

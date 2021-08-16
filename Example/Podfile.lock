@@ -31,9 +31,9 @@ PODS:
     - AdvanceSDK/Core
     - MercurySDK
   - BaiduMobAdSDK (4.81)
-  - GDTMobSDK (4.12.91):
-    - GDTMobSDK/GDTMobSDK (= 4.12.91)
-  - GDTMobSDK/GDTMobSDK (4.12.91)
+  - GDTMobSDK (4.13.0):
+    - GDTMobSDK/GDTMobSDK (= 4.13.0)
+  - GDTMobSDK/GDTMobSDK (4.13.0)
   - Masonry (1.1.0)
   - MercurySDK (3.1.6.3)
   - SDWebImage (5.11.1):
@@ -47,7 +47,6 @@ DEPENDENCIES:
   - AdvanceSDK/GDT (from `../`)
   - AdvanceSDK/KS (from `../`)
   - AdvanceSDK/Mercury (from `../`)
-  - GDTMobSDK (~> 4.12.91)
   - Masonry
   - SDWebImage
 
@@ -68,11 +67,11 @@ SPEC CHECKSUMS:
   Ads-CN: 49af96ac9f7b1a43ef4cfb37b6a74863421d4ee1
   AdvanceSDK: c2205eb39c5fa1c90427b49c31dc8058e22b088e
   BaiduMobAdSDK: 901bcd0eec019d7f335dfcdfa572b09f8a0b45d1
-  GDTMobSDK: 8da9c7433aed9009352f90501e57ef29b6d2fd6e
+  GDTMobSDK: 9b48a2583a4e0e973f01810168fce8477f2ce97b
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   MercurySDK: d9bb9f0423cdcf1b16a1aab3098370dd8b088dc7
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
 
-PODFILE CHECKSUM: 976c30dbd9375b8fc3bbafe78793ee33696489ca
+PODFILE CHECKSUM: 9d64161fb00b9768558d01a20201c919bd0b8e58
 
 COCOAPODS: 1.10.1

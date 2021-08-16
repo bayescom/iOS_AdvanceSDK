@@ -10,6 +10,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface AdvanceNativeExpressView : NSObject
+- (instancetype)initWithViewController:(UIViewController *)controller;
 // 信息流view
 @property (nonatomic, strong) UIView *expressView;
 

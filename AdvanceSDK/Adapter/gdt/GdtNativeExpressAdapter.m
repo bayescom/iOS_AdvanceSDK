@@ -92,9 +92,9 @@
         
         NSMutableArray *temp = [NSMutableArray array];
         for (GDTNativeExpressAdView *view in views) {
-            view.controller = _adspot.viewController;
+//            view.controller = _adspot.viewController;
             
-            AdvanceNativeExpressView *TT = [[AdvanceNativeExpressView alloc] init];
+            AdvanceNativeExpressView *TT = [[AdvanceNativeExpressView alloc] initWithViewController:_adspot.viewController];
             TT.expressView = view;
             TT.identifier = _supplier.identifier;
             [temp addObject:TT];
@@ -103,7 +103,7 @@
         
         self.views = temp;
         if (_supplier.isParallel == YES) {
-            NSLog(@"修改状态: %@", _supplier);
+//            NSLog(@"修改状态: %@", _supplier);
             _supplier.state = AdvanceSdkSupplierStateSuccess;
             return;
         }
@@ -193,16 +193,23 @@
     }
 }
 
-- (void)nativeExpressAdViewWillPresentScreen:(UIView *)nativeExpressAdView {
+
+- (void)nativeExpressAdViewWillPresentVideoVC:(GDTNativeExpressAdView *)nativeExpressAdView
+{
+    NSLog(@"--------%s-------",__FUNCTION__);
 }
 
-- (void)nativeExpressAdViewDidPresentScreen:(UIView *)nativeExpressAdView {
+- (void)nativeExpressAdViewDidPresentVideoVC:(GDTNativeExpressAdView *)nativeExpressAdView
+{
+    NSLog(@"--------%s-------",__FUNCTION__);
 }
-
-- (void)nativeExpressAdViewWillDissmissScreen:(UIView *)nativeExpressAdView {
+- (void)nativeExpressAdViewWillDismissVideoVC:(GDTNativeExpressAdView *)nativeExpressAdView
+{
+    NSLog(@"--------%s-------",__FUNCTION__);
 }
-
-- (void)nativeExpressAdViewDidDissmissScreen:(UIView *)nativeExpressAdView {
+- (void)nativeExpressAdViewDidDismissVideoVC:(GDTNativeExpressAdView *)nativeExpressAdView
+{
+    NSLog(@"--------%s-------",__FUNCTION__);
 }
 
 

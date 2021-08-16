@@ -54,6 +54,7 @@
 // MARK: ======================= AdvanceNativeExpressDelegate =======================
 /// 广告数据拉取成功
 - (void)advanceNativeExpressOnAdLoadSuccess:(NSArray<AdvanceNativeExpressView *> *)views {
+    NSLog(@"广告拉取成功 %s", __func__);
     self.arrViewsM = [views mutableCopy];
     for (NSInteger i = 0; i < self.arrViewsM.count; i++) {
         AdvanceNativeExpressView *view = self.arrViewsM[i];
