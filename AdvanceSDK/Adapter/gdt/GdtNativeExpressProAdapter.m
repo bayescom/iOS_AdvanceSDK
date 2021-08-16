@@ -109,13 +109,10 @@
         }
 
         
-//        if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdLoadSuccess:)]) {
-//            [_delegate advanceNativeExpressOnAdLoadSuccess:views];
-//        }
-        
-        if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdLoadSuccess123:)]) {
-            [_delegate advanceNativeExpressOnAdLoadSuccess123:temp];
+        if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdLoadSuccess:)]) {
+            [_delegate advanceNativeExpressOnAdLoadSuccess:views];
         }
+        
 
     }
 }

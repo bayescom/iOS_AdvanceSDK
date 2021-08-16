@@ -17,6 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSString *identifier;
 
 - (void)render;
+
 @end
 
 NS_ASSUME_NONNULL_END
