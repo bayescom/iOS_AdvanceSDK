@@ -41,20 +41,20 @@
 
 
 - (void)loadAd {
-    ADVLog(@"加载Mercury supplier: %@", _supplier);
+//    ADVLog(@"加载Mercury supplier: %@", _supplier);
     if (_supplier.state == AdvanceSdkSupplierStateSuccess) {// 并行请求保存的状态 再次轮到该渠道加载的时候 直接show
-        ADVLog(@"Mercury 成功");
+//        ADVLog(@"Mercury 成功");
         if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
             [self.delegate advanceUnifiedViewDidLoad];
         }
 //        [self showAd];
     } else if (_supplier.state == AdvanceSdkSupplierStateFailed) { //失败的话直接对外抛出回调
-        ADVLog(@"Mercury 失败 %@", _supplier);
+//        ADVLog(@"Mercury 失败 %@", _supplier);
         [self.adspot loadNextSupplierIfHas];
     } else if (_supplier.state == AdvanceSdkSupplierStateInPull) { // 正在请求广告时 什么都不用做等待就行
-        ADVLog(@"Mercury 正在加载中");
+//        ADVLog(@"Mercury 正在加载中");
     } else {
-        ADVLog(@"Mercury load ad");
+//        ADVLog(@"Mercury load ad");
         _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
         [_mercury_ad loadAd];
     }
@@ -75,7 +75,7 @@
 - (void)mercury_interstitialSuccess  {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
     if (_supplier.isParallel == YES) {
-        NSLog(@"修改状态: %@", _supplier);
+//        NSLog(@"修改状态: %@", _supplier);
         _supplier.state = AdvanceSdkSupplierStateSuccess;
         return;
     }

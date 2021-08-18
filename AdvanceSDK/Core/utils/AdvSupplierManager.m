@@ -63,6 +63,13 @@
     self.mediaId = mediaId;
     self.adspotId = adspotId;
     self.ext = [ext mutableCopy];
+
+    
+//    ADV_LEVEL_ERROR_LOG(@"----------测试 error");
+//    ADV_LEVEL_FATAL_LOG(@"----------测试 fatal");
+//    ADV_LEVEL_WARING_LOG(@"----------测试 waring");
+//    ADV_LEVEL_INFO_LOG(@"----------测试 info");
+//    ADV_LEVEL_DEBUG_LOG(@"----------测试 debug");
     
     // 获取本地数据
     _model = [AdvSupplierModel loadDataWithMediaId:mediaId adspotId:adspotId];
@@ -70,6 +77,7 @@
     // 是否实时
     if (!_model.setting.useCache) {
         _model = nil;
+        ADV_LEVEL_INFO_LOG(@"无本地策略");
     }
 
     // 是否超时
@@ -77,17 +85,18 @@
         if (_model.setting.cacheTime <= [[NSDate date] timeIntervalSince1970]) {
             [_model clearLocalModel];
             _model = nil;
+            ADV_LEVEL_INFO_LOG(@"无本地策略");
         }
     }
     
     // model不存在
     if (!_model) {
-        ADVLog(@"本地策略不可用，拉取线上策略");
+        ADV_LEVEL_INFO_LOG(@"本地策略不可用，拉取线上策略");
         _isLoadLocalSupplier = NO;
         [self fetchData:NO];
     } else {
         _isLoadLocalSupplier = YES;
-        ADVLog(@"执行本地策略");
+        ADV_LEVEL_INFO_LOG(@"执行本地策略");
         _supplierM = [_model.suppliers mutableCopy];
         [self sortSupplierMByPriority];
         if ([_delegate respondsToSelector:@selector(advSupplierManagerLoadSuccess:)]) {
@@ -117,6 +126,7 @@
     if (_model == nil) {
         // 执行打底渠道
 //        [self doBaseSupplierIfHas];
+        ADV_LEVEL_ERROR_LOG(@"策略请求失败");
         if ([_delegate respondsToSelector:@selector(advSupplierManagerLoadError:)]) {
             [_delegate advSupplierManagerLoadError:[AdvError errorWithCode:AdvErrorCode_102].toNSError];
         }
@@ -255,7 +265,7 @@
 //        NSLog(@"展示队列: %@", _supplierM);
     }
     
-    ADVLog(@"当前执行的渠道:%@ 是否并行:%d 优先级:%ld name:%@", supplier, supplier.isParallel, (long)supplier.priority, supplier.name);
+    ADV_LEVEL_INFO_LOG(@"当前执行的渠道:%@ 是否并行:%d 优先级:%ld name:%@", supplier, supplier.isParallel, (long)supplier.priority, supplier.name);
 
     
     // 如果成功或者失败 就意味着 该并行渠道有结果了, 所以不需要改变状态了
@@ -337,7 +347,7 @@
         [deviceInfo setValue:self.reqid forKey:@"reqid"];
     }
 
-    ADVLog(@"请求参数 %@   uuid:%@", deviceInfo, [AdvDeviceInfoUtil getAuctionId]);
+    ADV_LEVEL_INFO_LOG(@"请求参数 %@   uuid:%@", deviceInfo, [AdvDeviceInfoUtil getAuctionId]);
     NSError *parseError = nil;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:deviceInfo options:NSJSONWritingPrettyPrinted error:&parseError];
     NSURL *url = [NSURL URLWithString:AdvanceSdkRequestUrl];
@@ -349,11 +359,11 @@
     request.HTTPMethod = @"POST";
     NSURLSession *sharedSession = [NSURLSession sharedSession];
     self.serverTime = [[NSDate date] timeIntervalSince1970]*1000;
-    ADVLog(@"开始请求 %f", [[NSDate date] timeIntervalSince1970]);
+    ADV_LEVEL_INFO_LOG(@"开始请求时间戳: %f", [[NSDate date] timeIntervalSince1970]);
     self.dataTask = [sharedSession dataTaskWithRequest:request
                                                       completionHandler:^(NSData *_Nullable data, NSURLResponse *_Nullable response, NSError *_Nullable error) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            ADVLog(@"请求完成 %f", [[NSDate date] timeIntervalSince1970]);
+            ADV_LEVEL_INFO_LOG(@"请求完成时间戳: %f", [[NSDate date] timeIntervalSince1970]);
             [self doResultData:data response:response error:error saveOnly:saveOnly];
         });
     }];
@@ -396,7 +406,7 @@
 
 
         // 默认走打底
-//        ADVLog(@"statusCode != 200，执行打底");
+        ADV_LEVEL_ERROR_LOG(@"statusCode != 200, 策略返回出错");
 //        [self doBaseSupplierIfHas];
         return;
     }
@@ -411,6 +421,7 @@
             [_delegate advSupplierManagerLoadError:[AdvError errorWithCode:AdvErrorCode_104 obj:parseErr].toNSError];
         }
         return;
+        ADV_LEVEL_ERROR_LOG(@"策略解析出错");
     }
     
     if (a_model.code != 200) {
@@ -425,7 +436,7 @@
 //        }
         
         // 默认走打底
-//        ADVLog(@"model.code != 200，执行打底");
+        ADV_LEVEL_ERROR_LOG(@"statusCode != 200, 策略返回出错");
 //        [self doBaseSupplierIfHas];
         return;
     }
@@ -437,13 +448,13 @@
     // 当使用缓存 但未赋值默认缓存时间 赋值缓存时间为3天
     if (a_model.setting.cacheDur <= 0 && a_model.setting.useCache) {
         // 使用缓存，但未设置缓存时间(使用默认时间3day)
-        ADVLog(@"使用缓存，但未设置缓存时间(使用默认时间3day)");
+        ADV_LEVEL_INFO_LOG(@"使用缓存，但未设置缓存时间(使用默认时间3day)");
         a_model.setting.cacheDur = 24 * 60 * 60 * 3;
     }
     
     // 记录缓存过期时间
     a_model.setting.cacheTime = [[NSDate date] timeIntervalSince1970] + a_model.setting.cacheDur;
-    ADVLog(@"---------");
+//    ADVLog(@"---------");
     if (!saveOnly) {
         self.model = a_model;
         
@@ -454,7 +465,7 @@
             [_delegate advSupplierManagerLoadSuccess:self.model];
         }
         
-        ADVLog(@"TEST %@", a_model.setting.parallelGroup);
+//        ADVLog(@"TEST %@", a_model.setting.parallelGroup);
         // 开始执行策略
         [self loadNextSupplier];
     }
@@ -476,7 +487,12 @@
             NSURLSession *sharedSession = [NSURLSession sharedSession];
             NSURLSessionDataTask *dataTask = [sharedSession dataTaskWithRequest:request
                                                               completionHandler:^(NSData *_Nullable data, NSURLResponse *_Nullable response, NSError *_Nullable error) {
-                if (error == nil) {} else {}
+                
+                if (error == nil) {
+                    ADV_LEVEL_INFO_LOG(@"TK上报成功 : %@", url);
+                } else {
+                    ADV_LEVEL_WARING_LOG(@"TK上报失败, 请排查原因, 或导致统计有误!");
+                }
             }];
             [dataTask resume];
         } @catch (NSException *exception) {
@@ -497,7 +513,7 @@
 
 #pragma 错误码参数拼接
 - (NSString *)joinFailedUrlWithObj:(NSString *)urlString error:(NSError *)error {
-    ADVLog(@"UPLOAD error: %@", error);
+    ADV_LEVEL_INFO_LOG(@"上报错误: %@", error);
     if (error) {
 
         if ([error.domain isEqualToString:@"KSADErrorDomain"]) { // 快手SDK
@@ -625,7 +641,7 @@
         uploadArr =  supplier.succeedtk;
         // 曝光成功 更新本地策略
         if (_isLoadLocalSupplier) {
-            ADVLog(@"曝光成功 此次使用本地缓存 更新本地策略");
+            ADV_LEVEL_INFO_LOG(@"曝光成功 此次使用本地缓存 更新本地策略");
             [self fetchData:YES];
         }
     } else if (repoType == AdvanceSdkSupplierRepoImped) {
@@ -639,7 +655,7 @@
     }
     // 执行上报请求
     [self reportWithUploadArr:uploadArr error:error];
-    ADVLog(@"%@ = 上报(impid: %@)", ADVStringFromNAdvanceSdkSupplierRepoType(repoType), supplier.name);
+    ADV_LEVEL_INFO_LOG(@"%@ = 上报(impid: %@)", ADVStringFromNAdvanceSdkSupplierRepoType(repoType), supplier.name);
 }
 
 // MARK: ======================= get =======================
@@ -659,17 +675,14 @@
 
 - (void)setModel:(AdvSupplierModel *)model {
     if (_model != model) {
-        ADVLog(@"%@ -- %@", _model, model);
         _model = nil;
-        ADVLog(@"%@ -- %@", _model, model);
         _model = model;
-        ADVLog(@"model赋值 %@ %@", _model, model);
     }
 }
 
 - (void)dealloc
 {
-    ADVLog(@"mgr 释放啦");
+    ADV_LEVEL_INFO_LOG(@"mgr 释放啦");
     self.model = nil;
 }
 @end

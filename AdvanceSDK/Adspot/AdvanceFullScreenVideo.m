@@ -56,8 +56,8 @@
 
 /// 加载策略Model失败
 - (void)advanceBaseAdapterLoadError:(nullable NSError *)error {
-    if ([_delegate respondsToSelector:@selector(advanceFailedWithError:)]) {
-        [_delegate advanceFailedWithError:error];
+    if ([_delegate respondsToSelector:@selector(advanceFailedWithError:description:)]) {
+        [_delegate advanceFailedWithError:error description:[self.errorDescriptions copy]];
     }
 }
 
@@ -66,8 +66,8 @@
     // 返回渠道有问题 则不用再执行下面的渠道了
     if (error) {
         // 错误回调只调用一次
-        if (self.delegate != nil && [self.delegate respondsToSelector:@selector(advanceFailedWithError:)]) {
-            [self.delegate advanceFailedWithError:error];
+        if (self.delegate != nil && [self.delegate respondsToSelector:@selector(advanceFailedWithError:description:)]) {
+            [self.delegate advanceFailedWithError:error description:[self.errorDescriptions copy]];
         }
         [self deallocDelegate:NO];
         return;
@@ -103,7 +103,7 @@
             id adapter = ((id (*)(id, SEL, id, id))objc_msgSend)((id)[NSClassFromString(clsName) alloc], @selector(initWithSupplier:adspot:), supplier, self);
             // 标记当前的adapter 为了让当串行执行到的时候 获取这个adapter
             // 没有设置代理
-            ADVLog(@"并行: %@", adapter);
+//            ADVLog(@"并行: %@", adapter);
             ((void (*)(id, SEL, NSInteger))objc_msgSend)((id)adapter, @selector(setTag:), supplier.priority);
             ((void (*)(id, SEL))objc_msgSend)((id)adapter, @selector(loadAd));
             if (adapter) {
@@ -116,7 +116,7 @@
             if (!_adapter) {
                 _adapter = ((id (*)(id, SEL, id, id))objc_msgSend)((id)[NSClassFromString(clsName) alloc], @selector(initWithSupplier:adspot:), supplier, self);
             }
-            ADVLog(@"串行 %@ %ld %ld", _adapter, (long)[_adapter tag], supplier.priority);
+//            ADVLog(@"串行 %@ %ld %ld", _adapter, (long)[_adapter tag], supplier.priority);
             // 设置代理
             ((void (*)(id, SEL, id))objc_msgSend)((id)_adapter, @selector(setDelegate:), _delegate);
             ((void (*)(id, SEL))objc_msgSend)((id)_adapter, @selector(loadAd));
@@ -128,7 +128,7 @@
 //        ((void (*)(id, SEL))objc_msgSend)((id)_adapter, @selector(loadAd));
 #pragma clang diagnostic pop
     } else {
-        ADVLog(@"%@ 不存在", clsName);
+//        ADVLog(@"%@ 不存在", clsName);
         [self loadNextSupplierIfHas];
     }
 }

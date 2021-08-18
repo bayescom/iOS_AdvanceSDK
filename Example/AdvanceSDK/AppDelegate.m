@@ -72,7 +72,7 @@
             }
             dispatch_async(dispatch_get_main_queue(), ^{
                 // do something
-                [AdvSdkConfig shareInstance].isDebug = YES;
+                [AdvSdkConfig shareInstance].level = AdvLogLevel_Info;
 //                [AdvSdkConfig shareInstance].appId = @"100255";
 //                [self loadSplash];
             });
@@ -80,7 +80,6 @@
     }else{
         if ([manager isAdvertisingTrackingEnabled]) {
             idfa = [[manager advertisingIdentifier] UUIDString];
-            [AdvSdkConfig shareInstance].isDebug = YES;
 //            [AdvSdkConfig shareInstance].appId = @"100255";
 //            [self loadSplash];
         }
@@ -115,8 +114,8 @@
 }
 
 /// 广告加载失败
-- (void)advanceFailedWithError:(NSError *)error {
-    NSLog(@"广告展示失败 %s  error: %@", __func__, error);
+- (void)advanceFailedWithError:(NSError *)error description:(NSDictionary *)description{
+    NSLog(@"广告展示失败 %s  error: %@ 详情:%@", __func__, error, description);
 
 }
 

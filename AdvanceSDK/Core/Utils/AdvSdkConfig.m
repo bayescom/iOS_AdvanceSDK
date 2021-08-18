@@ -7,7 +7,7 @@
 //
 
 #import "AdvSdkConfig.h"
-
+#import "AdvLog.h"
 @interface AdvSdkConfig ()
 @property (nonatomic, strong) NSDictionary *config;
 
@@ -15,7 +15,7 @@
 
 @implementation AdvSdkConfig
 NSString *const AdvanceSdkAPIVersion = @"3.0";
-NSString *const AdvanceSdkVersion = @"3.2.4.8";
+NSString *const AdvanceSdkVersion = @"3.2.4.9";
 NSString *const AdvanceSdkRequestUrl = @"http://cruiser.bayescom.cn/eleven";
 NSString *const AdvanceReportDataUrl = @"http://cruiser.bayescom.cn/native";
 NSString *const SDK_ID_MERCURY =@"1";
@@ -77,7 +77,6 @@ static AdvSdkConfig *instance = nil;
     //dispatch_once （If called simultaneously from multiple threads, this function waits synchronously until the block has completed. 由官方解释，该函数是线程安全的）
     dispatch_once(&onceToken, ^{
         instance = [[super allocWithZone:NULL] init];
-        instance.isDebug = NO;
         instance.isAdTrack = YES;
     });
     return instance;
@@ -102,8 +101,9 @@ static AdvSdkConfig *instance = nil;
     return [AdvSdkConfig shareInstance];
 }
 
-- (void)setIsDebug:(bool)isDebug {
-    _isDebug = isDebug;
+
+- (void)setLevel:(AdvLogLevel)level {
+    _level = level;
 }
 
 //- (void)setCaidConfig:(NSDictionary *)caidConfig {

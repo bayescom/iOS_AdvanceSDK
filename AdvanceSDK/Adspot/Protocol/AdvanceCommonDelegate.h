@@ -18,8 +18,11 @@
 /// 若 reqId = bottom_default 则执行的是打底渠道
 - (void)advanceOnAdReceived:(NSString *)reqId;
 
-/// 广告请求失败
-- (void)advanceFailedWithError:(NSError *)error;
+
+/// 策略请求失败
+/// @param error 聚合SDK的错误
+/// @param description 每个渠道的错误详情, 部分情况下为nil  key的命名规则: 渠道名-优先级
+- (void)advanceFailedWithError:(NSError *)error description:(NSDictionary *)description;
 
 /// 内部渠道开始加载时调用
 - (void)advanceSupplierWillLoad:(NSString *)supplierId;

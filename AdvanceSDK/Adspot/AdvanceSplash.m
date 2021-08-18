@@ -32,6 +32,7 @@
 }
 
 - (instancetype)initWithAdspotId:(NSString *)adspotid customExt:(NSDictionary *)ext viewController:(UIViewController *)viewController {
+    ADV_LEVEL_INFO_LOG(@"==================== 初始化开屏广告, id: %@====================", adspotid);
     ext = [ext mutableCopy];
     if (!ext) {
         ext = [NSMutableDictionary dictionary];
@@ -61,7 +62,7 @@
 - (void)reportWithType:(AdvanceSdkSupplierRepoType)repoType supplier:(nonnull AdvSupplier *)supplier error:(nonnull NSError *)error {
     [super reportWithType:repoType supplier:supplier error:error];
     if (repoType == AdvanceSdkSupplierRepoImped) {
-        ADVLog(@"曝光成功 计时器清零");
+//        ADVLog(@"曝光成功 计时器清零");
         [_timeoutCheckTimer invalidate];
         _timeoutCheckTimer = nil;
         [_bgImgV removeFromSuperview];
@@ -79,8 +80,8 @@
 
 - (void)deallocDelegate:(BOOL)execute {
     
-    if([_delegate respondsToSelector:@selector(advanceFailedWithError:)] && execute) {
-        [_delegate advanceFailedWithError:[AdvError errorWithCode:AdvErrorCode_115].toNSError];
+    if([_delegate respondsToSelector:@selector(advanceFailedWithError:description:)] && execute) {
+        [_delegate advanceFailedWithError:[AdvError errorWithCode:AdvErrorCode_115].toNSError description:[self.errorDescriptions copy]];
         [_adapter performSelector:@selector(deallocAdapter)];
         [self deallocAdapter];
     }
@@ -112,8 +113,8 @@
 
 /// 加载策略Model失败
 - (void)advanceBaseAdapterLoadError:(nullable NSError *)error {
-    if ([_delegate respondsToSelector:@selector(advanceFailedWithError:)]) {
-        [_delegate advanceFailedWithError:error];
+    if ([_delegate respondsToSelector:@selector(advanceFailedWithError:description:)]) {
+        [_delegate advanceFailedWithError:error description:[self.errorDescriptions copy]];
     }
     [self deallocSelf];
     [self deallocDelegate:NO];
@@ -125,9 +126,9 @@
 - (void)advanceBaseAdapterLoadSuppluer:(nullable AdvSupplier *)supplier error:(nullable NSError *)error {
     // 返回渠道有问题 则不用再执行下面的渠道了
     if (error) {
-        ADVLog(@"%@", error);
-        if (self.delegate != nil && [self.delegate respondsToSelector:@selector(advanceFailedWithError:)]) {
-            [self.delegate advanceFailedWithError:error];
+        ADV_LEVEL_ERROR_LOG(@"%@", error);
+        if (self.delegate != nil && [self.delegate respondsToSelector:@selector(advanceFailedWithError:description:)]) {
+            [self.delegate advanceFailedWithError:error description:[self.errorDescriptions copy]];
         }
         [self deallocSelf];
         [self deallocDelegate:NO];
@@ -154,14 +155,14 @@
     } else if ([supplier.identifier isEqualToString:SDK_ID_BAIDU]) {
         clsName = @"BdSplashAdapter";
     }
-    ADVLog(@"%@ | %@", supplier.name, clsName);
+    ADV_LEVEL_INFO_LOG(@"%@ | %@", supplier.name, clsName);
     // 请求超时了
     NSTimeInterval now = [[NSDate date] timeIntervalSince1970]*1000;
     if ((_timeout_stamp > 0) && (now+500 > _timeout_stamp)
         && !(supplier.state == AdvanceSdkSupplierStateSuccess || supplier.state == AdvanceSdkSupplierStateFailed)) {
         // 1. 串行时如果前面的渠道加载时间过长 导致后面的渠道加载时间不足(还剩0.5s) 则默认下面的渠道无法加载成功, 直接清空view 结束此次广告加载流程
         // 2. 并行时,如果有结果了(成功或者失败) 则不应移除
-        ADVLog(@"总时长到了, 该清空了");
+//        ADVLog(@"总时长到了, 该清空了");
         [self deallocSelf]; //清空view 重置解释器
         [self deallocDelegate:YES];// 向外回调错误
     } else {
@@ -175,7 +176,7 @@
                 id adapter = ((id (*)(id, SEL, id, id))objc_msgSend)((id)[NSClassFromString(clsName) alloc], @selector(initWithSupplier:adspot:), supplier, self);
                 // 标记当前的adapter 为了让当串行执行到的时候 获取这个adapter
                 // 没有设置代理
-                ADVLog(@"并行: %@", adapter);
+//                ADVLog(@"并行: %@", adapter);
                 ((void (*)(id, SEL, NSInteger))objc_msgSend)((id)adapter, @selector(setTag:), supplier.priority);
                 ((void (*)(id, SEL))objc_msgSend)((id)adapter, @selector(loadAd));
 
@@ -194,7 +195,7 @@
                 }
                 
                 if ([supplier.identifier isEqualToString:@"00000000"]) {// 测试专用
-                    ADVLog(@"延时串行开始 %@", _adapter);
+//                    ADVLog(@"延时串行开始 %@", _adapter);
                     dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC));
                     dispatch_after(delayTime, dispatch_get_main_queue(), ^{
                         // 1. 先移除上一个失败的渠道
@@ -206,7 +207,7 @@
                         if (!_adapter) {
                             _adapter = ((id (*)(id, SEL, id, id))objc_msgSend)((id)[NSClassFromString(clsName) alloc], @selector(initWithSupplier:adspot:), supplier, self);
                         }
-                        ADVLog(@"延时串行 %@ %ld", _adapter, (long)[_adapter tag]);
+//                        ADVLog(@"延时串行 %@ %ld", _adapter, (long)[_adapter tag]);
                         // 设置代理
                         ((void (*)(id, SEL, id))objc_msgSend)((id)_adapter, @selector(setDelegate:), _delegate);
                         ((void (*)(id, SEL))objc_msgSend)((id)_adapter, @selector(loadAd));
@@ -222,7 +223,7 @@
                     if (!_adapter) {
                         _adapter = ((id (*)(id, SEL, id, id))objc_msgSend)((id)[NSClassFromString(clsName) alloc], @selector(initWithSupplier:adspot:), supplier, self);
                     }
-                    ADVLog(@"串行 %@ %ld", _adapter, (long)[_adapter tag]);
+//                    ADVLog(@"串行 %@ %ld", _adapter, (long)[_adapter tag]);
                     // 设置代理
                     ((void (*)(id, SEL, id))objc_msgSend)((id)_adapter, @selector(setDelegate:), _delegate);
                     ((void (*)(id, SEL))objc_msgSend)((id)_adapter, @selector(loadAd));
@@ -234,7 +235,7 @@
 #pragma clang diagnostic pop
         } else {
             NSString *msg = [NSString stringWithFormat:@"%@ 不存在", clsName];
-            ADVLog(@"%@", msg);
+            ADV_LEVEL_INFO_LOG(@"%@", msg);
             [self loadNextSupplierIfHas];
         }
     }

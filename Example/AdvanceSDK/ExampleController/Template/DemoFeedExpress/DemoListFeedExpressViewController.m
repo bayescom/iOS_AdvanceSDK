@@ -12,7 +12,7 @@
 
 #import "DemoUtils.h"
 #import <AdvanceSDK/AdvanceNativeExpress.h>
-
+#import <AdvanceSDK/AdvanceNativeExpressView.h>
 @interface DemoListFeedExpressViewController () <UITableViewDelegate, UITableViewDataSource, AdvanceNativeExpressDelegate>
 @property (strong, nonatomic) UITableView *tableView;
 
@@ -53,41 +53,26 @@
 
 // MARK: ======================= AdvanceNativeExpressDelegate =======================
 /// 广告数据拉取成功
-- (void)advanceNativeExpressOnAdLoadSuccess:(NSArray<UIView *> *)views {
-    NSLog(@"拉取数据成功  %@",views);
+- (void)advanceNativeExpressOnAdLoadSuccess:(NSArray<AdvanceNativeExpressView *> *)views {
+    NSLog(@"广告拉取成功 %s", __func__);
     self.arrViewsM = [views mutableCopy];
-    for (NSInteger i=0; i<self.arrViewsM.count;i++) {
-        if ([self.arrViewsM[i] isKindOfClass:NSClassFromString(@"BUNativeExpressFeedVideoAdView")] ||
-            [self.arrViewsM[i] isKindOfClass:NSClassFromString(@"BUNativeExpressAdView")]) {
-            [self.arrViewsM[i] performSelector:@selector(setRootViewController:) withObject:self];
-            [self.arrViewsM[i] performSelector:@selector(render)];
-        } else if ([self.arrViewsM[i] isKindOfClass:NSClassFromString(@"MercuryNativeExpressAdView")]) {
-            [self.arrViewsM[i] performSelector:@selector(setController:) withObject:self];
-            [self.arrViewsM[i] performSelector:@selector(render)];
-        } else if ([self.arrViewsM[i] isKindOfClass:NSClassFromString(@"GDTNativeExpressAdView")]) {// 广点通旧版信息流
-            [self.arrViewsM[i] performSelector:@selector(setController:) withObject:self];
-            [self.arrViewsM[i] performSelector:@selector(render)];
-        } else if ([self.arrViewsM[i] isKindOfClass:NSClassFromString(@"GDTNativeExpressProAdView")]) {// 广点通新版信息流
-            [self.arrViewsM[i] performSelector:@selector(setController:) withObject:self];
-            [self.arrViewsM[i] performSelector:@selector(render)];
-        } else if ([self.arrViewsM[i] isKindOfClass:NSClassFromString(@"BaiduMobAdSmartFeedView")]) {// 百度
-            [self.arrViewsM[i] performSelector:@selector(render)];
-        } else { // 快手
-            
-        }
+    for (NSInteger i = 0; i < self.arrViewsM.count; i++) {
+        AdvanceNativeExpressView *view = self.arrViewsM[i];
+        [view render];
         [_dataArrM insertObject:self.arrViewsM[i] atIndex:1];
     }
     [self.tableView reloadData];
+
 }
 
 
 /// 广告曝光
-- (void)advanceNativeExpressOnAdShow:(UIView *)adView {
+- (void)advanceNativeExpressOnAdShow:(AdvanceNativeExpressView *)adView {
     NSLog(@"广告曝光 %s", __func__);
 }
 
 /// 广告点击
-- (void)advanceNativeExpressOnAdClicked:(UIView *)adView {
+- (void)advanceNativeExpressOnAdClicked:(AdvanceNativeExpressView *)adView {
     NSLog(@"广告点击 %s", __func__);
 }
 
@@ -96,7 +81,7 @@
 /// 广告加载失败 是广点通 穿山甲 mercury 在拉取广告的时候就全部失败了
 /// 该回调的含义是: 比如: 广点通拉取广告成功了并返回了一组view  但是其中某个view的渲染失败了
 /// 该回调会触发多次
-- (void)advanceNativeExpressOnAdRenderSuccess:(UIView *)adView {
+- (void)advanceNativeExpressOnAdRenderSuccess:(AdvanceNativeExpressView *)adView {
     NSLog(@"广告渲染成功 %s %@", __func__, adView);
     [self.tableView reloadData];
 }
@@ -106,17 +91,16 @@
 /// 广告加载失败 是广点通 穿山甲 mercury 在拉取广告的时候就全部失败了
 /// 该回调的含义是: 比如: 广点通拉取广告成功了并返回了一组view  但是其中某个view的渲染失败了
 /// 该回调会触发多次
-- (void)advanceNativeExpressOnAdRenderFail:(UIView *)adView {
+- (void)advanceNativeExpressOnAdRenderFail:(AdvanceNativeExpressView *)adView {
     NSLog(@"广告渲染失败 %s %@", __func__, adView);
     [_dataArrM removeObject: adView];
-    [adView removeFromSuperview];
     [self.tableView reloadData];
 }
 
 /// 广告加载失败
 /// 该回调只会触发一次
-- (void)advanceFailedWithError:(NSError *)error {
-    NSLog(@"广告展示失败 %s  error: %@", __func__, error);
+- (void)advanceFailedWithError:(NSError *)error description:(NSDictionary *)description{
+    NSLog(@"广告展示失败 %s  error: %@ 详情:%@", __func__, error, description);
 
 }
 
@@ -133,11 +117,10 @@
 }
 
 /// 广告被关闭
-- (void)advanceNativeExpressOnAdClosed:(UIView *)adView {
+- (void)advanceNativeExpressOnAdClosed:(AdvanceNativeExpressView *)adView {
     //需要从tableview中删除
     NSLog(@"广告关闭 %s", __func__);
     [_dataArrM removeObject: adView];
-    [adView removeFromSuperview];
     [self.tableView reloadData];
 }
 
@@ -153,8 +136,7 @@
     if ([_dataArrM[indexPath.row] isKindOfClass:[BYExamCellModelElement class]]) {
         return ((BYExamCellModelElement *)_dataArrM[indexPath.row]).cellh;
     } else {
-        CGFloat height = ((UIView *)_dataArrM[indexPath.row]).frame.size.height;
-        NSLog(@"aaa height:%f",height);
+        CGFloat height = ([_dataArrM[indexPath.row] expressView]).frame.size.height;
         return height;
     }
 }
@@ -173,7 +155,7 @@
         if ([subView superview]) {
             [subView removeFromSuperview];
         }
-        UIView *view = _dataArrM[indexPath.row];
+        UIView *view = [_dataArrM[indexPath.row] expressView];
 
         view.tag = 1000;
         [cell.contentView addSubview:view];

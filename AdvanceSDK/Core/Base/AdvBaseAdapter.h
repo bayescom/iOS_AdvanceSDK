@@ -15,6 +15,9 @@ NS_ASSUME_NONNULL_BEGIN
 /// 并行渠道容器
 @property (nonatomic, strong) NSMutableArray * arrParallelSupplier;
 
+/// 各渠道错误的详细原因
+@property (nonatomic, strong) NSMutableDictionary * errorDescriptions;
+
 
 /// 聚合媒体Id
 @property (nonatomic, copy) NSString *mediaId;

@@ -15,7 +15,6 @@
 - (void)advanceFullScreenVideoOnAdPlayFinish;
 
 
-
 @end
 
 #endif

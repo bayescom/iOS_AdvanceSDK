@@ -62,7 +62,7 @@
 // MARK: ======================= AdvanceRewardVideoDelegate =======================
 /// 广告数据加载成功
 - (void)advanceUnifiedViewDidLoad {
-    NSLog(@"广告数据加载成功 %s", __func__);
+    NSLog(@"广告数据拉取成功, 正在缓存... %s", __func__);
     [JDStatusBarNotification showWithStatus:@"广告加载成功" dismissAfter:1.5];
 //    [self loadAdBtn2Action];
 }
@@ -92,8 +92,8 @@
 }
 
 /// 广告加载失败
-- (void)advanceFailedWithError:(NSError *)error {
-    NSLog(@"广告展示失败 %s  error: %@", __func__, error);
+- (void)advanceFailedWithError:(NSError *)error description:(NSDictionary *)description{
+    NSLog(@"广告展示失败 %s  error: %@ 详情:%@", __func__, error,description);
     [JDStatusBarNotification showWithStatus:@"广告加载失败" dismissAfter:1.5];
 
 }

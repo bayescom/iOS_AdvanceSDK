@@ -81,11 +81,9 @@
     NSLog(@"广告点击 %s", __func__);
 }
 
-/// 广告加载失败
-- (void)advanceFailedWithError:(NSError *)error {
+- (void)advanceFailedWithError:(NSError *)error description:(NSDictionary *)description{
     [JDStatusBarNotification showWithStatus:@"广告加载失败" dismissAfter:1.5];
-    NSLog(@"广告展示失败 %s  error: %@", __func__, error);
-
+    NSLog(@"广告展示失败 %s  error: %@ 详情:%@", __func__, error, description);
 }
 
 /// 内部渠道开始加载时调用

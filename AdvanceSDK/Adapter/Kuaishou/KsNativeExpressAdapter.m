@@ -15,13 +15,13 @@
 
 #import "AdvanceNativeExpress.h"
 #import "AdvLog.h"
-
+#import "AdvanceNativeExpressView.h"
 @interface KsNativeExpressAdapter ()<KSFeedAdsManagerDelegate, KSFeedAdDelegate>
 @property (nonatomic, strong) KSFeedAdsManager *ks_ad;
 @property (nonatomic, weak) AdvanceNativeExpress *adspot;
 @property (nonatomic, weak) UIViewController *controller;
 @property (nonatomic, strong) AdvSupplier *supplier;
-@property (nonatomic, strong) NSArray* views;
+@property (nonatomic, strong) NSArray<AdvanceNativeExpressView *> * views;
 
 @end
 
@@ -41,20 +41,20 @@
 - (void)loadAd {
     int adCount = 1;
 
-    NSLog(@"加载快手 supplier: %@ -- %ld", _supplier, (long)_supplier.priority);
+    ADV_LEVEL_INFO_LOG(@"加载快手");
     if (_supplier.state == AdvanceSdkSupplierStateSuccess) {// 并行请求保存的状态 再次轮到该渠道加载的时候 直接show
-        ADVLog(@"快手 成功");
+        ADV_LEVEL_INFO_LOG(@"快手 成功");
         if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdLoadSuccess:)]) {
             [_delegate advanceNativeExpressOnAdLoadSuccess:self.views];
         }
 //        [self showAd];
     } else if (_supplier.state == AdvanceSdkSupplierStateFailed) { //失败的话直接对外抛出回调
-        ADVLog(@"快手 失败");
+        ADV_LEVEL_INFO_LOG(@"快手 失败");
         [self.adspot loadNextSupplierIfHas];
     } else if (_supplier.state == AdvanceSdkSupplierStateInPull) { // 正在请求广告时 什么都不用做等待就行
-        ADVLog(@"快手 正在加载中");
+        ADV_LEVEL_INFO_LOG(@"快手 正在加载中");
     } else {
-        ADVLog(@"快手 load ad");
+        ADV_LEVEL_INFO_LOG(@"快手 load ad");
         _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
         _ks_ad.delegate = self;
         [_ks_ad loadAdDataWithCount:adCount];
@@ -85,9 +85,14 @@
         for (KSFeedAd *ad in feedAdDataArray) {
             ad.delegate = self;
             [ad setVideoSoundEnable:NO];
-            [temp addObject:ad.feedView];
+            
+            AdvanceNativeExpressView *TT = [[AdvanceNativeExpressView alloc] initWithViewController:_adspot.viewController];
+            TT.expressView = ad.feedView;
+            TT.identifier = _supplier.identifier;
+            [temp addObject:TT];
+
         }
-        self.views = [temp copy];
+        self.views = temp;
         if (_supplier.isParallel == YES) {
             _supplier.state = AdvanceSdkSupplierStateSuccess;
             return;
@@ -101,24 +106,40 @@
 //    [self refreshWithData:adsManager];
 }
 
+- (void)feedAdsManager:(KSFeedAdsManager *)adsManager didFailWithError:(NSError *)error {
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
+    NSLog(@"---> %@", error);
+}
+
 - (void)feedAdViewWillShow:(KSFeedAd *)feedAd {
     [_adspot reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
-    if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdShow:)]) {
-        [_delegate advanceNativeExpressOnAdShow:feedAd.feedView];
+    AdvanceNativeExpressView *expressView = [self returnExpressViewWithAdView:(UIView *)feedAd.feedView];
+    if (expressView) {
+        if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdShow:)]) {
+            [_delegate advanceNativeExpressOnAdShow:expressView];
+        }
     }
+
 
 }
 
 - (void)feedAdDidClick:(KSFeedAd *)feedAd {
     [_adspot reportWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
-    if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdClicked:)]) {
-        [_delegate advanceNativeExpressOnAdClicked:feedAd.feedView];
+    AdvanceNativeExpressView *expressView = [self returnExpressViewWithAdView:(UIView *)feedAd.feedView];
+
+    if (expressView) {
+        if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdClicked:)]) {
+            [_delegate advanceNativeExpressOnAdClicked:expressView];
+        }
     }
 }
 
 - (void)feedAdDislike:(KSFeedAd *)feedAd {
-    if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdClosed:)]) {
-        [_delegate advanceNativeExpressOnAdClosed:feedAd.feedView];
+    AdvanceNativeExpressView *expressView = [self returnExpressViewWithAdView:(UIView *)feedAd.feedView];
+    if (expressView) {
+        if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdClosed:)]) {
+            [_delegate advanceNativeExpressOnAdClosed:expressView];
+        }
     }
 }
 
@@ -129,5 +150,17 @@
 - (void)feedAdDidCloseOtherController:(KSFeedAd *)nativeAd interactionType:(KSAdInteractionType)interactionType {
     
 }
+
+- (AdvanceNativeExpressView *)returnExpressViewWithAdView:(UIView *)adView {
+    for (NSInteger i = 0; i < self.views.count; i++) {
+        AdvanceNativeExpressView *temp = self.views[i];
+        if (temp.expressView == adView) {
+            return temp;
+        }
+    }
+    return nil;
+}
+
+
 
 @end
