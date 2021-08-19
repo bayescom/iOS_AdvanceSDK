@@ -13,6 +13,7 @@
 #import "AdvLog.h"
 #import "AdvModel.h"
 #import "AdvAdsportInfoUtil.h"
+#import "AdvUploadTKUtil.h"
 @interface AdvSupplierManager ()
 @property (nonatomic, strong) AdvSupplierModel *model;
 
