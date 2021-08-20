@@ -6,10 +6,17 @@
 //
 
 #import "AdvUploadTKUtil.h"
+#import "AdvURLSessionOperation.h"
 @interface AdvUploadTKUtil ()
 
 @end
 
 @implementation AdvUploadTKUtil
-
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+//        [];
+    }
+    return self;
+}
 @end
