@@ -43,6 +43,9 @@
 @property (nonatomic, strong) NSLock *lock;
 
 
+@property (nonatomic, strong) AdvUploadTKUtil *tkUploadTool;
+
+
 
 @end
 
@@ -576,7 +579,7 @@
 
 /// 拼接时间戳
 /// @param urlString url
-/// @param type AdvanceSdkSupplierRepoType
+/// @param repoType AdvanceSdkSupplierRepoType
 - (NSString *)joinTimeUrlWithObj:(NSString *)urlString type:(AdvanceSdkSupplierRepoType)repoType {
     NSTimeInterval serverTime = [[NSDate date] timeIntervalSince1970]*1000 - self.serverTime;
     if (serverTime > 0) {
@@ -657,6 +660,13 @@
     // 执行上报请求
     [self reportWithUploadArr:uploadArr error:error];
     ADV_LEVEL_INFO_LOG(@"%@ = 上报(impid: %@)", ADVStringFromNAdvanceSdkSupplierRepoType(repoType), supplier.name);
+}
+
+- (AdvUploadTKUtil *)tkUploadTool {
+    if (!_tkUploadTool) {
+        _tkUploadTool = [AdvUploadTKUtil new];
+    }
+    return _tkUploadTool;
 }
 
 // MARK: ======================= get =======================
