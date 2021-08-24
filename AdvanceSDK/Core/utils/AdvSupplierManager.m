@@ -28,16 +28,11 @@
 @property (nonatomic, copy) NSString *mediaId;
 /// 广告位id
 @property (nonatomic, copy) NSString *adspotId;
-/// reqid
-@property (nonatomic, copy) NSString *reqid;
 /// 自定义拓展字段
 @property (nonatomic, strong) NSDictionary *ext;
 
 /// 是否是走的本地的渠道
 @property (nonatomic, assign) BOOL isLoadLocalSupplier;
-
-@property (nonatomic, assign) NSTimeInterval serverTime;
-
 
 @property (nonatomic, strong) NSURLSessionDataTask *dataTask;
 @property (nonatomic, strong) NSLock *lock;
@@ -66,14 +61,8 @@
                   customExt:(NSDictionary * _Nonnull)ext {
     self.mediaId = mediaId;
     self.adspotId = adspotId;
+    self.tkUploadTool = [[AdvUploadTKUtil alloc] init];
     self.ext = [ext mutableCopy];
-
-    
-//    ADV_LEVEL_ERROR_LOG(@"----------测试 error");
-//    ADV_LEVEL_FATAL_LOG(@"----------测试 fatal");
-//    ADV_LEVEL_WARING_LOG(@"----------测试 waring");
-//    ADV_LEVEL_INFO_LOG(@"----------测试 info");
-//    ADV_LEVEL_DEBUG_LOG(@"----------测试 debug");
     
     // 获取本地数据
     _model = [AdvSupplierModel loadDataWithMediaId:mediaId adspotId:adspotId];
@@ -346,9 +335,9 @@
     
     // 个性化广告推送开关
     [deviceInfo setValue:[AdvSdkConfig shareInstance].isAdTrack ? @"0" : @"1" forKey:@"donottrack"];
-    self.reqid = [AdvDeviceInfoUtil getAuctionId];
-    if (self.reqid) {
-        [deviceInfo setValue:self.reqid forKey:@"reqid"];
+    NSString *reqid = [AdvDeviceInfoUtil getAuctionId];
+    if (reqid) {
+        [deviceInfo setValue:reqid forKey:@"reqid"];
     }
 
     ADV_LEVEL_INFO_LOG(@"请求参数 %@   uuid:%@", deviceInfo, [AdvDeviceInfoUtil getAuctionId]);
@@ -362,8 +351,13 @@
     request.HTTPBody = jsonData;
     request.HTTPMethod = @"POST";
     NSURLSession *sharedSession = [NSURLSession sharedSession];
-    self.serverTime = [[NSDate date] timeIntervalSince1970]*1000;
+    
+    
+    self.tkUploadTool.serverTime = [[NSDate date] timeIntervalSince1970]*1000;
+    self.tkUploadTool.reqid = reqid;
+    
     ADV_LEVEL_INFO_LOG(@"开始请求时间戳: %f", [[NSDate date] timeIntervalSince1970]);
+    
     self.dataTask = [sharedSession dataTaskWithRequest:request
                                                       completionHandler:^(NSData *_Nullable data, NSURLResponse *_Nullable response, NSError *_Nullable error) {
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -476,145 +470,6 @@
     [a_model saveData:data];
 }
 
-/// 数据上报
-- (void)reportWithUploadArr:(NSArray<NSString *> *)uploadArr error:(NSError *)error{
-    for (id obj in uploadArr) {
-        @try {
-            NSString *urlString = obj;
-            urlString = [self paramValueOfUrl:obj withParam:@"&reqid"];
-            NSTimeInterval timeStamp = [[NSDate dateWithTimeIntervalSinceNow:0] timeIntervalSince1970] * 1000;
-            urlString = [urlString stringByReplacingOccurrencesOfString:@"__TIME__" withString:[NSString stringWithFormat:@"%0.0f", timeStamp]];
-            NSURL *url = [NSURL URLWithString:urlString];
-            NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:
-                                            NSURLRequestReloadIgnoringLocalCacheData   timeoutInterval:5];
-            request.HTTPMethod = @"GET";
-            NSURLSession *sharedSession = [NSURLSession sharedSession];
-            NSURLSessionDataTask *dataTask = [sharedSession dataTaskWithRequest:request
-                                                              completionHandler:^(NSData *_Nullable data, NSURLResponse *_Nullable response, NSError *_Nullable error) {
-                
-                if (error == nil) {
-                    ADV_LEVEL_INFO_LOG(@"TK上报成功 : %@", url);
-                } else {
-                    ADV_LEVEL_WARING_LOG(@"TK上报失败, 请排查原因, 或导致统计有误!");
-                }
-            }];
-            [dataTask resume];
-        } @catch (NSException *exception) {
-        } @finally {
-        }
-    }
-}
-
-#pragma failedtk 的参数拼接
-- (NSMutableArray *)failedtkUrlWithArr:(NSArray<NSString *> *)uploadArr error:(NSError *)error {
-    NSMutableArray *temp = [NSMutableArray arrayWithCapacity:uploadArr.count];
-    for (id obj in uploadArr.mutableCopy) {
-        NSString *failed = [self joinFailedUrlWithObj:obj error:error];
-        [temp addObject:failed];
-    }
-    return temp;
-}
-
-#pragma 错误码参数拼接
-- (NSString *)joinFailedUrlWithObj:(NSString *)urlString error:(NSError *)error {
-    ADV_LEVEL_INFO_LOG(@"上报错误: %@", error);
-    if (error) {
-
-        if ([error.domain isEqualToString:@"KSADErrorDomain"]) { // 快手SDK
-            return [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=err_ks_%ld&track_time",(long)error.code]];
-        } else if ([error.domain isEqualToString:@"BDAdErrorDomain"]) {
-            return [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=err_bd_%ld&track_time",(long)error.code]];
-
-        } else if ([error.domain isEqualToString:@"com.pangle.buadsdk"]) { // 新版穿山甲sdk报错
-            return [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=err_csj_%ld&track_time",(long)error.code]];
-        } else if ([error.domain isEqualToString:@"com.bytedance.buadsdk"]) {// 穿山甲sdk报错
-            return [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=err_csj_%ld&track_time",(long)error.code]];
-        } else if ([error.domain isEqualToString:@"GDTAdErrorDomain"]) {// 广点通
-            NSString *url = nil;
-            if (error.code == 6000 && error.localizedDescription != nil) {
-                
-                @try {
-                    //过滤字符串前后的空格
-                    NSString *errorDescription = [error.localizedDescription stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-                    //过滤字符串中间的空格
-                    errorDescription = [errorDescription stringByReplacingOccurrencesOfString:@" " withString:@""];
-                    ////匹配error.localizedDescription当中的"详细码:"得到的下标
-                    NSRange range = [errorDescription rangeOfString:@"详细码:"];
-                    // 截取"详细码:"后6位字符串
-                    NSString *subCodeString = [errorDescription substringWithRange:NSMakeRange(range.location + range.length, 6)];
-                    url = [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=err_gdt_%ld_%@&track_time",(long)error.code, subCodeString]];
-                } @catch (NSException *exception) {
-                    url = [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=err_gdt_%ld&track_time",(long)error.code]];
-                }
-            } else {
-                url = [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=err_gdt_%ld&track_time",(long)error.code]];
-            }
-            return url;
-        } else {// 倍业
-            return [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=err_mer_%ld&track_time",(long)error.code]];
-        }
-    }
-    return urlString;
-}
-
-#pragma loadedtk 的参数拼接
-- (NSMutableArray *)loadedtkUrlWithArr:(NSArray<NSString *> *)uploadArr {
-    NSMutableArray *temp = [NSMutableArray arrayWithCapacity:uploadArr.count];
-    for (id obj in uploadArr.mutableCopy) {
-        NSString *loadedtk = [self joinTimeUrlWithObj:obj type:AdvanceSdkSupplierRepoLoaded];
-        [temp addObject:loadedtk];
-    }
-    return temp;
-}
-
-#pragma imptk 的参数拼接
-- (NSMutableArray *)imptkUrlWithArr:(NSArray<NSString *> *)uploadArr {
-    NSMutableArray *temp = [NSMutableArray arrayWithCapacity:uploadArr.count];
-    for (id obj in uploadArr.mutableCopy) {
-        NSString *loadedtk = [self joinTimeUrlWithObj:obj type:AdvanceSdkSupplierRepoImped];
-        [temp addObject:loadedtk];
-    }
-    return temp;
-}
-
-/// 拼接时间戳
-/// @param urlString url
-/// @param repoType AdvanceSdkSupplierRepoType
-- (NSString *)joinTimeUrlWithObj:(NSString *)urlString type:(AdvanceSdkSupplierRepoType)repoType {
-    NSTimeInterval serverTime = [[NSDate date] timeIntervalSince1970]*1000 - self.serverTime;
-    if (serverTime > 0) {
-        if (repoType == AdvanceSdkSupplierRepoLoaded) {
-            return [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=l_%.0f&track_time",serverTime]];
-        } else if (repoType == AdvanceSdkSupplierRepoImped) {
-            return [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=tt_%.0f&track_time",serverTime]];
-        }
-    }
-    return urlString;
-}
-
-- (NSString *)paramValueOfUrl:(NSString *)url withParam:(NSString *)param {
-    @try {
-        if ([url containsString:param]) {
-            NSRange range =  [url rangeOfString:param];
-            
-            // 定义要删除按的reqid
-            NSString *reqidValue = [NSString stringWithFormat:@"reqid=%@", self.reqid];
-            
-            // 找到原url当中 reqid=balabalabala
-            NSRange rangeReq = NSMakeRange(range.location + 1, 38);
-            NSString * parametersString = [url substringWithRange:rangeReq];
-    //        [url  substringFromIndex:range.location];
-            if ([parametersString containsString:@"&"]) { // reqid=balabalabala 包含了& 说明截取不准确返回的url有问题 则不进行替换工作
-                return url;
-            }
-            url = [url stringByReplacingOccurrencesOfString:parametersString withString:reqidValue];
-        }
-    } @catch (NSException *exception) {
-        return url;
-    }
-    return url;
-}
-
 
 // MARK: ======================= Private =======================
 - (void)sortSupplierMByPriority {
@@ -638,7 +493,7 @@
     NSArray<NSString *> *uploadArr = nil;
     /// 按照类型判断上报地址
     if (repoType == AdvanceSdkSupplierRepoLoaded) {
-        uploadArr = [self loadedtkUrlWithArr:supplier.loadedtk];
+        uploadArr = [self.tkUploadTool loadedtkUrlWithArr:supplier.loadedtk];
     } else if (repoType == AdvanceSdkSupplierRepoClicked) {
         uploadArr =  supplier.clicktk;
     } else if (repoType == AdvanceSdkSupplierRepoSucceeded) {
@@ -649,16 +504,16 @@
             [self fetchData:YES];
         }
     } else if (repoType == AdvanceSdkSupplierRepoImped) {
-        uploadArr =  [self imptkUrlWithArr:supplier.imptk];
+        uploadArr =  [self.tkUploadTool imptkUrlWithArr:supplier.imptk];
     } else if (repoType == AdvanceSdkSupplierRepoFaileded) {
-        uploadArr =  [self failedtkUrlWithArr:supplier.failedtk error:error];
+        uploadArr =  [self.tkUploadTool failedtkUrlWithArr:supplier.failedtk error:error];
     }
     if (!uploadArr || uploadArr.count <= 0) {
         // TODO: 上报地址不存在
         return;
     }
     // 执行上报请求
-    [self reportWithUploadArr:uploadArr error:error];
+    [self.tkUploadTool reportWithUploadArr:uploadArr error:error];
     ADV_LEVEL_INFO_LOG(@"%@ = 上报(impid: %@)", ADVStringFromNAdvanceSdkSupplierRepoType(repoType), supplier.name);
 }
 
@@ -695,5 +550,6 @@
 {
     ADV_LEVEL_INFO_LOG(@"mgr 释放啦");
     self.model = nil;
+    self.tkUploadTool = nil;
 }
 @end
