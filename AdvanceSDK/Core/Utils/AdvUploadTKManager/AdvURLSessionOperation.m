@@ -21,7 +21,14 @@
     if (self = [super init]) {
         __weak typeof(self) weakSelf = self;
         _task = [session dataTaskWithURL:url completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-            [weakSelf completeOperationWithBlock:completionHandler data:data response:response error:error];
+            __strong typeof(self) strongSelf = weakSelf;//第一层
+            __weak typeof(self) weakSelf2 = strongSelf;
+
+            dispatch_async(dispatch_get_main_queue(), ^{
+                __strong typeof(self) strongSelf2 = weakSelf2;//第二层
+                [strongSelf2 completeOperationWithBlock:completionHandler data:data response:response error:error];
+            });
+
         }];
     }
     return self;
@@ -31,7 +38,13 @@
     if (self = [super init]) {
         __weak typeof(self) weakSelf = self;
         _task = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-            [weakSelf completeOperationWithBlock:completionHandler data:data response:response error:error];
+            __strong typeof(self) strongSelf = weakSelf;//第一层
+            __weak typeof(self) weakSelf2 = strongSelf;
+
+            dispatch_async(dispatch_get_main_queue(), ^{
+                __strong typeof(self) strongSelf2 = weakSelf2;//第二层
+                [strongSelf2 completeOperationWithBlock:completionHandler data:data response:response error:error];
+            });
         }];
     }
     return self;
