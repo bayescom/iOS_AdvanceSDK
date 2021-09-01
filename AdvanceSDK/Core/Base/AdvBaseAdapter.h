@@ -28,6 +28,9 @@ NS_ASSUME_NONNULL_BEGIN
 /// 自定义拓展参数
 @property (nonatomic, strong) NSDictionary *ext;
 
+/// 是否上传各渠道版本号 默认为NO
+@property (nonatomic, assign) BOOL isUploadSDKVersion;
+
 
 /// 初始化渠道
 - (instancetype)initWithMediaId:(nullable NSString *)mediaId

@@ -40,6 +40,9 @@
 }
 
 - (void)loadAd {
+    if (_isUploadSDKVersion) {
+        [self setSDKVersion];
+    }
     [self.mgr loadDataWithMediaId:_mediaId adspotId:_adspotid customExt:_ext];
 }
 
@@ -161,6 +164,49 @@
         [_baseDelegate advanceBaseAdapterLoadSuppluer:supplier error:error];
     }
 }
+
+- (void)setSDKVersion {
+    [self setGdtSDKVersion];
+    [self setCsjSDKVersion];
+    [self setMerSDKVersion];
+    [self setKsSDKVersion];
+}
+
+- (void)setGdtSDKVersion {
+    id cls = NSClassFromString(@"GDTSDKConfig");
+    NSString *gdtVersion = [cls performSelector:@selector(sdkVersion)];
+    
+    [self setSDKVersionForKey:@"gdt_v" version:gdtVersion];
+}
+
+- (void)setCsjSDKVersion {
+    id cls = NSClassFromString(@"BUAdSDKManager");
+    NSString *csjVersion = [cls performSelector:@selector(SDKVersion)];
+    
+    [self setSDKVersionForKey:@"csj_v" version:csjVersion];
+}
+
+- (void)setMerSDKVersion {
+    id cls = NSClassFromString(@"MercuryConfigManager");
+    NSString *merVersion = [cls performSelector:@selector(sdkVersion)];
+
+    [self setSDKVersionForKey:@"mry_v" version:merVersion];
+}
+
+- (void)setKsSDKVersion {
+    id cls = NSClassFromString(@"KSAdSDKManager");
+    NSString *ksVersion = [cls performSelector:@selector(SDKVersion)];
+    
+    [self setSDKVersionForKey:@"ks_v" version:ksVersion];
+}
+
+
+- (void)setSDKVersionForKey:(NSString *)key version:(NSString *)version {
+    if (version) {
+        [_ext setValue:version forKey:key];
+    }
+}
+
 
 // MARK: ======================= get =======================
 - (AdvSupplierManager *)mgr {

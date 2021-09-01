@@ -322,6 +322,8 @@
         }
         
         [deviceInfo setValue:self.ext forKey:@"ext"];
+        
+        ADV_LEVEL_INFO_LOG(@"自定义扩展字段 ext : %@", self.ext);
     }
     
     // caid 有就传没有就不穿

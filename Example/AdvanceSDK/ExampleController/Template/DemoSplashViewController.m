@@ -45,6 +45,7 @@
     self.advanceSplash = [[AdvanceSplash alloc] initWithAdspotId:self.adspotId
                                                   viewController:self];
 
+    self.advanceSplash.isUploadSDKVersion = YES;
     self.advanceSplash.delegate = self;
     self.advanceSplash.showLogoRequire = YES;
     self.advanceSplash.logoImage = [UIImage imageNamed:@"app_logo"];
