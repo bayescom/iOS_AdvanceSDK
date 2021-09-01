@@ -9,6 +9,10 @@
 #import "AdvUploadTKManager.h"
 #import "AdvSupplierModel.h"
 #import "AdvLog.h"
+
+#define MAXOPERATIONCOUNT 10
+#define TIMEOUT 5
+
 @interface AdvUploadTKUtil ()
 
 @end
@@ -42,6 +46,8 @@
         }
     }
     
+    [AdvUploadTKManager defaultManager].maxConcurrentOperationCount = MAXOPERATIONCOUNT;
+    [AdvUploadTKManager defaultManager].timeoutInterval = TIMEOUT;
     [[AdvUploadTKManager defaultManager] uploadTKWithUrls:[temp copy]];
 }
 
