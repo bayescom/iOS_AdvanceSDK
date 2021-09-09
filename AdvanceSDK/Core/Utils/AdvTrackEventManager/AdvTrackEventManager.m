@@ -9,6 +9,15 @@
 #import <objc/runtime.h>
 #import <objc/message.h>
 
+NSString * const AdvAnalyticsMethodCall = @"methodCall";
+NSString * const AdvAnalyticsUIControl = @"UIControl";
+NSString * const AdvAnalyticsClass = @"class";
+NSString * const AdvAnalyticsSelector = @"selector";
+NSString * const AdvAnalyticsDetails = @"details";
+NSString * const AdvAnalyticsParameters = @"parameters";
+NSString * const AdvAnalyticsShouldExecute = @"shouldExecute";
+NSString * const AdvAnalyticsEvent = @"event";
+
 static NSMutableDictionary *AdvEventDetails() {
     static NSMutableDictionary *dict;
     static dispatch_once_t onceToken;
@@ -32,11 +41,11 @@ static SEL adv_selectorForOriginSelector(SEL selector) {
     return NSSelectorFromString([NSStringFromSelector(selector) stringByAppendingString:@"__adv"]);
 }
 
-static NSString *sj_strForClassAndSelector(Class class, SEL selector) {
+static NSString *adv_strForClassAndSelector(Class class, SEL selector) {
     return [NSString stringWithFormat:@"%@_%@", NSStringFromClass(class), NSStringFromSelector(selector)];
 }
 
-static NSArray *sj_parametersForInvocation(NSInvocation *invocation) {
+static NSArray *adv_parametersForInvocation(NSInvocation *invocation) {
     NSMethodSignature *methodSignature = [invocation methodSignature];
     NSInteger numberOfArguments = [methodSignature numberOfArguments];
     NSMutableArray *argumentsArray = [NSMutableArray arrayWithCapacity:numberOfArguments - 2];
@@ -101,6 +110,23 @@ static NSArray *sj_parametersForInvocation(NSInvocation *invocation) {
     return [argumentsArray copy];
 }
 
+static void AdvForwardInvocation(__unsafe_unretained id assignSlf, SEL selector, NSInvocation *invocation) {
+    NSArray *events = AdvSelectorEvents()[adv_strForClassAndSelector([assignSlf class], selector)];
+    [events enumerateObjectsUsingBlock:^(NSString *eventName, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSDictionary *detail = AdvEventDetails()[eventName];
+        NSArray *argumentsArray = adv_parametersForInvocation(invocation);
+        BOOL (^shouldExecuteBlock)(id object, NSArray *parameters) = detail[AdvAnalyticsShouldExecute];
+        NSDictionary *(^parametersBlock)(id object, NSArray *parameters) = detail[AdvAnalyticsParameters];
+        if (shouldExecuteBlock == nil || shouldExecuteBlock(assignSlf, argumentsArray)) {
+            [[AdvTrackEventManager defaultManager].delegate trackAdvEvent:eventName withParameters:parametersBlock(assignSlf, argumentsArray)];
+        }
+    }];
+    
+    SEL newSelector = adv_selectorForOriginSelector(invocation.selector);
+    invocation.selector = newSelector;
+    [invocation invoke];
+}
+
 
 
 @implementation AdvTrackEventManager
@@ -152,5 +178,44 @@ static AdvTrackEventManager *defaultManager = nil;
 }
 
 // MARK: ======================= Methods =======================
+
+- (void)configure:(NSDictionary *)configurationDictionary delegate:(id<AdvTrackEventDelegate>)delegate {
+    self.delegate = delegate;
+    
+    NSArray *trackedMethodCallEventClasses = configurationDictionary[AdvAnalyticsMethodCall];
+    [trackedMethodCallEventClasses enumerateObjectsUsingBlock:^(NSDictionary *eventDictionary, NSUInteger idx, BOOL * _Nonnull stop) {
+        [self __addMethodCallEventAnalyticsHook:eventDictionary];
+    }];
+}
+
+- (void)__addMethodCallEventAnalyticsHook:(NSDictionary *)eventDictionary {
+    Class klass = eventDictionary[AdvAnalyticsClass];
+    [eventDictionary[AdvAnalyticsDetails] enumerateObjectsUsingBlock:^(id dict, NSUInteger idx, BOOL *stop) {
+        NSString *selectorName = dict[AdvAnalyticsSelector];
+        SEL originSelector = NSSelectorFromString(selectorName);
+        Method originMethod = class_getInstanceMethod(klass, originSelector);
+        const char *typeEncoding = method_getTypeEncoding(originMethod);
+        
+        SEL newSelector = adv_selectorForOriginSelector(originSelector);
+        class_addMethod(klass, newSelector, method_getImplementation(originMethod), typeEncoding);
+        
+        class_replaceMethod(klass, originSelector, _objc_msgForward, typeEncoding);
+        
+        if (class_getMethodImplementation(klass, @selector(forwardInvocation:)) != (IMP)AdvForwardInvocation) {
+            class_replaceMethod(klass, @selector(forwardInvocation:), (IMP)AdvForwardInvocation, "v@:@");
+        }
+        
+        NSMutableDictionary *detailDict = [dict mutableCopy];
+        [detailDict removeObjectForKey:AdvAnalyticsEvent];
+        [AdvEventDetails() setObject:detailDict forKey:dict[AdvAnalyticsEvent]];
+        
+        NSString *selectorKey = adv_strForClassAndSelector(klass, originSelector);
+        NSMutableArray *events = AdvSelectorEvents()[selectorKey];
+        if (!events) events = [NSMutableArray new];
+        [events addObject:dict[AdvAnalyticsEvent]];
+        [AdvSelectorEvents() setObject:events forKey:selectorKey];
+    }];
+}
+
 
 @end
