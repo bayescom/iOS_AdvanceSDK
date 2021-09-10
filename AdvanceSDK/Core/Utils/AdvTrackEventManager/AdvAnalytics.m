@@ -1,24 +1,8 @@
-//
-//  AdvTrackEventManager.m
-//  Pods
-//
-//  Created by MS on 2021/9/8.
-//
-
-#import "AdvTrackEventManager.h"
+#import "AdvAnalytics.h"
 #import <objc/runtime.h>
 #import <objc/message.h>
 
-NSString * const AdvAnalyticsMethodCall = @"methodCall";
-NSString * const AdvAnalyticsUIControl = @"UIControl";
-NSString * const AdvAnalyticsClass = @"class";
-NSString * const AdvAnalyticsSelector = @"selector";
-NSString * const AdvAnalyticsDetails = @"details";
-NSString * const AdvAnalyticsParameters = @"parameters";
-NSString * const AdvAnalyticsShouldExecute = @"shouldExecute";
-NSString * const AdvAnalyticsEvent = @"event";
-
-static NSMutableDictionary *AdvEventDetails() {
+static NSMutableDictionary *advEventDetails() {
     static NSMutableDictionary *dict;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -27,7 +11,7 @@ static NSMutableDictionary *AdvEventDetails() {
     return dict;
 }
 
-static NSMutableDictionary *AdvSelectorEvents() {
+static NSMutableDictionary *advSelectorEvents() {
     static NSMutableDictionary *dict;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -36,16 +20,15 @@ static NSMutableDictionary *AdvSelectorEvents() {
     return dict;
 }
 
-
-static SEL adv_selectorForOriginSelector(SEL selector) {
-    return NSSelectorFromString([NSStringFromSelector(selector) stringByAppendingString:@"__adv"]);
+static SEL Adv_selectorForOriginSelector(SEL selector) {
+    return NSSelectorFromString([NSStringFromSelector(selector) stringByAppendingString:@"__Adv"]);
 }
 
-static NSString *adv_strForClassAndSelector(Class class, SEL selector) {
-    return [NSString stringWithFormat:@"%@_%@", NSStringFromClass(class), NSStringFromSelector(selector)];
+static NSString *Adv_strForClassAndSelector(Class klass, SEL selector) {
+    return [NSString stringWithFormat:@"%@_%@", NSStringFromClass(klass), NSStringFromSelector(selector)];
 }
 
-static NSArray *adv_parametersForInvocation(NSInvocation *invocation) {
+static NSArray *Adv_parametersForInvocation(NSInvocation *invocation) {
     NSMethodSignature *methodSignature = [invocation methodSignature];
     NSInteger numberOfArguments = [methodSignature numberOfArguments];
     NSMutableArray *argumentsArray = [NSMutableArray arrayWithCapacity:numberOfArguments - 2];
@@ -111,48 +94,44 @@ static NSArray *adv_parametersForInvocation(NSInvocation *invocation) {
 }
 
 static void AdvForwardInvocation(__unsafe_unretained id assignSlf, SEL selector, NSInvocation *invocation) {
-    NSArray *events = AdvSelectorEvents()[adv_strForClassAndSelector([assignSlf class], selector)];
-    [events enumerateObjectsUsingBlock:^(NSString *eventName, NSUInteger idx, BOOL * _Nonnull stop) {
-        NSDictionary *detail = AdvEventDetails()[eventName];
-        NSArray *argumentsArray = adv_parametersForInvocation(invocation);
+    NSArray *events = advSelectorEvents()[Adv_strForClassAndSelector([assignSlf class], invocation.selector)];
+    [events enumerateObjectsUsingBlock:^(NSString *eventName, NSUInteger idx, BOOL *stop) {
+        NSDictionary *detail = advEventDetails()[eventName];
+        NSArray *argumentsArray = Adv_parametersForInvocation(invocation);
         BOOL (^shouldExecuteBlock)(id object, NSArray *parameters) = detail[AdvAnalyticsShouldExecute];
         NSDictionary *(^parametersBlock)(id object, NSArray *parameters) = detail[AdvAnalyticsParameters];
         if (shouldExecuteBlock == nil || shouldExecuteBlock(assignSlf, argumentsArray)) {
-            [[AdvTrackEventManager defaultManager].delegate trackAdvEvent:eventName withParameters:parametersBlock(assignSlf, argumentsArray)];
+            [[AdvAnalytics shared].provider trackAdvEvent:eventName withParameters:parametersBlock(assignSlf, argumentsArray)];
         }
     }];
-    
-    SEL newSelector = adv_selectorForOriginSelector(invocation.selector);
+    SEL newSelector = Adv_selectorForOriginSelector(invocation.selector);
     invocation.selector = newSelector;
     [invocation invoke];
 }
 
-
-
-@implementation AdvTrackEventManager
+@implementation AdvAnalytics
 // MARK: ======================= 初始化设置 =======================
+static AdvAnalytics *analytics = nil;
 
-static AdvTrackEventManager *defaultManager = nil;
-
-+ (AdvTrackEventManager*)defaultManager {
-    static dispatch_once_t token;
-    dispatch_once(&token, ^{
-        if(defaultManager == nil) {
-            defaultManager = [[self alloc] init];
-        }
++ (instancetype)shared {
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        analytics = [[AdvAnalytics alloc] init];
     });
-    return defaultManager;
+    return analytics;
 }
+
 
 + (id)allocWithZone:(struct _NSZone *)zone {
    static dispatch_once_t token;
     dispatch_once(&token, ^{
-        if(defaultManager == nil) {
-            defaultManager = [super allocWithZone:zone];
+        if(analytics == nil) {
+            analytics = [super allocWithZone:zone];
         }
     });
-    return defaultManager;
+    return analytics;
 }
+
 //自定义初始化方法
 - (instancetype)init {
     self = [super init];
@@ -179,11 +158,11 @@ static AdvTrackEventManager *defaultManager = nil;
 
 // MARK: ======================= Methods =======================
 
-- (void)configure:(NSDictionary *)configurationDictionary delegate:(id<AdvTrackEventDelegate>)delegate {
-    self.delegate = delegate;
-    
+
+- (void)configure:(NSDictionary *)configurationDictionary provider:(id<AdvAnalyticsProvider>)provider {
+    self.provider = provider;
     NSArray *trackedMethodCallEventClasses = configurationDictionary[AdvAnalyticsMethodCall];
-    [trackedMethodCallEventClasses enumerateObjectsUsingBlock:^(NSDictionary *eventDictionary, NSUInteger idx, BOOL * _Nonnull stop) {
+    [trackedMethodCallEventClasses enumerateObjectsUsingBlock:^(NSDictionary *eventDictionary, NSUInteger idx, BOOL *stop) {
         [self __addMethodCallEventAnalyticsHook:eventDictionary];
     }];
 }
@@ -196,7 +175,7 @@ static AdvTrackEventManager *defaultManager = nil;
         Method originMethod = class_getInstanceMethod(klass, originSelector);
         const char *typeEncoding = method_getTypeEncoding(originMethod);
         
-        SEL newSelector = adv_selectorForOriginSelector(originSelector);
+        SEL newSelector = Adv_selectorForOriginSelector(originSelector);
         class_addMethod(klass, newSelector, method_getImplementation(originMethod), typeEncoding);
         
         class_replaceMethod(klass, originSelector, _objc_msgForward, typeEncoding);
@@ -207,15 +186,14 @@ static AdvTrackEventManager *defaultManager = nil;
         
         NSMutableDictionary *detailDict = [dict mutableCopy];
         [detailDict removeObjectForKey:AdvAnalyticsEvent];
-        [AdvEventDetails() setObject:detailDict forKey:dict[AdvAnalyticsEvent]];
+        [advEventDetails() setObject:detailDict forKey:dict[AdvAnalyticsEvent]];
         
-        NSString *selectorKey = adv_strForClassAndSelector(klass, originSelector);
-        NSMutableArray *events = AdvSelectorEvents()[selectorKey];
+        NSString *selectorKey = Adv_strForClassAndSelector(klass, originSelector);
+        NSMutableArray *events = advSelectorEvents()[selectorKey];
         if (!events) events = [NSMutableArray new];
         [events addObject:dict[AdvAnalyticsEvent]];
-        [AdvSelectorEvents() setObject:events forKey:selectorKey];
+        [advSelectorEvents() setObject:events forKey:selectorKey];
     }];
 }
-
 
 @end

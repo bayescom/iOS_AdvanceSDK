@@ -67,6 +67,22 @@
 
 }
 
++ (NSMutableDictionary *)getSDKTrackEventDeviceInfoWithMediaId:(NSString *)mediaId adspotId:(NSString *)adspotId {
+    NSMutableDictionary *deviceInfo = [[NSMutableDictionary alloc] init];
+    @try {
+        [deviceInfo setValue:AdvanceSdkVersion forKey:@"sdkver"];
+        [deviceInfo setValue:@"0" forKey:@"sdktag"];
+        [deviceInfo setValue:[AdvDeviceInfoUtil getAppVersion] forKey:@"appver"];
+        [deviceInfo setValue:[AdvDeviceInfoUtil getAuctionId] forKey:@"reqid"];
+        [deviceInfo setValue:adspotId forKey:@"adspotid"];
+
+        return deviceInfo;
+    } @catch (NSException *exception) {
+        return deviceInfo;
+    }
+
+}
+
 + (NSString *)getAppVersion {
     NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
 

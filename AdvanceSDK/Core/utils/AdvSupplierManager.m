@@ -14,7 +14,7 @@
 #import "AdvModel.h"
 #import "AdvAdsportInfoUtil.h"
 #import "AdvUploadTKUtil.h"
-#import "AdvTrackEventManager.h"
+#import "AdvTrackEventUtil.h"
 @interface AdvSupplierManager ()
 @property (nonatomic, strong) AdvSupplierModel *model;
 
@@ -68,6 +68,11 @@
     // 获取本地数据
     _model = [AdvSupplierModel loadDataWithMediaId:mediaId adspotId:adspotId];
     
+    
+    [[[AdvTrackEventUtil alloc]initUtilWithMediaId:self.mediaId adspotId:self.adspotId] advTrackEventActionWithCase:AdvTrackEventCase_getInfo];
+    
+    
+    
     // 是否实时
     if (!_model.setting.useCache) {
         _model = nil;
@@ -82,6 +87,9 @@
             ADV_LEVEL_INFO_LOG(@"无本地策略");
         }
     }
+    
+    
+    
     
     // model不存在
     if (!_model) {
