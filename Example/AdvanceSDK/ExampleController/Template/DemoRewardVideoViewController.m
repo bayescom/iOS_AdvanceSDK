@@ -38,8 +38,6 @@
 
 - (void)loadAdBtn1Action {
     if (![self checkAdspotId]) { return; }
-//    self.advanceRewardVideo = [[AdvanceRewardVideo alloc] initWithAdspotId:@"11111112"
-//                                                           viewController:self];
 
     self.advanceRewardVideo = [[AdvanceRewardVideo alloc] initWithAdspotId:self.adspotId
                                                            viewController:self];
