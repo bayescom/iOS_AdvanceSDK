@@ -135,6 +135,13 @@
     }
 }
 
+- (void)gdt_rewardVideoAdDidRewardEffective:(GDTRewardVideoAd *)rewardedVideoAd info:(NSDictionary *)info {
+    if ([self.delegate respondsToSelector:@selector(advanceRewardVideoAdDidRewardEffective)]) {
+        [self.delegate advanceRewardVideoAdDidRewardEffective];
+    }
+
+}
+
 /// 视频广告视频播放完成
 - (void)gdt_rewardVideoAdDidPlayFinish:(GDTRewardVideoAd *)rewardedVideoAd {
     if ([self.delegate respondsToSelector:@selector(advanceRewardVideoAdDidPlayFinish)]) {
