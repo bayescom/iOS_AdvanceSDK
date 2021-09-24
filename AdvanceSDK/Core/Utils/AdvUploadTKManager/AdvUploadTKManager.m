@@ -38,7 +38,7 @@ static AdvUploadTKManager *defaultManager = nil;
     });
     return defaultManager;
 }
-//自定义初始化方法，本例中只有name这一属性
+//自定义初始化方法
 - (instancetype)init {
     self = [super init];
     if(self) {

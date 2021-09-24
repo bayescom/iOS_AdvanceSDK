@@ -14,6 +14,7 @@
 #import "AdvModel.h"
 #import "AdvAdsportInfoUtil.h"
 #import "AdvUploadTKUtil.h"
+#import "AdvTrackEventUtil.h"
 @interface AdvSupplierManager ()
 @property (nonatomic, strong) AdvSupplierModel *model;
 
@@ -67,6 +68,9 @@
     // 获取本地数据
     _model = [AdvSupplierModel loadDataWithMediaId:mediaId adspotId:adspotId];
     
+//    ADVTRACK(self.mediaId, self.adspotId, AdvTrackEventCase_getInfo);
+    
+    
     // 是否实时
     if (!_model.setting.useCache) {
         _model = nil;
@@ -81,6 +85,9 @@
             ADV_LEVEL_INFO_LOG(@"无本地策略");
         }
     }
+    
+    
+    
     
     // model不存在
     if (!_model) {
@@ -364,6 +371,7 @@
                                                       completionHandler:^(NSData *_Nullable data, NSURLResponse *_Nullable response, NSError *_Nullable error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             ADV_LEVEL_INFO_LOG(@"请求完成时间戳: %f", [[NSDate date] timeIntervalSince1970]);
+//            ADVTRACK(self.mediaId, self.adspotId, AdvTrackEventCase_getAction);
             [self doResultData:data response:response error:error saveOnly:saveOnly];
         });
     }];

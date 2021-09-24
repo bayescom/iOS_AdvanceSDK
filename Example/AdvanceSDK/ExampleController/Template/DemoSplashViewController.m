@@ -33,7 +33,8 @@
         @{@"addesc": @"haoxueche", @"adspotId": @"101361-10004237"},
         @{@"addesc": @"快手开屏", @"adspotId": @"100255-10004411"},
         @{@"addesc": @"快手开屏", @"adspotId": @"101394-10004333"},
-        @{@"addesc": @"百度", @"adspotId": @"100255-100050001"},
+        @{@"addesc": @"百度", @"adspotId": @"100255-10004242"},
+        @{@"addesc": @"百度", @"adspotId": @"100255-10005076"},
 
     ];
     self.btn1Title = @"加载并显示广告";
@@ -52,9 +53,13 @@
     self.advanceSplash.backgroundImage = [UIImage imageNamed:@"LaunchImage_img"];
     self.advanceSplash.timeout = 5;
     [self.advanceSplash loadAd];
+    
+    [self getInfoAction:@"11144355"];
 
 }
-
+- (void)getInfoAction:(NSString *)nnn {
+    
+}
 // MARK: ======================= AdvanceSplashDelegate =======================
 /// 广告数据拉取成功
 - (void)advanceUnifiedViewDidLoad {

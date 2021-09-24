@@ -17,6 +17,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSMutableDictionary *)getDeviceInfoWithMediaId:(NSString *)mediaId adspotId:(NSString *)adspotId;
 
++ (NSMutableDictionary *)getSDKTrackEventDeviceInfoWithMediaId:(NSString *)mediaId adspotId:(NSString *)adspotId;
+
 @end
 
 NS_ASSUME_NONNULL_END

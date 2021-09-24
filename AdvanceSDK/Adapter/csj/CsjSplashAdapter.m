@@ -237,4 +237,6 @@
     [self deallocAdapter];
 }
 
+
+
 @end
