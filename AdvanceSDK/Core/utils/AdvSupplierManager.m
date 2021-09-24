@@ -68,9 +68,7 @@
     // 获取本地数据
     _model = [AdvSupplierModel loadDataWithMediaId:mediaId adspotId:adspotId];
     
-    
-    [[[AdvTrackEventUtil alloc]initUtilWithMediaId:self.mediaId adspotId:self.adspotId] advTrackEventActionWithCase:AdvTrackEventCase_getInfo];
-    
+//    ADVTRACK(self.mediaId, self.adspotId, AdvTrackEventCase_getInfo);
     
     
     // 是否实时
@@ -373,6 +371,7 @@
                                                       completionHandler:^(NSData *_Nullable data, NSURLResponse *_Nullable response, NSError *_Nullable error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             ADV_LEVEL_INFO_LOG(@"请求完成时间戳: %f", [[NSDate date] timeIntervalSince1970]);
+//            ADVTRACK(self.mediaId, self.adspotId, AdvTrackEventCase_getAction);
             [self doResultData:data response:response error:error saveOnly:saveOnly];
         });
     }];

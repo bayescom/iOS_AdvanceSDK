@@ -10,6 +10,8 @@
 NS_ASSUME_NONNULL_BEGIN
 
 
+#define ADVTRACK(mediaId, adspodId, case) [[[AdvTrackEventUtil alloc]initUtilWithMediaId:mediaId adspotId:adspodId] advTrackEventActionWithCase:case]
+
 @interface AdvTrackEventUtil : NSObject
 - (instancetype)initUtilWithMediaId:(NSString *)mediaId adspotId:(NSString *)adspotId;
 

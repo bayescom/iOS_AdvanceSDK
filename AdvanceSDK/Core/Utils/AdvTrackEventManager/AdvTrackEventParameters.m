@@ -33,6 +33,7 @@
             break;
         case AdvTrackEventCase_getAction:
 
+            [self getData];
             break;
 
         default:
@@ -44,13 +45,23 @@
     NSMutableDictionary *dict = [AdvDeviceInfoUtil getSDKTrackEventDeviceInfoWithMediaId:_mediaId adspotId:_adspotId];
     [dict setObject:@"测试获取信息" forKey:@"msg"];
     [self getInfoAction:dict];
-
 }
 
 - (void)getInfoAction:(NSDictionary *)dict {
     
 }
 
+
+- (void)getData {
+    NSMutableDictionary *dict = [AdvDeviceInfoUtil getSDKTrackEventDeviceInfoWithMediaId:_mediaId adspotId:_adspotId];
+    [dict setObject:@"测试数据拉取" forKey:@"msg"];
+    [self getDataAction:dict];
+}
+
+
+- (void)getDataAction:(NSString *)str {
+    
+}
 
 - (NSString *)convertToJsonData:(NSDictionary *)dict {
     
