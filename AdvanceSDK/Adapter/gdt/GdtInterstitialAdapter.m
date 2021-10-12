@@ -26,9 +26,18 @@
 
 @implementation GdtInterstitialAdapter
 
-- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(AdvanceInterstitial *)adspot {
-    if (self = [super init]) {
-        _adspot = adspot;
+//- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(AdvanceInterstitial *)adspot {
+//    if (self = [super init]) {
+//        _adspot = adspot;
+//        _supplier = supplier;
+//        _gdt_ad = [[GDTUnifiedInterstitialAd alloc] initWithPlacementId:_supplier.adspotid];
+//    }
+//    return self;
+//}
+
+- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(id)adspot {
+    if (self = [super initWithSupplier:supplier adspot:adspot]) {
+        _adspot = (AdvanceInterstitial *)adspot;
         _supplier = supplier;
         _gdt_ad = [[GDTUnifiedInterstitialAd alloc] initWithPlacementId:_supplier.adspotid];
     }
