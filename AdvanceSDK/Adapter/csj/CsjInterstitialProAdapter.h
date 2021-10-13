@@ -5,6 +5,8 @@
 //  Created by MS on 2021/5/20.
 //
 
+
+#import "AdvBaseAdPosition.h"
 #import <Foundation/Foundation.h>
 #import "AdvanceInterstitialDelegate.h"
 
@@ -14,15 +16,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface CsjInterstitialProAdapter : NSObject
+@interface CsjInterstitialProAdapter : AdvBaseAdPosition
 @property (nonatomic, weak) id<AdvanceInterstitialDelegate> delegate;
-@property (nonatomic, assign) NSInteger tag;// 标记并行渠道为了找到响应的adapter
-
-- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(AdvanceInterstitial *)adspot;
-
-- (void)loadAd;
-
-- (void)showAd;
 
 @end
 
