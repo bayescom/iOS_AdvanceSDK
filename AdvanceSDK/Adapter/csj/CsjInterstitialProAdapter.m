@@ -52,6 +52,7 @@
 }
 
 - (void)supplierStateFailed {
+    ADV_LEVEL_INFO_LOG(@"穿山甲 失败");
     [self.adspot loadNextSupplierIfHas];
 }
 
@@ -67,6 +68,10 @@
 
 - (void)dealloc {
     ADVLog(@"%s", __func__);
+}
+
+- (void)deallocAdapter {
+    
 }
 
 
