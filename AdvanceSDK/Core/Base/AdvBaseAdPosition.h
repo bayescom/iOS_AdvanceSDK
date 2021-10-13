@@ -14,6 +14,18 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(id)adspot;
 
+
+// 渠道状态
+- (void)supplierStateSuccess;
+    
+- (void)supplierStateFailed;
+
+- (void)supplierStateInPull;
+
+- (void)supplierStateLoad;
+
+
+
 - (void)loadAd;
 
 - (void)showAd;
