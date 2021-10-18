@@ -27,7 +27,7 @@
 
 - (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(AdvanceInterstitial *)adspot {
     if (self = [super init]) {
-        _adspot = adspot;
+        _adspot = (AdvanceInterstitial *)adspot;
         _supplier = supplier;
         _gdt_ad = [[GDTExpressInterstitialAd alloc] initWithPlacementId:_supplier.adspotid];
     }

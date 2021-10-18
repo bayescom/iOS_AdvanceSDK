@@ -28,7 +28,7 @@
 
 - (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(id)adspot {
     if (self = [super init]) {
-        _adspot = adspot;
+        _adspot = (AdvanceInterstitial *)adspot;
         _supplier = supplier;
         _csj_ad = [[BUNativeExpressInterstitialAd alloc] initWithSlotID:_supplier.adspotid adSize:CGSizeMake(300, 450)];
     }

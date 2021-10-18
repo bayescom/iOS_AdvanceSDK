@@ -25,7 +25,7 @@
 
 - (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(id)adspot {
     if (self = [super init]) {
-        _adspot = adspot;
+        _adspot = (AdvanceInterstitial *)adspot;
         _supplier = supplier;
         
         _csj_ad = [[BUNativeExpressFullscreenVideoAd alloc] initWithSlotID:_supplier.adspotid];
