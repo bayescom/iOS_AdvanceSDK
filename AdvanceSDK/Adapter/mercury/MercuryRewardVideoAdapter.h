@@ -6,6 +6,7 @@
 //  Copyright © 2020 bayescom. All rights reserved.
 //
 
+#import "AdvBaseAdPosition.h"
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "AdvanceRewardVideoDelegate.h"
@@ -15,16 +16,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface MercuryRewardVideoAdapter : NSObject
+@interface MercuryRewardVideoAdapter : AdvBaseAdPosition
 @property (nonatomic, weak) id<AdvanceRewardVideoDelegate> delegate;
-@property (nonatomic, assign) NSInteger tag;// 标记并行渠道为了找到响应的adapter
-
-- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(AdvanceRewardVideo *)adspot;
-- (void)deallocAdapter;
-
-- (void)loadAd;
-
-- (void)showAd;
 
 @end
 
