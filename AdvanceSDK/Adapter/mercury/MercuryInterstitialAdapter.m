@@ -26,7 +26,7 @@
 @implementation MercuryInterstitialAdapter
 
 - (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(id)adspot {
-    if (self = [super init]) {
+    if (self = [super initWithSupplier:supplier adspot:adspot]) {
         _adspot = (AdvanceInterstitial *)adspot;
         _supplier = supplier;
         _mercury_ad = [[MercuryInterstitialAd alloc] initAdWithAdspotId:_supplier.adspotid delegate:self];

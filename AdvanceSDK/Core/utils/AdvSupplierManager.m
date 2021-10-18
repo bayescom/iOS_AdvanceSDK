@@ -184,7 +184,7 @@
         NSInteger currentPriority = currentSupplier.priority;
         
         [self notCPTLoadNextSuppluer:currentSupplier error:nil];
-        
+//        NSLog(@"---!!!>>> %ld", _model.setting.parallelGroup.count);
         if (_model.setting.parallelGroup.count > 0) {
             // 并行执行
             [self parallelActionWithCurrentPriority:currentPriority];

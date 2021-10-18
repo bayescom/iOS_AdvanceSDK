@@ -27,7 +27,7 @@
 @implementation CsjInterstitialAdapter
 
 - (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(id)adspot {
-    if (self = [super init]) {
+    if (self = [super initWithSupplier:supplier adspot:adspot]) {
         _adspot = (AdvanceInterstitial *)adspot;
         _supplier = supplier;
         _csj_ad = [[BUNativeExpressInterstitialAd alloc] initWithSlotID:_supplier.adspotid adSize:CGSizeMake(300, 450)];
@@ -60,6 +60,7 @@
 }
 
 - (void)supplierStateFailed {
+    NSLog(@"失败 失败失败失败失败失败失败失败  %ld", _supplier.priority);
     ADV_LEVEL_INFO_LOG(@"穿山甲 失败");
     [self.adspot loadNextSupplierIfHas];
 }

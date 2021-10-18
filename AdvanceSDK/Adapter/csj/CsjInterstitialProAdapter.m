@@ -24,7 +24,8 @@
 @implementation CsjInterstitialProAdapter
 
 - (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(id)adspot {
-    if (self = [super init]) {
+    if (self = [super initWithSupplier:supplier adspot:adspot]) {
+        NSLog(@"%s %@", __func__, supplier);
         _adspot = (AdvanceInterstitial *)adspot;
         _supplier = supplier;
         
@@ -59,6 +60,7 @@
 
 
 - (void)loadAd {
+    NSLog(@"%s %@", __func__, _supplier);
     [super loadAd];
 }
 

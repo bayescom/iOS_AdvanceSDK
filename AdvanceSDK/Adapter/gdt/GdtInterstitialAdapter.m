@@ -70,7 +70,8 @@
 
 }
 
-- (void)SupplierStateFailed {
+- (void)supplierStateFailed {
+    NSLog(@"广点通 失败失败失败失败失败失败失败  %ld", _supplier.priority);
     ADV_LEVEL_INFO_LOG(@"广点通 失败 %@", _supplier);
     _gdt_ad = nil;
     [self.adspot loadNextSupplierIfHas];

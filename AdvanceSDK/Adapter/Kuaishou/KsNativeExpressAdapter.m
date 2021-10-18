@@ -108,7 +108,6 @@
 
 - (void)feedAdsManager:(KSFeedAdsManager *)adsManager didFailWithError:(NSError *)error {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
-    NSLog(@"---> %@", error);
 }
 
 - (void)feedAdViewWillShow:(KSFeedAd *)feedAd {
