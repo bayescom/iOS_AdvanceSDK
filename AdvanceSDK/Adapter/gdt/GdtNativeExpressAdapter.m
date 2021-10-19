@@ -33,43 +33,51 @@
 
 @implementation GdtNativeExpressAdapter
 
-- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(AdvanceNativeExpress *)adspot {
-    if (self = [super init]) {
+
+- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(id)adspot {
+    if (self = [super initWithSupplier:supplier adspot:adspot]) {
         _adspot = adspot;
         _supplier = supplier;
         _gdt_ad = [[GDTNativeExpressAd alloc] initWithPlacementId:_supplier.adspotid
                                                            adSize:_adspot.adSize];
-
     }
     return self;
 }
 
-- (void)loadAd {
-    int adCount = 1;
-    
-    _gdt_ad.delegate = self;
+- (void)supplierStateLoad {
     ADV_LEVEL_INFO_LOG(@"加载广点通 supplier: %@", _supplier);
-    if (_supplier.state == AdvanceSdkSupplierStateSuccess) {// 并行请求保存的状态 再次轮到该渠道加载的时候 直接show
-        ADV_LEVEL_INFO_LOG(@"广点通 成功");
-        if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdLoadSuccess:)]) {
-            [_delegate advanceNativeExpressOnAdLoadSuccess:self.views];
-        }
-//        [self showAd];
-    } else if (_supplier.state == AdvanceSdkSupplierStateFailed) { //失败的话直接对外抛出回调
-        ADV_LEVEL_INFO_LOG(@"广点通 失败 %@", _supplier);
-        [self.adspot loadNextSupplierIfHas];
-    } else if (_supplier.state == AdvanceSdkSupplierStateInPull) { // 正在请求广告时 什么都不用做等待就行
-        ADV_LEVEL_INFO_LOG(@"广点通 正在加载中");
-    } else {
-        ADV_LEVEL_INFO_LOG(@"广点通 load ad");
-        _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
-        [_gdt_ad loadAd:adCount];;
-    }
+    _gdt_ad.delegate = self;
+    _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
+    [_gdt_ad loadAd:1];
+}
 
+- (void)supplierStateInPull {
+    ADV_LEVEL_INFO_LOG(@"广点通加载中...");
+}
+
+- (void)supplierStateSuccess {
+    ADV_LEVEL_INFO_LOG(@"广点通 成功");
+    if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdLoadSuccess:)]) {
+        [_delegate advanceNativeExpressOnAdLoadSuccess:self.views];
+    }
+}
+
+- (void)supplierStateFailed {
+    ADV_LEVEL_INFO_LOG(@"广点通 失败");
+    [self.adspot loadNextSupplierIfHas];
+}
+
+
+- (void)loadAd {
+    [super loadAd];
+}
+
+- (void)deallocAdapter {
+    
 }
 
 - (void)dealloc {
-    ADVLog(@"%s", __func__);
+
 }
 
 // MARK: ======================= GDTNativeExpressAdDelegete =======================
