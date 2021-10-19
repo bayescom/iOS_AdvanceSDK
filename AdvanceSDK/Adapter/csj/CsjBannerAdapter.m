@@ -25,8 +25,8 @@
 
 @implementation CsjBannerAdapter
 
-- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(AdvanceBanner *)adspot {
-    if (self = [super init]) {
+- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(id)adspot {
+    if (self = [super initWithSupplier:supplier adspot:adspot]) {
         _adspot = adspot;
         _supplier = supplier;
     }
@@ -34,7 +34,7 @@
 }
 
 - (void)loadAd {
-    _csj_ad = [[BUNativeExpressBannerView alloc] initWithSlotID:_supplier.adspotid rootViewController:_adspot.viewController adSize:_adspot.adContainer.bounds.size IsSupportDeepLink:YES interval:_adspot.refreshInterval];
+    _csj_ad = [[BUNativeExpressBannerView alloc] initWithSlotID:_supplier.adspotid rootViewController:_adspot.viewController adSize:_adspot.adContainer.bounds.size interval:_adspot.refreshInterval];
     _csj_ad.frame = _adspot.adContainer.bounds;
     _csj_ad.delegate = self;
     [_adspot.adContainer addSubview:_csj_ad];
