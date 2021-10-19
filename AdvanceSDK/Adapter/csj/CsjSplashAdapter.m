@@ -26,8 +26,9 @@
 @end
 
 @implementation CsjSplashAdapter
-- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(AdvanceSplash *)adspot {
-    if (self = [super init]) {
+
+- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(id)adspot {
+    if (self = [super initWithSupplier:supplier adspot:adspot]) {
         _adspot = adspot;
         _supplier = supplier;
         CGRect adFrame = [UIApplication sharedApplication].keyWindow.bounds;
@@ -38,13 +39,12 @@
             adFrame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height-real_h);
         }
         _csj_ad = [[BUSplashAdView alloc] initWithSlotID:_supplier.adspotid frame:adFrame];
-
     }
     return self;
 }
 
-- (void)loadAd {
-    
+- (void)supplierStateLoad {
+    ADV_LEVEL_INFO_LOG(@"加载穿山甲 supplier: %@", _supplier);
     if (self.adspot.timeout) {
         if (self.adspot.timeout > 500) {
             _csj_ad.tolerateTimeout = _adspot.timeout / 1000.0;
@@ -52,27 +52,34 @@
     }
 
     _csj_ad.delegate = self;
-    
-    ADV_LEVEL_INFO_LOG(@"加载穿山甲 supplier: %@ -- %ld", _supplier, (long)_supplier.priority);
-    if (_supplier.state == AdvanceSdkSupplierStateSuccess) {// 并行请求保存的状态 再次轮到该渠道加载的时候 直接show
-        ADV_LEVEL_INFO_LOG(@"穿山甲 成功");
-        if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
-            [self.delegate advanceUnifiedViewDidLoad];
-        }
-        [self showAd];
-    } else if (_supplier.state == AdvanceSdkSupplierStateFailed) { //失败的话直接对外抛出回调
-        ADV_LEVEL_INFO_LOG(@"穿山甲 失败");
-        [self.adspot loadNextSupplierIfHas];
-        [self deallocAdapter];
-    } else if (_supplier.state == AdvanceSdkSupplierStateInPull) { // 正在请求广告时 什么都不用做等待就行
-        ADV_LEVEL_INFO_LOG(@"穿山甲 正在加载中");
-    } else {
-        ADV_LEVEL_INFO_LOG(@"穿山甲 load ad");
-        _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
-        [self.csj_ad loadAdData];
+    _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
+    [self.csj_ad loadAdData];
+
+}
+
+- (void)supplierStateInPull {
+    ADV_LEVEL_INFO_LOG(@"穿山甲加载中...");
+}
+
+- (void)supplierStateSuccess {
+    ADV_LEVEL_INFO_LOG(@"穿山甲 成功");
+    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
+        [self.delegate advanceUnifiedViewDidLoad];
     }
+    [self showAd];
+    
+}
+
+- (void)supplierStateFailed {
+    ADV_LEVEL_INFO_LOG(@"穿山甲 失败");
+    [self.adspot loadNextSupplierIfHas];
+    [self deallocAdapter];
+}
 
 
+- (void)loadAd {
+    [super loadAd];
+    
 /*
     // ABCDEFGH  ACF BE DH G
     
