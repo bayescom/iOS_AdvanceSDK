@@ -93,47 +93,17 @@
     
     
     ADVLog(@"%@ | %@", supplier.name, clsName);
-
+    
     if (NSClassFromString(clsName)) {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wundeclared-selector"
-        // 1. 如果是并行渠道, 则生成一个adapter并标记渠道
-        // 2. 将生成的adapter 存储到容器中保持其广告加载的流程
-        // 3. 等到串行队列执行到该渠道的时候 直接载入这个adapter的加载流程里
-        if (supplier.isParallel) {
-            id adapter = ((id (*)(id, SEL, id, id))objc_msgSend)((id)[NSClassFromString(clsName) alloc], @selector(initWithSupplier:adspot:), supplier, self);
-            // 标记当前的adapter 为了让当串行执行到的时候 获取这个adapter
-            // 没有设置代理
-            ((void (*)(id, SEL, id))objc_msgSend)((id)adapter, @selector(setAdspotid:), supplier.adspotid);
-            ((void (*)(id, SEL))objc_msgSend)((id)adapter, @selector(loadAd));
-//            ADVLog(@"并行: %@", adapter);
-
-            if (adapter) {
-                // 存储并行的adapter
-                [self.arrParallelSupplier addObject:adapter];
-            }
-
-        } else {
-            // 1. 先移除上一个失败的渠道
-            // 2. 先看看当前执行的串行渠道 是不是之前的并行渠道
-            // 3. 如果不是之前的并行渠道 则为 其他串行渠道
-            // 4. 如果是之前的并行渠道, 直接载入
-            _adapter = [self adapterInParallelsWithSupplier:supplier];
-            if (!_adapter) {
-                _adapter = ((id (*)(id, SEL, id, id))objc_msgSend)((id)[NSClassFromString(clsName) alloc], @selector(initWithSupplier:adspot:), supplier, self);
-            }
-//            ADVLog(@"串行 %@", _adapter);
-            // 设置代理
-            ((void (*)(id, SEL, id))objc_msgSend)((id)_adapter, @selector(setDelegate:), _delegate);
-            ((void (*)(id, SEL))objc_msgSend)((id)_adapter, @selector(loadAd));
-        }
-//        _adapter = ((id (*)(id, SEL, id, id))objc_msgSend)((id)[NSClassFromString(clsName) alloc], @selector(initWithSupplier:adspot:), supplier, self);
-//        ((void (*)(id, SEL, id))objc_msgSend)((id)_adapter, @selector(setDelegate:), _delegate);
-//        ((void (*)(id, SEL))objc_msgSend)((id)_adapter, @selector(loadAd));
+        _adapter = ((id (*)(id, SEL, id, id))objc_msgSend)((id)[NSClassFromString(clsName) alloc], @selector(initWithSupplier:adspot:), supplier, self);
+        ((void (*)(id, SEL, id))objc_msgSend)((id)_adapter, @selector(setDelegate:), _delegate);
+        ((void (*)(id, SEL))objc_msgSend)((id)_adapter, @selector(loadAd));
 #pragma clang diagnostic pop
     } else {
         NSString *msg = [NSString stringWithFormat:@"%@ 不存在", clsName];
-//        ADVLog(@"%@", msg);
+        //        ADVLog(@"%@", msg);
         [self loadNextSupplierIfHas];
     }
 }
