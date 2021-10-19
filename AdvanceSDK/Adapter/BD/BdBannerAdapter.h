@@ -4,7 +4,7 @@
 //
 //  Created by MS on 2021/5/28.
 //
-
+#import "AdvBaseAdPosition.h"
 #import <Foundation/Foundation.h>
 #import "AdvanceBannerDelegate.h"
 
@@ -13,14 +13,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface BdBannerAdapter : NSObject
-@property (nonatomic, copy) NSString *adspotid;// 标记并行渠道为了找到响应的adapter
-
+@interface BdBannerAdapter : AdvBaseAdPosition
 @property (nonatomic, weak) id<AdvanceBannerDelegate> delegate;
-
-- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(AdvanceBanner *)adspot;
-
-- (void)loadAd;
 
 @end
 
