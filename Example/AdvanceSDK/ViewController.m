@@ -51,6 +51,11 @@
     UILabel *vLbl = [[UILabel alloc] initWithFrame:CGRectZero];
     vLbl.textAlignment = NSTextAlignmentCenter;
     
+    if (@available(iOS 15.0, *)) {
+        self.tableView.sectionHeaderTopPadding = 0;
+    }
+
+    
     [_tableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.mas_equalTo(0);
     }];

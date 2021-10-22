@@ -35,6 +35,15 @@
     
     UIBarButtonItem *settingItem = [[UIBarButtonItem alloc] initWithTitle:@"隐藏键盘" style:UIBarButtonItemStylePlain target:__txtF01 action:@selector(resignFirstResponder)];
     self.navigationItem.rightBarButtonItem = settingItem;
+    
+    if (@available(iOS 15.0, *)) {
+        UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
+        appearance.backgroundEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleRegular];
+        self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
+        self.navigationController.navigationBar.standardAppearance = appearance;
+    }
+
+
 }
 
 
