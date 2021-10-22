@@ -7,22 +7,15 @@
 
 #import <Foundation/Foundation.h>
 #import "AdvanceRewardVideoDelegate.h"
+#import "AdvBaseAdPosition.h"
 
 @class AdvSupplier;
 @class AdvanceRewardVideo;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface BdRewardVideoAdapter : NSObject
+@interface BdRewardVideoAdapter : AdvBaseAdPosition
 @property (nonatomic, weak) id<AdvanceRewardVideoDelegate> delegate;
-@property (nonatomic, assign) NSInteger tag;// 标记并行渠道为了找到响应的adapter
-
-- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(AdvanceRewardVideo *)adspot;
-- (void)deallocAdapter;
-
-- (void)loadAd;
-
-- (void)showAd;
 
 @end
 

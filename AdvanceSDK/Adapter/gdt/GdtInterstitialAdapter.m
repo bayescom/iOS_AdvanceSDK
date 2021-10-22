@@ -26,13 +26,62 @@
 
 @implementation GdtInterstitialAdapter
 
-- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(AdvanceInterstitial *)adspot {
-    if (self = [super init]) {
-        _adspot = adspot;
+//- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(AdvanceInterstitial *)adspot {
+//    if (self = [super init]) {
+//        _adspot = adspot;
+//        _supplier = supplier;
+//        _gdt_ad = [[GDTUnifiedInterstitialAd alloc] initWithPlacementId:_supplier.adspotid];
+//    }
+//    return self;
+//}
+
+- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(id)adspot {
+    if (self = [super initWithSupplier:supplier adspot:adspot]) {
+        _adspot = (AdvanceInterstitial *)adspot;
         _supplier = supplier;
         _gdt_ad = [[GDTUnifiedInterstitialAd alloc] initWithPlacementId:_supplier.adspotid];
     }
     return self;
+}
+
+
+- (void)loadAd {
+    ADV_LEVEL_INFO_LOG(@"加载广点通 supplier: %@", _supplier);
+    [super loadAd];
+}
+
+- (void)supplierStateLoad {
+    ADV_LEVEL_INFO_LOG(@"广点通 load ad");
+    _gdt_ad.delegate = self;
+    _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
+    [_gdt_ad loadAd];
+
+}
+
+- (void)supplierStateInPull {
+    ADV_LEVEL_INFO_LOG(@"广点通 正在加载中");
+}
+
+- (void)supplierStateSuccess {
+    ADV_LEVEL_INFO_LOG(@"广点通 成功");
+    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
+        [self.delegate advanceUnifiedViewDidLoad];
+    }
+
+}
+
+- (void)supplierStateFailed {
+    NSLog(@"广点通 失败失败失败失败失败失败失败  %ld", _supplier.priority);
+    ADV_LEVEL_INFO_LOG(@"广点通 失败 %@", _supplier);
+    _gdt_ad = nil;
+    [self.adspot loadNextSupplierIfHas];
+}
+
+
+
+
+- (void)showAd {
+    [_gdt_ad presentAdFromRootViewController:_adspot.viewController];
 }
 
 - (void)deallocAdapter {
@@ -40,31 +89,6 @@
 }
 
 
-- (void)loadAd {
-    _gdt_ad.delegate = self;
-    ADV_LEVEL_INFO_LOG(@"加载观点通 supplier: %@", _supplier);
-    if (_supplier.state == AdvanceSdkSupplierStateSuccess) {// 并行请求保存的状态 再次轮到该渠道加载的时候 直接show
-        ADV_LEVEL_INFO_LOG(@"广点通 成功");
-        if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
-            [self.delegate advanceUnifiedViewDidLoad];
-        }
-//        [self showAd];
-    } else if (_supplier.state == AdvanceSdkSupplierStateFailed) { //失败的话直接对外抛出回调
-        ADV_LEVEL_INFO_LOG(@"广点通 失败 %@", _supplier);
-        _gdt_ad = nil;
-        [self.adspot loadNextSupplierIfHas];
-    } else if (_supplier.state == AdvanceSdkSupplierStateInPull) { // 正在请求广告时 什么都不用做等待就行
-        ADV_LEVEL_INFO_LOG(@"广点通 正在加载中");
-    } else {
-        ADV_LEVEL_INFO_LOG(@"广点通 load ad");
-        _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
-        [_gdt_ad loadAd];
-    }
-}
-
-- (void)showAd {
-    [_gdt_ad presentAdFromRootViewController:_adspot.viewController];
-}
 
 - (void)dealloc {
     ADVLog(@"%s", __func__);

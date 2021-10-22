@@ -6,6 +6,7 @@
 //  Copyright © 2020 bayescom. All rights reserved.
 //
 
+#import "AdvBaseAdPosition.h"
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "AdvanceBannerDelegate.h"
@@ -15,14 +16,9 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface CsjBannerAdapter : NSObject
-@property (nonatomic, copy)   NSString *adspotid;// 标记并行渠道为了找到响应的adapter
+@interface CsjBannerAdapter : AdvBaseAdPosition
 
 @property (nonatomic, weak) id<AdvanceBannerDelegate> delegate;
-
-- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(AdvanceBanner *)adspot;
-
-- (void)loadAd;
 
 @end
 

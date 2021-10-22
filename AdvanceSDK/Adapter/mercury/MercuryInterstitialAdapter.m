@@ -25,12 +25,11 @@
 
 @implementation MercuryInterstitialAdapter
 
-- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(AdvanceInterstitial *)adspot {
-    if (self = [super init]) {
-        _adspot = adspot;
+- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(id)adspot {
+    if (self = [super initWithSupplier:supplier adspot:adspot]) {
+        _adspot = (AdvanceInterstitial *)adspot;
         _supplier = supplier;
         _mercury_ad = [[MercuryInterstitialAd alloc] initAdWithAdspotId:_supplier.adspotid delegate:self];
-
     }
     return self;
 }
@@ -40,24 +39,30 @@
 }
 
 
-- (void)loadAd {
-//    ADVLog(@"加载Mercury supplier: %@", _supplier);
-    if (_supplier.state == AdvanceSdkSupplierStateSuccess) {// 并行请求保存的状态 再次轮到该渠道加载的时候 直接show
-//        ADVLog(@"Mercury 成功");
-        if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
-            [self.delegate advanceUnifiedViewDidLoad];
-        }
-//        [self showAd];
-    } else if (_supplier.state == AdvanceSdkSupplierStateFailed) { //失败的话直接对外抛出回调
-//        ADVLog(@"Mercury 失败 %@", _supplier);
-        [self.adspot loadNextSupplierIfHas];
-    } else if (_supplier.state == AdvanceSdkSupplierStateInPull) { // 正在请求广告时 什么都不用做等待就行
-//        ADVLog(@"Mercury 正在加载中");
-    } else {
-//        ADVLog(@"Mercury load ad");
-        _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
-        [_mercury_ad loadAd];
+- (void)supplierStateLoad {
+    ADV_LEVEL_INFO_LOG(@"加载Mercury supplier: %@", _supplier);
+    _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
+    [_mercury_ad loadAd];
+}
+
+- (void)supplierStateInPull {
+    ADV_LEVEL_INFO_LOG(@"Mercury加载中...");
+}
+
+- (void)supplierStateSuccess {
+    ADV_LEVEL_INFO_LOG(@"Mercury 成功");
+    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
+        [self.delegate advanceUnifiedViewDidLoad];
     }
+}
+
+- (void)supplierStateFailed {
+    ADV_LEVEL_INFO_LOG(@"Mercury 失败");
+    [self.adspot loadNextSupplierIfHas];
+}
+
+- (void)loadAd {
+    [super loadAd];
 
 }
 

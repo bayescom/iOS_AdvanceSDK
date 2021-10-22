@@ -24,8 +24,8 @@
 
 @implementation MercuryRewardVideoAdapter
 
-- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(AdvanceRewardVideo *)adspot {
-    if (self = [super init]) {
+- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(id)adspot {
+    if (self = [super initWithSupplier:supplier adspot:adspot]) {
         _adspot = adspot;
         _supplier = supplier;
         _mercury_ad = [[MercuryRewardVideoAd alloc] initAdWithAdspotId:_supplier.adspotid delegate:self];
@@ -34,26 +34,32 @@
     return self;
 }
 
-- (void)loadAd {
-    
-//    ADVLog(@"加载观点通 supplier: %@", _supplier);
-    if (_supplier.state == AdvanceSdkSupplierStateSuccess) {// 并行请求保存的状态 再次轮到该渠道加载的时候 直接show
-//        ADVLog(@"广点通 成功");
-        if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
-            [self.delegate advanceUnifiedViewDidLoad];
-        }
-//        [self showAd];
-    } else if (_supplier.state == AdvanceSdkSupplierStateFailed) { //失败的话直接对外抛出回调
-//        ADVLog(@"广点通 失败 %@", _supplier);
-        [self.adspot loadNextSupplierIfHas];
-    } else if (_supplier.state == AdvanceSdkSupplierStateInPull) { // 正在请求广告时 什么都不用做等待就行
-//        ADVLog(@"广点通 正在加载中");
-    } else {
-//        ADVLog(@"广点通 load ad");
-        [_mercury_ad loadRewardVideoAd];
-        _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
-    }
+- (void)supplierStateLoad {
+    ADV_LEVEL_INFO_LOG(@"加载Mercury supplier: %@", _supplier);
+    [_mercury_ad loadRewardVideoAd];
+    _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
+}
 
+- (void)supplierStateInPull {
+    ADV_LEVEL_INFO_LOG(@"穿山甲Mercury...");
+}
+
+- (void)supplierStateSuccess {
+    ADV_LEVEL_INFO_LOG(@"Mercury 成功");
+    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
+        [self.delegate advanceUnifiedViewDidLoad];
+    }
+}
+
+- (void)supplierStateFailed {
+    ADV_LEVEL_INFO_LOG(@"Mercury 失败");
+    [self.adspot loadNextSupplierIfHas];
+}
+
+
+- (void)loadAd {
+    [super loadAd];
+    
 }
 
 - (void)showAd {

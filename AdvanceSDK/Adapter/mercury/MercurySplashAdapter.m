@@ -29,8 +29,9 @@
 @end
 
 @implementation MercurySplashAdapter
-- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(AdvanceSplash *)adspot {
-    if ([self init]) {
+
+- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(id)adspot {
+    if (self = [super initWithSupplier:supplier adspot:adspot]) {
         _adspot = adspot;
         _supplier = supplier;
     }

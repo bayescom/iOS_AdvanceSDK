@@ -29,8 +29,9 @@
 @end
 
 @implementation BdNativeExpressAdapter
-- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(AdvanceNativeExpress *)adspot {
-    if (self = [super init]) {
+
+- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(id)adspot {
+    if (self = [super initWithSupplier:supplier adspot:adspot]) {
         _adspot = adspot;
         _supplier = supplier;
         _bd_ad = [[BaiduMobAdNative alloc] init];
@@ -42,27 +43,35 @@
     return self;
 }
 
-- (void)loadAd {
-    int adCount = 1;
-    
+- (void)supplierStateLoad {
     ADV_LEVEL_INFO_LOG(@"加载百度 supplier: %@", _supplier);
-    if (_supplier.state == AdvanceSdkSupplierStateSuccess) {// 并行请求保存的状态 再次轮到该渠道加载的时候 直接show
-        ADV_LEVEL_INFO_LOG(@"广点通 成功");
-        if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdLoadSuccess:)]) {
-            [_delegate advanceNativeExpressOnAdLoadSuccess:self.views];
-        }
-//        [self showAd];
-    } else if (_supplier.state == AdvanceSdkSupplierStateFailed) { //失败的话直接对外抛出回调
-        ADV_LEVEL_INFO_LOG(@"广点通 失败 %@", _supplier);
-        [self.adspot loadNextSupplierIfHas];
-    } else if (_supplier.state == AdvanceSdkSupplierStateInPull) { // 正在请求广告时 什么都不用做等待就行
-        ADV_LEVEL_INFO_LOG(@"广点通 正在加载中");
-    } else {
-        ADV_LEVEL_INFO_LOG(@"广点通 load ad");
-        _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
-        [_bd_ad requestNativeAds];
-    }
+    _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
+    [_bd_ad requestNativeAds];
+}
 
+- (void)supplierStateInPull {
+    ADV_LEVEL_INFO_LOG(@"百度加载中...");
+}
+
+- (void)supplierStateSuccess {
+    ADV_LEVEL_INFO_LOG(@"百度 成功");
+    if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdLoadSuccess:)]) {
+        [_delegate advanceNativeExpressOnAdLoadSuccess:self.views];
+    }
+}
+
+- (void)supplierStateFailed {
+    ADV_LEVEL_INFO_LOG(@"百度 失败");
+    [self.adspot loadNextSupplierIfHas];
+}
+
+
+- (void)loadAd {
+    [super loadAd];
+}
+
+- (void)deallocAdapter {
+    
 }
 
 - (void)dealloc {

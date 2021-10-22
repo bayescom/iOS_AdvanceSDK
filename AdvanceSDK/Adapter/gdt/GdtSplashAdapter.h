@@ -6,6 +6,7 @@
 //  Copyright © 2020 Gdt. All rights reserved.
 //
 
+#import "AdvBaseAdPosition.h"
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "AdvanceSplashDelegate.h"
@@ -15,14 +16,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface GdtSplashAdapter : NSObject
-@property (nonatomic, assign) NSInteger tag;// 标记并行渠道为了找到响应的adapter
-
+@interface GdtSplashAdapter : AdvBaseAdPosition
 @property (nonatomic, weak) id<AdvanceSplashDelegate> delegate;
-
-- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(AdvanceSplash *)adspot;
-
-- (void)loadAd;
 
 @end
 

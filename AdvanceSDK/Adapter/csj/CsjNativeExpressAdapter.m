@@ -26,8 +26,8 @@
 
 @implementation CsjNativeExpressAdapter
 
-- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(AdvanceNativeExpress *)adspot; {
-    if (self = [super init]) {
+- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(id)adspot {
+    if (self = [super initWithSupplier:supplier adspot:adspot]) {
         _adspot = adspot;
         _supplier = supplier;
         
@@ -42,34 +42,40 @@
     return self;
 }
 
-- (void)loadAd {
-    int adCount = 1;
-
+- (void)supplierStateLoad {
+    ADV_LEVEL_INFO_LOG(@"加载穿山甲 supplier: %@", _supplier);
     _csj_ad.delegate = self;
-//    NSLog(@"加载穿山甲 supplier: %@ -- %ld", _supplier, (long)_supplier.priority);
-    ADV_LEVEL_INFO_LOG(@"加载穿山甲");
-    if (_supplier.state == AdvanceSdkSupplierStateSuccess) {// 并行请求保存的状态 再次轮到该渠道加载的时候 直接show
-        ADV_LEVEL_INFO_LOG(@"穿山甲 成功");
-        if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdLoadSuccess:)]) {
-            [_delegate advanceNativeExpressOnAdLoadSuccess:self.views];
-        }
-//        [self showAd];
-    } else if (_supplier.state == AdvanceSdkSupplierStateFailed) { //失败的话直接对外抛出回调
-        ADV_LEVEL_INFO_LOG(@"穿山甲 失败");
-        [self.adspot loadNextSupplierIfHas];
-    } else if (_supplier.state == AdvanceSdkSupplierStateInPull) { // 正在请求广告时 什么都不用做等待就行
-        ADV_LEVEL_INFO_LOG(@"穿山甲 正在加载中");
-    } else {
-        ADV_LEVEL_INFO_LOG(@"穿山甲 load ad");
-        _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
-        [_csj_ad loadAdDataWithCount:adCount];
-    }
+    _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
+    [_csj_ad loadAdDataWithCount:1];
+}
 
+- (void)supplierStateInPull {
+    ADV_LEVEL_INFO_LOG(@"穿山甲加载中...");
+}
+
+- (void)supplierStateSuccess {
+    ADV_LEVEL_INFO_LOG(@"穿山甲 成功");
+    if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdLoadSuccess:)]) {
+        [_delegate advanceNativeExpressOnAdLoadSuccess:self.views];
+    }
+}
+
+- (void)supplierStateFailed {
+    ADV_LEVEL_INFO_LOG(@"穿山甲 失败");
+    [self.adspot loadNextSupplierIfHas];
+}
+
+
+- (void)loadAd {
+    [super loadAd];
+}
+
+- (void)deallocAdapter {
     
 }
 
 - (void)dealloc {
-    ADVLog(@"%s", __func__);
+    ADV_LEVEL_INFO_LOG(@"%s", __func__);
 }
 
 // MARK: ======================= BUNativeExpressAdViewDelegate =======================

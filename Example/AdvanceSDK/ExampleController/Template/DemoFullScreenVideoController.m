@@ -30,7 +30,7 @@
         @{@"addesc": @"Mock 渠道错误", @"adspotId": @"100255-10000001"},
         @{@"addesc": @"Mock code200", @"adspotId": @"100255-10003321"},
         @{@"addesc": @"Mock code200", @"adspotId": @"100255-10004674"},
-        @{@"addesc": @"Mock code200", @"adspotId": @"100255-100070001"},
+        @{@"addesc": @"Mock code200", @"adspotId": @"100255-10008001"},
     ];
     self.btn1Title = @"加载广告";
     self.btn2Title = @"显示广告";

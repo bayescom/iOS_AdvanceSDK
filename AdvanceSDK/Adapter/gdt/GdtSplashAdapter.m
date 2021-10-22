@@ -31,8 +31,8 @@
 
 @implementation GdtSplashAdapter
 
-- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(AdvanceSplash *)adspot {
-    if (self = [super init]) {
+- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(id)adspot {
+    if (self = [super initWithSupplier:supplier adspot:adspot]) {
         _adspot = adspot;
         _supplier = supplier;
         _leftTime = 5;  // 默认5s
@@ -41,40 +41,47 @@
     return self;
 }
 
-- (void)loadAd {
-
+- (void)supplierStateLoad {
+    ADV_LEVEL_INFO_LOG(@"加载广点通 supplier: %@", _supplier);
     if (!_gdt_ad) {
-        [self deallocAdapter];
         return;
     }
+    _adspot.viewController.modalPresentationStyle = 0;
+    // 设置 backgroundImage
+    _gdt_ad.backgroundImage = _adspot.backgroundImage;
     _gdt_ad.delegate = self;
     if (self.adspot.timeout) {
         if (self.adspot.timeout > 500) {
             _gdt_ad.fetchDelay = _adspot.timeout / 1000.0;
         }
     }
-    _adspot.viewController.modalPresentationStyle = 0;
-    // 设置 backgroundImage
-    _gdt_ad.backgroundImage = _adspot.backgroundImage;
-//    ADV_LEVEL_INFO_LOG(@"加载广点通 supplier: %@", _supplier);
-    if (_supplier.state == AdvanceSdkSupplierStateSuccess) {// 并行请求保存的状态 再次轮到该渠道加载的时候 直接show
-//        ADV_LEVEL_INFO_LOG(@"广点通 成功");
-        if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
-            [self.delegate advanceUnifiedViewDidLoad];
-        }
-        [self showAd];
-    } else if (_supplier.state == AdvanceSdkSupplierStateFailed) { //失败的话直接对外抛出回调
-//        ADV_LEVEL_INFO_LOG(@"广点通 失败 %@", _supplier);
-        [self.adspot loadNextSupplierIfHas];
-        [self deallocAdapter];
-    } else if (_supplier.state == AdvanceSdkSupplierStateInPull) { // 正在请求广告时 什么都不用做等待就行
-//        ADV_LEVEL_INFO_LOG(@"广点通 正在加载中");
-    } else {
-//        ADV_LEVEL_INFO_LOG(@"广点通 load ad");
-        _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
-        [_gdt_ad loadAd];
-    }
+    _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
+    [_gdt_ad loadAd];
 
+}
+
+- (void)supplierStateInPull {
+    ADV_LEVEL_INFO_LOG(@"广点通加载中...");
+}
+
+- (void)supplierStateSuccess {
+    ADV_LEVEL_INFO_LOG(@"广点通 成功");
+    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
+        [self.delegate advanceUnifiedViewDidLoad];
+    }
+    [self showAd];
+    
+}
+
+- (void)supplierStateFailed {
+    ADV_LEVEL_INFO_LOG(@"广点通 失败");
+    [self.adspot loadNextSupplierIfHas];
+    [self deallocAdapter];
+}
+
+
+- (void)loadAd {
+    [super loadAd];
 }
 
 // MARK: ======================= GDTSplashAdDelegate =======================
@@ -82,7 +89,7 @@
 }
 
 - (void)deallocAdapter {
-//    _gdt_ad = nil;
+    _gdt_ad = nil;
 }
 
 - (void)showAd {

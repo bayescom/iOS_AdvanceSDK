@@ -20,8 +20,9 @@
 
 @end
 @implementation BdBannerAdapter
-- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(AdvanceBanner *)adspot {
-    if (self = [super init]) {
+
+- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(id)adspot {
+    if (self = [super initWithSupplier:supplier adspot:adspot]) {
         _adspot = adspot;
         _supplier = supplier;
     }

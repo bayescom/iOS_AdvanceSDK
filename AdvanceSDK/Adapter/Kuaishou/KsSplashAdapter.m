@@ -33,8 +33,9 @@
 @end
 
 @implementation KsSplashAdapter
-- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(AdvanceSplash *)adspot {
-    if (self = [super init]) {
+
+- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(id)adspot {
+    if (self = [super initWithSupplier:supplier adspot:adspot]) {
         _adspot = adspot;
         _supplier = supplier;
         _leftTime = 5;  // 默认5s
@@ -43,37 +44,47 @@
     return self;
 }
 
-- (void)loadAd {
-
+- (void)supplierStateLoad {
+    ADV_LEVEL_INFO_LOG(@"加载穿山甲 supplier: %@", _supplier);
     
-//    ADVLog(@"加载快手 supplier: %@", _supplier);
-
-    if (_supplier.state == AdvanceSdkSupplierStateSuccess) {// 并行请求保存的状态 再次轮到该渠道加载的时候 直接show
-//        ADVLog(@"快手 成功");
-        [self showAd];
-    } else if (_supplier.state == AdvanceSdkSupplierStateFailed) { //失败的话直接对外抛出回调
-//        ADVLog(@"快手 失败 %@", _supplier);
-        [self.adspot loadNextSupplierIfHas];
-        [self deallocAdapter];
-    } else if (_supplier.state == AdvanceSdkSupplierStateInPull) { // 正在请求广告时 什么都不用做等待就行
-//        ADVLog(@"快手 正在加载中");
-    } else {
-//        ADVLog(@"快手 load ad %@", _supplier.adspotid);
-        _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
-        NSInteger timeout = 5;
-        if (self.adspot.timeout) {
-            if (self.adspot.timeout > 500) {
-                timeout = self.adspot.timeout / 1000.0;
-            }
+    _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
+    NSInteger timeout = 5;
+    if (self.adspot.timeout) {
+        if (self.adspot.timeout > 500) {
+            timeout = self.adspot.timeout / 1000.0;
         }
-
-        _ks_ad.delegate = self;
-        _ks_ad.needShowMiniWindow = NO;
-        _ks_ad.rootViewController = _adspot.viewController;
-        _ks_ad.timeoutInterval = timeout;
-        [_ks_ad loadAdData];
     }
 
+    _ks_ad.delegate = self;
+    _ks_ad.needShowMiniWindow = NO;
+    _ks_ad.rootViewController = _adspot.viewController;
+    _ks_ad.timeoutInterval = timeout;
+    [_ks_ad loadAdData];
+
+}
+
+- (void)supplierStateInPull {
+    ADV_LEVEL_INFO_LOG(@"穿山甲加载中...");
+}
+
+- (void)supplierStateSuccess {
+    ADV_LEVEL_INFO_LOG(@"穿山甲 成功");
+    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
+        [self.delegate advanceUnifiedViewDidLoad];
+    }
+    [self showAd];
+    
+}
+
+- (void)supplierStateFailed {
+    ADV_LEVEL_INFO_LOG(@"穿山甲 失败");
+    [self.adspot loadNextSupplierIfHas];
+    [self deallocAdapter];
+}
+
+
+- (void)loadAd {
+    [super loadAd];
 }
 
 - (void)deallocAdapter {
@@ -90,12 +101,12 @@
  */
 - (void)ksad_splashAdDidLoad:(KSSplashAdView *)splashAdView {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
-    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
-        [self.delegate advanceUnifiedViewDidLoad];
-    }
     if (_supplier.isParallel == YES) {
         _supplier.state = AdvanceSdkSupplierStateSuccess;
         return;
+    }
+    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
+        [self.delegate advanceUnifiedViewDidLoad];
     }
     [self showAd];
 
