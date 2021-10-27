@@ -17,7 +17,6 @@
 
 - (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(id)adspot {
     if (self = [super init]) {
-        NSLog(@"%s  %@",__func__, _supplier);
         _supplier = supplier;
     }
     return self;
@@ -28,24 +27,23 @@
 - (void)loadAd {
 
     if (!_supplier) {
-        NSLog(@"渠道地址为空 日了狗了");
         return;
     }
-    NSLog(@"基类load情况 %ld  %ld %@", _supplier.priority, _supplier.state, _supplier );
+//    NSLog(@"基类load情况 %ld  %ld %@", _supplier.priority, _supplier.state, _supplier );
     if (_supplier.state == AdvanceSdkSupplierStateSuccess) {// 并行请求保存的状态 再次轮到该渠道加载的时候 直接show
-        NSLog(@"基类成功啦 %ld", _supplier.priority);
+//        NSLog(@"基类成功啦 %ld", _supplier.priority);
         [self supplierStateSuccess];
 
     } else if (_supplier.state == AdvanceSdkSupplierStateFailed) { //失败的话直接对外抛出回调
-        NSLog(@"基类失败啦 %ld", _supplier.priority);
+//        NSLog(@"基类失败啦 %ld", _supplier.priority);
         [self supplierStateFailed];
 
     } else if (_supplier.state == AdvanceSdkSupplierStateInPull) { // 正在请求广告时 什么都不用做等待就行
-        NSLog(@"基类请求中啦 %ld", _supplier.priority);
+//        NSLog(@"基类请求中啦 %ld", _supplier.priority);
         [self supplierStateInPull];
 
     } else {
-        NSLog(@"基类请load %ld", _supplier.priority);
+//        NSLog(@"基类请load %ld", _supplier.priority);
         [self supplierStateLoad];
     }
 

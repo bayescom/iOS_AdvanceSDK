@@ -1,44 +1,43 @@
 PODS:
-  - Ads-CN (3.8.1.0):
-    - Ads-CN/BUAdSDK (= 3.8.1.0)
-  - Ads-CN/BUAdSDK (3.8.1.0):
+  - Ads-CN (4.0.0.5):
+    - Ads-CN/BUAdSDK (= 4.0.0.5)
+  - Ads-CN/BUAdSDK (4.0.0.5):
     - Ads-CN/BUFoundation
     - Ads-CN/Domestic
-  - Ads-CN/BUFoundation (3.8.1.0)
-  - Ads-CN/Domestic (3.8.1.0)
-  - AdvanceSDK (3.2.5.2):
-    - AdvanceSDK/Core (= 3.2.5.2)
-  - AdvanceSDK/Adspot (3.2.5.2):
+  - Ads-CN/BUFoundation (4.0.0.5)
+  - Ads-CN/Domestic (4.0.0.5)
+  - AdvanceSDK (3.2.5.4):
+    - AdvanceSDK/Core (= 3.2.5.4)
+  - AdvanceSDK/Adspot (3.2.5.4):
     - AdvanceSDK/Core
-  - AdvanceSDK/BD (3.2.5.2):
+  - AdvanceSDK/BD (3.2.5.4):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - BaiduMobAdSDK
-  - AdvanceSDK/Core (3.2.5.2)
-  - AdvanceSDK/CSJ (3.2.5.2):
+  - AdvanceSDK/Core (3.2.5.4)
+  - AdvanceSDK/CSJ (3.2.5.4):
     - Ads-CN
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
-  - AdvanceSDK/GDT (3.2.5.2):
+  - AdvanceSDK/GDT (3.2.5.4):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - GDTMobSDK
-  - AdvanceSDK/KS (3.2.5.2):
+  - AdvanceSDK/KS (3.2.5.4):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
-  - AdvanceSDK/Mercury (3.2.5.2):
+    - KSAdSDK
+  - AdvanceSDK/Mercury (3.2.5.4):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - MercurySDK
-  - BaiduMobAdSDK (4.81)
-  - GDTMobSDK (4.13.0):
-    - GDTMobSDK/GDTMobSDK (= 4.13.0)
-  - GDTMobSDK/GDTMobSDK (4.13.0)
+  - BaiduMobAdSDK (4.83)
+  - GDTMobSDK (4.13.22):
+    - GDTMobSDK/GDTMobSDK (= 4.13.22)
+  - GDTMobSDK/GDTMobSDK (4.13.22)
+  - KSAdSDK (3.3.16)
   - Masonry (1.1.0)
   - MercurySDK (3.1.6.3)
-  - SDWebImage (5.11.1):
-    - SDWebImage/Core (= 5.11.1)
-  - SDWebImage/Core (5.11.1)
 
 DEPENDENCIES:
   - AdvanceSDK (from `../`)
@@ -48,30 +47,29 @@ DEPENDENCIES:
   - AdvanceSDK/KS (from `../`)
   - AdvanceSDK/Mercury (from `../`)
   - Masonry
-  - SDWebImage
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
     - Ads-CN
     - BaiduMobAdSDK
     - GDTMobSDK
+    - KSAdSDK
     - Masonry
     - MercurySDK
-    - SDWebImage
 
 EXTERNAL SOURCES:
   AdvanceSDK:
     :path: "../"
 
 SPEC CHECKSUMS:
-  Ads-CN: 49af96ac9f7b1a43ef4cfb37b6a74863421d4ee1
-  AdvanceSDK: 1766db09748662d59c25bf3d5656cc9f96fe6acd
-  BaiduMobAdSDK: 901bcd0eec019d7f335dfcdfa572b09f8a0b45d1
-  GDTMobSDK: 9b48a2583a4e0e973f01810168fce8477f2ce97b
+  Ads-CN: 85c20c8e557b01f30bd0e1cb68244b90b061a8d5
+  AdvanceSDK: c3ee27b4384f231a70e9ce9f3218cb93fbeac713
+  BaiduMobAdSDK: d3006333637dacac0ef9808655a686e18019f033
+  GDTMobSDK: 3d36a2c7c606b1e5255442fcd609b09f322ca016
+  KSAdSDK: 21a9cac9f2b9d81dc38eca078950d006775e83ff
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   MercurySDK: d9bb9f0423cdcf1b16a1aab3098370dd8b088dc7
-  SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
 
-PODFILE CHECKSUM: 9d64161fb00b9768558d01a20201c919bd0b8e58
+PODFILE CHECKSUM: b0cf6c06036fe450afa19423df819146fb9221dc
 
-COCOAPODS: 1.10.1
+COCOAPODS: 1.11.2
