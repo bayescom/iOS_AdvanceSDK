@@ -30,9 +30,11 @@ Pod::Spec.new do |s|
     
     valid_archs = ['i386', 'armv7', 'x86_64', 'arm64']
     # bitcode
-    s.pod_target_xcconfig = { 'ENABLE_BITCODE' => 'NO', 'VALID_ARCHS' => valid_archs.join(' '), 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
-    s.user_target_xcconfig = { 'ENABLE_BITCODE' => 'NO', 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
-    
+#    s.pod_target_xcconfig = { 'ENABLE_BITCODE' => 'NO', 'VALID_ARCHS' => valid_archs.join(' '), 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
+#    s.user_target_xcconfig = { 'ENABLE_BITCODE' => 'NO', 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
+    s.pod_target_xcconfig = { 'ENABLE_BITCODE' => 'NO'}
+    s.user_target_xcconfig = { 'ENABLE_BITCODE' => 'NO'}
+
     s.default_subspec = 'Core'
     
     s.requires_arc = true
@@ -75,41 +77,15 @@ Pod::Spec.new do |s|
         gdt.frameworks = 'AdSupport', 'CoreLocation', 'QuartzCore', 'SystemConfiguration', 'CoreTelephony', 'Security', 'StoreKit', 'AVFoundation', 'WebKit'
         gdt.libraries     = 'xml2', 'z'
     end
-    
-#    s.subspec 'KS' do |ks|
-#        ks.dependency 'AdvanceSDK/Core'
-#        ks.dependency 'AdvanceSDK/Adspot'
-##        ks.dependency 'KSAdSDK'
-#        ks.source_files =  'AdvanceSDK/Adapter/Kuaishou/**/*.{h,m}'
-#        ks.frameworks = 'Foundation', 'UIKit', 'MobileCoreServices', 'CoreGraphics', 'Security', 'SystemConfiguration','CoreTelephony', 'AdSupport', 'CoreData', 'StoreKit', 'AVFoundation', 'MediaPlayer', 'CoreMedia','WebKit', 'Accelerate', 'CoreLocation', 'AVKit','MessageUI','QuickLook', 'AddressBook'
-#        ks.libraries =  'z','resolv.9', 'sqlite3','c++','c++abi'
-#        ks.ios.vendored_frameworks = 'AdvanceSDK/Adapter/Kuaishou/KuaishouFrameWork/KSAdSDK.framework'
-#        ks.vendored_frameworks = 'KSAdSDK.framework'
-#    end
-    
+        
     s.subspec 'KS' do |ks|
         ks.dependency 'AdvanceSDK/Core'
         ks.dependency 'AdvanceSDK/Adspot'
-        ks.dependency 'KSAdSDK', '~> 3.3.16'
+        ks.dependency 'KSAdSDK'
         ks.source_files = 'AdvanceSDK/Adapter/Kuaishou/**/*.{h,m}'
         ks.frameworks = ["Foundation", "UIKit", "MobileCoreServices", "CoreGraphics", "Security", "SystemConfiguration", "CoreTelephony", "AdSupport", "CoreData", "StoreKit", "AVFoundation", "MediaPlayer", "CoreMedia", "WebKit", "Accelerate", "CoreLocation", "AVKit", "MessageUI", "QuickLook", "AudioToolBox", "AddressBook"]
         ks.libraries =  ["z", "resolv.9", "sqlite3", "c++", "c++abi"]
-        ks.ios.vendored_framework   = 'KSAdSDK.framework'
     end
-
-    
-#    s.subspec 'KS' do |ks|
-#        ks.dependency 'AdvanceSDK/Core'
-#        ks.dependency 'AdvanceSDK/Adspot'
-#        ks.dependency 'KSAdSDK'
-#        ks.source_files =  ['AdvanceSDK/Adapter/Kuaishou/**/*.{h,m}', { :git => 'https://gitee.com/happytour/copy-of-KSAdSDKFull.git', :tag => s.version.to_s }]
-#        ks.frameworks = ["Foundation", "UIKit", "MobileCoreServices", "CoreGraphics", "Security", "SystemConfiguration", "CoreTelephony", "AdSupport", "CoreData", "StoreKit", "AVFoundation", "MediaPlayer", "CoreMedia", "WebKit", "Accelerate", "CoreLocation", "AVKit", "MessageUI", "QuickLook", "AudioToolBox"]
-#        ks.libraries =  ["z", "resolv.9", "sqlite3", "c++", "c++abi"]
-#        ks.ios.vendored_framework   = 'KSAdSDK/Frameworks/KSAdSDK.framework'
-#    end
-
-
-
     
     s.subspec 'BD' do |bd|
         bd.dependency 'AdvanceSDK/Core'

@@ -6,28 +6,28 @@ PODS:
     - Ads-CN/Domestic
   - Ads-CN/BUFoundation (4.0.0.5)
   - Ads-CN/Domestic (4.0.0.5)
-  - AdvanceSDK (3.2.5.3):
-    - AdvanceSDK/Core (= 3.2.5.3)
-  - AdvanceSDK/Adspot (3.2.5.3):
+  - AdvanceSDK (3.2.5.4):
+    - AdvanceSDK/Core (= 3.2.5.4)
+  - AdvanceSDK/Adspot (3.2.5.4):
     - AdvanceSDK/Core
-  - AdvanceSDK/BD (3.2.5.3):
+  - AdvanceSDK/BD (3.2.5.4):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - BaiduMobAdSDK
-  - AdvanceSDK/Core (3.2.5.3)
-  - AdvanceSDK/CSJ (3.2.5.3):
+  - AdvanceSDK/Core (3.2.5.4)
+  - AdvanceSDK/CSJ (3.2.5.4):
     - Ads-CN
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
-  - AdvanceSDK/GDT (3.2.5.3):
+  - AdvanceSDK/GDT (3.2.5.4):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - GDTMobSDK
-  - AdvanceSDK/KS (3.2.5.3):
+  - AdvanceSDK/KS (3.2.5.4):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
-    - KSAdSDK (~> 3.3.16)
-  - AdvanceSDK/Mercury (3.2.5.3):
+    - KSAdSDK
+  - AdvanceSDK/Mercury (3.2.5.4):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - MercurySDK
@@ -38,9 +38,6 @@ PODS:
   - KSAdSDK (3.3.16)
   - Masonry (1.1.0)
   - MercurySDK (3.1.6.3)
-  - SDWebImage (5.12.1):
-    - SDWebImage/Core (= 5.12.1)
-  - SDWebImage/Core (5.12.1)
 
 DEPENDENCIES:
   - AdvanceSDK (from `../`)
@@ -49,9 +46,7 @@ DEPENDENCIES:
   - AdvanceSDK/GDT (from `../`)
   - AdvanceSDK/KS (from `../`)
   - AdvanceSDK/Mercury (from `../`)
-  - KSAdSDK (~> 3.3.16)
   - Masonry
-  - SDWebImage
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
@@ -61,7 +56,6 @@ SPEC REPOS:
     - KSAdSDK
     - Masonry
     - MercurySDK
-    - SDWebImage
 
 EXTERNAL SOURCES:
   AdvanceSDK:
@@ -69,14 +63,13 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Ads-CN: 85c20c8e557b01f30bd0e1cb68244b90b061a8d5
-  AdvanceSDK: ddd37e348783c3e2421ca6d6aa120234f99a3007
+  AdvanceSDK: c3ee27b4384f231a70e9ce9f3218cb93fbeac713
   BaiduMobAdSDK: d3006333637dacac0ef9808655a686e18019f033
   GDTMobSDK: 3d36a2c7c606b1e5255442fcd609b09f322ca016
   KSAdSDK: 21a9cac9f2b9d81dc38eca078950d006775e83ff
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   MercurySDK: d9bb9f0423cdcf1b16a1aab3098370dd8b088dc7
-  SDWebImage: 4dc3e42d9ec0c1028b960a33ac6b637bb432207b
 
-PODFILE CHECKSUM: 05f32f7770ac3e32c79ff2b9f4e2bf0206138db0
+PODFILE CHECKSUM: b0cf6c06036fe450afa19423df819146fb9221dc
 
-COCOAPODS: 1.10.1
+COCOAPODS: 1.11.2
