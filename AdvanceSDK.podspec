@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
     s.name             = 'AdvanceSDK'
     
-    s.version          = '3.2.5.3'
+    s.version          = '3.2.5.4'
     s.ios.deployment_target = '9.0'
     s.platform     = :ios, "9.0"
     s.requires_arc = true
@@ -76,16 +76,27 @@ Pod::Spec.new do |s|
         gdt.libraries     = 'xml2', 'z'
     end
     
+#    s.subspec 'KS' do |ks|
+#        ks.dependency 'AdvanceSDK/Core'
+#        ks.dependency 'AdvanceSDK/Adspot'
+##        ks.dependency 'KSAdSDK'
+#        ks.source_files =  'AdvanceSDK/Adapter/Kuaishou/**/*.{h,m}'
+#        ks.frameworks = 'Foundation', 'UIKit', 'MobileCoreServices', 'CoreGraphics', 'Security', 'SystemConfiguration','CoreTelephony', 'AdSupport', 'CoreData', 'StoreKit', 'AVFoundation', 'MediaPlayer', 'CoreMedia','WebKit', 'Accelerate', 'CoreLocation', 'AVKit','MessageUI','QuickLook', 'AddressBook'
+#        ks.libraries =  'z','resolv.9', 'sqlite3','c++','c++abi'
+#        ks.ios.vendored_frameworks = 'AdvanceSDK/Adapter/Kuaishou/KuaishouFrameWork/KSAdSDK.framework'
+#        ks.vendored_frameworks = 'KSAdSDK.framework'
+#    end
+    
     s.subspec 'KS' do |ks|
         ks.dependency 'AdvanceSDK/Core'
         ks.dependency 'AdvanceSDK/Adspot'
-#        ks.dependency 'KSAdSDK'
-        ks.source_files =  'AdvanceSDK/Adapter/Kuaishou/**/*.{h,m}'
-        ks.frameworks = 'Foundation', 'UIKit', 'MobileCoreServices', 'CoreGraphics', 'Security', 'SystemConfiguration','CoreTelephony', 'AdSupport', 'CoreData', 'StoreKit', 'AVFoundation', 'MediaPlayer', 'CoreMedia','WebKit', 'Accelerate', 'CoreLocation', 'AVKit','MessageUI','QuickLook', 'AddressBook'
-        ks.libraries =  'z','resolv.9', 'sqlite3','c++','c++abi'
-        ks.ios.vendored_frameworks = 'AdvanceSDK/Adapter/Kuaishou/KuaishouFrameWork/KSAdSDK.framework'
-        ks.vendored_frameworks = 'KSAdSDK.framework'
+        ks.dependency 'KSAdSDK', '~> 3.3.16'
+        ks.source_files = 'AdvanceSDK/Adapter/Kuaishou/**/*.{h,m}'
+        ks.frameworks = ["Foundation", "UIKit", "MobileCoreServices", "CoreGraphics", "Security", "SystemConfiguration", "CoreTelephony", "AdSupport", "CoreData", "StoreKit", "AVFoundation", "MediaPlayer", "CoreMedia", "WebKit", "Accelerate", "CoreLocation", "AVKit", "MessageUI", "QuickLook", "AudioToolBox", "AddressBook"]
+        ks.libraries =  ["z", "resolv.9", "sqlite3", "c++", "c++abi"]
+        ks.ios.vendored_framework   = 'KSAdSDK.framework'
     end
+
     
 #    s.subspec 'KS' do |ks|
 #        ks.dependency 'AdvanceSDK/Core'
@@ -96,6 +107,8 @@ Pod::Spec.new do |s|
 #        ks.libraries =  ["z", "resolv.9", "sqlite3", "c++", "c++abi"]
 #        ks.ios.vendored_framework   = 'KSAdSDK/Frameworks/KSAdSDK.framework'
 #    end
+
+
 
     
     s.subspec 'BD' do |bd|
