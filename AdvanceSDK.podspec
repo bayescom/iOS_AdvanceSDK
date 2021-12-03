@@ -55,7 +55,7 @@ Pod::Spec.new do |s|
         mer.dependency 'AdvanceSDK/Adspot'
         mer.dependency 'MercurySDK'
         mer.source_files = 'AdvanceSDK/Adapter/mercury/**/*.{h,m}'
-        mer.frameworks = 'StoreKit', 'AVFoundation'
+        mer.frameworks = 'StoreKit', 'AVFoundation', 'CoreMotion'
     end
     
     s.subspec 'CSJ' do |csj|
