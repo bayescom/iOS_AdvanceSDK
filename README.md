@@ -41,6 +41,10 @@
       <key>SKAdNetworkIdentifier</key>
       <string>f7s53z58qe.skadnetwork</string>
     </dict>
+    <dict>
+      <key>SKAdNetworkIdentifier</key> 
+      <string>r3y5dwb26t.skadnetwork</string>
+    </dict>
   </array>
 ```
 
@@ -68,8 +72,8 @@ target 'AdvanceSDK_Example' do
 
   pod 'AdvanceSDK'
   pod 'AdvanceSDK/Mercury' #必须添加
-  pod 'AdvanceSDK/CSJ' #如果想集成穿山甲,则添加 如果不需要则不添加
-  pod 'AdvanceSDK/GDT' #如果想集成广点通,则添加 如果不需要则不添加
+  pod 'AdvanceSDK/CSJ' #必须添加
+  pod 'AdvanceSDK/GDT' #必须添加
   pod 'AdvanceSDK/BD' #如果想集成广点通,则添加 如果不需要则不添加
   pod 'AdvanceSDK/KS' #如果想集成快手,则添加 如果不需要则不添加
     
@@ -88,8 +92,6 @@ target 'AdvanceSDK_Example' do
 # 如果想单独升级快手 则需要指明升级的版本号 例如:
 # pod 'KSAdSDK', '~> 3.3.10'
   终端里执行 pod update KSAdSDK
-
-# 建议添加 CSJ和GDT, BD,KS看需求
 
 end
 
@@ -153,7 +155,7 @@ platform :ios, '9.0'
 target '你的项目名称' do
   # use_frameworks!
   # Pods for 你的项目名称
-  pod 'AdvanceSDK', '~> 3.2.5.5' # 可指定你想要的版本号
+  pod 'AdvanceSDK', '~> 3.1.6.6' # 可指定你想要的版本号
   pod 'AdvanceSDK/CSJ', 	# 如果需要导入穿山甲SDK 如果不需要则不添加
   pod 'AdvanceSDK/GDT', 	# 如果需要导入广点通SDK 如果不需要则不添加
   pod 'AdvanceSDK/Mercury' # 如果需要导入MercurySDK 如果不需要则不添加
@@ -200,7 +202,7 @@ $ pod install
 指定SDK版本前，请先确保repo库为最新版本，参考上一小节内容进行更新。如果需要指定SDK版本，需要在Podfile文件中，pod那一行指定版本号：
 
 ```
-  pod 'AdvanceSDK', '~> 3.2.5.5' # 可指定你想要的版本号
+  pod 'AdvanceSDK', '~> 3.1.6.6' # 可指定你想要的版本号
   pod 'AdvanceSDK/CSJ'
   pod 'AdvanceSDK/GDT'
 
