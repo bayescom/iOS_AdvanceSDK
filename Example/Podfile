@@ -10,10 +10,7 @@ target 'AdvanceSDK_Example' do
   pod 'AdvanceSDK/GDT', :path => '../'
   pod 'AdvanceSDK/KS', :path => '../'
   pod 'AdvanceSDK/BD', :path => '../'
-#  pod 'SDWebImage'
   pod 'Masonry'
-  pod 'MercurySDK', '~> 3.1.6.5'
-#  pod 'KSAdSDK', :git => 'https://gitee.com/happytour/copy-of-KSAdSDKFull.git'
 #  pod "STDebugConsole"
 #  pod 'JPFPSStatus'
 

@@ -83,11 +83,6 @@
     NSString *clsName = @"";
     if ([supplier.identifier isEqualToString:SDK_ID_GDT]) {
         clsName = @"GdtInterstitialAdapter";
-//        if (supplier.versionTag == 1) {
-//            clsName = @"GdtInterstitialAdapter";
-//        } else {
-//            clsName = @"GdtInterstitialProAdapter";
-//        }
     } else if ([supplier.identifier isEqualToString:SDK_ID_CSJ]) {
         if (supplier.versionTag == 1) {
             clsName = @"CsjInterstitialAdapter";
