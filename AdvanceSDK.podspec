@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
     s.name             = 'AdvanceSDK'
     
-    s.version          = '3.2.5.5'
+    s.version          = '3.1.6.6'
     s.ios.deployment_target = '9.0'
     s.platform     = :ios, "9.0"
     s.requires_arc = true
@@ -55,7 +55,7 @@ Pod::Spec.new do |s|
         mer.dependency 'AdvanceSDK/Adspot'
         mer.dependency 'MercurySDK'
         mer.source_files = 'AdvanceSDK/Adapter/mercury/**/*.{h,m}'
-        mer.frameworks = 'StoreKit', 'AVFoundation'
+        mer.frameworks = 'StoreKit', 'AVFoundation', 'CoreMotion'
     end
     
     s.subspec 'CSJ' do |csj|

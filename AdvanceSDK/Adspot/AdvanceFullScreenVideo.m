@@ -82,11 +82,7 @@
     // 根据渠道id自定义初始化b
     NSString *clsName = @"";
     if ([supplier.identifier isEqualToString:SDK_ID_GDT]) {
-        if (supplier.versionTag == 1) {
-            clsName = @"GdtFullScreenVideoAdapter";
-        } else {
-            clsName = @"GDTFullScreenVideoProAdapter";
-        }
+        clsName = @"GdtFullScreenVideoAdapter";
     } else if ([supplier.identifier isEqualToString:SDK_ID_CSJ]) {
         clsName = @"CsjFullScreenVideoAdapter";
     } else if ([supplier.identifier isEqualToString:SDK_ID_KS]) {
