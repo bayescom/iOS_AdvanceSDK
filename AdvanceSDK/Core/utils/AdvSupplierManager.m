@@ -333,28 +333,12 @@
         ADV_LEVEL_INFO_LOG(@"自定义扩展字段 ext : %@", self.ext);
     }
     
-    // caid 有就传没有就不穿
-//    NSDictionary *config = [AdvSdkConfig shareInstance].caidConfig;
-//    if (config) {
-//        NSString *caid = [config valueForKey:AdvSdkConfigCAID];
-//        if (caid) {
-//            [deviceInfo setValue:caid forKey:@"caid"];
-//        }
-//    }
     
-    // 个性化广告推送开关
-    [deviceInfo setValue:[AdvSdkConfig shareInstance].isAdTrack ? @"0" : @"1" forKey:@"donottrack"];
-    NSString *reqid = [AdvDeviceInfoUtil getAuctionId];
-    if (reqid) {
-        [deviceInfo setValue:reqid forKey:@"reqid"];
-    }
-
     ADV_LEVEL_INFO_LOG(@"请求参数 %@   uuid:%@", deviceInfo, [AdvDeviceInfoUtil getAuctionId]);
     NSError *parseError = nil;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:deviceInfo options:NSJSONWritingPrettyPrinted error:&parseError];
-    NSURL *url = [NSURL URLWithString:AdvanceSdkRequestUrl];
-//    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@?adspotid=%@", AdvanceSdkRequestUrl, _adspotId]];
-//    NSURL *url = [NSURL URLWithString:@"https://mock.yonyoucloud.com/mock/2650/api/v3/eleven"];
+//    NSURL *url = [NSURL URLWithString:AdvanceSdkRequestUrl];
+    NSURL *url = [NSURL URLWithString:AdvanceSdkRequestMockUrl];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:self.fetchTime];
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     request.HTTPBody = jsonData;
@@ -363,7 +347,11 @@
     
     
     self.tkUploadTool.serverTime = [[NSDate date] timeIntervalSince1970]*1000;
-    self.tkUploadTool.reqid = reqid;
+    NSString *reqid = [AdvDeviceInfoUtil getAuctionId];
+    if (reqid) {
+        self.tkUploadTool.reqid = reqid;
+    }
+
     
     ADV_LEVEL_INFO_LOG(@"开始请求时间戳: %f", [[NSDate date] timeIntervalSince1970]);
     

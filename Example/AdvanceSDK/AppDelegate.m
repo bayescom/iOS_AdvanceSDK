@@ -106,10 +106,6 @@
 
 // MARK: ======================= AdvanceSplashDelegate =======================
 /**
- remark remarkable revenue prevent convention  invention astronuat astronomy  scope telescope segment section sector  evalueate  valuable prvalent available motive  motivate  emotion motion  remove resolve absolute propel appeal impulse
- amount 数量总计 等同  arouse abundant accelerate 加速加快 acquaintance
- 
- institution consitute consititution positive characteristic respond response responsible  responsibility spouse speculate prospect suspect expect expectation perspective
  */
 /// 广告数据拉取成功
 - (void)advanceUnifiedViewDidLoad {

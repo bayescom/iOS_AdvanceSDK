@@ -60,6 +60,13 @@
         [deviceInfo setValue:[AdvDeviceInfoUtil getNetwork] forKey:@"network"];
         //idfv
         [deviceInfo setValue:[AdvDeviceInfoUtil getIdfv] forKey:@"idfv"];
+        // 个性化广告推送开关
+        [deviceInfo setValue:[AdvSdkConfig shareInstance].isAdTrack ? @"0" : @"1" forKey:@"donottrack"];
+        NSString *reqid = [AdvDeviceInfoUtil getAuctionId];
+        if (reqid) {
+            [deviceInfo setValue:reqid forKey:@"reqid"];
+        }
+
         return deviceInfo;
     } @catch (NSException *exception) {
         return deviceInfo;

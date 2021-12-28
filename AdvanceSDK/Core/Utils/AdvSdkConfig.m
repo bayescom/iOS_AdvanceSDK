@@ -18,6 +18,7 @@ NSString *const AdvanceSdkAPIVersion = @"3.0";
 NSString *const AdvanceSdkVersion = @"3.2.5.6";
 NSString *const AdvanceSdkRequestUrl = @"http://cruiser.bayescom.cn/eleven";
 NSString *const AdvanceReportDataUrl = @"http://cruiser.bayescom.cn/native";
+NSString *const AdvanceSdkRequestMockUrl = @"https://mock.yonyoucloud.com/mock/2650/api/v3/eleven";
 NSString *const SDK_ID_MERCURY =@"1";
 NSString *const SDK_ID_GDT=@"2";
 NSString *const SDK_ID_CSJ=@"3";
