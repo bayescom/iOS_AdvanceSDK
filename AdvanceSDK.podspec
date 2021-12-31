@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
     s.name             = 'AdvanceSDK'
     
-    s.version          = '3.2.5.6'
+    s.version          = '3.2.5.7'
     s.ios.deployment_target = '9.0'
     s.platform     = :ios, "9.0"
     s.requires_arc = true
@@ -61,7 +61,7 @@ Pod::Spec.new do |s|
     s.subspec 'CSJ' do |csj|
         csj.dependency 'AdvanceSDK/Core'
         csj.dependency 'AdvanceSDK/Adspot'
-        csj.dependency 'Ads-CN'
+        csj.dependency 'Ads-CN', '4.1.0.2'
         csj.source_files = 'AdvanceSDK/Adapter/csj/**/*.{h,m}'
         csj.frameworks = 'UIKit', 'MapKit', 'WebKit', 'MediaPlayer', 'CoreLocation', 'AdSupport', 'CoreMedia', 'AVFoundation', 'CoreTelephony', 'StoreKit', 'SystemConfiguration', 'MobileCoreServices', 'CoreMotion', 'Accelerate','AudioToolbox','JavaScriptCore','Security','CoreImage','AudioToolbox','ImageIO','QuartzCore','CoreGraphics','CoreText'
         csj.libraries = 'c++', 'resolv', 'z', 'sqlite3', 'bz2', 'xml2', 'iconv', 'c++abi'
@@ -72,7 +72,7 @@ Pod::Spec.new do |s|
     s.subspec 'GDT' do |gdt|
         gdt.dependency 'AdvanceSDK/Core'
         gdt.dependency 'AdvanceSDK/Adspot'
-        gdt.dependency 'GDTMobSDK'
+        gdt.dependency 'GDTMobSDK', '4.13.33'
         gdt.source_files =  'AdvanceSDK/Adapter/gdt/**/*.{h,m}'
         gdt.frameworks = 'AdSupport', 'CoreLocation', 'QuartzCore', 'SystemConfiguration', 'CoreTelephony', 'Security', 'StoreKit', 'AVFoundation', 'WebKit'
         gdt.libraries     = 'xml2', 'z'
@@ -81,7 +81,7 @@ Pod::Spec.new do |s|
     s.subspec 'KS' do |ks|
         ks.dependency 'AdvanceSDK/Core'
         ks.dependency 'AdvanceSDK/Adspot'
-        ks.dependency 'KSAdSDK'
+        ks.dependency 'KSAdSDK', '3.3.18.1'
         ks.source_files = 'AdvanceSDK/Adapter/Kuaishou/**/*.{h,m}'
         ks.frameworks = ["Foundation", "UIKit", "MobileCoreServices", "CoreGraphics", "Security", "SystemConfiguration", "CoreTelephony", "AdSupport", "CoreData", "StoreKit", "AVFoundation", "MediaPlayer", "CoreMedia", "WebKit", "Accelerate", "CoreLocation", "AVKit", "MessageUI", "QuickLook", "AudioToolBox", "AddressBook"]
         ks.libraries =  ["z", "resolv.9", "sqlite3", "c++", "c++abi"]
@@ -90,7 +90,7 @@ Pod::Spec.new do |s|
     s.subspec 'BD' do |bd|
         bd.dependency 'AdvanceSDK/Core'
         bd.dependency 'AdvanceSDK/Adspot'
-        bd.dependency 'BaiduMobAdSDK'
+        bd.dependency 'BaiduMobAdSDK', '4.84'
         bd.source_files =  'AdvanceSDK/Adapter/bd/**/*.{h,m}'
         bd.frameworks = 'CoreLocation', 'SystemConfiguration', 'CoreGraphics', 'CoreMotion', 'CoreTelephony', 'AdSupport', 'SystemConfiguration', 'QuartzCore', 'WebKit', 'MessageUI','SafariServices','AVFoundation','EventKit','QuartzCore','CoreMedia','StoreKit'
         bd.libraries     = 'c++'
