@@ -56,13 +56,10 @@
     self.advanceSplash.timeout = 5;
     [self.advanceSplash loadAd];
     
-    [self getInfoAction:@"11144355"];
 
 }
-- (void)getInfoAction:(NSString *)nnn {
-    
-}
 // MARK: ======================= AdvanceSplashDelegate =======================
+
 /// 广告数据拉取成功
 - (void)advanceUnifiedViewDidLoad {
     NSLog(@"广告数据拉取成功 %s", __func__);

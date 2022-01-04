@@ -26,15 +26,6 @@
 
 @implementation GdtInterstitialAdapter
 
-//- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(AdvanceInterstitial *)adspot {
-//    if (self = [super init]) {
-//        _adspot = adspot;
-//        _supplier = supplier;
-//        _gdt_ad = [[GDTUnifiedInterstitialAd alloc] initWithPlacementId:_supplier.adspotid];
-//    }
-//    return self;
-//}
-
 - (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(id)adspot {
     if (self = [super initWithSupplier:supplier adspot:adspot]) {
         _adspot = (AdvanceInterstitial *)adspot;
@@ -81,6 +72,7 @@
 
 
 - (void)showAd {
+    NSLog(@"%@ %@", _gdt_ad, _adspot.viewController);
     [_gdt_ad presentAdFromRootViewController:_adspot.viewController];
 }
 
@@ -98,6 +90,10 @@
 // MARK: ======================= GdtInterstitialAdDelegate =======================
 /// 插屏广告预加载成功回调，当接收服务器返回的广告数据成功且预加载后调用该函数
 - (void)unifiedInterstitialSuccessToLoadAd:(GDTUnifiedInterstitialAd *)unifiedInterstitial {
+    
+}
+
+- (void)unifiedInterstitialRenderSuccess:(GDTUnifiedInterstitialAd *)unifiedInterstitial {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
 //    NSLog(@"广点通插屏拉取成功 %@",self.gdt_ad);
     if (_supplier.isParallel == YES) {
@@ -109,6 +105,7 @@
     if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
         [self.delegate advanceUnifiedViewDidLoad];
     }
+
 }
 
 /// 插屏广告预加载失败回调，当接收服务器返回的广告数据失败后调用该函数
