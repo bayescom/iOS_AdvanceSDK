@@ -126,6 +126,10 @@
     }
 }
 
+- (void)dealloc {
+    [self deallocAdapter];
+}
+
 - (void)showAd {
     [[UIApplication sharedApplication].keyWindow addSubview:_csj_ad];
     [[UIApplication sharedApplication].keyWindow bringSubviewToFront:[_adspot performSelector:@selector(bgImgV)]];

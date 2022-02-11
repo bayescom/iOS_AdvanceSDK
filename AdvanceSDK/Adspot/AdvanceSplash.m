@@ -259,4 +259,8 @@
     return _bgImgV;
 }
 
+- (void)dealloc {
+    [self deallocSelf];
+}
+
 @end

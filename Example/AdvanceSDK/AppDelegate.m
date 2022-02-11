@@ -77,6 +77,7 @@
                 [AdvSdkConfig shareInstance].level = AdvLogLevel_Debug;
 //                [AdvSdkConfig shareInstance].appId = @"100255";
 //                [self loadSplash];
+                [self loadSplash];
             });
         }];
     }else{
@@ -93,7 +94,7 @@
 
 - (void)loadSplash {
     // 测试使用 很容易不出广告
-    self.advanceSplash = [[AdvanceSplash alloc] initWithAdspotId:@"10002619"
+    self.advanceSplash = [[AdvanceSplash alloc] initWithAdspotId:@"10005886"
 //    self.advanceSplash = [[AdvanceSplash alloc] initWithAdspotId:@"20000003"
                                                   viewController:self.window.rootViewController];
     self.advanceSplash.delegate = self;
