@@ -1,43 +1,50 @@
 PODS:
-  - Ads-CN (4.2.0.2):
-    - Ads-CN/BUAdSDK (= 4.2.0.2)
-  - Ads-CN/BUAdSDK (4.2.0.2):
+  - Ads-CN (4.3.0.5):
+    - Ads-CN/BUAdSDK (= 4.3.0.5)
+  - Ads-CN/BUAdSDK (4.3.0.5):
     - Ads-CN/BUFoundation
     - Ads-CN/Domestic
-  - Ads-CN/BUFoundation (4.2.0.2)
-  - Ads-CN/Domestic (4.2.0.2)
-  - AdvanceSDK (3.2.5.8):
-    - AdvanceSDK/Core (= 3.2.5.8)
-  - AdvanceSDK/Adspot (3.2.5.8):
+  - Ads-CN/BUFoundation (4.3.0.5):
+    - BURelyFoundation (= 0.0.1.47)
+  - Ads-CN/Domestic (4.3.0.5):
+    - Ads-CN/BUFoundation
+  - AdvanceSDK (3.2.6.0):
+    - AdvanceSDK/Core (= 3.2.6.0)
+  - AdvanceSDK/Adspot (3.2.6.0):
     - AdvanceSDK/Core
-  - AdvanceSDK/BD (3.2.5.8):
+  - AdvanceSDK/BD (3.2.6.0):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
-    - BaiduMobAdSDK (= 4.84)
-  - AdvanceSDK/Core (3.2.5.8)
-  - AdvanceSDK/CSJ (3.2.5.8):
-    - Ads-CN (= 4.2.0.2)
+    - BaiduMobAdSDK (= 4.861)
+  - AdvanceSDK/Core (3.2.6.0)
+  - AdvanceSDK/CSJ (3.2.6.0):
+    - Ads-CN (= 4.3.0.5)
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
-  - AdvanceSDK/GDT (3.2.5.8):
+  - AdvanceSDK/GDT (3.2.6.0):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
-    - GDTMobSDK (= 4.13.41)
-  - AdvanceSDK/KS (3.2.5.8):
+    - GDTMobSDK (= 4.13.53)
+  - AdvanceSDK/KS (3.2.6.0):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
-    - KSAdSDK (= 3.3.19)
-  - AdvanceSDK/Mercury (3.2.5.8):
+    - KSAdSDK (= 3.3.23)
+  - AdvanceSDK/Mercury (3.2.6.0):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - MercurySDK
-  - BaiduMobAdSDK (4.84)
-  - GDTMobSDK (4.13.41):
-    - GDTMobSDK/GDTMobSDK (= 4.13.41)
-  - GDTMobSDK/GDTMobSDK (4.13.41)
-  - KSAdSDK (3.3.19)
+  - BaiduMobAdSDK (4.861)
+  - BURelyFoundation (0.0.1.47):
+    - BURelyFoundation/HM (= 0.0.1.47)
+    - BURelyFoundation/NETWork (= 0.0.1.47)
+  - BURelyFoundation/HM (0.0.1.47)
+  - BURelyFoundation/NETWork (0.0.1.47)
+  - GDTMobSDK (4.13.53):
+    - GDTMobSDK/GDTMobSDK (= 4.13.53)
+  - GDTMobSDK/GDTMobSDK (4.13.53)
+  - KSAdSDK (3.3.23)
   - Masonry (1.1.0)
-  - MercurySDK (3.1.6.7)
+  - MercurySDK (3.1.6.8)
 
 DEPENDENCIES:
   - AdvanceSDK (from `../`)
@@ -52,6 +59,7 @@ SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
     - Ads-CN
     - BaiduMobAdSDK
+    - BURelyFoundation
     - GDTMobSDK
     - KSAdSDK
     - Masonry
@@ -62,14 +70,15 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  Ads-CN: 9fe60236f2433ea9091842729ea2c93c3bc84134
-  AdvanceSDK: f4bbbe2665962d8daa9bb9c51865703453fd2e70
-  BaiduMobAdSDK: 3ed353b00dc62b45e71c806bf9b1940d59ac91bf
-  GDTMobSDK: 1fef5d6147cca39a24a8b3925661bfc4c5b71608
-  KSAdSDK: 15e8f0afe08eb6d98612a0bf38c03778d4405dcf
+  Ads-CN: b6b1294ba4e938168475ceacc786f7263d8b9747
+  AdvanceSDK: 76b02e65b846d97dde049c6194b713b8d4b56e12
+  BaiduMobAdSDK: 23e9ca38da6685dd35bb1a32540ff20353ec2361
+  BURelyFoundation: 5e7f811867d3ee91ed20e426c505e31c55674256
+  GDTMobSDK: 08e5a0fa193a850e55330c1fb09063418e88465b
+  KSAdSDK: 57b85bc6a7ae560ee67cae70da5d0d6875125d9e
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
-  MercurySDK: a3dc407953744f09194e93de0d9d445c19eb475b
+  MercurySDK: 810fd51eff1d359c1d98fa8d682073a3ae38c58a
 
-PODFILE CHECKSUM: 8e86e8316201209e5e41d8d2f9f28d9e44f52990
+PODFILE CHECKSUM: 6345e3085e419fb78ee6919e3e57f90d9f90170a
 
 COCOAPODS: 1.11.2
