@@ -30,6 +30,7 @@
         @{@"addesc": @"Mock code200", @"adspotId": @"100255-10009988"},
         @{@"addesc": @"Mock code200", @"adspotId": @"100255-10004405"},
         @{@"addesc": @"Mock code200", @"adspotId": @"100255-100050002"},
+        @{@"addesc": @"Mock code200", @"adspotId": @"102036-10006215"},
     ];
     
     self.btn1Title = @"加载广告";
