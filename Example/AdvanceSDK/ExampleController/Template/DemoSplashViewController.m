@@ -36,7 +36,7 @@
 
     self.advanceSplash.isUploadSDKVersion = YES;
     self.advanceSplash.delegate = self;
-//    self.advanceSplash.showLogoRequire = YES;
+    self.advanceSplash.showLogoRequire = YES;
 //    self.advanceSplash.logoImage = [UIImage imageNamed:@"app_logo"];
     self.advanceSplash.backgroundImage = [UIImage imageNamed:@"LaunchImage_img"];
     self.advanceSplash.timeout = 5;
