@@ -60,9 +60,6 @@
 /// 请求广告数据成功后调用
 - (void)advanceUnifiedViewDidLoad {
     NSLog(@"请求广告数据成功后调用 %s", __func__);
-    _isAdLoaded=true;
-    [JDStatusBarNotification showWithStatus:@"广告加载成功" dismissAfter:1.5];
-    [self loadAdBtn2Action];
 }
 
 /// 广告曝光
@@ -99,6 +96,15 @@
 /// 广告播放完成
 - (void)advanceFullScreenVideoOnAdPlayFinish {
     NSLog(@"广告播放完成 %s", __func__);
+}
+
+/// 广告视频缓存完成
+- (void)advanceFullScreenVideoOnAdVideoCached {
+    NSLog(@"广告缓存成功 %s", __func__);
+    _isAdLoaded=true;
+    [JDStatusBarNotification showWithStatus:@"广告加载成功" dismissAfter:1.5];
+    [self loadAdBtn2Action];
+
 }
 
 /// 策略加载成功

@@ -14,6 +14,7 @@
 /// 视频播放完成
 - (void)advanceFullScreenVideoOnAdPlayFinish;
 - (void)advanceFullScreenVideodDidClickSkip;
+- (void)advanceFullScreenVideoOnAdVideoCached;
 
 
 @end
