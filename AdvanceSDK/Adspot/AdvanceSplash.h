@@ -18,10 +18,11 @@ NS_ASSUME_NONNULL_BEGIN
 /// 广告方法回调代理
 @property (nonatomic, weak) id<AdvanceSplashDelegate> delegate;
 
-/// 是否必须展示Logo 默认: NO 注意: 强制展示Logo可能会影响收益 !!!
+/// 是否必须展示Logo 默认: NO 注意: 强制展示Logo可能会影响收益 !!!  当 showLogoRequire = YES时, 必须设置logoImage
 @property (nonatomic, assign) BOOL showLogoRequire;
 
 /// 广告Logo
+/// 当 showLogoRequire = YES时, 必须设置logoImage
 @property(nonatomic, strong) UIImage *logoImage;
 
 /// 广告未加载出来时的占位图

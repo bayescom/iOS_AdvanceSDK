@@ -34,6 +34,8 @@
         CGRect adFrame = [UIApplication sharedApplication].keyWindow.bounds;
         // 设置logo
         if (_adspot.logoImage && _adspot.showLogoRequire) {
+            
+            NSAssert(_adspot.logoImage != nil, @"showLogoRequire = YES时, 必须设置logoImage");
             CGFloat real_w = [UIScreen mainScreen].bounds.size.width;
             CGFloat real_h = _adspot.logoImage.size.height*(real_w/_adspot.logoImage.size.width);
             adFrame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height-real_h);
@@ -80,42 +82,6 @@
 - (void)loadAd {
     [super loadAd];
     
-/*
-    // ABCDEFGH  ACF BE DH G
-    
-    // 按优先级排序确定执行顺序       // 并行 load       并行 load      并行 load         并行 load
-             渠道A  · · · · · · · · 渠道C · · · · ·  渠道F · · · · · · · · · · · · · · · · · · · · · 未来更多
-               ↓                     ↓               ↓
-             渠道B  · · · · · · · · · · · · · · · · · · · · · · · · 渠道E · · · · · · · · · · · · · 未来更多
-               ↓                     ↓               ↓               ↓
-             渠道C  ← ← ← ← ← ← ← ← ←
-               ↓                                     ↓               ↓
-             渠道D  · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · 渠道H · · · · 未来更多
-               ↓                                     ↓               ↓                 ↓             ↓
-             渠道E  ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ←  ← ← ← ← ← ← ← ←
-               ↓                                     ↓                                 ↓             ↓
-             渠道F  ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ←
-               ↓                                                                       ↓             ↓
-             渠道G
-               ↓                                                                       ↓             ↓
-             渠道H  ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ←
-               ↓                                                                                     ↓
-            未来更多 ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ← ←
-    
-
-    
-    // 每个渠道执行时的广告数据状态
-    // 串行渠道 load和show一定是结合在一起的  所以成功 失败 请求中 一定是并行状态
-    if (state == Success) { // 并行状态
-        show
-    } else if (state == Failed) { // 并行状态
-        next
-    } else if (state == loading) { // 并行状态
-        go on
-    } else { // 其他均为串行状态
-        load and show
-    }
-*/
 }
 
 - (void)deallocAdapter {
@@ -139,6 +105,7 @@
     
     if (_adspot.showLogoRequire) {
         // 添加Logo
+        NSAssert(_adspot.logoImage != nil, @"showLogoRequire = YES时, 必须设置logoImage");
         CGFloat real_w = [UIScreen mainScreen].bounds.size.width;
         CGFloat real_h = _adspot.logoImage.size.height*(real_w/_adspot.logoImage.size.width);
         UIImageView *imgV = [[UIImageView alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height-real_h, real_w, real_h)];
