@@ -84,11 +84,7 @@
     if ([supplier.identifier isEqualToString:SDK_ID_GDT]) {
         clsName = @"GdtInterstitialAdapter";
     } else if ([supplier.identifier isEqualToString:SDK_ID_CSJ]) {
-        if (supplier.versionTag == 1) {
-            clsName = @"CsjInterstitialAdapter";
-        } else {
-            clsName = @"CsjInterstitialProAdapter";
-        }
+        clsName = @"CsjInterstitialAdapter";
     } else if ([supplier.identifier isEqualToString:SDK_ID_MERCURY]) {
         clsName = @"MercuryInterstitialAdapter";
     } else if ([supplier.identifier isEqualToString:SDK_ID_KS]) {
