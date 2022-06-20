@@ -144,13 +144,18 @@
     }
 }
 
+// 点击了跳过
+- (void)nativeExpressFullscreenVideoAdDidClickSkip:(BUNativeExpressFullscreenVideoAd *)fullscreenVideoAd {
+    if ([self.delegate respondsToSelector:@selector(advanceFullScreenVideodDidClickSkip)]) {
+        [self.delegate advanceFullScreenVideodDidClickSkip];
+    }
+}
+
+
 
 - (void)nativeExpressFullscreenVideoAdViewRenderSuccess:(BUNativeExpressFullscreenVideoAd *)rewardedVideoAd {
     
 }
 
-- (void)nativeExpressFullscreenVideoAdDidClickSkip:(BUNativeExpressFullscreenVideoAd *)fullscreenVideoAd {
-    
-}
 
 @end

@@ -24,13 +24,7 @@
     
     self.initDefSubviewsFlag = YES;
     self.adspotIdsArr = @[
-        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10003014"},
         @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10004765"},
-        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10004567"},
-        @{@"addesc": @"Mock 渠道错误", @"adspotId": @"100255-10000001"},
-        @{@"addesc": @"Mock code200", @"adspotId": @"100255-10003321"},
-        @{@"addesc": @"Mock code200", @"adspotId": @"100255-10004674"},
-        @{@"addesc": @"Mock code200", @"adspotId": @"100255-10008001"},
     ];
     self.btn1Title = @"加载广告";
     self.btn2Title = @"显示广告";
@@ -90,6 +84,11 @@
 - (void)advanceSupplierWillLoad:(NSString *)supplierId {
     NSLog(@"内部渠道开始加载 %s  supplierId: %@", __func__, supplierId);
 
+}
+
+/// 点击跳过
+- (void)advanceFullScreenVideodDidClickSkip {
+    NSLog(@"点击了跳过 %s", __func__);
 }
 
 /// 广告关闭

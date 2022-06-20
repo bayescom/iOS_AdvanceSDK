@@ -13,6 +13,7 @@
 @optional
 /// 视频播放完成
 - (void)advanceFullScreenVideoOnAdPlayFinish;
+- (void)advanceFullScreenVideodDidClickSkip;
 
 
 @end
