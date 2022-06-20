@@ -61,7 +61,6 @@
     NSLog(@"广告展示失败 %s  error: %@ 详情:%@", __func__, error, description);
 
 }
-
 /// 内部渠道开始加载时调用
 - (void)advanceSupplierWillLoad:(NSString *)supplierId {
     NSLog(@"内部渠道开始加载 %s  supplierId: %@", __func__, supplierId);

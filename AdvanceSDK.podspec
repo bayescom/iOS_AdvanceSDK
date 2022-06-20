@@ -72,7 +72,7 @@ Pod::Spec.new do |s|
     s.subspec 'GDT' do |gdt|
         gdt.dependency 'AdvanceSDK/Core'
         gdt.dependency 'AdvanceSDK/Adspot'
-        gdt.dependency 'GDTMobSDK', '4.13.53'
+        gdt.dependency 'GDTMobSDK', '4.13.70'
         gdt.source_files =  'AdvanceSDK/Adapter/gdt/**/*.{h,m}'
         gdt.frameworks = 'AdSupport', 'CoreLocation', 'QuartzCore', 'SystemConfiguration', 'CoreTelephony', 'Security', 'StoreKit', 'AVFoundation', 'WebKit'
         gdt.libraries     = 'xml2', 'z'
