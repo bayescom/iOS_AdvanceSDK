@@ -23,21 +23,7 @@
     
     self.initDefSubviewsFlag = YES;
     self.adspotIdsArr = @[
-        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-100024364312"},
         @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10002619"},
-        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"101031-10003190"},
-        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"101245-10003940"},
-        @{@"addesc": @"Mock 渠道错误", @"adspotId": @"100255-10000001"},
-        @{@"addesc": @"Mock code200", @"adspotId": @"100255-10003321"},
-        @{@"addesc": @"Mock code200", @"adspotId": @"100255-10009879"},
-        @{@"addesc": @"haoxueche", @"adspotId": @"101361-10004237"},
-        @{@"addesc": @"快手开屏", @"adspotId": @"100255-10004411"},
-        @{@"addesc": @"快手开屏", @"adspotId": @"101394-10004333"},
-        @{@"addesc": @"百度", @"adspotId": @"100255-10004242"},
-        @{@"addesc": @"百度", @"adspotId": @"100255-10005076"},
-        @{@"addesc": @"悦动圈", @"adspotId": @"100255-10005519"},
-        
-
     ];
     self.btn1Title = @"加载并显示广告";
 }
