@@ -1,13 +1,15 @@
 PODS:
-  - Ads-CN (4.3.0.5):
-    - Ads-CN/BUAdSDK (= 4.3.0.5)
-  - Ads-CN/BUAdSDK (4.3.0.5):
-    - Ads-CN/BUFoundation
+  - Ads-CN (4.5.1.6):
+    - Ads-CN/BUAdSDK (= 4.5.1.6)
+  - Ads-CN/BUAdSDK (4.5.1.6):
     - Ads-CN/Domestic
-  - Ads-CN/BUFoundation (4.3.0.5):
-    - BURelyFoundation (= 0.0.1.47)
-  - Ads-CN/Domestic (4.3.0.5):
+  - Ads-CN/BUFoundation (4.5.1.6):
+    - BURelyFoundation (= 0.0.1.58)
+  - Ads-CN/CSJAdSDK (4.5.1.6):
     - Ads-CN/BUFoundation
+  - Ads-CN/Domestic (4.5.1.6):
+    - Ads-CN/BUFoundation
+    - Ads-CN/CSJAdSDK
   - AdvanceSDK (3.2.6.0):
     - AdvanceSDK/Core (= 3.2.6.0)
   - AdvanceSDK/Adspot (3.2.6.0):
@@ -18,7 +20,7 @@ PODS:
     - BaiduMobAdSDK (= 4.861)
   - AdvanceSDK/Core (3.2.6.0)
   - AdvanceSDK/CSJ (3.2.6.0):
-    - Ads-CN (= 4.3.0.5)
+    - Ads-CN (= 4.5.1.6)
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
   - AdvanceSDK/GDT (3.2.6.0):
@@ -34,11 +36,11 @@ PODS:
     - AdvanceSDK/Core
     - MercurySDK
   - BaiduMobAdSDK (4.861)
-  - BURelyFoundation (0.0.1.47):
-    - BURelyFoundation/HM (= 0.0.1.47)
-    - BURelyFoundation/NETWork (= 0.0.1.47)
-  - BURelyFoundation/HM (0.0.1.47)
-  - BURelyFoundation/NETWork (0.0.1.47)
+  - BURelyFoundation (0.0.1.58):
+    - BURelyFoundation/HM (= 0.0.1.58)
+    - BURelyFoundation/NETWork (= 0.0.1.58)
+  - BURelyFoundation/HM (0.0.1.58)
+  - BURelyFoundation/NETWork (0.0.1.58)
   - GDTMobSDK (4.13.53):
     - GDTMobSDK/GDTMobSDK (= 4.13.53)
   - GDTMobSDK/GDTMobSDK (4.13.53)
@@ -70,10 +72,10 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  Ads-CN: b6b1294ba4e938168475ceacc786f7263d8b9747
-  AdvanceSDK: 76b02e65b846d97dde049c6194b713b8d4b56e12
+  Ads-CN: 5563d7a0ed3f99fd47d421fcb48e70688efedd55
+  AdvanceSDK: 84e6714dbaa96d464964d3aba3983a3b2df6d6ea
   BaiduMobAdSDK: 23e9ca38da6685dd35bb1a32540ff20353ec2361
-  BURelyFoundation: 5e7f811867d3ee91ed20e426c505e31c55674256
+  BURelyFoundation: f529322f9e93cf8cc0b4539e447aff77a8ff34de
   GDTMobSDK: 08e5a0fa193a850e55330c1fb09063418e88465b
   KSAdSDK: 57b85bc6a7ae560ee67cae70da5d0d6875125d9e
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201

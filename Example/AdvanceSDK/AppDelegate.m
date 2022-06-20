@@ -38,7 +38,6 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
         
     
-    
 #pragma 开始集成前 请务必阅读文档中的注意事项及Checklist https://github.com/bayescom/AdvanceSDK
 #pragma 开始集成前 请务必阅读文档中的注意事项及Checklist https://github.com/bayescom/AdvanceSDK
 #pragma 开始集成前 请务必阅读文档中的注意事项及Checklist https://github.com/bayescom/AdvanceSDK
@@ -77,7 +76,7 @@
                 [AdvSdkConfig shareInstance].level = AdvLogLevel_Debug;
 //                [AdvSdkConfig shareInstance].appId = @"100255";
 //                [self loadSplash];
-                [self loadSplash];
+//                [self loadSplash];
             });
         }];
     }else{
