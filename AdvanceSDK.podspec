@@ -90,7 +90,7 @@ Pod::Spec.new do |s|
     s.subspec 'BD' do |bd|
         bd.dependency 'AdvanceSDK/Core'
         bd.dependency 'AdvanceSDK/Adspot'
-        bd.dependency 'BaiduMobAdSDK', '4.861'
+        bd.dependency 'BaiduMobAdSDK', '4.88'
         bd.source_files =  'AdvanceSDK/Adapter/bd/**/*.{h,m}'
         bd.frameworks = 'CoreLocation', 'SystemConfiguration', 'CoreGraphics', 'CoreMotion', 'CoreTelephony', 'AdSupport', 'SystemConfiguration', 'QuartzCore', 'WebKit', 'MessageUI','SafariServices','AVFoundation','EventKit','QuartzCore','CoreMedia','StoreKit'
         bd.libraries     = 'c++'

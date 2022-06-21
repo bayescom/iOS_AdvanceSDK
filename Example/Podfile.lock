@@ -17,7 +17,7 @@ PODS:
   - AdvanceSDK/BD (3.2.6.0):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
-    - BaiduMobAdSDK (= 4.861)
+    - BaiduMobAdSDK (= 4.88)
   - AdvanceSDK/Core (3.2.6.0)
   - AdvanceSDK/CSJ (3.2.6.0):
     - Ads-CN (= 4.5.1.6)
@@ -35,7 +35,7 @@ PODS:
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - MercurySDK
-  - BaiduMobAdSDK (4.861)
+  - BaiduMobAdSDK (4.88)
   - BURelyFoundation (0.0.1.58):
     - BURelyFoundation/HM (= 0.0.1.58)
     - BURelyFoundation/NETWork (= 0.0.1.58)
@@ -73,8 +73,8 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Ads-CN: 5563d7a0ed3f99fd47d421fcb48e70688efedd55
-  AdvanceSDK: 0a43f3b7a94eba1804e1282350da92f5be423a2e
-  BaiduMobAdSDK: 23e9ca38da6685dd35bb1a32540ff20353ec2361
+  AdvanceSDK: 79dea6e43611eef5e9b6ade5667adb9a3029e66d
+  BaiduMobAdSDK: f40cc622afcabcc3561ff13c32f3a3af55ee088d
   BURelyFoundation: f529322f9e93cf8cc0b4539e447aff77a8ff34de
   GDTMobSDK: 22c1b935a45797cc175df35f79db9d49a9b738bc
   KSAdSDK: 57b85bc6a7ae560ee67cae70da5d0d6875125d9e

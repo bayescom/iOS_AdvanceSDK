@@ -17,6 +17,12 @@
 
 #import "BdSplashAdapter.h"
 @interface BdSplashAdapter ()<BaiduMobAdSplashDelegate>
+{
+     
+    NSInteger _timeout;
+    NSInteger _timeout_stamp;
+
+}
 @property (nonatomic, strong) BaiduMobAdSplash *bd_ad;
 @property (nonatomic, weak) AdvanceSplash *adspot;
 @property (nonatomic, strong) AdvSupplier *supplier;
@@ -37,8 +43,8 @@
         _adspot = adspot;
         _supplier = supplier;
         _leftTime = 5;  // 默认5s
-        _bd_ad = [[BaiduMobAdSplash alloc] init];
-        _bd_ad.AdUnitTag = supplier.adspotid;
+        self.bd_ad = [[BaiduMobAdSplash alloc] init];
+        self.bd_ad.AdUnitTag = supplier.adspotid;
     }
     return self;
 }
@@ -73,8 +79,7 @@
     } else {
         _bd_ad.adSize = CGSizeMake(window.frame.size.width, window.frame.size.height);
     }
-    
-    [_bd_ad load];
+    [self.bd_ad load];
 
 }
 
@@ -105,6 +110,8 @@
 
 - (void)deallocAdapter {
 //    _gdt_ad = nil;
+    [self.bd_ad stop];
+    self.bd_ad = nil;
     [self.customSplashView removeFromSuperview];
     [self.imgV removeFromSuperview];
 }
@@ -136,16 +143,29 @@
 
 
 - (NSString *)publisherId {
+//    return @"fdsfds";
     return _supplier.mediaid;
 }
 
 - (void)splashDidDismissLp:(BaiduMobAdSplash *)splash {
-//    NSLog(@"开屏广告落地页被关闭");
+//    NSLog(@"开屏广告落地页被关闭, ");
 }
 
 - (void)splashDidDismissScreen:(BaiduMobAdSplash *)splash {
 //    NSLog(@"开屏广告被移除");
-    [self deallocAdapter];
+//    [self deallocAdapter];
+    if ([[NSDate date] timeIntervalSince1970]*1000 < _timeout_stamp) {// 关闭时的时间小于过期时间则点击了跳过
+//        NSLog(@"%f, %ld",[[NSDate date] timeIntervalSince1970]*1000,  _timeout_stamp);
+        if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdSkipClicked)]) {
+            [self.delegate advanceSplashOnAdSkipClicked];
+        }
+    } else {
+        if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdCountdownToZero)]) {
+            [self.delegate advanceSplashOnAdCountdownToZero];
+        }
+    }
+    [self.customSplashView removeFromSuperview];
+    [self.imgV removeFromSuperview];
     if ([self.delegate respondsToSelector:@selector(advanceDidClose)]) {
         [self.delegate advanceDidClose];
     }
@@ -161,6 +181,9 @@
 
 - (void)splashSuccessPresentScreen:(BaiduMobAdSplash *)splash {
 //    NSLog(@"开屏广告展示成功");
+    _timeout = 5;
+    // 记录过期的时间
+    _timeout_stamp = ([[NSDate date] timeIntervalSince1970] + _timeout)*1000;
     self.customSplashView.hidden = NO;
     self.imgV.hidden = NO;
 }
@@ -193,14 +216,20 @@
     [self showAd];
 }
 
-- (void)splashAdLoadFail:(BaiduMobAdSplash *)splash {
-//    NSLog(@"开屏广告请求失败");
-    NSError *error = [[NSError alloc]initWithDomain:@"BDAdErrorDomain" code:1000000 userInfo:@{@"desc":@"百度广告请求错误"}];
+- (void)splashAdLoadFailCode:(NSString *)errCode
+                     message:(NSString *)message
+                    splashAd:(BaiduMobAdSplash *)nativeAd {
+    NSError *error = [[NSError alloc]initWithDomain:@"BDAdErrorDomain" code:[errCode integerValue] userInfo:@{@"desc":message}];
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
     if (_supplier.isParallel == YES) {
         _supplier.state = AdvanceSdkSupplierStateFailed;
         return;
     }
     [self deallocAdapter];
+
 }
+
+//- (void)splashAdLoadFail:(BaiduMobAdSplash *)splash {
+////    NSLog(@"开屏广告请求失败");
+//}
 @end
