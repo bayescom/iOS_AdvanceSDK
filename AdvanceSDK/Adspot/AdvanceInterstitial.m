@@ -89,6 +89,8 @@
         clsName = @"MercuryInterstitialAdapter";
     } else if ([supplier.identifier isEqualToString:SDK_ID_KS]) {
         clsName = @"KsInterstitialAdapter";
+    } else if ([supplier.identifier isEqualToString:SDK_ID_BAIDU]) {
+        clsName = @"BdInterstitialAdapter";
     }
     if (NSClassFromString(clsName)) {
 #pragma clang diagnostic push
