@@ -142,8 +142,8 @@
 //}
 
 - (void)gdt_rewardVideoAdDidRewardEffective:(GDTRewardVideoAd *)rewardedVideoAd info:(NSDictionary *)info {
-    if ([self.delegate respondsToSelector:@selector(advanceRewardVideoAdDidRewardEffective)]) {
-        [self.delegate advanceRewardVideoAdDidRewardEffective];
+    if ([self.delegate respondsToSelector:@selector(advanceRewardVideoAdDidRewardEffective:)]) {
+        [self.delegate advanceRewardVideoAdDidRewardEffective:YES];
     }
 
 }

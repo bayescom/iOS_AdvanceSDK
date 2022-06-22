@@ -19,7 +19,7 @@
 - (void)advanceRewardVideoAdDidPlayFinish;
 
 /// 广告到达激励时间
-- (void)advanceRewardVideoAdDidRewardEffective;
+- (void)advanceRewardVideoAdDidRewardEffective:(BOOL)isReward;
 
 @end
 

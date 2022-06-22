@@ -70,8 +70,8 @@
 }
 
 /// 到达激励时间
-- (void)advanceRewardVideoAdDidRewardEffective {
-    NSLog(@"到达激励时间 %s", __func__);
+- (void)advanceRewardVideoAdDidRewardEffective:(BOOL)isReward {
+    NSLog(@"到达激励时间 %s %d", __func__, isReward);
 }
 
 /// 广告曝光

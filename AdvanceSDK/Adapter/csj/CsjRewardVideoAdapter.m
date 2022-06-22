@@ -152,8 +152,8 @@
 
 - (void)nativeExpressRewardedVideoAdServerRewardDidSucceed:(BUNativeExpressRewardedVideoAd *)rewardedVideoAd verify:(BOOL)verify {
     /// 视频广告播放达到激励条件回调
-    if ([self.delegate respondsToSelector:@selector(advanceRewardVideoAdDidRewardEffective)]) {
-        [self.delegate advanceRewardVideoAdDidRewardEffective];
+    if ([self.delegate respondsToSelector:@selector(advanceRewardVideoAdDidRewardEffective:)]) {
+        [self.delegate advanceRewardVideoAdDidRewardEffective:verify];
     }
 }
 
