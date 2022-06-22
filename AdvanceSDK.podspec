@@ -81,7 +81,7 @@ Pod::Spec.new do |s|
     s.subspec 'KS' do |ks|
         ks.dependency 'AdvanceSDK/Core'
         ks.dependency 'AdvanceSDK/Adspot'
-        ks.dependency 'KSAdSDK', '3.3.23'
+        ks.dependency 'KSAdSDK', '3.3.25'
         ks.source_files = 'AdvanceSDK/Adapter/Kuaishou/**/*.{h,m}'
         ks.frameworks = ["Foundation", "UIKit", "MobileCoreServices", "CoreGraphics", "Security", "SystemConfiguration", "CoreTelephony", "AdSupport", "CoreData", "StoreKit", "AVFoundation", "MediaPlayer", "CoreMedia", "WebKit", "Accelerate", "CoreLocation", "AVKit", "MessageUI", "QuickLook", "AudioToolBox", "AddressBook"]
         ks.libraries =  ["z", "resolv.9", "sqlite3", "c++", "c++abi"]
