@@ -23,21 +23,7 @@
     
     self.initDefSubviewsFlag = YES;
     self.adspotIdsArr = @[
-        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-100024364312"},
         @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10002619"},
-        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"101031-10003190"},
-        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"101245-10003940"},
-        @{@"addesc": @"Mock 渠道错误", @"adspotId": @"100255-10000001"},
-        @{@"addesc": @"Mock code200", @"adspotId": @"100255-10003321"},
-        @{@"addesc": @"Mock code200", @"adspotId": @"100255-10009879"},
-        @{@"addesc": @"haoxueche", @"adspotId": @"101361-10004237"},
-        @{@"addesc": @"快手开屏", @"adspotId": @"100255-10004411"},
-        @{@"addesc": @"快手开屏", @"adspotId": @"101394-10004333"},
-        @{@"addesc": @"百度", @"adspotId": @"100255-10004242"},
-        @{@"addesc": @"百度", @"adspotId": @"100255-10005076"},
-        @{@"addesc": @"悦动圈", @"adspotId": @"100255-10005519"},
-        
-
     ];
     self.btn1Title = @"加载并显示广告";
 }
@@ -50,8 +36,8 @@
 
     self.advanceSplash.isUploadSDKVersion = YES;
     self.advanceSplash.delegate = self;
-    self.advanceSplash.showLogoRequire = YES;
-    self.advanceSplash.logoImage = [UIImage imageNamed:@"app_logo"];
+//    self.advanceSplash.showLogoRequire = YES;
+//    self.advanceSplash.logoImage = [UIImage imageNamed:@"app_logo"];
     self.advanceSplash.backgroundImage = [UIImage imageNamed:@"LaunchImage_img"];
     self.advanceSplash.timeout = 5;
     [self.advanceSplash loadAd];
@@ -75,7 +61,6 @@
     NSLog(@"广告展示失败 %s  error: %@ 详情:%@", __func__, error, description);
 
 }
-
 /// 内部渠道开始加载时调用
 - (void)advanceSupplierWillLoad:(NSString *)supplierId {
     NSLog(@"内部渠道开始加载 %s  supplierId: %@", __func__, supplierId);

@@ -75,9 +75,6 @@
 // MARK: ======================= BUNativeExpressFullscreenVideoAdDelegate =======================
 /// 广告预加载成功回调
 - (void)nativeExpressFullscreenVideoAdDidLoad:(BUNativeExpressFullscreenVideoAd *)fullscreenVideoAd {
-}
-
-- (void)nativeExpressFullscreenVideoAdDidDownLoadVideo:(BUNativeExpressFullscreenVideoAd *)fullscreenVideoAd {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded  supplier:_supplier error:nil];
 //    NSLog(@"穿山甲全屏视频拉取成功");
     _supplier.state = AdvanceSdkSupplierStateSuccess;
@@ -87,6 +84,12 @@
 
     if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
         [self.delegate advanceUnifiedViewDidLoad];
+    }
+}
+
+- (void)nativeExpressFullscreenVideoAdDidDownLoadVideo:(BUNativeExpressFullscreenVideoAd *)fullscreenVideoAd {
+    if ([self.delegate respondsToSelector:@selector(advanceFullScreenVideoOnAdVideoCached)]) {
+        [self.delegate advanceFullScreenVideoOnAdVideoCached];
     }
 }
 
@@ -144,13 +147,18 @@
     }
 }
 
+// 点击了跳过
+- (void)nativeExpressFullscreenVideoAdDidClickSkip:(BUNativeExpressFullscreenVideoAd *)fullscreenVideoAd {
+    if ([self.delegate respondsToSelector:@selector(advanceFullScreenVideodDidClickSkip)]) {
+        [self.delegate advanceFullScreenVideodDidClickSkip];
+    }
+}
+
+
 
 - (void)nativeExpressFullscreenVideoAdViewRenderSuccess:(BUNativeExpressFullscreenVideoAd *)rewardedVideoAd {
     
 }
 
-- (void)nativeExpressFullscreenVideoAdDidClickSkip:(BUNativeExpressFullscreenVideoAd *)fullscreenVideoAd {
-    
-}
 
 @end

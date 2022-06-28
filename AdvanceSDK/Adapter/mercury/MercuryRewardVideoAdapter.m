@@ -135,8 +135,8 @@
 
 /// 视频广告播放达到激励条件回调
 - (void)mercury_rewardVideoAdDidRewardEffective {
-    if ([self.delegate respondsToSelector:@selector(advanceRewardVideoAdDidRewardEffective)]) {
-        [self.delegate advanceRewardVideoAdDidRewardEffective];
+    if ([self.delegate respondsToSelector:@selector(advanceRewardVideoAdDidRewardEffective:)]) {
+        [self.delegate advanceRewardVideoAdDidRewardEffective:YES];
     }
 }
 

@@ -20,6 +20,13 @@
 #define StrongSelf(type) __strong typeof(weak##type) strong##type = weak##type;
 
 @interface KsSplashAdapter ()<KSSplashAdViewDelegate>
+{
+     
+    NSInteger _timeout;
+    NSInteger _timeout_stamp;
+
+}
+
 @property (nonatomic, weak) AdvanceSplash *adspot;
 @property (nonatomic, strong) AdvSupplier *supplier;
 
@@ -115,7 +122,9 @@
  * splash ad material load, ready to display
  */
 - (void)ksad_splashAdContentDidLoad:(KSSplashAdView *)splashAdView {
-    
+    _timeout = 5;
+    // 记录过期的时间
+    _timeout_stamp = ([[NSDate date] timeIntervalSince1970] + _timeout)*1000;
 }
 /**
  * splash ad (material) failed to load
@@ -184,10 +193,9 @@
  * splash ad close conversion viewcontroller (no subsequent callbacks, remove & release KSSplashAdView here)
  */
 - (void)ksad_splashAdDidCloseConversionVC:(KSSplashAdView *)splashAdView interactionType:(KSAdInteractionType)interactType {
-    if ([self.delegate respondsToSelector:@selector(advanceDidClose)]) {
-        [self.delegate advanceDidClose];
-    }
-    [self deallocAdapter];
+    
+
+    [self ksadDidClose];
 
 }
 
@@ -195,23 +203,31 @@
  * splash ad play finished & auto dismiss (no subsequent callbacks, remove & release KSSplashAdView here)
  */
 - (void)ksad_splashAdDidAutoDismiss:(KSSplashAdView *)splashAdView {
-    if ([self.delegate respondsToSelector:@selector(advanceDidClose)]) {
-        [self.delegate advanceDidClose];
-    }
-    [self deallocAdapter];
 
+    [self ksadDidClose];
 }
 /**
  * splash ad close by user (zoom out mode) (no subsequent callbacks, remove & release KSSplashAdView here)
  */
 - (void)ksad_splashAdDidClose:(KSSplashAdView *)splashAdView {
+
+    [self ksadDidClose];
+}
+
+- (void)ksadDidClose {
+    if ([[NSDate date] timeIntervalSince1970]*1000 < _timeout_stamp) {// 关闭时的时间小于过期时间则点击了跳过
+
+    } else {
+        if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdCountdownToZero)]) {
+            [self.delegate advanceSplashOnAdCountdownToZero];
+        }
+    }
     if ([self.delegate respondsToSelector:@selector(advanceDidClose)]) {
         [self.delegate advanceDidClose];
     }
     [self deallocAdapter];
 
 }
-
 
 
 

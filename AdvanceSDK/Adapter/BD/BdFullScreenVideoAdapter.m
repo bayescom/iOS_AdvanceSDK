@@ -83,10 +83,6 @@
 - (void)fullScreenVideoAdLoadSuccess:(BaiduMobAdExpressFullScreenVideo *)video {
     //    ADVLog(@"百度全屏视频拉取成功");
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
-}
-
-- (void)fullScreenVideoAdLoaded:(BaiduMobAdExpressFullScreenVideo *)video {
-//    ADVLog(@"百度全屏视频缓存成功");
     if (_supplier.isParallel == YES) {
         ADVLog(@"修改状态: %@", _supplier);
         _supplier.state = AdvanceSdkSupplierStateSuccess;
@@ -94,6 +90,15 @@
     }
     if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
         [self.delegate advanceUnifiedViewDidLoad];
+    }
+
+
+}
+
+- (void)fullScreenVideoAdLoaded:(BaiduMobAdExpressFullScreenVideo *)video {
+//    ADVLog(@"百度全屏视频缓存成功");
+    if ([self.delegate respondsToSelector:@selector(advanceFullScreenVideoOnAdVideoCached)]) {
+        [self.delegate advanceFullScreenVideoOnAdVideoCached];
     }
 }
 
@@ -139,6 +144,7 @@
     }
 }
 
+
 - (void)fullScreenVideoAdDidClose:(BaiduMobAdExpressFullScreenVideo *)video withPlayingProgress:(CGFloat)progress {
 //    NSLog(@"全屏视频点击关闭，progress:%f", progress);
     if ([self.delegate respondsToSelector:@selector(advanceDidClose)]) {
@@ -148,6 +154,9 @@
 
 - (void)fullScreenVideoAdDidSkip:(BaiduMobAdExpressFullScreenVideo *)video withPlayingProgress:(CGFloat)progress{
 //    NSLog(@"全屏视频点击跳过，progress:%f", progress);
+    if ([self.delegate respondsToSelector:@selector(advanceFullScreenVideodDidClickSkip)]) {
+        [self.delegate advanceFullScreenVideodDidClickSkip];
+    }
 
 }
 

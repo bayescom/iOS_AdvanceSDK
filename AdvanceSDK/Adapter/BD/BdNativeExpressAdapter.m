@@ -37,7 +37,7 @@
         _bd_ad = [[BaiduMobAdNative alloc] init];
         _bd_ad.delegate = self;
         _bd_ad.publisherId = _supplier.mediaid;
-        _bd_ad.adId = _supplier.adspotid;
+        _bd_ad.adUnitTag = _supplier.adspotid;
         _bd_ad.presentAdViewController = _adspot.viewController;
     }
     return self;
@@ -90,27 +90,28 @@
     } else {
         [_adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
         NSMutableArray *temp = [NSMutableArray array];
-        for (BaiduMobAdNativeAdObject *object in nativeAds) {
-            if ([object isExpired]) {
-                continue;
-            }
-            // BDview
-            BaiduMobAdSmartFeedView *view = [[BaiduMobAdSmartFeedView alloc]initWithObject:object frame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, CGFLOAT_MIN)];
-            UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapGesture:)];
-            [view addGestureRecognizer:tapGesture];
+        
+        BaiduMobAdNativeAdObject *object = nativeAds.firstObject;
+//        if ([object isExpired]) {
+//            continue;
+//        }
+        // BDview
+        BaiduMobAdSmartFeedView *view = [[BaiduMobAdSmartFeedView alloc]initWithObject:object frame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, CGFLOAT_MIN)];
+//            UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapGesture:)];
+//            [view addGestureRecognizer:tapGesture];
 
-            [view setVideoMute:YES];
-            
+        [view setVideoMute:YES];
+        
 //            [view handleClick];
-            [view trackImpression];
-            
-            // advanceView
-            AdvanceNativeExpressView *TT = [[AdvanceNativeExpressView alloc] initWithViewController:_adspot.viewController];
-            TT.expressView = view;
-            TT.identifier = _supplier.identifier;
-            [temp addObject:TT];
+//            [view trackImpression];
+        [view reSize];
 
-        }
+        // advanceView
+        AdvanceNativeExpressView *TT = [[AdvanceNativeExpressView alloc] initWithViewController:_adspot.viewController];
+        TT.expressView = view;
+        TT.identifier = _supplier.identifier;
+        [temp addObject:TT];
+
         self.views = temp;
         if (_supplier.isParallel == YES) {
 //            NSLog(@"修改状态: %@", _supplier);
@@ -139,6 +140,17 @@
     _bd_ad = nil;
 
 }
+
+// 负反馈点击选项回调
+- (void)nativeAdDislikeClick:(UIView *)adView; {
+//    NSLog(@"智能优选负反馈点击：%@", object);
+    AdvanceNativeExpressView *temp = [self returnExpressViewWithAdView:adView];
+    if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdClosed:)]) {
+        [_delegate advanceNativeExpressOnAdClosed:temp];
+    }
+
+}
+
 
 //广告被点击，打开后续详情页面，如果为视频广告，可选择暂停视频
 - (void)nativeAdClicked:(UIView *)nativeAdView nativeAdDataObject:(BaiduMobAdNativeAdObject *)object {
@@ -185,7 +197,7 @@
 //广告曝光失败
 - (void)nativeAdExposureFail:(UIView *)nativeAdView nativeAdDataObject:(BaiduMobAdNativeAdObject *)object failReason:(int)reason {
 //    NSLog(@"信息流广告曝光失败:%@ - %@，reason：%d", nativeAdView, object, reason);
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:nil];
+//    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:nil];
     
     AdvanceNativeExpressView *expressView = [self returnExpressViewWithAdView:nativeAdView];
 

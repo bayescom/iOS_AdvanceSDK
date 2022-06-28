@@ -11,6 +11,8 @@ target 'AdvanceSDK_Example' do
   pod 'AdvanceSDK/KS', :path => '../'
   pod 'AdvanceSDK/BD', :path => '../'
   pod 'Masonry'
+#  pod 'Ads-CN', '4.4.0.0'
+
 #  pod "STDebugConsole"
 #  pod 'JPFPSStatus'
 

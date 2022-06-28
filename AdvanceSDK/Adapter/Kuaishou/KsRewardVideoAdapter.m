@@ -187,8 +187,8 @@
  */
 - (void)rewardedVideoAd:(KSRewardedVideoAd *)rewardedVideoAd hasReward:(BOOL)hasReward {
     if (hasReward) {
-        if ([self.delegate respondsToSelector:@selector(advanceRewardVideoAdDidRewardEffective)]) {
-            [self.delegate advanceRewardVideoAdDidRewardEffective];
+        if ([self.delegate respondsToSelector:@selector(advanceRewardVideoAdDidRewardEffective:)]) {
+            [self.delegate advanceRewardVideoAdDidRewardEffective:hasReward];
         }
     }
 }

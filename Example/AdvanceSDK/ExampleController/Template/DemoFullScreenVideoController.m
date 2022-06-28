@@ -24,13 +24,7 @@
     
     self.initDefSubviewsFlag = YES;
     self.adspotIdsArr = @[
-        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10003014"},
         @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10004765"},
-        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10004567"},
-        @{@"addesc": @"Mock 渠道错误", @"adspotId": @"100255-10000001"},
-        @{@"addesc": @"Mock code200", @"adspotId": @"100255-10003321"},
-        @{@"addesc": @"Mock code200", @"adspotId": @"100255-10004674"},
-        @{@"addesc": @"Mock code200", @"adspotId": @"100255-10008001"},
     ];
     self.btn1Title = @"加载广告";
     self.btn2Title = @"显示广告";
@@ -66,9 +60,6 @@
 /// 请求广告数据成功后调用
 - (void)advanceUnifiedViewDidLoad {
     NSLog(@"请求广告数据成功后调用 %s", __func__);
-    _isAdLoaded=true;
-    [JDStatusBarNotification showWithStatus:@"广告加载成功" dismissAfter:1.5];
-    [self loadAdBtn2Action];
 }
 
 /// 广告曝光
@@ -92,6 +83,11 @@
 
 }
 
+/// 点击跳过
+- (void)advanceFullScreenVideodDidClickSkip {
+    NSLog(@"点击了跳过 %s", __func__);
+}
+
 /// 广告关闭
 - (void)advanceDidClose {
     NSLog(@"广告关闭了 %s", __func__);
@@ -100,6 +96,15 @@
 /// 广告播放完成
 - (void)advanceFullScreenVideoOnAdPlayFinish {
     NSLog(@"广告播放完成 %s", __func__);
+}
+
+/// 广告视频缓存完成
+- (void)advanceFullScreenVideoOnAdVideoCached {
+    NSLog(@"广告缓存成功 %s", __func__);
+    _isAdLoaded=true;
+    [JDStatusBarNotification showWithStatus:@"广告加载成功" dismissAfter:1.5];
+    [self loadAdBtn2Action];
+
 }
 
 /// 策略加载成功

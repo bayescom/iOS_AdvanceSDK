@@ -88,7 +88,7 @@ static AdvUploadTKManager *defaultManager = nil;
     NSMutableArray *uploadFails = [NSMutableArray array];
     
     for (NSString *url in urls) {
-        [self.queue addOperation:[self createSessionOperationWithUrl:url urls:temp uploadFails:uploadFails sign:sign complete:completeBlock fail:failBlock]];
+        [self.queue addOperation:[self _createSessionOperationWithUrl:url urls:temp uploadFails:uploadFails sign:sign uploadCount:0 complete:completeBlock fail:failBlock]];
     }
     
 }
@@ -106,13 +106,25 @@ static AdvUploadTKManager *defaultManager = nil;
     return request;
 }
 
-- (AdvURLSessionOperation *)createSessionOperationWithUrl:(NSString *)urlString
+/// 上传任务
+/// @param urlString 被上传的url
+/// @param urls 所有待上传的url
+/// @param uploadFails 上传失败的容器(目前没用, 未来可能做失败缓存上传)
+/// @param sign 本组上传的标志
+/// @param count urlString被上传的次数, 目前是失败后上传3次 如果还失败,则无视,不做失败缓存
+/// @param completeBlock 成功回调
+/// @param failBlock 失败回调
+
+- (AdvURLSessionOperation *)_createSessionOperationWithUrl:(NSString *)urlString
                                                      urls:(NSMutableArray *)urls
                                               uploadFails:(NSMutableArray *)uploadFails
                                                      sign:(NSString *)sign
+                                               uploadCount:(NSInteger)count
                                                   complete:(AdvUploadTkComplete)completeBlock
                                                      fail:(AdvUploadTkFail)failBlock {
     
+    __block NSInteger tempCount = count;
+
     NSMutableURLRequest *request = [self createRequestWithUrl:urlString];
     
     NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
@@ -127,9 +139,14 @@ static AdvUploadTKManager *defaultManager = nil;
         // 2. 如果有失败的 把url保存在容器里 并回调出去
         //    便于后续版本做缓存上报的功能
         if ([(NSHTTPURLResponse *)response statusCode] != 200) {
-            
+            // 添加进失败容器
             [uploadFails addObject:urlString];
+            if (tempCount < 2) {// 说明已经失败过两次了 不用在上传了
+                tempCount++;
+                [self.queue addOperation:[self _createSessionOperationWithUrl:urlString urls:urls uploadFails:uploadFails sign:sign uploadCount:tempCount complete:completeBlock fail:failBlock]];
+            }
             
+            // 重新
             if (failBlock) {
                 failBlock(urlString, [(NSHTTPURLResponse *)response statusCode]);
             }

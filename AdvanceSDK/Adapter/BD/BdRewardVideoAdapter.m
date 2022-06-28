@@ -155,8 +155,8 @@
 
 - (void)rewardedVideoAdRewardDidSuccess:(BaiduMobAdRewardVideo *)video verify:(BOOL)verify {
     //    NSLog(@"激励成功回调, progress:%f", progress);
-    if ([self.delegate respondsToSelector:@selector(advanceRewardVideoAdDidRewardEffective)]) {
-        [self.delegate advanceRewardVideoAdDidRewardEffective];
+    if ([self.delegate respondsToSelector:@selector(advanceRewardVideoAdDidRewardEffective:)]) {
+        [self.delegate advanceRewardVideoAdDidRewardEffective:verify];
     }
 }
 
