@@ -90,6 +90,7 @@ NSString * ADVStringFromNAdvanceSdkSupplierRepoType(AdvanceSdkSupplierRepoType t
 @property (nonatomic, copy)   NSString *adspotid;
 @property (nonatomic, copy)   NSString *name;
 @property (nonatomic, copy)   NSString *mediaid;
+@property (nonatomic, copy)   NSString *price;
 @property (nonatomic, assign) NSInteger priority;
 @property (nonatomic, assign) BOOL isParallel;// 是否并行
 @property (nonatomic, assign) AdvanceSdkSupplierState state;// 渠道状态
