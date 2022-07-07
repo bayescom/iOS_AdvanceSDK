@@ -164,6 +164,8 @@
             [tempBidding addObject:parallelSupplier];
         }
     }];
+    
+    [_model.setting.parallelGroup removeObject:biddingPriority];
 
     // 参与bidding的渠道数
     _incomeBiddingCount = tempBidding.count;
