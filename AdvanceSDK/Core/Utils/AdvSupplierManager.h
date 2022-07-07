@@ -9,7 +9,7 @@
 #import "AdvSupplierModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
-@class AdvSupplierQueue;
+
 @protocol AdvSupplierManagerDelegate <NSObject>
 
 // MARK: ======================= 策略回调 =======================
@@ -22,6 +22,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// 返回下一个渠道的参数
 - (void)advSupplierLoadSuppluer:(nullable AdvSupplier *)supplier error:(nullable NSError *)error;
+
+
+/// bidding相关
+/// 开始bidding
+/// @param suppliers 参加bidding的渠道
+- (void)advBiddingActionWithSuppliers:(NSMutableArray <AdvSupplier*>*)suppliers;
 
 @end
 
@@ -67,6 +73,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// 取消正在进行的策略请求
 - (void)cacelDataTask;
+
+/// 进入bidding队列
+- (void)inBiddingQueueWithSupplier:(AdvSupplier *)supplier;
 
 @end
 

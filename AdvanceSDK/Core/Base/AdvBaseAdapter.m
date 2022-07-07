@@ -54,7 +54,15 @@
 //    NSLog(@"|||--- %@ %ld %@",supplier.sdktag, (long)supplier.priority, supplier);
     [_mgr reportWithType:repoType supplier:supplier error:error];
     
+    // 如果是bidding渠道,且请求广告成功, 那么就加入bidding队列 (bidding的渠道一定是并发的, isParallel一定为yes)
+    if (repoType == AdvanceSdkSupplierRepoSucceeded && supplier.isSupportBidding) {
+        [_mgr inBiddingQueueWithSupplier:supplier];
+    }
+    
+    
     // 失败了 并且不是并行才会走下一个渠道
+    // 由于bidding渠道isParallel=yes 所以bidding是不会走这个逻辑的
+    // 但是bidding结束后会选择一个胜出的渠道, 胜出的渠道isParallel = NO 所以会走这个逻辑
     if (repoType == AdvanceSdkSupplierRepoFaileded && !supplier.isParallel) {
 //        NSLog(@"%@ |||   %ld %@",supplier.sdktag, (long)supplier.priority, supplier);
         // 搜集各渠道的错误信息

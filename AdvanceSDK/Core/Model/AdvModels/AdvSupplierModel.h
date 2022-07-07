@@ -75,6 +75,7 @@ NSString * ADVStringFromNAdvanceSdkSupplierRepoType(AdvanceSdkSupplierRepoType t
 @property (nonatomic, copy)   NSString *cptStart;
 @property (nonatomic, copy)   NSString *cptEnd;
 @property (nonatomic, copy)   NSString *cptSupplier;
+@property (nonatomic, assign) BOOL isBidding; // 策略告知是本次是否有bidding渠道, 这个字段决定了parallelGroup 拿到第一组优先级后 是否走bidding逻辑
 @property (nonatomic, copy)   NSArray<NSString *> *parallelIDS;
 @property (nonatomic, strong) NSMutableArray<NSMutableArray<NSNumber *> *> *parallelGroup;
 @property (nonatomic, assign) NSTimeInterval cacheTime;
@@ -99,6 +100,7 @@ NSString * ADVStringFromNAdvanceSdkSupplierRepoType(AdvanceSdkSupplierRepoType t
 @property (nonatomic, copy)   NSArray<NSString *> *imptk;
 @property (nonatomic, copy)   NSArray<NSString *> *succeedtk;
 @property (nonatomic, copy)   NSArray<NSString *> *failedtk;
+@property (nonatomic, assign) BOOL isSupportBidding;
 
 
 /// 构建打底渠道
