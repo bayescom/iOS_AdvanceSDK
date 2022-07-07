@@ -73,6 +73,21 @@
     }
 
 }
+
+// 开始bidding
+- (void)advManagerBiddingActionWithSuppliers:(NSMutableArray<AdvSupplier *> *)suppliers {
+    if (self.baseDelegate && [self.baseDelegate respondsToSelector:@selector(advanceBaseAdapterBiddingAction:)]) {
+        [self.baseDelegate advanceBaseAdapterBiddingAction:suppliers];
+    }
+}
+
+// bidding结束
+- (void)advManagerBiddingEndWithWinSupplier:(AdvSupplier *)supplier {
+    if (self.baseDelegate && [self.baseDelegate respondsToSelector:@selector(advanceBaseAdapterBiddingEndWithWinSupplier:)]) {
+        [self.baseDelegate advanceBaseAdapterBiddingEndWithWinSupplier:supplier];
+    }
+}
+
 - (void)collectErrorWithSupplier:(AdvSupplier *)supplier error:(NSError *)error {
     // key: 渠道名-优先级
     if (error) {

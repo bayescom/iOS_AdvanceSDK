@@ -25,6 +25,13 @@
 /// @param supplier 被加载的渠道
 /// @param error 异常信息
 - (void)advanceBaseAdapterLoadSuppluer:(nullable AdvSupplier *)supplier error:(nullable NSError *)error;
+
+// 开始bidding
+- (void)advanceBaseAdapterBiddingAction:(NSMutableArray <AdvSupplier *> *_Nullable)suppliers;
+
+// bidding结束
+- (void)advanceBaseAdapterBiddingEndWithWinSupplier:(AdvSupplier *_Nonnull)supplier;
+
 @end
 
 #endif /* AdvanceSupplierDelegate_h */

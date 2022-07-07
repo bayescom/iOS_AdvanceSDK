@@ -14,7 +14,9 @@
 @optional
 
 
+
 @end
+    
 
 
 #endif /* AdvanceBiddingBaseDelegate_h */

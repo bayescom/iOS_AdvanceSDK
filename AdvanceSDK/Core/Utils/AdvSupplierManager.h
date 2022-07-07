@@ -27,7 +27,15 @@ NS_ASSUME_NONNULL_BEGIN
 /// bidding相关
 /// 开始bidding
 /// @param suppliers 参加bidding的渠道
-- (void)advBiddingActionWithSuppliers:(NSMutableArray <AdvSupplier*>*)suppliers;
+- (void)advManagerBiddingActionWithSuppliers:(NSMutableArray <AdvSupplier*>*)suppliers;
+
+/// bidding相关
+/// 结束bidding
+/// @param supplier 参加bidding的渠道
+- (void)advManagerBiddingEndWithWinSupplier:(AdvSupplier *)supplier;
+
+/// bidding失败(即规定时间内,所有bidding广告为 都没有返回广告)
+- (void)advManagerBiddingFailed;
 
 @end
 

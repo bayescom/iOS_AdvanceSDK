@@ -39,7 +39,7 @@
 //    self.advanceSplash.showLogoRequire = YES;
 //    self.advanceSplash.logoImage = [UIImage imageNamed:@"app_logo"];
     self.advanceSplash.backgroundImage = [UIImage imageNamed:@"LaunchImage_img"];
-    self.advanceSplash.timeout = 10;
+    self.advanceSplash.timeout = 10; // 如果使用bidding 功能 timeout时长必须要比 服务器下发的bidding等待时间要长 否则会严重影响变现效率
     [self.advanceSplash loadAd];
     
 
@@ -92,4 +92,12 @@
     NSLog(@"%s 策略id为: %@",__func__ , reqId);
 }
 
+
+- (void)advanceBiddingAction {
+    NSLog(@"%s 开始bidding",__func__);
+}
+
+- (void)advanceBiddingEnd {
+    NSLog(@"%s 结束bidding",__func__);
+}
 @end

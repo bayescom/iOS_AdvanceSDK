@@ -47,6 +47,11 @@
 @property (nonatomic, strong) NSMutableArray *arrayWaitingBidding;
 
 
+/// 计时器检测bidding时间
+@property (nonatomic, strong) CADisplayLink *timeoutCheckTimer;
+/// bidding截止时间戳
+@property (nonatomic, assign) NSInteger timeout_stamp;
+
 @end
 
 @implementation AdvSupplierManager
@@ -125,7 +130,7 @@
         [self parallelActionWithCurrentPriority:currentPriority];
     }
 }
-// - (void)advBiddingActionWithSuppliers:(NSMutableArray <AdvSupplier*>*)suppliers;
+// - (void)advManagerBiddingActionWithSuppliers:(NSMutableArray <AdvSupplier*>*)suppliers;
 
 - (void)loadBiddingSupplier {
     if (_model == nil) {
@@ -170,11 +175,19 @@
         
         // 有参加bidding 的 全部一起并发并且最多等候5s(这个5s需要从服务器下发)
         // bidding开始
-        if (self.delegate && [self.delegate respondsToSelector:@selector(advBiddingActionWithSuppliers:)]) {
-            [self.delegate advBiddingActionWithSuppliers:tempBidding];
+        if (self.delegate && [self.delegate respondsToSelector:@selector(advManagerBiddingActionWithSuppliers:)]) {
+            [self.delegate advManagerBiddingActionWithSuppliers:tempBidding];
             
         }
         
+        // 记录过期的时间(这个 5 应该是服务端下发, 目前本地写死)
+        _timeout_stamp = ([[NSDate date] timeIntervalSince1970] + 5)*1000;
+        // 开启定时器监听过期
+        [_timeoutCheckTimer invalidate];
+
+        _timeoutCheckTimer = [CADisplayLink displayLinkWithTarget:self selector:@selector(timeoutCheckTimerAction)];
+        [_timeoutCheckTimer addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
+
         // 一起并发
         [tempBidding enumerateObjectsUsingBlock:^(AdvSupplier  *_Nonnull supplier, NSUInteger idx, BOOL * _Nonnull stop) {
             // isParallel和isSupportBidding 这两个字段在上面已经设置过了 所以这里不用再设置了
@@ -190,12 +203,20 @@
 // 进入bidding队列
 - (void)inBiddingQueueWithSupplier:(AdvSupplier *)supplier {
     
-    NSLog(@"---> %@", supplier);
     [self.arrayWaitingBidding addObject:supplier];
     
     // 如果所有并发渠道都有结果返回了 则选择price高的渠道展示
 //    NSLog(@"%@", self.arrayWaitingBidding.count);
-    if (self.arrayWaitingBidding.count == 3) {
+    
+    if (self.arrayWaitingBidding.count == _incomeBiddingCount) {
+        [self _sortSuppliersByPrice:self.arrayWaitingBidding];
+    }
+}
+
+// 检测时间戳, 如果bidding截止 那么就把当前返回广告的渠道
+- (void)timeoutCheckTimerAction {
+    if ([[NSDate date] timeIntervalSince1970]*1000 > _timeout_stamp) {
+//        NSLog(@"检测时间截止");
         [self _sortSuppliersByPrice:self.arrayWaitingBidding];
     }
 }
@@ -204,6 +225,11 @@
 - (void)_sortSuppliersByPrice:(NSMutableArray <AdvSupplier *> *)suppliers {
     // 如果规定时间内 bidding没有返回结果, 那么判定此次bidding失败,
     // 目前失败直接往外抛异常回调, 后续可能会在bidding失败后走之前的逻辑
+    
+    
+    // 停止检测时间戳
+    [self deallocTimer];
+    
     if (suppliers.count == 0) {
         if ([_delegate respondsToSelector:@selector(advSupplierManagerLoadError:)]) {
             [_delegate advSupplierManagerLoadError:[AdvError errorWithCode:AdvErrorCode_117].toNSError];
@@ -229,7 +255,12 @@
     // 取价格最高的渠道执行
     AdvSupplier *currentSupplier = suppliers.lastObject;
     currentSupplier.isParallel = NO;
-    NSLog(@"----> %@", currentSupplier);
+    
+    // bidding结束
+    if (self.delegate && [self.delegate respondsToSelector:@selector(advManagerBiddingEndWithWinSupplier:)]) {
+        [self.delegate advManagerBiddingEndWithWinSupplier:currentSupplier];
+    }
+
     [self notCPTLoadNextSuppluer:currentSupplier error:nil];
 
 }
@@ -637,9 +668,16 @@
     }
 }
 
+- (void)deallocTimer {
+    [_timeoutCheckTimer invalidate];
+    _timeoutCheckTimer = nil;
+    _timeout_stamp = 0;
+}
+
 - (void)dealloc
 {
     ADV_LEVEL_INFO_LOG(@"mgr 释放啦");
+    [self deallocTimer];
     self.model = nil;
     self.tkUploadTool = nil;
 }
