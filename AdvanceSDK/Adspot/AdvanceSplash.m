@@ -133,6 +133,8 @@
     if (self.delegate && [self.delegate respondsToSelector:@selector(advanceBiddingEnd)]) {
         [self.delegate advanceBiddingEnd];
     }
+    
+    
 }
 
 

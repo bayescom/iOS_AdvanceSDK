@@ -74,6 +74,9 @@
             [_mgr loadNextSupplierIfHas];
         } else {
             // 如果走到了这里, 则意味着 最后胜出的渠道,展示失败  现阶段只抛异常,  下阶段,要在这里执行gromore的逻辑
+            if ([_baseDelegate respondsToSelector:@selector(advanceBaseAdapterLoadError:)]) {
+                [_baseDelegate advanceBaseAdapterLoadError:error];
+            }
         }
     }
 
@@ -87,9 +90,10 @@
 }
 
 // bidding结束
-- (void)advManagerBiddingEndWithWinSupplier:(AdvSupplier *)supplier {
+- (void)advManagerBiddingEndWithWinSupplier:(AdvSupplier *)winSupplier {
+    // 抛出去 下个版本会在每个广告位的 advanceBaseAdapterBiddingEndWithWinSupplier 里 执行GroMore的逻辑
     if (self.baseDelegate && [self.baseDelegate respondsToSelector:@selector(advanceBaseAdapterBiddingEndWithWinSupplier:)]) {
-        [self.baseDelegate advanceBaseAdapterBiddingEndWithWinSupplier:supplier];
+        [self.baseDelegate advanceBaseAdapterBiddingEndWithWinSupplier:winSupplier];
     }
 }
 

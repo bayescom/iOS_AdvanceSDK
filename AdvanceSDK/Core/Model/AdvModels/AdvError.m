@@ -52,7 +52,7 @@
         @(AdvErrorCode_114) : @"非CPT本地策略都执行失败",
         @(AdvErrorCode_115) : @"请求超出设定总时长",
         @(AdvErrorCode_116) : @"策略中未配置渠道",
-        @(AdvErrorCode_117) : @"所有bidding渠道均为返回广告",
+        @(AdvErrorCode_117) : @"所有bidding渠道均未返回广告",
     };
     return [codeMap objectForKey:@(code)];
 }
