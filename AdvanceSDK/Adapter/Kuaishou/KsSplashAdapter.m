@@ -107,6 +107,8 @@
  * splash ad request done
  */
 - (void)ksad_splashAdDidLoad:(KSSplashAdView *)splashAdView {
+    _supplier.supplierPrice = splashAdView.ecpm;
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
     if (_supplier.isParallel == YES) {
         _supplier.state = AdvanceSdkSupplierStateSuccess;

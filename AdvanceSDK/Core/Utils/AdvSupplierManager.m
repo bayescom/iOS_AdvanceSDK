@@ -170,7 +170,7 @@
     // 参与bidding的渠道数
     _incomeBiddingCount = tempBidding.count;
 
-    if (_incomeBiddingCount == 0) {// 没有参加bidding的渠道即没有并发, 那么就按照就的业务去执行
+    if (_incomeBiddingCount == 0) {// 没有参加bidding的渠道即没有并发, 那么就按照旧的业务去执行
         [self loadNextSupplier];
         
     } else {
@@ -243,12 +243,23 @@
     
     // 价格由低到高排序
     [suppliers sortWithOptions:NSSortStable usingComparator:^NSComparisonResult(id _Nonnull obj1, id _Nonnull obj2) {
+        
         AdvSupplier *obj11 = obj1;
         AdvSupplier *obj22 = obj2;
-        if (obj11.price.floatValue > obj22.price.floatValue) {
+        
+        CGFloat obj11_price = (obj11.supplierPrice > 0) ? obj11.supplierPrice : obj11.price.floatValue;
+        CGFloat obj22_price = (obj22.supplierPrice > 0) ? obj22.supplierPrice : obj22.price.floatValue;
+        
+        if (obj11_price > obj22_price) {
             return NSOrderedDescending;
-        } else if (obj11.price.floatValue == obj22.price.floatValue) {
-            return NSOrderedSame;
+        } else if (obj11_price  == obj22_price) {
+            if (obj11.priority > obj22.priority) {// 价格相同的话 按照优先级排序
+                return NSOrderedDescending;
+            } else if (obj11.priority == obj22.priority) {
+                return NSOrderedSame;
+            } else {
+                return NSOrderedAscending;
+            }
         } else {
             return NSOrderedAscending;
         }
@@ -576,6 +587,7 @@
 //        ADVLog(@"TEST %@", a_model.setting.parallelGroup);
         // 开始执行策略
 
+        /*
         if (_model.setting.isBidding) {
             // bidding业务
             [self loadBiddingSupplier];
@@ -583,6 +595,10 @@
             // 之前的业务
             [self loadNextSupplier];
         }
+        */
+        
+        // 现在全都走新逻辑
+        [self loadBiddingSupplier];
     }
     [a_model saveData:data];
 }

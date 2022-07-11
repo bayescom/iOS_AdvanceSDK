@@ -54,8 +54,9 @@
 //    NSLog(@"|||--- %@ %ld %@",supplier.sdktag, (long)supplier.priority, supplier);
     [_mgr reportWithType:repoType supplier:supplier error:error];
     
-    // 如果是bidding渠道,且请求广告成功, 那么就加入bidding队列 (bidding的渠道一定是并发的, isParallel一定为yes)
-    if (repoType == AdvanceSdkSupplierRepoSucceeded && supplier.isSupportBidding) {
+    // 如果是bidding渠道,且上报类型是bidding, 那么就加入bidding队列 (bidding的渠道一定是并发的, isParallel一定为yes)
+    // 注意: 每个渠道返回价格的时机不一样 广点通 didload就可以返回, 详见 AdvSupplier.supplierPrice 的说明
+    if (repoType == AdvanceSdkSupplierRepoBidding && supplier.isSupportBidding) {
         [_mgr inBiddingQueueWithSupplier:supplier];
     }
     

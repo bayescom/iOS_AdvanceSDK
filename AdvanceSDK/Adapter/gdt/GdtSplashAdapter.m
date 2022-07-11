@@ -114,6 +114,8 @@
 
 - (void)splashAdDidLoad:(GDTSplashAd *)splashAd {
 //    NSLog(@"广点通开屏拉取成功 %@ %d",self.gdt_ad ,[self.gdt_ad isAdValid]);
+    _supplier.supplierPrice = splashAd.eCPM;
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
 
     if (_supplier.isParallel == YES) {

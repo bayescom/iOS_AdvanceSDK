@@ -22,6 +22,10 @@ typedef NS_ENUM(NSUInteger, AdvanceSdkSupplierRepoType) {
     AdvanceSdkSupplierRepoImped,
     /// 失败上报
     AdvanceSdkSupplierRepoFaileded,
+    
+    /// bidding上报 目前未使用
+    AdvanceSdkSupplierRepoBidding
+
 };
 
 typedef NS_ENUM(NSUInteger, AdvanceSdkSupplierState) {
@@ -93,6 +97,11 @@ NSString * ADVStringFromNAdvanceSdkSupplierRepoType(AdvanceSdkSupplierRepoType t
 @property (nonatomic, copy)   NSString *mediaid;
 @property (nonatomic, copy)   NSString *price;
 @property (nonatomic, assign) NSInteger priority;
+
+/// 该字段由各渠道SDK 返回并填充 用来做比价
+/// GDT 单位:分   成功返回一个大于等于0的值，-1表示无权限或后台出现异常
+@property (nonatomic, assign) NSInteger supplierPrice;
+
 @property (nonatomic, assign) BOOL isParallel;// 是否并行
 @property (nonatomic, assign) AdvanceSdkSupplierState state;// 渠道状态
 @property (nonatomic, copy)   NSArray<NSString *> *clicktk;
