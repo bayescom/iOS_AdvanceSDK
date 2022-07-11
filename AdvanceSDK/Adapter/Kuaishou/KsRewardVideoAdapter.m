@@ -19,6 +19,7 @@
 @property (nonatomic, strong) KSRewardedVideoAd *ks_ad;
 @property (nonatomic, weak) AdvanceRewardVideo *adspot;
 @property (nonatomic, strong) AdvSupplier *supplier;
+@property (nonatomic, assign) BOOL isCached;
 
 @end
 
@@ -50,6 +51,12 @@
     ADV_LEVEL_INFO_LOG(@"快手 成功");
     if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
         [self.delegate advanceUnifiedViewDidLoad];
+    }
+    
+    if (_isCached) {
+        if ([self.delegate respondsToSelector:@selector(advanceRewardVideoOnAdVideoCached)]) {
+            [self.delegate advanceRewardVideoOnAdVideoCached];
+        }
     }
 }
 
@@ -86,6 +93,8 @@
  This method is called when video ad material loaded successfully.
  */
 - (void)rewardedVideoAdDidLoad:(KSRewardedVideoAd *)rewardedVideoAd {
+    _supplier.supplierPrice = rewardedVideoAd.ecpm;
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
     
 //    NSLog(@"广点通激励视频拉取成功 %@",self.ks_ad);
@@ -105,6 +114,7 @@
  @param error : the reason of error
  */
 - (void)rewardedVideoAd:(KSRewardedVideoAd *)rewardedVideoAd didFailWithError:(NSError *_Nullable)error {
+    NSLog(@"快手 错误 %@", error);
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
     if (_supplier.isParallel == YES) {
         _supplier.state = AdvanceSdkSupplierStateFailed;
@@ -116,6 +126,10 @@
  This method is called when cached successfully.
  */
 - (void)rewardedVideoAdVideoDidLoad:(KSRewardedVideoAd *)rewardedVideoAd {
+    if (_supplier.isParallel == YES) {
+        _isCached = YES;
+        return;
+    }
     if ([self.delegate respondsToSelector:@selector(advanceRewardVideoOnAdVideoCached)]) {
         [self.delegate advanceRewardVideoOnAdVideoCached];
     }

@@ -158,7 +158,9 @@
         AdvSupplier *parallelSupplier = [self getSupplierByPriority:[priority integerValue]];
         BOOL isSupportParallel = [AdvAdsportInfoUtil isSupportParallelWithAdTypeName:adTypeName supplierId:parallelSupplier.identifier];
         if (isSupportParallel && // 该广告位支持并行
-            ![tempBidding containsObject:parallelSupplier]) {// tempBidding 不包含这个渠道
+            ![tempBidding containsObject:parallelSupplier] &&// tempBidding 不包含这个渠道
+            parallelSupplier != nil) {
+            
             parallelSupplier.isParallel = YES;// 并发执行这些渠道
             parallelSupplier.isSupportBidding = YES;// 并且支持bidding
             [tempBidding addObject:parallelSupplier];
@@ -264,6 +266,10 @@
             return NSOrderedAscending;
         }
     }];
+    
+    for (AdvSupplier *temp in suppliers) {
+        NSLog(@"------1-> %@  %ld %ld", temp.sdktag, (long)temp.supplierPrice, (long)temp.priority);
+    }
 
     // 取价格最高的渠道执行
     AdvSupplier *currentSupplier = suppliers.lastObject;
