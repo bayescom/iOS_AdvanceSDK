@@ -107,7 +107,7 @@
 
 #pragma 错误码参数拼接
 - (NSString *)joinFailedUrlWithObj:(NSString *)urlString error:(NSError *)error {
-    ADV_LEVEL_INFO_LOG(@"上报错误: %@", error);
+    ADV_LEVEL_INFO_LOG(@"上报错误: %@  %@", error.domain, error);
     if (error) {
 
         if ([error.domain isEqualToString:@"KSADErrorDomain"]) { // 快手SDK
@@ -115,7 +115,7 @@
         } else if ([error.domain isEqualToString:@"BDAdErrorDomain"]) {
             return [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=err_bd_%ld&track_time",(long)error.code]];
 
-        } else if ([error.domain isEqualToString:@"com.pangle.buadsdk"]) { // 新版穿山甲sdk报错
+        } else if ([error.domain isEqualToString:@"com.pangle.buadsdk"] || [error.domain isEqualToString:@"com.buadsdk"]) { // 新版穿山甲sdk报错
             return [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=err_csj_%ld&track_time",(long)error.code]];
         } else if ([error.domain isEqualToString:@"com.bytedance.buadsdk"]) {// 穿山甲sdk报错
             return [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=err_csj_%ld&track_time",(long)error.code]];

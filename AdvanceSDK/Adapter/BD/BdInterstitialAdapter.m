@@ -84,7 +84,8 @@
 
 - (void)interstitialAdLoaded:(BaiduMobAdExpressInterstitial *)interstitial {
     NSLog(@"ExpressInterstitial loaded 请求成功");
-    
+    _supplier.supplierPrice = [[interstitial getECPMLevel] integerValue];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
 //    NSLog(@"穿山甲插屏视频拉取成功");
     _supplier.state = AdvanceSdkSupplierStateSuccess;

@@ -54,6 +54,12 @@
 //    NSLog(@"|||--- %@ %ld %@",supplier.sdktag, (long)supplier.priority, supplier);
     [_mgr reportWithType:repoType supplier:supplier error:error];
     
+    // 搜集各渠道的错误信息
+    if (error) {
+        [self collectErrorWithSupplier:supplier error:error];
+    }
+
+    
     // 如果是bidding渠道,且上报类型是bidding, 那么就加入bidding队列 (bidding的渠道一定是并发的, isParallel一定为yes)
     // 注意: 每个渠道返回价格的时机不一样 广点通 didload就可以返回, 详见 AdvSupplier.supplierPrice 的说明
     if (repoType == AdvanceSdkSupplierRepoBidding && supplier.isSupportBidding) {
@@ -65,9 +71,7 @@
     // 由于bidding渠道isParallel=yes 所以bidding是不会走这个逻辑的
     // 但是bidding结束后会选择一个胜出的渠道, 胜出的渠道isParallel = NO 所以会走这个逻辑
     if (repoType == AdvanceSdkSupplierRepoFaileded && !supplier.isParallel) {
-//        NSLog(@"%@ |||   %ld %@",supplier.sdktag, (long)supplier.priority, supplier);
-        // 搜集各渠道的错误信息
-        [self collectErrorWithSupplier:supplier error:error];
+        NSLog(@"%@ |||   %ld %@",supplier.sdktag, (long)supplier.priority, supplier);
         
         // 如果渠道非并发 且不支持bidding 且失败了, 则为原来的业务渠道, 走原来的业务逻辑
         if (supplier.isSupportBidding == NO) {
@@ -75,9 +79,11 @@
             [_mgr loadNextSupplierIfHas];
         } else {
             // 如果走到了这里, 则意味着 最后胜出的渠道,展示失败  现阶段只抛异常,  下阶段,要在这里执行gromore的逻辑
-            if ([_baseDelegate respondsToSelector:@selector(advanceBaseAdapterLoadError:)]) {
-                [_baseDelegate advanceBaseAdapterLoadError:error];
-            }
+//            if ([_baseDelegate respondsToSelector:@selector(advanceBaseAdapterLoadError:)]) {
+//                [_baseDelegate advanceBaseAdapterLoadError:error];
+//            }
+            // 加载下一组bidding
+            [_mgr loadNextBiddingSupplierIfHas];
         }
     }
 

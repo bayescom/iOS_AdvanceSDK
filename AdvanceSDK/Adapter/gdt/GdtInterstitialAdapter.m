@@ -94,6 +94,8 @@
 }
 
 - (void)unifiedInterstitialRenderSuccess:(GDTUnifiedInterstitialAd *)unifiedInterstitial {
+    _supplier.supplierPrice = unifiedInterstitial.eCPM;
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
 //    NSLog(@"广点通插屏拉取成功 %@",self.gdt_ad);
     if (_supplier.isParallel == YES) {

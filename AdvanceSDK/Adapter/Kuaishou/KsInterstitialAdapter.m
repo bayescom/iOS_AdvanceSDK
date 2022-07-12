@@ -90,6 +90,8 @@
  * interstitial ad render success
  */
 - (void)ksad_interstitialAdRenderSuccess:(KSInterstitialAd *)interstitialAd {
+    _supplier.supplierPrice = interstitialAd.ecpm;
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
     _isDidLoad = YES;
 //    ADVLog(@"快手插屏视频拉取成功");

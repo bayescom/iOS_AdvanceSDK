@@ -61,6 +61,20 @@
     }
 }
 
+// 开始bidding
+- (void)advanceBaseAdapterBiddingAction:(NSMutableArray <AdvSupplier *> *_Nullable)suppliers {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(advanceBiddingAction)]) {
+        [self.delegate advanceBiddingAction];
+    }
+}
+
+// bidding结束
+- (void)advanceBaseAdapterBiddingEndWithWinSupplier:(AdvSupplier *_Nonnull)supplier {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(advanceBiddingEnd)]) {
+        [self.delegate advanceBiddingEnd];
+    }
+}
+
 /// 返回下一个渠道的参数
 - (void)advanceBaseAdapterLoadSuppluer:(nullable AdvSupplier *)supplier error:(nullable NSError *)error {
     // 返回渠道有问题 则不用再执行下面的渠道了
