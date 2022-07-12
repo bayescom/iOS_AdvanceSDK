@@ -95,7 +95,7 @@ NSString * ADVStringFromNAdvanceSdkSupplierRepoType(AdvanceSdkSupplierRepoType t
 @property (nonatomic, copy)   NSString *adspotid;
 @property (nonatomic, copy)   NSString *name;
 @property (nonatomic, copy)   NSString *mediaid;
-@property (nonatomic, copy)   NSString *price;
+@property (nonatomic, assign) CGFloat sdk_price;// 单位: 元
 @property (nonatomic, assign) NSInteger priority;
 
 /// 该字段由各渠道SDK 返回并填充 用来做比价

@@ -249,18 +249,18 @@
         AdvSupplier *obj11 = obj1;
         AdvSupplier *obj22 = obj2;
         
-        CGFloat obj11_price = (obj11.supplierPrice > 0) ? obj11.supplierPrice : obj11.price.floatValue;
-        CGFloat obj22_price = (obj22.supplierPrice > 0) ? obj22.supplierPrice : obj22.price.floatValue;
+        CGFloat obj11_price = (obj11.supplierPrice > 0) ? obj11.supplierPrice : obj11.sdk_price * 100;
+        CGFloat obj22_price = (obj22.supplierPrice > 0) ? obj22.supplierPrice : obj22.sdk_price * 100;
         
         if (obj11_price > obj22_price) {
             return NSOrderedDescending;
         } else if (obj11_price  == obj22_price) {
             if (obj11.priority > obj22.priority) {// 价格相同的话 按照优先级排序
-                return NSOrderedDescending;
+                return NSOrderedAscending;
             } else if (obj11.priority == obj22.priority) {
                 return NSOrderedSame;
             } else {
-                return NSOrderedAscending;
+                return NSOrderedDescending;
             }
         } else {
             return NSOrderedAscending;
@@ -466,8 +466,8 @@
     ADV_LEVEL_INFO_LOG(@"请求参数 %@   uuid:%@", deviceInfo, [AdvDeviceInfoUtil getAuctionId]);
     NSError *parseError = nil;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:deviceInfo options:NSJSONWritingPrettyPrinted error:&parseError];
-//    NSURL *url = [NSURL URLWithString:AdvanceSdkRequestUrl];
-    NSURL *url = [NSURL URLWithString:AdvanceSdkRequestMockUrl];
+    NSURL *url = [NSURL URLWithString:AdvanceSdkRequestUrl];
+//    NSURL *url = [NSURL URLWithString:AdvanceSdkRequestMockUrl];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:self.fetchTime];
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     request.HTTPBody = jsonData;
@@ -538,7 +538,7 @@
     
     NSError *parseErr = nil;
     AdvSupplierModel *a_model = [AdvSupplierModel adv_modelWithJSON:data];
-//    ADVLog(@"[JSON]%@", [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil]);
+    ADVLog(@"[JSON]%@", [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil]);
     ADVLogJSONData(data);
     if (parseErr || !a_model) {
         // parse error
