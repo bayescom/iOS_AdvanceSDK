@@ -112,7 +112,7 @@
             [_delegate advSupplierManagerLoadSuccess:self.model];
         }
         // 开始执行策略
-        [self loadNextSupplier];
+        [self loadBiddingSupplier];
     }
 }
 
@@ -184,7 +184,7 @@
     // 参与bidding的渠道数
     _incomeBiddingCount = tempBidding.count;
 
-    NSLog(@"_incomeBiddingCount = %ld", _incomeBiddingCount);
+//    NSLog(@"_incomeBiddingCount = %ld", _incomeBiddingCount);
     if (_incomeBiddingCount == 0) {// 没有参加bidding的渠道即没有并发, 那么就按照旧的业务去执行
         if (self.model.setting.parallelGroup.count == 0) { // 如果并发组里元素个数为0 那么就开始执行剩下非并发的渠道了
             [self loadNextSupplier];
@@ -252,13 +252,7 @@
     [self deallocTimer];
     
     if (suppliers.count == 0) {
-//        if (self.model.setting.parallelGroup.count == 0) {
-//            if ([_delegate respondsToSelector:@selector(advSupplierManagerLoadError:)]) {
-//                [_delegate advSupplierManagerLoadError:[AdvError errorWithCode:AdvErrorCode_117].toNSError];
-//            }
-//        } else {
-            [self loadNextBiddingSupplierIfHas];
-//        }
+        [self loadNextBiddingSupplierIfHas];
         return;
     }
     
@@ -315,40 +309,7 @@
 
         return;
     }
-    // 判断是否在CPT时间段
-    NSTimeInterval curTime = [[NSDate date] timeIntervalSince1970]*1000.0;
-    if ([_model.setting.cptStart floatValue] < curTime && [_model.setting.cptEnd floatValue] > curTime) {
-        
-        // CPT 无渠道
-        if (_supplierM.count <= 0) {
-            // 抛异常
-            if ([_delegate respondsToSelector:@selector(advSupplierLoadSuppluer:error:)]) {
-                [_delegate advSupplierLoadSuppluer:nil error:[AdvError errorWithCode:AdvErrorCode_111].toNSError];
-            }
-            return;
-        }
-        
-        AdvSupplier *targetSupplier = nil;
-        for (AdvSupplier *supplier in _supplierM) {
-            if (supplier.identifier == _model.setting.cptSupplier) {
-                targetSupplier = supplier;
-            }
-        }
-        
-        // CPT 未找到目标渠道
-        if (targetSupplier == nil) {
-            // 抛异常
-            if ([_delegate respondsToSelector:@selector(advSupplierLoadSuppluer:error:)]) {
-                [_delegate advSupplierLoadSuppluer:nil error:[AdvError errorWithCode:AdvErrorCode_112].toNSError];
-            }
-            return;
-        }
-        
-        [self reportWithType:AdvanceSdkSupplierRepoLoaded supplier:targetSupplier error:nil];
-        if ([_delegate respondsToSelector:@selector(advSupplierLoadSuppluer:error:)]) {
-            [_delegate advSupplierLoadSuppluer:targetSupplier error:nil];
-        }
-    } else {
+   
         // 非包天 model无渠道信息
         if (_model.suppliers.count <= 0) {
             
@@ -360,17 +321,10 @@
         }
 
         
-        // 执行非CPT渠道逻辑
         AdvSupplier *currentSupplier = _supplierM.firstObject;
-//        NSInteger currentPriority = currentSupplier.priority;
         
         [self notCPTLoadNextSuppluer:currentSupplier error:nil];
-//        NSLog(@"---!!!>>> %ld", _model.setting.parallelGroup.count);
-//        if (_model.setting.parallelGroup.count > 0) {
-//            // 并行执行
-//            [self parallelActionWithCurrentPriority:currentPriority];
-//        }
-    }
+    
 }
 
 // 并行执行
@@ -609,20 +563,7 @@
         if ([_delegate respondsToSelector:@selector(advSupplierManagerLoadSuccess:)]) {
             [_delegate advSupplierManagerLoadSuccess:self.model];
         }
-        
-//        ADVLog(@"TEST %@", a_model.setting.parallelGroup);
-        // 开始执行策略
-
-        /*
-        if (_model.setting.isBidding) {
-            // bidding业务
-            [self loadBiddingSupplier];
-        } else {
-            // 之前的业务
-            [self loadNextSupplier];
-        }
-        */
-        
+                
         // 现在全都走新逻辑
         [self loadBiddingSupplier];
     }
