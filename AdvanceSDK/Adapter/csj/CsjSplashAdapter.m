@@ -122,6 +122,7 @@
  This method is called when splash ad material loaded successfully.
  */
 - (void)splashAdDidLoad:(BUSplashAdView *)splashAd {
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
 //    NSLog(@"穿山甲开屏拉取成功");
     _supplier.state = AdvanceSdkSupplierStateSuccess;

@@ -19,6 +19,7 @@
 @property (nonatomic, strong) KSFullscreenVideoAd *ks_ad;
 @property (nonatomic, weak) AdvanceFullScreenVideo *adspot;
 @property (nonatomic, strong) AdvSupplier *supplier;
+@property (nonatomic, assign) BOOL isCached;
 
 @end
 
@@ -49,6 +50,12 @@
     ADV_LEVEL_INFO_LOG(@"快手 成功");
     if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
         [self.delegate advanceUnifiedViewDidLoad];
+    }
+    
+    if (_isCached) {
+        if ([self.delegate respondsToSelector:@selector(advanceFullScreenVideoOnAdVideoCached)]) {
+            [self.delegate advanceFullScreenVideoOnAdVideoCached];
+        }
     }
 }
 
@@ -109,6 +116,10 @@
  This method is called when cached successfully.
  */
 - (void)fullscreenVideoAdVideoDidLoad:(KSFullscreenVideoAd *)fullscreenVideoAd {
+    if (_supplier.isParallel == YES) {
+        _isCached = YES;
+        return;
+    }
     if ([self.delegate respondsToSelector:@selector(advanceFullScreenVideoOnAdVideoCached)]) {
         [self.delegate advanceFullScreenVideoOnAdVideoCached];
     }
