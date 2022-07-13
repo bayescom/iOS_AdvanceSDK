@@ -10,6 +10,8 @@ target 'AdvanceSDK_Example' do
   pod 'AdvanceSDK/GDT', :path => '../'
   pod 'AdvanceSDK/KS', :path => '../'
   pod 'AdvanceSDK/BD', :path => '../'
+  pod 'AdvanceSDK/TANX', :path => '../'
+
   pod 'Masonry'
 #  pod 'Ads-CN', '4.4.0.0'
 

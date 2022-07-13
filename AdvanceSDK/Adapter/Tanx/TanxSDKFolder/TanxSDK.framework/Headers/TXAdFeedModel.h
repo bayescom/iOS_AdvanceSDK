@@ -7,7 +7,6 @@
 //
 
 #import <JSONModel/JSONModel.h>
-#import <TanxSDK/TXAdMonitor.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -16,7 +15,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, copy, readwrite) NSString <Ignore>*reqId;
 
 @property(nonatomic, copy, readonly) NSString <Optional>*eCPM;      //返回广告的eCPM，单位：分
-@property(nonatomic, copy, readonly) NSString <Optional>*winnoticeUrl;      //竞价成功的上报地址
 
 @property(nonatomic, copy, readonly) NSString <Optional>*creativeId;
 @property(nonatomic, copy, readonly) NSString <Optional>*templateId;
@@ -25,10 +23,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, copy, readonly) NSString <Optional>*endStamp;
 @property(nonatomic, copy, readonly) NSString <Ignore>*seatId;
 @property(nonatomic, copy, readonly) NSString <Optional>*rankId;
-
-@property(nonatomic, copy, readonly) NSArray <NSString *><Optional>*impression_tracking_url;
-@property(nonatomic, copy, readonly) NSArray <NSString *><Optional>*click_tracking_url;
-@property(nonatomic, copy, readonly) NSArray <TXAdMonitor *><Optional>*event_track;
 
 @property (nonatomic, copy, readonly) NSString <Optional>*assetUrl;
 @property (nonatomic, assign, readonly) NSInteger width;

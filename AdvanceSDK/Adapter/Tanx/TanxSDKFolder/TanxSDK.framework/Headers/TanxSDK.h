@@ -15,7 +15,6 @@
 #import <TanxSDK/TXAdEnum.h>
 #import <TanxSDK/TXAdResponse.h>
 #import <TanxSDK/TXAdSeat.h>
-#import <TanxSDK/TXAdMonitor.h>
 #import <TanxSDK/TXAdCache.h>
 
 // Biz
@@ -30,7 +29,7 @@
 #import <TanxSDK/TXAdSplashModel.h>
 #import <TanxSDK/TXAdSplashTemplateConfig.h>
 #import <TanxSDK/TXAdDetailWebView.h>
-
+#import <TanxSDK/TXAdRewardVideoAd.h>
 
 
 

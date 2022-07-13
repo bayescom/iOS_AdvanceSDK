@@ -99,6 +99,23 @@ Pod::Spec.new do |s|
         
         
     end
+    
+    s.subspec 'TANX' do |tanx|
+        tanx.dependency 'AdvanceSDK/Core'
+        tanx.dependency 'AdvanceSDK/Adspot'
+        tanx.dependency 'JSONModel', '1.8.0'
+        tanx.dependency 'Reachability', '3.2'
+        tanx.dependency 'SDWebImage', '5.12.1'
+        tanx.source_files =  'AdvanceSDK/Adapter/Tanx/*{h,m}'
+        tanx.ios.vendored_frameworks = 'AdvanceSDK/Adapter/Tanx/TanxSDKFolder/TanxSDK.framework'
+#        tanx.vendored_frameworks = 'TanxSDK.framework'
+
+
+        valid_archs = ['armv7', 'armv7s', 'x86_64', 'arm64']
+        
+        
+    end
+
 
     
     s.xcconfig = {

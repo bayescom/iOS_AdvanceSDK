@@ -35,6 +35,12 @@ PODS:
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - MercurySDK
+  - AdvanceSDK/TANX (3.2.6.2):
+    - AdvanceSDK/Adspot
+    - AdvanceSDK/Core
+    - JSONModel (= 1.8.0)
+    - Reachability (= 3.2)
+    - SDWebImage (= 5.12.1)
   - BaiduMobAdSDK (4.88)
   - BURelyFoundation (0.0.1.58):
     - BURelyFoundation/HM (= 0.0.1.58)
@@ -44,9 +50,14 @@ PODS:
   - GDTMobSDK (4.13.70):
     - GDTMobSDK/GDTMobSDK (= 4.13.70)
   - GDTMobSDK/GDTMobSDK (4.13.70)
+  - JSONModel (1.8.0)
   - KSAdSDK (3.3.25)
   - Masonry (1.1.0)
-  - MercurySDK (3.1.6.8)
+  - MercurySDK (3.1.7.0)
+  - Reachability (3.2)
+  - SDWebImage (5.12.1):
+    - SDWebImage/Core (= 5.12.1)
+  - SDWebImage/Core (5.12.1)
 
 DEPENDENCIES:
   - AdvanceSDK (from `../`)
@@ -55,6 +66,7 @@ DEPENDENCIES:
   - AdvanceSDK/GDT (from `../`)
   - AdvanceSDK/KS (from `../`)
   - AdvanceSDK/Mercury (from `../`)
+  - AdvanceSDK/TANX (from `../`)
   - Masonry
 
 SPEC REPOS:
@@ -63,9 +75,12 @@ SPEC REPOS:
     - BaiduMobAdSDK
     - BURelyFoundation
     - GDTMobSDK
+    - JSONModel
     - KSAdSDK
     - Masonry
     - MercurySDK
+    - Reachability
+    - SDWebImage
 
 EXTERNAL SOURCES:
   AdvanceSDK:
@@ -73,14 +88,17 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Ads-CN: 5563d7a0ed3f99fd47d421fcb48e70688efedd55
-  AdvanceSDK: 9f2087455b88c2399b9b8c5b4fc43c4788834cfb
+  AdvanceSDK: 94af886b143d57935de2572afb3f0f725a24e054
   BaiduMobAdSDK: f40cc622afcabcc3561ff13c32f3a3af55ee088d
   BURelyFoundation: f529322f9e93cf8cc0b4539e447aff77a8ff34de
   GDTMobSDK: 22c1b935a45797cc175df35f79db9d49a9b738bc
+  JSONModel: 02ab723958366a3fd27da57ea2af2113658762e9
   KSAdSDK: b2932c54160f71af31bf704d0c284c8b9d26735e
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
-  MercurySDK: 810fd51eff1d359c1d98fa8d682073a3ae38c58a
+  MercurySDK: 082da288e471eae21b92c1702f73467b44a84def
+  Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
+  SDWebImage: 4dc3e42d9ec0c1028b960a33ac6b637bb432207b
 
-PODFILE CHECKSUM: 04306b597d40fa59ee5a971fe513c7a2bc1787eb
+PODFILE CHECKSUM: 40dc706a76dd61f04beed989efa82996c1c6cc42
 
 COCOAPODS: 1.11.2
