@@ -10,8 +10,8 @@ Pod::Spec.new do |s|
     s.name             = 'AdvanceSDK'
     
     s.version          = '3.2.6.2'
-    s.ios.deployment_target = '9.0'
-    s.platform     = :ios, "9.0"
+    s.ios.deployment_target = '12.0'
+    s.platform     = :ios, "12.0"
     s.requires_arc = true
     
     s.license          = { :type => 'MIT', :file => 'LICENSE' }
