@@ -95,11 +95,11 @@
 }
 
 
-- (void)advanceBiddingAction {
-    NSLog(@"%s 开始bidding",__func__);
-}
-
-- (void)advanceBiddingEnd {
-    NSLog(@"%s 结束bidding",__func__);
-}
+//- (void)advanceBiddingAction {
+//    NSLog(@"%s 开始bidding",__func__);
+//}
+//
+//- (void)advanceBiddingEnd {
+//    NSLog(@"%s 结束bidding",__func__);
+//}
 @end

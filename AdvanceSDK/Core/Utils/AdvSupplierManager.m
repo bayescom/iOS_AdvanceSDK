@@ -184,7 +184,7 @@
     // 参与bidding的渠道数
     _incomeBiddingCount = tempBidding.count;
 
-//    NSLog(@"_incomeBiddingCount = %ld", _incomeBiddingCount);
+    NSLog(@"_incomeBiddingCount = %ld", _incomeBiddingCount);
     if (_incomeBiddingCount == 0) {// 没有参加bidding的渠道即没有并发, 那么就按照旧的业务去执行
         if (self.model.setting.parallelGroup.count == 0) { // 如果并发组里元素个数为0 那么就开始执行剩下非并发的渠道了
             [self loadNextSupplier];

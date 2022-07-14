@@ -132,7 +132,7 @@
 
 - (void)splashAdExposured:(GDTSplashAd *)splashAd {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
-    if ([self.delegate respondsToSelector:@selector(advanceExposured)] && self.gdt_ad) {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(advanceExposured)] && self.gdt_ad) {
         [self.delegate advanceExposured];
     }
 }

@@ -168,7 +168,10 @@
         clsName = @"KsSplashAdapter";
     } else if ([supplier.identifier isEqualToString:SDK_ID_BAIDU]) {
         clsName = @"BdSplashAdapter";
+    } else if ([supplier.identifier isEqualToString:SDK_ID_TANX]) {
+        clsName = @"TanxSplashAdapter";
     }
+    
     ADV_LEVEL_INFO_LOG(@"%@ | %@", supplier.name, clsName);
     // 请求超时了
     NSTimeInterval now = [[NSDate date] timeIntervalSince1970]*1000;

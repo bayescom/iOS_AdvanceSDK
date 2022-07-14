@@ -56,6 +56,7 @@
     
     // 搜集各渠道的错误信息
     if (error) {
+        NSLog(@"-->   %@", error);
         [self collectErrorWithSupplier:supplier error:error];
     }
 
@@ -157,6 +158,8 @@
         clsName = @"KSAdSDKManager";
     } else if ([supplier.identifier isEqualToString:SDK_ID_BAIDU]){
         clsName = @"BaiduMobAdSetting";
+    } else if ([supplier.identifier isEqualToString:SDK_ID_TANX]){
+        clsName = @"TXAdSDKInitializtion";
     }
     
     
@@ -194,6 +197,14 @@
             [bdSetting performSelector:@selector(setSupportHttps:) withObject:NO];
 
         });
+    } else if ([supplier.identifier isEqualToString:SDK_ID_TANX]) {
+        // Tanx
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+
+            [NSClassFromString(clsName) performSelector:@selector(setupSDKWithAppID:andAppKey:) withObject:supplier.mediaid withObject:supplier.mediakey];
+
+        });
     } else {
         
     }
@@ -209,6 +220,7 @@
     [self setCsjSDKVersion];
     [self setMerSDKVersion];
     [self setKsSDKVersion];
+    [self setTanxSDKVersion];
 }
 
 - (void)setGdtSDKVersion {
@@ -238,6 +250,16 @@
     
     [self setSDKVersionForKey:@"ks_v" version:ksVersion];
 }
+
+- (void)setTanxSDKVersion {
+    id cls = NSClassFromString(@"TXAdSDKConfiguration");
+    NSString *tanxVersion = [cls performSelector:@selector(sdkVersion)];
+    
+    [self setSDKVersionForKey:@"tanx_v" version:tanxVersion];
+}
+
+
+
 
 
 - (void)setSDKVersionForKey:(NSString *)key version:(NSString *)version {

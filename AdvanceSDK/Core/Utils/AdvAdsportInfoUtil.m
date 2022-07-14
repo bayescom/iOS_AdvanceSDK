@@ -21,6 +21,8 @@
             return YES;
         } else if ([ID isEqualToString:SDK_ID_BAIDU]) {
             return YES;
+        } else if ([ID isEqualToString:SDK_ID_TANX]) {
+            return YES;
         }
     } else if ([adTypeName isEqualToString:AdvSdkTypeAdNameRewardVideo]) {
         return YES;
