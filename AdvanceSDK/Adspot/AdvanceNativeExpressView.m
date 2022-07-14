@@ -19,6 +19,10 @@
     }
     return self;
 }
+
+- (void)setIdentifier:(NSString *)identifier {
+    _identifier = identifier;
+}
 - (void)render {
     if (self.controller == nil || self.expressView == nil) {
         return;
@@ -38,7 +42,7 @@
         [self.expressView performSelector:@selector(render)];
     } else if ([self.expressView isKindOfClass:NSClassFromString(@"BaiduMobAdSmartFeedView")]) {// 百度
         [self.expressView performSelector:@selector(render)];
-    } else { // 快手
+    } else { // 快手 或 tanx
         
     }
 

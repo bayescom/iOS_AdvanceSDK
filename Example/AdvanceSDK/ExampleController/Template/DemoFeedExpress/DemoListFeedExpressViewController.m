@@ -136,8 +136,17 @@
     if ([_dataArrM[indexPath.row] isKindOfClass:[BYExamCellModelElement class]]) {
         return ((BYExamCellModelElement *)_dataArrM[indexPath.row]).cellh;
     } else {
-        CGFloat height = ([_dataArrM[indexPath.row] expressView]).frame.size.height;
-        return height;
+        
+        AdvanceNativeExpressView *adView = _dataArrM[indexPath.row];
+        
+        
+        UIView *view = [adView expressView];
+        CGFloat height = view.frame.size.height;
+        if ([adView.identifier isEqualToString:SDK_ID_TANX]) {
+            return height + 10;
+        } else {
+            return height;
+        }
     }
 }
 
@@ -155,14 +164,27 @@
         if ([subView superview]) {
             [subView removeFromSuperview];
         }
-        UIView *view = [_dataArrM[indexPath.row] expressView];
+        AdvanceNativeExpressView *adView = _dataArrM[indexPath.row];
+        
+        
+        UIView *view = [adView expressView];
 
         view.tag = 1000;
         [cell.contentView addSubview:view];
         cell.accessibilityIdentifier = @"nativeTemp_ad";
-        [view mas_remakeConstraints:^(MASConstraintMaker *make) {
-            make.edges.equalTo(@0);
-        }];
+        if ([adView.identifier isEqualToString:SDK_ID_TANX]) { // tanx 的广告不带padding 需要自己调节
+            [view mas_remakeConstraints:^(MASConstraintMaker *make) {
+                make.top.equalTo(cell.contentView);
+                make.left.equalTo(@(10));
+                make.right.equalTo(@(-10));
+                make.bottom.equalTo(@(10));
+            }];
+
+        } else{
+            [view mas_remakeConstraints:^(MASConstraintMaker *make) {
+                make.edges.equalTo(@0);
+            }];
+        }
 
         return cell;
     }

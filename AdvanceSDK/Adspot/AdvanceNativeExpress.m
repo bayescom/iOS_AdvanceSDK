@@ -113,6 +113,8 @@
         clsName = @"KsNativeExpressAdapter";
     } else if ([supplier.identifier isEqualToString:SDK_ID_BAIDU]) {
         clsName = @"BdNativeExpressAdapter";
+    } else if ([supplier.identifier isEqualToString:SDK_ID_TANX]) {
+        clsName = @"TanxNativeExpressAdapter";
     }
     
     

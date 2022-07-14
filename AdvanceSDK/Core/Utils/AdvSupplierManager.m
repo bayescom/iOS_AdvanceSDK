@@ -121,14 +121,14 @@
     AdvSupplier *currentSupplier = _supplierM.firstObject;
     // 不管是不是并行渠道, 到了该执行的时候 必须要按照串行渠道的逻辑去执行
     currentSupplier.isParallel = NO;
-    NSInteger currentPriority = currentSupplier.priority;
+//    NSInteger currentPriority = currentSupplier.priority;
 
     [self notCPTLoadNextSuppluer:currentSupplier error:nil];
 
-    if (_model.setting.parallelGroup.count > 0) {
-        // 并行执行
-        [self parallelActionWithCurrentPriority:currentPriority];
-    }
+//    if (_model.setting.parallelGroup.count > 0) {
+//        // 并行执行
+//        [self parallelActionWithCurrentPriority:currentPriority];
+//    }
 }
 
 // 开始下一组bidding
