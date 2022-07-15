@@ -38,7 +38,10 @@
     return self;
 }
 
-- (void)loadAd {
+
+
+- (void)supplierStateLoad {
+    ADV_LEVEL_INFO_LOG(@"加载Mercury supplier: %@", _supplier);
     _mercury_ad = [[MercurySplashAd alloc] initAdWithAdspotId:_supplier.adspotid delegate:self];
     _mercury_ad.placeholderImage = _adspot.backgroundImage;
     _mercury_ad.logoImage = _adspot.logoImage;
@@ -53,8 +56,54 @@
     _mercury_ad.delegate = self;
     _mercury_ad.controller = _adspot.viewController;
 
-    [_mercury_ad loadAdAndShow];
+    [_mercury_ad loadAd];
+
 }
+
+- (void)supplierStateInPull {
+    ADV_LEVEL_INFO_LOG(@"Mercury加载中...");
+}
+
+- (void)supplierStateSuccess {
+    ADV_LEVEL_INFO_LOG(@"Mercury 成功");
+    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
+        [self.delegate advanceUnifiedViewDidLoad];
+    }
+    [self showAd];
+    
+}
+
+- (void)supplierStateFailed {
+    ADV_LEVEL_INFO_LOG(@"Mercury 失败");
+    [self.adspot loadNextSupplierIfHas];
+    [self deallocAdapter];
+}
+
+
+- (void)loadAd {
+    [super loadAd];
+}
+
+- (void)showAd {
+//    [[UIApplication sharedApplication].keyWindow addSubview:_csj_ad];
+//    [[UIApplication sharedApplication].keyWindow bringSubviewToFront:[_adspot performSelector:@selector(bgImgV)]];
+    UIImageView *imgV;
+    if (_adspot.showLogoRequire) {
+        // 添加Logo
+        NSAssert(_adspot.logoImage != nil, @"showLogoRequire = YES时, 必须设置logoImage");
+        CGFloat real_w = [UIScreen mainScreen].bounds.size.width;
+        CGFloat real_h = _adspot.logoImage.size.height*(real_w/_adspot.logoImage.size.width);
+        UIImageView *imgV = [[UIImageView alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height-real_h, real_w, real_h)];
+        imgV.userInteractionEnabled = YES;
+        imgV.image = _adspot.logoImage;
+    }
+
+        [self.mercury_ad showAdWithBottomView:_adspot.showLogoRequire?imgV:nil skipView:nil];
+
+}
+
+
+
 
 - (void)dealloc {
     ADVLog(@"%s", __func__);
@@ -82,10 +131,19 @@
 
 // MARK: ======================= MercurySplashAdDelegate =======================
 - (void)mercury_splashAdDidLoad:(MercurySplashAd *)splashAd {
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
+
+    if (_supplier.isParallel == YES) {
+//        NSLog(@"修改状态: %@", _supplier);
+        _supplier.state = AdvanceSdkSupplierStateSuccess;
+        return;
+    }
     if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
         [self.delegate advanceUnifiedViewDidLoad];
     }
+
+    [self showAd];
 }
 
 - (void)mercury_splashAdExposured:(MercurySplashAd *)splashAd {

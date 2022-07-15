@@ -11,19 +11,7 @@
 + (BOOL)isSupportParallelWithAdTypeName:(NSString *)adTypeName supplierId:(NSString *)ID {
     
     if ([adTypeName isEqualToString:AdvSdkTypeAdNameSplash]) { // 开屏
-        if ([ID isEqualToString:SDK_ID_MERCURY]) { // mercury
-            return NO;
-        } else if ([ID isEqualToString:SDK_ID_GDT]) {
-            return YES;
-        } else if ([ID isEqualToString:SDK_ID_CSJ]) {
-            return YES;
-        } else if ([ID isEqualToString:SDK_ID_KS]) {
-            return YES;
-        } else if ([ID isEqualToString:SDK_ID_BAIDU]) {
-            return YES;
-        } else if ([ID isEqualToString:SDK_ID_TANX]) {
-            return YES;
-        }
+        return YES;
     } else if ([adTypeName isEqualToString:AdvSdkTypeAdNameRewardVideo]) {
         return YES;
     } else if ([adTypeName isEqualToString:AdvSdkTypeAdNameInterstitial]){
