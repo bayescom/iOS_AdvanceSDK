@@ -28,11 +28,11 @@
 - (void)advanceSupplierWillLoad:(NSString *)supplierId;
 
 
-// 开始bidding
-- (void)advanceBiddingAction;
-
-// bidding结束
-- (void)advanceBiddingEnd;
+//// 开始bidding
+//- (void)advanceBiddingAction;
+//
+//// bidding结束
+//- (void)advanceBiddingEnd;
 
 
 

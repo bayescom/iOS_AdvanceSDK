@@ -86,7 +86,6 @@
 - (void)gdt_rewardVideoAdDidLoad:(GDTRewardVideoAd *)rewardedVideoAd {
     _supplier.supplierPrice = rewardedVideoAd.eCPM;
     [self.adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
-    
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
     
 //    NSLog(@"广点通激励视频拉取成功 %@",self.gdt_ad);
