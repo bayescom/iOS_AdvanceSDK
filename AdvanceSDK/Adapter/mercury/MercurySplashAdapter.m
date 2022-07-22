@@ -156,6 +156,15 @@
 
 - (void)mercury_splashAdFailError:(nullable NSError *)error {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
+    _supplier.state = AdvanceSdkSupplierStateFailed;
+//    NSLog(@"========>>>>>>>> %ld %@", (long)_supplier.priority, error);
+    if (_supplier.isParallel == YES) { // 并行不释放 只上报
+        
+        return;
+    } else { //
+        [self deallocAdapter];
+    }
+
 //    if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdFailedWithSdkId:error:)]) {
 //        [self.delegate advanceSplashOnAdFailedWithSdkId:_supplier.identifier error:error];
 //    }

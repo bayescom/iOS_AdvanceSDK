@@ -71,11 +71,11 @@
 }
 
 - (void)supplierStateInPull {
-    ADV_LEVEL_INFO_LOG(@"穿山甲加载中...");
+    ADV_LEVEL_INFO_LOG(@"快手加载中...");
 }
 
 - (void)supplierStateSuccess {
-    ADV_LEVEL_INFO_LOG(@"穿山甲 成功");
+    ADV_LEVEL_INFO_LOG(@"快手 成功");
     if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
         [self.delegate advanceUnifiedViewDidLoad];
     }
@@ -84,7 +84,7 @@
 }
 
 - (void)supplierStateFailed {
-    ADV_LEVEL_INFO_LOG(@"穿山甲 失败");
+    ADV_LEVEL_INFO_LOG(@"快手 失败");
     [self.adspot loadNextSupplierIfHas];
     [self deallocAdapter];
 }
