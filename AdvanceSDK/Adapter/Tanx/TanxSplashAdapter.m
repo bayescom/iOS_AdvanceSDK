@@ -140,7 +140,6 @@
             
             self.templateView = [self.splashManager renderSplashTemplateWithModel:splashModel config:config];
             self.templateView.frame = CGRectMake(0, 0, self.window.bounds.size.width, self.window.bounds.size.height - imgV.frame.size.height);
-            
             if (self.templateView == nil || splashModel.isValid == NO) {
                 NSError *temp = [NSError errorWithDomain:@"广告物料加载失败" code:10002 userInfo:nil];
                 [self tanxSplashAdFailToPresentWithError:temp];
@@ -192,6 +191,9 @@
 /// 开屏开始展示
 - (void)onSplashShow {
     NSLog(@"%s",__func__);
+    if (self.templateView == nil) {
+        return;
+    }
     [self.adspot reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
     if (self.delegate && [self.delegate respondsToSelector:@selector(advanceExposured)]) {
         [self.delegate advanceExposured];

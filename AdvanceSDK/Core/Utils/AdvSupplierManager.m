@@ -133,8 +133,19 @@
 
 // 开始下一组bidding
 - (void)loadNextBiddingSupplierIfHas {
-    [self.arrayWaitingBidding removeAllObjects];
-    [self loadBiddingSupplierAction];
+    
+    // 取当前bidding组里次优先胜出的广告
+    AdvSupplier *currentSupplier = self.arrayWaitingBidding.lastObject;
+    currentSupplier.isParallel = NO;
+    
+    if (currentSupplier) {// 如果有 继续执行
+        [self notCPTLoadNextSuppluer:currentSupplier error:nil];
+    } else {
+        [self.arrayWaitingBidding removeAllObjects];
+        [self loadBiddingSupplierAction];
+    }
+
+    
 }
 
 // - (void)advManagerBiddingActionWithSuppliers:(NSMutableArray <AdvSupplier*>*)suppliers;
@@ -263,8 +274,8 @@
         AdvSupplier *obj11 = obj1;
         AdvSupplier *obj22 = obj2;
         
-        CGFloat obj11_price = (obj11.supplierPrice > 0) ? obj11.supplierPrice : obj11.sdk_price * 100;
-        CGFloat obj22_price = (obj22.supplierPrice > 0) ? obj22.supplierPrice : obj22.sdk_price * 100;
+        CGFloat obj11_price = (obj11.supplierPrice > 0) ? obj11.supplierPrice : obj11.sdk_price;
+        CGFloat obj22_price = (obj22.supplierPrice > 0) ? obj22.supplierPrice : obj22.sdk_price;
         
         if (obj11_price > obj22_price) {
             return NSOrderedDescending;
@@ -295,6 +306,8 @@
     }
 
     [self notCPTLoadNextSuppluer:currentSupplier error:nil];
+    // 执行的都从 arrayWaitingBidding里面删除
+    [self.arrayWaitingBidding removeObject:currentSupplier];
 
 }
 
