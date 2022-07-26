@@ -84,6 +84,10 @@ NSString * ADVStringFromNAdvanceSdkSupplierRepoType(AdvanceSdkSupplierRepoType t
 @property (nonatomic, strong) NSMutableArray<NSMutableArray<NSNumber *> *> *parallelGroup;
 @property (nonatomic, assign) NSTimeInterval cacheTime;
 
+
+@property (nonatomic , assign) NSInteger bidding_type;
+@property (nonatomic , assign) NSInteger parallel_timeout;
+
 @end
 
 @interface AdvSupplier : NSObject

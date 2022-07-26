@@ -205,15 +205,14 @@
         
     } else {
         
-        // 有参加bidding 的 全部一起并发并且最多等候5s(这个5s需要从服务器下发)
         // bidding开始
         if (self.delegate && [self.delegate respondsToSelector:@selector(advManagerBiddingActionWithSuppliers:)]) {
             [self.delegate advManagerBiddingActionWithSuppliers:tempBidding];
             
         }
         
-        // 记录过期的时间(这个 2 应该是服务端下发, 目前本地写死)
-        _timeout_stamp = ([[NSDate date] timeIntervalSince1970] + 2)*1000;
+        // 记录过期的时间
+        _timeout_stamp = ([[NSDate date] timeIntervalSince1970] + _model.setting.parallel_timeout / 1000)*1000;
         // 开启定时器监听过期
         [_timeoutCheckTimer invalidate];
 
@@ -525,7 +524,7 @@
     
     NSError *parseErr = nil;
     AdvSupplierModel *a_model = [AdvSupplierModel adv_modelWithJSON:data];
-    ADVLog(@"[JSON]%@", [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil]);
+//    ADVLog(@"[JSON]%@", [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil]);
     ADVLogJSONData(data);
     if (parseErr || !a_model) {
         // parse error

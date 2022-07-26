@@ -1440,8 +1440,30 @@ static NSString *ModelDescription(NSObject *model) {
 
 + (instancetype)adv_modelWithJSON:(id)json {
     NSDictionary *dic = [self _adv_dictionaryWithJSON:json];
+//    NSLog(@"[JSON]:%@", [self by_jsonStringCompactFormatForDictionary:dic]);
     return [self adv_modelWithDictionary:dic];
 }
+
++ (NSString *)by_jsonStringCompactFormatForDictionary:(NSDictionary *)dicJson {
+
+    
+
+    if (![dicJson isKindOfClass:[NSDictionary class]] || ![NSJSONSerialization isValidJSONObject:dicJson]) {
+
+        return nil;
+
+    }
+
+    
+
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dicJson options:0 error:nil];
+
+    NSString *strJson = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+
+    return strJson;
+
+}
+
 
 + (instancetype)adv_modelWithDictionary:(NSDictionary *)dictionary {
     if (!dictionary || dictionary == (id)kCFNull) return nil;
