@@ -32,6 +32,7 @@ extern NSString *const SDK_ID_CSJ;
 extern NSString *const SDK_ID_BAIDU;
 extern NSString *const SDK_ID_KS;
 extern NSString *const SDK_ID_TANX;
+extern NSString *const SDK_ID_BIDDING;
 
 //extern NSString *const AdvSdkConfigCAID;
 //extern NSString *const AdvSdkConfigCAIDPublicKey;
