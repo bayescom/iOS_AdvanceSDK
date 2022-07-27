@@ -137,22 +137,27 @@ Pod::Spec.new do |s|
        # MintegralAdSDK 使用时请务必使用cocoapod源
        bidding.dependency 'MintegralAdSDK', '7.1.7.0'
        
-       bidding.ios.vendored_frameworks = 'AdvanceSDK/Adapter/Bidding/SDKs/ABUAdAdmobAdapter/ABUAdAdmobAdapter/ABUAdAdmobAdapter.framework'
+       bidding.ios.vendored_frameworks = ['AdvanceSDK/Adapter/Bidding/SDKs/ABUAdAdmobAdapter/ABUAdAdmobAdapter/ABUAdAdmobAdapter.framework',
+       'AdvanceSDK/Adapter/Bidding/SDKs/ABUAdBaiduAdapter/ABUAdBaiduAdapter/ABUAdBaiduAdapter.framework',
+       'AdvanceSDK/Adapter/Bidding/SDKs/ABUAdCsjAdapter/ABUAdCsjAdapter/ABUAdCsjAdapter.framework',
+       'AdvanceSDK/Adapter/Bidding/SDKs/ABUAdGdtAdapter/ABUAdGdtAdapter/ABUAdGdtAdapter.framework',
+       'AdvanceSDK/Adapter/Bidding/SDKs/ABUAdKlevinAdapter/ABUAdKlevinAdapter/ABUAdKlevinAdapter.framework',
+       'AdvanceSDK/Adapter/Bidding/SDKs/ABUAdMintegralAdapter/ABUAdMintegralAdapter/ABUAdMintegralAdapter.framework',
+       'AdvanceSDK/Adapter/Bidding/SDKs/ABUAdUnityAdapter/ABUAdUnityAdapter/ABUAdUnityAdapter.framework',
+       'AdvanceSDK/Adapter/Bidding/SDKs/ABUVisualDebug/ABUVisualDebug/ABUVisualDebug.framework',
+       'AdvanceSDK/Adapter/Bidding/SDKs/Ads-Mediation-CN/Ads-Mediation-CN/ABUAdSDK.framework'
        
-       bidding.ios.vendored_frameworks = 'AdvanceSDK/Adapter/Bidding/SDKs/ABUAdBaiduAdapter/ABUAdBaiduAdapter/ABUAdBaiduAdapter.framework'
-       
-       bidding.ios.vendored_frameworks = 'AdvanceSDK/Adapter/Bidding/SDKs/ABUAdCsjAdapter/ABUAdCsjAdapter/ABUAdCsjAdapter.framework'
-       
-       bidding.ios.vendored_frameworks = 'AdvanceSDK/Adapter/Bidding/SDKs/ABUAdGdtAdapter/ABUAdGdtAdapter/ABUAdGdtAdapter.framework'
-       
-       bidding.ios.vendored_frameworks = 'AdvanceSDK/Adapter/Bidding/SDKs/ABUAdKlevinAdapter/ABUAdKlevinAdapter/ABUAdKlevinAdapter.framework'
-       
-       bidding.ios.vendored_frameworks = 'AdvanceSDK/Adapter/Bidding/SDKs/ABUAdMintegralAdapter/ABUAdMintegralAdapter/ABUAdMintegralAdapter.framework'
-       
-       bidding.ios.vendored_frameworks = 'AdvanceSDK/Adapter/Bidding/SDKs/ABUAdUnityAdapter/ABUAdUnityAdapter/ABUAdUnityAdapter.framework'
-       bidding.ios.vendored_frameworks = 'AdvanceSDK/Adapter/Bidding/SDKs/ABUVisualDebug/ABUVisualDebug/ABUVisualDebug.framework'
-       bidding.ios.vendored_frameworks = 'AdvanceSDK/Adapter/Bidding/SDKs/Ads-Mediation-CN/Ads-Mediation-CN/Ads-Mediation-CN.framework'
-#        tanx.vendored_frameworks = 'TanxSDK.framework'
+       ]
+
+#bidding.vendored_frameworks = 'ABUAdAdmobAdapter.framework'
+#bidding.vendored_frameworks = 'ABUAdBaiduAdapter.framework'
+#bidding.vendored_frameworks = 'ABUAdCsjAdapter.framework'
+#bidding.vendored_frameworks = 'ABUAdGdtAdapter.framework'
+#bidding.vendored_frameworks = 'ABUAdKlevinAdapter.framework'
+#bidding.vendored_frameworks = 'ABUAdMintegralAdapter.framework'
+#bidding.vendored_frameworks = 'ABUAdUnityAdapter.framework'
+#bidding.vendored_frameworks = 'ABUVisualDebug.framework'
+#bidding.vendored_frameworks = 'ABUAdSDK.framework'
 
 
         valid_archs = ['armv7', 'armv7s', 'x86_64', 'arm64']
