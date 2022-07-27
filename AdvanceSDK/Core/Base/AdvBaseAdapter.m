@@ -160,6 +160,8 @@
         clsName = @"BaiduMobAdSetting";
     } else if ([supplier.identifier isEqualToString:SDK_ID_TANX]){
         clsName = @"TXAdSDKInitializtion";
+    } else if ([supplier.identifier isEqualToString:SDK_ID_BIDDING]){
+        clsName = @"ABUAdSDKManager";
     }
     
     
@@ -205,6 +207,15 @@
             [NSClassFromString(clsName) performSelector:@selector(setupSDKWithAppID:andAppKey:) withObject:supplier.mediaid withObject:supplier.mediakey];
 
         });
+    } else if ([supplier.identifier isEqualToString:SDK_ID_BIDDING]){
+        // GroMore
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+            
+            [NSClassFromString(clsName) performSelector:@selector(setupSDKWithAppId:config:) withObject:supplier.mediaid withObject:nil];
+
+        });
+
     } else {
         
     }
