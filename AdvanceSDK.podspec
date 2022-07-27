@@ -72,7 +72,7 @@ Pod::Spec.new do |s|
     s.subspec 'GDT' do |gdt|
         gdt.dependency 'AdvanceSDK/Core'
         gdt.dependency 'AdvanceSDK/Adspot'
-        gdt.dependency 'GDTMobSDK', '4.13.70'
+        gdt.dependency 'GDTMobSDK', '4.13.71'
         gdt.source_files =  'AdvanceSDK/Adapter/gdt/**/*.{h,m}'
         gdt.frameworks = 'AdSupport', 'CoreLocation', 'QuartzCore', 'SystemConfiguration', 'CoreTelephony', 'Security', 'StoreKit', 'AVFoundation', 'WebKit'
         gdt.libraries     = 'xml2', 'z'
@@ -90,7 +90,7 @@ Pod::Spec.new do |s|
     s.subspec 'BD' do |bd|
         bd.dependency 'AdvanceSDK/Core'
         bd.dependency 'AdvanceSDK/Adspot'
-        bd.dependency 'BaiduMobAdSDK', '4.88'
+        bd.dependency 'BaiduMobAdSDK', '4.881'
         bd.source_files =  'AdvanceSDK/Adapter/bd/**/*.{h,m}'
         bd.frameworks = 'CoreLocation', 'SystemConfiguration', 'CoreGraphics', 'CoreMotion', 'CoreTelephony', 'AdSupport', 'SystemConfiguration', 'QuartzCore', 'WebKit', 'MessageUI','SafariServices','AVFoundation','EventKit','QuartzCore','CoreMedia','StoreKit'
         bd.libraries     = 'c++'
@@ -115,6 +115,53 @@ Pod::Spec.new do |s|
         
         
     end
+    
+    s.subspec 'Bidding' do |bidding|
+        bidding.dependency 'AdvanceSDK/Core'
+        bidding.dependency 'AdvanceSDK/Adspot'
+        bidding.dependency 'Ads-CN'
+        bidding.source_files =  'AdvanceSDK/Adapter/Bidding/*{h,m}'
+
+       # UnityAds
+       bidding.dependency 'UnityAds', '4.2.1'
+       # Admob/GoogleAd
+#       bidding.dependency 'Google-Mobile-Ads-SDK', '9.5.0'
+       # 百度SDK
+       bidding.dependency 'BaiduMobAdSDK', '4.881'
+       # 广点通/优量汇
+       bidding.dependency 'GDTMobSDK' ,'4.13.71'
+       # SigmobAd
+       # pod 'SigmobAd-iOS', '3.5.3'
+       # 游可赢
+       bidding.dependency 'KlevinAdSDK', '2.5.1.202'
+       # MintegralAdSDK 使用时请务必使用cocoapod源
+       bidding.dependency 'MintegralAdSDK', '7.1.7.0'
+       
+       bidding.ios.vendored_frameworks = 'AdvanceSDK/Adapter/Bidding/SDKs/ABUAdAdmobAdapter/ABUAdAdmobAdapter/ABUAdAdmobAdapter.framework'
+       
+       bidding.ios.vendored_frameworks = 'AdvanceSDK/Adapter/Bidding/SDKs/ABUAdBaiduAdapter/ABUAdBaiduAdapter/ABUAdBaiduAdapter.framework'
+       
+       bidding.ios.vendored_frameworks = 'AdvanceSDK/Adapter/Bidding/SDKs/ABUAdCsjAdapter/ABUAdCsjAdapter/ABUAdCsjAdapter.framework'
+       
+       bidding.ios.vendored_frameworks = 'AdvanceSDK/Adapter/Bidding/SDKs/ABUAdGdtAdapter/ABUAdGdtAdapter/ABUAdGdtAdapter.framework'
+       
+       bidding.ios.vendored_frameworks = 'AdvanceSDK/Adapter/Bidding/SDKs/ABUAdKlevinAdapter/ABUAdKlevinAdapter/ABUAdKlevinAdapter.framework'
+       
+       bidding.ios.vendored_frameworks = 'AdvanceSDK/Adapter/Bidding/SDKs/ABUAdMintegralAdapter/ABUAdMintegralAdapter/ABUAdMintegralAdapter.framework'
+       
+       bidding.ios.vendored_frameworks = 'AdvanceSDK/Adapter/Bidding/SDKs/ABUAdUnityAdapter/ABUAdUnityAdapter/ABUAdUnityAdapter.framework'
+       bidding.ios.vendored_frameworks = 'AdvanceSDK/Adapter/Bidding/SDKs/ABUVisualDebug/ABUVisualDebug/ABUVisualDebug.framework'
+       bidding.ios.vendored_frameworks = 'AdvanceSDK/Adapter/Bidding/SDKs/Ads-Mediation-CN/Ads-Mediation-CN/Ads-Mediation-CN.framework'
+#        tanx.vendored_frameworks = 'TanxSDK.framework'
+
+
+        valid_archs = ['armv7', 'armv7s', 'x86_64', 'arm64']
+        
+        
+    end
+
+
+
 
 
     
