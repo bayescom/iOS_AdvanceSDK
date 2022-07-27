@@ -161,7 +161,21 @@
         return;
     }
     
-    [self loadBiddingSupplierAction];
+    
+    // 如果用 bidding功能
+    if (_model.setting.bidding_type == 1) {
+        // 根据渠道标识 获取bidding的supplier去执行
+        
+        [_supplierM enumerateObjectsUsingBlock:^(AdvSupplier * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            if ([obj.identifier isEqualToString:SDK_ID_BIDDING]) {
+                *stop = YES;
+                obj.isParallel = NO;
+                [self notCPTLoadNextSuppluer:obj error:nil];
+            }
+        }];
+    } else {
+        [self loadBiddingSupplierAction];
+    }
 }
 
 // 开始bidding的逻辑

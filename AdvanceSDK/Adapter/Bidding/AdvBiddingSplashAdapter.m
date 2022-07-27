@@ -43,7 +43,7 @@
         _adspot = adspot;
         _supplier = supplier;
         _leftTime = 5;  // 默认5s
-        self.splashAd = [[ABUSplashAd alloc] initWithAdUnitID:_supplier.mediaid];
+        self.splashAd = [[ABUSplashAd alloc] initWithAdUnitID:_supplier.adspotid];
         self.splashAd.delegate = self;
         self.splashAd.rootViewController = _adspot.viewController;
 
@@ -111,4 +111,27 @@
     // 设置logo
 }
 
+- (void)splashAdDidLoad:(ABUSplashAd *)splashAd {
+    ADV_LEVEL_INFO_LOG(@"%s", __func__);
+    [self.splashAd showInWindow:[[UIApplication sharedApplication] keyWindow]];
+}
+
+- (void)splashAd:(ABUSplashAd *)splashAd didFailWithError:(NSError *)error {
+    ADV_LEVEL_INFO_LOG(@"%s-error:%@", __func__, error);
+}
+
+- (void)splashAdDidClose:(ABUSplashAd *_Nonnull)splashAd {
+    ADV_LEVEL_INFO_LOG(@"%s", __func__);
+    [self.splashAd destoryAd];
+}
+
+- (void)splashAdWillVisible:(ABUSplashAd *_Nonnull)splashAd {
+    ABURitInfo *info = [splashAd getShowEcpmInfo];
+    ADV_LEVEL_INFO_LOG(@"ecpm:%@", info.ecpm);
+    ADV_LEVEL_INFO_LOG(@"platform:%@", info.adnName);
+    ADV_LEVEL_INFO_LOG(@"ritID:%@", info.slotID);
+    ADV_LEVEL_INFO_LOG(@"requestID:%@", info.requestID ?: @"None");
+    
+    ADV_LEVEL_INFO_LOG(@"%s", __func__);
+}
 @end
