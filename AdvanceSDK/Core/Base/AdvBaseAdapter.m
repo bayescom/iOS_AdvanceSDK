@@ -214,10 +214,9 @@
 
         });
     } else if ([supplier.identifier isEqualToString:SDK_ID_BIDDING]){
-        // GroMore
+        // bidding 此之前已经对 biddingConfig进行了初始化 并赋值了
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
-            
             [ABUAdSDKManager setupSDKWithAppId:supplier.mediaid config:^ABUUserConfig *(ABUUserConfig *c) {
                 c.logEnable = YES;
                 return c;

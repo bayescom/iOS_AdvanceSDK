@@ -8,7 +8,8 @@
 #import "AdvBiddingSplashCustomAdapter.h"
 #import <AdvanceSDK/AdvanceSplash.h>
 #import "ABUDCustomSplashView.h"
-
+#import "AdvBiddingCongfig.h"
+#import "AdvSupplierModel.h"
 @interface AdvBiddingSplashCustomAdapter ()<AdvanceSplashDelegate>
 @property(strong,nonatomic) AdvanceSplash *advanceSplash;
 @property (nonatomic, strong) ABUDCustomSplashView *splashView;
@@ -28,6 +29,7 @@
 
 - (void)loadSplashAdWithSlotID:(nonnull NSString *)slotID andParameter:(nonnull NSDictionary *)parameter {
     NSLog(@"----------->自定义开屏adapter开始加载啦啦<------------");
+    NSLog(@"%@", [AdvBiddingCongfig defaultManager].adDataModel);
     CGSize size = [parameter[ABUAdLoadingParamSPExpectSize] CGSizeValue];
     self.customBottomView = parameter[ABUAdLoadingParamSPCustomBottomView];
     

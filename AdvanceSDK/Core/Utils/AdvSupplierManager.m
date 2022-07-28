@@ -15,6 +15,9 @@
 #import "AdvAdsportInfoUtil.h"
 #import "AdvUploadTKUtil.h"
 #import "AdvTrackEventUtil.h"
+#import <objc/runtime.h>
+#import <objc/message.h>
+
 @interface AdvSupplierManager ()
 {
     NSInteger _incomeBiddingCount;
@@ -170,6 +173,12 @@
             if ([obj.identifier isEqualToString:SDK_ID_BIDDING]) {
                 *stop = YES;
                 obj.isParallel = NO;
+                
+                // 初始化 biddingCongfig单例
+                id biddingConfig = ((id(*)(id,SEL))objc_msgSend)(NSClassFromString(@"AdvBiddingCongfig"), @selector(defaultManager));
+                // 将策略Model 付给BiddingCongfig 用来在customAdapter里初始化新的开屏广告位
+                [biddingConfig performSelector:@selector(setAdDataModel:) withObject:self.model];
+
                 [self notCPTLoadNextSuppluer:obj error:nil];
             }
         }];
