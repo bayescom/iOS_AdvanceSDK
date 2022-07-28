@@ -130,9 +130,9 @@
 
 // bidding结束
 - (void)advanceBaseAdapterBiddingEndWithWinSupplier:(AdvSupplier *_Nonnull)supplier {
-//    if (self.delegate && [self.delegate respondsToSelector:@selector(advanceBiddingEnd)]) {
-//        [self.delegate advanceBiddingEnd];
-//    }
+    if (self.delegate && [self.delegate respondsToSelector:@selector(advanceBiddingEndWithPrice:)]) {
+        [self.delegate advanceBiddingEndWithPrice:supplier.supplierPrice];
+    }
 }
 
 
@@ -279,6 +279,14 @@
     _bgImgV.userInteractionEnabled = YES;
     return _bgImgV;
 }
+
+- (void)showAd {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundeclared-selector"
+    ((void (*)(id, SEL))objc_msgSend)((id)_adapter, @selector(showAd));
+#pragma clang diagnostic pop
+}
+
 
 - (void)dealloc {
     [self deallocSelf];

@@ -119,6 +119,14 @@
     }
 }
 
+- (void)loadDataWithSupplierModel:(AdvSupplierModel *)model {
+    self.model = model;
+    self.model.setting.bidding_type = 0;
+    self.supplierM = [self.model.suppliers mutableCopy];
+    [self loadBiddingSupplierAction];
+    
+}
+
 - (void)loadNextSupplierIfHas {
     // 执行非CPT渠道逻辑
     AdvSupplier *currentSupplier = _supplierM.firstObject;
@@ -203,7 +211,7 @@
         // 想要bidding->广告位必须要支持并发->必须支持load 和show 分离
         AdvSupplier *parallelSupplier = [self getSupplierByPriority:[priority integerValue]];
         BOOL isSupportParallel = [AdvAdsportInfoUtil isSupportParallelWithAdTypeName:adTypeName supplierId:parallelSupplier.identifier];
-        if (isSupportParallel && // 该广告位支持并行
+        if (// 该广告位支持并行
             ![tempBidding containsObject:parallelSupplier] &&// tempBidding 不包含这个渠道
             parallelSupplier != nil) {
             
@@ -235,7 +243,7 @@
         }
         
         // 记录过期的时间
-        _timeout_stamp = ([[NSDate date] timeIntervalSince1970] + _model.setting.parallel_timeout / 1000)*1000;
+        _timeout_stamp = ([[NSDate date] timeIntervalSince1970] + (_model.setting.parallel_timeout / 1000))*1000;
         // 开启定时器监听过期
         [_timeoutCheckTimer invalidate];
 

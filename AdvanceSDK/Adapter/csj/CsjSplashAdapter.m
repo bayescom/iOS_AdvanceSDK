@@ -68,7 +68,7 @@
     if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
         [self.delegate advanceUnifiedViewDidLoad];
     }
-    [self showAd];
+//    [self showAd];
     
 }
 
@@ -133,7 +133,7 @@
         [self.delegate advanceUnifiedViewDidLoad];
     }
     
-    [self showAd];
+//    [self showAd];
 }
 
 /**
@@ -150,19 +150,12 @@
     } else { //
         [self deallocAdapter];
     }
-
-//    if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdFailedWithSdkId:error:)]) {
-//        [self.delegate advanceSplashOnAdFailedWithSdkId:_adspot.adspotid error:error];
-//    }
 }
 
 /**
  This method is called when splash ad slot will be showing.
  */
 - (void)splashAdWillVisible:(BUSplashAdView *)splashAd {
-//    if (_supplier.isParallel) { // 如果是并行 先不要释放, 需要等到串行执行到这个渠道的时候才可以释放
-//        [self deallocAdapter];
-//    }
 
     [self.adspot reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(advanceExposured)] && self.csj_ad) {
@@ -196,20 +189,20 @@
  This method is called when spalashAd skip button  is clicked.
  */
 - (void)splashAdDidClickSkip:(BUSplashAdView *)splashAd {
-    [self deallocAdapter];
     if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdSkipClicked)]) {
         [self.delegate advanceSplashOnAdSkipClicked];
     }
+    [self deallocAdapter];
 }
 
 /**
  This method is called when spalashAd countdown equals to zero
  */
 - (void)splashAdCountdownToZero:(BUSplashAdView *)splashAd {
-    [self deallocAdapter];
     if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdCountdownToZero)]) {
         [self.delegate advanceSplashOnAdCountdownToZero];
     }
+    [self deallocAdapter];
 }
 
 - (void)splashAdDidCloseOtherController:(BUSplashAdView *)splashAd interactionType:(BUInteractionType)interactionType {

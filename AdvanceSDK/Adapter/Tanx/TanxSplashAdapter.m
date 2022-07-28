@@ -92,7 +92,7 @@
     if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
         [self.delegate advanceUnifiedViewDidLoad];
     }
-    [self showAd];
+//    [self showAd];
     
 }
 
@@ -170,7 +170,7 @@
         [self.delegate advanceUnifiedViewDidLoad];
     }
 
-    [self showAd];
+//    [self showAd];
 
 }
 

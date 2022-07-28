@@ -52,6 +52,11 @@
     [self.mgr loadDataWithMediaId:_mediaId adspotId:_adspotid customExt:_ext];
 }
 
+/// 加载策略
+- (void)loadAdWithSupplierModel:(AdvSupplierModel *)model {
+    [self.mgr loadDataWithSupplierModel:model];
+}
+
 - (void)loadNextSupplierIfHas {
     [_mgr loadNextSupplierIfHas];
 }
@@ -62,7 +67,6 @@
     
     // 搜集各渠道的错误信息
     if (error) {
-        NSLog(@"-->   %@", error);
         [self collectErrorWithSupplier:supplier error:error];
     }
 
@@ -78,7 +82,7 @@
     // 由于bidding渠道isParallel=yes 所以bidding是不会走这个逻辑的
     // 但是bidding结束后会选择一个胜出的渠道, 胜出的渠道isParallel = NO 所以会走这个逻辑
     if (repoType == AdvanceSdkSupplierRepoFaileded && !supplier.isParallel) {
-        NSLog(@"%@ |||   %ld %@",supplier.sdktag, (long)supplier.priority, supplier);
+//        NSLog(@"%@ |||   %ld %@",supplier.sdktag, (long)supplier.priority, supplier);
         
         // 如果渠道非并发 且不支持bidding 且失败了, 则为原来的业务渠道, 走原来的业务逻辑
         if (supplier.isSupportBidding == NO) {

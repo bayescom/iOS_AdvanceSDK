@@ -92,7 +92,7 @@
 }
 
 - (void)supplierStateFailed {
-    ADV_LEVEL_INFO_LOG(@"穿山甲 失败");
+    ADV_LEVEL_INFO_LOG(@"bidding 失败");
     [self.adspot loadNextSupplierIfHas];
     [self deallocAdapter];
 }
@@ -103,35 +103,69 @@
 }
 
 - (void)deallocAdapter {
+    [self.splashAd destoryAd];
     self.splashAd = nil;
     [self.imgV removeFromSuperview];
 }
 
 - (void)showAd {
     // 设置logo
+    [self.splashAd showInWindow:[[UIApplication sharedApplication] keyWindow]];
 }
 
 - (void)splashAdDidLoad:(ABUSplashAd *)splashAd {
     ADV_LEVEL_INFO_LOG(@"%s", __func__);
-    [self.splashAd showInWindow:[[UIApplication sharedApplication] keyWindow]];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
+    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
+        [self.delegate advanceUnifiedViewDidLoad];
+    }
+    [self showAd];
 }
 
 - (void)splashAd:(ABUSplashAd *)splashAd didFailWithError:(NSError *)error {
     ADV_LEVEL_INFO_LOG(@"%s-error:%@", __func__, error);
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
+    [self deallocAdapter];
 }
 
 - (void)splashAdDidClose:(ABUSplashAd *_Nonnull)splashAd {
     ADV_LEVEL_INFO_LOG(@"%s", __func__);
-    [self.splashAd destoryAd];
+    if ([self.delegate respondsToSelector:@selector(advanceDidClose)]) {
+        [self.delegate advanceDidClose];
+    }
+    [self deallocAdapter];
+    
 }
 
 - (void)splashAdWillVisible:(ABUSplashAd *_Nonnull)splashAd {
     ABURitInfo *info = [splashAd getShowEcpmInfo];
+    ADV_LEVEL_INFO_LOG(@"%s", __func__);
     ADV_LEVEL_INFO_LOG(@"ecpm:%@", info.ecpm);
     ADV_LEVEL_INFO_LOG(@"platform:%@", info.adnName);
     ADV_LEVEL_INFO_LOG(@"ritID:%@", info.slotID);
     ADV_LEVEL_INFO_LOG(@"requestID:%@", info.requestID ?: @"None");
     
-    ADV_LEVEL_INFO_LOG(@"%s", __func__);
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
+    if ([self.delegate respondsToSelector:@selector(advanceExposured)]) {
+        [self.delegate advanceExposured];
+    }
+
 }
+
+- (void)splashAdDidClick:(ABUSplashAd *)splashAd {
+    if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdSkipClicked)]) {
+        [self.delegate advanceSplashOnAdSkipClicked];
+    }
+}
+
+- (void)splashAdCountdownToZero:(ABUSplashAd *)splashAd {
+    if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdCountdownToZero)]) {
+        [self.delegate advanceSplashOnAdCountdownToZero];
+    }
+    [self deallocAdapter];
+
+}
+
+
+
 @end

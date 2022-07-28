@@ -68,6 +68,10 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)loadDataWithMediaId:(NSString *)mediaId
                    adspotId:(NSString *)adspotId
                   customExt:(NSDictionary *_Nonnull)ext;
+
+/// 加载策略
+- (void)loadDataWithSupplierModel:(AdvSupplierModel *)model;
+
 /**
  * 加载下个渠道
  * 回调 advSupplierLoadSuppluer: error:
