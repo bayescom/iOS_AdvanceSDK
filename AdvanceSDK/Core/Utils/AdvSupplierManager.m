@@ -55,6 +55,10 @@
 /// bidding截止时间戳
 @property (nonatomic, assign) NSInteger timeout_stamp;
 
+
+/// 广告数据data
+@property (nonatomic, strong) NSData *adData;
+
 @end
 
 @implementation AdvSupplierManager
@@ -185,8 +189,9 @@
                 // 初始化 biddingCongfig单例
                 id biddingConfig = ((id(*)(id,SEL))objc_msgSend)(NSClassFromString(@"AdvBiddingCongfig"), @selector(defaultManager));
                 // 将策略Model 付给BiddingCongfig 用来在customAdapter里初始化新的开屏广告位
-                [biddingConfig performSelector:@selector(setAdDataModel:) withObject:self.model];
-
+                [biddingConfig performSelector:@selector(setAdData:) withObject:self.adData];
+                
+                [_model.setting.parallelGroup removeObject:self.model.setting.parallelGroup.firstObject];
                 [self notCPTLoadNextSuppluer:obj error:nil];
             }
         }];
@@ -599,7 +604,7 @@
 //    ADVLog(@"---------");
     if (!saveOnly) {
         self.model = a_model;
-        
+        self.adData = data;
         _supplierM = [_model.suppliers mutableCopy];
         [self sortSupplierMByPriority];
         

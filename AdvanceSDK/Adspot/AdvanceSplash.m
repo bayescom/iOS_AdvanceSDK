@@ -283,7 +283,13 @@
 - (void)showAd {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wundeclared-selector"
-    ((void (*)(id, SEL))objc_msgSend)((id)_adapter, @selector(showAd));
+    dispatch_async(dispatch_get_main_queue(), ^{
+       // UI更新代码
+        ((void (*)(id, SEL))objc_msgSend)((id)_adapter, @selector(showAd));
+
+    });
+
+
 #pragma clang diagnostic pop
 }
 

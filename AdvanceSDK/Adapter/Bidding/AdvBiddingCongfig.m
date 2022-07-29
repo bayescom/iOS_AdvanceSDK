@@ -6,7 +6,8 @@
 //
 
 #import "AdvBiddingCongfig.h"
-
+#import "AdvSupplierModel.h"
+#import "AdvModel.h"
 @implementation AdvBiddingCongfig
 // MARK: ======================= 初始化设置 =======================
 
@@ -61,6 +62,12 @@ static AdvBiddingCongfig *defaultManager = nil;
 
 - (void)deleteAdDataModel {
     self.adDataModel = nil;
+    self.adData = nil;
     _adDataModel = nil;
+}
+
+- (void)setAdData:(NSData *)adData {
+    _adData = adData;
+    self.adDataModel = [AdvSupplierModel adv_modelWithJSON:_adData];
 }
 @end

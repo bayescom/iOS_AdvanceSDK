@@ -32,6 +32,33 @@
     
     
     AdvSupplierModel *model = [AdvBiddingCongfig defaultManager].adDataModel;
+    NSLog(@"%@",model.setting.parallelGroup);
+    
+    // 需对数据进行处理, 因为parallelGroup中 只有第一组参与bidding 所以要把多余的删除 不然第一组失败了 还会继续往下运行
+    NSMutableArray *tempForParallelGroup = model.setting.parallelGroup.firstObject;
+    NSMutableArray *tempForSuppliers = [NSMutableArray new];
+    
+    // 只添加parallelGroup 中第一组的渠道
+    __weak typeof(self) _self = self;
+    [model.suppliers enumerateObjectsUsingBlock:^(AdvSupplier * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        __strong typeof(_self) self = _self;
+        
+        NSNumber *numberValue = [[NSNumber alloc]initWithInteger:obj.priority];
+        if ([tempForParallelGroup containsObject:numberValue]) {
+            [tempForSuppliers addObject:obj];
+        }
+    }];
+    
+    [model.setting.parallelGroup removeAllObjects];
+    [model.suppliers removeAllObjects];
+    
+    //
+    [model.setting.parallelGroup addObject:tempForParallelGroup];
+    [model.suppliers addObjectsFromArray:tempForSuppliers];
+
+    NSLog(@"%@",model.setting.parallelGroup);
+    NSLog(@"%@",model.suppliers);
+
     
     self.advanceSplash = [[AdvanceSplash alloc] initWithAdspotId:slotID
                                                   viewController:self.bridge.viewControllerForPresentingModalView];
@@ -64,49 +91,51 @@
 
 /// 广告数据拉取成功
 - (void)advanceUnifiedViewDidLoad {
-    NSLog(@"广告数据拉取成功 %s", __func__);
+//    NSLog(@"广告数据拉取成功 %s", __func__);
 }
 
 /// 广告曝光成功
 - (void)advanceExposured {
-    NSLog(@"广告曝光成功 %s", __func__);
+//    NSLog(@"广告曝光成功 %s", __func__);
 //    [self.bridge splashAdWillVisible:self];
 }
 
 /// 广告加载失败
 - (void)advanceFailedWithError:(NSError *)error description:(NSDictionary *)description{
-    NSLog(@"广告展示失败 %s  error: %@ 详情:%@", __func__, error, description);
+//    NSLog(@"广告展示失败 %s  error: %@ 详情:%@", __func__, error, description);
 
 }
 
 /// 广告点击
 - (void)advanceClicked {
-    NSLog(@"广告点击 %s", __func__);
+//    NSLog(@"广告点击 %s", __func__);
     [self.bridge splashAdDidClick:self];
 }
 
 /// 广告关闭
 - (void)advanceDidClose {
-    NSLog(@"广告关闭了 %s", __func__);
+//    NSLog(@"广告关闭了 %s", __func__);
     [self.bridge splashAdDidClose:self];
 }
 
 /// 广告倒计时结束
 - (void)advanceSplashOnAdCountdownToZero {
-    NSLog(@"广告倒计时结束 %s", __func__);
+//    NSLog(@"广告倒计时结束 %s", __func__);
     [self.bridge splashAdDidCountDownToZero:self];
+    [self.bridge splashAdDidClose:self];
 }
 
 /// 点击了跳过
 - (void)advanceSplashOnAdSkipClicked {
-    NSLog(@"点击了跳过 %s", __func__);
+//    NSLog(@"点击了跳过 %s", __func__);
     [self.bridge splashAdDidClickSkip:self];
+    [self.bridge splashAdDidClose:self];
 }
 
 // 策略请求成功
 - (void)advanceOnAdReceived:(NSString *)reqId
 {
-    NSLog(@"%s 策略id为: %@",__func__ , reqId);
+//    NSLog(@"%s 策略id为: %@",__func__ , reqId);
 }
 
 
@@ -114,7 +143,7 @@
 
 - (void)didReceiveBidResult:(ABUMediaBidResult *)result {
     // 在此处理Client Bidding的结果回调
-    NSLog(@"----------->自定义开屏adapter有结果啦啦 %d %ld %@ %@ %@ %@<------------", result.win, result.winnerPrice, result.lossDescription, result.winnerAdnID, result.ext, result.originNativeAdData);
+//    NSLog(@"----------->自定义开屏adapter有结果啦啦 %d %ld %@ %@ %@ %@<------------", result.win, result.winnerPrice, result.lossDescription, result.winnerAdnID, result.ext, result.originNativeAdData);
 }
 
 

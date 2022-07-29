@@ -11,7 +11,8 @@ NS_ASSUME_NONNULL_BEGIN
 @class AdvSupplierModel;
 @interface AdvBiddingCongfig : NSObject
 + (AdvBiddingCongfig *)defaultManager;
-@property (nonatomic, strong) AdvSupplierModel *adDataModel;
+@property (nonatomic, strong, readonly) AdvSupplierModel *adDataModel;
+@property (nonatomic, strong) NSData *adData;
 
 // 清空持有的adDataModel
 - (void)deleteAdDataModel;

@@ -69,7 +69,7 @@
     if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
         [self.delegate advanceUnifiedViewDidLoad];
     }
-    [self showAd];
+//    [self showAd];
     
 }
 
@@ -87,18 +87,25 @@
 - (void)showAd {
 //    [[UIApplication sharedApplication].keyWindow addSubview:_csj_ad];
 //    [[UIApplication sharedApplication].keyWindow bringSubviewToFront:[_adspot performSelector:@selector(bgImgV)]];
-    UIImageView *imgV;
-    if (_adspot.showLogoRequire) {
-        // 添加Logo
-        NSAssert(_adspot.logoImage != nil, @"showLogoRequire = YES时, 必须设置logoImage");
-        CGFloat real_w = [UIScreen mainScreen].bounds.size.width;
-        CGFloat real_h = _adspot.logoImage.size.height*(real_w/_adspot.logoImage.size.width);
-        UIImageView *imgV = [[UIImageView alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height-real_h, real_w, real_h)];
-        imgV.userInteractionEnabled = YES;
-        imgV.image = _adspot.logoImage;
-    }
+    __weak typeof(self) _self = self;
 
-        [self.mercury_ad showAdWithBottomView:_adspot.showLogoRequire?imgV:nil skipView:nil];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        __strong typeof(_self) self = _self;
+       // UI更新代码
+        UIImageView *imgV;
+        if (_adspot.showLogoRequire) {
+            // 添加Logo
+            NSAssert(_adspot.logoImage != nil, @"showLogoRequire = YES时, 必须设置logoImage");
+            CGFloat real_w = [UIScreen mainScreen].bounds.size.width;
+            CGFloat real_h = _adspot.logoImage.size.height*(real_w/_adspot.logoImage.size.width);
+            UIImageView *imgV = [[UIImageView alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height-real_h, real_w, real_h)];
+            imgV.userInteractionEnabled = YES;
+            imgV.image = _adspot.logoImage;
+        }
+
+            [self.mercury_ad showAdWithBottomView:_adspot.showLogoRequire?imgV:nil skipView:nil];
+    });
+
 
 }
 
@@ -143,7 +150,7 @@
         [self.delegate advanceUnifiedViewDidLoad];
     }
 
-    [self showAd];
+//    [self showAd];
 }
 
 - (void)mercury_splashAdExposured:(MercurySplashAd *)splashAd {

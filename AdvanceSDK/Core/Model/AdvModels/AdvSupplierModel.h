@@ -53,7 +53,7 @@ NSString * ADVStringFromNAdvanceSdkSupplierRepoType(AdvanceSdkSupplierRepoType t
 
 @interface AdvSupplierModel : NSObject
 @property (nonatomic, strong) AdvSetting *setting;
-@property (nonatomic, copy)   NSArray<AdvSupplier *> *suppliers;
+@property (nonatomic, strong)   NSMutableArray<AdvSupplier *> *suppliers;
 @property (nonatomic, copy)   NSString *msg;
 @property (nonatomic, assign) NSInteger code;
 @property (nonatomic, copy)   NSString *reqid;
