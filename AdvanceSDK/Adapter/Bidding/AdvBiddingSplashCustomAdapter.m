@@ -32,33 +32,6 @@
     
     
     AdvSupplierModel *model = [AdvBiddingCongfig defaultManager].adDataModel;
-    NSLog(@"%@",model.setting.parallelGroup);
-    
-    // 需对数据进行处理, 因为parallelGroup中 只有第一组参与bidding 所以要把多余的删除 不然第一组失败了 还会继续往下运行
-    NSMutableArray *tempForParallelGroup = model.setting.parallelGroup.firstObject;
-    NSMutableArray *tempForSuppliers = [NSMutableArray new];
-    
-    // 只添加parallelGroup 中第一组的渠道
-    __weak typeof(self) _self = self;
-    [model.suppliers enumerateObjectsUsingBlock:^(AdvSupplier * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        __strong typeof(_self) self = _self;
-        
-        NSNumber *numberValue = [[NSNumber alloc]initWithInteger:obj.priority];
-        if ([tempForParallelGroup containsObject:numberValue]) {
-            [tempForSuppliers addObject:obj];
-        }
-    }];
-    
-    [model.setting.parallelGroup removeAllObjects];
-    [model.suppliers removeAllObjects];
-    
-    //
-    [model.setting.parallelGroup addObject:tempForParallelGroup];
-    [model.suppliers addObjectsFromArray:tempForSuppliers];
-
-    NSLog(@"%@",model.setting.parallelGroup);
-    NSLog(@"%@",model.suppliers);
-
     
     self.advanceSplash = [[AdvanceSplash alloc] initWithAdspotId:slotID
                                                   viewController:self.bridge.viewControllerForPresentingModalView];

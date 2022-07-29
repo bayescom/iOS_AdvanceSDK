@@ -180,24 +180,30 @@
     // 如果用 bidding功能
     if (_model.setting.bidding_type == 1) {
         // 根据渠道标识 获取bidding的supplier去执行
-        
+        __weak typeof(self) _self = self;
         [_supplierM enumerateObjectsUsingBlock:^(AdvSupplier * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            __strong typeof(_self) self = _self;
             if ([obj.identifier isEqualToString:SDK_ID_BIDDING]) {
                 *stop = YES;
-                obj.isParallel = NO;
-                
-                // 初始化 biddingCongfig单例
-                id biddingConfig = ((id(*)(id,SEL))objc_msgSend)(NSClassFromString(@"AdvBiddingCongfig"), @selector(defaultManager));
-                // 将策略Model 付给BiddingCongfig 用来在customAdapter里初始化新的开屏广告位
-                [biddingConfig performSelector:@selector(setAdData:) withObject:self.adData];
-                
-                [_model.setting.parallelGroup removeObject:self.model.setting.parallelGroup.firstObject];
-                [self notCPTLoadNextSuppluer:obj error:nil];
+                [self GMBiddingActionWithGMSupplier:obj];
             }
         }];
     } else {
         [self loadBiddingSupplierAction];
     }
+}
+
+
+// 开启GMbidding
+- (void)GMBiddingActionWithGMSupplier:(AdvSupplier *)GMObj {
+    GMObj.isParallel = NO;
+    // 初始化 biddingCongfig单例
+    id biddingConfig = ((id(*)(id,SEL))objc_msgSend)(NSClassFromString(@"AdvBiddingCongfig"), @selector(defaultManager));
+    // 将策略Model 付给BiddingCongfig 用来在customAdapter里初始化新的开屏广告位
+    [biddingConfig performSelector:@selector(setAdData:) withObject:self.adData];
+    [self notCPTLoadNextSuppluer:GMObj error:nil];
+
+
 }
 
 // 开始bidding的逻辑
@@ -441,9 +447,17 @@
         
     } else {
 //        NSLog(@"展示队列优先级: %ld", (long)supplier.priority);
-        [self.lock lock];
-        [_supplierM removeObject:supplier];
-        [self.lock unlock];
+        if ([supplier.identifier isEqualToString:SDK_ID_BIDDING]) {
+            [self.lock lock];
+            [_supplierM removeAllObjects];
+            [self.lock unlock];
+
+        } else {
+            [self.lock lock];
+            [_supplierM removeObject:supplier];
+            [self.lock unlock];
+
+        }
 //        NSLog(@"展示队列: %@", _supplierM);
     }
     
