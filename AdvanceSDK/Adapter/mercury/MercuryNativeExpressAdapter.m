@@ -81,6 +81,8 @@
         }
 
     } else if (self.adspot) {
+        _supplier.supplierPrice = views.firstObject.price;
+        [self.adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
         [_adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
         [_adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
         

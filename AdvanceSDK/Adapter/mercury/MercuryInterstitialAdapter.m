@@ -77,7 +77,9 @@
 
 // MARK: ======================= MercuryInterstitialAdDelegate =======================
 /// 插屏广告预加载成功回调，当接收服务器返回的广告数据成功且预加载后调用该函数
-- (void)mercury_interstitialSuccess  {
+- (void)mercury_interstitialSuccess:(MercuryInterstitialAd *)interstitialAd  {
+    _supplier.supplierPrice = interstitialAd.price;
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
     if (_supplier.isParallel == YES) {
 //        NSLog(@"修改状态: %@", _supplier);
@@ -104,7 +106,7 @@
 }
 
 /// 插屏广告视图曝光失败回调，插屏广告曝光失败回调该函数
-- (void)mercury_interstitialFailToPresent {
+- (void)mercury_interstitialFailToPresent:(MercuryInterstitialAd *)interstitialAd {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:[NSError errorWithDomain:@"广告素材渲染失败" code:301 userInfo:@{@"msg": @"广告素材渲染失败"}]];
     _mercury_ad = nil;
 //    if ([self.delegate respondsToSelector:@selector(advanceInterstitialOnAdRenderFailed)]) {
@@ -114,7 +116,7 @@
 }
 
 /// 插屏广告曝光回调
-- (void)mercury_interstitialWillExposure {
+- (void)mercury_interstitialWillExposure:(MercuryInterstitialAd *)interstitialAd {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(advanceExposured)]) {
         [self.delegate advanceExposured];
@@ -122,7 +124,7 @@
 }
 
 /// 插屏广告点击回调
-- (void)mercury_interstitialClicked {
+- (void)mercury_interstitialClicked:(MercuryInterstitialAd *)interstitialAd {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(advanceClicked)]) {
         [self.delegate advanceClicked];
@@ -130,7 +132,7 @@
 }
 
 /// 插屏广告曝光结束回调，插屏广告曝光结束回调该函数
-- (void)mercury_interstitialDidDismissScreen {
+- (void)mercury_interstitialDidDismissScreen:(MercuryInterstitialAd *)interstitialAd {
     if ([self.delegate respondsToSelector:@selector(advanceDidClose)]) {
         [self.delegate advanceDidClose];
     }

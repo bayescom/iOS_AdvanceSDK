@@ -131,6 +131,7 @@
 
 // MARK: ======================= MercurySplashAdDelegate =======================
 - (void)mercury_splashAdDidLoad:(MercurySplashAd *)splashAd {
+    _supplier.supplierPrice = splashAd.price;
     [self.adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
 
