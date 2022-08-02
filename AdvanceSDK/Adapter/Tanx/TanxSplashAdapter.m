@@ -123,9 +123,10 @@
     UIImageView *imgV;
     if (_adspot.logoImage  && _adspot.showLogoRequire) {
         NSAssert(_adspot.logoImage != nil, @"showLogoRequire = YES时, 必须设置logoImage");
+        
         CGFloat real_w = [UIScreen mainScreen].bounds.size.width;
         CGFloat real_h = _adspot.logoImage.size.height*(real_w/_adspot.logoImage.size.width);
-        imgV = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, real_w, real_h)];
+        imgV = [[UIImageView alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height - real_h, real_w, real_h)];
         imgV.userInteractionEnabled = YES;
         imgV.image = _adspot.logoImage;
     }
@@ -140,13 +141,15 @@
             
             self.templateView = [self.splashManager renderSplashTemplateWithModel:splashModel config:config];
             self.templateView.frame = CGRectMake(0, 0, self.window.bounds.size.width, self.window.bounds.size.height - imgV.frame.size.height);
-            NSLog(@"Tanx失败  %@---> %@  %d", self, self.templateView, splashModel.isValid);
-            if (self.templateView == nil) {
-                NSLog(@"Tanx失败  %@---> %@  %d", self, self.templateView, splashModel.isValid);
+//            NSLog(@"Tanx失败  %@---> %@  %d", self, self.templateView, splashModel.isValid);
+            if (self.templateView == nil || splashModel == NO) {
                 NSError *temp = [NSError errorWithDomain:@"广告物料加载失败" code:10002 userInfo:nil];
                 [self tanxSplashAdFailToPresentWithError:temp];
             } else {
                 [self.window addSubview:self.templateView];
+                if (imgV) {
+                    [self.window addSubview:imgV];
+                }
                 [self.window bringSubviewToFront:self.templateView];
             }
             [self biddingWithSplashModel:splashModel isWin:YES];

@@ -107,6 +107,12 @@
  * splash ad request done
  */
 - (void)ksad_splashAdDidLoad:(KSSplashAdView *)splashAdView {
+
+}
+/**
+ * splash ad material load, ready to display
+ */
+- (void)ksad_splashAdContentDidLoad:(KSSplashAdView *)splashAdView {
     _supplier.supplierPrice = splashAdView.ecpm;
     [self.adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
@@ -119,11 +125,6 @@
     }
     [self showAd];
 
-}
-/**
- * splash ad material load, ready to display
- */
-- (void)ksad_splashAdContentDidLoad:(KSSplashAdView *)splashAdView {
     _timeout = 5;
     // 记录过期的时间
     _timeout_stamp = ([[NSDate date] timeIntervalSince1970] + _timeout)*1000;
@@ -289,7 +290,7 @@
         return;
     }
     _ks_ad.frame = [UIScreen mainScreen].bounds;
-    [[UIApplication sharedApplication].adv_getCurrentWindow addSubview:_ks_ad];
+    [_ks_ad showInView:[UIApplication sharedApplication].adv_getCurrentWindow];
 }
 
 //- (void)ksad_splashAdDismiss:(BOOL)converted {

@@ -38,7 +38,7 @@
             
             
             
-            
+            ADV_LEVEL_INFO_LOG(@"TK上报===>> %@", urlString);
             [temp addObject:urlString];
             
         } @catch (NSException *exception) {
@@ -74,6 +74,16 @@
     return url;
 }
 
+#pragma succeedtk 的参数拼接
+- (NSMutableArray *)succeedtkUrlWithArr:(NSArray<NSString *> *)uploadArr price:(NSInteger)price {
+    NSMutableArray *temp = [NSMutableArray arrayWithCapacity:uploadArr.count];
+    for (id obj in uploadArr.mutableCopy) {
+        NSString *succeedtk = [self joinPriceUrlWithObj:obj price:price];
+        [temp addObject:succeedtk];
+    }
+    return temp;
+}
+
 
 #pragma loadedtk 的参数拼接
 - (NSMutableArray *)loadedtkUrlWithArr:(NSArray<NSString *> *)uploadArr {
@@ -86,10 +96,11 @@
 }
 
 #pragma imptk 的参数拼接
-- (NSMutableArray *)imptkUrlWithArr:(NSArray<NSString *> *)uploadArr {
+- (NSMutableArray *)imptkUrlWithArr:(NSArray<NSString *> *)uploadArr price:(NSInteger)price {
     NSMutableArray *temp = [NSMutableArray arrayWithCapacity:uploadArr.count];
     for (id obj in uploadArr.mutableCopy) {
         NSString *loadedtk = [self joinTimeUrlWithObj:obj type:AdvanceSdkSupplierRepoImped];
+        loadedtk = [self joinPriceUrlWithObj:loadedtk price:price];
         [temp addObject:loadedtk];
     }
     return temp;
@@ -163,7 +174,14 @@
     return urlString;
 }
 
-
+// 拼接价格
+- (NSString *)joinPriceUrlWithObj:(NSString *)urlString price:(NSInteger)price {
+    if (price > 0) {
+        return  [NSString stringWithFormat:@"%@&bidResult=%ld", urlString, (long)price];
+    } else {
+        return urlString;
+    }
+}
 
 
 @end

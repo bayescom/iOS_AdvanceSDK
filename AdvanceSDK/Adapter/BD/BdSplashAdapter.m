@@ -98,7 +98,7 @@
 }
 
 - (void)supplierStateFailed {
-    ADV_LEVEL_INFO_LOG(@"穿山甲 失败");
+    ADV_LEVEL_INFO_LOG(@"百度 失败");
     [self.adspot loadNextSupplierIfHas];
     [self deallocAdapter];
 }

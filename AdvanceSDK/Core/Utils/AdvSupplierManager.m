@@ -122,7 +122,7 @@
     // 不管是不是并行渠道, 到了该执行的时候 必须要按照串行渠道的逻辑去执行
     currentSupplier.isParallel = NO;
 //    NSInteger currentPriority = currentSupplier.priority;
-
+    NSLog(@"%s %@", __func__, currentSupplier.sdktag);
     [self notCPTLoadNextSuppluer:currentSupplier error:nil];
 
 //    if (_model.setting.parallelGroup.count > 0) {
@@ -133,12 +133,13 @@
 
 // 开始下一组bidding
 - (void)loadNextBiddingSupplierIfHas {
-    
+    NSLog(@"------------>>>>>>>");
     // 取当前bidding组里次优先胜出的广告
     AdvSupplier *currentSupplier = self.arrayWaitingBidding.lastObject;
     currentSupplier.isParallel = NO;
     
     if (currentSupplier) {// 如果有 继续执行
+        NSLog(@"%s %@",__func__, currentSupplier.sdktag);
         [self notCPTLoadNextSuppluer:currentSupplier error:nil];
     } else {
         [self.arrayWaitingBidding removeAllObjects];
@@ -166,10 +167,6 @@
 
 // 开始bidding的逻辑
 - (void)loadBiddingSupplierAction {
-    /// 确认哪些渠道参加bidding
-    NSDictionary *ext = [self.ext mutableCopy];
-    NSString *adTypeName = [ext valueForKey:AdvSdkTypeAdName];
-
     // 参加bidding的渠道
     NSMutableArray *tempBidding = [NSMutableArray array];
     
@@ -179,9 +176,7 @@
     [biddingPriority enumerateObjectsUsingBlock:^(NSNumber  *_Nonnull priority, NSUInteger idx, BOOL * _Nonnull stop) {
         // 想要bidding->广告位必须要支持并发->必须支持load 和show 分离
         AdvSupplier *parallelSupplier = [self getSupplierByPriority:[priority integerValue]];
-        BOOL isSupportParallel = [AdvAdsportInfoUtil isSupportParallelWithAdTypeName:adTypeName supplierId:parallelSupplier.identifier];
-        if (isSupportParallel && // 该广告位支持并行
-            ![tempBidding containsObject:parallelSupplier] &&// tempBidding 不包含这个渠道
+        if (![tempBidding containsObject:parallelSupplier] &&// tempBidding 不包含这个渠道
             parallelSupplier != nil) {
             
             parallelSupplier.isParallel = YES;// 并发执行这些渠道
@@ -212,7 +207,10 @@
         }
         
         // 记录过期的时间
-        _timeout_stamp = ([[NSDate date] timeIntervalSince1970] + _model.setting.parallel_timeout / 1000)*1000;
+        if (_timeoutCheckTimer) {
+            [self deallocTimer];
+        }
+        _timeout_stamp = ([[NSDate date] timeIntervalSince1970] + (_model.setting.parallel_timeout / 1000))*1000;
         // 开启定时器监听过期
         [_timeoutCheckTimer invalidate];
 
@@ -224,6 +222,7 @@
             // isParallel和isSupportBidding 这两个字段在上面已经设置过了 所以这里不用再设置了
 //            supplier.isParallel = YES;// 并发执行这些渠道
 //            supplier.isSupportBidding = YES;// 并且支持bidding
+            NSLog(@"-->%s tag %@", __func__, supplier.sdktag);
             [self notCPTLoadNextSuppluer:supplier error:nil];
         }];
         
@@ -303,7 +302,7 @@
     if (self.delegate && [self.delegate respondsToSelector:@selector(advManagerBiddingEndWithWinSupplier:)]) {
         [self.delegate advManagerBiddingEndWithWinSupplier:currentSupplier];
     }
-
+    NSLog(@"%s %@",__func__, currentSupplier.sdktag);
     [self notCPTLoadNextSuppluer:currentSupplier error:nil];
     // 执行的都从 arrayWaitingBidding里面删除
     [self.arrayWaitingBidding removeObject:currentSupplier];
@@ -334,7 +333,7 @@
 
         
         AdvSupplier *currentSupplier = _supplierM.firstObject;
-        
+         NSLog(@"%s %@", __func__, currentSupplier.sdktag);
         [self notCPTLoadNextSuppluer:currentSupplier error:nil];
     
 }
@@ -360,11 +359,10 @@
                     NSInteger priority = [prioritys[i] integerValue];
                     AdvSupplier *parallelSupplier = [self getSupplierByPriority:priority];
                     
-                    BOOL isSupportParallel = [AdvAdsportInfoUtil isSupportParallelWithAdTypeName:adTypeName supplierId:parallelSupplier.identifier];
-                    if (isSupportParallel && // 该广告位支持并行
-                        parallelSupplier.priority != [currentPriority integerValue] &&// 并且不是currentSupplier
+                    if (parallelSupplier.priority != [currentPriority integerValue] &&// 并且不是currentSupplier
                         parallelSupplier) {
                         parallelSupplier.isParallel = YES;
+                        NSLog(@"%s %@", __func__, parallelSupplier.sdktag);
                         [self notCPTLoadNextSuppluer:parallelSupplier error:nil];
                     }
                 }
@@ -609,14 +607,15 @@
     } else if (repoType == AdvanceSdkSupplierRepoClicked) {
         uploadArr =  supplier.clicktk;
     } else if (repoType == AdvanceSdkSupplierRepoSucceeded) {
-        uploadArr =  supplier.succeedtk;
+
+        uploadArr =  [self.tkUploadTool succeedtkUrlWithArr:supplier.succeedtk price:supplier.supplierPrice];
         // 曝光成功 更新本地策略
         if (_isLoadLocalSupplier) {
             ADV_LEVEL_INFO_LOG(@"曝光成功 此次使用本地缓存 更新本地策略");
             [self fetchData:YES];
         }
     } else if (repoType == AdvanceSdkSupplierRepoImped) {
-        uploadArr =  [self.tkUploadTool imptkUrlWithArr:supplier.imptk];
+        uploadArr =  [self.tkUploadTool imptkUrlWithArr:supplier.imptk price:supplier.supplierPrice];
     } else if (repoType == AdvanceSdkSupplierRepoFaileded) {
         uploadArr =  [self.tkUploadTool failedtkUrlWithArr:supplier.failedtk error:error];
     }
