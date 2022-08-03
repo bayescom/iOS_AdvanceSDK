@@ -108,9 +108,9 @@ Pod::Spec.new do |s|
         tanx.dependency 'SDWebImage', '5.12.1'
         tanx.source_files =  'AdvanceSDK/Adapter/Tanx/*{h,m}'
         tanx.ios.vendored_frameworks = 'AdvanceSDK/Adapter/Tanx/TanxSDKFolder/TanxSDK.framework'
-#        tanx.vendored_frameworks = 'TanxSDK.framework'
-
-
+        tanx.frameworks = 'AdSupport', 'CoreMotion', 'CoreTelephony', 'SystemConfiguration', 'WebKit'
+        tanx.libraries = 'resolv', 'sqlite3.0', 'z'
+        
         valid_archs = ['armv7', 'armv7s', 'x86_64', 'arm64']
         
         

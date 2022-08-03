@@ -181,7 +181,7 @@
 
 - (void)onSplashClickWithWebUrl:(NSString *)webUrl {
     NSLog(@"%s  %@",__func__, webUrl);
-    
+     
     [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(advanceClicked)]) {
         [self.delegate advanceClicked];
