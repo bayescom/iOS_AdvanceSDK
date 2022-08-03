@@ -56,7 +56,7 @@
     
     // 搜集各渠道的错误信息
     if (error) {
-        NSLog(@"-->   %@", error);
+//        NSLog(@"-->   %@", error);
         [self collectErrorWithSupplier:supplier error:error];
     }
 

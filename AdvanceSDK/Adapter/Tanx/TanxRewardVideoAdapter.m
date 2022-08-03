@@ -94,7 +94,7 @@
     
 //    NSLog(@"广点通激励视频拉取成功 %@",self.gdt_ad);
     if (_supplier.isParallel == YES) {
-        NSLog(@"修改状态: %@", _supplier);
+//        NSLog(@"修改状态: %@", _supplier);
         _supplier.state = AdvanceSdkSupplierStateSuccess;
         return;
     }

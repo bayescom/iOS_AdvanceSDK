@@ -51,36 +51,40 @@
 
 - (void)supplierStateLoad {
     ADV_LEVEL_INFO_LOG(@"加载百度 supplier: %@", _supplier);
-    if (!_bd_ad) {
-        [self deallocAdapter];
-        return;
-    }
-    _bd_ad.delegate = self;
-    if (self.adspot.timeout) {
-        if (self.adspot.timeout > 500) {
-            _bd_ad.timeout = _adspot.timeout / 1000.0;
+    __weak typeof(self) _self = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        __strong typeof(_self) self = _self;
+        if (!_bd_ad) {
+            [self deallocAdapter];
+            return;
         }
-    }
-    
-    _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
-    
-    UIWindow *window = [UIApplication sharedApplication].adv_getCurrentWindow;
-    if (_adspot.logoImage) {
-        CGFloat real_w = [UIScreen mainScreen].bounds.size.width;
-        CGFloat real_h = _adspot.logoImage.size.height*(real_w/_adspot.logoImage.size.width);
-        self.imgV = [[UIImageView alloc] initWithFrame:CGRectMake(0, window.frame.size.height - real_h, real_w, real_h)];
-        self.imgV.userInteractionEnabled = YES;
-        self.imgV.image = _adspot.logoImage;
-        self.imgV.hidden = YES;
-
+        _bd_ad.delegate = self;
+        if (self.adspot.timeout) {
+            if (self.adspot.timeout > 500) {
+                _bd_ad.timeout = _adspot.timeout / 1000.0;
+            }
+        }
         
-        _bd_ad.adSize = CGSizeMake(window.frame.size.width, window.frame.size.height - self.imgV.frame.size.height);
-
-    } else {
-        _bd_ad.adSize = CGSizeMake(window.frame.size.width, window.frame.size.height);
-    }
-    [self.bd_ad load];
-
+        _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
+        
+        UIWindow *window = [UIApplication sharedApplication].adv_getCurrentWindow;
+        if (_adspot.logoImage) {
+            CGFloat real_w = [UIScreen mainScreen].bounds.size.width;
+            CGFloat real_h = _adspot.logoImage.size.height*(real_w/_adspot.logoImage.size.width);
+            self.imgV = [[UIImageView alloc] initWithFrame:CGRectMake(0, window.frame.size.height - real_h, real_w, real_h)];
+            self.imgV.userInteractionEnabled = YES;
+            self.imgV.image = _adspot.logoImage;
+            self.imgV.hidden = YES;
+            
+            
+            _bd_ad.adSize = CGSizeMake(window.frame.size.width, window.frame.size.height - self.imgV.frame.size.height);
+            
+        } else {
+            _bd_ad.adSize = CGSizeMake(window.frame.size.width, window.frame.size.height);
+        }
+        [self.bd_ad load];
+    });
+    
 }
 
 - (void)supplierStateInPull {
@@ -117,20 +121,25 @@
 }
 
 - (void)showAd {
-    // 设置logo
-    UIWindow *window = [UIApplication sharedApplication].adv_getCurrentWindow;
-    if (self.imgV) {
-        [window addSubview:self.imgV];
-    }
-    
-    if (self.bd_ad) {
-        [window addSubview:self.customSplashView];
-        self.customSplashView.frame = CGRectMake(window.frame.origin.x, window.frame.origin.y, window.frame.size.width, window.frame.size.height - self.imgV.frame.size.height);
-        self.customSplashView.backgroundColor = [UIColor whiteColor];
-        [self.bd_ad showInContainerView:self.customSplashView];
-    
-//        NSLog(@"百度开屏展示%@",self.bd_ad);
-    }
+    __weak typeof(self) _self = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        __strong typeof(_self) self = _self;
+
+        // 设置logo
+        UIWindow *window = [UIApplication sharedApplication].adv_getCurrentWindow;
+        if (self.imgV) {
+            [window addSubview:self.imgV];
+        }
+        
+        if (self.bd_ad) {
+            [window addSubview:self.customSplashView];
+            self.customSplashView.frame = CGRectMake(window.frame.origin.x, window.frame.origin.y, window.frame.size.width, window.frame.size.height - self.imgV.frame.size.height);
+            self.customSplashView.backgroundColor = [UIColor whiteColor];
+            [self.bd_ad showInContainerView:self.customSplashView];
+            
+            //        NSLog(@"百度开屏展示%@",self.bd_ad);
+        }
+    });
 }
 
 - (UIView *)customSplashView {

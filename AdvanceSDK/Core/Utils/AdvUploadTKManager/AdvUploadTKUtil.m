@@ -38,7 +38,6 @@
             
             
             
-            ADV_LEVEL_INFO_LOG(@"TK上报===>> %@", urlString);
             [temp addObject:urlString];
             
         } @catch (NSException *exception) {

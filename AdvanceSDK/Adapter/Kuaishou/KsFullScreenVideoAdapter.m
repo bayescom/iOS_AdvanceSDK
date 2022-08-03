@@ -70,7 +70,9 @@
 }
 
 - (void)showAd {
+    __weak typeof(self) _self = self;
     dispatch_async(dispatch_get_main_queue(), ^{
+        __strong typeof(_self) self = _self;
         if (self.ks_ad.isValid) {
             [self.ks_ad showAdFromRootViewController:self.adspot.viewController.navigationController];
         }

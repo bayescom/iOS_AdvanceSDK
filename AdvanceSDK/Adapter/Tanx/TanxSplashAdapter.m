@@ -47,6 +47,7 @@
 @property(nonatomic, strong) AdvSupplier *supplier;
 @property(nonatomic, strong)NSArray <TXAdSplashModel *> *splashModels;
 @property(nonatomic, assign) BOOL isClick;
+@property(nonatomic, strong) UIImageView *imgV;
 
 @end
 
@@ -109,52 +110,60 @@
 
 
 - (void)deallocAdapter {
-    [self.templateView removeFromSuperview];
-    self.templateView = nil;
-    
-    if ([self.delegate respondsToSelector:@selector(advanceDidClose)]) {
-        [self.delegate advanceDidClose];
-    }
-
+    __weak typeof(self) _self = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        __strong typeof(_self) self = _self;
+        
+        [self.templateView removeFromSuperview];
+        self.templateView = nil;
+        [self.imgV removeFromSuperview];
+        self.imgV = nil;
+        
+        if ([self.delegate respondsToSelector:@selector(advanceDidClose)]) {
+            [self.delegate advanceDidClose];
+        }
+    });
 }
 
 - (void)showAd {
     // 设置logo
-    UIImageView *imgV;
-    if (_adspot.logoImage  && _adspot.showLogoRequire) {
-        NSAssert(_adspot.logoImage != nil, @"showLogoRequire = YES时, 必须设置logoImage");
-        
-        CGFloat real_w = [UIScreen mainScreen].bounds.size.width;
-        CGFloat real_h = _adspot.logoImage.size.height*(real_w/_adspot.logoImage.size.width);
-        imgV = [[UIImageView alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height - real_h, real_w, real_h)];
-        imgV.userInteractionEnabled = YES;
-        imgV.image = _adspot.logoImage;
-    }
-    if (self.splashManager) {
-        
-        //渲染模板
-        dispatch_async(dispatch_get_main_queue(), ^{
+    __weak typeof(self) _self = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        __strong typeof(_self) self = _self;
+        if (_adspot.logoImage  && _adspot.showLogoRequire) {
+            NSAssert(_adspot.logoImage != nil, @"showLogoRequire = YES时, 必须设置logoImage");
+            
+            CGFloat real_w = [UIScreen mainScreen].bounds.size.width;
+            CGFloat real_h = _adspot.logoImage.size.height*(real_w/_adspot.logoImage.size.width);
+            self.imgV = [[UIImageView alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height - real_h, real_w, real_h)];
+            self.imgV.userInteractionEnabled = YES;
+            self.imgV.image = _adspot.logoImage;
+        }
+        if (self.splashManager) {
+            
+            //渲染模板
             self.window = [UIApplication sharedApplication].adv_getCurrentWindow;
             
             TXAdSplashModel *splashModel = self.splashModels.firstObject;
             TXAdSplashTemplateConfig *config = [[TXAdSplashTemplateConfig alloc] init];
             
             self.templateView = [self.splashManager renderSplashTemplateWithModel:splashModel config:config];
-            self.templateView.frame = CGRectMake(0, 0, self.window.bounds.size.width, self.window.bounds.size.height - imgV.frame.size.height);
-//            NSLog(@"Tanx失败  %@---> %@  %d", self, self.templateView, splashModel.isValid);
+            self.templateView.frame = CGRectMake(0, 0, self.window.bounds.size.width, self.window.bounds.size.height - self.imgV.frame.size.height);
+            //            ADV_LEVEL_INFO_LOG(@"Tanx失败  %@---> %@  %d", self, self.templateView, splashModel.isValid);
             if (self.templateView == nil || splashModel == NO) {
                 NSError *temp = [NSError errorWithDomain:@"广告物料加载失败" code:10002 userInfo:nil];
                 [self tanxSplashAdFailToPresentWithError:temp];
             } else {
                 [self.window addSubview:self.templateView];
-                if (imgV) {
-                    [self.window addSubview:imgV];
+                if (self.imgV) {
+                    [self.window addSubview:self.imgV];
                 }
                 [self.window bringSubviewToFront:self.templateView];
             }
             [self biddingWithSplashModel:splashModel isWin:YES];
-        });
-    }
+        }
+    });
+    
 }
 
 // 加载成功
@@ -167,7 +176,7 @@
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
 
     if (_supplier.isParallel == YES) {
-//        NSLog(@"修改状态: %@", _supplier);
+//        ADV_LEVEL_INFO_LOG(@"修改状态: %@", _supplier);
         _supplier.state = AdvanceSdkSupplierStateSuccess;
         return;
     }
@@ -180,7 +189,7 @@
 }
 
 - (void)onSplashClickWithWebUrl:(NSString *)webUrl {
-    NSLog(@"%s  %@",__func__, webUrl);
+    ADV_LEVEL_INFO_LOG(@"%s  %@",__func__, webUrl);
      
     [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(advanceClicked)]) {
@@ -195,7 +204,7 @@
 
 /// 开屏开始展示
 - (void)onSplashShow {
-    NSLog(@"%s",__func__);
+    ADV_LEVEL_INFO_LOG(@"%s",__func__);
     [self.adspot reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
     if (self.delegate && [self.delegate respondsToSelector:@selector(advanceExposured)]) {
         [self.delegate advanceExposured];
@@ -210,10 +219,10 @@
 
 /// 开屏关闭
 - (void)onSplashClose {
-    NSLog(@"%s",__func__);
+    ADV_LEVEL_INFO_LOG(@"%s",__func__);
     
     if ([[NSDate date] timeIntervalSince1970]*1000 < _timeout_stamp && _isClick == NO) {// 关闭时的时间小于过期时间 且 没有被点击广告区域  则点击了跳过
-//        NSLog(@"%f, %ld",[[NSDate date] timeIntervalSince1970]*1000,  _timeout_stamp);
+//        ADV_LEVEL_INFO_LOG(@"%f, %ld",[[NSDate date] timeIntervalSince1970]*1000,  _timeout_stamp);
         if (self.delegate && [self.delegate respondsToSelector:@selector(advanceSplashOnAdSkipClicked)]) {
             [self.delegate advanceSplashOnAdSkipClicked];
         }
@@ -243,6 +252,13 @@
 - (void)biddingWithSplashModel:(TXAdSplashModel *)splashModel isWin:(BOOL)isWin
 {
     [self.splashManager uploadBidding:splashModel isWin:isWin];
+}
+
+- (UIImageView *)imgV {
+    if (!_imgV) {
+        _imgV = [UIImageView new];
+    }
+    return _imgV;
 }
 
 @end

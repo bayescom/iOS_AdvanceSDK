@@ -122,7 +122,7 @@
     // 不管是不是并行渠道, 到了该执行的时候 必须要按照串行渠道的逻辑去执行
     currentSupplier.isParallel = NO;
 //    NSInteger currentPriority = currentSupplier.priority;
-    NSLog(@"%s %@", __func__, currentSupplier.sdktag);
+//    NSLog(@"%s %@", __func__, currentSupplier.sdktag);
     [self notCPTLoadNextSuppluer:currentSupplier error:nil];
 
 //    if (_model.setting.parallelGroup.count > 0) {
@@ -133,13 +133,13 @@
 
 // 开始下一组bidding
 - (void)loadNextBiddingSupplierIfHas {
-    NSLog(@"------------>>>>>>>");
+//    NSLog(@"------------>>>>>>>");
     // 取当前bidding组里次优先胜出的广告
     AdvSupplier *currentSupplier = self.arrayWaitingBidding.lastObject;
     currentSupplier.isParallel = NO;
     
     if (currentSupplier) {// 如果有 继续执行
-        NSLog(@"%s %@",__func__, currentSupplier.sdktag);
+//        NSLog(@"%s %@",__func__, currentSupplier.sdktag);
         [self notCPTLoadNextSuppluer:currentSupplier error:nil];
     } else {
         [self.arrayWaitingBidding removeAllObjects];
@@ -190,7 +190,7 @@
     // 参与bidding的渠道数
     _incomeBiddingCount = tempBidding.count;
 
-    NSLog(@"_incomeBiddingCount = %ld", _incomeBiddingCount);
+//    NSLog(@"_incomeBiddingCount = %ld", _incomeBiddingCount);
     if (_incomeBiddingCount == 0) {// 没有参加bidding的渠道即没有并发, 那么就按照旧的业务去执行
         if (self.model.setting.parallelGroup.count == 0) { // 如果并发组里元素个数为0 那么就开始执行剩下非并发的渠道了
             [self loadNextSupplier];
@@ -222,7 +222,7 @@
             // isParallel和isSupportBidding 这两个字段在上面已经设置过了 所以这里不用再设置了
 //            supplier.isParallel = YES;// 并发执行这些渠道
 //            supplier.isSupportBidding = YES;// 并且支持bidding
-            NSLog(@"-->%s tag %@", __func__, supplier.sdktag);
+//            NSLog(@"-->%s tag %@", __func__, supplier.sdktag);
             [self notCPTLoadNextSuppluer:supplier error:nil];
         }];
         
@@ -237,7 +237,7 @@
     
     // 如果所有并发渠道都有结果返回了 则选择price高的渠道展示
 //    NSLog(@"%@", self.arrayWaitingBidding.count);
-    NSLog(@"_incomeBiddingCount = %ld  arrayWaitingBidding.count = %ld", _incomeBiddingCount, _arrayWaitingBidding.count);
+//    NSLog(@"_incomeBiddingCount = %ld  arrayWaitingBidding.count = %ld", _incomeBiddingCount, _arrayWaitingBidding.count);
     if (self.arrayWaitingBidding.count == _incomeBiddingCount) {
         [self _sortSuppliersByPrice:self.arrayWaitingBidding];
     }
@@ -274,7 +274,8 @@
         
         CGFloat obj11_price = (obj11.supplierPrice > 0) ? obj11.supplierPrice : obj11.sdk_price;
         CGFloat obj22_price = (obj22.supplierPrice > 0) ? obj22.supplierPrice : obj22.sdk_price;
-        
+        obj11.supplierPrice = obj11_price;
+        obj22.supplierPrice = obj22_price;
         if (obj11_price > obj22_price) {
             return NSOrderedDescending;
         } else if (obj11_price  == obj22_price) {
@@ -302,7 +303,7 @@
     if (self.delegate && [self.delegate respondsToSelector:@selector(advManagerBiddingEndWithWinSupplier:)]) {
         [self.delegate advManagerBiddingEndWithWinSupplier:currentSupplier];
     }
-    NSLog(@"%s %@",__func__, currentSupplier.sdktag);
+//    NSLog(@"%s %@",__func__, currentSupplier.sdktag);
     [self notCPTLoadNextSuppluer:currentSupplier error:nil];
     // 执行的都从 arrayWaitingBidding里面删除
     [self.arrayWaitingBidding removeObject:currentSupplier];
@@ -333,7 +334,7 @@
 
         
         AdvSupplier *currentSupplier = _supplierM.firstObject;
-         NSLog(@"%s %@", __func__, currentSupplier.sdktag);
+//         NSLog(@"%s %@", __func__, currentSupplier.sdktag);
         [self notCPTLoadNextSuppluer:currentSupplier error:nil];
     
 }
@@ -362,7 +363,7 @@
                     if (parallelSupplier.priority != [currentPriority integerValue] &&// 并且不是currentSupplier
                         parallelSupplier) {
                         parallelSupplier.isParallel = YES;
-                        NSLog(@"%s %@", __func__, parallelSupplier.sdktag);
+//                        NSLog(@"%s %@", __func__, parallelSupplier.sdktag);
                         [self notCPTLoadNextSuppluer:parallelSupplier error:nil];
                     }
                 }
@@ -608,14 +609,14 @@
         uploadArr =  supplier.clicktk;
     } else if (repoType == AdvanceSdkSupplierRepoSucceeded) {
 
-        uploadArr =  [self.tkUploadTool succeedtkUrlWithArr:supplier.succeedtk price:supplier.supplierPrice];
+        uploadArr =  [self.tkUploadTool succeedtkUrlWithArr:supplier.succeedtk price:(supplier.supplierPrice == 0) ? supplier.sdk_price : supplier.supplierPrice];
         // 曝光成功 更新本地策略
         if (_isLoadLocalSupplier) {
             ADV_LEVEL_INFO_LOG(@"曝光成功 此次使用本地缓存 更新本地策略");
             [self fetchData:YES];
         }
     } else if (repoType == AdvanceSdkSupplierRepoImped) {
-        uploadArr =  [self.tkUploadTool imptkUrlWithArr:supplier.imptk price:supplier.supplierPrice];
+        uploadArr =  [self.tkUploadTool imptkUrlWithArr:supplier.imptk price:(supplier.supplierPrice == 0) ? supplier.sdk_price : supplier.supplierPrice];
     } else if (repoType == AdvanceSdkSupplierRepoFaileded) {
         uploadArr =  [self.tkUploadTool failedtkUrlWithArr:supplier.failedtk error:error];
     }

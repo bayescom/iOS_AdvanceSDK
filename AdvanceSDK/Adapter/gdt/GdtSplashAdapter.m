@@ -94,22 +94,26 @@
 
 - (void)showAd {
     // 设置logo
-    UIImageView *imgV;
-    if (_adspot.logoImage) {
-        CGFloat real_w = [UIScreen mainScreen].bounds.size.width;
-        CGFloat real_h = _adspot.logoImage.size.height*(real_w/_adspot.logoImage.size.width);
-        imgV = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, real_w, real_h)];
-        imgV.userInteractionEnabled = YES;
-        imgV.image = _adspot.logoImage;
-    }
-    if (self.gdt_ad) {
-
-        if ([self.gdt_ad isAdValid]) {
-            [_gdt_ad showAdInWindow:[UIApplication sharedApplication].adv_getCurrentWindow withBottomView:_adspot.showLogoRequire?imgV:nil skipView:nil];
-        } else {
-
+    __weak typeof(self) _self = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        __strong typeof(_self) self = _self;
+        UIImageView *imgV;
+        if (_adspot.logoImage) {
+            CGFloat real_w = [UIScreen mainScreen].bounds.size.width;
+            CGFloat real_h = _adspot.logoImage.size.height*(real_w/_adspot.logoImage.size.width);
+            imgV = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, real_w, real_h)];
+            imgV.userInteractionEnabled = YES;
+            imgV.image = _adspot.logoImage;
         }
-    }
+        if (self.gdt_ad) {
+            
+            if ([self.gdt_ad isAdValid]) {
+                [_gdt_ad showAdInWindow:[UIApplication sharedApplication].adv_getCurrentWindow withBottomView:_adspot.showLogoRequire?imgV:nil skipView:nil];
+            } else {
+                
+            }
+        }
+    });
 }
 
 - (void)splashAdDidLoad:(GDTSplashAd *)splashAd {

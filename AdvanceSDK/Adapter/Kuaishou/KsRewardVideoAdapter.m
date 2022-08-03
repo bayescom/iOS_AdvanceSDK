@@ -72,7 +72,9 @@
 }
 
 - (void)showAd {
+    __weak typeof(self) _self = self;
     dispatch_async(dispatch_get_main_queue(), ^{
+        __strong typeof(_self) self = _self;
         if (self.ks_ad.isValid) {
             [self.ks_ad showAdFromRootViewController:self.adspot.viewController.navigationController];
         }
@@ -114,7 +116,7 @@
  @param error : the reason of error
  */
 - (void)rewardedVideoAd:(KSRewardedVideoAd *)rewardedVideoAd didFailWithError:(NSError *_Nullable)error {
-    NSLog(@"快手 错误 %@", error);
+//    NSLog(@"快手 错误 %@", error);
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
     if (_supplier.isParallel == YES) {
         _supplier.state = AdvanceSdkSupplierStateFailed;
