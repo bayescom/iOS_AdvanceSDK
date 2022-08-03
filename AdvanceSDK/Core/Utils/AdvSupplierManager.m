@@ -190,7 +190,7 @@
     // 参与bidding的渠道数
     _incomeBiddingCount = tempBidding.count;
 
-//    NSLog(@"_incomeBiddingCount = %ld", _incomeBiddingCount);
+    NSLog(@"_incomeBiddingCount = %ld", _incomeBiddingCount);
     if (_incomeBiddingCount == 0) {// 没有参加bidding的渠道即没有并发, 那么就按照旧的业务去执行
         if (self.model.setting.parallelGroup.count == 0) { // 如果并发组里元素个数为0 那么就开始执行剩下非并发的渠道了
             [self loadNextSupplier];
@@ -210,7 +210,13 @@
         if (_timeoutCheckTimer) {
             [self deallocTimer];
         }
-        _timeout_stamp = ([[NSDate date] timeIntervalSince1970] + (_model.setting.parallel_timeout / 1000))*1000;
+        
+        NSInteger parallel_timeout = _model.setting.parallel_timeout;
+        if (parallel_timeout == 0) {
+            parallel_timeout = 3000;
+        }
+        
+        _timeout_stamp = ([[NSDate date] timeIntervalSince1970] + (parallel_timeout / 1000))*1000;
         // 开启定时器监听过期
         [_timeoutCheckTimer invalidate];
 
@@ -291,9 +297,9 @@
         }
     }];
     
-//    for (AdvSupplier *temp in suppliers) {
-//        NSLog(@"------1-> %@  %ld %ld", temp.sdktag, (long)temp.supplierPrice, (long)temp.priority);
-//    }
+    for (AdvSupplier *temp in suppliers) {
+        NSLog(@"------1-> %@  %ld %ld", temp.sdktag, (long)temp.supplierPrice, (long)temp.priority);
+    }
 
     // 取价格最高的渠道执行
     AdvSupplier *currentSupplier = suppliers.lastObject;
@@ -618,7 +624,15 @@
     } else if (repoType == AdvanceSdkSupplierRepoImped) {
         uploadArr =  [self.tkUploadTool imptkUrlWithArr:supplier.imptk price:(supplier.supplierPrice == 0) ? supplier.sdk_price : supplier.supplierPrice];
     } else if (repoType == AdvanceSdkSupplierRepoFaileded) {
+        
+        
         uploadArr =  [self.tkUploadTool failedtkUrlWithArr:supplier.failedtk error:error];
+        
+        // 加载失败的无论串并发都从 supplierM中删除
+        [self.lock lock];
+        [_supplierM removeObject:supplier];
+        [self.lock unlock];
+
     }
     if (!uploadArr || uploadArr.count <= 0) {
         // TODO: 上报地址不存在
