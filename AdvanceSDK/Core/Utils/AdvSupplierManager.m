@@ -291,9 +291,9 @@
         }
     }];
     
-    for (AdvSupplier *temp in suppliers) {
-        NSLog(@"------1-> %@  %ld %ld", temp.sdktag, (long)temp.supplierPrice, (long)temp.priority);
-    }
+//    for (AdvSupplier *temp in suppliers) {
+//        NSLog(@"------1-> %@  %ld %ld", temp.sdktag, (long)temp.supplierPrice, (long)temp.priority);
+//    }
 
     // 取价格最高的渠道执行
     AdvSupplier *currentSupplier = suppliers.lastObject;
@@ -523,7 +523,7 @@
     
     NSError *parseErr = nil;
     AdvSupplierModel *a_model = [AdvSupplierModel adv_modelWithJSON:data];
-//    ADVLog(@"[JSON]%@", [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil]);
+//    NSLog(@"[JSON]%@", [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil]);
     ADVLogJSONData(data);
     if (parseErr || !a_model) {
         // parse error

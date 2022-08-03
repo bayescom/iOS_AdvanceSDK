@@ -118,7 +118,6 @@
  */
 - (void)ksad_splashAdContentDidLoad:(KSSplashAdView *)splashAdView {
     _supplier.supplierPrice = splashAdView.ecpm;
-    _supplier.supplierPrice = 100;
     [self.adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
     if (_supplier.isParallel == YES) {

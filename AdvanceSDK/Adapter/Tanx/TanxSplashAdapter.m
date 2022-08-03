@@ -150,7 +150,7 @@
             self.templateView = [self.splashManager renderSplashTemplateWithModel:splashModel config:config];
             self.templateView.frame = CGRectMake(0, 0, self.window.bounds.size.width, self.window.bounds.size.height - self.imgV.frame.size.height);
             //            ADV_LEVEL_INFO_LOG(@"Tanx失败  %@---> %@  %d", self, self.templateView, splashModel.isValid);
-            if (self.templateView == nil || splashModel == NO) {
+            if (self.templateView == nil || splashModel.isValid == NO) {
                 NSError *temp = [NSError errorWithDomain:@"广告物料加载失败" code:10002 userInfo:nil];
                 [self tanxSplashAdFailToPresentWithError:temp];
             } else {
