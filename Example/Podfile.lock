@@ -10,37 +10,31 @@ PODS:
   - Ads-CN/Domestic (4.5.1.6):
     - Ads-CN/BUFoundation
     - Ads-CN/CSJAdSDK
-  - AdvanceSDK (3.2.6.2):
-    - AdvanceSDK/Core (= 3.2.6.2)
-  - AdvanceSDK/Adspot (3.2.6.2):
+  - AdvanceSDK (4.0.0.0):
+    - AdvanceSDK/Core (= 4.0.0.0)
+  - AdvanceSDK/Adspot (4.0.0.0):
     - AdvanceSDK/Core
-  - AdvanceSDK/BD (3.2.6.2):
+  - AdvanceSDK/BD (4.0.0.0):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - BaiduMobAdSDK (= 4.88)
-  - AdvanceSDK/Core (3.2.6.2)
-  - AdvanceSDK/CSJ (3.2.6.2):
+  - AdvanceSDK/Core (4.0.0.0)
+  - AdvanceSDK/CSJ (4.0.0.0):
     - Ads-CN (= 4.5.1.6)
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
-  - AdvanceSDK/GDT (3.2.6.2):
+  - AdvanceSDK/GDT (4.0.0.0):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - GDTMobSDK (= 4.13.70)
-  - AdvanceSDK/KS (3.2.6.2):
+  - AdvanceSDK/KS (4.0.0.0):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - KSAdSDK (= 3.3.25)
-  - AdvanceSDK/Mercury (3.2.6.2):
+  - AdvanceSDK/Mercury (4.0.0.0):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - MercurySDK (= 3.1.7.1)
-  - AdvanceSDK/TANX (3.2.6.2):
-    - AdvanceSDK/Adspot
-    - AdvanceSDK/Core
-    - JSONModel (= 1.8.0)
-    - Reachability (= 3.2)
-    - SDWebImage (= 5.12.1)
   - BaiduMobAdSDK (4.88)
   - BURelyFoundation (0.0.1.58):
     - BURelyFoundation/HM (= 0.0.1.58)
@@ -66,8 +60,10 @@ DEPENDENCIES:
   - AdvanceSDK/GDT (from `../`)
   - AdvanceSDK/KS (from `../`)
   - AdvanceSDK/Mercury (from `../`)
-  - AdvanceSDK/TANX (from `../`)
+  - JSONModel (= 1.8.0)
   - Masonry
+  - Reachability (= 3.2)
+  - SDWebImage (= 5.12.1)
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
@@ -88,7 +84,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Ads-CN: 5563d7a0ed3f99fd47d421fcb48e70688efedd55
-  AdvanceSDK: 1b69db2d6882334e6cd3b9bbacd7a794338cfc0a
+  AdvanceSDK: 02d0943617a527f5a9fbecd70e9d37b6660c1b6a
   BaiduMobAdSDK: f40cc622afcabcc3561ff13c32f3a3af55ee088d
   BURelyFoundation: f529322f9e93cf8cc0b4539e447aff77a8ff34de
   GDTMobSDK: 22c1b935a45797cc175df35f79db9d49a9b738bc
@@ -99,6 +95,6 @@ SPEC CHECKSUMS:
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
   SDWebImage: 4dc3e42d9ec0c1028b960a33ac6b637bb432207b
 
-PODFILE CHECKSUM: 40dc706a76dd61f04beed989efa82996c1c6cc42
+PODFILE CHECKSUM: 894d3fe6990b75363e73ec6ea040ecfb5ba6f0e7
 
 COCOAPODS: 1.11.2
