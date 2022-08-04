@@ -47,16 +47,20 @@
 
 - (void)supplierStateLoad {
     ADV_LEVEL_INFO_LOG(@"加载穿山甲 supplier: %@", _supplier);
-    if (self.adspot.timeout) {
-        if (self.adspot.timeout > 500) {
-            _csj_ad.tolerateTimeout = _adspot.timeout / 1000.0;
+    __weak typeof(self) _self = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        __strong typeof(_self) self = _self;
+        
+        if (self.adspot.timeout) {
+            if (self.adspot.timeout > 500) {
+                _csj_ad.tolerateTimeout = _adspot.timeout / 1000.0;
+            }
         }
-    }
-
-    _csj_ad.delegate = self;
-    _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
-    [self.csj_ad loadAdData];
-
+        
+        _csj_ad.delegate = self;
+        _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
+        [self.csj_ad loadAdData];
+    });
 }
 
 - (void)supplierStateInPull {

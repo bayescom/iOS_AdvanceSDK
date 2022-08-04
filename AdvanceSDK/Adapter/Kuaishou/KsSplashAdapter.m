@@ -55,21 +55,24 @@
 
 - (void)supplierStateLoad {
     ADV_LEVEL_INFO_LOG(@"加载快手 supplier: %@", _supplier);
-    
-    _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
-    NSInteger timeout = 5;
-    if (self.adspot.timeout) {
-        if (self.adspot.timeout > 500) {
-            timeout = self.adspot.timeout / 1000.0;
+    __weak typeof(self) _self = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        __strong typeof(_self) self = _self;
+        
+        _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
+        NSInteger timeout = 5;
+        if (self.adspot.timeout) {
+            if (self.adspot.timeout > 500) {
+                timeout = self.adspot.timeout / 1000.0;
+            }
         }
-    }
-
-    _ks_ad.delegate = self;
-    _ks_ad.needShowMiniWindow = NO;
-    _ks_ad.rootViewController = _adspot.viewController;
-    _ks_ad.timeoutInterval = timeout;
-    [_ks_ad loadAdData];
-
+        
+        _ks_ad.delegate = self;
+        _ks_ad.needShowMiniWindow = NO;
+        _ks_ad.rootViewController = _adspot.viewController;
+        _ks_ad.timeoutInterval = timeout;
+        [_ks_ad loadAdData];
+    });
 }
 
 - (void)supplierStateInPull {
