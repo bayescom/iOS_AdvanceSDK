@@ -9,18 +9,9 @@
 #import "AdvSdkConfig.h"
 @implementation AdvAdsportInfoUtil
 + (BOOL)isSupportParallelWithAdTypeName:(NSString *)adTypeName supplierId:(NSString *)ID {
-    BOOL parallel = NO;
     
     if ([adTypeName isEqualToString:AdvSdkTypeAdNameSplash]) { // 开屏
-        if ([ID isEqualToString:SDK_ID_MERCURY]) { // mercury
-            parallel = NO;
-        } else if ([ID isEqualToString:SDK_ID_GDT]) {
-            parallel = YES;
-        } else if ([ID isEqualToString:SDK_ID_CSJ]) {
-            parallel = YES;
-        } else if ([ID isEqualToString:SDK_ID_KS]) {
-            parallel = YES;
-        }
+        return YES;
     } else if ([adTypeName isEqualToString:AdvSdkTypeAdNameRewardVideo]) {
         return YES;
     } else if ([adTypeName isEqualToString:AdvSdkTypeAdNameInterstitial]){
@@ -34,7 +25,7 @@
     } else if ([adTypeName isEqualToString:AdvSdkTypeAdNameNativeExpress]) {
         return YES;
     }
-    return parallel;
+    return NO;
 }
 
 @end

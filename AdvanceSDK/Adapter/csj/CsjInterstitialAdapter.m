@@ -60,7 +60,7 @@
 }
 
 - (void)supplierStateFailed {
-    NSLog(@"失败 失败失败失败失败失败失败失败  %ld", _supplier.priority);
+//    NSLog(@"失败 失败失败失败失败失败失败失败  %ld", _supplier.priority);
     ADV_LEVEL_INFO_LOG(@"穿山甲 失败");
     [self.adspot loadNextSupplierIfHas];
 }
@@ -82,6 +82,7 @@
 // MARK: ======================= BUNativeExpresInterstitialAdDelegate =======================
 /// 插屏广告预加载成功回调，当接收服务器返回的广告数据成功且预加载后调用该函数
 - (void)nativeExpresInterstitialAdDidLoad:(BUNativeExpressInterstitialAd *)interstitialAd {
+    
 }
 
 /// 插屏广告预加载失败回调，当接收服务器返回的广告数据失败后调用该函数
@@ -133,6 +134,7 @@
 
 /// 广告可以调用Show
 - (void)nativeExpresInterstitialAdRenderSuccess:(BUNativeExpressInterstitialAd *)interstitialAd {
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
 //    NSLog(@"穿山甲插屏视频拉取成功");
     _supplier.state = AdvanceSdkSupplierStateSuccess;

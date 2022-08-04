@@ -84,12 +84,12 @@ NSString *const LOG_LEVEL_DEBUG_SCHEME  = @"ADV_LEVE_DEBUG";
 }
 
 + (void)logJsonData:(NSData *)data {
-    NSDictionary *res = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-    NSString *md5 = [[res description] md5];
-    [[NSUserDefaults standardUserDefaults] setObject:data forKey:md5];
+//    NSDictionary *res = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+//    NSString *md5 = [[res description] md5];
+//    [[NSUserDefaults standardUserDefaults] setObject:data forKey:md5];
     
 //    ADVLog(@"[JSON][-%@-]", md5);
-    ADV_LEVEL_INFO_LOG(@"%@", res);
+//    ADV_LEVEL_INFO_LOG(@"%@", res);
 }
 
 @end

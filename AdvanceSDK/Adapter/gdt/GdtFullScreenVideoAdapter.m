@@ -21,6 +21,7 @@
 @property (nonatomic, strong) GDTUnifiedInterstitialAd *gdt_ad;
 @property (nonatomic, weak) AdvanceFullScreenVideo *adspot;
 @property (nonatomic, strong) AdvSupplier *supplier;
+@property (nonatomic, assign) BOOL isCached;
 
 @end
 
@@ -51,6 +52,12 @@
     if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
         [self.delegate advanceUnifiedViewDidLoad];
     }
+    
+    if (_isCached) {
+        if ([self.delegate respondsToSelector:@selector(advanceFullScreenVideoOnAdVideoCached)]) {
+            [self.delegate advanceFullScreenVideoOnAdVideoCached];
+        }
+    }
 }
 
 - (void)supplierStateFailed {
@@ -79,6 +86,8 @@
 // MARK: ======================= GDTUnifiedInterstitialAdDelegate =======================
 /// 插屏广告预加载成功回调，当接收服务器返回的广告数据成功且预加载后调用该函数
 - (void)unifiedInterstitialSuccessToLoadAd:(GDTUnifiedInterstitialAd *)unifiedInterstitial {
+    _supplier.supplierPrice = unifiedInterstitial.eCPM;
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
 //    NSLog(@"广点通全屏视频拉取成功 %@",self.gdt_ad);
     if (_supplier.isParallel == YES) {
@@ -95,6 +104,10 @@
 
 /// 插屏2.0广告视频缓存完成
 - (void)unifiedInterstitialDidDownloadVideo:(GDTUnifiedInterstitialAd *)unifiedInterstitial {
+    if (_supplier.isParallel == YES) {
+        _isCached = YES;
+        return;
+    }
     if ([self.delegate respondsToSelector:@selector(advanceFullScreenVideoOnAdVideoCached)]) {
         [self.delegate advanceFullScreenVideoOnAdVideoCached];
     }

@@ -19,6 +19,7 @@
 @property (nonatomic, strong) KSFullscreenVideoAd *ks_ad;
 @property (nonatomic, weak) AdvanceFullScreenVideo *adspot;
 @property (nonatomic, strong) AdvSupplier *supplier;
+@property (nonatomic, assign) BOOL isCached;
 
 @end
 
@@ -50,6 +51,12 @@
     if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
         [self.delegate advanceUnifiedViewDidLoad];
     }
+    
+    if (_isCached) {
+        if ([self.delegate respondsToSelector:@selector(advanceFullScreenVideoOnAdVideoCached)]) {
+            [self.delegate advanceFullScreenVideoOnAdVideoCached];
+        }
+    }
 }
 
 - (void)supplierStateFailed {
@@ -63,7 +70,9 @@
 }
 
 - (void)showAd {
+    __weak typeof(self) _self = self;
     dispatch_async(dispatch_get_main_queue(), ^{
+        __strong typeof(_self) self = _self;
         if (self.ks_ad.isValid) {
             [self.ks_ad showAdFromRootViewController:self.adspot.viewController.navigationController];
         }
@@ -109,6 +118,10 @@
  This method is called when cached successfully.
  */
 - (void)fullscreenVideoAdVideoDidLoad:(KSFullscreenVideoAd *)fullscreenVideoAd {
+    if (_supplier.isParallel == YES) {
+        _isCached = YES;
+        return;
+    }
     if ([self.delegate respondsToSelector:@selector(advanceFullScreenVideoOnAdVideoCached)]) {
         [self.delegate advanceFullScreenVideoOnAdVideoCached];
     }

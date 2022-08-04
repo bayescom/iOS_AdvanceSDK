@@ -94,26 +94,32 @@
 
 - (void)showAd {
     // 设置logo
-    UIImageView *imgV;
-    if (_adspot.logoImage) {
-        CGFloat real_w = [UIScreen mainScreen].bounds.size.width;
-        CGFloat real_h = _adspot.logoImage.size.height*(real_w/_adspot.logoImage.size.width);
-        imgV = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, real_w, real_h)];
-        imgV.userInteractionEnabled = YES;
-        imgV.image = _adspot.logoImage;
-    }
-    if (self.gdt_ad) {
-
-        if ([self.gdt_ad isAdValid]) {
-            [_gdt_ad showAdInWindow:[UIApplication sharedApplication].adv_getCurrentWindow withBottomView:_adspot.showLogoRequire?imgV:nil skipView:nil];
-        } else {
-
+    __weak typeof(self) _self = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        __strong typeof(_self) self = _self;
+        UIImageView *imgV;
+        if (_adspot.logoImage) {
+            CGFloat real_w = [UIScreen mainScreen].bounds.size.width;
+            CGFloat real_h = _adspot.logoImage.size.height*(real_w/_adspot.logoImage.size.width);
+            imgV = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, real_w, real_h)];
+            imgV.userInteractionEnabled = YES;
+            imgV.image = _adspot.logoImage;
         }
-    }
+        if (self.gdt_ad) {
+            
+            if ([self.gdt_ad isAdValid]) {
+                [_gdt_ad showAdInWindow:[UIApplication sharedApplication].adv_getCurrentWindow withBottomView:_adspot.showLogoRequire?imgV:nil skipView:nil];
+            } else {
+                
+            }
+        }
+    });
 }
 
 - (void)splashAdDidLoad:(GDTSplashAd *)splashAd {
 //    NSLog(@"广点通开屏拉取成功 %@ %d",self.gdt_ad ,[self.gdt_ad isAdValid]);
+    _supplier.supplierPrice = splashAd.eCPM;
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
 
     if (_supplier.isParallel == YES) {
@@ -130,7 +136,7 @@
 
 - (void)splashAdExposured:(GDTSplashAd *)splashAd {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
-    if ([self.delegate respondsToSelector:@selector(advanceExposured)] && self.gdt_ad) {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(advanceExposured)] && self.gdt_ad) {
         [self.delegate advanceExposured];
     }
 }

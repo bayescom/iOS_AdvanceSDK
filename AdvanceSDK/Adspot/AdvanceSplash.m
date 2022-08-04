@@ -70,6 +70,7 @@
     }
 }
 
+
 /// Override
 - (void)deallocSelf {
     [_bgImgV removeFromSuperview];
@@ -120,6 +121,19 @@
     [self deallocDelegate:NO];
 }
 
+// 开始bidding
+- (void)advanceBaseAdapterBiddingAction:(NSMutableArray <AdvSupplier *> *_Nullable)suppliers {
+//    if (self.delegate && [self.delegate respondsToSelector:@selector(advanceBiddingAction)]) {
+//        [self.delegate advanceBiddingAction];
+//    }
+}
+
+// bidding结束
+- (void)advanceBaseAdapterBiddingEndWithWinSupplier:(AdvSupplier *_Nonnull)supplier {
+//    if (self.delegate && [self.delegate respondsToSelector:@selector(advanceBiddingEnd)]) {
+//        [self.delegate advanceBiddingEnd];
+//    }
+}
 
 
 
@@ -154,7 +168,10 @@
         clsName = @"KsSplashAdapter";
     } else if ([supplier.identifier isEqualToString:SDK_ID_BAIDU]) {
         clsName = @"BdSplashAdapter";
+    } else if ([supplier.identifier isEqualToString:SDK_ID_TANX]) {
+        clsName = @"TanxSplashAdapter";
     }
+    
     ADV_LEVEL_INFO_LOG(@"%@ | %@", supplier.name, clsName);
     // 请求超时了
     NSTimeInterval now = [[NSDate date] timeIntervalSince1970]*1000;

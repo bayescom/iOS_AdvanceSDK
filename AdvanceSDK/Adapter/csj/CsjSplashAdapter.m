@@ -97,31 +97,37 @@
 }
 
 - (void)showAd {
-    [[UIApplication sharedApplication].keyWindow addSubview:_csj_ad];
-    [[UIApplication sharedApplication].keyWindow bringSubviewToFront:[_adspot performSelector:@selector(bgImgV)]];
-    
-    _csj_ad.backgroundColor = [UIColor clearColor];
-    _csj_ad.rootViewController = _adspot.viewController;
-    
-    if (_adspot.showLogoRequire) {
-        // 添加Logo
-        NSAssert(_adspot.logoImage != nil, @"showLogoRequire = YES时, 必须设置logoImage");
-        CGFloat real_w = [UIScreen mainScreen].bounds.size.width;
-        CGFloat real_h = _adspot.logoImage.size.height*(real_w/_adspot.logoImage.size.width);
-        UIImageView *imgV = [[UIImageView alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height-real_h, real_w, real_h)];
-        imgV.userInteractionEnabled = YES;
-        imgV.image = _adspot.logoImage;
-        if (imgV) {
-            [_csj_ad addSubview:imgV];
-        }
-    }
+    __weak typeof(self) _self = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        __strong typeof(_self) self = _self;
 
+        [[UIApplication sharedApplication].keyWindow addSubview:_csj_ad];
+        [[UIApplication sharedApplication].keyWindow bringSubviewToFront:[_adspot performSelector:@selector(bgImgV)]];
+        
+        _csj_ad.backgroundColor = [UIColor clearColor];
+        _csj_ad.rootViewController = _adspot.viewController;
+        
+        if (_adspot.showLogoRequire) {
+            // 添加Logo
+            NSAssert(_adspot.logoImage != nil, @"showLogoRequire = YES时, 必须设置logoImage");
+            CGFloat real_w = [UIScreen mainScreen].bounds.size.width;
+            CGFloat real_h = _adspot.logoImage.size.height*(real_w/_adspot.logoImage.size.width);
+            UIImageView *imgV = [[UIImageView alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height-real_h, real_w, real_h)];
+            imgV.userInteractionEnabled = YES;
+            imgV.image = _adspot.logoImage;
+            if (imgV) {
+                [_csj_ad addSubview:imgV];
+            }
+        }
+    });
+    
 }
 // MARK: ======================= BUSplashAdDelegate =======================
 /**
  This method is called when splash ad material loaded successfully.
  */
 - (void)splashAdDidLoad:(BUSplashAdView *)splashAd {
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
 //    NSLog(@"穿山甲开屏拉取成功");
     _supplier.state = AdvanceSdkSupplierStateSuccess;
@@ -159,9 +165,9 @@
  This method is called when splash ad slot will be showing.
  */
 - (void)splashAdWillVisible:(BUSplashAdView *)splashAd {
-    if (_supplier.isParallel) { // 如果是并行 先不要释放, 需要等到串行执行到这个渠道的时候才可以释放
-        [self deallocAdapter];
-    }
+//    if (_supplier.isParallel) { // 如果是并行 先不要释放, 需要等到串行执行到这个渠道的时候才可以释放
+//        [self deallocAdapter];
+//    }
 
     [self.adspot reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(advanceExposured)] && self.csj_ad) {

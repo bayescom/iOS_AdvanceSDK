@@ -9,9 +9,9 @@
 Pod::Spec.new do |s|
     s.name             = 'AdvanceSDK'
     
-    s.version          = '3.2.6.2'
-    s.ios.deployment_target = '9.0'
-    s.platform     = :ios, "9.0"
+    s.version          = '4.0.0.0'
+    s.ios.deployment_target = '12.0'
+    s.platform     = :ios, "12.0"
     s.requires_arc = true
     
     s.license          = { :type => 'MIT', :file => 'LICENSE' }
@@ -53,7 +53,7 @@ Pod::Spec.new do |s|
     s.subspec 'Mercury' do |mer|
         mer.dependency 'AdvanceSDK/Core'
         mer.dependency 'AdvanceSDK/Adspot'
-        mer.dependency 'MercurySDK'
+        mer.dependency 'MercurySDK', '3.1.7.1'
         mer.source_files = 'AdvanceSDK/Adapter/mercury/**/*.{h,m}'
         mer.frameworks = 'StoreKit', 'AVFoundation', 'CoreMotion'
     end
@@ -99,6 +99,23 @@ Pod::Spec.new do |s|
         
         
     end
+    
+    s.subspec 'TANX' do |tanx|
+        tanx.dependency 'AdvanceSDK/Core'
+        tanx.dependency 'AdvanceSDK/Adspot'
+        tanx.dependency 'JSONModel', '1.8.0'
+        tanx.dependency 'Reachability', '3.2'
+        tanx.dependency 'SDWebImage', '5.12.1'
+        tanx.source_files =  'AdvanceSDK/Adapter/Tanx/*{h,m}'
+        tanx.ios.vendored_frameworks = 'AdvanceSDK/Adapter/Tanx/TanxSDKFolder/TanxSDK.framework'
+        tanx.frameworks = 'AdSupport', 'CoreMotion', 'CoreTelephony', 'SystemConfiguration', 'WebKit'
+        tanx.libraries = 'resolv', 'sqlite3.0', 'z'
+        
+        valid_archs = ['armv7', 'armv7s', 'x86_64', 'arm64']
+        
+        
+    end
+
 
     
     s.xcconfig = {

@@ -63,7 +63,7 @@
 }
 
 - (void)supplierStateFailed {
-//    NSLog(@"失败 失败失败失败失败失败失败失败  %ld", _supplier.priority);
+//    ADV_LEVEL_INFO_LOG(@"失败 失败失败失败失败失败失败失败  %ld", _supplier.priority);
     ADV_LEVEL_INFO_LOG(@"百度 失败");
     [self.adspot loadNextSupplierIfHas];
 }
@@ -83,10 +83,11 @@
 }
 
 - (void)interstitialAdLoaded:(BaiduMobAdExpressInterstitial *)interstitial {
-    NSLog(@"ExpressInterstitial loaded 请求成功");
-    
+    ADV_LEVEL_INFO_LOG(@"ExpressInterstitial loaded 请求成功");
+    _supplier.supplierPrice = [[interstitial getECPMLevel] integerValue];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
-//    NSLog(@"穿山甲插屏视频拉取成功");
+//    ADV_LEVEL_INFO_LOG(@"穿山甲插屏视频拉取成功");
     _supplier.state = AdvanceSdkSupplierStateSuccess;
     if (_supplier.isParallel == YES) {
         return;
@@ -98,7 +99,7 @@
 }
 
 - (void)interstitialAdLoadFailed:(BaiduMobAdExpressInterstitial *)interstitial withError:(BaiduMobFailReason)reason {
-    NSLog(@"ExpressInterstitial failed 请求失败");
+    ADV_LEVEL_INFO_LOG(@"ExpressInterstitial failed 请求失败");
     NSError *error = [[NSError alloc]initWithDomain:@"BDAdErrorDomain" code:1000020 + reason userInfo:@{@"desc":@"百度广告请求错误"}];
     
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
@@ -110,18 +111,18 @@
 }
 
 - (void)interstitialAdDownloadSucceeded:(BaiduMobAdExpressInterstitial *)interstitial {
-    NSLog(@"ExpressInterstitial downloadSucceeded 缓存成功");
+    ADV_LEVEL_INFO_LOG(@"ExpressInterstitial downloadSucceeded 缓存成功");
 }
 
 - (void)interstitialAdDownLoadFailed:(BaiduMobAdExpressInterstitial *)interstitial {
-    NSLog(@"ExpressInterstitial downloadFailed 缓存失败");
+    ADV_LEVEL_INFO_LOG(@"ExpressInterstitial downloadFailed 缓存失败");
     NSError *error = [[NSError alloc]initWithDomain:@"BDAdErrorDomain" code:1000220 userInfo:@{@"desc":@"百度广告缓存错误"}];
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
     self.bd_ad = nil;
 }
 
 - (void)interstitialAdExposure:(BaiduMobAdExpressInterstitial *)interstitial {
-    NSLog(@"ExpressInterstitial exposure 曝光成功");
+    ADV_LEVEL_INFO_LOG(@"ExpressInterstitial exposure 曝光成功");
     [self.adspot reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(advanceExposured)]) {
         [self.delegate advanceExposured];
@@ -129,14 +130,14 @@
 }
 
 - (void)interstitialAdExposureFail:(BaiduMobAdExpressInterstitial *)interstitial withError:(int)reason {
-    NSLog(@"ExpressInterstitial exposure 展现失败");
+    ADV_LEVEL_INFO_LOG(@"ExpressInterstitial exposure 展现失败");
     NSError *error = [[NSError alloc]initWithDomain:@"BDAdErrorDomain" code:1000120 + reason userInfo:@{@"desc":@"百度广告展现错误"}];
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
     self.bd_ad = nil;
 }
 
 - (void)interstitialAdDidClick:(BaiduMobAdExpressInterstitial *)interstitial {
-    NSLog(@"ExpressInterstitial click 发生点击");
+    ADV_LEVEL_INFO_LOG(@"ExpressInterstitial click 发生点击");
     [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(advanceClicked)]) {
         [self.delegate advanceClicked];
@@ -144,11 +145,11 @@
 }
 
 - (void)interstitialAdDidLPClose:(BaiduMobAdExpressInterstitial *)interstitial {
-    NSLog(@"ExpressInterstitial lpClose 落地页关闭");
+    ADV_LEVEL_INFO_LOG(@"ExpressInterstitial lpClose 落地页关闭");
 }
 
 - (void)interstitialAdDidClose:(BaiduMobAdExpressInterstitial *)interstitial {
-    NSLog(@"ExpressInterstitial close 点击关闭");
+    ADV_LEVEL_INFO_LOG(@"ExpressInterstitial close 点击关闭");
     if ([self.delegate respondsToSelector:@selector(advanceDidClose)]) {
         [self.delegate advanceDidClose];
     }

@@ -38,14 +38,14 @@
 }
 
 - (void)event:(NSString *)event withParameters:(NSDictionary *)parameters {
-    NSLog(@"%s  %@   %@", __func__, event, parameters);
+//    NSLog(@"%s  %@   %@", __func__, event, parameters);
 }
 
 
 - (void)trackAdvEvent:(NSString *)event withParameters:(NSDictionary *)parameters {
     
 
-    NSLog(@"%s  %@   %@", __func__, event, parameters);
+//    NSLog(@"%s  %@   %@", __func__, event, parameters);
 }
 
 // 注册事件

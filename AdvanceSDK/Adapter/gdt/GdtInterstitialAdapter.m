@@ -62,7 +62,6 @@
 }
 
 - (void)supplierStateFailed {
-    NSLog(@"广点通 失败失败失败失败失败失败失败  %ld", _supplier.priority);
     ADV_LEVEL_INFO_LOG(@"广点通 失败 %@", _supplier);
     _gdt_ad = nil;
     [self.adspot loadNextSupplierIfHas];
@@ -72,7 +71,6 @@
 
 
 - (void)showAd {
-    NSLog(@"%@ %@", _gdt_ad, _adspot.viewController);
     [_gdt_ad presentAdFromRootViewController:_adspot.viewController];
 }
 
@@ -94,6 +92,8 @@
 }
 
 - (void)unifiedInterstitialRenderSuccess:(GDTUnifiedInterstitialAd *)unifiedInterstitial {
+    _supplier.supplierPrice = unifiedInterstitial.eCPM;
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
 //    NSLog(@"广点通插屏拉取成功 %@",self.gdt_ad);
     if (_supplier.isParallel == YES) {

@@ -9,7 +9,7 @@
 #import "AdvSupplierModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
-@class AdvSupplierQueue;
+
 @protocol AdvSupplierManagerDelegate <NSObject>
 
 // MARK: ======================= 策略回调 =======================
@@ -22,6 +22,20 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// 返回下一个渠道的参数
 - (void)advSupplierLoadSuppluer:(nullable AdvSupplier *)supplier error:(nullable NSError *)error;
+
+
+/// bidding相关
+/// 开始bidding
+/// @param suppliers 参加bidding的渠道
+- (void)advManagerBiddingActionWithSuppliers:(NSMutableArray <AdvSupplier*>*)suppliers;
+
+/// bidding相关
+/// 结束bidding
+/// @param supplier 参加bidding的渠道
+- (void)advManagerBiddingEndWithWinSupplier:(AdvSupplier *)supplier;
+
+/// bidding失败(即规定时间内,所有bidding广告为 都没有返回广告)
+- (void)advManagerBiddingFailed;
 
 @end
 
@@ -60,6 +74,11 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)loadNextSupplierIfHas;
 
+/**
+ * 加载下一层bidding
+ * 回调 advSupplierLoadSuppluer: error:
+ */
+- (void)loadNextBiddingSupplierIfHas;
 /// 数据上报
 /// @param repoType 上报的类型
 - (void)reportWithType:(AdvanceSdkSupplierRepoType)repoType supplier:(AdvSupplier *)supplier error:(NSError *)error;
@@ -67,6 +86,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// 取消正在进行的策略请求
 - (void)cacelDataTask;
+
+/// 进入bidding队列
+- (void)inBiddingQueueWithSupplier:(AdvSupplier *)supplier;
 
 @end
 

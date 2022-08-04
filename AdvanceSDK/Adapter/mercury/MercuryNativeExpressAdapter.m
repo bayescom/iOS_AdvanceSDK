@@ -81,7 +81,9 @@
         }
 
     } else if (self.adspot) {
-        [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
+        _supplier.supplierPrice = views.firstObject.price;
+        [_adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
+        [_adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
         
 
         NSMutableArray *temp = [NSMutableArray array];

@@ -26,6 +26,16 @@
 
 /// 内部渠道开始加载时调用
 - (void)advanceSupplierWillLoad:(NSString *)supplierId;
+
+
+//// 开始bidding
+//- (void)advanceBiddingAction;
+//
+//// bidding结束
+//- (void)advanceBiddingEnd;
+
+
+
 @end
 
 #endif /* AdvanceBaseDelegate_h */

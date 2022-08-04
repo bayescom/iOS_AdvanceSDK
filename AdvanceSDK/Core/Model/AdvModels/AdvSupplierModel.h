@@ -22,6 +22,10 @@ typedef NS_ENUM(NSUInteger, AdvanceSdkSupplierRepoType) {
     AdvanceSdkSupplierRepoImped,
     /// 失败上报
     AdvanceSdkSupplierRepoFaileded,
+    
+    /// bidding上报 目前未使用
+    AdvanceSdkSupplierRepoBidding
+
 };
 
 typedef NS_ENUM(NSUInteger, AdvanceSdkSupplierState) {
@@ -75,9 +79,14 @@ NSString * ADVStringFromNAdvanceSdkSupplierRepoType(AdvanceSdkSupplierRepoType t
 @property (nonatomic, copy)   NSString *cptStart;
 @property (nonatomic, copy)   NSString *cptEnd;
 @property (nonatomic, copy)   NSString *cptSupplier;
+@property (nonatomic, assign) BOOL isBidding; // 策略告知是本次是否有bidding渠道, 这个字段决定了parallelGroup 拿到第一组优先级后 是否走bidding逻辑
 @property (nonatomic, copy)   NSArray<NSString *> *parallelIDS;
 @property (nonatomic, strong) NSMutableArray<NSMutableArray<NSNumber *> *> *parallelGroup;
 @property (nonatomic, assign) NSTimeInterval cacheTime;
+
+
+@property (nonatomic , assign) NSInteger bidding_type;
+@property (nonatomic , assign) NSInteger parallel_timeout;
 
 @end
 
@@ -90,7 +99,13 @@ NSString * ADVStringFromNAdvanceSdkSupplierRepoType(AdvanceSdkSupplierRepoType t
 @property (nonatomic, copy)   NSString *adspotid;
 @property (nonatomic, copy)   NSString *name;
 @property (nonatomic, copy)   NSString *mediaid;
+@property (nonatomic, assign) NSInteger sdk_price;// 单位: 分
 @property (nonatomic, assign) NSInteger priority;
+
+/// 该字段由各渠道SDK 返回并填充 用来做比价
+/// GDT 单位:分   成功返回一个大于等于0的值，-1表示无权限或后台出现异常
+@property (nonatomic, assign) NSInteger supplierPrice;
+
 @property (nonatomic, assign) BOOL isParallel;// 是否并行
 @property (nonatomic, assign) AdvanceSdkSupplierState state;// 渠道状态
 @property (nonatomic, copy)   NSArray<NSString *> *clicktk;
@@ -98,6 +113,7 @@ NSString * ADVStringFromNAdvanceSdkSupplierRepoType(AdvanceSdkSupplierRepoType t
 @property (nonatomic, copy)   NSArray<NSString *> *imptk;
 @property (nonatomic, copy)   NSArray<NSString *> *succeedtk;
 @property (nonatomic, copy)   NSArray<NSString *> *failedtk;
+@property (nonatomic, assign) BOOL isSupportBidding;
 
 
 /// 构建打底渠道

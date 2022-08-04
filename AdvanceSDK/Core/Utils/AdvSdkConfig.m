@@ -24,6 +24,7 @@ NSString *const SDK_ID_GDT=@"2";
 NSString *const SDK_ID_CSJ=@"3";
 NSString *const SDK_ID_KS =@"5";
 NSString *const SDK_ID_BAIDU=@"4";
+NSString *const SDK_ID_TANX=@"7";
 
 //NSString * const AdvSdkConfigCAID = @"kMercuryConfigCAIDKey";
 //NSString * const AdvSdkConfigCAIDPublicKey = @"kMercuryConfigCAIDPublicKey-Key";

@@ -19,6 +19,7 @@
 @property (nonatomic, strong) BUNativeExpressFullscreenVideoAd *csj_ad;
 @property (nonatomic, weak) AdvanceFullScreenVideo *adspot;
 @property (nonatomic, strong) AdvSupplier *supplier;
+@property (nonatomic, assign) BOOL isCached;
 
 @end
 
@@ -50,7 +51,11 @@
     if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
         [self.delegate advanceUnifiedViewDidLoad];
     }
-    
+    if (_isCached) {
+        if ([self.delegate respondsToSelector:@selector(advanceFullScreenVideoOnAdVideoCached)]) {
+            [self.delegate advanceFullScreenVideoOnAdVideoCached];
+        }
+    }
 }
 
 - (void)supplierStateFailed {
@@ -75,6 +80,7 @@
 // MARK: ======================= BUNativeExpressFullscreenVideoAdDelegate =======================
 /// 广告预加载成功回调
 - (void)nativeExpressFullscreenVideoAdDidLoad:(BUNativeExpressFullscreenVideoAd *)fullscreenVideoAd {
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded  supplier:_supplier error:nil];
 //    NSLog(@"穿山甲全屏视频拉取成功");
     _supplier.state = AdvanceSdkSupplierStateSuccess;
@@ -88,6 +94,10 @@
 }
 
 - (void)nativeExpressFullscreenVideoAdDidDownLoadVideo:(BUNativeExpressFullscreenVideoAd *)fullscreenVideoAd {
+    if (_supplier.isParallel == YES) { // 并行不释放 只上报
+        _isCached = YES;
+        return;
+    }
     if ([self.delegate respondsToSelector:@selector(advanceFullScreenVideoOnAdVideoCached)]) {
         [self.delegate advanceFullScreenVideoOnAdVideoCached];
     }

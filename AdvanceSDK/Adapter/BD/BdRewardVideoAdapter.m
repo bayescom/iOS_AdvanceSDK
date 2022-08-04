@@ -17,6 +17,7 @@
 @property (nonatomic, strong) BaiduMobAdRewardVideo *bd_ad;
 @property (nonatomic, weak) AdvanceRewardVideo *adspot;
 @property (nonatomic, strong) AdvSupplier *supplier;
+@property (nonatomic, assign) BOOL isCached;
 
 @end
 
@@ -49,6 +50,12 @@
     if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
         [self.delegate advanceUnifiedViewDidLoad];
     }
+    
+    if (_isCached) {
+        if ([self.delegate respondsToSelector:@selector(advanceRewardVideoOnAdVideoCached)]) {
+            [self.delegate advanceRewardVideoOnAdVideoCached];
+        }
+    }
 }
 
 - (void)supplierStateFailed {
@@ -75,6 +82,9 @@
 
 - (void)rewardedAdLoadSuccess:(BaiduMobAdRewardVideo *)video {
     //    NSLog(@"激励视频请求成功");
+    _supplier.supplierPrice = [[video getECPMLevel] integerValue];
+//    _supplier.supplierPrice = 10;
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
     if (_supplier.isParallel == YES) {
         _supplier.state = AdvanceSdkSupplierStateSuccess;
@@ -97,6 +107,10 @@
 
 - (void)rewardedVideoAdLoaded:(BaiduMobAdRewardVideo *)video {
 //    NSLog(@"激励视频缓存成功");
+    if (_supplier.isParallel == YES) {
+        _isCached = YES;
+        return;
+    }
     if ([self.delegate respondsToSelector:@selector(advanceRewardVideoOnAdVideoCached)]) {
         [self.delegate advanceRewardVideoOnAdVideoCached];
     }

@@ -19,6 +19,7 @@
 @property (nonatomic, strong) MercuryRewardVideoAd *mercury_ad;
 @property (nonatomic, weak) AdvanceRewardVideo *adspot;
 @property (nonatomic, strong) AdvSupplier *supplier;
+@property (nonatomic, assign) BOOL isCached;
 
 @end
 
@@ -49,6 +50,12 @@
     if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
         [self.delegate advanceUnifiedViewDidLoad];
     }
+    
+    if (_isCached) {
+        if ([self.delegate respondsToSelector:@selector(advanceRewardVideoOnAdVideoCached)]) {
+            [self.delegate advanceRewardVideoOnAdVideoCached];
+        }
+    }
 }
 
 - (void)supplierStateFailed {
@@ -76,7 +83,9 @@
 
 // MARK: ======================= MercuryRewardVideoAdDelegate =======================
 /// 广告数据加载成功回调
-- (void)mercury_rewardVideoAdDidLoad {
+- (void)mercury_rewardVideoAdDidLoad:(MercuryRewardVideoAd *)rewardVideoAd {
+    _supplier.supplierPrice = rewardVideoAd.price;
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
     if (_supplier.isParallel == YES) {
 //        NSLog(@"修改状态: %@", _supplier);
@@ -104,14 +113,18 @@
 }
 
 //视频缓存成功回调
-- (void)mercury_rewardVideoAdVideoDidLoad {
+- (void)mercury_rewardVideoAdVideoDidLoad:(MercuryRewardVideoAd *)rewardVideoAd {
+    if (_supplier.isParallel == YES) {
+        _isCached = YES;
+        return;
+    }
     if ([self.delegate respondsToSelector:@selector(advanceRewardVideoOnAdVideoCached)]) {
         [self.delegate advanceRewardVideoOnAdVideoCached];
     }
 }
 
 /// 视频广告曝光回调
-- (void)mercury_rewardVideoAdDidExposed {
+- (void)mercury_rewardVideoAdDidExposed:(MercuryRewardVideoAd *)rewardVideoAd {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(advanceExposured)]) {
         [self.delegate advanceExposured];
@@ -119,14 +132,14 @@
 }
 
 /// 视频播放页关闭回调
-- (void)mercury_rewardVideoAdDidClose {
+- (void)mercury_rewardVideoAdDidClose:(MercuryRewardVideoAd *)rewardVideoAd {
     if ([self.delegate respondsToSelector:@selector(advanceDidClose)]) {
         [self.delegate advanceDidClose];
     }
 }
 
 /// 视频广告信息点击回调
-- (void)mercury_rewardVideoAdDidClicked {
+- (void)mercury_rewardVideoAdDidClicked:(MercuryRewardVideoAd *)rewardVideoAd {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(advanceClicked)]) {
         [self.delegate advanceClicked];
@@ -134,14 +147,14 @@
 }
 
 /// 视频广告播放达到激励条件回调
-- (void)mercury_rewardVideoAdDidRewardEffective {
+- (void)mercury_rewardVideoAdDidRewardEffective:(MercuryRewardVideoAd *)rewardVideoAd {
     if ([self.delegate respondsToSelector:@selector(advanceRewardVideoAdDidRewardEffective:)]) {
         [self.delegate advanceRewardVideoAdDidRewardEffective:YES];
     }
 }
 
 /// 视频广告视频播放完成
-- (void)mercury_rewardVideoAdDidPlayFinish {
+- (void)mercury_rewardVideoAdDidPlayFinish:(MercuryRewardVideoAd *)rewardVideoAd {
     if ([self.delegate respondsToSelector:@selector(advanceRewardVideoAdDidPlayFinish)]) {
         [self.delegate advanceRewardVideoAdDidPlayFinish];
     }

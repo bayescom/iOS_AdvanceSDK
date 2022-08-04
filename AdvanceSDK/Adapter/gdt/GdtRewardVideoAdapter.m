@@ -19,6 +19,7 @@
 @property (nonatomic, strong) GDTRewardVideoAd *gdt_ad;
 @property (nonatomic, weak) AdvanceRewardVideo *adspot;
 @property (nonatomic, strong) AdvSupplier *supplier;
+@property (nonatomic, assign) BOOL isCached;
 
 @end
 
@@ -49,6 +50,12 @@
     if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
         [self.delegate advanceUnifiedViewDidLoad];
     }
+    
+    if (_isCached) {
+        if ([self.delegate respondsToSelector:@selector(advanceRewardVideoOnAdVideoCached)]) {
+            [self.delegate advanceRewardVideoOnAdVideoCached];
+        }
+    }
 }
 
 - (void)supplierStateFailed {
@@ -77,11 +84,13 @@
 // MARK: ======================= GdtRewardVideoAdDelegate =======================
 /// 广告数据加载成功回调
 - (void)gdt_rewardVideoAdDidLoad:(GDTRewardVideoAd *)rewardedVideoAd {
+    _supplier.supplierPrice = rewardedVideoAd.eCPM;
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
     
 //    NSLog(@"广点通激励视频拉取成功 %@",self.gdt_ad);
     if (_supplier.isParallel == YES) {
-        NSLog(@"修改状态: %@", _supplier);
+//        NSLog(@"修改状态: %@", _supplier);
         _supplier.state = AdvanceSdkSupplierStateSuccess;
         return;
     }
@@ -106,6 +115,10 @@
 
 //视频缓存成功回调
 - (void)gdt_rewardVideoAdVideoDidLoad:(GDTRewardVideoAd *)rewardedVideoAd {
+    if (_supplier.isParallel == YES) {
+        _isCached = YES;
+        return;
+    }
     if ([self.delegate respondsToSelector:@selector(advanceRewardVideoOnAdVideoCached)]) {
         [self.delegate advanceRewardVideoOnAdVideoCached];
     }
