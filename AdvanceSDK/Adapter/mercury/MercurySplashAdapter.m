@@ -42,22 +42,26 @@
 
 - (void)supplierStateLoad {
     ADV_LEVEL_INFO_LOG(@"加载Mercury supplier: %@", _supplier);
-    _mercury_ad = [[MercurySplashAd alloc] initAdWithAdspotId:_supplier.adspotid delegate:self];
-    _mercury_ad.placeholderImage = _adspot.backgroundImage;
-    _mercury_ad.logoImage = _adspot.logoImage;
-    if (_adspot.showLogoRequire) {
-        _mercury_ad.showType = MercurySplashAdShowCutBottom;
-    }
-    if (_adspot.timeout) {
-        if (_adspot.timeout > 500) {
-            _mercury_ad.fetchDelay = _supplier.timeout / 1000.0;
+    __weak typeof(self) _self = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        __strong typeof(_self) self = _self;
+        
+        _mercury_ad = [[MercurySplashAd alloc] initAdWithAdspotId:_supplier.adspotid delegate:self];
+        _mercury_ad.placeholderImage = _adspot.backgroundImage;
+        _mercury_ad.logoImage = _adspot.logoImage;
+        if (_adspot.showLogoRequire) {
+            _mercury_ad.showType = MercurySplashAdShowCutBottom;
         }
-    }
-    _mercury_ad.delegate = self;
-    _mercury_ad.controller = _adspot.viewController;
-
-    [_mercury_ad loadAd];
-
+        if (_adspot.timeout) {
+            if (_adspot.timeout > 500) {
+                _mercury_ad.fetchDelay = _supplier.timeout / 1000.0;
+            }
+        }
+        _mercury_ad.delegate = self;
+        _mercury_ad.controller = _adspot.viewController;
+        
+        [_mercury_ad loadAd];
+    });
 }
 
 - (void)supplierStateInPull {
