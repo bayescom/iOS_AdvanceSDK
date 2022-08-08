@@ -31,7 +31,7 @@
     NSLog(@"----------->自定义开屏adapter开始加载啦啦<------------");
     
     
-    AdvSupplierModel *model = [AdvBiddingCongfig defaultManager].adDataModel;
+    AdvSupplierModel *model = [[AdvBiddingCongfig defaultManager] returnSupplierByAdspotId:slotID];
     
     self.advanceSplash = [[AdvanceSplash alloc] initWithAdspotId:slotID
                                                   viewController:self.bridge.viewControllerForPresentingModalView];

@@ -201,7 +201,7 @@
     // 初始化 biddingCongfig单例
     id biddingConfig = ((id(*)(id,SEL))objc_msgSend)(NSClassFromString(@"AdvBiddingCongfig"), @selector(defaultManager));
     // 将策略Model 付给BiddingCongfig 用来在customAdapter里初始化新的开屏广告位
-    [biddingConfig performSelector:@selector(setAdData:) withObject:self.adData];
+    [biddingConfig performSelector:@selector(setAdDataModel:adspotId:) withObject:self.model withObject:self.adspotId];
     [self notCPTLoadNextSuppluer:GMObj error:nil];
 
 

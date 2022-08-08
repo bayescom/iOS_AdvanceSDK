@@ -69,7 +69,8 @@
         UIImageView *bottomView = [[UIImageView alloc] init];
         CGFloat real_w = [UIScreen mainScreen].bounds.size.width;
         CGFloat real_h = _adspot.logoImage.size.height*(real_w/_adspot.logoImage.size.width);
-        bottomView.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height-real_h);
+        bottomView.image = _adspot.logoImage;
+        bottomView.frame = CGRectMake(0, [UIScreen mainScreen].bounds.size.height-real_h, [UIScreen mainScreen].bounds.size.width, real_h);
         self.splashAd.customBottomView = bottomView;
     }
 

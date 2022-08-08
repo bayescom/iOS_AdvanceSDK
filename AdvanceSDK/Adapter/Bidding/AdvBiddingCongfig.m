@@ -8,6 +8,10 @@
 #import "AdvBiddingCongfig.h"
 #import "AdvSupplierModel.h"
 #import "AdvModel.h"
+@interface AdvBiddingCongfig ()
+@property (nonatomic, strong) NSMutableDictionary *dicts;
+@end
+
 @implementation AdvBiddingCongfig
 // MARK: ======================= 初始化设置 =======================
 
@@ -52,22 +56,30 @@ static AdvBiddingCongfig *defaultManager = nil;
 
 //自定义描述信息，用于log详细打印
 - (NSString *)description {
-    return @"这是倍业聚合SDK中用于上传各广告位生命周期的组件";
+    return @"这是倍业聚合SDK用于bidding持有数据的单例";
 }
 
-
-- (void)setAdDataModel:(AdvSupplierModel *)adDataModel {
-    _adDataModel = adDataModel;
-}
 
 - (void)deleteAdDataModel {
-    self.adDataModel = nil;
-    self.adData = nil;
-    _adDataModel = nil;
+    [self.dicts removeAllObjects];
+    self.dicts = nil;
 }
 
-- (void)setAdData:(NSData *)adData {
-    _adData = adData;
-    self.adDataModel = [AdvSupplierModel adv_modelWithJSON:_adData];
+- (void)setAdDataModel:(AdvSupplierModel *)adDataModel adspotId:(NSString *)adspotId {
+
+    [self.dicts setObject:adDataModel forKey:adspotId];
+
+}
+
+- (AdvSupplierModel *)returnSupplierByAdspotId:(NSString *)adspotId {
+    AdvSupplierModel *model = [self.dicts objectForKey:adspotId];
+    return model;
+}
+
+- (NSMutableDictionary *)dicts {
+    if (!_dicts) {
+        _dicts = [NSMutableDictionary dictionary];
+    }
+    return _dicts;
 }
 @end
