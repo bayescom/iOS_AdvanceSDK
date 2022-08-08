@@ -15,7 +15,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSMutableArray *)loadedtkUrlWithArr:(NSArray<NSString *> *)uploadArr;
 
-- (NSMutableArray *)imptkUrlWithArr:(NSArray<NSString *> *)uploadArr;
+- (NSMutableArray *)succeedtkUrlWithArr:(NSArray<NSString *> *)uploadArr price:(NSInteger)price;
+
+- (NSMutableArray *)imptkUrlWithArr:(NSArray<NSString *> *)uploadArr price:(NSInteger)price;
 
 - (NSMutableArray *)failedtkUrlWithArr:(NSArray<NSString *> *)uploadArr error:(NSError *)error;
 

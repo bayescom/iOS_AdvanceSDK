@@ -35,6 +35,8 @@
 // 是否点击了
 @property (nonatomic, assign) BOOL isClick;
 @property (nonatomic, strong) KSSplashAdView *ks_ad;
+@property (nonatomic, strong) UIImageView *imgV;
+
 
 
 @end
@@ -53,21 +55,24 @@
 
 - (void)supplierStateLoad {
     ADV_LEVEL_INFO_LOG(@"加载快手 supplier: %@", _supplier);
-    
-    _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
-    NSInteger timeout = 5;
-    if (self.adspot.timeout) {
-        if (self.adspot.timeout > 500) {
-            timeout = self.adspot.timeout / 1000.0;
+    __weak typeof(self) _self = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        __strong typeof(_self) self = _self;
+        
+        _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
+        NSInteger timeout = 5;
+        if (self.adspot.timeout) {
+            if (self.adspot.timeout > 500) {
+                timeout = self.adspot.timeout / 1000.0;
+            }
         }
-    }
-
-    _ks_ad.delegate = self;
-    _ks_ad.needShowMiniWindow = NO;
-    _ks_ad.rootViewController = _adspot.viewController;
-    _ks_ad.timeoutInterval = timeout;
-    [_ks_ad loadAdData];
-
+        
+        _ks_ad.delegate = self;
+        _ks_ad.needShowMiniWindow = NO;
+        _ks_ad.rootViewController = _adspot.viewController;
+        _ks_ad.timeoutInterval = timeout;
+        [_ks_ad loadAdData];
+    });
 }
 
 - (void)supplierStateInPull {
@@ -100,6 +105,8 @@
         [self.ks_ad removeFromSuperview];
         self.ks_ad = nil;
     }
+    [self.imgV removeFromSuperview];
+    self.imgV = nil;
 }
 
 
@@ -107,6 +114,12 @@
  * splash ad request done
  */
 - (void)ksad_splashAdDidLoad:(KSSplashAdView *)splashAdView {
+
+}
+/**
+ * splash ad material load, ready to display
+ */
+- (void)ksad_splashAdContentDidLoad:(KSSplashAdView *)splashAdView {
     _supplier.supplierPrice = splashAdView.ecpm;
     [self.adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
@@ -119,11 +132,6 @@
     }
 //    [self showAd];
 
-}
-/**
- * splash ad material load, ready to display
- */
-- (void)ksad_splashAdContentDidLoad:(KSSplashAdView *)splashAdView {
     _timeout = 5;
     // 记录过期的时间
     _timeout_stamp = ([[NSDate date] timeIntervalSince1970] + _timeout)*1000;
@@ -232,120 +240,32 @@
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-//- (void)checkAction {
-//    NSInteger timeout = 5;
-//    if (self.adspot.timeout) {
-//        if (self.adspot.timeout > 500) {
-//            timeout = self.adspot.timeout / 1000.0;
-//        }
-//    }
-//
-//    WeakSelf(self);
-//    [KSAdSplashManager checkSplashWithTimeoutv2:timeout completion:^(KSAdSplashViewController * _Nullable splashViewController, NSError * _Nullable error) {
-//        StrongSelf(self);
-//        NSLog(@"kssplashViewController %@   error:%@", splashViewController, error);
-//        [strongself checkResultWith:splashViewController error:error];
-//    }];
-//}
-//
-//- (void)checkResultWith:(KSAdSplashViewController *)splashViewController error:(NSError *)error {
-//    if (splashViewController) {
-//        // 请求数据成功
-//        [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
-//        if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
-//            [self.delegate advanceUnifiedViewDidLoad];
-//        }
-//        self.vc = splashViewController;
-//        if (_supplier.isParallel == YES) {
-//            _supplier.state = AdvanceSdkSupplierStateSuccess;
-//            return;
-//        }
-//        [self showAd];
-//    }
-//
-//    if (error) {
-//        [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
-//        if (_supplier.isParallel == YES) {
-//            _supplier.state = AdvanceSdkSupplierStateFailed;
-//        }
-//    }
-//}
-
 - (void)showAd {
     if (!_ks_ad) {
         return;
     }
-    _ks_ad.frame = [UIScreen mainScreen].bounds;
-    [[UIApplication sharedApplication].adv_getCurrentWindow addSubview:_ks_ad];
+    // 设置logo
+    CGRect adFrame = [UIScreen mainScreen].bounds;
+    if (_adspot.logoImage && _adspot.showLogoRequire) {
+        
+        NSAssert(_adspot.logoImage != nil, @"showLogoRequire = YES时, 必须设置logoImage");
+        CGFloat real_w = [UIScreen mainScreen].bounds.size.width;
+        CGFloat real_h = _adspot.logoImage.size.height*(real_w/_adspot.logoImage.size.width);
+        adFrame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height-real_h);
+        
+        self.imgV = [[UIImageView alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height-real_h, real_w, real_h)];
+        self.imgV.userInteractionEnabled = YES;
+        self.imgV.image = _adspot.logoImage;
+        [[UIApplication sharedApplication].adv_getCurrentWindow addSubview:self.imgV];
+    }
+    _ks_ad.frame = adFrame;
+    [_ks_ad showInView:[UIApplication sharedApplication].adv_getCurrentWindow];
 }
 
-//- (void)ksad_splashAdDismiss:(BOOL)converted {
-//    //convert为YES时需要直接隐藏掉splash，防止影响后续转化页面展示
-//    WeakSelf(self)
-//    [self.vc dismissViewControllerAnimated:!converted completion:^{
-//        StrongSelf(self);
-//        if ([strongself.delegate respondsToSelector:@selector(advanceDidClose)]) {
-//            [strongself.delegate advanceDidClose];
-//        }
-//    }];
-//
-//}
-//
-//- (void)ksad_splashAdClicked {
-//    NSLog(@"----%@", NSStringFromSelector(_cmd));
-//    [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
-//    if ([self.delegate respondsToSelector:@selector(advanceClicked)]) {
-//        [self.delegate advanceClicked];
-//    }
-//}
-//
-//- (void)ksad_splashAdDidShow {
-//    NSLog(@"----%@", NSStringFromSelector(_cmd));
-//    [self.adspot reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
-//    if ([self.delegate respondsToSelector:@selector(advanceExposured)]) {
-//        [self.delegate advanceExposured];
-//    }
-//}
-//
-//- (void)ksad_splashAdTimeOver {
-//    NSLog(@"----%@", NSStringFromSelector(_cmd));
-//    if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdCountdownToZero)]) {
-//        [self.delegate advanceSplashOnAdCountdownToZero];
-//    }
-//
-//}
-//
-//- (void)ksad_splashAdVideoDidSkipped:(NSTimeInterval)playDuration {
-//    NSLog(@"----%@", NSStringFromSelector(_cmd));
-//    if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdSkipClicked)]) {
-//        [self.delegate advanceSplashOnAdSkipClicked];
-//    }
-//}
-//
-//- (void)ksad_splashAdVideoDidStartPlay {
-//    NSLog(@"----%@", NSStringFromSelector(_cmd));
-//}
-//
-//- (void)ksad_splashAdVideoFailedToPlay:(NSError *)error {
-//    NSLog(@"----%@, %@", NSStringFromSelector(_cmd), error);
-//}
-//
-//- (UIViewController *)ksad_splashAdConversionRootVC {
-//    return [UIApplication sharedApplication].adv_getCurrentWindow.rootViewController;
-//}
-//
-
+- (UIImageView *)imgV {
+    if (!_imgV) {
+        _imgV = [[UIImageView alloc] init];
+    }
+    return _imgV;
+}
 @end

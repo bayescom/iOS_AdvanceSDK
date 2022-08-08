@@ -60,7 +60,7 @@
 }
 
 - (void)supplierStateFailed {
-    NSLog(@"失败 失败失败失败失败失败失败失败  %ld", _supplier.priority);
+//    NSLog(@"失败 失败失败失败失败失败失败失败  %ld", _supplier.priority);
     ADV_LEVEL_INFO_LOG(@"穿山甲 失败");
     [self.adspot loadNextSupplierIfHas];
 }

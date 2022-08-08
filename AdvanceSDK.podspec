@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
     s.name             = 'AdvanceSDK'
     
-    s.version          = '3.2.6.2'
+    s.version          = '4.0.0.1'
     s.ios.deployment_target = '12.0'
     s.platform     = :ios, "12.0"
     s.requires_arc = true
@@ -53,7 +53,7 @@ Pod::Spec.new do |s|
     s.subspec 'Mercury' do |mer|
         mer.dependency 'AdvanceSDK/Core'
         mer.dependency 'AdvanceSDK/Adspot'
-        mer.dependency 'MercurySDK'
+        mer.dependency 'MercurySDK', '3.1.7.1'
         mer.source_files = 'AdvanceSDK/Adapter/mercury/**/*.{h,m}'
         mer.frameworks = 'StoreKit', 'AVFoundation', 'CoreMotion'
     end
@@ -100,21 +100,21 @@ Pod::Spec.new do |s|
         
     end
     
-    s.subspec 'TANX' do |tanx|
-        tanx.dependency 'AdvanceSDK/Core'
-        tanx.dependency 'AdvanceSDK/Adspot'
-        tanx.dependency 'JSONModel', '1.8.0'
-        tanx.dependency 'Reachability', '3.2'
-        tanx.dependency 'SDWebImage', '5.12.1'
-        tanx.source_files =  'AdvanceSDK/Adapter/Tanx/*{h,m}'
-        tanx.ios.vendored_frameworks = 'AdvanceSDK/Adapter/Tanx/TanxSDKFolder/TanxSDK.framework'
-#        tanx.vendored_frameworks = 'TanxSDK.framework'
-
-
-        valid_archs = ['armv7', 'armv7s', 'x86_64', 'arm64']
-        
-        
-    end
+#    s.subspec 'TANX' do |tanx|
+#        tanx.dependency 'AdvanceSDK/Core'
+#        tanx.dependency 'AdvanceSDK/Adspot'
+#        tanx.dependency 'JSONModel', '1.8.0'
+#        tanx.dependency 'Reachability', '3.2'
+#        tanx.dependency 'SDWebImage', '5.12.1'
+#        tanx.source_files =  'AdvanceSDK/Adapter/Tanx/*{h,m}'
+#        tanx.ios.vendored_frameworks = 'AdvanceSDK/Adapter/Tanx/TanxSDKFolder/TanxSDK.framework'
+##        tanx.vendored_frameworks = 'TanxSDK.framework'
+#
+#
+#        valid_archs = ['armv7', 'armv7s', 'x86_64', 'arm64']
+#
+#
+#    end
     
     s.subspec 'Bidding' do |bidding|
         bidding.dependency 'AdvanceSDK/Core'
@@ -149,24 +149,10 @@ Pod::Spec.new do |s|
        
        ]
 
-#bidding.vendored_frameworks = 'ABUAdAdmobAdapter.framework'
-#bidding.vendored_frameworks = 'ABUAdBaiduAdapter.framework'
-#bidding.vendored_frameworks = 'ABUAdCsjAdapter.framework'
-#bidding.vendored_frameworks = 'ABUAdGdtAdapter.framework'
-#bidding.vendored_frameworks = 'ABUAdKlevinAdapter.framework'
-#bidding.vendored_frameworks = 'ABUAdMintegralAdapter.framework'
-#bidding.vendored_frameworks = 'ABUAdUnityAdapter.framework'
-#bidding.vendored_frameworks = 'ABUVisualDebug.framework'
-#bidding.vendored_frameworks = 'ABUAdSDK.framework'
-
-
         valid_archs = ['armv7', 'armv7s', 'x86_64', 'arm64']
         
         
     end
-
-
-
 
 
     

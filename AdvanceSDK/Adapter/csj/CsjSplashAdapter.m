@@ -47,16 +47,20 @@
 
 - (void)supplierStateLoad {
     ADV_LEVEL_INFO_LOG(@"加载穿山甲 supplier: %@", _supplier);
-    if (self.adspot.timeout) {
-        if (self.adspot.timeout > 500) {
-            _csj_ad.tolerateTimeout = _adspot.timeout / 1000.0;
+    __weak typeof(self) _self = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        __strong typeof(_self) self = _self;
+        
+        if (self.adspot.timeout) {
+            if (self.adspot.timeout > 500) {
+                _csj_ad.tolerateTimeout = _adspot.timeout / 1000.0;
+            }
         }
-    }
-
-    _csj_ad.delegate = self;
-    _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
-    [self.csj_ad loadAdData];
-
+        
+        _csj_ad.delegate = self;
+        _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
+        [self.csj_ad loadAdData];
+    });
 }
 
 - (void)supplierStateInPull {
@@ -97,25 +101,30 @@
 }
 
 - (void)showAd {
-    [[UIApplication sharedApplication].keyWindow addSubview:_csj_ad];
-    [[UIApplication sharedApplication].keyWindow bringSubviewToFront:[_adspot performSelector:@selector(bgImgV)]];
-    
-    _csj_ad.backgroundColor = [UIColor clearColor];
-    _csj_ad.rootViewController = _adspot.viewController;
-    
-    if (_adspot.showLogoRequire) {
-        // 添加Logo
-        NSAssert(_adspot.logoImage != nil, @"showLogoRequire = YES时, 必须设置logoImage");
-        CGFloat real_w = [UIScreen mainScreen].bounds.size.width;
-        CGFloat real_h = _adspot.logoImage.size.height*(real_w/_adspot.logoImage.size.width);
-        UIImageView *imgV = [[UIImageView alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height-real_h, real_w, real_h)];
-        imgV.userInteractionEnabled = YES;
-        imgV.image = _adspot.logoImage;
-        if (imgV) {
-            [_csj_ad addSubview:imgV];
-        }
-    }
+    __weak typeof(self) _self = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        __strong typeof(_self) self = _self;
 
+        [[UIApplication sharedApplication].keyWindow addSubview:_csj_ad];
+        [[UIApplication sharedApplication].keyWindow bringSubviewToFront:[_adspot performSelector:@selector(bgImgV)]];
+        
+        _csj_ad.backgroundColor = [UIColor clearColor];
+        _csj_ad.rootViewController = _adspot.viewController;
+        
+        if (_adspot.showLogoRequire) {
+            // 添加Logo
+            NSAssert(_adspot.logoImage != nil, @"showLogoRequire = YES时, 必须设置logoImage");
+            CGFloat real_w = [UIScreen mainScreen].bounds.size.width;
+            CGFloat real_h = _adspot.logoImage.size.height*(real_w/_adspot.logoImage.size.width);
+            UIImageView *imgV = [[UIImageView alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height-real_h, real_w, real_h)];
+            imgV.userInteractionEnabled = YES;
+            imgV.image = _adspot.logoImage;
+            if (imgV) {
+                [_csj_ad addSubview:imgV];
+            }
+        }
+    });
+    
 }
 // MARK: ======================= BUSplashAdDelegate =======================
 /**

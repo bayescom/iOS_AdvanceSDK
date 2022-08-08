@@ -87,6 +87,7 @@
         // 如果渠道非并发 且不支持bidding 且失败了, 则为原来的业务渠道, 走原来的业务逻辑
         if (supplier.isSupportBidding == NO) {
             // 执行下一个渠道
+            
             [_mgr loadNextSupplierIfHas];
         } else {
             // 如果走到了这里, 则意味着 最后胜出的渠道,展示失败  现阶段只抛异常,  下阶段,要在这里执行gromore的逻辑

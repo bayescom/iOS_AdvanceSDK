@@ -62,7 +62,6 @@
 }
 
 - (void)supplierStateFailed {
-    NSLog(@"广点通 失败失败失败失败失败失败失败  %ld", _supplier.priority);
     ADV_LEVEL_INFO_LOG(@"广点通 失败 %@", _supplier);
     _gdt_ad = nil;
     [self.adspot loadNextSupplierIfHas];
@@ -72,7 +71,6 @@
 
 
 - (void)showAd {
-    NSLog(@"%@ %@", _gdt_ad, _adspot.viewController);
     [_gdt_ad presentAdFromRootViewController:_adspot.viewController];
 }
 

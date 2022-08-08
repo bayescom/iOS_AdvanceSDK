@@ -7,7 +7,7 @@
 
 #import "AdvUploadTKManager.h"
 #import "AdvURLSessionOperation.h"
-
+#import "AdvLog.h"
 @interface AdvUploadTKManager ()
 @property (nonatomic, strong) NSOperationQueue *queue;
 
@@ -128,9 +128,8 @@ static AdvUploadTKManager *defaultManager = nil;
     NSMutableURLRequest *request = [self createRequestWithUrl:urlString];
     
     NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
-
+//    ADV_LEVEL_INFO_LOG(@"\r\nTK上报===>>%@", urlString);
     AdvURLSessionOperation *operation = [[AdvURLSessionOperation alloc] initWithSession:session request:request completionHandler:^(NSData * _Nonnull data, NSURLResponse * _Nonnull response, NSError * _Nonnull error) {
-        
         // 1. 无论成功失败 只要有结果就移除
         if ([urls containsObject:urlString]) {
             [urls removeObject:urlString];
@@ -151,7 +150,6 @@ static AdvUploadTKManager *defaultManager = nil;
                 failBlock(urlString, [(NSHTTPURLResponse *)response statusCode]);
             }
         }
-        
         // 上传流程结束
         if (urls.count == 0) {
             

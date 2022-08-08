@@ -42,22 +42,26 @@
 
 - (void)supplierStateLoad {
     ADV_LEVEL_INFO_LOG(@"加载Mercury supplier: %@", _supplier);
-    _mercury_ad = [[MercurySplashAd alloc] initAdWithAdspotId:_supplier.adspotid delegate:self];
-    _mercury_ad.placeholderImage = _adspot.backgroundImage;
-    _mercury_ad.logoImage = _adspot.logoImage;
-    if (_adspot.showLogoRequire) {
-        _mercury_ad.showType = MercurySplashAdShowCutBottom;
-    }
-    if (_adspot.timeout) {
-        if (_adspot.timeout > 500) {
-            _mercury_ad.fetchDelay = _supplier.timeout / 1000.0;
+    __weak typeof(self) _self = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        __strong typeof(_self) self = _self;
+        
+        _mercury_ad = [[MercurySplashAd alloc] initAdWithAdspotId:_supplier.adspotid delegate:self];
+        _mercury_ad.placeholderImage = _adspot.backgroundImage;
+        _mercury_ad.logoImage = _adspot.logoImage;
+        if (_adspot.showLogoRequire) {
+            _mercury_ad.showType = MercurySplashAdShowCutBottom;
         }
-    }
-    _mercury_ad.delegate = self;
-    _mercury_ad.controller = _adspot.viewController;
-
-    [_mercury_ad loadAd];
-
+        if (_adspot.timeout) {
+            if (_adspot.timeout > 500) {
+                _mercury_ad.fetchDelay = _supplier.timeout / 1000.0;
+            }
+        }
+        _mercury_ad.delegate = self;
+        _mercury_ad.controller = _adspot.viewController;
+        
+        [_mercury_ad loadAd];
+    });
 }
 
 - (void)supplierStateInPull {
@@ -88,10 +92,8 @@
 //    [[UIApplication sharedApplication].keyWindow addSubview:_csj_ad];
 //    [[UIApplication sharedApplication].keyWindow bringSubviewToFront:[_adspot performSelector:@selector(bgImgV)]];
     __weak typeof(self) _self = self;
-
     dispatch_async(dispatch_get_main_queue(), ^{
         __strong typeof(_self) self = _self;
-       // UI更新代码
         UIImageView *imgV;
         if (_adspot.showLogoRequire) {
             // 添加Logo
@@ -105,8 +107,6 @@
 
             [self.mercury_ad showAdWithBottomView:_adspot.showLogoRequire?imgV:nil skipView:nil];
     });
-
-
 }
 
 
@@ -138,6 +138,7 @@
 
 // MARK: ======================= MercurySplashAdDelegate =======================
 - (void)mercury_splashAdDidLoad:(MercurySplashAd *)splashAd {
+    _supplier.supplierPrice = splashAd.price;
     [self.adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
 
