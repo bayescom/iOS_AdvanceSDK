@@ -120,7 +120,10 @@ Pod::Spec.new do |s|
         bidding.dependency 'AdvanceSDK/Core'
         bidding.dependency 'AdvanceSDK/Adspot'
         bidding.dependency 'Ads-CN'
-        bidding.source_files =  'AdvanceSDK/Adapter/Bidding/*{h,m}'
+        bidding.source_files =  ['AdvanceSDK/Adapter/Bidding/*{h,m}',
+                                 'AdvanceSDK/Adapter/Bidding/AdvBiddingAdapter/*{h,m}',
+                                 'AdvanceSDK/Adapter/Bidding/AdvBiddingCustomAdapter/*{h,m}'
+                                ]
 
        # UnityAds
        bidding.dependency 'UnityAds', '4.2.1'
