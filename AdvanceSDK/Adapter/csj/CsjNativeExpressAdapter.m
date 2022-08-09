@@ -102,6 +102,7 @@
             AdvanceNativeExpressView *TT = [[AdvanceNativeExpressView alloc] initWithViewController:_adspot.viewController];
             TT.expressView = view;
             TT.identifier = _supplier.identifier;
+            TT.price = _supplier.sdk_price;
             [temp addObject:TT];
 
         }
