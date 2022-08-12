@@ -34,7 +34,7 @@
     _advanceFeed = [[AdvanceNativeExpress alloc] initWithAdspotId:slotID customExt:nil viewController:self.bridge.viewControllerForPresentingModalView adSize:size];
 
     _advanceFeed.delegate = self;
-    [_advanceFeed loadAd];
+    [_advanceFeed loadAdWithSupplierModel:model];
 
 }
 

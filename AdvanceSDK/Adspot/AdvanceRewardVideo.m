@@ -80,10 +80,9 @@
 
 // bidding结束
 - (void)advanceBaseAdapterBiddingEndWithWinSupplier:(AdvSupplier *_Nonnull)supplier {
-//    if (self.delegate && [self.delegate respondsToSelector:@selector(advanceBiddingEnd)]) {
-//        [self.delegate advanceBiddingEnd];
-//    }
-    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(advanceBiddingEndWithPrice:)]) {
+        [self.delegate advanceBiddingEndWithPrice:supplier.supplierPrice];
+    }
     
 }
 
@@ -121,8 +120,10 @@
         clsName = @"BdRewardVideoAdapter";
     } else if ([supplier.identifier isEqualToString:SDK_ID_TANX]) {
         clsName = @"TanxRewardVideoAdapter";
+    } else if ([supplier.identifier isEqualToString:SDK_ID_BIDDING]) {
+        clsName = @"AdvBiddingRewardVideoAdapter";
     }
-        
+    
     if (NSClassFromString(clsName)) {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wundeclared-selector"

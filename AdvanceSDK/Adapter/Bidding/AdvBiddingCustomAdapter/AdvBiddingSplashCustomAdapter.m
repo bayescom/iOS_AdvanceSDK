@@ -59,7 +59,6 @@
 //    }
     [self.advanceSplash showAd];
     // 模拟广告展示回调
-    [self.bridge splashAdWillVisible:self];
 }
 
 /// 广告数据拉取成功
@@ -71,6 +70,7 @@
 - (void)advanceExposured {
 //    NSLog(@"广告曝光成功 %s", __func__);
 //    [self.bridge splashAdWillVisible:self];
+    [self.bridge splashAdWillVisible:self];
 }
 
 /// 广告加载失败
