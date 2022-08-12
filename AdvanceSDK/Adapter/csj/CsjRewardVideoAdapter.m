@@ -99,6 +99,7 @@
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
 //    NSLog(@"穿山甲激励视频拉取成功");
     _supplier.state = AdvanceSdkSupplierStateSuccess;
+    NSLog(@"--1> %@ %d", _supplier, _supplier.isParallel);
     if (_supplier.isParallel == YES) {
         return;
     }

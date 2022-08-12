@@ -267,10 +267,9 @@
 
         // 一起并发
         [tempBidding enumerateObjectsUsingBlock:^(AdvSupplier  *_Nonnull supplier, NSUInteger idx, BOOL * _Nonnull stop) {
-            // isParallel和isSupportBidding 这两个字段在上面已经设置过了 所以这里不用再设置了
-//            supplier.isParallel = YES;// 并发执行这些渠道
-//            supplier.isSupportBidding = YES;// 并且支持bidding
-//            NSLog(@"-->%s tag %@", __func__, supplier.sdktag);
+            supplier.isParallel = YES;// 并发执行这些渠道
+            supplier.isSupportBidding = YES;// 并且支持bidding
+            NSLog(@"-->%s tag %@ %@ %d", __func__,supplier, supplier.sdktag, supplier.isParallel);
             [self notCPTLoadNextSuppluer:supplier error:nil];
         }];
         
