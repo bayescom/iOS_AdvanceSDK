@@ -11,6 +11,7 @@
 @class AdvSetting;
 @class AdvSupplier;
 @class AdvPriorityMap;
+@class AdvBiddingModel;
 typedef NS_ENUM(NSUInteger, AdvanceSdkSupplierRepoType) {
     /// 发起加载请求上报
     AdvanceSdkSupplierRepoLoaded,
@@ -87,8 +88,19 @@ NSString * ADVStringFromNAdvanceSdkSupplierRepoType(AdvanceSdkSupplierRepoType t
 
 @property (nonatomic , assign) NSInteger bidding_type;
 @property (nonatomic , assign) NSInteger parallel_timeout;
+@property (nonatomic , strong) AdvBiddingModel *gromore_params;
+
 
 @end
+
+@interface AdvBiddingModel : NSObject
+@property (nonatomic, assign) NSInteger timeout;
+@property (nonatomic, copy)   NSString *appid;
+@property (nonatomic, copy)   NSString *adspotid;
+
+@end
+
+
 
 @interface AdvSupplier : NSObject
 @property (nonatomic, copy)   NSString *identifier;
@@ -123,5 +135,6 @@ NSString * ADVStringFromNAdvanceSdkSupplierRepoType(AdvanceSdkSupplierRepoType t
 //                              sdkId:(nonnull NSString *)sdkid;
 
 @end
+
 
 NS_ASSUME_NONNULL_END

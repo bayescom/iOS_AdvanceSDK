@@ -92,6 +92,11 @@ NSString *const DEFAULT_LOADEDTK = @"http://cruiser.bayescom.cn/loaded?action=lo
 }
 @end
 
+@implementation AdvBiddingModel
+
+@end
+
+
 
 @implementation AdvSupplier
 
