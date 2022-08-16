@@ -54,11 +54,12 @@
 
 - (void)supplierStateLoad {
     ADV_LEVEL_INFO_LOG(@"加载bidding supplier: %@", _supplier);
-    if (self.adspot.timeout) {
-        if (self.adspot.timeout > 500) {
-            self.splashAd.tolerateTimeout = _adspot.timeout / 1000.0;
-        }
+    NSInteger parallel_timeout = _supplier.timeout;
+    if (parallel_timeout == 0) {
+        parallel_timeout = 3000;
     }
+
+    self.splashAd.tolerateTimeout = parallel_timeout / 1000.0;
     
     _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
     

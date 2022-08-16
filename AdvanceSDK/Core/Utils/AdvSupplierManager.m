@@ -181,14 +181,22 @@
     // 如果用 bidding功能
     if (_model.setting.bidding_type == 1) {
         // 根据渠道标识 获取bidding的supplier去执行
-        __weak typeof(self) _self = self;
-        [_supplierM enumerateObjectsUsingBlock:^(AdvSupplier * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            __strong typeof(_self) self = _self;
-            if ([obj.identifier isEqualToString:SDK_ID_BIDDING]) {
-                *stop = YES;
-                [self GMBiddingActionWithGMSupplier:obj];
-            }
-        }];
+        [self GMBiddingAction];
+//        AdvSupplier *GMObj = [AdvSupplier new];
+//
+//        GMObj.mediaid = self.model.setting.gromore_params.appid;
+//        GMObj.adspotid = self.model.setting.gromore_params.adspotid;
+//        GMObj.timeout = self.model.setting.gromore_params.timeout;
+//        GMObj.identifier = SDK_ID_BIDDING;
+//
+//        __weak typeof(self) _self = self;
+//        [_supplierM enumerateObjectsUsingBlock:^(AdvSupplier * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+//            __strong typeof(_self) self = _self;
+//            if ([obj.identifier isEqualToString:SDK_ID_BIDDING]) {
+//                *stop = YES;
+//                [self GMBiddingActionWithGMSupplier:obj];
+//            }
+//        }];
     } else {
         [self loadBiddingSupplierAction];
     }
@@ -196,8 +204,16 @@
 
 
 // 开启GMbidding
-- (void)GMBiddingActionWithGMSupplier:(AdvSupplier *)GMObj {
+- (void)GMBiddingAction {
+    AdvSupplier *GMObj = [AdvSupplier new];
+    
+    GMObj.mediaid = self.model.setting.gromore_params.appid;
+    GMObj.adspotid = self.model.setting.gromore_params.adspotid;
+    GMObj.timeout = self.model.setting.gromore_params.timeout;
+    GMObj.identifier = SDK_ID_BIDDING;
     GMObj.isParallel = NO;
+    GMObj.name = @"实时竞价";
+    GMObj.sdktag = @"Bidding";
     // 初始化 biddingCongfig单例
     id biddingConfig = ((id(*)(id,SEL))objc_msgSend)(NSClassFromString(@"AdvBiddingCongfig"), @selector(defaultManager));
     // 将策略Model 付给BiddingCongfig 用来在customAdapter里初始化新的开屏广告位

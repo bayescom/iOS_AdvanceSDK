@@ -60,17 +60,15 @@
         __strong typeof(_self) self = _self;
         
         _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
-        NSInteger timeout = 5;
-        if (self.adspot.timeout) {
-            if (self.adspot.timeout > 500) {
-                timeout = self.adspot.timeout / 1000.0;
-            }
+        NSInteger parallel_timeout = _supplier.timeout;
+        if (parallel_timeout == 0) {
+            parallel_timeout = 3000;
         }
+        _ks_ad.timeoutInterval = parallel_timeout / 1000.0;
         
         _ks_ad.delegate = self;
         _ks_ad.needShowMiniWindow = NO;
         _ks_ad.rootViewController = _adspot.viewController;
-        _ks_ad.timeoutInterval = timeout;
         [_ks_ad loadAdData];
     });
 }

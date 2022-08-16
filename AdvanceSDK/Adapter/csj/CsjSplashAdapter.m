@@ -51,11 +51,11 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         __strong typeof(_self) self = _self;
         
-        if (self.adspot.timeout) {
-            if (self.adspot.timeout > 500) {
-                _csj_ad.tolerateTimeout = _adspot.timeout / 1000.0;
-            }
+        NSInteger parallel_timeout = _supplier.timeout;
+        if (parallel_timeout == 0) {
+            parallel_timeout = 3000;
         }
+        _csj_ad.tolerateTimeout = parallel_timeout / 1000.0;
         
         _csj_ad.delegate = self;
         _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
