@@ -10,7 +10,12 @@
 #import <AdvanceSDK/AdvanceNativeExpressView.h>
 #import "AdvBiddingCongfig.h"
 #import "AdvSupplierModel.h"
-@interface AdvBiddingNativeExpressCustomAdapter ()<AdvanceNativeExpressDelegate>
+# if __has_include(<ABUAdSDK/ABUAdSDK.h>)
+#import <ABUAdSDK/ABUAdSDK.h>
+#else
+#import <Ads-Mediation-CN/ABUAdSDK.h>
+#endif
+@interface AdvBiddingNativeExpressCustomAdapter ()<AdvanceNativeExpressDelegate, ABUCustomNativeAdapter>
 @property(strong,nonatomic) AdvanceNativeExpress *advanceFeed;
 
 @end

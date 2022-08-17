@@ -10,7 +10,13 @@
 //#import "ABUDCustomSplashView.h"
 #import "AdvBiddingCongfig.h"
 #import "AdvSupplierModel.h"
-@interface AdvBiddingSplashCustomAdapter ()<AdvanceSplashDelegate>
+# if __has_include(<ABUAdSDK/ABUAdSDK.h>)
+#import <ABUAdSDK/ABUAdSDK.h>
+#else
+#import <Ads-Mediation-CN/ABUAdSDK.h>
+#endif
+
+@interface AdvBiddingSplashCustomAdapter ()<AdvanceSplashDelegate, ABUCustomSplashAdapter>
 @property(strong,nonatomic) AdvanceSplash *advanceSplash;
 //@property (nonatomic, strong) ABUDCustomSplashView *splashView;
 @property (nonatomic, strong) UIView *customBottomView;

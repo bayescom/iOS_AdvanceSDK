@@ -10,7 +10,13 @@
 #import "AdvBiddingCongfig.h"
 #import "AdvSupplierModel.h"
 #import "UIApplication+Adv.h"
-@interface AdvBiddingRewardVideoCustomAdapter ()<AdvanceRewardVideoDelegate>
+# if __has_include(<ABUAdSDK/ABUAdSDK.h>)
+#import <ABUAdSDK/ABUAdSDK.h>
+#else
+#import <Ads-Mediation-CN/ABUAdSDK.h>
+#endif
+
+@interface AdvBiddingRewardVideoCustomAdapter ()<AdvanceRewardVideoDelegate, ABUCustomRewardedVideoAdapter>
 @property (nonatomic, strong) AdvanceRewardVideo *advanceRewardVideo;
 @property (nonatomic, weak) UIViewController *viewController;
 @property (nonatomic, assign) NSInteger price;
