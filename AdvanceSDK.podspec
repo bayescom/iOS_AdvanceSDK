@@ -30,11 +30,11 @@ Pod::Spec.new do |s|
     
     valid_archs = ['i386', 'armv7', 'x86_64', 'arm64']
     # bitcode
-#    s.pod_target_xcconfig = { 'ENABLE_BITCODE' => 'NO', 'VALID_ARCHS' => valid_archs.join(' '), 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
-#    s.user_target_xcconfig = { 'ENABLE_BITCODE' => 'NO', 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
+    #    s.pod_target_xcconfig = { 'ENABLE_BITCODE' => 'NO', 'VALID_ARCHS' => valid_archs.join(' '), 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
+    #    s.user_target_xcconfig = { 'ENABLE_BITCODE' => 'NO', 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
     s.pod_target_xcconfig = { 'ENABLE_BITCODE' => 'NO'}
     s.user_target_xcconfig = { 'ENABLE_BITCODE' => 'NO'}
-
+    
     s.default_subspec = 'Core'
     
     s.requires_arc = true
@@ -77,7 +77,7 @@ Pod::Spec.new do |s|
         gdt.frameworks = 'AdSupport', 'CoreLocation', 'QuartzCore', 'SystemConfiguration', 'CoreTelephony', 'Security', 'StoreKit', 'AVFoundation', 'WebKit'
         gdt.libraries     = 'xml2', 'z'
     end
-        
+    
     s.subspec 'KS' do |ks|
         ks.dependency 'AdvanceSDK/Core'
         ks.dependency 'AdvanceSDK/Adspot'
@@ -100,64 +100,80 @@ Pod::Spec.new do |s|
         
     end
     
-#    s.subspec 'TANX' do |tanx|
-#        tanx.dependency 'AdvanceSDK/Core'
-#        tanx.dependency 'AdvanceSDK/Adspot'
-#        tanx.dependency 'JSONModel', '1.8.0'
-#        tanx.dependency 'Reachability', '3.2'
-#        tanx.dependency 'SDWebImage', '5.12.1'
-#        tanx.source_files =  'AdvanceSDK/Adapter/Tanx/*{h,m}'
-#        tanx.ios.vendored_frameworks = 'AdvanceSDK/Adapter/Tanx/TanxSDKFolder/TanxSDK.framework'
-##        tanx.vendored_frameworks = 'TanxSDK.framework'
-#
-#
-#        valid_archs = ['armv7', 'armv7s', 'x86_64', 'arm64']
-#
-#
-#    end
-    
+    #    s.subspec 'TANX' do |tanx|
+    #        tanx.dependency 'AdvanceSDK/Core'
+    #        tanx.dependency 'AdvanceSDK/Adspot'
+    #        tanx.dependency 'JSONModel', '1.8.0'
+    #        tanx.dependency 'Reachability', '3.2'
+    #        tanx.dependency 'SDWebImage', '5.12.1'
+    #        tanx.source_files =  'AdvanceSDK/Adapter/Tanx/*{h,m}'
+    #        tanx.ios.vendored_frameworks = 'AdvanceSDK/Adapter/Tanx/TanxSDKFolder/TanxSDK.framework'
+    ##        tanx.vendored_frameworks = 'TanxSDK.framework'
+    #
+    #
+    #        valid_archs = ['armv7', 'armv7s', 'x86_64', 'arm64']
+    #
+    #
+    #    end
     s.subspec 'Bidding' do |bidding|
         bidding.dependency 'AdvanceSDK/Core'
         bidding.dependency 'AdvanceSDK/Adspot'
-        bidding.dependency 'Ads-CN'
-        bidding.source_files =  ['AdvanceSDK/Adapter/Bidding/*{h,m}',
-                                 'AdvanceSDK/Adapter/Bidding/AdvBiddingAdapter/*{h,m}',
-                                 'AdvanceSDK/Adapter/Bidding/AdvBiddingCustomAdapter/*{h,m}'
-                                ]
+        bidding.dependency 'AdvBiddingSDK'
+        bidding.dependency 'AdvBiddingSuppliers'
 
-       # UnityAds
-       bidding.dependency 'UnityAds', '4.2.1'
-       # Admob/GoogleAd
-#       bidding.dependency 'Google-Mobile-Ads-SDK', '9.5.0'
-       # 百度SDK
-       bidding.dependency 'BaiduMobAdSDK', '4.881'
-       # 广点通/优量汇
-       bidding.dependency 'GDTMobSDK' ,'4.13.71'
-       # SigmobAd
-       # pod 'SigmobAd-iOS', '3.5.3'
-       # 游可赢
-       bidding.dependency 'KlevinAdSDK', '2.5.1.202'
-       # MintegralAdSDK 使用时请务必使用cocoapod源
-       bidding.dependency 'MintegralAdSDK', '7.1.7.0'
-       
-       bidding.ios.vendored_frameworks = ['AdvanceSDK/Adapter/Bidding/SDKs/ABUAdAdmobAdapter/ABUAdAdmobAdapter/ABUAdAdmobAdapter.framework',
-       'AdvanceSDK/Adapter/Bidding/SDKs/ABUAdBaiduAdapter/ABUAdBaiduAdapter/ABUAdBaiduAdapter.framework',
-       'AdvanceSDK/Adapter/Bidding/SDKs/ABUAdCsjAdapter/ABUAdCsjAdapter/ABUAdCsjAdapter.framework',
-       'AdvanceSDK/Adapter/Bidding/SDKs/ABUAdGdtAdapter/ABUAdGdtAdapter/ABUAdGdtAdapter.framework',
-       'AdvanceSDK/Adapter/Bidding/SDKs/ABUAdKlevinAdapter/ABUAdKlevinAdapter/ABUAdKlevinAdapter.framework',
-       'AdvanceSDK/Adapter/Bidding/SDKs/ABUAdMintegralAdapter/ABUAdMintegralAdapter/ABUAdMintegralAdapter.framework',
-       'AdvanceSDK/Adapter/Bidding/SDKs/ABUAdUnityAdapter/ABUAdUnityAdapter/ABUAdUnityAdapter.framework',
-       'AdvanceSDK/Adapter/Bidding/SDKs/ABUVisualDebug/ABUVisualDebug/ABUVisualDebug.framework',
-       'AdvanceSDK/Adapter/Bidding/SDKs/Ads-Mediation-CN/Ads-Mediation-CN/ABUAdSDK.framework'
-       
-       ]
+#        bidding.dependency 'Ads-CN'
+#        bidding.source_files =  ['AdvanceSDK/Adapter/Bidding/*{h,m}',
+#        'AdvanceSDK/Adapter/Bidding/AdvBiddingAdapter/*{h,m}',
+#        'AdvanceSDK/Adapter/Bidding/AdvBiddingCustomAdapter/*{h,m}'
+#        ]
+#
+#        # UnityAds
+#        bidding.dependency 'UnityAds', '4.2.1'
+#        # Admob/GoogleAd
+#        #       bidding.dependency 'Google-Mobile-Ads-SDK', '9.5.0'
+#        # 百度SDK
+#        bidding.dependency 'BaiduMobAdSDK', '4.881'
+#        # 广点通/优量汇
+#        bidding.dependency 'GDTMobSDK' ,'4.13.71'
+#        # SigmobAd
+#        # pod 'SigmobAd-iOS', '3.5.3'
+#        # 游可赢
+#        bidding.dependency 'KlevinAdSDK', '2.5.1.202'
+#        # MintegralAdSDK 使用时请务必使用cocoapod源
+#        bidding.dependency 'MintegralAdSDK', '7.1.7.0'
+
+#        bidding.ios.vendored_frameworks = ['AdvanceSDK/Adapter/Bidding/SDKs/ABUAdAdmobAdapter/ABUAdAdmobAdapter/ABUAdAdmobAdapter.framework',
+#        'AdvanceSDK/Adapter/Bidding/SDKs/ABUAdBaiduAdapter/ABUAdBaiduAdapter/ABUAdBaiduAdapter.framework',
+#        'AdvanceSDK/Adapter/Bidding/SDKs/ABUAdCsjAdapter/ABUAdCsjAdapter/ABUAdCsjAdapter.framework',
+#        'AdvanceSDK/Adapter/Bidding/SDKs/ABUAdGdtAdapter/ABUAdGdtAdapter/ABUAdGdtAdapter.framework',
+#        'AdvanceSDK/Adapter/Bidding/SDKs/ABUAdKlevinAdapter/ABUAdKlevinAdapter/ABUAdKlevinAdapter.framework',
+#        'AdvanceSDK/Adapter/Bidding/SDKs/ABUAdMintegralAdapter/ABUAdMintegralAdapter/ABUAdMintegralAdapter.framework',
+#        'AdvanceSDK/Adapter/Bidding/SDKs/ABUAdUnityAdapter/ABUAdUnityAdapter/ABUAdUnityAdapter.framework',
+#        'AdvanceSDK/Adapter/Bidding/SDKs/ABUVisualDebug/ABUVisualDebug/ABUVisualDebug.framework',
+#        'AdvanceSDK/Adapter/Bidding/SDKs/Ads-Mediation-CN/Ads-Mediation-CN/ABUAdSDK.framework',
+##        'AdvanceSDK/Adapter/Bidding/AdvBidding.framework'
+#
+#        ]
 
         valid_archs = ['armv7', 'armv7s', 'x86_64', 'arm64']
-        
-        
+
+
     end
+    
+    
+    s.subspec 'AdvBidding' do |advBidding|
+        advBidding.dependency 'AdvanceSDK/Core'
+        advBidding.dependency 'AdvanceSDK/Adspot'
+        advBidding.dependency 'AdvBiddingSDK', '1.0.0'
+        advBidding.dependency 'AdvBiddingSuppliers', '0.0.1'
 
 
+#        valid_archs = ['armv7', 'armv7s', 'x86_64', 'arm64']
+
+
+    end
+    
+    
     
     s.xcconfig = {
         'VALID_ARCHS' =>  valid_archs.join(' '),

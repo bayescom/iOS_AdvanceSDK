@@ -13,11 +13,11 @@
 #import <objc/runtime.h>
 #import <objc/message.h>
 
-# if __has_include(<ABUAdSDK/ABUAdSDK.h>)
-#import <ABUAdSDK/ABUAdSDK.h>
-#else
-#import <Ads-Mediation-CN/ABUAdSDK.h>
-#endif
+//# if __has_include(<ABUAdSDK/ABUAdSDK.h>)
+//#import <ABUAdSDK/ABUAdSDK.h>
+//#else
+//#import <Ads-Mediation-CN/ABUAdSDK.h>
+//#endif
 
 @interface AdvBaseAdapter ()  <AdvSupplierManagerDelegate, AdvanceSupplierDelegate>
 @property (nonatomic, strong) AdvSupplierManager *mgr;
@@ -222,10 +222,11 @@
         // bidding 此之前已经对 biddingConfig进行了初始化 并赋值了
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
-            [ABUAdSDKManager setupSDKWithAppId:supplier.mediaid config:^ABUUserConfig *(ABUUserConfig *c) {
-                c.logEnable = YES;
-                return c;
-            }];
+            [NSClassFromString(clsName) performSelector:@selector(setupSDKWithAppId:config:) withObject:supplier.mediaid withObject:nil];
+//            [ABUAdSDKManager setupSDKWithAppId:supplier.mediaid config:^ABUUserConfig *(ABUUserConfig *c) {
+//                c.logEnable = YES;
+//                return c;
+//            }];
         });
 
     } else {

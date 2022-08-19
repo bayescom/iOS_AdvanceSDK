@@ -14,19 +14,15 @@ PODS:
     - AdvanceSDK/Core (= 4.0.0.1)
   - AdvanceSDK/Adspot (4.0.0.1):
     - AdvanceSDK/Core
+  - AdvanceSDK/AdvBidding (4.0.0.1):
+    - AdvanceSDK/Adspot
+    - AdvanceSDK/Core
+    - AdvBiddingSDK (= 1.0.0)
+    - AdvBiddingSuppliers (= 0.0.1)
   - AdvanceSDK/BD (4.0.0.1):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - BaiduMobAdSDK (= 4.881)
-  - AdvanceSDK/Bidding (4.0.0.1):
-    - Ads-CN
-    - AdvanceSDK/Adspot
-    - AdvanceSDK/Core
-    - BaiduMobAdSDK (= 4.881)
-    - GDTMobSDK (= 4.13.71)
-    - KlevinAdSDK (= 2.5.1.202)
-    - MintegralAdSDK (= 7.1.7.0)
-    - UnityAds (= 4.2.1)
   - AdvanceSDK/Core (4.0.0.1)
   - AdvanceSDK/CSJ (4.0.0.1):
     - Ads-CN (= 4.5.1.6)
@@ -44,6 +40,8 @@ PODS:
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - MercurySDK (= 3.1.7.1)
+  - AdvBiddingSDK (1.0.0)
+  - AdvBiddingSuppliers (0.0.1)
   - BaiduMobAdSDK (4.881)
   - BURelyFoundation (0.0.1.58):
     - BURelyFoundation/HM (= 0.0.1.58)
@@ -54,55 +52,18 @@ PODS:
     - GDTMobSDK/GDTMobSDK (= 4.13.71)
   - GDTMobSDK/GDTMobSDK (4.13.71)
   - JSONModel (1.8.0)
-  - KlevinAdSDK (2.5.1.202)
   - KSAdSDK (3.3.25)
   - Masonry (1.1.0)
   - MercurySDK (3.1.7.1)
-  - MintegralAdSDK (7.1.7.0):
-    - MintegralAdSDK/BannerAd (= 7.1.7.0)
-    - MintegralAdSDK/BidBannerAd (= 7.1.7.0)
-    - MintegralAdSDK/BidInterstitialVideoAd (= 7.1.7.0)
-    - MintegralAdSDK/BidNativeAd (= 7.1.7.0)
-    - MintegralAdSDK/BidNewInterstitialAd (= 7.1.7.0)
-    - MintegralAdSDK/BidRewardVideoAd (= 7.1.7.0)
-    - MintegralAdSDK/InterstitialVideoAd (= 7.1.7.0)
-    - MintegralAdSDK/NativeAd (= 7.1.7.0)
-    - MintegralAdSDK/NewInterstitialAd (= 7.1.7.0)
-    - MintegralAdSDK/RewardVideoAd (= 7.1.7.0)
-  - MintegralAdSDK/BannerAd (7.1.7.0):
-    - MintegralAdSDK/NativeAd
-  - MintegralAdSDK/BidBannerAd (7.1.7.0):
-    - MintegralAdSDK/BannerAd
-    - MintegralAdSDK/BidNativeAd
-  - MintegralAdSDK/BidInterstitialVideoAd (7.1.7.0):
-    - MintegralAdSDK/BidNativeAd
-    - MintegralAdSDK/InterstitialVideoAd
-  - MintegralAdSDK/BidNativeAd (7.1.7.0):
-    - MintegralAdSDK/NativeAd
-  - MintegralAdSDK/BidNewInterstitialAd (7.1.7.0):
-    - MintegralAdSDK/BidNativeAd
-    - MintegralAdSDK/NewInterstitialAd
-  - MintegralAdSDK/BidRewardVideoAd (7.1.7.0):
-    - MintegralAdSDK/BidNativeAd
-    - MintegralAdSDK/RewardVideoAd
-  - MintegralAdSDK/InterstitialVideoAd (7.1.7.0):
-    - MintegralAdSDK/NativeAd
-  - MintegralAdSDK/NativeAd (7.1.7.0)
-  - MintegralAdSDK/NewInterstitialAd (7.1.7.0):
-    - MintegralAdSDK/InterstitialVideoAd
-    - MintegralAdSDK/NativeAd
-  - MintegralAdSDK/RewardVideoAd (7.1.7.0):
-    - MintegralAdSDK/NativeAd
   - Reachability (3.2)
   - SDWebImage (5.12.1):
     - SDWebImage/Core (= 5.12.1)
   - SDWebImage/Core (5.12.1)
-  - UnityAds (4.2.1)
 
 DEPENDENCIES:
   - AdvanceSDK (from `../`)
+  - AdvanceSDK/AdvBidding (from `../`)
   - AdvanceSDK/BD (from `../`)
-  - AdvanceSDK/Bidding (from `../`)
   - AdvanceSDK/CSJ (from `../`)
   - AdvanceSDK/GDT (from `../`)
   - AdvanceSDK/KS (from `../`)
@@ -115,18 +76,17 @@ DEPENDENCIES:
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
     - Ads-CN
+    - AdvBiddingSDK
+    - AdvBiddingSuppliers
     - BaiduMobAdSDK
     - BURelyFoundation
     - GDTMobSDK
     - JSONModel
-    - KlevinAdSDK
     - KSAdSDK
     - Masonry
     - MercurySDK
-    - MintegralAdSDK
     - Reachability
     - SDWebImage
-    - UnityAds
 
 EXTERNAL SOURCES:
   AdvanceSDK:
@@ -134,20 +94,19 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Ads-CN: 5563d7a0ed3f99fd47d421fcb48e70688efedd55
-  AdvanceSDK: 986512d1ddfa407b546fc80f26cacdc0fcb3c869
+  AdvanceSDK: f22576fa0e3e867e4edac3e2fde486199b32a37f
+  AdvBiddingSDK: 00f233244ea9afa1a673b99765fedb6f06d1b630
+  AdvBiddingSuppliers: 9cd2e3c977950b34c89c9521f5135bbc47251bc4
   BaiduMobAdSDK: f4c68649b472327e072ed724e70684891da8ba73
   BURelyFoundation: f529322f9e93cf8cc0b4539e447aff77a8ff34de
   GDTMobSDK: 60dca5929fd3cbb68f32eb81305cb65fb988726a
   JSONModel: 02ab723958366a3fd27da57ea2af2113658762e9
-  KlevinAdSDK: db06bfeca15a438e4f34c15be142e53977d8de09
   KSAdSDK: b2932c54160f71af31bf704d0c284c8b9d26735e
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   MercurySDK: 4e53bb5bd9f6c4893942697194fe9f76b8e9008c
-  MintegralAdSDK: 9c8952852f6b7d38dfca6acd70bc267443c57729
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
   SDWebImage: 4dc3e42d9ec0c1028b960a33ac6b637bb432207b
-  UnityAds: a2274b216f9ed1e4d1d74c08178f21223f08e17a
 
-PODFILE CHECKSUM: 06cff29bb84d0d7bfd59651bd5dadb4f102962fd
+PODFILE CHECKSUM: b6542fdff02c5f15daf1eb21afae5532d3c85fec
 
 COCOAPODS: 1.11.2
