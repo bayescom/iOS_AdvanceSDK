@@ -183,4 +183,28 @@
 }
 
 
+
+- (void)reportEventWithParams:(NSDictionary *)params {
+    NSURL *url = [NSURL URLWithString:AdvanceSdkEventUrl];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:20];
+    
+    NSError *parseError = nil;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:[params copy] options:NSJSONWritingPrettyPrinted error:&parseError];
+    
+    request.HTTPMethod = @"POST";
+    request.HTTPBody = jsonData;
+    //use share session
+    NSURLSession *sharedSession = [NSURLSession sharedSession];
+    
+    NSURLSessionDataTask *dataTask = [sharedSession dataTaskWithRequest:request
+                                                      completionHandler:^(NSData *_Nullable data, NSURLResponse *_Nullable response, NSError *_Nullable error) {
+        // NSURLSession multi thread
+        if (error == nil) {
+            ADV_LEVEL_INFO_LOG(@"上报开屏超时错误");
+
+        }
+    }];
+    [dataTask resume];
+
+}
 @end

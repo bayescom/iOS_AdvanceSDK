@@ -90,11 +90,7 @@
             
             [_mgr loadNextSupplierIfHas];
         } else {
-            // 如果走到了这里, 则意味着 最后胜出的渠道,展示失败  现阶段只抛异常,  下阶段,要在这里执行gromore的逻辑
-//            if ([_baseDelegate respondsToSelector:@selector(advanceBaseAdapterLoadError:)]) {
-//                [_baseDelegate advanceBaseAdapterLoadError:error];
-//            }
-            // 加载下一组bidding
+            // 如果走到了这里, 则意味着 最后胜出的渠道, 加载下一组bidding
             [_mgr loadNextBiddingSupplierIfHas];
         }
     }
