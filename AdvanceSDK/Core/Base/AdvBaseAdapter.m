@@ -91,7 +91,7 @@
             [_mgr loadNextSupplierIfHas];
         } else {
             // 如果走到了这里, 则意味着 最后胜出的渠道, 加载下一组bidding
-            [_mgr loadNextBiddingSupplierIfHas];
+            [_mgr loadNextWaterfallSupplierIfHas];
         }
     }
 

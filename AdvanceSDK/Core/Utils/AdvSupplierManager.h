@@ -82,7 +82,7 @@ NS_ASSUME_NONNULL_BEGIN
  * 加载下一层bidding
  * 回调 advSupplierLoadSuppluer: error:
  */
-- (void)loadNextBiddingSupplierIfHas;
+- (void)loadNextWaterfallSupplierIfHas;
 /// 数据上报
 /// @param repoType 上报的类型
 - (void)reportWithType:(AdvanceSdkSupplierRepoType)repoType supplier:(AdvSupplier *)supplier error:(NSError *)error;

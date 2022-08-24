@@ -83,6 +83,7 @@ NSString * ADVStringFromNAdvanceSdkSupplierRepoType(AdvanceSdkSupplierRepoType t
 @property (nonatomic, assign) BOOL isBidding; // 策略告知是本次是否有bidding渠道, 这个字段决定了parallelGroup 拿到第一组优先级后 是否走bidding逻辑
 @property (nonatomic, copy)   NSArray<NSString *> *parallelIDS;
 @property (nonatomic, strong) NSMutableArray<NSMutableArray<NSNumber *> *> *parallelGroup;
+@property (nonatomic, strong) NSMutableArray<NSNumber *> *headBiddingGroup;
 @property (nonatomic, assign) NSTimeInterval cacheTime;
 
 
