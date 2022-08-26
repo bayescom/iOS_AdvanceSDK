@@ -214,6 +214,7 @@
 - (void)splashAdLoadSuccess:(BaiduMobAdSplash *)splash {
 //    NSLog(@"百度开屏拉取成功 %@",self.bd_ad);
     _supplier.supplierPrice = [[splash getECPMLevel] integerValue];
+//    _supplier.supplierPrice = 10000;
     [self.adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
     if (_supplier.isParallel == YES) {
