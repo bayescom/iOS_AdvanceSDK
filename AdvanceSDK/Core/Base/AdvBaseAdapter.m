@@ -73,9 +73,17 @@
     
     // 如果是bidding渠道,且上报类型是bidding, 那么就加入bidding队列 (bidding的渠道一定是并发的, isParallel一定为yes)
     // 注意: 每个渠道返回价格的时机不一样 广点通 didload就可以返回, 详见 AdvSupplier.supplierPrice 的说明
-    if (repoType == AdvanceSdkSupplierRepoBidding && supplier.isSupportBidding) {
-        [_mgr inBiddingQueueWithSupplier:supplier];
+    
+    // 瀑布流的广告位 进入瀑布流的队列
+    if (repoType == AdvanceSdkSupplierRepoBidding && supplier.positionType == AdvanceSdkSupplierTypeWaterfall) {
+        [_mgr inWaterfallQueueWithSupplier:supplier];
     }
+    
+    // headBidding 广告位进入headBidding队列
+    if (repoType == AdvanceSdkSupplierRepoBidding && supplier.positionType == AdvanceSdkSupplierTypeHeadBidding) {
+        [_mgr inHeadBiddingQueueWithSupplier:supplier];
+    }
+
     
     
     // 失败了 并且不是并行才会走下一个渠道
@@ -85,7 +93,7 @@
 //        NSLog(@"%@ |||   %ld %@",supplier.sdktag, (long)supplier.priority, supplier);
         
         // 如果渠道非并发 且不支持bidding 且失败了, 则为原来的业务渠道, 走原来的业务逻辑
-        if (supplier.isSupportBidding == NO) {
+        if (supplier.positionType == AdvanceSdkSupplierTypeWaterfall) {
             // 执行下一个渠道
             
             [_mgr loadNextSupplierIfHas];

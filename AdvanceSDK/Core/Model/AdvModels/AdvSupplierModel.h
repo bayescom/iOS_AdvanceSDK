@@ -46,6 +46,14 @@ typedef NS_ENUM(NSUInteger, AdvanceSdkSupplierState) {
 
 };
 
+typedef NS_ENUM(NSUInteger, AdvanceSdkSupplierBiddingType) {
+    /// 瀑布流式广告
+    AdvanceSdkSupplierTypeWaterfall,
+    /// headBidding类型广告
+    AdvanceSdkSupplierTypeHeadBidding,
+};
+
+
 NS_ASSUME_NONNULL_BEGIN
 
 NSString * ADVStringFromNAdvanceSdkSupplierRepoType(AdvanceSdkSupplierRepoType type);
@@ -126,7 +134,7 @@ NSString * ADVStringFromNAdvanceSdkSupplierRepoType(AdvanceSdkSupplierRepoType t
 @property (nonatomic, copy)   NSArray<NSString *> *imptk;
 @property (nonatomic, copy)   NSArray<NSString *> *succeedtk;
 @property (nonatomic, copy)   NSArray<NSString *> *failedtk;
-@property (nonatomic, assign) BOOL isSupportBidding;
+@property (nonatomic, assign) AdvanceSdkSupplierBiddingType positionType;
 
 
 /// 构建打底渠道

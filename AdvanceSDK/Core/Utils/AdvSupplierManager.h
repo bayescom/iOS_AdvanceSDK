@@ -83,6 +83,7 @@ NS_ASSUME_NONNULL_BEGIN
  * 回调 advSupplierLoadSuppluer: error:
  */
 - (void)loadNextWaterfallSupplierIfHas;
+
 /// 数据上报
 /// @param repoType 上报的类型
 - (void)reportWithType:(AdvanceSdkSupplierRepoType)repoType supplier:(AdvSupplier *)supplier error:(NSError *)error;
@@ -92,7 +93,11 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)cacelDataTask;
 
 /// 进入bidding队列
-- (void)inBiddingQueueWithSupplier:(AdvSupplier *)supplier;
+- (void)inWaterfallQueueWithSupplier:(AdvSupplier *)supplier;
+
+// 进入HeadBidding队列
+- (void)inHeadBiddingQueueWithSupplier:(AdvSupplier *)supplier;
+
 
 @end
 
