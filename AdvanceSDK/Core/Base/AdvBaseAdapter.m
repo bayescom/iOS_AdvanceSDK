@@ -103,6 +103,10 @@
         }
     }
 
+    // 如果并发渠道失败了 要通知mananger那边 _inwaterfallcount -1
+    if (repoType == AdvanceSdkSupplierRepoFaileded && supplier.isParallel) {
+        [_mgr inParallelWithErrorSupplier:supplier];
+    }
 }
 
 // 开始bidding

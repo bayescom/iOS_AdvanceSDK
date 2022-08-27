@@ -98,6 +98,8 @@ NS_ASSUME_NONNULL_BEGIN
 // 进入HeadBidding队列
 - (void)inHeadBiddingQueueWithSupplier:(AdvSupplier *)supplier;
 
+// 接收失败的并发渠道
+- (void)inParallelWithErrorSupplier:(AdvSupplier *)errorSupplier;
 
 @end
 

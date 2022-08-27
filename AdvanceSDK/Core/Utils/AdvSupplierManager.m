@@ -264,10 +264,15 @@
     [self.model.setting.headBiddingGroup removeAllObjects];
 
 
+    // tempWaterfall = 0意味着所有parallelGroup 的渠道都没展现 这个时候 _incomeWaterfallCount应置为0, 避免卡住问题
+    if (tempWaterfall.count > 0) {
+        _incomeWaterfallCount = tempWaterfall.count + self.arrayHeadBidding.count;
+    } else {
+        _incomeWaterfallCount = 0;
+    }
     // 参与bidding的渠道数
-    _incomeWaterfallCount = tempWaterfall.count;
 
-//    NSLog(@"_incomeWaterfallCount = %ld", _incomeWaterfallCount);
+    NSLog(@"_incomeWaterfallCount = %ld", _incomeWaterfallCount);
     if (_incomeWaterfallCount == 0) {// 没有参加bidding的渠道即没有并发, 那么就按照旧的业务去执行
         if (self.model.setting.parallelGroup.count == 0) { // 如果并发组里元素个数为0 那么就开始执行剩下非并发的渠道了
             [self loadNextSupplier];
@@ -356,7 +361,7 @@
     
     // 如果所有并发渠道都有结果返回了 则选择price高的渠道展示
 //    NSLog(@"%@", self.arrayWaterfall.count);
-//    NSLog(@"_incomeWaterfallCount = %ld  arrayWaterfall.count = %ld", _incomeWaterfallCount, _arrayWaterfall.count);
+    NSLog(@"_incomeWaterfallCount = %ld  arrayWaterfall.count = %ld arrayHeadBidding.count = %ld", _incomeWaterfallCount, _arrayWaterfall.count, _arrayHeadBidding.count);
     if (self.arrayWaterfall.count == _incomeWaterfallCount) {
         [self _sortSuppliersByPrice:self.arrayWaterfall];
     }
@@ -369,6 +374,28 @@
     }
     [self.arrayHeadBidding addObject:supplier];
     
+    NSLog(@"===2=> %ld  %ld %ld", (long)_incomeWaterfallCount, self.arrayWaterfall.count, self.arrayHeadBidding.count);
+    if (self.arrayWaterfall.count + self.arrayHeadBidding.count == _incomeWaterfallCount) {
+        [self _sortSuppliersByPrice:self.arrayWaterfall];
+    }
+
+}
+
+// 错误渠道接受
+- (void)inParallelWithErrorSupplier:(AdvSupplier *)errorSupplier {
+    if (!errorSupplier) {
+        return;
+    }
+    
+    NSLog(@"====> %ld", (long)_incomeWaterfallCount);
+    if (_incomeWaterfallCount > 0) {
+        _incomeWaterfallCount = _incomeWaterfallCount - 1;
+        // 每层总
+        NSLog(@"===1=> %ld  %ld %ld", (long)_incomeWaterfallCount, self.arrayWaterfall.count, self.arrayHeadBidding.count);
+        if (self.arrayWaterfall.count + self.arrayHeadBidding.count == _incomeWaterfallCount) {
+            [self _sortSuppliersByPrice:self.arrayWaterfall];
+        }
+    }
 }
 
 // 检测时间戳, 如果bidding截止 那么就把当前返回广告的渠道
