@@ -14,7 +14,7 @@
 #import "UIApplication+Adv.h"
 #import "AdvLog.h"
 #import "AdvError.h"
-
+#import "AdvUploadTKUtil.h"
 @interface AdvanceSplash ()
 @property (nonatomic, strong) id adapter;
 
@@ -22,6 +22,7 @@
 
 @property (nonatomic, assign) NSInteger timeout_stamp;
 @property (nonatomic, strong) CADisplayLink *timeoutCheckTimer;
+@property (nonatomic, copy) NSString *reqId;
 
 @end
 
@@ -84,6 +85,7 @@
     if([_delegate respondsToSelector:@selector(advanceFailedWithError:description:)] && execute) {
         [_delegate advanceFailedWithError:[AdvError errorWithCode:AdvErrorCode_115].toNSError description:[self.errorDescriptions copy]];
         [_adapter performSelector:@selector(deallocAdapter)];
+        [self uploadTimeOutError];
         [self deallocAdapter];
     }
     _delegate = nil;
@@ -100,6 +102,7 @@
 // 返回策略id
 - (void)advanceOnAdReceivedWithReqId:(NSString *)reqId
 {
+    self.reqId = reqId;
     if ([_delegate respondsToSelector:@selector(advanceOnAdReceived:)]) {
         [_delegate advanceOnAdReceived:reqId];
     }
@@ -130,9 +133,9 @@
 
 // bidding结束
 - (void)advanceBaseAdapterBiddingEndWithWinSupplier:(AdvSupplier *_Nonnull)supplier {
-//    if (self.delegate && [self.delegate respondsToSelector:@selector(advanceBiddingEnd)]) {
-//        [self.delegate advanceBiddingEnd];
-//    }
+    if (self.delegate && [self.delegate respondsToSelector:@selector(advanceBiddingEndWithPrice:)]) {
+        [self.delegate advanceBiddingEndWithPrice:supplier.supplierPrice];
+    }
 }
 
 
@@ -170,7 +173,11 @@
         clsName = @"BdSplashAdapter";
     } else if ([supplier.identifier isEqualToString:SDK_ID_TANX]) {
         clsName = @"TanxSplashAdapter";
+    } else if ([supplier.identifier isEqualToString:SDK_ID_BIDDING]) {
+        clsName = @"AdvBiddingSplashAdapter";
     }
+    
+    
     
     ADV_LEVEL_INFO_LOG(@"%@ | %@", supplier.name, clsName);
     // 请求超时了
@@ -274,6 +281,40 @@
     _bgImgV.frame = [UIScreen mainScreen].bounds;
     _bgImgV.userInteractionEnabled = YES;
     return _bgImgV;
+}
+
+- (void)showAd {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundeclared-selector"
+    dispatch_async(dispatch_get_main_queue(), ^{
+       // UI更新代码
+        ((void (*)(id, SEL))objc_msgSend)((id)_adapter, @selector(showAd));
+
+    });
+
+
+#pragma clang diagnostic pop
+}
+
+- (void)uploadTimeOutError {
+    NSMutableDictionary *paramsM = [NSMutableDictionary dictionary];
+    
+    if (self.mediaId) {
+        [paramsM setObject:self.mediaId forKey:@"mediaid"];
+    }
+    if (self.adspotid) {
+        [paramsM setObject:self.adspotid forKey:@"adspotid"];
+    }
+    if (self.reqId) {
+        [paramsM setObject:self.reqId forKey:@"reqId"];
+    }
+    
+    [paramsM setObject:@"开屏广告超时,被强制关闭" forKey:@"msg"];
+    [paramsM setObject:@(1001) forKey:@"code"];
+
+    [AdvUploadTKUtil.new reportEventWithParams:paramsM];
+    
+
 }
 
 - (void)dealloc {

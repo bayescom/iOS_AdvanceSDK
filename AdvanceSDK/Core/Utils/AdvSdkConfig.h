@@ -26,12 +26,14 @@ extern NSString *const AdvanceSdkVersion;
 extern NSString *const AdvanceSdkRequestUrl;
 extern NSString *const AdvanceReportDataUrl;
 extern NSString *const AdvanceSdkRequestMockUrl;
+extern NSString *const AdvanceSdkEventUrl;
 extern NSString *const SDK_ID_MERCURY;
 extern NSString *const SDK_ID_GDT;
 extern NSString *const SDK_ID_CSJ;
 extern NSString *const SDK_ID_BAIDU;
 extern NSString *const SDK_ID_KS;
 extern NSString *const SDK_ID_TANX;
+extern NSString *const SDK_ID_BIDDING;
 
 //extern NSString *const AdvSdkConfigCAID;
 //extern NSString *const AdvSdkConfigCAIDPublicKey;

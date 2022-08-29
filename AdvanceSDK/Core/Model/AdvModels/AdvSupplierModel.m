@@ -88,9 +88,15 @@ NSString *const DEFAULT_LOADEDTK = @"http://cruiser.bayescom.cn/loaded?action=lo
         @"priorityMap": @"priority_map",
         @"parallelIDS": @"parallel_ids",
         @"parallelGroup": @"parallel_group",
+        @"headBiddingGroup": @"head_bidding_group",
     };
 }
 @end
+
+@implementation AdvBiddingModel
+
+@end
+
 
 
 @implementation AdvSupplier

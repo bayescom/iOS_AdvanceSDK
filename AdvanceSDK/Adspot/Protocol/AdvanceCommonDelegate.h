@@ -32,7 +32,7 @@
 //- (void)advanceBiddingAction;
 //
 //// bidding结束
-//- (void)advanceBiddingEnd;
+- (void)advanceBiddingEndWithPrice:(NSInteger)price;
 
 
 

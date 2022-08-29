@@ -48,13 +48,15 @@ NS_ASSUME_NONNULL_BEGIN
 /// 加载策略
 - (void)loadAd;
 
+
+/// 加载策略
+- (void)loadAdWithSupplierModel:(AdvSupplierModel *)model;
+
 /**
  * 加载下个渠道
  */
 - (void)loadNextSupplierIfHas;
 
-/// 上报 (已经被废弃)
-//- (void)reportWithType:(AdvanceSdkSupplierRepoType)repoType;
 
 /// 上报
 - (void)reportWithType:(AdvanceSdkSupplierRepoType)repoType supplier:(AdvSupplier *)supplier error:(NSError *)error;

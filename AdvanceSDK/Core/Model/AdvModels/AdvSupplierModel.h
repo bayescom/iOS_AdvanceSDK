@@ -11,6 +11,7 @@
 @class AdvSetting;
 @class AdvSupplier;
 @class AdvPriorityMap;
+@class AdvBiddingModel;
 typedef NS_ENUM(NSUInteger, AdvanceSdkSupplierRepoType) {
     /// 发起加载请求上报
     AdvanceSdkSupplierRepoLoaded,
@@ -45,6 +46,14 @@ typedef NS_ENUM(NSUInteger, AdvanceSdkSupplierState) {
 
 };
 
+typedef NS_ENUM(NSUInteger, AdvanceSdkSupplierBiddingType) {
+    /// 瀑布流式广告
+    AdvanceSdkSupplierTypeWaterfall,
+    /// headBidding类型广告
+    AdvanceSdkSupplierTypeHeadBidding,
+};
+
+
 NS_ASSUME_NONNULL_BEGIN
 
 NSString * ADVStringFromNAdvanceSdkSupplierRepoType(AdvanceSdkSupplierRepoType type);
@@ -53,7 +62,7 @@ NSString * ADVStringFromNAdvanceSdkSupplierRepoType(AdvanceSdkSupplierRepoType t
 
 @interface AdvSupplierModel : NSObject
 @property (nonatomic, strong) AdvSetting *setting;
-@property (nonatomic, copy)   NSArray<AdvSupplier *> *suppliers;
+@property (nonatomic, strong)   NSMutableArray<AdvSupplier *> *suppliers;
 @property (nonatomic, copy)   NSString *msg;
 @property (nonatomic, assign) NSInteger code;
 @property (nonatomic, copy)   NSString *reqid;
@@ -82,13 +91,25 @@ NSString * ADVStringFromNAdvanceSdkSupplierRepoType(AdvanceSdkSupplierRepoType t
 @property (nonatomic, assign) BOOL isBidding; // 策略告知是本次是否有bidding渠道, 这个字段决定了parallelGroup 拿到第一组优先级后 是否走bidding逻辑
 @property (nonatomic, copy)   NSArray<NSString *> *parallelIDS;
 @property (nonatomic, strong) NSMutableArray<NSMutableArray<NSNumber *> *> *parallelGroup;
+@property (nonatomic, strong) NSMutableArray<NSNumber *> *headBiddingGroup;
 @property (nonatomic, assign) NSTimeInterval cacheTime;
 
 
 @property (nonatomic , assign) NSInteger bidding_type;
 @property (nonatomic , assign) NSInteger parallel_timeout;
+@property (nonatomic , strong) AdvBiddingModel *gromore_params;
+
 
 @end
+
+@interface AdvBiddingModel : NSObject
+@property (nonatomic, assign) NSInteger timeout;
+@property (nonatomic, copy)   NSString *appid;
+@property (nonatomic, copy)   NSString *adspotid;
+
+@end
+
+
 
 @interface AdvSupplier : NSObject
 @property (nonatomic, copy)   NSString *identifier;
@@ -113,7 +134,7 @@ NSString * ADVStringFromNAdvanceSdkSupplierRepoType(AdvanceSdkSupplierRepoType t
 @property (nonatomic, copy)   NSArray<NSString *> *imptk;
 @property (nonatomic, copy)   NSArray<NSString *> *succeedtk;
 @property (nonatomic, copy)   NSArray<NSString *> *failedtk;
-@property (nonatomic, assign) BOOL isSupportBidding;
+@property (nonatomic, assign) AdvanceSdkSupplierBiddingType positionType;
 
 
 /// 构建打底渠道
@@ -123,5 +144,6 @@ NSString * ADVStringFromNAdvanceSdkSupplierRepoType(AdvanceSdkSupplierRepoType t
 //                              sdkId:(nonnull NSString *)sdkid;
 
 @end
+
 
 NS_ASSUME_NONNULL_END

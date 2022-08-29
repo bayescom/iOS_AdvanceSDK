@@ -54,11 +54,13 @@
         // 设置 backgroundImage
         _gdt_ad.backgroundImage = _adspot.backgroundImage;
         _gdt_ad.delegate = self;
-        if (self.adspot.timeout) {
-            if (self.adspot.timeout > 500) {
-                _gdt_ad.fetchDelay = _adspot.timeout / 1000.0;
-            }
+        
+        NSInteger parallel_timeout = _supplier.timeout;
+        if (parallel_timeout == 0) {
+            parallel_timeout = 3000;
         }
+        _gdt_ad.fetchDelay = parallel_timeout / 1000.0;
+
         _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
         [_gdt_ad loadAd];
     });
@@ -73,7 +75,7 @@
     if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
         [self.delegate advanceUnifiedViewDidLoad];
     }
-    [self showAd];
+//    [self showAd];
     
 }
 
@@ -135,7 +137,7 @@
         [self.delegate advanceUnifiedViewDidLoad];
     }
 
-    [self showAd];
+//    [self showAd];
 }
 
 - (void)splashAdExposured:(GDTSplashAd *)splashAd {

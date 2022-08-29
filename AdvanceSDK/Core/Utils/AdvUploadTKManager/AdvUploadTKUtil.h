@@ -22,6 +22,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSMutableArray *)failedtkUrlWithArr:(NSArray<NSString *> *)uploadArr error:(NSError *)error;
 
 - (void)reportWithUploadArr:(NSArray<NSString *> *)uploadArr error:(NSError *)error;
+
+- (void)reportEventWithParams:(NSDictionary *)params;
 @end
 
 NS_ASSUME_NONNULL_END

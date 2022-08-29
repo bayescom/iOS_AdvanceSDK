@@ -68,6 +68,10 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)loadDataWithMediaId:(NSString *)mediaId
                    adspotId:(NSString *)adspotId
                   customExt:(NSDictionary *_Nonnull)ext;
+
+/// 加载策略
+- (void)loadDataWithSupplierModel:(AdvSupplierModel *)model;
+
 /**
  * 加载下个渠道
  * 回调 advSupplierLoadSuppluer: error:
@@ -78,7 +82,8 @@ NS_ASSUME_NONNULL_BEGIN
  * 加载下一层bidding
  * 回调 advSupplierLoadSuppluer: error:
  */
-- (void)loadNextBiddingSupplierIfHas;
+- (void)loadNextWaterfallSupplierIfHas;
+
 /// 数据上报
 /// @param repoType 上报的类型
 - (void)reportWithType:(AdvanceSdkSupplierRepoType)repoType supplier:(AdvSupplier *)supplier error:(NSError *)error;
@@ -88,7 +93,13 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)cacelDataTask;
 
 /// 进入bidding队列
-- (void)inBiddingQueueWithSupplier:(AdvSupplier *)supplier;
+- (void)inWaterfallQueueWithSupplier:(AdvSupplier *)supplier;
+
+// 进入HeadBidding队列
+- (void)inHeadBiddingQueueWithSupplier:(AdvSupplier *)supplier;
+
+// 接收失败的并发渠道
+- (void)inParallelWithErrorSupplier:(AdvSupplier *)errorSupplier;
 
 @end
 

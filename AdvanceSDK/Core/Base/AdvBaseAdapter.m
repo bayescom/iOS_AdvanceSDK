@@ -13,6 +13,12 @@
 #import <objc/runtime.h>
 #import <objc/message.h>
 
+//# if __has_include(<ABUAdSDK/ABUAdSDK.h>)
+//#import <ABUAdSDK/ABUAdSDK.h>
+//#else
+//#import <Ads-Mediation-CN/ABUAdSDK.h>
+//#endif
+
 @interface AdvBaseAdapter ()  <AdvSupplierManagerDelegate, AdvanceSupplierDelegate>
 @property (nonatomic, strong) AdvSupplierManager *mgr;
 
@@ -46,6 +52,11 @@
     [self.mgr loadDataWithMediaId:_mediaId adspotId:_adspotid customExt:_ext];
 }
 
+/// 加载策略
+- (void)loadAdWithSupplierModel:(AdvSupplierModel *)model {
+    [self.mgr loadDataWithSupplierModel:model];
+}
+
 - (void)loadNextSupplierIfHas {
     [_mgr loadNextSupplierIfHas];
 }
@@ -56,16 +67,24 @@
     
     // 搜集各渠道的错误信息
     if (error) {
-//        NSLog(@"-->   %@", error);
         [self collectErrorWithSupplier:supplier error:error];
     }
 
     
     // 如果是bidding渠道,且上报类型是bidding, 那么就加入bidding队列 (bidding的渠道一定是并发的, isParallel一定为yes)
     // 注意: 每个渠道返回价格的时机不一样 广点通 didload就可以返回, 详见 AdvSupplier.supplierPrice 的说明
-    if (repoType == AdvanceSdkSupplierRepoBidding && supplier.isSupportBidding) {
-        [_mgr inBiddingQueueWithSupplier:supplier];
+    
+    // 瀑布流的广告位 进入瀑布流的队列
+    if (repoType == AdvanceSdkSupplierRepoBidding && supplier.positionType == AdvanceSdkSupplierTypeWaterfall) {
+        [_mgr inWaterfallQueueWithSupplier:supplier];
     }
+    
+    // headBidding 广告位进入headBidding队列
+    if (repoType == AdvanceSdkSupplierRepoBidding && supplier.positionType == AdvanceSdkSupplierTypeHeadBidding) {
+//        NSLog(@"|||111--- %@ %ld %@",supplier.sdktag, (long)supplier.priority, supplier);
+        [_mgr inHeadBiddingQueueWithSupplier:supplier];
+    }
+
     
     
     // 失败了 并且不是并行才会走下一个渠道
@@ -75,20 +94,20 @@
 //        NSLog(@"%@ |||   %ld %@",supplier.sdktag, (long)supplier.priority, supplier);
         
         // 如果渠道非并发 且不支持bidding 且失败了, 则为原来的业务渠道, 走原来的业务逻辑
-        if (supplier.isSupportBidding == NO) {
+        if (supplier.positionType == AdvanceSdkSupplierTypeWaterfall) {
             // 执行下一个渠道
             
             [_mgr loadNextSupplierIfHas];
         } else {
-            // 如果走到了这里, 则意味着 最后胜出的渠道,展示失败  现阶段只抛异常,  下阶段,要在这里执行gromore的逻辑
-//            if ([_baseDelegate respondsToSelector:@selector(advanceBaseAdapterLoadError:)]) {
-//                [_baseDelegate advanceBaseAdapterLoadError:error];
-//            }
-            // 加载下一组bidding
-            [_mgr loadNextBiddingSupplierIfHas];
+            // 如果走到了这里, 则意味着 最后胜出的渠道, 加载下一组bidding
+            [_mgr loadNextWaterfallSupplierIfHas];
         }
     }
 
+    // 如果并发渠道失败了 要通知mananger那边 _inwaterfallcount -1
+    if (repoType == AdvanceSdkSupplierRepoFaileded && supplier.isParallel) {
+        [_mgr inParallelWithErrorSupplier:supplier];
+    }
 }
 
 // 开始bidding
@@ -161,6 +180,8 @@
         clsName = @"BaiduMobAdSetting";
     } else if ([supplier.identifier isEqualToString:SDK_ID_TANX]){
         clsName = @"TXAdSDKInitializtion";
+    } else if ([supplier.identifier isEqualToString:SDK_ID_BIDDING]){
+        clsName = @"ABUAdSDKManager";
     }
     
     
@@ -206,6 +227,17 @@
             [NSClassFromString(clsName) performSelector:@selector(setupSDKWithAppID:andAppKey:) withObject:supplier.mediaid withObject:supplier.mediakey];
 
         });
+    } else if ([supplier.identifier isEqualToString:SDK_ID_BIDDING]){
+        // bidding 此之前已经对 biddingConfig进行了初始化 并赋值了
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+            [NSClassFromString(clsName) performSelector:@selector(setupSDKWithAppId:config:) withObject:supplier.mediaid withObject:nil];
+//            [ABUAdSDKManager setupSDKWithAppId:supplier.mediaid config:^ABUUserConfig *(ABUUserConfig *c) {
+//                c.logEnable = YES;
+//                return c;
+//            }];
+        });
+
     } else {
         
     }

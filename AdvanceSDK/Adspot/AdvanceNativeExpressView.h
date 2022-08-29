@@ -17,6 +17,9 @@ NS_ASSUME_NONNULL_BEGIN
 // 渠道标识
 @property (nonatomic, copy) NSString *identifier;
 
+// 该信息流广告的价格;
+@property (nonatomic, assign) NSInteger price;
+
 - (void)render;
 
 @end

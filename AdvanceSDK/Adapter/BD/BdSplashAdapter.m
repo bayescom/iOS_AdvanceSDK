@@ -59,11 +59,12 @@
             return;
         }
         _bd_ad.delegate = self;
-        if (self.adspot.timeout) {
-            if (self.adspot.timeout > 500) {
-                _bd_ad.timeout = _adspot.timeout / 1000.0;
-            }
+        NSInteger parallel_timeout = _supplier.timeout;
+        if (parallel_timeout == 0) {
+            parallel_timeout = 3000;
         }
+
+        _bd_ad.timeout = parallel_timeout / 1000.0;
         
         _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
         
@@ -96,7 +97,7 @@
     if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
         [self.delegate advanceUnifiedViewDidLoad];
     }
-    [self showAd];
+//    [self showAd];
 
     
 }
@@ -213,6 +214,7 @@
 - (void)splashAdLoadSuccess:(BaiduMobAdSplash *)splash {
 //    NSLog(@"百度开屏拉取成功 %@",self.bd_ad);
     _supplier.supplierPrice = [[splash getECPMLevel] integerValue];
+//    _supplier.supplierPrice = 10000;
     [self.adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
     if (_supplier.isParallel == YES) {
@@ -224,7 +226,7 @@
         [self.delegate advanceUnifiedViewDidLoad];
     }
 
-    [self showAd];
+//    [self showAd];
 }
 
 - (void)splashAdLoadFailCode:(NSString *)errCode

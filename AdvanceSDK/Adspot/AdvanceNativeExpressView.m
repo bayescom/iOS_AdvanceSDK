@@ -42,6 +42,8 @@
         [self.expressView performSelector:@selector(render)];
     } else if ([self.expressView isKindOfClass:NSClassFromString(@"BaiduMobAdSmartFeedView")]) {// 百度
         [self.expressView performSelector:@selector(render)];
+    } else if ([self.expressView isKindOfClass:NSClassFromString(@"ABUNativeAdView")]) {// bidding
+        [self.expressView performSelector:@selector(render)];
     } else { // 快手 或 tanx
         
     }

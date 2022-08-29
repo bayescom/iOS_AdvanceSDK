@@ -15,16 +15,18 @@
 
 @implementation AdvSdkConfig
 NSString *const AdvanceSdkAPIVersion = @"3.0";
-NSString *const AdvanceSdkVersion = @"4.0.0.1";
+NSString *const AdvanceSdkVersion = @"4.0.0.2";
 NSString *const AdvanceSdkRequestUrl = @"http://cruiser.bayescom.cn/eleven";
 NSString *const AdvanceReportDataUrl = @"http://cruiser.bayescom.cn/native";
 NSString *const AdvanceSdkRequestMockUrl = @"https://mock.yonyoucloud.com/mock/2650/api/v3/eleven";
+NSString *const AdvanceSdkEventUrl = @"https://cruiser.bayescom.cn/sdkevent";
 NSString *const SDK_ID_MERCURY =@"1";
 NSString *const SDK_ID_GDT=@"2";
 NSString *const SDK_ID_CSJ=@"3";
 NSString *const SDK_ID_KS =@"5";
 NSString *const SDK_ID_BAIDU=@"4";
 NSString *const SDK_ID_TANX=@"7";
+NSString *const SDK_ID_BIDDING=@"8";
 
 //NSString * const AdvSdkConfigCAID = @"kMercuryConfigCAIDKey";
 //NSString * const AdvSdkConfigCAIDPublicKey = @"kMercuryConfigCAIDPublicKey-Key";

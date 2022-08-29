@@ -95,6 +95,7 @@
             AdvanceNativeExpressView *TT = [[AdvanceNativeExpressView alloc] initWithViewController:_adspot.viewController];
             TT.expressView = ad.feedView;
             TT.identifier = _supplier.identifier;
+            TT.price = ad.ecpm;
             [temp addObject:TT];
 
         }

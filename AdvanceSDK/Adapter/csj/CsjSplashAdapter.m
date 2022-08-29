@@ -22,6 +22,7 @@
 @property (nonatomic, strong) BUSplashAdView *csj_ad;
 @property (nonatomic, weak) AdvanceSplash *adspot;
 @property (nonatomic, strong) AdvSupplier *supplier;
+@property (nonatomic, assign) BOOL isCanch;
 
 @end
 
@@ -51,11 +52,11 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         __strong typeof(_self) self = _self;
         
-        if (self.adspot.timeout) {
-            if (self.adspot.timeout > 500) {
-                _csj_ad.tolerateTimeout = _adspot.timeout / 1000.0;
-            }
+        NSInteger parallel_timeout = _supplier.timeout;
+        if (parallel_timeout == 0) {
+            parallel_timeout = 3000;
         }
+        _csj_ad.tolerateTimeout = parallel_timeout / 1000.0;
         
         _csj_ad.delegate = self;
         _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
@@ -69,10 +70,14 @@
 
 - (void)supplierStateSuccess {
     ADV_LEVEL_INFO_LOG(@"穿山甲 成功");
+    if (_isCanch) {
+        return;
+    }
+    _isCanch = YES;
     if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
         [self.delegate advanceUnifiedViewDidLoad];
     }
-    [self showAd];
+//    [self showAd];
     
 }
 
@@ -131,6 +136,10 @@
  This method is called when splash ad material loaded successfully.
  */
 - (void)splashAdDidLoad:(BUSplashAdView *)splashAd {
+    if (_isCanch) {
+        return;
+    }
+    _isCanch = YES;
     [self.adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
 //    NSLog(@"穿山甲开屏拉取成功");
@@ -142,7 +151,7 @@
         [self.delegate advanceUnifiedViewDidLoad];
     }
     
-    [self showAd];
+//    [self showAd];
 }
 
 /**
@@ -159,19 +168,12 @@
     } else { //
         [self deallocAdapter];
     }
-
-//    if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdFailedWithSdkId:error:)]) {
-//        [self.delegate advanceSplashOnAdFailedWithSdkId:_adspot.adspotid error:error];
-//    }
 }
 
 /**
  This method is called when splash ad slot will be showing.
  */
 - (void)splashAdWillVisible:(BUSplashAdView *)splashAd {
-//    if (_supplier.isParallel) { // 如果是并行 先不要释放, 需要等到串行执行到这个渠道的时候才可以释放
-//        [self deallocAdapter];
-//    }
 
     [self.adspot reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(advanceExposured)] && self.csj_ad) {
@@ -205,20 +207,20 @@
  This method is called when spalashAd skip button  is clicked.
  */
 - (void)splashAdDidClickSkip:(BUSplashAdView *)splashAd {
-    [self deallocAdapter];
     if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdSkipClicked)]) {
         [self.delegate advanceSplashOnAdSkipClicked];
     }
+    [self deallocAdapter];
 }
 
 /**
  This method is called when spalashAd countdown equals to zero
  */
 - (void)splashAdCountdownToZero:(BUSplashAdView *)splashAd {
-    [self deallocAdapter];
     if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdCountdownToZero)]) {
         [self.delegate advanceSplashOnAdCountdownToZero];
     }
+    [self deallocAdapter];
 }
 
 - (void)splashAdDidCloseOtherController:(BUSplashAdView *)splashAd interactionType:(BUInteractionType)interactionType {

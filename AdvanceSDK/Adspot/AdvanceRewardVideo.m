@@ -80,10 +80,9 @@
 
 // bidding结束
 - (void)advanceBaseAdapterBiddingEndWithWinSupplier:(AdvSupplier *_Nonnull)supplier {
-//    if (self.delegate && [self.delegate respondsToSelector:@selector(advanceBiddingEnd)]) {
-//        [self.delegate advanceBiddingEnd];
-//    }
-    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(advanceBiddingEndWithPrice:)]) {
+        [self.delegate advanceBiddingEndWithPrice:supplier.supplierPrice];
+    }
     
 }
 
@@ -121,8 +120,10 @@
         clsName = @"BdRewardVideoAdapter";
     } else if ([supplier.identifier isEqualToString:SDK_ID_TANX]) {
         clsName = @"TanxRewardVideoAdapter";
+    } else if ([supplier.identifier isEqualToString:SDK_ID_BIDDING]) {
+        clsName = @"AdvBiddingRewardVideoAdapter";
     }
-        
+    
     if (NSClassFromString(clsName)) {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wundeclared-selector"
@@ -130,7 +131,7 @@
             id adapter = ((id (*)(id, SEL, id, id))objc_msgSend)((id)[NSClassFromString(clsName) alloc], @selector(initWithSupplier:adspot:), supplier, self);
             // 标记当前的adapter 为了让当串行执行到的时候 获取这个adapter
             // 没有设置代理
-//            ADVLog(@"并行: %@", adapter);
+//            ADV_LEVEL_INFO_LOG(@"并行: %@", adapter);
             ((void (*)(id, SEL, NSInteger))objc_msgSend)((id)adapter, @selector(setTag:), supplier.priority);
             ((void (*)(id, SEL))objc_msgSend)((id)adapter, @selector(loadAd));
             if (adapter) {
@@ -143,7 +144,7 @@
             if (!_adapter) {
                 _adapter = ((id (*)(id, SEL, id, id))objc_msgSend)((id)[NSClassFromString(clsName) alloc], @selector(initWithSupplier:adspot:), supplier, self);
             }
-//            ADVLog(@"串行 %@ %ld %ld", _adapter, (long)[_adapter tag], supplier.priority);
+            ADV_LEVEL_INFO_LOG(@"串行 %@ %ld %ld", _adapter, (long)[_adapter tag], supplier.priority);
             // 设置代理
             ((void (*)(id, SEL, id))objc_msgSend)((id)_adapter, @selector(setDelegate:), _delegate);
             ((void (*)(id, SEL))objc_msgSend)((id)_adapter, @selector(loadAd));

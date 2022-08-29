@@ -24,6 +24,7 @@
     self.initDefSubviewsFlag = YES;
     self.adspotIdsArr = @[
         @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10002619"},
+        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10006483"},
 //        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10005519"},
         
     ];
@@ -41,7 +42,7 @@
     self.advanceSplash.showLogoRequire = YES;
     self.advanceSplash.logoImage = [UIImage imageNamed:@"app_logo"];
     self.advanceSplash.backgroundImage = [UIImage imageNamed:@"LaunchImage_img"];
-    self.advanceSplash.timeout = 20; // 如果使用bidding 功能 timeout时长必须要比 服务器下发的bidding等待时间要长 否则会严重影响变现效率
+    self.advanceSplash.timeout = 5; // 如果使用bidding 功能 timeout时长必须要比 服务器下发的bidding等待时间要长 否则会严重影响变现效率
     [self.advanceSplash loadAd];
     
 
@@ -51,6 +52,7 @@
 /// 广告数据拉取成功
 - (void)advanceUnifiedViewDidLoad {
     NSLog(@"广告数据拉取成功 %s", __func__);
+    [self.advanceSplash showAd];
 }
 
 /// 广告曝光成功
