@@ -362,7 +362,7 @@
     // 如果所有并发渠道都有结果返回了 则选择price高的渠道展示
 //    NSLog(@"%@", self.arrayWaterfall.count);
     NSLog(@"_incomeWaterfallCount = %ld  arrayWaterfall.count = %ld arrayHeadBidding.count = %ld", _incomeWaterfallCount, _arrayWaterfall.count, _arrayHeadBidding.count);
-    if (self.arrayWaterfall.count == _incomeWaterfallCount) {
+    if (self.arrayWaterfall.count + self.arrayHeadBidding.count == _incomeWaterfallCount) {
         [self _sortSuppliersByPrice:self.arrayWaterfall];
     }
 }
@@ -440,6 +440,7 @@
     NSLog(@"arrayHeadBidding = %@",self.arrayHeadBidding);
 
     // 价格由低到高排序
+//    NSLog(@"------1111111-> %@  %ld %ld", suppliers[0].sdktag, (long)obj11.supplierPrice, (long)obj11.priority);
     [suppliers sortWithOptions:NSSortStable usingComparator:^NSComparisonResult(id _Nonnull obj1, id _Nonnull obj2) {
         
         AdvSupplier *obj11 = obj1;
@@ -447,6 +448,9 @@
         
         NSInteger obj11_price = (obj11.supplierPrice > 0) ? obj11.supplierPrice : obj11.sdk_price;
         NSInteger obj22_price = (obj22.supplierPrice > 0) ? obj22.supplierPrice : obj22.sdk_price;
+        NSLog(@"------obj11_price-> %@  %ld %ld", obj11.sdktag, (long)obj11.supplierPrice, (long)obj11.priority);
+        NSLog(@"------obj22_price-> %@  %ld %ld", obj22.sdktag, (long)obj22.supplierPrice, (long)obj22.priority);
+
         obj11.supplierPrice = obj11_price;
         obj22.supplierPrice = obj22_price;
         if (obj11_price > obj22_price) {
@@ -481,7 +485,7 @@
     if (self.delegate && [self.delegate respondsToSelector:@selector(advManagerBiddingEndWithWinSupplier:)]) {
         [self.delegate advManagerBiddingEndWithWinSupplier:currentSupplier];
     }
-//    NSLog(@"%s %@",__func__, currentSupplier.sdktag);
+    NSLog(@"%s %@ %ld",__func__, currentSupplier.sdktag, currentSupplier.sdk_price);
     [self notCPTLoadNextSuppluer:currentSupplier error:nil];
     // 执行的都从 arrayWaterfall里面删除
     [self.arrayWaterfall removeObject:currentSupplier];

@@ -34,6 +34,9 @@
     if (self = [super initWithSupplier:supplier adspot:adspot]) {
         _adspot = adspot;
         _supplier = supplier;
+        _mercury_ad = [[MercurySplashAd alloc] initAdWithAdspotId:_supplier.adspotid delegate:self];
+        _mercury_ad.placeholderImage = _adspot.backgroundImage;
+        _mercury_ad.logoImage = _adspot.logoImage;
     }
     return self;
 }
@@ -46,9 +49,6 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         __strong typeof(_self) self = _self;
         
-        _mercury_ad = [[MercurySplashAd alloc] initAdWithAdspotId:_supplier.adspotid delegate:self];
-        _mercury_ad.placeholderImage = _adspot.backgroundImage;
-        _mercury_ad.logoImage = _adspot.logoImage;
         if (_adspot.showLogoRequire) {
             _mercury_ad.showType = MercurySplashAdShowCutBottom;
         }
@@ -143,7 +143,7 @@
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
 
     if (_supplier.isParallel == YES) {
-//        NSLog(@"修改状态: %@", _supplier);
+        NSLog(@"修改状态: %@", _supplier);
         _supplier.state = AdvanceSdkSupplierStateSuccess;
         return;
     }
@@ -166,7 +166,7 @@
 - (void)mercury_splashAdFailError:(nullable NSError *)error {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
     _supplier.state = AdvanceSdkSupplierStateFailed;
-//    NSLog(@"========>>>>>>>> %ld %@", (long)_supplier.priority, error);
+    NSLog(@"========>>>>>>>> %ld %@", (long)_supplier.priority, error);
     if (_supplier.isParallel == YES) { // 并行不释放 只上报
         
         return;
