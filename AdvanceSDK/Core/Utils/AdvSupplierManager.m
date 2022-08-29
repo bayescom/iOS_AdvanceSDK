@@ -272,7 +272,7 @@
     }
     // 参与bidding的渠道数
 
-    NSLog(@"_incomeWaterfallCount = %ld", _incomeWaterfallCount);
+//    NSLog(@"_incomeWaterfallCount = %ld", _incomeWaterfallCount);
     if (_incomeWaterfallCount == 0) {// 没有参加bidding的渠道即没有并发, 那么就按照旧的业务去执行
         if (self.model.setting.parallelGroup.count == 0) { // 如果并发组里元素个数为0 那么就开始执行剩下非并发的渠道了
             [self loadNextSupplier];
@@ -311,7 +311,7 @@
             __strong typeof(_self) self = _self;
             supplier.isParallel = YES;// 并发执行这些渠道
 //            supplier.positionType = AdvanceSdkSupplierTypeWaterfall;
-            NSLog(@"-->%s tag %@ %@ %d", __func__,supplier, supplier.sdktag, supplier.isParallel);
+//            NSLog(@"-->%s tag %@ %@ %d", __func__,supplier, supplier.sdktag, supplier.isParallel);
             [self notCPTLoadNextSuppluer:supplier error:nil];
         }];
         
@@ -350,18 +350,18 @@
     // 返回广告的渠道价格比 _waterfallMinPrice 低 就做替换
     // 目的是 在waterfall 每层结束的时候 就要知道这层的最低价格
     NSInteger price = (supplier.supplierPrice > 0) ? supplier.supplierPrice : supplier.sdk_price;
-    NSLog(@"===> %ld %ld", price, _waterfallMinPrice);
+//    NSLog(@"===> %ld %ld", price, _waterfallMinPrice);
     // 0是初始值
     // 当_waterfallMinPrice 为初始值或者 price 更小时 才对_waterfallMinPrice赋值
     if (price < _waterfallMinPrice || _waterfallMinPrice == 0) {
         _waterfallMinPrice = price;
     }
-    NSLog(@"===> %ld %ld", price, _waterfallMinPrice);
+//    NSLog(@"===> %ld %ld", price, _waterfallMinPrice);
     [self.arrayWaterfall addObject:supplier];
     
     // 如果所有并发渠道都有结果返回了 则选择price高的渠道展示
 //    NSLog(@"%@", self.arrayWaterfall.count);
-    NSLog(@"_incomeWaterfallCount = %ld  arrayWaterfall.count = %ld arrayHeadBidding.count = %ld", _incomeWaterfallCount, _arrayWaterfall.count, _arrayHeadBidding.count);
+//    NSLog(@"_incomeWaterfallCount = %ld  arrayWaterfall.count = %ld arrayHeadBidding.count = %ld", _incomeWaterfallCount, _arrayWaterfall.count, _arrayHeadBidding.count);
     if (self.arrayWaterfall.count + self.arrayHeadBidding.count == _incomeWaterfallCount) {
         [self _sortSuppliersByPrice:self.arrayWaterfall];
     }
@@ -374,7 +374,7 @@
     }
     [self.arrayHeadBidding addObject:supplier];
     
-    NSLog(@"===2=> %ld  %ld %ld", (long)_incomeWaterfallCount, self.arrayWaterfall.count, self.arrayHeadBidding.count);
+//    NSLog(@"===2=> %ld  %ld %ld", (long)_incomeWaterfallCount, self.arrayWaterfall.count, self.arrayHeadBidding.count);
     if (self.arrayWaterfall.count + self.arrayHeadBidding.count == _incomeWaterfallCount) {
         [self _sortSuppliersByPrice:self.arrayWaterfall];
     }
@@ -387,11 +387,11 @@
         return;
     }
     
-    NSLog(@"====> %ld", (long)_incomeWaterfallCount);
+//    NSLog(@"====> %ld", (long)_incomeWaterfallCount);
     if (_incomeWaterfallCount > 0) {
         _incomeWaterfallCount = _incomeWaterfallCount - 1;
         // 每层总
-        NSLog(@"===1=> %ld  %ld %ld", (long)_incomeWaterfallCount, self.arrayWaterfall.count, self.arrayHeadBidding.count);
+//        NSLog(@"===1=> %ld  %ld %ld", (long)_incomeWaterfallCount, self.arrayWaterfall.count, self.arrayHeadBidding.count);
         if (self.arrayWaterfall.count + self.arrayHeadBidding.count == _incomeWaterfallCount) {
             [self _sortSuppliersByPrice:self.arrayWaterfall];
         }
@@ -425,19 +425,20 @@
     // 3: 加入到suppliers的广告位 positionType 需切换到AdvanceSdkSupplierTypeWaterfall
     NSMutableArray *tempBidding = [self.arrayHeadBidding mutableCopy];
     
-    NSLog(@"suppliers = %@",suppliers);
-    NSLog(@"arrayHeadBidding = %@",self.arrayHeadBidding);
+//    NSLog(@"suppliers = %@",suppliers);
+//    NSLog(@"arrayHeadBidding = %@",self.arrayHeadBidding);
 
     [tempBidding enumerateObjectsUsingBlock:^(AdvSupplier * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        NSLog(@"%ld  %ld", obj.supplierPrice, _waterfallMinPrice);
-        if (obj.supplierPrice > _waterfallMinPrice) {
+//        NSLog(@"%ld  %ld", obj.supplierPrice, _waterfallMinPrice);
+        NSInteger obj_price = (obj.supplierPrice > 0) ? obj.supplierPrice : obj.sdk_price;
+        if (obj_price > _waterfallMinPrice) {
             [suppliers addObject:obj];
             [self.arrayHeadBidding removeObject:obj];
         }
     }];
     
-    NSLog(@"suppliers = %@",suppliers);
-    NSLog(@"arrayHeadBidding = %@",self.arrayHeadBidding);
+//    NSLog(@"suppliers = %@",suppliers);
+//    NSLog(@"arrayHeadBidding = %@",self.arrayHeadBidding);
 
     // 价格由低到高排序
 //    NSLog(@"------1111111-> %@  %ld %ld", suppliers[0].sdktag, (long)obj11.supplierPrice, (long)obj11.priority);
@@ -448,8 +449,8 @@
         
         NSInteger obj11_price = (obj11.supplierPrice > 0) ? obj11.supplierPrice : obj11.sdk_price;
         NSInteger obj22_price = (obj22.supplierPrice > 0) ? obj22.supplierPrice : obj22.sdk_price;
-        NSLog(@"------obj11_price-> %@  %ld %ld", obj11.sdktag, (long)obj11.supplierPrice, (long)obj11.priority);
-        NSLog(@"------obj22_price-> %@  %ld %ld", obj22.sdktag, (long)obj22.supplierPrice, (long)obj22.priority);
+//        NSLog(@"------obj11_price-> %@  %ld %ld", obj11.sdktag, (long)obj11.supplierPrice, (long)obj11.priority);
+//        NSLog(@"------obj22_price-> %@  %ld %ld", obj22.sdktag, (long)obj22.supplierPrice, (long)obj22.priority);
 
         obj11.supplierPrice = obj11_price;
         obj22.supplierPrice = obj22_price;
@@ -468,13 +469,13 @@
         }
     }];
     
-    for (AdvSupplier *temp in suppliers) {
-        NSLog(@"------1-> %@  %ld %ld", temp.sdktag, (long)temp.supplierPrice, (long)temp.priority);
-    }
-    
-    for (AdvSupplier *temp in self.arrayHeadBidding) {
-        NSLog(@"------2-> %@  %ld %ld", temp.sdktag, (long)temp.supplierPrice, (long)temp.priority);
-    }
+//    for (AdvSupplier *temp in suppliers) {
+//        NSLog(@"------1-> %@ %ld %ld %ld", temp.sdktag, (long)temp.sdk_price, (long)temp.supplierPrice, (long)temp.priority);
+//    }
+//
+//    for (AdvSupplier *temp in self.arrayHeadBidding) {
+//        NSLog(@"------2-> %@ %ld %ld %ld", temp.sdktag, (long)temp.sdk_price, (long)temp.supplierPrice, (long)temp.priority);
+//    }
 
 
     // 取价格最高的渠道执行
@@ -485,7 +486,7 @@
     if (self.delegate && [self.delegate respondsToSelector:@selector(advManagerBiddingEndWithWinSupplier:)]) {
         [self.delegate advManagerBiddingEndWithWinSupplier:currentSupplier];
     }
-    NSLog(@"%s %@ %ld",__func__, currentSupplier.sdktag, currentSupplier.sdk_price);
+//    NSLog(@"%s %@ %ld",__func__, currentSupplier.sdktag, currentSupplier.sdk_price);
     [self notCPTLoadNextSuppluer:currentSupplier error:nil];
     // 执行的都从 arrayWaterfall里面删除
     [self.arrayWaterfall removeObject:currentSupplier];
@@ -644,8 +645,8 @@
     ADV_LEVEL_INFO_LOG(@"请求参数 %@   uuid:%@", deviceInfo, [AdvDeviceInfoUtil getAuctionId]);
     NSError *parseError = nil;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:deviceInfo options:NSJSONWritingPrettyPrinted error:&parseError];
-//    NSURL *url = [NSURL URLWithString:AdvanceSdkRequestUrl];
-    NSURL *url = [NSURL URLWithString:AdvanceSdkRequestMockUrl];
+    NSURL *url = [NSURL URLWithString:AdvanceSdkRequestUrl];
+//    NSURL *url = [NSURL URLWithString:AdvanceSdkRequestMockUrl];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:self.fetchTime];
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     request.HTTPBody = jsonData;
@@ -715,7 +716,7 @@
     
     NSError *parseErr = nil;
     AdvSupplierModel *a_model = [AdvSupplierModel adv_modelWithJSON:data];
-    NSLog(@"[JSON]%@", [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil]);
+//    NSLog(@"[JSON]%@", [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil]);
     if (parseErr || !a_model) {
         // parse error
         if (!saveOnly && [_delegate respondsToSelector:@selector(advSupplierManagerLoadError:)]) {

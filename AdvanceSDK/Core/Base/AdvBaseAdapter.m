@@ -81,6 +81,7 @@
     
     // headBidding 广告位进入headBidding队列
     if (repoType == AdvanceSdkSupplierRepoBidding && supplier.positionType == AdvanceSdkSupplierTypeHeadBidding) {
+//        NSLog(@"|||111--- %@ %ld %@",supplier.sdktag, (long)supplier.priority, supplier);
         [_mgr inHeadBiddingQueueWithSupplier:supplier];
     }
 
