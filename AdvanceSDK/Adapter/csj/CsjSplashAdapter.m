@@ -144,6 +144,7 @@
         return;
     }
     _isCanch = YES;
+    _supplier.supplierPrice = 0;
     [self.adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
 //    NSLog(@"穿山甲开屏拉取成功");
