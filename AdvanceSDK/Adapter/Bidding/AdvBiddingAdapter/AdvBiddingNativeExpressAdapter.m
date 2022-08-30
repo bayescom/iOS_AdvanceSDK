@@ -175,7 +175,7 @@
     ADV_LEVEL_INFO_LOG(@"platform:%@", info.adnName);
     ADV_LEVEL_INFO_LOG(@"ritID:%@", info.slotID);
     ADV_LEVEL_INFO_LOG(@"requestID:%@", info.requestID ?: @"None");
-    
+    _supplier.supplierPrice = (info.ecpm) ? info.ecpm.integerValue : 0;
     [_adspot reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
     AdvanceNativeExpressView *expressView = [self returnExpressViewWithAdView:(UIView *)nativeAdView];
     if (expressView) {

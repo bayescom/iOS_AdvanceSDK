@@ -98,6 +98,7 @@ NSString * ADVStringFromNAdvanceSdkSupplierRepoType(AdvanceSdkSupplierRepoType t
 @property (nonatomic , assign) NSInteger bidding_type;
 @property (nonatomic , assign) NSInteger parallel_timeout;
 @property (nonatomic , strong) AdvBiddingModel *gromore_params;
+@property (nonatomic , copy)   NSArray<NSString *> *gmtk;
 
 
 @end
