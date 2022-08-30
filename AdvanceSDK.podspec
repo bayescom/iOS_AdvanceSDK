@@ -115,18 +115,18 @@ Pod::Spec.new do |s|
     #
     #
     #    end
-#    s.subspec 'Bidding' do |bidding|
-#        bidding.dependency 'AdvanceSDK/Core'
-#        bidding.dependency 'AdvanceSDK/Adspot'
+    s.subspec 'Bidding' do |bidding|
+        bidding.dependency 'AdvanceSDK/Core'
+        bidding.dependency 'AdvanceSDK/Adspot'
 #        bidding.dependency 'AdvBiddingSDK'
-#        bidding.dependency 'AdvBiddingSuppliers'
+        bidding.dependency 'AdvBiddingSuppliers'
 
-#        bidding.dependency 'Ads-CN'
-#        bidding.source_files =  ['AdvanceSDK/Adapter/Bidding/*{h,m}',
-#        'AdvanceSDK/Adapter/Bidding/AdvBiddingAdapter/*{h,m}',
-#        'AdvanceSDK/Adapter/Bidding/AdvBiddingCustomAdapter/*{h,m}'
-#        ]
-#
+        bidding.dependency 'Ads-CN'
+        bidding.source_files =  ['AdvanceSDK/Adapter/Bidding/*{h,m}',
+        'AdvanceSDK/Adapter/Bidding/AdvBiddingAdapter/*{h,m}',
+        'AdvanceSDK/Adapter/Bidding/AdvBiddingCustomAdapter/*{h,m}'
+        ]
+
 #        # UnityAds
 #        bidding.dependency 'UnityAds', '4.2.1'
 #        # Admob/GoogleAd
@@ -141,7 +141,7 @@ Pod::Spec.new do |s|
 #        bidding.dependency 'KlevinAdSDK', '2.5.1.202'
 #        # MintegralAdSDK 使用时请务必使用cocoapod源
 #        bidding.dependency 'MintegralAdSDK', '7.1.7.0'
-
+#
 #        bidding.ios.vendored_frameworks = ['AdvanceSDK/Adapter/Bidding/SDKs/ABUAdAdmobAdapter/ABUAdAdmobAdapter/ABUAdAdmobAdapter.framework',
 #        'AdvanceSDK/Adapter/Bidding/SDKs/ABUAdBaiduAdapter/ABUAdBaiduAdapter/ABUAdBaiduAdapter.framework',
 #        'AdvanceSDK/Adapter/Bidding/SDKs/ABUAdCsjAdapter/ABUAdCsjAdapter/ABUAdCsjAdapter.framework',
@@ -155,10 +155,10 @@ Pod::Spec.new do |s|
 #
 #        ]
 
-#        valid_archs = ['armv7', 'armv7s', 'x86_64', 'arm64']
-#
-#
-#    end
+        valid_archs = ['armv7', 'armv7s', 'x86_64', 'arm64']
+
+
+    end
     
     
 #    s.subspec 'AdvBidding' do |advBidding|
