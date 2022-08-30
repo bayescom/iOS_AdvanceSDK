@@ -105,6 +105,8 @@
 }
 
 - (void)deallocAdapter {
+    ADV_LEVEL_INFO_LOG(@"===> %s %@", __func__, [NSThread currentThread]);
+
     [self.splashAd destoryAd];
     self.splashAd = nil;
     [self.imgV removeFromSuperview];

@@ -31,6 +31,7 @@
 - (void)dismissSplashAd {
     NSLog(@"----------->自定义开屏adapter开始释放啦啦<------------");
     self.advanceSplash = nil;
+    self.customBottomView = nil;
 }
 
 - (void)loadSplashAdWithSlotID:(nonnull NSString *)slotID andParameter:(nonnull NSDictionary *)parameter {
@@ -42,12 +43,31 @@
     self.advanceSplash = [[AdvanceSplash alloc] initWithAdspotId:slotID
                                                   viewController:self.bridge.viewControllerForPresentingModalView];
 
+    
+    self.customBottomView = parameter[ABUAdLoadingParamSPCustomBottomView];
+    
+    if (self.customBottomView) {
+        self.advanceSplash.logoImage = [self convertViewToImage:self.customBottomView];
+        self.advanceSplash.showLogoRequire = YES;
+    }
     self.advanceSplash.delegate = self;
-//    self.advanceSplash.timeout = 20; // 如果使用bidding 功能 timeout时长必须要比 服务器下发的bidding等待时间要长 否则会严重影响变现效率
     [self.advanceSplash loadAdWithSupplierModel:model];
 
 //    [self.bridge splashAd:self didLoadWithExt:@{ABUMediaAdLoadingExtECPM:@"100000"}];
 
+}
+
+- (UIImage *)convertViewToImage:(UIView *)view {
+    
+    UIImage *imageRet = [[UIImage alloc]init];
+    //UIGraphicsBeginImageContextWithOptions(区域大小, 是否是非透明的, 屏幕密度);
+    UIGraphicsBeginImageContextWithOptions(view.frame.size, YES, [UIScreen mainScreen].scale);
+    [view.layer renderInContext:UIGraphicsGetCurrentContext()];
+    imageRet = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return imageRet;
+    
 }
 
 - (void)advanceBiddingEndWithPrice:(NSInteger)price {

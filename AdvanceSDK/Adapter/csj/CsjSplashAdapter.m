@@ -94,16 +94,20 @@
 }
 
 - (void)deallocAdapter {
-    if (self.csj_ad) {
-//        NSLog(@"穿山甲 释放了");
-        [self.csj_ad removeFromSuperview];
-        self.csj_ad = nil;
-    }
+    ADV_LEVEL_INFO_LOG(@"%s", __func__);
+    ADV_LEVEL_INFO_LOG(@"%@", [NSThread currentThread]);
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        ADV_LEVEL_INFO_LOG(@"%@", [NSThread currentThread]);
+        if (_csj_ad) {
+    //        NSLog(@"穿山甲 释放了");
+            [_csj_ad removeFromSuperview];
+            _csj_ad = nil;
+        }
+    });
+
 }
 
-- (void)dealloc {
-    [self deallocAdapter];
-}
 
 - (void)showAd {
     __weak typeof(self) _self = self;

@@ -107,6 +107,14 @@ NSString *const DEFAULT_LOADEDTK = @"http://cruiser.bayescom.cn/loaded?action=lo
     };
 }
 
+
+- (void)setSupplierPrice:(NSInteger)supplierPrice {
+    _supplierPrice = supplierPrice;
+    if (supplierPrice == 0) {
+        _supplierPrice = self.sdk_price;
+    }
+}
+
 // MARK: ======================= 构建打底渠道 =======================
 //+ (instancetype)supplierWithMediaId:(NSString *)mediaId
 //                           adspotId:(NSString *)adspotid

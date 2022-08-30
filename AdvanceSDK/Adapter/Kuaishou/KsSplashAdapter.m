@@ -99,12 +99,16 @@
 
 - (void)deallocAdapter {
 //    _gdt_ad = nil;
-    if (self.ks_ad) {
-        [self.ks_ad removeFromSuperview];
-        self.ks_ad = nil;
-    }
-    [self.imgV removeFromSuperview];
-    self.imgV = nil;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        if (_ks_ad) {
+            [_ks_ad removeFromSuperview];
+            _ks_ad = nil;
+        }
+        [_imgV removeFromSuperview];
+        _imgV = nil;
+    });
+
 }
 
 
