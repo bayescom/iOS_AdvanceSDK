@@ -361,7 +361,7 @@
     
     // 如果所有并发渠道都有结果返回了 则选择price高的渠道展示
 //    NSLog(@"%@", self.arrayWaterfall.count);
-    NSLog(@"_incomeWaterfallCount = %ld  arrayWaterfall.count = %ld arrayHeadBidding.count = %ld", _incomeWaterfallCount, _arrayWaterfall.count, _arrayHeadBidding.count);
+//    NSLog(@"_incomeWaterfallCount = %ld  arrayWaterfall.count = %ld arrayHeadBidding.count = %ld", _incomeWaterfallCount, _arrayWaterfall.count, _arrayHeadBidding.count);
     if (self.arrayWaterfall.count + self.arrayHeadBidding.count == _incomeWaterfallCount) {
         [self _sortSuppliersByPrice:self.arrayWaterfall];
     }
@@ -374,7 +374,7 @@
     }
     [self.arrayHeadBidding addObject:supplier];
     
-    NSLog(@"===2=> %ld  %ld %ld", (long)_incomeWaterfallCount, self.arrayWaterfall.count, self.arrayHeadBidding.count);
+//    NSLog(@"===2=> %ld  %ld %ld", (long)_incomeWaterfallCount, self.arrayWaterfall.count, self.arrayHeadBidding.count);
     if (self.arrayWaterfall.count + self.arrayHeadBidding.count == _incomeWaterfallCount) {
         [self _sortSuppliersByPrice:self.arrayWaterfall];
     }
@@ -391,7 +391,7 @@
     if (_incomeWaterfallCount > 0) {
         _incomeWaterfallCount = _incomeWaterfallCount - 1;
         // 每层总
-        NSLog(@"===1=> %ld  %ld %ld", (long)_incomeWaterfallCount, self.arrayWaterfall.count, self.arrayHeadBidding.count);
+//        NSLog(@"===1=> %ld  %ld %ld", (long)_incomeWaterfallCount, self.arrayWaterfall.count, self.arrayHeadBidding.count);
         if (self.arrayWaterfall.count + self.arrayHeadBidding.count == _incomeWaterfallCount) {
             [self _sortSuppliersByPrice:self.arrayWaterfall];
         }
@@ -402,7 +402,7 @@
 - (void)timeoutCheckTimerAction {
     if ([[NSDate date] timeIntervalSince1970]*1000 > _timeout_stamp) {
 //        NSLog(@"检测时间截止");
-        NSLog(@"===111=> %ld  %ld %ld", (long)_incomeWaterfallCount, self.arrayWaterfall.count, self.arrayHeadBidding.count);
+//        NSLog(@"===111=> %ld  %ld %ld", (long)_incomeWaterfallCount, self.arrayWaterfall.count, self.arrayHeadBidding.count);
         [self _sortSuppliersByPrice:self.arrayWaterfall];
     }
 }
@@ -426,8 +426,8 @@
     // 3: 加入到suppliers的广告位 positionType 需切换到AdvanceSdkSupplierTypeWaterfall
     NSMutableArray *tempBidding = [self.arrayHeadBidding mutableCopy];
     
-    NSLog(@"suppliers = %@",suppliers);
-    NSLog(@"arrayHeadBidding = %@",self.arrayHeadBidding);
+//    NSLog(@"suppliers = %@",suppliers);
+//    NSLog(@"arrayHeadBidding = %@",self.arrayHeadBidding);
 
     [tempBidding enumerateObjectsUsingBlock:^(AdvSupplier * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
 //        NSLog(@"%ld  %ld", obj.supplierPrice, _waterfallMinPrice);
@@ -438,8 +438,8 @@
         }
     }];
     
-    NSLog(@"suppliers = %@",suppliers);
-    NSLog(@"arrayHeadBidding = %@",self.arrayHeadBidding);
+//    NSLog(@"suppliers = %@",suppliers);
+//    NSLog(@"arrayHeadBidding = %@",self.arrayHeadBidding);
 
 //     价格由低到高排序
 //    NSLog(@"------1111111-> %@  %ld %ld", suppliers[0].sdktag, (long)obj11.supplierPrice, (long)obj11.priority);
@@ -470,13 +470,13 @@
         }
     }];
     
-    for (AdvSupplier *temp in suppliers) {
-        NSLog(@"------1-> %@ %ld %ld %ld", temp.sdktag, (long)temp.sdk_price, (long)temp.supplierPrice, (long)temp.priority);
-    }
-
-    for (AdvSupplier *temp in self.arrayHeadBidding) {
-        NSLog(@"------2-> %@ %ld %ld %ld", temp.sdktag, (long)temp.sdk_price, (long)temp.supplierPrice, (long)temp.priority);
-    }
+//    for (AdvSupplier *temp in suppliers) {
+//        NSLog(@"------1-> %@ %ld %ld %ld", temp.sdktag, (long)temp.sdk_price, (long)temp.supplierPrice, (long)temp.priority);
+//    }
+//
+//    for (AdvSupplier *temp in self.arrayHeadBidding) {
+//        NSLog(@"------2-> %@ %ld %ld %ld", temp.sdktag, (long)temp.sdk_price, (long)temp.supplierPrice, (long)temp.priority);
+//    }
 
 
     // 取价格最高的渠道执行
@@ -717,7 +717,7 @@
     
     NSError *parseErr = nil;
     AdvSupplierModel *a_model = [AdvSupplierModel adv_modelWithJSON:data];
-    NSLog(@"[JSON]%@", [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil]);
+//    NSLog(@"[JSON]%@", [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil]);
     if (parseErr || !a_model) {
         // parse error
         if (!saveOnly && [_delegate respondsToSelector:@selector(advSupplierManagerLoadError:)]) {
