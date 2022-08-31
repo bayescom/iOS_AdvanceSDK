@@ -54,13 +54,7 @@
 
 - (void)supplierStateSuccess {
     ADV_LEVEL_INFO_LOG(@"穿山甲 成功");
-    if (_isCanch) {
-        return;
-    }
-    _isCanch = YES;
-    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
-        [self.delegate advanceUnifiedViewDidLoad];
-    }
+    [self unifiedDelegate];
 
 }
 
@@ -87,12 +81,10 @@
 // MARK: ======================= BUNativeExpresInterstitialAdDelegate =======================
 /// 插屏广告预加载成功回调，当接收服务器返回的广告数据成功且预加载后调用该函数
 - (void)nativeExpresInterstitialAdDidLoad:(BUNativeExpressInterstitialAd *)interstitialAd {
-    NSLog(@"穿山甲插屏视频拉取成功 nativeExpresInterstitialAdDidLoad");
 }
 
 /// 插屏广告预加载失败回调，当接收服务器返回的广告数据失败后调用该函数
 - (void)nativeExpresInterstitialAd:(BUNativeExpressInterstitialAd *)interstitialAd didFailWithError:(NSError *)error {
-    NSLog(@"穿山甲插屏视频拉取成功 nativeExpresInterstitialAd");
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
     _supplier.state = AdvanceSdkSupplierStateFailed;
     if (_supplier.isParallel == YES) { // 并行不释放 只上报
@@ -107,7 +99,6 @@
 
 /// 插屏广告渲染失败
 - (void)nativeExpresInterstitialAdRenderFail:(BUNativeExpressInterstitialAd *)interstitialAd error:(NSError *)error {
-    NSLog(@"穿山甲插屏视频拉取成功 nativeExpresInterstitialAdRenderFail");
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
     _csj_ad = nil;
 //    if ([self.delegate respondsToSelector:@selector(advanceInterstitialOnAdRenderFailed)]) {
@@ -118,7 +109,6 @@
 
 /// 插屏广告曝光回调
 - (void)nativeExpresInterstitialAdWillVisible:(BUNativeExpressInterstitialAd *)interstitialAd {
-    NSLog(@"穿山甲插屏视频拉取成功 nativeExpresInterstitialAdWillVisible");
     [self.adspot reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(advanceExposured)]) {
         [self.delegate advanceExposured];
@@ -127,7 +117,6 @@
 
 /// 插屏广告点击回调
 - (void)nativeExpresInterstitialAdDidClick:(BUNativeExpressInterstitialAd *)interstitialAd {
-    NSLog(@"穿山甲插屏视频拉取成功 nativeExpresInterstitialAdDidClick");
     [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(advanceClicked)]) {
         [self.delegate advanceClicked];
@@ -136,7 +125,6 @@
 
 /// 插屏广告曝光结束回调，插屏广告曝光结束回调该函数
 - (void)nativeExpresInterstitialAdDidClose:(BUNativeExpressInterstitialAd *)interstitialAd {
-    NSLog(@"穿山甲插屏视频拉取成功 nativeExpresInterstitialAdDidClose");
     if ([self.delegate respondsToSelector:@selector(advanceDidClose)]) {
         [self.delegate advanceDidClose];
     }
@@ -144,18 +132,25 @@
 
 /// 广告可以调用Show
 - (void)nativeExpresInterstitialAdRenderSuccess:(BUNativeExpressInterstitialAd *)interstitialAd {
-    if (_isCanch) {
-        return;
-    }
-    _isCanch = YES;
+//    if (_isCanch) {
+//        return;
+//    }
+//    _isCanch = YES;
     [self.adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
-    NSLog(@"穿山甲插屏视频拉取成功");
     _supplier.state = AdvanceSdkSupplierStateSuccess;
     if (_supplier.isParallel == YES) {
         return;
     }
+    [self unifiedDelegate];
 
+}
+
+- (void)unifiedDelegate {
+    if (_isCanch) {
+        return;
+    }
+    _isCanch = YES;
     if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
         [self.delegate advanceUnifiedViewDidLoad];
     }

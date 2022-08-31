@@ -12,9 +12,9 @@ target 'AdvanceSDK_Example' do
   pod 'AdvanceSDK/BD', :path => '../'
 #  pod 'AdvanceSDK/Bidding', :path => '../'
 #  pod 'AdvanceSDK/AdvBidding', :path => '../'
-#  pod 'JSONModel', '1.8.0'
-#  pod 'Reachability', '3.2'
-#  pod 'SDWebImage', '5.12.1'
+  pod 'JSONModel', '1.8.0'
+  pod 'Reachability', '3.2'
+  pod 'SDWebImage', '5.12.1'
 
   pod 'Masonry'
 #  pod 'Ads-CN', '4.4.0.0'
