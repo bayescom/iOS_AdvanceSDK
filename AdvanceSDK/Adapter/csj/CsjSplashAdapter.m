@@ -17,6 +17,9 @@
 #import "AdvanceSplash.h"
 #import "UIApplication+Adv.h"
 #import "AdvLog.h"
+#import <objc/runtime.h>
+#import <objc/message.h>
+
 @interface CsjSplashAdapter ()  <BUSplashAdDelegate>
 
 @property (nonatomic, strong) BUSplashAdView *csj_ad;
@@ -77,7 +80,7 @@
     if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
         [self.delegate advanceUnifiedViewDidLoad];
     }
-//    [self showAd];
+    [self showAd];
     
 }
 
@@ -108,8 +111,19 @@
 
 }
 
+- (void)gmShowAd {
+    [self showAdAction];
+}
 
 - (void)showAd {
+    NSString *isGMBidding = ((NSNumber * (*)(id, SEL))objc_msgSend)((id)self.adspot, @selector(isGMBidding));
+
+    if (isGMBidding == 1) {
+        return;
+    }
+    [self showAdAction];
+}
+- (void)showAdAction {
     __weak typeof(self) _self = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         __strong typeof(_self) self = _self;
@@ -133,7 +147,7 @@
             }
         }
     });
-    
+
 }
 // MARK: ======================= BUSplashAdDelegate =======================
 /**
@@ -156,7 +170,7 @@
         [self.delegate advanceUnifiedViewDidLoad];
     }
     
-//    [self showAd];
+    [self showAd];
 }
 
 /**

@@ -23,6 +23,7 @@
 @property (nonatomic, assign) NSInteger timeout_stamp;
 @property (nonatomic, strong) CADisplayLink *timeoutCheckTimer;
 @property (nonatomic, copy) NSString *reqId;
+@property (nonatomic, strong) NSNumber *isGMBidding;
 
 @end
 

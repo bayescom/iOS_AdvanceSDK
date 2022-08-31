@@ -17,6 +17,9 @@
 #import "AdvanceSplash.h"
 #import "UIApplication+Adv.h"
 #import "AdvLog.h"
+#import <objc/runtime.h>
+#import <objc/message.h>
+
 @interface GdtSplashAdapter () <GDTSplashAdDelegate>
 @property (nonatomic, strong) GDTSplashAd *gdt_ad;
 @property (nonatomic, weak) AdvanceSplash *adspot;
@@ -75,7 +78,7 @@
     if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
         [self.delegate advanceUnifiedViewDidLoad];
     }
-//    [self showAd];
+    [self showAd];
     
 }
 
@@ -98,7 +101,19 @@
     _gdt_ad = nil;
 }
 
+- (void)gmShowAd {
+    [self showAdAction];
+}
+
 - (void)showAd {
+    NSString *isGMBidding = ((NSNumber * (*)(id, SEL))objc_msgSend)((id)self.adspot, @selector(isGMBidding));
+
+    if (isGMBidding == 1) {
+        return;
+    }
+    [self showAdAction];
+}
+- (void)showAdAction {
     // 设置logo
     __weak typeof(self) _self = self;
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -137,7 +152,7 @@
         [self.delegate advanceUnifiedViewDidLoad];
     }
 
-//    [self showAd];
+    [self showAd];
 }
 
 - (void)splashAdExposured:(GDTSplashAd *)splashAd {

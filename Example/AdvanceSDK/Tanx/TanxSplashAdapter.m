@@ -16,6 +16,8 @@
 #import "AdvanceSplash.h"
 #import "UIApplication+Adv.h"
 #import "AdvLog.h"
+#import <objc/runtime.h>
+#import <objc/message.h>
 
 #if !__has_feature(objc_arc)
     // Safe releases
@@ -125,7 +127,20 @@
     });
 }
 
+- (void)gmShowAd {
+    [self showAdAction];
+}
+
 - (void)showAd {
+    NSString *isGMBidding = ((NSNumber * (*)(id, SEL))objc_msgSend)((id)self.adspot, @selector(isGMBidding));
+
+    if (isGMBidding == 1) {
+        return;
+    }
+    [self showAdAction];
+}
+
+- (void)showAdAction {
     // 设置logo
     __weak typeof(self) _self = self;
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -163,7 +178,7 @@
             [self biddingWithSplashModel:splashModel isWin:YES];
         }
     });
-    
+
 }
 
 // 加载成功

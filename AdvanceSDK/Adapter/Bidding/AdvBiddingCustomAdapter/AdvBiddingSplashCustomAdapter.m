@@ -43,7 +43,8 @@
     self.advanceSplash = [[AdvanceSplash alloc] initWithAdspotId:slotID
                                                   viewController:self.bridge.viewControllerForPresentingModalView];
 
-    
+    [self.advanceSplash performSelector:@selector(setIsGMBidding:) withObject:@(1)];
+
     self.customBottomView = parameter[ABUAdLoadingParamSPCustomBottomView];
     
     if (self.customBottomView) {
@@ -83,7 +84,8 @@
 //    if (self.customBottomView) {
 //        [window addSubview:self.customBottomView];
 //    }
-    [self.advanceSplash showAd];
+    [self.advanceSplash performSelector:@selector(showAd)];
+//    [self.advanceSplash showAd];
     // 模拟广告展示回调
 }
 
