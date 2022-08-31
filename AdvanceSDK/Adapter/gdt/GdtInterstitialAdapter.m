@@ -21,6 +21,7 @@
 @property (nonatomic, strong) GDTUnifiedInterstitialAd *gdt_ad;
 @property (nonatomic, weak) AdvanceInterstitial *adspot;
 @property (nonatomic, strong) AdvSupplier *supplier;
+@property (nonatomic, assign) BOOL isCanch;
 
 @end
 
@@ -55,10 +56,8 @@
 
 - (void)supplierStateSuccess {
     ADV_LEVEL_INFO_LOG(@"广点通 成功");
-    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
-        [self.delegate advanceUnifiedViewDidLoad];
-    }
-
+    
+    [self unifiedDelegate];
 }
 
 - (void)supplierStateFailed {
@@ -101,10 +100,9 @@
         _supplier.state = AdvanceSdkSupplierStateSuccess;
         return;
     }
+    
+    [self unifiedDelegate];
 
-    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
-        [self.delegate advanceUnifiedViewDidLoad];
-    }
 
 }
 
@@ -143,5 +141,16 @@
         [self.delegate advanceDidClose];
     }
 }
+
+- (void)unifiedDelegate {
+    if (_isCanch) {
+        return;
+    }
+    _isCanch = YES;
+    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
+        [self.delegate advanceUnifiedViewDidLoad];
+    }
+}
+
 
 @end

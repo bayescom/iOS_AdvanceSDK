@@ -52,7 +52,7 @@
 /// 广告数据拉取成功
 - (void)advanceUnifiedViewDidLoad {
     NSLog(@"广告数据拉取成功 %s", __func__);
-//    [self.advanceSplash showAd];
+
 }
 
 /// 广告曝光成功
