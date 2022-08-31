@@ -402,6 +402,7 @@
 - (void)timeoutCheckTimerAction {
     if ([[NSDate date] timeIntervalSince1970]*1000 > _timeout_stamp) {
 //        NSLog(@"检测时间截止");
+//        NSLog(@"===111=> %ld  %ld %ld", (long)_incomeWaterfallCount, self.arrayWaterfall.count, self.arrayHeadBidding.count);
         [self _sortSuppliersByPrice:self.arrayWaterfall];
     }
 }
@@ -440,7 +441,7 @@
 //    NSLog(@"suppliers = %@",suppliers);
 //    NSLog(@"arrayHeadBidding = %@",self.arrayHeadBidding);
 
-    // 价格由低到高排序
+//     价格由低到高排序
 //    NSLog(@"------1111111-> %@  %ld %ld", suppliers[0].sdktag, (long)obj11.supplierPrice, (long)obj11.priority);
     [suppliers sortWithOptions:NSSortStable usingComparator:^NSComparisonResult(id _Nonnull obj1, id _Nonnull obj2) {
         

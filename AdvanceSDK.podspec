@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
     s.name             = 'AdvanceSDK'
     
-    s.version          = '4.0.0.2'
+    s.version          = '4.0.0.3'
     s.ios.deployment_target = '12.0'
     s.platform     = :ios, "12.0"
     s.requires_arc = true

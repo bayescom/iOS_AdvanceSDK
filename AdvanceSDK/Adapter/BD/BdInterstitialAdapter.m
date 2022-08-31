@@ -19,6 +19,7 @@
 @property (nonatomic, strong) BaiduMobAdExpressInterstitial *bd_ad;
 @property (nonatomic, weak) AdvanceInterstitial *adspot;
 @property (nonatomic, strong) AdvSupplier *supplier;
+@property (nonatomic, assign) BOOL isCanch;
 
 @end
 
@@ -56,9 +57,7 @@
 
 - (void)supplierStateSuccess {
     ADV_LEVEL_INFO_LOG(@"百度 成功");
-    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
-        [self.delegate advanceUnifiedViewDidLoad];
-    }
+    [self unifiedDelegate];
 
 }
 
@@ -92,10 +91,7 @@
     if (_supplier.isParallel == YES) {
         return;
     }
-
-    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
-        [self.delegate advanceUnifiedViewDidLoad];
-    }
+    [self unifiedDelegate];
 }
 
 - (void)interstitialAdLoadFailed:(BaiduMobAdExpressInterstitial *)interstitial withError:(BaiduMobFailReason)reason {
@@ -154,6 +150,17 @@
         [self.delegate advanceDidClose];
     }
 }
+
+- (void)unifiedDelegate {
+    if (_isCanch) {
+        return;
+    }
+    _isCanch = YES;
+    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
+        [self.delegate advanceUnifiedViewDidLoad];
+    }
+}
+
 
 
 @end

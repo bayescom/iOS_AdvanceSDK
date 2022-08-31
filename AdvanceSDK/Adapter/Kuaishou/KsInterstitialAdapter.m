@@ -20,6 +20,7 @@
 @property (nonatomic, weak) AdvanceInterstitial *adspot;
 @property (nonatomic, strong) AdvSupplier *supplier;
 @property (nonatomic, assign) BOOL isDidLoad;
+@property (nonatomic, assign) BOOL isCanch;
 
 @end
 
@@ -49,10 +50,8 @@
 
 - (void)supplierStateSuccess {
     ADV_LEVEL_INFO_LOG(@"快手 成功");
-    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
-        [self.delegate advanceUnifiedViewDidLoad];
-    }
     
+    [self unifiedDelegate];
 }
 
 - (void)supplierStateFailed {
@@ -99,10 +98,8 @@
     if (_supplier.isParallel == YES) {
         return;
     }
+    [self unifiedDelegate];
 
-    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
-        [self.delegate advanceUnifiedViewDidLoad];
-    }
 }
 /**
  * interstitial ad load or render failed
@@ -172,5 +169,16 @@
         [self.delegate advanceDidClose];
     }
 }
+
+- (void)unifiedDelegate {
+    if (_isCanch) {
+        return;
+    }
+    _isCanch = YES;
+    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
+        [self.delegate advanceUnifiedViewDidLoad];
+    }
+}
+
 
 @end
