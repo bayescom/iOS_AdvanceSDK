@@ -10,37 +10,37 @@ PODS:
   - Ads-CN/Domestic (4.5.1.6):
     - Ads-CN/BUFoundation
     - Ads-CN/CSJAdSDK
-  - AdvanceSDK (4.0.0.3):
-    - AdvanceSDK/Core (= 4.0.0.3)
-  - AdvanceSDK/Adspot (4.0.0.3):
+  - AdvanceSDK (4.0.0.4):
+    - AdvanceSDK/Core (= 4.0.0.4)
+  - AdvanceSDK/Adspot (4.0.0.4):
     - AdvanceSDK/Core
-  - AdvanceSDK/BD (4.0.0.3):
+  - AdvanceSDK/BD (4.0.0.4):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - BaiduMobAdSDK (= 4.881)
-  - AdvanceSDK/Bidding (4.0.0.3):
+  - AdvanceSDK/Bidding (4.0.0.4):
     - Ads-CN
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
-    - AdvBiddingSuppliers
-  - AdvanceSDK/Core (4.0.0.3)
-  - AdvanceSDK/CSJ (4.0.0.3):
+    - AdvBiddingSuppliers (= 0.0.2)
+  - AdvanceSDK/Core (4.0.0.4)
+  - AdvanceSDK/CSJ (4.0.0.4):
     - Ads-CN (= 4.5.1.6)
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
-  - AdvanceSDK/GDT (4.0.0.3):
+  - AdvanceSDK/GDT (4.0.0.4):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - GDTMobSDK (= 4.13.71)
-  - AdvanceSDK/KS (4.0.0.3):
+  - AdvanceSDK/KS (4.0.0.4):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - KSAdSDK (= 3.3.25)
-  - AdvanceSDK/Mercury (4.0.0.3):
+  - AdvanceSDK/Mercury (4.0.0.4):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - MercurySDK (= 3.1.7.1)
-  - AdvBiddingSuppliers (0.0.1)
+  - AdvBiddingSuppliers (0.0.2)
   - BaiduMobAdSDK (4.881)
   - BURelyFoundation (0.0.1.58):
     - BURelyFoundation/HM (= 0.0.1.58)
@@ -92,8 +92,8 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Ads-CN: 5563d7a0ed3f99fd47d421fcb48e70688efedd55
-  AdvanceSDK: f8a8f101bed82bdb3ed6c39f4db51107e338bdf1
-  AdvBiddingSuppliers: 9cd2e3c977950b34c89c9521f5135bbc47251bc4
+  AdvanceSDK: f630f0251913d8d8580a62df171a0bfc95ae7943
+  AdvBiddingSuppliers: 0ef4b0d89c87e8651296ac192dbc0e1f409f1402
   BaiduMobAdSDK: f4c68649b472327e072ed724e70684891da8ba73
   BURelyFoundation: f529322f9e93cf8cc0b4539e447aff77a8ff34de
   GDTMobSDK: 60dca5929fd3cbb68f32eb81305cb65fb988726a
@@ -104,6 +104,6 @@ SPEC CHECKSUMS:
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
   SDWebImage: 4dc3e42d9ec0c1028b960a33ac6b637bb432207b
 
-PODFILE CHECKSUM: 92ed00a7516b4645c121d0d4b5aa7ce4935809b5
+PODFILE CHECKSUM: a16cb14694fa672cbbf38a28b60cf1fba94d45e1
 
 COCOAPODS: 1.11.2

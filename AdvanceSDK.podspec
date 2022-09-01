@@ -9,9 +9,9 @@
 Pod::Spec.new do |s|
     s.name             = 'AdvanceSDK'
     
-    s.version          = '4.0.0.3'
-    s.ios.deployment_target = '12.0'
-    s.platform     = :ios, "12.0"
+    s.version          = '4.0.0.4'
+    s.ios.deployment_target = '9.0'
+    s.platform     = :ios, "9.0"
     s.requires_arc = true
     
     s.license          = { :type => 'MIT', :file => 'LICENSE' }
@@ -119,7 +119,7 @@ Pod::Spec.new do |s|
         bidding.dependency 'AdvanceSDK/Core'
         bidding.dependency 'AdvanceSDK/Adspot'
 #        bidding.dependency 'AdvBiddingSDK'
-        bidding.dependency 'AdvBiddingSuppliers'
+        bidding.dependency 'AdvBiddingSuppliers','0.0.2'
 
         bidding.dependency 'Ads-CN'
         bidding.source_files =  ['AdvanceSDK/Adapter/Bidding/*{h,m}',
