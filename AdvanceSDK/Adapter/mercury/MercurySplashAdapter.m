@@ -25,6 +25,7 @@
 @property (nonatomic, strong) MercurySplashAd *mercury_ad;
 @property (nonatomic, strong) AdvSupplier *supplier;
 @property (nonatomic, weak) AdvanceSplash *adspot;
+@property (nonatomic, assign) BOOL isCanch;
 
 @end
 
@@ -70,10 +71,7 @@
 
 - (void)supplierStateSuccess {
     ADV_LEVEL_INFO_LOG(@"Mercury 成功");
-    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
-        [self.delegate advanceUnifiedViewDidLoad];
-    }
-    [self showAd];
+    [self unifiedDelegate];
     
 }
 
@@ -144,15 +142,10 @@
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
 
     if (_supplier.isParallel == YES) {
-        NSLog(@"修改状态: %@", _supplier);
         _supplier.state = AdvanceSdkSupplierStateSuccess;
         return;
     }
-    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
-        [self.delegate advanceUnifiedViewDidLoad];
-    }
-
-    [self showAd];
+    [self unifiedDelegate];
 }
 
 - (void)mercury_splashAdExposured:(MercurySplashAd *)splashAd {
@@ -167,7 +160,6 @@
 - (void)mercury_splashAdFailError:(nullable NSError *)error {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
     _supplier.state = AdvanceSdkSupplierStateFailed;
-    NSLog(@"========>>>>>>>> %ld %@", (long)_supplier.priority, error);
     if (_supplier.isParallel == YES) { // 并行不释放 只上报
         
         return;
@@ -203,6 +195,17 @@
     if ([self.delegate respondsToSelector:@selector(advanceDidClose)]) {
         [self.delegate advanceDidClose];
     }
+}
+
+- (void)unifiedDelegate {
+    if (_isCanch) {
+        return;
+    }
+    _isCanch = YES;
+    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
+        [self.delegate advanceUnifiedViewDidLoad];
+    }
+    [self showAd];
 }
 
 @end

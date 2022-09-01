@@ -36,7 +36,7 @@
 @property (nonatomic, assign) BOOL isClick;
 @property (nonatomic, strong) UIView *customSplashView;
 @property (nonatomic, strong) UIImageView *imgV;
-
+@property (nonatomic, assign) BOOL isCanch;
 @end
 
 @implementation BdSplashAdapter
@@ -97,11 +97,8 @@
 
 - (void)supplierStateSuccess {
     ADV_LEVEL_INFO_LOG(@"百度 成功");
-    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
-        [self.delegate advanceUnifiedViewDidLoad];
-    }
-    [self showAd];
 
+    [self unifiedDelegate];
     
 }
 
@@ -238,11 +235,7 @@
         _supplier.state = AdvanceSdkSupplierStateSuccess;
         return;
     }
-    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
-        [self.delegate advanceUnifiedViewDidLoad];
-    }
-
-    [self showAd];
+    [self unifiedDelegate];
 }
 
 - (void)splashAdLoadFailCode:(NSString *)errCode
@@ -261,4 +254,17 @@
 //- (void)splashAdLoadFail:(BaiduMobAdSplash *)splash {
 ////    NSLog(@"开屏广告请求失败");
 //}
+
+
+- (void)unifiedDelegate {
+    if (_isCanch) {
+        return;
+    }
+    _isCanch = YES;
+    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
+        [self.delegate advanceUnifiedViewDidLoad];
+    }
+    [self showAd];
+}
+
 @end

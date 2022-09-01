@@ -37,6 +37,7 @@
 @property (nonatomic, assign) NSUInteger leftTime;
 // 是否点击了
 @property (nonatomic, assign) BOOL isClick;
+@property (nonatomic, assign) BOOL isCanch;
 @property (nonatomic, strong) KSSplashAdView *ks_ad;
 @property (nonatomic, strong) UIImageView *imgV;
 
@@ -82,10 +83,7 @@
 
 - (void)supplierStateSuccess {
     ADV_LEVEL_INFO_LOG(@"快手 成功");
-    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
-        [self.delegate advanceUnifiedViewDidLoad];
-    }
-    [self showAd];
+    [self unifiedDelegate];
     
 }
 
@@ -168,10 +166,7 @@
         _supplier.state = AdvanceSdkSupplierStateSuccess;
         return;
     }
-    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
-        [self.delegate advanceUnifiedViewDidLoad];
-    }
-    [self showAd];
+    [self unifiedDelegate];
 
     _timeout = 5;
     // 记录过期的时间
@@ -287,4 +282,16 @@
     }
     return _imgV;
 }
+
+- (void)unifiedDelegate {
+    if (_isCanch) {
+        return;
+    }
+    _isCanch = YES;
+    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
+        [self.delegate advanceUnifiedViewDidLoad];
+    }
+    [self showAd];
+}
+
 @end

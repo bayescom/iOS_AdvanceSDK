@@ -29,6 +29,7 @@
 @property (nonatomic, assign) NSUInteger leftTime;
 // 是否点击了
 @property (nonatomic, assign) BOOL isClick;
+@property (nonatomic, assign) BOOL isCanch;
 
 @end
 
@@ -75,11 +76,7 @@
 
 - (void)supplierStateSuccess {
     ADV_LEVEL_INFO_LOG(@"广点通 成功");
-    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
-        [self.delegate advanceUnifiedViewDidLoad];
-    }
-    [self showAd];
-    
+    [self unifiedDelegate];
 }
 
 - (void)supplierStateFailed {
@@ -148,11 +145,7 @@
         _supplier.state = AdvanceSdkSupplierStateSuccess;
         return;
     }
-    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
-        [self.delegate advanceUnifiedViewDidLoad];
-    }
-
-    [self showAd];
+    [self unifiedDelegate];
 }
 
 - (void)splashAdExposured:(GDTSplashAd *)splashAd {
@@ -202,5 +195,17 @@
         [self.delegate advanceSplashOnAdCountdownToZero];
     }
 }
+
+- (void)unifiedDelegate {
+    if (_isCanch) {
+        return;
+    }
+    _isCanch = YES;
+    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
+        [self.delegate advanceUnifiedViewDidLoad];
+    }
+    [self showAd];
+}
+
 
 @end

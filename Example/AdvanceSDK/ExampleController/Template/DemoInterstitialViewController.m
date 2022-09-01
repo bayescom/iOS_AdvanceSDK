@@ -33,16 +33,10 @@
 - (void)loadAdBtn1Action {
     if (![self checkAdspotId]) { return; }
     
-//    self.advanceInterstitial = [[AdvanceInterstitial alloc] initWithAdspotId:@"11111112"
-//                                                              viewController:self];
 
     self.advanceInterstitial = [[AdvanceInterstitial alloc] initWithAdspotId:self.adspotId
                                                               viewController:self];
-    
-//    self.advanceInterstitial = [[AdvanceInterstitial alloc] initWithAdspotId:self.adspotId
-//                                                                   customExt:self.ext
-//                                                              viewController:self];
-    self.advanceInterstitial.delegate = self;
+        self.advanceInterstitial.delegate = self;
     _isAdLoaded=false;
     [self.advanceInterstitial loadAd];
 }
