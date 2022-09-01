@@ -123,9 +123,7 @@
         _supplier.state = AdvanceSdkSupplierStateSuccess;
         return;
     }
-    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
-        [self.delegate advanceUnifiedViewDidLoad];
-    }
+
     [self unifiedDelegate];
 
     _timeout = 5;
