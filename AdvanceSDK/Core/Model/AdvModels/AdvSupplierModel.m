@@ -136,36 +136,36 @@ NSString *const DEFAULT_LOADEDTK = @"http://cruiser.bayescom.cn/loaded?action=lo
 //    return supplier;
 //}
 
-- (void)addDefaultSdkSupplierTK {
-    NSString *idfa = [AdvDeviceInfoUtil getIdfa];
-    NSString *auctionId= [AdvDeviceInfoUtil getAuctionId];
-    self.imptk      = [[[NSMutableArray alloc] init] arrayByAddingObject:
-                       [self constructDefaultTk:DEFAULT_IMPTK withAppId:self.mediaid adspotId:self.adspotid idfa:idfa supplierId:self.identifier auctionId:auctionId supplierAdspotId:self.adspotid]];
-    self.succeedtk  = [[[NSMutableArray alloc] init] arrayByAddingObject:
-                       [self constructDefaultTk:DEFAULT_SUCCEEDTK withAppId:self.mediaid adspotId:self.adspotid idfa:idfa supplierId:self.identifier auctionId:auctionId supplierAdspotId:self.adspotid]];
-    self.clicktk    = [[[NSMutableArray alloc] init] arrayByAddingObject:
-                       [self constructDefaultTk:DEFAULT_CLICKTK withAppId:self.mediaid adspotId:self.adspotid idfa:idfa supplierId:self.identifier auctionId: auctionId supplierAdspotId:self.adspotid]];
-    self.failedtk   = [[[NSMutableArray alloc] init] arrayByAddingObject:
-                       [self constructDefaultTk:DEFAULT_FAILEDTK withAppId:self.mediaid adspotId:self.adspotid idfa:idfa supplierId:self.identifier auctionId:auctionId supplierAdspotId:self.adspotid]];
-    self.loadedtk   = [[[NSMutableArray alloc] init] arrayByAddingObject:
-                       [self constructDefaultTk:DEFAULT_LOADEDTK withAppId:self.mediaid adspotId:self.adspotid idfa:idfa supplierId:self.identifier auctionId:auctionId supplierAdspotId:self.adspotid]];
-}
-
-- (NSString *)constructDefaultTk:(NSString *)url withAppId:(NSString *)appid adspotId:(NSString *)adspotid idfa:(NSString *)idfa
-                      supplierId:(NSString *)supplierid auctionId:(NSString*)auctionId supplierAdspotId:(NSString*) supplierAdspotId {
-    @try {
-        NSString *url2 = [url stringByReplacingOccurrencesOfString:@"__ADSPOTID__" withString:self.adspotid];
-        NSString *url3 = [url2 stringByReplacingOccurrencesOfString:@"__APPID__" withString:self.mediaid];
-        NSString *url4 = [url3 stringByReplacingOccurrencesOfString:@"__IDFA__" withString:idfa];
-        NSString *url5 = [url4 stringByReplacingOccurrencesOfString:@"__SUPPLIERID__" withString:supplierid];
-        NSString *url6 = [url5 stringByReplacingOccurrencesOfString:@"__AUCTION_ID__" withString:auctionId];
-        NSString *url7 = [url6 stringByReplacingOccurrencesOfString:@"__SUPPLIER_ADSPOT_ID__" withString:supplierAdspotId];
-        return url7;
-    }
-    @catch (NSException *e) {
-        return url;
-    }
-}
+//- (void)addDefaultSdkSupplierTK {
+//    NSString *idfa = [AdvDeviceInfoUtil getIdfa];
+//    NSString *auctionId= [AdvDeviceInfoUtil getAuctionId];
+//    self.imptk      = [[[NSMutableArray alloc] init] arrayByAddingObject:
+//                       [self constructDefaultTk:DEFAULT_IMPTK withAppId:self.mediaid adspotId:self.adspotid idfa:idfa supplierId:self.identifier auctionId:auctionId supplierAdspotId:self.adspotid]];
+//    self.succeedtk  = [[[NSMutableArray alloc] init] arrayByAddingObject:
+//                       [self constructDefaultTk:DEFAULT_SUCCEEDTK withAppId:self.mediaid adspotId:self.adspotid idfa:idfa supplierId:self.identifier auctionId:auctionId supplierAdspotId:self.adspotid]];
+//    self.clicktk    = [[[NSMutableArray alloc] init] arrayByAddingObject:
+//                       [self constructDefaultTk:DEFAULT_CLICKTK withAppId:self.mediaid adspotId:self.adspotid idfa:idfa supplierId:self.identifier auctionId: auctionId supplierAdspotId:self.adspotid]];
+//    self.failedtk   = [[[NSMutableArray alloc] init] arrayByAddingObject:
+//                       [self constructDefaultTk:DEFAULT_FAILEDTK withAppId:self.mediaid adspotId:self.adspotid idfa:idfa supplierId:self.identifier auctionId:auctionId supplierAdspotId:self.adspotid]];
+//    self.loadedtk   = [[[NSMutableArray alloc] init] arrayByAddingObject:
+//                       [self constructDefaultTk:DEFAULT_LOADEDTK withAppId:self.mediaid adspotId:self.adspotid idfa:idfa supplierId:self.identifier auctionId:auctionId supplierAdspotId:self.adspotid]];
+//}
+//
+//- (NSString *)constructDefaultTk:(NSString *)url withAppId:(NSString *)appid adspotId:(NSString *)adspotid idfa:(NSString *)idfa
+//                      supplierId:(NSString *)supplierid auctionId:(NSString*)auctionId supplierAdspotId:(NSString*) supplierAdspotId {
+//    @try {
+//        NSString *url2 = [url stringByReplacingOccurrencesOfString:@"__ADSPOTID__" withString:self.adspotid];
+//        NSString *url3 = [url2 stringByReplacingOccurrencesOfString:@"__APPID__" withString:self.mediaid];
+//        NSString *url4 = [url3 stringByReplacingOccurrencesOfString:@"__IDFA__" withString:idfa];
+//        NSString *url5 = [url4 stringByReplacingOccurrencesOfString:@"__SUPPLIERID__" withString:supplierid];
+//        NSString *url6 = [url5 stringByReplacingOccurrencesOfString:@"__AUCTION_ID__" withString:auctionId];
+//        NSString *url7 = [url6 stringByReplacingOccurrencesOfString:@"__SUPPLIER_ADSPOT_ID__" withString:supplierAdspotId];
+//        return url7;
+//    }
+//    @catch (NSException *e) {
+//        return url;
+//    }
+//}
 
 @end
 

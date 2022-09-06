@@ -644,7 +644,7 @@
     }
     
     
-    ADV_LEVEL_INFO_LOG(@"请求参数 %@   uuid:%@", deviceInfo, [AdvDeviceInfoUtil getAuctionId]);
+    ADV_LEVEL_INFO_LOG(@"请求参数 %@", deviceInfo);
     NSError *parseError = nil;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:deviceInfo options:NSJSONWritingPrettyPrinted error:&parseError];
 //    NSURL *url = [NSURL URLWithString:AdvanceSdkRequestUrl];
@@ -657,10 +657,6 @@
     
     
     self.tkUploadTool.serverTime = [[NSDate date] timeIntervalSince1970]*1000;
-    NSString *reqid = [AdvDeviceInfoUtil getAuctionId];
-    if (reqid) {
-        self.tkUploadTool.reqid = reqid;
-    }
 
     
     ADV_LEVEL_INFO_LOG(@"开始请求时间戳: %f", [[NSDate date] timeIntervalSince1970]);

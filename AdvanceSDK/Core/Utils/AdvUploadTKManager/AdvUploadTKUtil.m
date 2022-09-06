@@ -32,7 +32,7 @@
     for (id obj in uploadArr) {
         @try {
             NSString *urlString = obj;
-            urlString = [self paramValueOfUrl:obj withParam:@"&reqid"];
+//            urlString = [self paramValueOfUrl:obj withParam:@"&reqid"];
             NSTimeInterval timeStamp = [[NSDate dateWithTimeIntervalSinceNow:0] timeIntervalSince1970] * 1000;
             urlString = [urlString stringByReplacingOccurrencesOfString:@"__TIME__" withString:[NSString stringWithFormat:@"%0.0f", timeStamp]];
             
