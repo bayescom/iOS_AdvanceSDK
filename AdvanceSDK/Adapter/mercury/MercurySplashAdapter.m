@@ -86,7 +86,21 @@
     [super loadAd];
 }
 
+
+- (void)gmShowAd {
+    [self showAdAction];
+}
+
 - (void)showAd {
+    NSNumber *isGMBidding = ((NSNumber * (*)(id, SEL))objc_msgSend)((id)self.adspot, @selector(isGMBidding));
+
+    if (isGMBidding.integerValue == 1) {
+        return;
+    }
+    [self showAdAction];
+}
+
+- (void)showAdAction {
 //    [[UIApplication sharedApplication].keyWindow addSubview:_csj_ad];
 //    [[UIApplication sharedApplication].keyWindow bringSubviewToFront:[_adspot performSelector:@selector(bgImgV)]];
     __weak typeof(self) _self = self;
