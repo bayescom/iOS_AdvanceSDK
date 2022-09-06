@@ -84,7 +84,7 @@
 //    if (self.customBottomView) {
 //        [window addSubview:self.customBottomView];
 //    }
-    [self.advanceSplash performSelector:@selector(showAd)];
+    [self.advanceSplash performSelector:@selector(gmShowAd)];
 //    [self.advanceSplash showAd];
     // 模拟广告展示回调
 }
