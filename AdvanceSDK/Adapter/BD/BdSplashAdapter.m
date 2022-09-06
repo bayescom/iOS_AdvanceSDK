@@ -126,9 +126,9 @@
 }
 
 - (void)showAd {
-    NSString *isGMBidding = ((NSNumber * (*)(id, SEL))objc_msgSend)((id)self.adspot, @selector(isGMBidding));
+    NSNumber *isGMBidding = ((NSNumber * (*)(id, SEL))objc_msgSend)((id)self.adspot, @selector(isGMBidding));
 
-    if (isGMBidding == 1) {
+    if (isGMBidding.integerValue == 1) {
         return;
     }
     [self showAdAction];
