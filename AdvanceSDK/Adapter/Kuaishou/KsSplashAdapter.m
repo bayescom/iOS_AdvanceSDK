@@ -208,6 +208,8 @@
     if ([self.delegate respondsToSelector:@selector(advanceClicked)]) {
         [self.delegate advanceClicked];
     }
+    [_imgV removeFromSuperview];
+    _imgV = nil;
 }
 /**
  * splash ad will zoom out, frame can be assigned

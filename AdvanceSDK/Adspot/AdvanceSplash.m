@@ -275,6 +275,20 @@
 #pragma clang diagnostic pop
 }
 
+
+- (void)gmShowAd {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundeclared-selector"
+    dispatch_async(dispatch_get_main_queue(), ^{
+       // UI更新代码
+        ((void (*)(id, SEL))objc_msgSend)((id)_adapter, @selector(gmShowAd));
+
+    });
+
+
+#pragma clang diagnostic pop
+
+}
 - (void)uploadTimeOutError {
     NSMutableDictionary *paramsM = [NSMutableDictionary dictionary];
     
