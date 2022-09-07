@@ -168,9 +168,6 @@
     }
     [self unifiedDelegate];
 
-    _timeout = 5;
-    // 记录过期的时间
-    _timeout_stamp = ([[NSDate date] timeIntervalSince1970] + _timeout)*1000;
 }
 /**
  * splash ad (material) failed to load
@@ -191,6 +188,11 @@
     if ([self.delegate respondsToSelector:@selector(advanceExposured)]) {
         [self.delegate advanceExposured];
     }
+    
+    _timeout = 5;
+    // 记录过期的时间
+    _timeout_stamp = ([[NSDate date] timeIntervalSince1970] + _timeout)*1000;
+
 }
 /**
  * splash ad video begin play
@@ -208,6 +210,7 @@
     if ([self.delegate respondsToSelector:@selector(advanceClicked)]) {
         [self.delegate advanceClicked];
     }
+    [self ksadDidClose];
     [_imgV removeFromSuperview];
     _imgV = nil;
 }
@@ -234,6 +237,8 @@
     if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdSkipClicked)]) {
         [self.delegate advanceSplashOnAdSkipClicked];
     }
+    
+    [self ksadDidClose];
     [self deallocAdapter];
 }
 /**
