@@ -157,8 +157,9 @@
 }
 
 - (void)splashAdDidClick:(ABUSplashAd *)splashAd {
-    if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdSkipClicked)]) {
-        [self.delegate advanceSplashOnAdSkipClicked];
+    
+    if ([self.delegate respondsToSelector:@selector(advanceClicked)]) {
+        [self.delegate advanceClicked];
     }
 }
 

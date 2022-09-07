@@ -211,8 +211,7 @@
     [_imgV removeFromSuperview];
     _imgV = nil;
 }
-/**
- * splash ad will zoom out, frame can be assigned
+/**   * splash ad will zoom out, frame can be assigned
  * for video ad only
  * @param frame target frame
  */

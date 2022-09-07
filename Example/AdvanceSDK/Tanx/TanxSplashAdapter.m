@@ -115,15 +115,15 @@
     __weak typeof(self) _self = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         __strong typeof(_self) self = _self;
-        
-        [self.templateView removeFromSuperview];
-        self.templateView = nil;
-        [self.imgV removeFromSuperview];
-        self.imgV = nil;
-        
         if ([self.delegate respondsToSelector:@selector(advanceDidClose)]) {
             [self.delegate advanceDidClose];
         }
+        [self.splashManager removeLocalAssets];
+        [self.templateView removeFromSuperview];
+        [self.imgV removeFromSuperview];
+        self.templateView = nil;
+        self.imgV = nil;
+        self.splashManager = nil;
     });
 }
 
@@ -212,7 +212,16 @@
     }
     _isClick = YES;
 
-    [self deallocAdapter];
+    [self.splashManager removeLocalAssets];
+    [self.templateView removeFromSuperview];
+    [self.imgV removeFromSuperview];
+    self.templateView = nil;
+    self.imgV = nil;
+    self.splashManager = nil;
+    if ([self.delegate respondsToSelector:@selector(advanceDidClose)]) {
+        [self.delegate advanceDidClose];
+    }
+//    [self deallocAdapter];
 
 }
 
@@ -249,7 +258,17 @@
         }
     }
     
-    [self deallocAdapter];
+    [self.splashManager removeLocalAssets];
+    [self.templateView removeFromSuperview];
+    [self.imgV removeFromSuperview];
+    self.templateView = nil;
+    self.imgV = nil;
+    self.splashManager = nil;
+    if ([self.delegate respondsToSelector:@selector(advanceDidClose)]) {
+        [self.delegate advanceDidClose];
+    }
+
+//    [self deallocAdapter];
 }
 
 

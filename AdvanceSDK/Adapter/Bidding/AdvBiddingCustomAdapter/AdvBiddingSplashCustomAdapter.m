@@ -91,7 +91,7 @@
 
 /// 广告数据拉取成功
 - (void)advanceUnifiedViewDidLoad {
-    NSLog(@"广告数据拉取成功 %s", __func__);
+//    NSLog(@"广告数据拉取成功 %s", __func__);
 }
 
 /// 广告曝光成功
@@ -123,14 +123,13 @@
 - (void)advanceSplashOnAdCountdownToZero {
 //    NSLog(@"广告倒计时结束 %s", __func__);
     [self.bridge splashAdDidCountDownToZero:self];
-    [self.bridge splashAdDidClose:self];
 }
 
 /// 点击了跳过
 - (void)advanceSplashOnAdSkipClicked {
 //    NSLog(@"点击了跳过 %s", __func__);
     [self.bridge splashAdDidClickSkip:self];
-    [self.bridge splashAdDidClose:self];
+//    [self.bridge splashAdDidClose:self];
 }
 
 // 策略请求成功
