@@ -49,13 +49,46 @@
 
 - (void)renderForExpressAdView:(nonnull UIView *)expressAdView {
     // 如不adn广告不需要render，请尽量模拟回调renderSuccess
-    [self.bridge nativeAd:self renderSuccessWithExpressView:expressAdView];
+//    [self.bridge nativeAd:self renderSuccessWithExpressView:expressAdView];
+    if ([expressAdView isKindOfClass:NSClassFromString(@"BUNativeExpressFeedVideoAdView")] ||
+        [expressAdView isKindOfClass:NSClassFromString(@"BUNativeExpressAdView")]) {
+        [expressAdView performSelector:@selector(render)];
+    } else if ([expressAdView isKindOfClass:NSClassFromString(@"MercuryNativeExpressAdView")]) {
+        [expressAdView performSelector:@selector(render)];
+    } else if ([expressAdView isKindOfClass:NSClassFromString(@"GDTNativeExpressAdView")]) {// 广点通旧版信息流
+        [expressAdView performSelector:@selector(render)];
+    } else if ([expressAdView isKindOfClass:NSClassFromString(@"GDTNativeExpressProAdView")]) {// 广点通新版信息流
+        [expressAdView performSelector:@selector(render)];
+    } else if ([expressAdView isKindOfClass:NSClassFromString(@"BaiduMobAdSmartFeedView")]) {// 百度
+        [expressAdView performSelector:@selector(render)];
+    } else if ([expressAdView isKindOfClass:NSClassFromString(@"ABUNativeAdView")]) {// bidding
+        [expressAdView performSelector:@selector(render)];
+    } else { // 快手 或 tanx
+        
+    }
+
 }
 
 - (void)setRootViewController:(nonnull UIViewController *)viewController forExpressAdView:(nonnull UIView *)expressAdView {
+    if ([expressAdView isKindOfClass:NSClassFromString(@"BUNativeExpressFeedVideoAdView")] ||
+        [expressAdView isKindOfClass:NSClassFromString(@"BUNativeExpressAdView")]) {
+        [expressAdView performSelector:@selector(setRootViewController:) withObject:viewController];
+    } else if ([expressAdView isKindOfClass:NSClassFromString(@"MercuryNativeExpressAdView")]) {
+        [expressAdView performSelector:@selector(setController:) withObject:viewController];
+    } else if ([expressAdView isKindOfClass:NSClassFromString(@"GDTNativeExpressAdView")]) {// 广点通旧版信息流
+        [expressAdView performSelector:@selector(setController:) withObject:viewController];
+    } else if ([expressAdView isKindOfClass:NSClassFromString(@"GDTNativeExpressProAdView")]) {// 广点通新版信息流
+        [expressAdView performSelector:@selector(setController:) withObject:viewController];
+    } else if ([expressAdView isKindOfClass:NSClassFromString(@"BaiduMobAdSmartFeedView")]) {// 百度
+    } else if ([expressAdView isKindOfClass:NSClassFromString(@"ABUNativeAdView")]) {// bidding
+    } else { // 快手 或 tanx
+        
+    }
+
 }
 
 - (void)setRootViewController:(nonnull UIViewController *)viewController forNativeAd:(nonnull id)nativeAd {
+    
 }
 
 - (void)didReceiveBidResult:(ABUMediaBidResult *)result {
@@ -71,7 +104,7 @@
     NSMutableArray *exts = [NSMutableArray arrayWithCapacity:views.count];
     for (NSInteger i = 0; i < views.count; i++) {
         AdvanceNativeExpressView *view = views[i];
-        [list addObject:view];
+        [list addObject:view.expressView];
         [exts addObject:@{
             ABUMediaAdLoadingExtECPM : @(view.price),
         }];
