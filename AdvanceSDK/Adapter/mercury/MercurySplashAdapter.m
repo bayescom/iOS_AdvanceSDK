@@ -26,6 +26,7 @@
 @property (nonatomic, strong) AdvSupplier *supplier;
 @property (nonatomic, weak) AdvanceSplash *adspot;
 @property (nonatomic, assign) BOOL isCanch;
+@property (nonatomic, assign) NSInteger isGMBidding;
 
 @end
 
@@ -93,6 +94,7 @@
 
 - (void)showAd {
     NSNumber *isGMBidding = ((NSNumber * (*)(id, SEL))objc_msgSend)((id)self.adspot, @selector(isGMBidding));
+    self.isGMBidding = isGMBidding.integerValue;
 
     if (isGMBidding.integerValue == 1) {
         return;
@@ -196,6 +198,13 @@
 - (void)mercury_splashAdLifeTime:(NSUInteger)time {
     if (time <= 0 && [self.delegate respondsToSelector:@selector(advanceSplashOnAdCountdownToZero)]) {
         [self.delegate advanceSplashOnAdCountdownToZero];
+    }
+    
+    if (self.isGMBidding == 0) {
+        return;
+    }
+    if (time <= 0 && [self.delegate respondsToSelector:@selector(advanceDidClose)]) {
+        [self.delegate advanceDidClose];
     }
 }
 
