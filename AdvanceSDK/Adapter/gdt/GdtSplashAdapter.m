@@ -30,6 +30,7 @@
 // 是否点击了
 @property (nonatomic, assign) BOOL isClick;
 @property (nonatomic, assign) BOOL isCanch;
+@property (nonatomic, assign) NSInteger isGMBidding;
 
 @end
 
@@ -105,6 +106,7 @@
 - (void)showAd {
     NSNumber *isGMBidding = ((NSNumber * (*)(id, SEL))objc_msgSend)((id)self.adspot, @selector(isGMBidding));
 
+    self.isGMBidding = isGMBidding.integerValue;
     if (isGMBidding.integerValue == 1) {
         return;
     }
@@ -182,6 +184,9 @@
         if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdSkipClicked)]) {
             [self.delegate advanceSplashOnAdSkipClicked];
         }
+        if ([self.delegate respondsToSelector:@selector(advanceDidClose)]) {
+            [self.delegate advanceDidClose];
+        }
     } else {
         if ([self.delegate respondsToSelector:@selector(advanceDidClose)]) {
             [self.delegate advanceDidClose];
@@ -193,6 +198,14 @@
     _leftTime = time;
     if (time <= 0 && [self.delegate respondsToSelector:@selector(advanceSplashOnAdCountdownToZero)]) {
         [self.delegate advanceSplashOnAdCountdownToZero];
+    }
+    
+    // 当GMBidding的时候 会有一个splashAdClosed 不执行的bug 所以需要用这个逻辑来触发 advanceDidClose
+    if (self.isGMBidding == 0) {
+        return;
+    }
+    if (time <= 0 && [self.delegate respondsToSelector:@selector(advanceDidClose)]) {
+        [self.delegate advanceDidClose];
     }
 }
 
