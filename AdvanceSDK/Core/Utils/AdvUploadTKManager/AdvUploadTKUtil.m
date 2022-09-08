@@ -119,7 +119,7 @@
 - (NSString *)joinFailedUrlWithObj:(NSString *)urlString error:(NSError *)error {
     ADV_LEVEL_INFO_LOG(@"上报错误: %@  %@", error.domain, error);
     if (error) {
-
+        
         if ([error.domain isEqualToString:@"KSADErrorDomain"]) { // 快手SDK
             return [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=err_ks_%ld&track_time",(long)error.code]];
         } else if ([error.domain isEqualToString:@"BDAdErrorDomain"]) {
@@ -127,6 +127,8 @@
 
         } else if ([error.domain isEqualToString:@"com.pangle.buadsdk"] || [error.domain isEqualToString:@"com.buadsdk"]) { // 新版穿山甲sdk报错
             return [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=err_csj_%ld&track_time",(long)error.code]];
+        } else if ([error.domain isEqualToString:@"com.bytedance.GroMore"]) { // GM
+            return [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=err_gm_%ld&track_time",(long)error.code]];
         } else if ([error.domain isEqualToString:@"com.bytedance.buadsdk"]) {// 穿山甲sdk报错
             return [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=err_csj_%ld&track_time",(long)error.code]];
         } else if ([error.domain isEqualToString:@"GDTAdErrorDomain"]) {// 广点通
