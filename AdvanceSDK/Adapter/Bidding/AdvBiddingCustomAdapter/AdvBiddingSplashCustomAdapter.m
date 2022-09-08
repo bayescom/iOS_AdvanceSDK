@@ -20,7 +20,7 @@
 @property(strong,nonatomic) AdvanceSplash *advanceSplash;
 //@property (nonatomic, strong) ABUDCustomSplashView *splashView;
 @property (nonatomic, strong) UIView *customBottomView;
-
+@property (nonatomic, assign) NSInteger price;
 @end
 
 @implementation AdvBiddingSplashCustomAdapter
@@ -72,8 +72,8 @@
 }
 
 - (void)advanceBiddingEndWithPrice:(NSInteger)price {
-    NSLog(@"%s %ld", __func__, price);
-    [self.bridge splashAd:self didLoadWithExt:@{ABUMediaAdLoadingExtECPM:[NSString stringWithFormat:@"%ld", price]}];
+//    NSLog(@"%s %ld", __func__, price);
+    self.price = price;
 }
 
 - (void)showSplashAdInWindow:(nonnull UIWindow *)window parameter:(nonnull NSDictionary *)parameter {
@@ -92,6 +92,7 @@
 /// 广告数据拉取成功
 - (void)advanceUnifiedViewDidLoad {
 //    NSLog(@"广告数据拉取成功 %s", __func__);
+    [self.bridge splashAd:self didLoadWithExt:@{ABUMediaAdLoadingExtECPM:[NSString stringWithFormat:@"%ld", self.price]}];
 }
 
 /// 广告曝光成功
