@@ -49,9 +49,11 @@
 
 - (void)renderForExpressAdView:(nonnull UIView *)expressAdView {
     // 如不adn广告不需要render，请尽量模拟回调renderSuccess
+    NSLog(@"renderForExpressAdView   %@", expressAdView);
 //    [self.bridge nativeAd:self renderSuccessWithExpressView:expressAdView];
     if ([expressAdView isKindOfClass:NSClassFromString(@"BUNativeExpressFeedVideoAdView")] ||
-        [expressAdView isKindOfClass:NSClassFromString(@"BUNativeExpressAdView")]) {
+        [expressAdView isKindOfClass:NSClassFromString(@"BUNativeExpressAdView")] ||
+        [expressAdView isKindOfClass:NSClassFromString(@"CSJNativeExpressAdView")]) {
         [expressAdView performSelector:@selector(render)];
     } else if ([expressAdView isKindOfClass:NSClassFromString(@"MercuryNativeExpressAdView")]) {
         [expressAdView performSelector:@selector(render)];
@@ -70,8 +72,11 @@
 }
 
 - (void)setRootViewController:(nonnull UIViewController *)viewController forExpressAdView:(nonnull UIView *)expressAdView {
+    NSLog(@"setRootViewController   %@ %@", expressAdView, viewController);
     if ([expressAdView isKindOfClass:NSClassFromString(@"BUNativeExpressFeedVideoAdView")] ||
-        [expressAdView isKindOfClass:NSClassFromString(@"BUNativeExpressAdView")]) {
+        [expressAdView isKindOfClass:NSClassFromString(@"BUNativeExpressAdView")] ||
+        [expressAdView isKindOfClass:NSClassFromString(@"CSJNativeExpressAdView")]) {
+
         [expressAdView performSelector:@selector(setRootViewController:) withObject:viewController];
     } else if ([expressAdView isKindOfClass:NSClassFromString(@"MercuryNativeExpressAdView")]) {
         [expressAdView performSelector:@selector(setController:) withObject:viewController];
@@ -136,6 +141,7 @@
 /// 该回调会触发多次
 - (void)advanceNativeExpressOnAdRenderSuccess:(AdvanceNativeExpressView *)adView {
     NSLog(@"广告渲染成功 %s %@", __func__, adView);
+    [self.bridge nativeAd:self renderSuccessWithExpressView:adView.expressView];
 
 }
 

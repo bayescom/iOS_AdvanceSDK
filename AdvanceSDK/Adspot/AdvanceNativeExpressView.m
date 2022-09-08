@@ -28,7 +28,8 @@
         return;
     }
     if ([self.expressView isKindOfClass:NSClassFromString(@"BUNativeExpressFeedVideoAdView")] ||
-        [self.expressView isKindOfClass:NSClassFromString(@"BUNativeExpressAdView")]) {
+        [self.expressView isKindOfClass:NSClassFromString(@"BUNativeExpressAdView")] ||
+        [self.expressView isKindOfClass:NSClassFromString(@"CSJNativeExpressAdView")]) {
         [self.expressView performSelector:@selector(setRootViewController:) withObject:_controller];
         [self.expressView performSelector:@selector(render)];
     } else if ([self.expressView isKindOfClass:NSClassFromString(@"MercuryNativeExpressAdView")]) {
