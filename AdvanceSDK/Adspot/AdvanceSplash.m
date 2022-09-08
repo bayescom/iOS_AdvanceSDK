@@ -75,10 +75,17 @@
 
 /// Override
 - (void)deallocSelf {
-    [_bgImgV removeFromSuperview];
-    [_timeoutCheckTimer invalidate];
-    _timeoutCheckTimer = nil;
-    _timeout_stamp = 0;
+    NSLog(@"--fafdsfdsa");
+    NSLog(@"%@",[NSThread currentThread]);
+    dispatch_async(dispatch_get_main_queue(), ^{
+//        ADV_LEVEL_INFO_LOG(@"%@", [NSThread currentThread]);
+        [_bgImgV removeFromSuperview];
+        _bgImgV = nil;
+        [_timeoutCheckTimer invalidate];
+        _timeoutCheckTimer = nil;
+        _timeout_stamp = 0;
+    });
+
 }
 
 - (void)deallocDelegate:(BOOL)execute {
@@ -310,8 +317,8 @@
 
 }
 
-- (void)dealloc {
-    [self deallocSelf];
-}
+//- (void)dealloc {
+//    [self deallocSelf];
+//}
 
 @end
