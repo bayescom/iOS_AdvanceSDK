@@ -132,7 +132,7 @@
 }
 
 - (void)deallocAdapter {
-    ADV_LEVEL_INFO_LOG(@"11===> %s %@", __func__, [NSThread currentThread]);
+//    ADV_LEVEL_INFO_LOG(@"11===> %s %@", __func__, [NSThread currentThread]);
     id timer0 = [_mercury_ad performSelector:@selector(timer0)];
     [timer0 performSelector:@selector(stopTimer)];
 

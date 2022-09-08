@@ -32,7 +32,7 @@
 }
 
 - (void)loadNativeAdWithSlotID:(nonnull NSString *)slotID andSize:(CGSize)size imageSize:(CGSize)imageSize parameter:(nonnull NSDictionary *)parameter {
-    NSLog(@"----------->自定义开屏adapter开始加载啦啦<------------");
+//    NSLog(@"----------->自定义开屏adapter开始加载啦啦<------------");
     
     AdvSupplierModel *model = [[AdvBiddingCongfig defaultManager] returnSupplierByAdspotId:slotID];
     
@@ -49,7 +49,7 @@
 
 - (void)renderForExpressAdView:(nonnull UIView *)expressAdView {
     // 如不adn广告不需要render，请尽量模拟回调renderSuccess
-    NSLog(@"renderForExpressAdView   %@", expressAdView);
+//    NSLog(@"renderForExpressAdView   %@", expressAdView);
 //    [self.bridge nativeAd:self renderSuccessWithExpressView:expressAdView];
     if ([expressAdView isKindOfClass:NSClassFromString(@"BUNativeExpressFeedVideoAdView")] ||
         [expressAdView isKindOfClass:NSClassFromString(@"BUNativeExpressAdView")] ||
@@ -104,7 +104,7 @@
 // MARK: ======================= AdvanceNativeExpressDelegate =======================
 /// 广告数据拉取成功
 - (void)advanceNativeExpressOnAdLoadSuccess:(NSArray<AdvanceNativeExpressView *> *)views {
-    NSLog(@"广告拉取成功 %s", __func__);
+//    NSLog(@"广告拉取成功 %s", __func__);
     NSMutableArray *list = [NSMutableArray arrayWithCapacity:views.count];
     NSMutableArray *exts = [NSMutableArray arrayWithCapacity:views.count];
     for (NSInteger i = 0; i < views.count; i++) {
@@ -122,13 +122,13 @@
 
 /// 广告曝光
 - (void)advanceNativeExpressOnAdShow:(AdvanceNativeExpressView *)adView {
-    NSLog(@"广告曝光 %s", __func__);
+//    NSLog(@"广告曝光 %s", __func__);
     [self.bridge nativeAd:self didVisibleWithMediatedNativeAd:adView.expressView];
 }
 
 /// 广告点击
 - (void)advanceNativeExpressOnAdClicked:(AdvanceNativeExpressView *)adView {
-    NSLog(@"广告点击 %s", __func__);
+//    NSLog(@"广告点击 %s", __func__);
     [self.bridge nativeAd:self didClickWithMediatedNativeAd:adView.expressView];
     [self.bridge nativeAd:self willPresentFullScreenModalWithMediatedNativeAd:adView.expressView];
 
@@ -140,7 +140,7 @@
 /// 该回调的含义是: 比如: 广点通拉取广告成功了并返回了一组view  但是其中某个view的渲染失败了
 /// 该回调会触发多次
 - (void)advanceNativeExpressOnAdRenderSuccess:(AdvanceNativeExpressView *)adView {
-    NSLog(@"广告渲染成功 %s %@", __func__, adView);
+//    NSLog(@"广告渲染成功 %s %@", __func__, adView);
     [self.bridge nativeAd:self renderSuccessWithExpressView:adView.expressView];
 
 }
@@ -151,32 +151,32 @@
 /// 该回调的含义是: 比如: 广点通拉取广告成功了并返回了一组view  但是其中某个view的渲染失败了
 /// 该回调会触发多次
 - (void)advanceNativeExpressOnAdRenderFail:(AdvanceNativeExpressView *)adView {
-    NSLog(@"广告渲染失败 %s %@", __func__, adView);
+//    NSLog(@"广告渲染失败 %s %@", __func__, adView);
 }
 
 /// 广告加载失败
 /// 该回调只会触发一次
 - (void)advanceFailedWithError:(NSError *)error description:(NSDictionary *)description{
-    NSLog(@"广告展示失败 %s  error: %@ 详情:%@", __func__, error, description);
+//    NSLog(@"广告展示失败 %s  error: %@ 详情:%@", __func__, error, description);
 
 }
 
 /// 内部渠道开始加载时调用
 - (void)advanceSupplierWillLoad:(NSString *)supplierId {
-    NSLog(@"内部渠道开始加载 %s  supplierId: %@", __func__, supplierId);
+//    NSLog(@"内部渠道开始加载 %s  supplierId: %@", __func__, supplierId);
 
 }
 
 /// 加载策略成功
 - (void)advanceOnAdReceived:(NSString *)reqId
 {
-    NSLog(@"%s 策略id为: %@",__func__ , reqId);
+//    NSLog(@"%s 策略id为: %@",__func__ , reqId);
 }
 
 /// 广告被关闭
 - (void)advanceNativeExpressOnAdClosed:(AdvanceNativeExpressView *)adView {
     //需要从tableview中删除
-    NSLog(@"广告关闭 %s", __func__);
+//    NSLog(@"广告关闭 %s", __func__);
     [self.bridge nativeAd:self didCloseWithExpressView:adView.expressView closeReasons:@[]];
 }
 

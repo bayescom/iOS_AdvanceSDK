@@ -91,10 +91,10 @@
 
 - (void)deallocAdapter {
     ADV_LEVEL_INFO_LOG(@"%s", __func__);
-    ADV_LEVEL_INFO_LOG(@"%@", [NSThread currentThread]);
+//    ADV_LEVEL_INFO_LOG(@"%@", [NSThread currentThread]);
 
     dispatch_async(dispatch_get_main_queue(), ^{
-        ADV_LEVEL_INFO_LOG(@"%@", [NSThread currentThread]);
+//        ADV_LEVEL_INFO_LOG(@"%@", [NSThread currentThread]);
         if (_csj_ad) {
     //        NSLog(@"穿山甲 释放了");
             [_csj_ad removeFromSuperview];
