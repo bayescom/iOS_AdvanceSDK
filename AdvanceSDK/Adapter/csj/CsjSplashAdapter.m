@@ -17,6 +17,9 @@
 #import "AdvanceSplash.h"
 #import "UIApplication+Adv.h"
 #import "AdvLog.h"
+#import <objc/runtime.h>
+#import <objc/message.h>
+
 @interface CsjSplashAdapter ()  <BUSplashAdDelegate>
 
 @property (nonatomic, strong) BUSplashAdView *csj_ad;
@@ -87,18 +90,33 @@
 }
 
 - (void)deallocAdapter {
-    if (self.csj_ad) {
-//        NSLog(@"穿山甲 释放了");
-        [self.csj_ad removeFromSuperview];
-        self.csj_ad = nil;
-    }
+    ADV_LEVEL_INFO_LOG(@"%s", __func__);
+//    ADV_LEVEL_INFO_LOG(@"%@", [NSThread currentThread]);
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+//        ADV_LEVEL_INFO_LOG(@"%@", [NSThread currentThread]);
+        if (_csj_ad) {
+    //        NSLog(@"穿山甲 释放了");
+            [_csj_ad removeFromSuperview];
+            _csj_ad = nil;
+        }
+    });
+
 }
 
-- (void)dealloc {
-    [self deallocAdapter];
+- (void)gmShowAd {
+    [self showAdAction];
 }
 
 - (void)showAd {
+    NSNumber *isGMBidding = ((NSNumber * (*)(id, SEL))objc_msgSend)((id)self.adspot, @selector(isGMBidding));
+
+    if (isGMBidding.integerValue == 1) {
+        return;
+    }
+    [self showAdAction];
+}
+- (void)showAdAction {
     __weak typeof(self) _self = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         __strong typeof(_self) self = _self;
@@ -122,7 +140,7 @@
             }
         }
     });
-    
+
 }
 // MARK: ======================= BUSplashAdDelegate =======================
 /**

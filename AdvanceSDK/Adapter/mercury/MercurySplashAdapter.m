@@ -26,6 +26,7 @@
 @property (nonatomic, strong) AdvSupplier *supplier;
 @property (nonatomic, weak) AdvanceSplash *adspot;
 @property (nonatomic, assign) BOOL isCanch;
+@property (nonatomic, assign) NSInteger isGMBidding;
 
 @end
 
@@ -86,7 +87,22 @@
     [super loadAd];
 }
 
+
+- (void)gmShowAd {
+    [self showAdAction];
+}
+
 - (void)showAd {
+    NSNumber *isGMBidding = ((NSNumber * (*)(id, SEL))objc_msgSend)((id)self.adspot, @selector(isGMBidding));
+    self.isGMBidding = isGMBidding.integerValue;
+
+    if (isGMBidding.integerValue == 1) {
+        return;
+    }
+    [self showAdAction];
+}
+
+- (void)showAdAction {
 //    [[UIApplication sharedApplication].keyWindow addSubview:_csj_ad];
 //    [[UIApplication sharedApplication].keyWindow bringSubviewToFront:[_adspot performSelector:@selector(bgImgV)]];
     __weak typeof(self) _self = self;
@@ -112,10 +128,11 @@
 
 - (void)dealloc {
     ADVLog(@"%s", __func__);
+//    [self deallocAdapter];
 }
 
 - (void)deallocAdapter {
-    
+//    ADV_LEVEL_INFO_LOG(@"11===> %s %@", __func__, [NSThread currentThread]);
     id timer0 = [_mercury_ad performSelector:@selector(timer0)];
     [timer0 performSelector:@selector(stopTimer)];
 
@@ -181,6 +198,13 @@
 - (void)mercury_splashAdLifeTime:(NSUInteger)time {
     if (time <= 0 && [self.delegate respondsToSelector:@selector(advanceSplashOnAdCountdownToZero)]) {
         [self.delegate advanceSplashOnAdCountdownToZero];
+    }
+    
+    if (self.isGMBidding == 0) {
+        return;
+    }
+    if (time <= 0 && [self.delegate respondsToSelector:@selector(advanceDidClose)]) {
+        [self.delegate advanceDidClose];
     }
 }
 

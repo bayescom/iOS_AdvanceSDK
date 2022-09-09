@@ -10,31 +10,38 @@ PODS:
   - Ads-CN/Domestic (4.5.1.6):
     - Ads-CN/BUFoundation
     - Ads-CN/CSJAdSDK
-  - AdvanceSDK (4.0.0.3):
-    - AdvanceSDK/Core (= 4.0.0.3)
-  - AdvanceSDK/Adspot (4.0.0.3):
+  - AdvanceSDK (4.0.0.5):
+    - AdvanceSDK/Core (= 4.0.0.5)
+  - AdvanceSDK/Adspot (4.0.0.5):
     - AdvanceSDK/Core
-  - AdvanceSDK/BD (4.0.0.3):
+  - AdvanceSDK/AdvBidding (4.0.0.5):
+    - AdvanceSDK/Adspot
+    - AdvanceSDK/Core
+    - AdvBiddingSDK (= 1.0.2)
+    - AdvBiddingSuppliers (= 0.0.2)
+  - AdvanceSDK/BD (4.0.0.5):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - BaiduMobAdSDK (= 4.881)
-  - AdvanceSDK/Core (4.0.0.3)
-  - AdvanceSDK/CSJ (4.0.0.3):
+  - AdvanceSDK/Core (4.0.0.5)
+  - AdvanceSDK/CSJ (4.0.0.5):
     - Ads-CN (= 4.5.1.6)
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
-  - AdvanceSDK/GDT (4.0.0.3):
+  - AdvanceSDK/GDT (4.0.0.5):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - GDTMobSDK (= 4.13.71)
-  - AdvanceSDK/KS (4.0.0.3):
+  - AdvanceSDK/KS (4.0.0.5):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - KSAdSDK (= 3.3.25)
-  - AdvanceSDK/Mercury (4.0.0.3):
+  - AdvanceSDK/Mercury (4.0.0.5):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
-    - MercurySDK (= 3.1.7.1)
+    - MercurySDK (= 3.1.7.2)
+  - AdvBiddingSDK (1.0.2)
+  - AdvBiddingSuppliers (0.0.2)
   - BaiduMobAdSDK (4.881)
   - BURelyFoundation (0.0.1.58):
     - BURelyFoundation/HM (= 0.0.1.58)
@@ -47,7 +54,7 @@ PODS:
   - JSONModel (1.8.0)
   - KSAdSDK (3.3.25)
   - Masonry (1.1.0)
-  - MercurySDK (3.1.7.1)
+  - MercurySDK (3.1.7.2)
   - Reachability (3.2)
   - SDWebImage (5.12.1):
     - SDWebImage/Core (= 5.12.1)
@@ -55,6 +62,7 @@ PODS:
 
 DEPENDENCIES:
   - AdvanceSDK (from `../`)
+  - AdvanceSDK/AdvBidding (from `../`)
   - AdvanceSDK/BD (from `../`)
   - AdvanceSDK/CSJ (from `../`)
   - AdvanceSDK/GDT (from `../`)
@@ -68,6 +76,8 @@ DEPENDENCIES:
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
     - Ads-CN
+    - AdvBiddingSDK
+    - AdvBiddingSuppliers
     - BaiduMobAdSDK
     - BURelyFoundation
     - GDTMobSDK
@@ -84,17 +94,19 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Ads-CN: 5563d7a0ed3f99fd47d421fcb48e70688efedd55
-  AdvanceSDK: 1b6bdcf7ce98e7ca48fc047e053f0b19934cb462
+  AdvanceSDK: 6e5bf483cb2f24e88acbffa4536cabfc77906380
+  AdvBiddingSDK: 52fc9d7c42ba224fc7e12b0e232e915cf619d1a9
+  AdvBiddingSuppliers: 0ef4b0d89c87e8651296ac192dbc0e1f409f1402
   BaiduMobAdSDK: f4c68649b472327e072ed724e70684891da8ba73
   BURelyFoundation: f529322f9e93cf8cc0b4539e447aff77a8ff34de
   GDTMobSDK: 60dca5929fd3cbb68f32eb81305cb65fb988726a
   JSONModel: 02ab723958366a3fd27da57ea2af2113658762e9
   KSAdSDK: b2932c54160f71af31bf704d0c284c8b9d26735e
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
-  MercurySDK: 4e53bb5bd9f6c4893942697194fe9f76b8e9008c
+  MercurySDK: 2e7d83c4e249ac22f953c6e2ff94904137494b08
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
   SDWebImage: 4dc3e42d9ec0c1028b960a33ac6b637bb432207b
 
-PODFILE CHECKSUM: eb57c0828c3127cbacbd1fa95fb7d6911dd6d667
+PODFILE CHECKSUM: 4abacceea58e5fc0ee517e85e88e45d2eb4b2a1f
 
 COCOAPODS: 1.11.2

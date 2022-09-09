@@ -16,6 +16,9 @@
 
 
 #import "BdSplashAdapter.h"
+#import <objc/runtime.h>
+#import <objc/message.h>
+
 @interface BdSplashAdapter ()<BaiduMobAdSplashDelegate>
 {
      
@@ -118,7 +121,20 @@
     [self.imgV removeFromSuperview];
 }
 
+- (void)gmShowAd {
+    [self showAdAction];
+}
+
 - (void)showAd {
+    NSNumber *isGMBidding = ((NSNumber * (*)(id, SEL))objc_msgSend)((id)self.adspot, @selector(isGMBidding));
+
+    if (isGMBidding.integerValue == 1) {
+        return;
+    }
+    [self showAdAction];
+}
+
+- (void)showAdAction {
     __weak typeof(self) _self = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         __strong typeof(_self) self = _self;

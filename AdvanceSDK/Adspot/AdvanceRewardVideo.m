@@ -81,7 +81,8 @@
 // bidding结束
 - (void)advanceBaseAdapterBiddingEndWithWinSupplier:(AdvSupplier *_Nonnull)supplier {
     if (self.delegate && [self.delegate respondsToSelector:@selector(advanceBiddingEndWithPrice:)]) {
-        [self.delegate advanceBiddingEndWithPrice:supplier.supplierPrice];
+        NSInteger price = (supplier.supplierPrice == 0) ? supplier.sdk_price : supplier.supplierPrice;
+        [self.delegate advanceBiddingEndWithPrice:price];
     }
     
 }

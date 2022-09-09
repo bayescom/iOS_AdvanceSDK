@@ -16,6 +16,8 @@
 #import "AdvanceSplash.h"
 #import "UIApplication+Adv.h"
 #import "AdvLog.h"
+#import <objc/runtime.h>
+#import <objc/message.h>
 
 #if !__has_feature(objc_arc)
     // Safe releases
@@ -113,19 +115,32 @@
     __weak typeof(self) _self = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         __strong typeof(_self) self = _self;
-        
-        [self.templateView removeFromSuperview];
-        self.templateView = nil;
-        [self.imgV removeFromSuperview];
-        self.imgV = nil;
-        
         if ([self.delegate respondsToSelector:@selector(advanceDidClose)]) {
             [self.delegate advanceDidClose];
         }
+        [self.splashManager removeLocalAssets];
+        [self.templateView removeFromSuperview];
+        [self.imgV removeFromSuperview];
+        self.templateView = nil;
+        self.imgV = nil;
+        self.splashManager = nil;
     });
 }
 
+- (void)gmShowAd {
+    [self showAdAction];
+}
+
 - (void)showAd {
+    NSNumber *isGMBidding = ((NSNumber * (*)(id, SEL))objc_msgSend)((id)self.adspot, @selector(isGMBidding));
+
+    if (isGMBidding.integerValue == 1) {
+        return;
+    }
+    [self showAdAction];
+}
+
+- (void)showAdAction {
     // 设置logo
     __weak typeof(self) _self = self;
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -163,7 +178,7 @@
             [self biddingWithSplashModel:splashModel isWin:YES];
         }
     });
-    
+
 }
 
 // 加载成功
@@ -197,7 +212,16 @@
     }
     _isClick = YES;
 
-    [self deallocAdapter];
+    [self.splashManager removeLocalAssets];
+    [self.templateView removeFromSuperview];
+    [self.imgV removeFromSuperview];
+    self.templateView = nil;
+    self.imgV = nil;
+    self.splashManager = nil;
+    if ([self.delegate respondsToSelector:@selector(advanceDidClose)]) {
+        [self.delegate advanceDidClose];
+    }
+//    [self deallocAdapter];
 
 }
 
@@ -234,7 +258,17 @@
         }
     }
     
-    [self deallocAdapter];
+    [self.splashManager removeLocalAssets];
+    [self.templateView removeFromSuperview];
+    [self.imgV removeFromSuperview];
+    self.templateView = nil;
+    self.imgV = nil;
+    self.splashManager = nil;
+    if ([self.delegate respondsToSelector:@selector(advanceDidClose)]) {
+        [self.delegate advanceDidClose];
+    }
+
+//    [self deallocAdapter];
 }
 
 

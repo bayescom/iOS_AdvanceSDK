@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
     s.name             = 'AdvanceSDK'
     
-    s.version          = '4.0.0.4'
+    s.version          = '4.0.0.5'
     s.ios.deployment_target = '9.0'
     s.platform     = :ios, "9.0"
     s.requires_arc = true
@@ -53,7 +53,7 @@ Pod::Spec.new do |s|
     s.subspec 'Mercury' do |mer|
         mer.dependency 'AdvanceSDK/Core'
         mer.dependency 'AdvanceSDK/Adspot'
-        mer.dependency 'MercurySDK', '3.1.7.1'
+        mer.dependency 'MercurySDK', '3.1.7.2'
         mer.source_files = 'AdvanceSDK/Adapter/mercury/**/*.{h,m}'
         mer.frameworks = 'StoreKit', 'AVFoundation', 'CoreMotion'
     end
@@ -118,60 +118,33 @@ Pod::Spec.new do |s|
 #    s.subspec 'Bidding' do |bidding|
 #        bidding.dependency 'AdvanceSDK/Core'
 #        bidding.dependency 'AdvanceSDK/Adspot'
-#        bidding.dependency 'AdvBiddingSDK'
-#        bidding.dependency 'AdvBiddingSuppliers'
-
+##        bidding.dependency 'AdvBiddingSDK'
+#        bidding.dependency 'AdvBiddingSuppliers','0.0.2'
+#
 #        bidding.dependency 'Ads-CN'
 #        bidding.source_files =  ['AdvanceSDK/Adapter/Bidding/*{h,m}',
 #        'AdvanceSDK/Adapter/Bidding/AdvBiddingAdapter/*{h,m}',
 #        'AdvanceSDK/Adapter/Bidding/AdvBiddingCustomAdapter/*{h,m}'
 #        ]
 #
-#        # UnityAds
-#        bidding.dependency 'UnityAds', '4.2.1'
-#        # Admob/GoogleAd
-#        #       bidding.dependency 'Google-Mobile-Ads-SDK', '9.5.0'
-#        # 百度SDK
-#        bidding.dependency 'BaiduMobAdSDK', '4.881'
-#        # 广点通/优量汇
-#        bidding.dependency 'GDTMobSDK' ,'4.13.71'
-#        # SigmobAd
-#        # pod 'SigmobAd-iOS', '3.5.3'
-#        # 游可赢
-#        bidding.dependency 'KlevinAdSDK', '2.5.1.202'
-#        # MintegralAdSDK 使用时请务必使用cocoapod源
-#        bidding.dependency 'MintegralAdSDK', '7.1.7.0'
-
-#        bidding.ios.vendored_frameworks = ['AdvanceSDK/Adapter/Bidding/SDKs/ABUAdAdmobAdapter/ABUAdAdmobAdapter/ABUAdAdmobAdapter.framework',
-#        'AdvanceSDK/Adapter/Bidding/SDKs/ABUAdBaiduAdapter/ABUAdBaiduAdapter/ABUAdBaiduAdapter.framework',
-#        'AdvanceSDK/Adapter/Bidding/SDKs/ABUAdCsjAdapter/ABUAdCsjAdapter/ABUAdCsjAdapter.framework',
-#        'AdvanceSDK/Adapter/Bidding/SDKs/ABUAdGdtAdapter/ABUAdGdtAdapter/ABUAdGdtAdapter.framework',
-#        'AdvanceSDK/Adapter/Bidding/SDKs/ABUAdKlevinAdapter/ABUAdKlevinAdapter/ABUAdKlevinAdapter.framework',
-#        'AdvanceSDK/Adapter/Bidding/SDKs/ABUAdMintegralAdapter/ABUAdMintegralAdapter/ABUAdMintegralAdapter.framework',
-#        'AdvanceSDK/Adapter/Bidding/SDKs/ABUAdUnityAdapter/ABUAdUnityAdapter/ABUAdUnityAdapter.framework',
-#        'AdvanceSDK/Adapter/Bidding/SDKs/ABUVisualDebug/ABUVisualDebug/ABUVisualDebug.framework',
-#        'AdvanceSDK/Adapter/Bidding/SDKs/Ads-Mediation-CN/Ads-Mediation-CN/ABUAdSDK.framework',
-##        'AdvanceSDK/Adapter/Bidding/AdvBidding.framework'
 #
-#        ]
-
 #        valid_archs = ['armv7', 'armv7s', 'x86_64', 'arm64']
 #
 #
 #    end
     
     
-#    s.subspec 'AdvBidding' do |advBidding|
-#        advBidding.dependency 'AdvanceSDK/Core'
-#        advBidding.dependency 'AdvanceSDK/Adspot'
-#        advBidding.dependency 'AdvBiddingSDK', '1.0.0'
-#        advBidding.dependency 'AdvBiddingSuppliers', '0.0.1'
-#
-#
-##        valid_archs = ['armv7', 'armv7s', 'x86_64', 'arm64']
-#
-#
-#    end
+    s.subspec 'AdvBidding' do |advBidding|
+        advBidding.dependency 'AdvanceSDK/Core'
+        advBidding.dependency 'AdvanceSDK/Adspot'
+        advBidding.dependency 'AdvBiddingSDK', '1.0.2'
+        advBidding.dependency 'AdvBiddingSuppliers', '0.0.2'
+
+
+#        valid_archs = ['armv7', 'armv7s', 'x86_64', 'arm64']
+
+
+    end
     
     
     

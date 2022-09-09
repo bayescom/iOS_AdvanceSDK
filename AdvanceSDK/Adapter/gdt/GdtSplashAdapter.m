@@ -17,6 +17,9 @@
 #import "AdvanceSplash.h"
 #import "UIApplication+Adv.h"
 #import "AdvLog.h"
+#import <objc/runtime.h>
+#import <objc/message.h>
+
 @interface GdtSplashAdapter () <GDTSplashAdDelegate>
 @property (nonatomic, strong) GDTSplashAd *gdt_ad;
 @property (nonatomic, weak) AdvanceSplash *adspot;
@@ -27,6 +30,7 @@
 // 是否点击了
 @property (nonatomic, assign) BOOL isClick;
 @property (nonatomic, assign) BOOL isCanch;
+@property (nonatomic, assign) NSInteger isGMBidding;
 
 @end
 
@@ -95,7 +99,20 @@
     _gdt_ad = nil;
 }
 
+- (void)gmShowAd {
+    [self showAdAction];
+}
+
 - (void)showAd {
+    NSNumber *isGMBidding = ((NSNumber * (*)(id, SEL))objc_msgSend)((id)self.adspot, @selector(isGMBidding));
+
+    self.isGMBidding = isGMBidding.integerValue;
+    if (isGMBidding.integerValue == 1) {
+        return;
+    }
+    [self showAdAction];
+}
+- (void)showAdAction {
     // 设置logo
     __weak typeof(self) _self = self;
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -167,6 +184,9 @@
         if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdSkipClicked)]) {
             [self.delegate advanceSplashOnAdSkipClicked];
         }
+        if ([self.delegate respondsToSelector:@selector(advanceDidClose)]) {
+            [self.delegate advanceDidClose];
+        }
     } else {
         if ([self.delegate respondsToSelector:@selector(advanceDidClose)]) {
             [self.delegate advanceDidClose];
@@ -178,6 +198,14 @@
     _leftTime = time;
     if (time <= 0 && [self.delegate respondsToSelector:@selector(advanceSplashOnAdCountdownToZero)]) {
         [self.delegate advanceSplashOnAdCountdownToZero];
+    }
+    
+    // 当GMBidding的时候 会有一个splashAdClosed 不执行的bug 所以需要用这个逻辑来触发 advanceDidClose
+    if (self.isGMBidding == 0) {
+        return;
+    }
+    if (time <= 0 && [self.delegate respondsToSelector:@selector(advanceDidClose)]) {
+        [self.delegate advanceDidClose];
     }
 }
 

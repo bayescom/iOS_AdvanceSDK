@@ -16,6 +16,9 @@
 #import "AdvanceSplash.h"
 #import "UIApplication+Adv.h"
 #import "AdvLog.h"
+#import <objc/runtime.h>
+#import <objc/message.h>
+
 #define WeakSelf(type) __weak typeof(type) weak##type = type;
 #define StrongSelf(type) __strong typeof(weak##type) strong##type = weak##type;
 
@@ -97,12 +100,52 @@
 
 - (void)deallocAdapter {
 //    _gdt_ad = nil;
-    if (self.ks_ad) {
-        [self.ks_ad removeFromSuperview];
-        self.ks_ad = nil;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        if (_ks_ad) {
+            [_ks_ad removeFromSuperview];
+            _ks_ad = nil;
+        }
+        [_imgV removeFromSuperview];
+        _imgV = nil;
+    });
+
+}
+
+- (void)gmShowAd {
+    [self showAdAction];
+}
+
+- (void)showAd {
+    NSNumber *isGMBidding = ((NSNumber * (*)(id, SEL))objc_msgSend)((id)self.adspot, @selector(isGMBidding));
+
+    if (isGMBidding.integerValue == 1) {
+        return;
     }
-    [self.imgV removeFromSuperview];
-    self.imgV = nil;
+    [self showAdAction];
+}
+
+- (void)showAdAction {
+    if (!_ks_ad) {
+        return;
+    }
+    // 设置logo
+    CGRect adFrame = [UIScreen mainScreen].bounds;
+    if (_adspot.logoImage && _adspot.showLogoRequire) {
+        
+        NSAssert(_adspot.logoImage != nil, @"showLogoRequire = YES时, 必须设置logoImage");
+        CGFloat real_w = [UIScreen mainScreen].bounds.size.width;
+        CGFloat real_h = _adspot.logoImage.size.height*(real_w/_adspot.logoImage.size.width);
+        adFrame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height-real_h);
+        
+        self.imgV = [[UIImageView alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height-real_h, real_w, real_h)];
+        self.imgV.userInteractionEnabled = YES;
+        self.imgV.image = _adspot.logoImage;
+        [[UIApplication sharedApplication].adv_getCurrentWindow addSubview:self.imgV];
+    }
+    _ks_ad.frame = adFrame;
+    [_ks_ad showInView:[UIApplication sharedApplication].adv_getCurrentWindow];
+
 }
 
 
@@ -123,12 +166,8 @@
         _supplier.state = AdvanceSdkSupplierStateSuccess;
         return;
     }
-
     [self unifiedDelegate];
 
-    _timeout = 5;
-    // 记录过期的时间
-    _timeout_stamp = ([[NSDate date] timeIntervalSince1970] + _timeout)*1000;
 }
 /**
  * splash ad (material) failed to load
@@ -149,6 +188,11 @@
     if ([self.delegate respondsToSelector:@selector(advanceExposured)]) {
         [self.delegate advanceExposured];
     }
+    
+    _timeout = 5;
+    // 记录过期的时间
+    _timeout_stamp = ([[NSDate date] timeIntervalSince1970] + _timeout)*1000;
+
 }
 /**
  * splash ad video begin play
@@ -166,9 +210,11 @@
     if ([self.delegate respondsToSelector:@selector(advanceClicked)]) {
         [self.delegate advanceClicked];
     }
+    [self ksadDidClose];
+    [_imgV removeFromSuperview];
+    _imgV = nil;
 }
-/**
- * splash ad will zoom out, frame can be assigned
+/**   * splash ad will zoom out, frame can be assigned
  * for video ad only
  * @param frame target frame
  */
@@ -191,6 +237,8 @@
     if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdSkipClicked)]) {
         [self.delegate advanceSplashOnAdSkipClicked];
     }
+    
+    [self ksadDidClose];
     [self deallocAdapter];
 }
 /**
@@ -233,28 +281,6 @@
 
 }
 
-
-- (void)showAd {
-    if (!_ks_ad) {
-        return;
-    }
-    // 设置logo
-    CGRect adFrame = [UIScreen mainScreen].bounds;
-    if (_adspot.logoImage && _adspot.showLogoRequire) {
-        
-        NSAssert(_adspot.logoImage != nil, @"showLogoRequire = YES时, 必须设置logoImage");
-        CGFloat real_w = [UIScreen mainScreen].bounds.size.width;
-        CGFloat real_h = _adspot.logoImage.size.height*(real_w/_adspot.logoImage.size.width);
-        adFrame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height-real_h);
-        
-        self.imgV = [[UIImageView alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height-real_h, real_w, real_h)];
-        self.imgV.userInteractionEnabled = YES;
-        self.imgV.image = _adspot.logoImage;
-        [[UIApplication sharedApplication].adv_getCurrentWindow addSubview:self.imgV];
-    }
-    _ks_ad.frame = adFrame;
-    [_ks_ad showInView:[UIApplication sharedApplication].adv_getCurrentWindow];
-}
 
 - (UIImageView *)imgV {
     if (!_imgV) {
