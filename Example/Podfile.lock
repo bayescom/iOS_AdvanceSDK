@@ -14,15 +14,15 @@ PODS:
     - AdvanceSDK/Core (= 4.0.0.5)
   - AdvanceSDK/Adspot (4.0.0.5):
     - AdvanceSDK/Core
+  - AdvanceSDK/AdvBidding (4.0.0.5):
+    - AdvanceSDK/Adspot
+    - AdvanceSDK/Core
+    - AdvBiddingSDK (= 1.0.2)
+    - AdvBiddingSuppliers (= 0.0.2)
   - AdvanceSDK/BD (4.0.0.5):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - BaiduMobAdSDK (= 4.881)
-  - AdvanceSDK/Bidding (4.0.0.5):
-    - Ads-CN
-    - AdvanceSDK/Adspot
-    - AdvanceSDK/Core
-    - AdvBiddingSuppliers (= 0.0.2)
   - AdvanceSDK/Core (4.0.0.5)
   - AdvanceSDK/CSJ (4.0.0.5):
     - Ads-CN (= 4.5.1.6)
@@ -40,6 +40,7 @@ PODS:
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - MercurySDK (= 3.1.7.2)
+  - AdvBiddingSDK (1.0.2)
   - AdvBiddingSuppliers (0.0.2)
   - BaiduMobAdSDK (4.881)
   - BURelyFoundation (0.0.1.58):
@@ -61,8 +62,8 @@ PODS:
 
 DEPENDENCIES:
   - AdvanceSDK (from `../`)
+  - AdvanceSDK/AdvBidding (from `../`)
   - AdvanceSDK/BD (from `../`)
-  - AdvanceSDK/Bidding (from `../`)
   - AdvanceSDK/CSJ (from `../`)
   - AdvanceSDK/GDT (from `../`)
   - AdvanceSDK/KS (from `../`)
@@ -75,6 +76,7 @@ DEPENDENCIES:
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
     - Ads-CN
+    - AdvBiddingSDK
     - AdvBiddingSuppliers
     - BaiduMobAdSDK
     - BURelyFoundation
@@ -92,7 +94,8 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Ads-CN: 5563d7a0ed3f99fd47d421fcb48e70688efedd55
-  AdvanceSDK: 9dad4ffeefb5952c33a9d3fc139d95ec87f77790
+  AdvanceSDK: 6e5bf483cb2f24e88acbffa4536cabfc77906380
+  AdvBiddingSDK: 52fc9d7c42ba224fc7e12b0e232e915cf619d1a9
   AdvBiddingSuppliers: 0ef4b0d89c87e8651296ac192dbc0e1f409f1402
   BaiduMobAdSDK: f4c68649b472327e072ed724e70684891da8ba73
   BURelyFoundation: f529322f9e93cf8cc0b4539e447aff77a8ff34de
@@ -104,6 +107,6 @@ SPEC CHECKSUMS:
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
   SDWebImage: 4dc3e42d9ec0c1028b960a33ac6b637bb432207b
 
-PODFILE CHECKSUM: a16cb14694fa672cbbf38a28b60cf1fba94d45e1
+PODFILE CHECKSUM: 4abacceea58e5fc0ee517e85e88e45d2eb4b2a1f
 
 COCOAPODS: 1.11.2
