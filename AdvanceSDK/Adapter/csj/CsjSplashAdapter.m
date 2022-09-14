@@ -221,17 +221,15 @@
 }
 
 - (void)splashAdViewControllerDidClose:(BUSplashAd *)splashAd {
-    NSLog(@"!!!!!!!");
     [self closeDelegate];
 }
 
 - (void)splashDidCloseOtherController:(nonnull BUSplashAd *)splashAd interactionType:(BUInteractionType)interactionType {
-    NSLog(@"!!!!!!rewrewr!");
     [self closeDelegate];
 }
 
 - (void)splashVideoAdDidPlayFinish:(nonnull BUSplashAd *)splashAd didFailWithError:(nonnull NSError *)error {
-    NSLog(@"!!!!!!ffagdagdas!");
+    
 }
 
 
