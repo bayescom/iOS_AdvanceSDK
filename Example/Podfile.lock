@@ -1,53 +1,75 @@
 PODS:
-  - Ads-CN (4.5.1.6):
-    - Ads-CN/BUAdSDK (= 4.5.1.6)
-  - Ads-CN/BUAdSDK (4.5.1.6):
-    - Ads-CN/Domestic
-  - Ads-CN/BUFoundation (4.5.1.6):
-    - BURelyFoundation (= 0.0.1.58)
-  - Ads-CN/CSJAdSDK (4.5.1.6):
-    - Ads-CN/BUFoundation
-  - Ads-CN/Domestic (4.5.1.6):
-    - Ads-CN/BUFoundation
-    - Ads-CN/CSJAdSDK
-  - AdvanceSDK (4.0.0.5):
-    - AdvanceSDK/Core (= 4.0.0.5)
-  - AdvanceSDK/Adspot (4.0.0.5):
+  - Ads-CN (4.7.1.0):
+    - Ads-CN/BUAdSDK (= 4.7.1.0)
+  - Ads-CN/BUAdSDK (4.7.1.0):
+    - Ads-CN/Dep_Accurate
+  - Ads-CN/Dep_Accurate (4.7.1.0):
+    - BUAdSDK (= 0.1.0.24)
+    - BURelyFoundation/CSJ (= 0.0.3.6)
+  - AdvanceSDK (4.0.0.6):
+    - AdvanceSDK/Core (= 4.0.0.6)
+  - AdvanceSDK/Adspot (4.0.0.6):
     - AdvanceSDK/Core
-  - AdvanceSDK/AdvBidding (4.0.0.5):
+  - AdvanceSDK/AdvBidding (4.0.0.6):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - AdvBiddingSDK (= 1.0.2)
     - AdvBiddingSuppliers (= 0.0.2)
-  - AdvanceSDK/BD (4.0.0.5):
+  - AdvanceSDK/BD (4.0.0.6):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - BaiduMobAdSDK (= 4.881)
-  - AdvanceSDK/Core (4.0.0.5)
-  - AdvanceSDK/CSJ (4.0.0.5):
-    - Ads-CN (= 4.5.1.6)
+  - AdvanceSDK/Core (4.0.0.6)
+  - AdvanceSDK/CSJ (4.0.0.6):
+    - Ads-CN (= 4.7.1.0)
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
-  - AdvanceSDK/GDT (4.0.0.5):
+  - AdvanceSDK/GDT (4.0.0.6):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - GDTMobSDK (= 4.13.71)
-  - AdvanceSDK/KS (4.0.0.5):
+  - AdvanceSDK/KS (4.0.0.6):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - KSAdSDK (= 3.3.25)
-  - AdvanceSDK/Mercury (4.0.0.5):
+  - AdvanceSDK/Mercury (4.0.0.6):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - MercurySDK (= 3.1.7.2)
   - AdvBiddingSDK (1.0.2)
   - AdvBiddingSuppliers (0.0.2)
   - BaiduMobAdSDK (4.881)
-  - BURelyFoundation (0.0.1.58):
-    - BURelyFoundation/HM (= 0.0.1.58)
-    - BURelyFoundation/NETWork (= 0.0.1.58)
-  - BURelyFoundation/HM (0.0.1.58)
-  - BURelyFoundation/NETWork (0.0.1.58)
+  - BUAdSDK (0.1.0.24):
+    - BUAdSDK/BUAdSDK (= 0.1.0.24)
+  - BUAdSDK/BUAdSDK (0.1.0.24)
+  - BURelyFoundation/AFNetworking (0.0.3.6)
+  - BURelyFoundation/BURelyFoundation (0.0.3.6)
+  - BURelyFoundation/CSJ (0.0.3.6):
+    - BURelyFoundation/AFNetworking
+    - BURelyFoundation/BURelyFoundation
+    - BURelyFoundation/Foundation
+    - BURelyFoundation/Gecko
+    - BURelyFoundation/HM
+    - BURelyFoundation/NETWork
+    - BURelyFoundation/SDWebImage
+    - BURelyFoundation/YYModel
+    - BURelyFoundation/ZFPlayer
+    - BURelyFoundation/Zip
+  - BURelyFoundation/Foundation (0.0.3.6):
+    - BURelyFoundation/NETWork
+  - BURelyFoundation/Gecko (0.0.3.6):
+    - BURelyFoundation/Foundation
+  - BURelyFoundation/HM (0.0.3.6)
+  - BURelyFoundation/NETWork (0.0.3.6):
+    - BURelyFoundation/AFNetworking
+  - BURelyFoundation/SDWebImage (0.0.3.6):
+    - BURelyFoundation/Foundation
+  - BURelyFoundation/YYModel (0.0.3.6)
+  - BURelyFoundation/ZFPlayer (0.0.3.6):
+    - BURelyFoundation/Foundation
+    - BURelyFoundation/Zip
+  - BURelyFoundation/Zip (0.0.3.6):
+    - BURelyFoundation/Foundation
   - GDTMobSDK (4.13.71):
     - GDTMobSDK/GDTMobSDK (= 4.13.71)
   - GDTMobSDK/GDTMobSDK (4.13.71)
@@ -79,6 +101,7 @@ SPEC REPOS:
     - AdvBiddingSDK
     - AdvBiddingSuppliers
     - BaiduMobAdSDK
+    - BUAdSDK
     - BURelyFoundation
     - GDTMobSDK
     - JSONModel
@@ -93,12 +116,13 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  Ads-CN: 5563d7a0ed3f99fd47d421fcb48e70688efedd55
-  AdvanceSDK: 6e5bf483cb2f24e88acbffa4536cabfc77906380
+  Ads-CN: 2b4a13d0430272f1bd90d0e2589623f9e6fc4ce6
+  AdvanceSDK: a0fd0f716f576716624be7af29987c9adc615cec
   AdvBiddingSDK: 52fc9d7c42ba224fc7e12b0e232e915cf619d1a9
   AdvBiddingSuppliers: 0ef4b0d89c87e8651296ac192dbc0e1f409f1402
   BaiduMobAdSDK: f4c68649b472327e072ed724e70684891da8ba73
-  BURelyFoundation: f529322f9e93cf8cc0b4539e447aff77a8ff34de
+  BUAdSDK: 5528f72f7b9b478a12743ea23af7bdb9746efc00
+  BURelyFoundation: b208aa141bb04033a1dd66dbdea114f4745f357a
   GDTMobSDK: 60dca5929fd3cbb68f32eb81305cb65fb988726a
   JSONModel: 02ab723958366a3fd27da57ea2af2113658762e9
   KSAdSDK: b2932c54160f71af31bf704d0c284c8b9d26735e

@@ -627,7 +627,6 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-AdvanceSDK_Example/Pods-AdvanceSDK_Example-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/BURelyFoundation/BURelyFoundation.framework",
 				"${BUILT_PRODUCTS_DIR}/JSONModel/JSONModel.framework",
 				"${BUILT_PRODUCTS_DIR}/Masonry/Masonry.framework",
 				"${BUILT_PRODUCTS_DIR}/Reachability/Reachability.framework",
@@ -636,7 +635,6 @@
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BURelyFoundation.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JSONModel.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Masonry.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Reachability.framework",
@@ -883,14 +881,6 @@
 					"-framework",
 					"\"AudioToolbox\"",
 					"-framework",
-					"\"BUAdSDK\"",
-					"-framework",
-					"\"BUCNAuxiliary\"",
-					"-framework",
-					"\"BUFoundation\"",
-					"-framework",
-					"\"BURelyFoundation\"",
-					"-framework",
 					"\"BaiduMobAdSDK\"",
 					"-framework",
 					"\"CSJAdSDK\"",
@@ -1022,14 +1012,6 @@
 					"\"AudioToolBox\"",
 					"-framework",
 					"\"AudioToolbox\"",
-					"-framework",
-					"\"BUAdSDK\"",
-					"-framework",
-					"\"BUCNAuxiliary\"",
-					"-framework",
-					"\"BUFoundation\"",
-					"-framework",
-					"\"BURelyFoundation\"",
 					"-framework",
 					"\"BaiduMobAdSDK\"",
 					"-framework",

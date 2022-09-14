@@ -22,10 +22,13 @@
 
 @interface CsjSplashAdapter ()  <BUSplashAdDelegate>
 
-@property (nonatomic, strong) BUSplashAdView *csj_ad;
+@property (nonatomic, strong) BUSplashAd *csj_ad;
 @property (nonatomic, weak) AdvanceSplash *adspot;
 @property (nonatomic, strong) AdvSupplier *supplier;
+@property (nonatomic, strong) UIImageView *imgV;
+
 @property (nonatomic, assign) BOOL isCanch;
+@property (nonatomic, assign) BOOL isClose;
 
 @end
 
@@ -44,7 +47,7 @@
             CGFloat real_h = _adspot.logoImage.size.height*(real_w/_adspot.logoImage.size.width);
             adFrame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height-real_h);
         }
-        _csj_ad = [[BUSplashAdView alloc] initWithSlotID:_supplier.adspotid frame:adFrame];
+        _csj_ad = [[BUSplashAd alloc] initWithSlotID:_supplier.adspotid adSize:adFrame.size];
     }
     return self;
 }
@@ -97,8 +100,10 @@
 //        ADV_LEVEL_INFO_LOG(@"%@", [NSThread currentThread]);
         if (_csj_ad) {
     //        NSLog(@"穿山甲 释放了");
-            [_csj_ad removeFromSuperview];
+            [_csj_ad removeSplashView];
             _csj_ad = nil;
+            [_imgV removeFromSuperview];
+            _imgV = nil;
         }
     });
 
@@ -121,32 +126,19 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         __strong typeof(_self) self = _self;
 
-        [[UIApplication sharedApplication].keyWindow addSubview:_csj_ad];
+//        [[UIApplication sharedApplication].keyWindow addSubview:_csj_ad];
         [[UIApplication sharedApplication].keyWindow bringSubviewToFront:[_adspot performSelector:@selector(bgImgV)]];
         
-        _csj_ad.backgroundColor = [UIColor clearColor];
-        _csj_ad.rootViewController = _adspot.viewController;
-        
-        if (_adspot.showLogoRequire) {
-            // 添加Logo
-            NSAssert(_adspot.logoImage != nil, @"showLogoRequire = YES时, 必须设置logoImage");
-            CGFloat real_w = [UIScreen mainScreen].bounds.size.width;
-            CGFloat real_h = _adspot.logoImage.size.height*(real_w/_adspot.logoImage.size.width);
-            UIImageView *imgV = [[UIImageView alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height-real_h, real_w, real_h)];
-            imgV.userInteractionEnabled = YES;
-            imgV.image = _adspot.logoImage;
-            if (imgV) {
-                [_csj_ad addSubview:imgV];
-            }
-        }
+        [_csj_ad showSplashViewInRootViewController:[UIApplication sharedApplication].adv_getCurrentWindow.rootViewController];
     });
 
 }
 // MARK: ======================= BUSplashAdDelegate =======================
-/**
- This method is called when splash ad material loaded successfully.
- */
-- (void)splashAdDidLoad:(BUSplashAdView *)splashAd {
+
+
+
+- (void)splashAdLoadSuccess:(nonnull BUSplashAd *)splashAd {
+    NSLog(@"11111111111");
     [self.adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
 //    NSLog(@"穿山甲开屏拉取成功");
@@ -155,8 +147,93 @@
         return;
     }
     [self unifiedDelegate];
-    
 }
+
+- (void)splashAdRenderSuccess:(nonnull BUSplashAd *)splashAd {
+    NSLog(@"2222222222");
+    
+    if (_adspot.showLogoRequire) {
+        // 添加Logo
+        NSAssert(_adspot.logoImage != nil, @"showLogoRequire = YES时, 必须设置logoImage");
+        CGFloat real_w = [UIScreen mainScreen].bounds.size.width;
+        CGFloat real_h = _adspot.logoImage.size.height*(real_w/_adspot.logoImage.size.width);
+        _imgV = [[UIImageView alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height-real_h, real_w, real_h)];
+        _imgV.userInteractionEnabled = YES;
+        _imgV.image = _adspot.logoImage;
+        if (_imgV) {
+            [_csj_ad.splashRootViewController.view addSubview:_imgV];
+        }
+    }
+}
+
+
+- (void)splashAdLoadFail:(nonnull BUSplashAd *)splashAd error:(BUAdError * _Nullable)error {
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
+    _supplier.state = AdvanceSdkSupplierStateFailed;
+//    NSLog(@"========>>>>>>>> %ld %@", (long)_supplier.priority, error);
+    if (_supplier.isParallel == YES) { // 并行不释放 只上报
+        
+        return;
+    } else { //
+        [self deallocAdapter];
+    }
+}
+
+
+- (void)splashAdRenderFail:(nonnull BUSplashAd *)splashAd error:(BUAdError * _Nullable)error {
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
+}
+
+- (void)splashAdWillShow:(nonnull BUSplashAd *)splashAd {
+
+}
+
+- (void)splashAdDidShow:(nonnull BUSplashAd *)splashAd {
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
+    if ([self.delegate respondsToSelector:@selector(advanceExposured)] && self.csj_ad) {
+        [self.delegate advanceExposured];
+    }
+}
+
+- (void)splashAdDidClick:(nonnull BUSplashAd *)splashAd {
+//    [self deallocAdapter];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
+    if ([self.delegate respondsToSelector:@selector(advanceClicked)]) {
+        [self.delegate advanceClicked];
+    }
+}
+
+- (void)splashAdDidClose:(nonnull BUSplashAd *)splashAd closeType:(BUSplashAdCloseType)closeType {
+    
+    if (closeType == BUSplashAdCloseType_CountdownToZero) {
+        if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdCountdownToZero)]) {
+            [self.delegate advanceSplashOnAdCountdownToZero];
+        }
+    }
+    
+    if (closeType == BUSplashAdCloseType_ClickSkip) {
+        if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdSkipClicked)]) {
+            [self.delegate advanceSplashOnAdSkipClicked];
+        }
+    }
+    
+    [self closeDelegate];
+}
+
+- (void)splashAdViewControllerDidClose:(BUSplashAd *)splashAd {
+    NSLog(@"!!!!!!!");
+    [self closeDelegate];
+}
+
+- (void)splashDidCloseOtherController:(nonnull BUSplashAd *)splashAd interactionType:(BUInteractionType)interactionType {
+    NSLog(@"!!!!!!rewrewr!");
+    [self closeDelegate];
+}
+
+- (void)splashVideoAdDidPlayFinish:(nonnull BUSplashAd *)splashAd didFailWithError:(nonnull NSError *)error {
+    NSLog(@"!!!!!!ffagdagdas!");
+}
+
 
 - (void)unifiedDelegate {
     if (_isCanch) {
@@ -169,79 +246,18 @@
     [self showAd];
 }
 
-/**
- This method is called when splash ad material failed to load.
- @param error : the reason of error
- */
-- (void)splashAd:(BUSplashAdView *)splashAd didFailWithError:(NSError * _Nullable)error {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
-    _supplier.state = AdvanceSdkSupplierStateFailed;
-//    NSLog(@"========>>>>>>>> %ld %@", (long)_supplier.priority, error);
-    if (_supplier.isParallel == YES) { // 并行不释放 只上报
-        
+- (void)closeDelegate {
+    if (_isClose) {
         return;
-    } else { //
-        [self deallocAdapter];
     }
-}
+    _isClose = YES;
 
-/**
- This method is called when splash ad slot will be showing.
- */
-- (void)splashAdWillVisible:(BUSplashAdView *)splashAd {
-
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
-    if ([self.delegate respondsToSelector:@selector(advanceExposured)] && self.csj_ad) {
-        [self.delegate advanceExposured];
-    }
-}
-
-/**
- This method is called when splash ad is clicked.
- */
-- (void)splashAdDidClick:(BUSplashAdView *)splashAd {
-    [self deallocAdapter];
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
-    if ([self.delegate respondsToSelector:@selector(advanceClicked)]) {
-        [self.delegate advanceClicked];
-    }
-}
-
-/**
- This method is called when splash ad is closed.
- */
-- (void)splashAdDidClose:(BUSplashAdView *)splashAd {
-    [_csj_ad removeFromSuperview];
     if ([self.delegate respondsToSelector:@selector(advanceDidClose)]) {
         [self.delegate advanceDidClose];
-    }
-//    _csj_ad = nil;
-}
 
-/**
- This method is called when spalashAd skip button  is clicked.
- */
-- (void)splashAdDidClickSkip:(BUSplashAdView *)splashAd {
-    if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdSkipClicked)]) {
-        [self.delegate advanceSplashOnAdSkipClicked];
     }
     [self deallocAdapter];
+
 }
-
-/**
- This method is called when spalashAd countdown equals to zero
- */
-- (void)splashAdCountdownToZero:(BUSplashAdView *)splashAd {
-    if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdCountdownToZero)]) {
-        [self.delegate advanceSplashOnAdCountdownToZero];
-    }
-    [self deallocAdapter];
-}
-
-- (void)splashAdDidCloseOtherController:(BUSplashAdView *)splashAd interactionType:(BUInteractionType)interactionType {
-    [self deallocAdapter];
-}
-
-
 
 @end
