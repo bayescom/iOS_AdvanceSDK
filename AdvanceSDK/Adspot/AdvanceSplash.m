@@ -75,8 +75,8 @@
 
 /// Override
 - (void)deallocSelf {
-    NSLog(@"--fafdsfdsa");
-    NSLog(@"%@",[NSThread currentThread]);
+//    NSLog(@"--fafdsfdsa");
+//    NSLog(@"%@",[NSThread currentThread]);
     dispatch_async(dispatch_get_main_queue(), ^{
 //        ADV_LEVEL_INFO_LOG(@"%@", [NSThread currentThread]);
         [_bgImgV removeFromSuperview];

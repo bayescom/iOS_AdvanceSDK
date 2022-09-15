@@ -138,7 +138,7 @@
 
 
 - (void)splashAdLoadSuccess:(nonnull BUSplashAd *)splashAd {
-    NSLog(@"11111111111");
+//    NSLog(@"11111111111");
     [self.adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
 //    NSLog(@"穿山甲开屏拉取成功");
@@ -150,7 +150,7 @@
 }
 
 - (void)splashAdRenderSuccess:(nonnull BUSplashAd *)splashAd {
-    NSLog(@"2222222222");
+//    NSLog(@"2222222222");
     
     if (_adspot.showLogoRequire) {
         // 添加Logo
