@@ -19,7 +19,7 @@
 #import "AdvanceNativeExpress.h"
 #import "AdvLog.h"
 #import "AdvanceNativeExpressView.h"
-@interface BdNativeExpressAdapter ()<BaiduMobAdNativeAdDelegate>
+@interface BdNativeExpressAdapter ()<BaiduMobAdNativeAdDelegate, BaiduMobAdNativeInterationDelegate>
 @property (nonatomic, strong) BaiduMobAdNative *bd_ad;
 @property (nonatomic, weak) AdvanceNativeExpress *adspot;
 @property (nonatomic, weak) UIViewController *controller;
@@ -35,7 +35,7 @@
         _adspot = adspot;
         _supplier = supplier;
         _bd_ad = [[BaiduMobAdNative alloc] init];
-        _bd_ad.delegate = self;
+        _bd_ad.adDelegate = self;
         _bd_ad.publisherId = _supplier.mediaid;
         _bd_ad.adUnitTag = _supplier.adspotid;
         _bd_ad.presentAdViewController = _adspot.viewController;
@@ -94,6 +94,7 @@
         NSMutableArray *temp = [NSMutableArray array];
         
         BaiduMobAdNativeAdObject *object = nativeAds.firstObject;
+        object.interationDelegate = self;
 //        if ([object isExpired]) {
 //            continue;
 //        }
@@ -145,7 +146,7 @@
 }
 
 // 负反馈点击选项回调
-- (void)nativeAdDislikeClick:(UIView *)adView; {
+- (void)nativeAdDislikeClick:(UIView *)adView reason:(BaiduMobAdDislikeReasonType)reason; {
 //    NSLog(@"智能优选负反馈点击：%@", object);
     AdvanceNativeExpressView *temp = [self returnExpressViewWithAdView:adView];
     if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdClosed:)]) {
