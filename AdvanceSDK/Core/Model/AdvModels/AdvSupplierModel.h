@@ -71,15 +71,6 @@ NSString * ADVStringFromNAdvanceSdkSupplierRepoType(AdvanceSdkSupplierRepoType t
 @property (nonatomic, copy)   NSString *advAdspotId;
 
 
-/// 从本地查找数据
-+ (instancetype)loadDataWithMediaId:(NSString *)mediaId adspotId:(NSString *)adspotId;
-
-/// 移除本地缓存数据
-- (void)clearLocalModel;
-
-/// 存储到本地
-- (void)saveData:(NSData *)data;
-
 @end
 
 @interface AdvSetting : NSObject

@@ -14,7 +14,6 @@
 #import "AdvModel.h"
 #import "AdvAdsportInfoUtil.h"
 #import "AdvUploadTKUtil.h"
-#import "AdvTrackEventUtil.h"
 #import <objc/runtime.h>
 #import <objc/message.h>
 
@@ -83,28 +82,6 @@
     self.adspotId = adspotId;
     self.tkUploadTool = [[AdvUploadTKUtil alloc] init];
     self.ext = [ext mutableCopy];
-    
-    // 获取本地数据
-    _model = [AdvSupplierModel loadDataWithMediaId:mediaId adspotId:adspotId];
-    
-//    ADVTRACK(self.mediaId, self.adspotId, AdvTrackEventCase_getInfo);
-    
-    
-    // 是否实时
-    if (!_model.setting.useCache) {
-        _model = nil;
-        ADV_LEVEL_INFO_LOG(@"无本地策略");
-    }
-
-    // 是否超时
-    if (_model.setting.cacheTime > 0) {
-        if (_model.setting.cacheTime <= [[NSDate date] timeIntervalSince1970]) {
-            [_model clearLocalModel];
-            _model = nil;
-            ADV_LEVEL_INFO_LOG(@"无本地策略");
-        }
-    }
-    
     
     
     
@@ -768,7 +745,6 @@
         // 现在全都走新逻辑
         [self loadBiddingSupplier];
     }
-    [a_model saveData:data];
 }
 
 

@@ -41,34 +41,6 @@ NSString *const DEFAULT_LOADEDTK = @"http://cruiser.bayescom.cn/loaded?action=lo
 
 @implementation AdvSupplierModel
 
-+ (instancetype)loadDataWithMediaId:(NSString *)mediaId adspotId:(NSString *)adspotId {
-    NSString *key = [NSString stringWithFormat:@"%@_%@_%@", NSStringFromClass(AdvSupplierModel.class), mediaId, adspotId];
-    NSData *data = [[NSUserDefaults standardUserDefaults] objectForKey:key];
-    if (!data) {
-        return nil;
-    }
-    AdvSupplierModel *model = [AdvSupplierModel adv_modelWithJSON:data];
-    if (model) {
-        model.advMediaId = mediaId;
-        model.advAdspotId = adspotId;
-    }
-    return model;
-}
-
-- (void)clearLocalModel {
-    NSString *key = [NSString stringWithFormat:@"%@_%@_%@", NSStringFromClass(AdvSupplierModel.class), self.advMediaId, self.advAdspotId];
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:key];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-}
-
-- (void)saveData:(NSData *)data{
-//    if (self.suppliers.count > 0) {
-        NSString *key = [NSString stringWithFormat:@"%@_%@_%@", NSStringFromClass(AdvSupplierModel.class), self.advMediaId, self.advAdspotId];
-        [[NSUserDefaults standardUserDefaults] setObject:data forKey:key];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-//    }
-}
-
 
 + (NSDictionary *)modelContainerPropertyGenericClass {
     return @{@"suppliers" : [AdvSupplier class]};

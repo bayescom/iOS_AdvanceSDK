@@ -38,12 +38,7 @@
         [deviceInfo setValue:time forKey:@"time"];
         //    [deviceInfo setValue:[AdvDeviceInfoUtil getUserAgent] forKey:@"ua"];
         [deviceInfo setValue:[AdvDeviceInfoUtil getIPAddress:YES] forKey:@"ip"];
-        //lat
-        //lon
-        [deviceInfo setValue:[AdvDeviceInfoUtil getScreenWidth] forKey:@"sw"];
-        [deviceInfo setValue:[AdvDeviceInfoUtil getScreenHeight] forKey:@"sh"];
-        //ppi
-        [deviceInfo setValue:[AdvDeviceInfoUtil getPPI] forKey:@"ppi"];
+
         //make
         [deviceInfo setValue:[AdvDeviceInfoUtil getMake] forKey:@"make"];
         //model
@@ -66,22 +61,6 @@
         if (reqid) {
             [deviceInfo setValue:reqid forKey:@"reqid"];
         }
-
-        return deviceInfo;
-    } @catch (NSException *exception) {
-        return deviceInfo;
-    }
-
-}
-
-+ (NSMutableDictionary *)getSDKTrackEventDeviceInfoWithMediaId:(NSString *)mediaId adspotId:(NSString *)adspotId {
-    NSMutableDictionary *deviceInfo = [[NSMutableDictionary alloc] init];
-    @try {
-        [deviceInfo setValue:AdvanceSdkVersion forKey:@"sdkver"];
-        [deviceInfo setValue:@"0" forKey:@"sdktag"];
-        [deviceInfo setValue:[AdvDeviceInfoUtil getAppVersion] forKey:@"appver"];
-        [deviceInfo setValue:[AdvDeviceInfoUtil getAuctionId] forKey:@"reqid"];
-        [deviceInfo setValue:adspotId forKey:@"adspotid"];
 
         return deviceInfo;
     } @catch (NSException *exception) {
@@ -210,31 +189,6 @@
     }
 }
 
-+ (NSNumber *)getScreenHeight {
-    CGFloat scale = [UIScreen mainScreen].scale;
-    return [NSNumber numberWithFloat:[UIScreen mainScreen].bounds.size.height * scale];
-
-}
-
-+ (NSNumber *)getScreenWidth {
-    CGFloat scale = [UIScreen mainScreen].scale;
-    return [NSNumber numberWithFloat:[UIScreen mainScreen].bounds.size.width * scale];
-}
-
-+ (NSNumber *)getPPI {
-    NSNumber *ppi = @(0);
-    @try {
-        NSString *model = [AdvDeviceInfoUtil getModel];
-        NSDictionary *modelPPiDict = [AdvDeviceInfoUtil getModelPPIDict];
-        ppi = [modelPPiDict objectForKey:model];
-        if (!ppi) {ppi = @401;}
-    } @catch (NSException *exception) {
-
-    } @finally {
-        return ppi;
-    }
-}
-
 + (NSString *)getModel {
     NSString *model = @"";
     @try {
@@ -250,164 +204,6 @@
 
 + (NSString *)getOsv {
     return [[UIDevice currentDevice] systemVersion];
-}
-
-+ (NSDictionary *)getModelPPIDict {   //https://en.wikipedia.org/wiki/List_of_iOS_devices
-    return @{
-            // 1st Gen
-            @"iPhone1,1": @163,
-            // 3G
-            @"iPhone1,2": @163,
-            // 3GS
-            @"iPhone2,1": @163,
-            //4
-            @"iPhone3,1": @326,
-            @"iPhone3,2": @326,
-            @"iPhone3,3": @326,
-
-            // 4S
-            @"iPhone4,1": @326,
-
-            // 5
-            @"iPhone5,1": @326,
-            @"iPhone5,2": @326,
-
-            // 5c
-            @"iPhone5,3": @326,
-            @"iPhone5,4": @326,
-
-            // 5s
-            @"iPhone6,1": @326,
-            @"iPhone6,2": @326,
-
-            // 6 Plus
-            @"iPhone7,1": @401,
-            // 6
-            @"iPhone7,2": @326,
-
-            // 6s
-            @"iPhone8,1": @326,
-
-            // 6s Plus
-            @"iPhone8,2": @401,
-
-            // SE
-            @"iPhone8,4": @326,
-
-            // 7
-            @"iPhone9,1": @326,
-            @"iPhone9,3": @326,
-
-            // 7 Plus
-            @"iPhone9,2": @401,
-            @"iPhone9,4": @401,
-
-            //8
-            @"iPhone10,1": @401,
-            @"iPhone10,4": @401,
-
-            //8 Plus
-            @"iPhone10,2": @401,
-            @"iPhone10,5": @401,
-
-            //X
-            @"iPhone10,3": @458,
-            @"iPhone10,6": @458,
-            //XS
-            @"iPhone11,2": @458,
-            //XS-MAX
-            @"iPhone11,4": @458,
-            @"iPhone11,6": @458,
-            //XR
-            @"iPhone11,8": @326,
-
-
-            //iPod
-            // 1st Gen
-            @"iPod1,1": @163,
-
-            // 2nd Gen
-            @"iPod2,1": @163,
-
-            // 3rd Gen
-            @"iPod3,1": @163,
-
-            // 4th Gen
-            @"iPod4,1": @326,
-
-            // 5th Gen
-            @"iPod5,1": @326,
-
-            // 6th Gen
-            @"iPod7,1": @326,
-
-            //iPad
-
-            @"iPad1,1": @132,
-            // 2
-            @"iPad2,1": @132,
-            @"iPad2,2": @132,
-            @"iPad2,3": @132,
-            @"iPad2,4": @132,
-
-            // Mini
-            @"iPad2,5": @163,
-            @"iPad2,6": @163,
-            @"iPad2,7": @163,
-
-            // 3
-            @"iPad3,1": @264,
-            @"iPad3,2": @264,
-            @"iPad3,3": @264,
-
-            // 4
-            @"iPad3,4": @264,
-            @"iPad3,5": @264,
-            @"iPad3,6": @264,
-
-            // Air
-            @"iPad4,1": @264,
-            @"iPad4,2": @264,
-            @"iPad4,3": @264,
-
-            // Mini 2
-
-            @"iPad4,4": @326,
-            @"iPad4,5": @326,
-            @"iPad4,6": @326,
-
-            // Mini 3
-            @"iPad4,7": @326,
-            @"iPad4,8": @326,
-            @"iPad4,9": @326,
-
-            // Mini 4
-            @"iPad5,1": @326,
-            @"iPad5,2": @326,
-
-            // Air 2
-            @"iPad5,3": @264,
-            @"iPad5,4": @264,
-
-            // Pro 12.9-inch
-            @"iPad6,7": @264,
-            @"iPad6,8": @264,
-
-            // Pro 9.7-inch
-            @"iPad6,3": @264,
-            @"iPad6,4": @264,
-
-            // iPad 5th Gen, 2017
-
-            @"iPad6,11": @264,
-            @"iPad6,12": @264,
-
-            // iPad 2018
-            @"iPad7,5": @264,
-            @"iPad7,6": @264,
-
-    };
-
 }
 
 + (NSString *)getIdfa {
