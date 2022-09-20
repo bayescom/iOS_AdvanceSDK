@@ -74,6 +74,20 @@ NSString * const AdvSdkTypeAdNameInterstitial = @"INTERSTAITIAL_AD";
 NSString * const AdvSdkTypeAdNameFullScreenVideo = @"FULLSCREENVIDEO_AD";
 NSString * const AdvSdkTypeAdNameNativeExpress = @"NATIVEEXPRESS_AD";
 NSString * const AdvSdkTypeAdNameRewardVideo = @"REWARDVIDEO_AD";
+
+// MARK: ======================= NSUserDefaultsKeys =======================
+
+NSString * const AdvanceSDKModelKey = @"AdvanceSDKModelKey";
+NSString * const AdvanceSDKIdfaKey = @"AdvanceSDKIdfaKey";
+NSString * const AdvanceSDKIdfvKey = @"AdvanceSDKIdfvKey";
+NSString * const AdvanceSDKCarrierKey = @"AdvanceSDKCarrierKey";
+NSString * const AdvanceSDKNetworkKey = @"AdvanceSDKNetworkKey";
+//timeKeys
+NSString * const AdvanceSDKTimeOutForeverKey = @"AdvanceSDKTimeOutForeverKey";
+NSString * const AdvanceSDKOneMonthKey = @"AdvanceSDKOneMonthKey";
+NSString * const AdvanceSDKHourKey = @"AdvanceSDKHourKey";
+
+
 static AdvSdkConfig *instance = nil;
 
 + (instancetype)shareInstance {

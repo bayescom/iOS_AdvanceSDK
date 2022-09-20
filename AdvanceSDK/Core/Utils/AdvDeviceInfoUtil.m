@@ -24,15 +24,12 @@
 #define IOS_VPN         @"utun0"
 #define IP_ADDR_IPv4    @"ipv4"
 #define IP_ADDR_IPv6    @"ipv6"
-// 永久保存
-#define kTimeOutForeverKey    @"kTimeOutForeverKey"
 
-// 一个月
-#define kTimeOutOneMonthKey    @"kTimeOutOneMonth"
-#define kTimeOutOneMonth 60 * 60 * 24 * 30 // 30天
+//#define kTimeOutOneMonth 60 * 60 * 24 * 30 // 30天
+#define kTimeOutOneMonth 60 // 30天
 
-#define kTimeOutOneHourKey    @"kTimeOutOneHour"
-#define kTimeOutOneHour 60 * 60 // 1小时
+//#define kTimeOutOneHour 60 * 60 // 1小时
+#define kTimeOutOneHour 60  // 1小时
 
 @interface AdvDeviceInfoUtil ()
 /// 缓存的数据
@@ -113,22 +110,19 @@ static AdvDeviceInfoUtil *_instance = nil;
 - (NSMutableDictionary *)returnParametersWithDic:(NSMutableDictionary *)deviceInfo {
     
     /// 永久存储加密
-    //make
-    [deviceInfo setValue:[AdvDeviceInfoUtil getMake] forKey:@"make"];
-    //model
-    [deviceInfo setValue:[AdvDeviceInfoUtil getModel] forKey:@"model"];
+    /// make model
+    NSMutableDictionary *dictForever = [self saveLocalForever];
+    [deviceInfo addEntriesFromDictionary:dictForever];
     
     /// 一个月更新
-    /// idfa
-    [deviceInfo setValue:[AdvDeviceInfoUtil getIdfa] forKey:@"idfa"];
-    /// idfv
-    [deviceInfo setValue:[AdvDeviceInfoUtil getIdfv] forKey:@"idfv"];
+    /// idfa idfv
+    NSMutableDictionary *dictOneMonth = [self saveLocalForOneMonth];
+    [deviceInfo addEntriesFromDictionary:dictOneMonth];
 
     /// 每小时更新
-    /// carrier
-    [deviceInfo setValue:[AdvDeviceInfoUtil getCarrier] forKey:@"carrier"];
-    /// network
-    [deviceInfo setValue:[AdvDeviceInfoUtil getNetwork] forKey:@"network"];
+    /// carrier network
+    NSMutableDictionary *dictOneHour = [self saveLocalForOneHour];
+    [deviceInfo addEntriesFromDictionary:dictOneHour];
 
 
     NSString *reqid = [AdvDeviceInfoUtil getAuctionId];
@@ -137,6 +131,116 @@ static AdvDeviceInfoUtil *_instance = nil;
     }
     return deviceInfo;
 }
+
+
+- (NSMutableDictionary *)saveLocalForever {
+
+    NSMutableDictionary *dic = [NSMutableDictionary dictionary];
+    
+    //make
+    [dic setValue:[self getMake] forKey:@"make"];
+    //model
+    [dic setValue:[self getModel] forKey:@"model"];
+
+
+    return dic;
+    
+}
+
+- (NSMutableDictionary *)saveLocalForOneMonth {
+    NSMutableDictionary *dic = [NSMutableDictionary dictionary];
+    
+    NSString *idfa = [[NSUserDefaults standardUserDefaults] objectForKey:AdvanceSDKIdfaKey];
+    NSString *idfv = [[NSUserDefaults standardUserDefaults] objectForKey:AdvanceSDKIdfvKey];
+    
+    NSInteger _timeout_stamp = [[[NSUserDefaults standardUserDefaults] objectForKey:AdvanceSDKOneMonthKey] integerValue];
+
+    // idfa idfv 时间戳任何一项都没问题 则直接返回dic
+    if (![self isEmptyString:idfa] &&
+        ![self isEmptyString:idfv] &&
+        [[NSDate date] timeIntervalSince1970] < _timeout_stamp) {
+        
+        
+        [dic setValue:idfa forKey:@"idfa"];
+        [dic setValue:idfv forKey:@"idfv"];
+    } else {
+        // idfa idfv 时间戳任何一项有问题 都重新获取
+        NSString *tempIdfa = [AdvDeviceInfoUtil getIdfa];
+        NSString *tempIdfv = [AdvDeviceInfoUtil getIdfv];
+        
+        NSInteger __current_timeout_stamp = [[NSDate date] timeIntervalSince1970] + (kTimeOutOneMonth);
+        NSNumber *__number = [NSNumber numberWithInteger:__current_timeout_stamp];
+
+        [dic setValue:tempIdfa forKey:@"idfa"];
+        [dic setValue:tempIdfv forKey:@"idfv"];
+
+        
+        [self saveInfo:tempIdfa key:AdvanceSDKIdfaKey];
+        [self saveInfo:tempIdfv key:AdvanceSDKIdfvKey];
+        [self saveNumber:__number key:AdvanceSDKOneMonthKey];
+    }
+
+    return dic;
+
+}
+
+- (NSMutableDictionary *)saveLocalForOneHour {
+    NSMutableDictionary *dic = [NSMutableDictionary dictionary];
+    /// carrier
+//    [deviceInfo setValue:[AdvDeviceInfoUtil getCarrier] forKey:@"carrier"];
+//    /// network
+//    [deviceInfo setValue:[AdvDeviceInfoUtil getNetwork] forKey:@"network"];
+
+    NSString *carrier = [[NSUserDefaults standardUserDefaults] objectForKey:AdvanceSDKCarrierKey];
+    NSNumber *network = [[NSUserDefaults standardUserDefaults] objectForKey:AdvanceSDKNetworkKey];
+    
+    NSInteger _timeout_stamp = [[[NSUserDefaults standardUserDefaults] objectForKey:AdvanceSDKHourKey] integerValue];
+
+    
+    // idfa idfv 时间戳任何一项都没问题 则直接返回dic
+    if (![self isEmptyString:carrier] &&
+        [[NSDate date] timeIntervalSince1970] < _timeout_stamp) {
+        
+        
+        [dic setValue:carrier forKey:@"carrier"];
+        [dic setValue:network forKey:@"network"];
+    } else {
+        // idfa idfv 时间戳任何一项有问题 都重新获取
+        NSString *tempCarrier = [self getCarrier];
+        NSNumber *tempNetwork = [self getNetwork];
+        
+        NSInteger __current_timeout_stamp = [[NSDate date] timeIntervalSince1970] + (kTimeOutOneHour);
+        NSNumber *__number = [NSNumber numberWithInteger:__current_timeout_stamp];
+
+        [dic setValue:tempCarrier forKey:@"carrier"];
+        [dic setValue:tempNetwork forKey:@"network"];
+
+        
+        [self saveInfo:tempCarrier key:AdvanceSDKCarrierKey];
+        [self saveNumber:tempNetwork key:AdvanceSDKNetworkKey];
+        [self saveNumber:__number key:AdvanceSDKHourKey];
+    }
+
+    return dic;
+
+}
+
+/*
+NSString * const AdvanceSDKModelKey = @"AdvanceSDKModelKey";
+NSString * const AdvanceSDKIdfaKey = @"AdvanceSDKIdfaKey";
+NSString * const AdvanceSDKIdfvKey = @"AdvanceSDKIdfvKey";
+NSString * const AdvanceSDKCarrierKey = @"AdvanceSDKCarrierKey";
+NSString * const AdvanceSDKNetworkKey = @"AdvanceSDKNetworkKey";
+//timeKeys
+NSString * const AdvanceSDKTimeOutForeverKey = @"AdvanceSDKTimeOutForeverKey";
+NSString * const AdvanceSDKOneMonthKey = @"AdvanceSDKOneMonthKey";
+NSString * const AdvanceSDKHourKey = @"AdvanceSDKHourKey";
+
+#define kTimeOutOneMonth 60 * 60 * 24 * 30 // 30天
+
+#define kTimeOutOneHour 60 * 60 // 1小时
+*/
+
 
 + (NSString *)getAppVersion {
     NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
@@ -157,7 +261,7 @@ static AdvDeviceInfoUtil *_instance = nil;
     }
 }
 
-+ (NSString *)getMake {
+- (NSString *)getMake {
     return @"apple";
 }
 
@@ -193,55 +297,22 @@ static AdvDeviceInfoUtil *_instance = nil;
     }
 }
 
-+ (NSDictionary *)getIPAddresses {
-    NSMutableDictionary *addresses = [NSMutableDictionary dictionaryWithCapacity:8];
-    @try {
-        // retrieve the current interfaces - returns 0 on success
-        struct ifaddrs *interfaces;
-        if (!getifaddrs(&interfaces)) {
-            // Loop through linked list of interfaces
-            struct ifaddrs *interface;
-            for (interface = interfaces; interface; interface = interface->ifa_next) {
-                if (!(interface->ifa_flags & IFF_UP) /* || (interface->ifa_flags & IFF_LOOPBACK) */ ) {
-                    continue; // deeply nested code harder to read
-                }
-                const struct sockaddr_in *addr = (const struct sockaddr_in *) interface->ifa_addr;
-                char addrBuf[MAX(INET_ADDRSTRLEN, INET6_ADDRSTRLEN)];
-                if (addr && (addr->sin_family == AF_INET || addr->sin_family == AF_INET6)) {
-                    NSString *name = [NSString stringWithUTF8String:interface->ifa_name];
-                    NSString *type;
-                    if (addr->sin_family == AF_INET) {
-                        if (inet_ntop(AF_INET, &addr->sin_addr, addrBuf, INET_ADDRSTRLEN)) {
-                            type = IP_ADDR_IPv4;
-                        }
-                    } else {
-                        const struct sockaddr_in6 *addr6 = (const struct sockaddr_in6 *) interface->ifa_addr;
-                        if (inet_ntop(AF_INET6, &addr6->sin6_addr, addrBuf, INET6_ADDRSTRLEN)) {
-                            type = IP_ADDR_IPv6;
-                        }
-                    }
-                    if (type) {
-                        NSString *key = [NSString stringWithFormat:@"%@/%@", name, type];
-                        addresses[key] = [NSString stringWithUTF8String:addrBuf];
-                    }
-                }
-            }
-            // Free memory
-            freeifaddrs(interfaces);
-        }
-    } @catch (NSException *exception) {
+- (NSString *)getModel {
+    
+    NSString *model = [[NSUserDefaults standardUserDefaults] objectForKey:AdvanceSDKModelKey];
 
-    } @finally {
-        return [addresses count] ? addresses : nil;
+    if ([self isEmptyString:model]) {
+        model = @"";
+    } else {
+        return model;
     }
-}
-
-+ (NSString *)getModel {
-    NSString *model = @"";
+    
     @try {
         struct utsname systemInfo;
         uname(&systemInfo);
         model = [NSString stringWithCString:systemInfo.machine encoding:NSUTF8StringEncoding];
+        
+        [self saveInfo:model key:AdvanceSDKModelKey];
     } @catch (NSException *exception) {
 
     } @finally {
@@ -259,7 +330,7 @@ static AdvDeviceInfoUtil *_instance = nil;
     return idfa;
 }
 
-+ (NSString *)getCarrier {
+- (NSString *)getCarrier {
     NSString *result = @"";
     @try {
         CTTelephonyNetworkInfo *netInfo = [[CTTelephonyNetworkInfo alloc] init];
@@ -277,7 +348,7 @@ static AdvDeviceInfoUtil *_instance = nil;
     }
 }
 
-+ (NSNumber *)getNetwork {
+- (NSNumber *)getNetwork {
     NSNumber *res = @(0);
     @try {
         NSCountedSet *cset = [[NSCountedSet alloc] init];
@@ -348,6 +419,40 @@ static AdvDeviceInfoUtil *_instance = nil;
     } @catch (NSException *exception) {
         return @"";
     }
+}
+
+- (BOOL)isEmptyString:(NSString *)string{
+       if(string == nil) {
+            return YES;
+        }
+        if (string == NULL) {
+            return YES;
+        }
+        if ([string isKindOfClass:[NSNull class]]) {
+            return YES;
+        }
+        if ([[string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] length]==0) {
+            return YES;
+        }
+    return NO;
+}
+
+- (void)saveInfo:(id)info key:(NSString *)key {
+    if ([self isEmptyString:info] || [self isEmptyString:key]) {
+        return;
+    }
+    [[NSUserDefaults standardUserDefaults] setObject:info forKey:key];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+
+}
+
+- (void)saveNumber:(id)time key:(NSString *)key {
+    if ([self isEmptyString:key]) {
+        return;
+    }
+    [[NSUserDefaults standardUserDefaults] setObject:time forKey:key];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+
 }
 
 
