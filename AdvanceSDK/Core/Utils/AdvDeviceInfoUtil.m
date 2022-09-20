@@ -24,6 +24,16 @@
 #define IOS_VPN         @"utun0"
 #define IP_ADDR_IPv4    @"ipv4"
 #define IP_ADDR_IPv6    @"ipv6"
+// 永久保存
+#define kTimeOutForeverKey    @"kTimeOutForeverKey"
+
+// 一个月
+#define kTimeOutOneMonthKey    @"kTimeOutOneMonth"
+#define kTimeOutOneMonth 60 * 60 * 24 * 30 // 30天
+
+#define kTimeOutOneHourKey    @"kTimeOutOneHour"
+#define kTimeOutOneHour 60 * 60 // 1小时
+
 
 @implementation AdvDeviceInfoUtil
 + (NSMutableDictionary *)getDeviceInfoWithMediaId:(NSString *)mediaId adspotId:(NSString *)adspotId {
@@ -36,8 +46,6 @@
         [deviceInfo setValue:[AdvDeviceInfoUtil getAppVersion] forKey:@"appver"];
         NSString *time = [AdvDeviceInfoUtil getTime];
         [deviceInfo setValue:time forKey:@"time"];
-        //    [deviceInfo setValue:[AdvDeviceInfoUtil getUserAgent] forKey:@"ua"];
-        [deviceInfo setValue:[AdvDeviceInfoUtil getIPAddress:YES] forKey:@"ip"];
 
         //make
         [deviceInfo setValue:[AdvDeviceInfoUtil getMake] forKey:@"make"];
@@ -90,28 +98,6 @@
 
 + (NSString *)getMake {
     return @"apple";
-}
-
-+ (NSString *)getIPAddress:(BOOL)preferIPv4 {
-    __block NSString *address;
-    @try {
-        NSArray *searchArray = preferIPv4 ?
-                @[IOS_VPN @"/" IP_ADDR_IPv4, IOS_VPN @"/" IP_ADDR_IPv6, IOS_WIFI @"/" IP_ADDR_IPv4, IOS_WIFI @"/" IP_ADDR_IPv6, IOS_CELLULAR @"/" IP_ADDR_IPv4, IOS_CELLULAR @"/" IP_ADDR_IPv6] :
-                @[IOS_VPN @"/" IP_ADDR_IPv6, IOS_VPN @"/" IP_ADDR_IPv4, IOS_WIFI @"/" IP_ADDR_IPv6, IOS_WIFI @"/" IP_ADDR_IPv4, IOS_CELLULAR @"/" IP_ADDR_IPv6, IOS_CELLULAR @"/" IP_ADDR_IPv4];
-
-        NSDictionary *addresses = [self getIPAddresses];
-        //  BYLog(@"addresses: %@", addresses);
-
-        [searchArray enumerateObjectsUsingBlock:^(NSString *key, NSUInteger idx, BOOL *stop) {
-            address = addresses[key];
-            //筛选出IP地址格式
-            if ([self isValidatIP:address]) *stop = YES;
-        }];
-    } @catch (NSException *exception) {
-    } @finally {
-        return address ? address : @"0.0.0.0";
-    }
-
 }
 
 + (BOOL)isValidatIP:(NSString *)ipAddress {
@@ -208,6 +194,7 @@
 
 + (NSString *)getIdfa {
     NSString *idfa = [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString];
+    
     return idfa;
 }
 
