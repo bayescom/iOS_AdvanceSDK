@@ -86,6 +86,7 @@ NSString * const AdvanceSDKNetworkKey = @"AdvanceSDKNetworkKey";
 NSString * const AdvanceSDKTimeOutForeverKey = @"AdvanceSDKTimeOutForeverKey";
 NSString * const AdvanceSDKOneMonthKey = @"AdvanceSDKOneMonthKey";
 NSString * const AdvanceSDKHourKey = @"AdvanceSDKHourKey";
+NSString * const AdvanceSDKSecretKey = @"bayescom1000000w";
 
 
 static AdvSdkConfig *instance = nil;

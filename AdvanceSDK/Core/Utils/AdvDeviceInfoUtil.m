@@ -18,18 +18,17 @@
 #import <CoreTelephony/CTCarrier.h>
 #import <CoreTelephony/CTTelephonyNetworkInfo.h>
 #import <CommonCrypto/CommonCrypto.h>
-
+#import "AdvanceAESCipher.h"
+#import "AdvLog.h"
 #define IOS_CELLULAR    @"pdp_ip0"
 #define IOS_WIFI        @"en0"
 #define IOS_VPN         @"utun0"
 #define IP_ADDR_IPv4    @"ipv4"
 #define IP_ADDR_IPv6    @"ipv6"
 
-//#define kTimeOutOneMonth 60 * 60 * 24 * 30 // 30天
-#define kTimeOutOneMonth 60 // 30天
+#define kTimeOutOneMonth 60 * 60 * 24 * 30 // 30天
 
-//#define kTimeOutOneHour 60 * 60 // 1小时
-#define kTimeOutOneHour 60  // 1小时
+#define kTimeOutOneHour 60 * 60 // 1小时
 
 @interface AdvDeviceInfoUtil ()
 /// 缓存的数据
@@ -62,15 +61,17 @@ static AdvDeviceInfoUtil *_instance = nil;
     NSMutableDictionary *deviceInfo = [[NSMutableDictionary alloc] init];
     @try {
         if (self.cacheInfo) {
+            deviceInfo = [self.cacheInfo mutableCopy];
             // 实时获取
-            [self.cacheInfo setValue:mediaId forKey:@"appid"];
-            [self.cacheInfo setValue:adspotId forKey:@"adspotid"];
+            [deviceInfo setValue:mediaId forKey:@"appid"];
+            [deviceInfo setValue:adspotId forKey:@"adspotid"];
             NSString *time = [AdvDeviceInfoUtil getTime];
-            [self.cacheInfo setValue:time forKey:@"time"];
+            [deviceInfo setValue:time forKey:@"time"];
 
-            [self returnParametersWithDic:self.cacheInfo];
+            deviceInfo = [self returnParametersWithDic:self.cacheInfo];
+            deviceInfo = [self createDeviceEncinfoWithDic:self.cacheInfo];
             
-            return self.cacheInfo;
+            return deviceInfo;
             
         } else {
             self.cacheInfo = [[NSMutableDictionary alloc] init];
@@ -95,8 +96,8 @@ static AdvDeviceInfoUtil *_instance = nil;
 
             // 只需要冷启动获取一次的字段
             self.cacheInfo = [deviceInfo mutableCopy]; ///<---------------
-            
-            [self returnParametersWithDic:deviceInfo];
+            deviceInfo = [self returnParametersWithDic:deviceInfo];
+            deviceInfo = [self createDeviceEncinfoWithDic:deviceInfo];
             return deviceInfo;
         }
 
@@ -106,7 +107,77 @@ static AdvDeviceInfoUtil *_instance = nil;
 
 }
 
-// 获取参数
+// 对获取好的参数进行加密处理
+- (NSMutableDictionary *)createDeviceEncinfoWithDic:(NSMutableDictionary *)deviceInfo {
+    NSMutableDictionary *encryptDic = [NSMutableDictionary dictionary];
+    
+    NSString *carrier = [deviceInfo objectForKey:@"carrier"];
+    // 将正常的 值 放入需要加密的字典里然后再删除 deviceInfo中的该字段
+    if (![self isEmptyString:carrier]) {
+        [encryptDic setObject:carrier forKey:@"carrier"];
+        [deviceInfo removeObjectForKey:@"carrier"];
+    }
+    
+    NSNumber *network = [deviceInfo objectForKey:@"network"];
+    [encryptDic setObject:network forKey:@"network"];
+    [deviceInfo removeObjectForKey:@"network"];
+    
+    NSString *make = [deviceInfo objectForKey:@"make"];
+    if (![self isEmptyString:make]) {
+        [encryptDic setObject:make forKey:@"make"];
+        [deviceInfo removeObjectForKey:@"make"];
+    }
+    
+    NSString *model = [deviceInfo objectForKey:@"model"];
+    if (![self isEmptyString:model]) {
+        [encryptDic setObject:model forKey:@"model"];
+        [deviceInfo removeObjectForKey:@"model"];
+    }
+
+    NSNumber *os = [deviceInfo objectForKey:@"os"];
+    [encryptDic setObject:os forKey:@"os"];
+    [deviceInfo removeObjectForKey:@"os"];
+
+    NSString *osv = [deviceInfo objectForKey:@"osv"];
+    if (![self isEmptyString:osv]) {
+        [encryptDic setObject:osv forKey:@"osv"];
+        [deviceInfo removeObjectForKey:@"osv"];
+    }
+    
+    NSString *idfa = [deviceInfo objectForKey:@"idfa"];
+    if (![self isEmptyString:idfa]) {
+        [encryptDic setObject:idfa forKey:@"idfa"];
+        [deviceInfo removeObjectForKey:@"idfa"];
+    }
+
+    NSString *idfv = [deviceInfo objectForKey:@"idfv"];
+    if (![self isEmptyString:idfv]) {
+        [encryptDic setObject:idfv forKey:@"idfv"];
+        [deviceInfo removeObjectForKey:@"idfv"];
+    }
+
+
+    NSNumber *devicetype = [deviceInfo objectForKey:@"devicetype"];
+    [encryptDic setObject:devicetype forKey:@"devicetype"];
+    [deviceInfo removeObjectForKey:@"devicetype"];
+
+    NSString *json = [self jsonStringCompactFormatForDictionary:encryptDic];
+    ADV_LEVEL_INFO_LOG(@"设备信息 加密前: %@", json);
+    NSString *jsonEncrypt = advanceAesEncryptString(json, AdvanceSDKSecretKey);
+    jsonEncrypt = [self base64UrlEncoder:jsonEncrypt];
+    ADV_LEVEL_INFO_LOG(@"设备信息 加密后: %@", jsonEncrypt);
+
+    if ([self isEmptyString:jsonEncrypt]) {
+        return deviceInfo;
+    }
+    
+    [deviceInfo setObject:jsonEncrypt forKey:@"device_encinfo"];
+        
+    return deviceInfo;
+}
+
+
+// 获取参数(这些参数的加密时间缓存时间是不同的)
 - (NSMutableDictionary *)returnParametersWithDic:(NSMutableDictionary *)deviceInfo {
     
     /// 永久存储加密
@@ -160,9 +231,13 @@ static AdvDeviceInfoUtil *_instance = nil;
         ![self isEmptyString:idfv] &&
         [[NSDate date] timeIntervalSince1970] < _timeout_stamp) {
         
+
+        NSString *decryptIdfa = advanceAesDecryptString(idfa, AdvanceSDKSecretKey);
+        NSString *decryptIdfv = advanceAesDecryptString(idfv, AdvanceSDKSecretKey);
+
         
-        [dic setValue:idfa forKey:@"idfa"];
-        [dic setValue:idfv forKey:@"idfv"];
+        [dic setValue:decryptIdfa forKey:@"idfa"];
+        [dic setValue:decryptIdfv forKey:@"idfv"];
     } else {
         // idfa idfv 时间戳任何一项有问题 都重新获取
         NSString *tempIdfa = [AdvDeviceInfoUtil getIdfa];
@@ -200,9 +275,10 @@ static AdvDeviceInfoUtil *_instance = nil;
     // idfa idfv 时间戳任何一项都没问题 则直接返回dic
     if (![self isEmptyString:carrier] &&
         [[NSDate date] timeIntervalSince1970] < _timeout_stamp) {
-        
-        
-        [dic setValue:carrier forKey:@"carrier"];
+
+        NSString *decryptText = advanceAesDecryptString(carrier, AdvanceSDKSecretKey);
+                
+        [dic setValue:decryptText forKey:@"carrier"];
         [dic setValue:network forKey:@"network"];
     } else {
         // idfa idfv 时间戳任何一项有问题 都重新获取
@@ -224,23 +300,6 @@ static AdvDeviceInfoUtil *_instance = nil;
     return dic;
 
 }
-
-/*
-NSString * const AdvanceSDKModelKey = @"AdvanceSDKModelKey";
-NSString * const AdvanceSDKIdfaKey = @"AdvanceSDKIdfaKey";
-NSString * const AdvanceSDKIdfvKey = @"AdvanceSDKIdfvKey";
-NSString * const AdvanceSDKCarrierKey = @"AdvanceSDKCarrierKey";
-NSString * const AdvanceSDKNetworkKey = @"AdvanceSDKNetworkKey";
-//timeKeys
-NSString * const AdvanceSDKTimeOutForeverKey = @"AdvanceSDKTimeOutForeverKey";
-NSString * const AdvanceSDKOneMonthKey = @"AdvanceSDKOneMonthKey";
-NSString * const AdvanceSDKHourKey = @"AdvanceSDKHourKey";
-
-#define kTimeOutOneMonth 60 * 60 * 24 * 30 // 30天
-
-#define kTimeOutOneHour 60 * 60 // 1小时
-*/
-
 
 + (NSString *)getAppVersion {
     NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
@@ -304,7 +363,8 @@ NSString * const AdvanceSDKHourKey = @"AdvanceSDKHourKey";
     if ([self isEmptyString:model]) {
         model = @"";
     } else {
-        return model;
+        NSString *decryptText = advanceAesDecryptString(model, AdvanceSDKSecretKey);
+        return decryptText;
     }
     
     @try {
@@ -437,16 +497,23 @@ NSString * const AdvanceSDKHourKey = @"AdvanceSDKHourKey";
     return NO;
 }
 
-- (void)saveInfo:(id)info key:(NSString *)key {
+- (void)saveInfo:(NSString *)info key:(NSString *)key {
     if ([self isEmptyString:info] || [self isEmptyString:key]) {
         return;
     }
-    [[NSUserDefaults standardUserDefaults] setObject:info forKey:key];
+    
+    NSString *encryptText = advanceAesEncryptString(info, AdvanceSDKSecretKey);
+    
+    if ([self isEmptyString:encryptText]) {
+        return;
+    }
+
+    [[NSUserDefaults standardUserDefaults] setObject:encryptText forKey:key];
     [[NSUserDefaults standardUserDefaults] synchronize];
 
 }
 
-- (void)saveNumber:(id)time key:(NSString *)key {
+- (void)saveNumber:(NSNumber *)time key:(NSString *)key {
     if ([self isEmptyString:key]) {
         return;
     }
@@ -454,6 +521,33 @@ NSString * const AdvanceSDKHourKey = @"AdvanceSDKHourKey";
     [[NSUserDefaults standardUserDefaults] synchronize];
 
 }
+
+// 字典转json
+- (NSString *)jsonStringCompactFormatForDictionary:(NSDictionary *)dicJson {
+
+    if (![dicJson isKindOfClass:[NSDictionary class]] || ![NSJSONSerialization isValidJSONObject:dicJson]) {
+
+        return nil;
+
+    }
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dicJson options:0 error:nil];
+
+    NSString *strJson = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+
+    return strJson;
+
+}
+
+// base64 url 编码
+- (NSString *)base64UrlEncoder:(NSString *)str {
+//    NSData *data = [[str dataUsingEncoding:NSUTF8StringEncoding] base64EncodedDataWithOptions:0];
+//    NSMutableString *base64Str = [[NSMutableString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    str = (NSMutableString * )[str stringByReplacingOccurrencesOfString:@"+" withString:@"-"];
+    str = (NSMutableString * )[str stringByReplacingOccurrencesOfString:@"/" withString:@"_"];
+    str = (NSMutableString * )[str stringByReplacingOccurrencesOfString:@"=" withString:@""];
+    return str;
+}
+
 
 
 @end

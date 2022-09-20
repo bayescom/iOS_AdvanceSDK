@@ -57,6 +57,7 @@ extern NSString *const AdvanceSDKNetworkKey;
 extern NSString *const AdvanceSDKTimeOutForeverKey;
 extern NSString *const AdvanceSDKOneMonthKey;
 extern NSString *const AdvanceSDKHourKey;
+extern NSString *const AdvanceSDKSecretKey;
 
 
 extern int const ADVANCE_RECEIVED;
