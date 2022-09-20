@@ -34,47 +34,108 @@
 #define kTimeOutOneHourKey    @"kTimeOutOneHour"
 #define kTimeOutOneHour 60 * 60 // 1小时
 
+@interface AdvDeviceInfoUtil ()
+/// 缓存的数据
+@property (nonatomic, strong) NSMutableDictionary *cacheInfo;
+
+@end
 
 @implementation AdvDeviceInfoUtil
-+ (NSMutableDictionary *)getDeviceInfoWithMediaId:(NSString *)mediaId adspotId:(NSString *)adspotId {
+
+// MARK: 单例
+static AdvDeviceInfoUtil *_instance = nil;
++ (instancetype) sharedInstance {
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        _instance = [[super allocWithZone:NULL] init] ;
+    }) ;
+    
+    return _instance ;
+}
+
++ (id) allocWithZone:(struct _NSZone *)zone {
+    return [AdvDeviceInfoUtil sharedInstance] ;
+}
+
+- (id) copyWithZone:(struct _NSZone *)zone {
+    return [AdvDeviceInfoUtil sharedInstance] ;
+}
+
+- (NSMutableDictionary *)getDeviceInfoWithMediaId:(NSString *)mediaId adspotId:(NSString *)adspotId {
     NSMutableDictionary *deviceInfo = [[NSMutableDictionary alloc] init];
     @try {
-        [deviceInfo setValue:AdvanceSdkVersion forKey:@"sdk_version"];
-        [deviceInfo setValue:AdvanceSdkAPIVersion forKey:@"version"];
-        [deviceInfo setValue:mediaId forKey:@"appid"];
-        [deviceInfo setValue:adspotId forKey:@"adspotid"];
-        [deviceInfo setValue:[AdvDeviceInfoUtil getAppVersion] forKey:@"appver"];
-        NSString *time = [AdvDeviceInfoUtil getTime];
-        [deviceInfo setValue:time forKey:@"time"];
+        if (self.cacheInfo) {
+            // 实时获取
+            [self.cacheInfo setValue:mediaId forKey:@"appid"];
+            [self.cacheInfo setValue:adspotId forKey:@"adspotid"];
+            NSString *time = [AdvDeviceInfoUtil getTime];
+            [self.cacheInfo setValue:time forKey:@"time"];
 
-        //make
-        [deviceInfo setValue:[AdvDeviceInfoUtil getMake] forKey:@"make"];
-        //model
-        [deviceInfo setValue:[AdvDeviceInfoUtil getModel] forKey:@"model"];
-        //os
-        [deviceInfo setValue:@1 forKey:@"os"];
-        //osv
-        [deviceInfo setValue:[AdvDeviceInfoUtil getOsv] forKey:@"osv"];
-        //idfa
-        [deviceInfo setValue:[AdvDeviceInfoUtil getIdfa] forKey:@"idfa"];
-        //carrier
-        [deviceInfo setValue:[AdvDeviceInfoUtil getCarrier] forKey:@"carrier"];
-        //network
-        [deviceInfo setValue:[AdvDeviceInfoUtil getNetwork] forKey:@"network"];
-        //idfv
-        [deviceInfo setValue:[AdvDeviceInfoUtil getIdfv] forKey:@"idfv"];
-        // 个性化广告推送开关
-        [deviceInfo setValue:[AdvSdkConfig shareInstance].isAdTrack ? @"0" : @"1" forKey:@"donottrack"];
-        NSString *reqid = [AdvDeviceInfoUtil getAuctionId];
-        if (reqid) {
-            [deviceInfo setValue:reqid forKey:@"reqid"];
+            [self returnParametersWithDic:self.cacheInfo];
+            
+            return self.cacheInfo;
+            
+        } else {
+            self.cacheInfo = [[NSMutableDictionary alloc] init];
+            
+            // 实时获取
+            [deviceInfo setValue:mediaId forKey:@"appid"];
+            [deviceInfo setValue:adspotId forKey:@"adspotid"];
+            NSString *time = [AdvDeviceInfoUtil getTime];
+            [deviceInfo setValue:time forKey:@"time"];
+
+            // 冷启动获取一次
+            [deviceInfo setValue:AdvanceSdkVersion forKey:@"sdk_version"];
+            [deviceInfo setValue:AdvanceSdkAPIVersion forKey:@"version"];
+            [deviceInfo setValue:@1 forKey:@"os"];
+            [deviceInfo setValue:@1 forKey:@"devicetype"];
+            // 个性化广告推送开关
+            [deviceInfo setValue:[AdvSdkConfig shareInstance].isAdTrack ? @"0" : @"1" forKey:@"donottrack"];
+            
+            // 加密
+            [deviceInfo setValue:[AdvDeviceInfoUtil getOsv] forKey:@"osv"];
+            [deviceInfo setValue:[AdvDeviceInfoUtil getAppVersion] forKey:@"appver"];
+
+            // 只需要冷启动获取一次的字段
+            self.cacheInfo = [deviceInfo mutableCopy]; ///<---------------
+            
+            [self returnParametersWithDic:deviceInfo];
+            return deviceInfo;
         }
 
-        return deviceInfo;
     } @catch (NSException *exception) {
         return deviceInfo;
     }
 
+}
+
+// 获取参数
+- (NSMutableDictionary *)returnParametersWithDic:(NSMutableDictionary *)deviceInfo {
+    
+    /// 永久存储加密
+    //make
+    [deviceInfo setValue:[AdvDeviceInfoUtil getMake] forKey:@"make"];
+    //model
+    [deviceInfo setValue:[AdvDeviceInfoUtil getModel] forKey:@"model"];
+    
+    /// 一个月更新
+    /// idfa
+    [deviceInfo setValue:[AdvDeviceInfoUtil getIdfa] forKey:@"idfa"];
+    /// idfv
+    [deviceInfo setValue:[AdvDeviceInfoUtil getIdfv] forKey:@"idfv"];
+
+    /// 每小时更新
+    /// carrier
+    [deviceInfo setValue:[AdvDeviceInfoUtil getCarrier] forKey:@"carrier"];
+    /// network
+    [deviceInfo setValue:[AdvDeviceInfoUtil getNetwork] forKey:@"network"];
+
+
+    NSString *reqid = [AdvDeviceInfoUtil getAuctionId];
+    if (reqid) {
+        [deviceInfo setValue:reqid forKey:@"reqid"];
+    }
+    return deviceInfo;
 }
 
 + (NSString *)getAppVersion {
@@ -288,5 +349,6 @@
         return @"";
     }
 }
+
 
 @end

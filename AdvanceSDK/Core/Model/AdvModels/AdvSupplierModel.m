@@ -6,7 +6,6 @@
 //
 
 #import "AdvSupplierModel.h"
-#import "AdvDeviceInfoUtil.h"
 #import "AdvLog.h"
 #import "AdvModel.h"
 
