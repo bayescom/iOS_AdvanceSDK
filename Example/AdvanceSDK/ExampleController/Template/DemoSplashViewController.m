@@ -26,7 +26,7 @@
         @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10002619"},
         @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10006483"},
         @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10006482"},
-        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"101731-10005519"},
+        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10006572"},
     ];
     self.btn1Title = @"加载并显示广告";
 }

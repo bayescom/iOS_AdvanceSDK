@@ -27,8 +27,10 @@
 #define IP_ADDR_IPv6    @"ipv6"
 
 #define kTimeOutOneMonth 60 * 60 * 24 * 30 // 30天
+//#define kTimeOutOneMonth 60 // 30天
 
 #define kTimeOutOneHour 60 * 60 // 1小时
+//#define kTimeOutOneHour 60  // 1小时
 
 @interface AdvDeviceInfoUtil ()
 /// 缓存的数据
@@ -68,8 +70,8 @@ static AdvDeviceInfoUtil *_instance = nil;
             NSString *time = [AdvDeviceInfoUtil getTime];
             [deviceInfo setValue:time forKey:@"time"];
 
-            deviceInfo = [self returnParametersWithDic:self.cacheInfo];
-            deviceInfo = [self createDeviceEncinfoWithDic:self.cacheInfo];
+            deviceInfo = [self returnParametersWithDic:deviceInfo];
+            deviceInfo = [self createDeviceEncinfoWithDic:deviceInfo];
             
             return deviceInfo;
             
