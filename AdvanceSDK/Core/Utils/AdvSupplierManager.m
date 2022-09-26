@@ -619,7 +619,7 @@
         
         ADV_LEVEL_INFO_LOG(@"自定义扩展字段 ext : %@", self.ext);
     }
-    
+    // 1200411781 5073996413293680
     
     ADV_LEVEL_INFO_LOG(@"请求参数 %@", deviceInfo);
     NSLog(@"%@", [self jsonStringCompactFormatForDictionary:deviceInfo]);
