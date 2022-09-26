@@ -241,7 +241,6 @@
     
     [self.model.setting.headBiddingGroup removeAllObjects];
 
-
     // tempWaterfall = 0意味着所有parallelGroup 的渠道都没展现 这个时候 _incomeWaterfallCount应置为0, 避免卡住问题
     if (tempWaterfall.count > 0) {
         _incomeWaterfallCount = tempWaterfall.count + self.arrayHeadBidding.count;
@@ -455,7 +454,7 @@
 //    for (AdvSupplier *temp in self.arrayHeadBidding) {
 //        NSLog(@"------2-> %@ %ld %ld %ld", temp.sdktag, (long)temp.sdk_price, (long)temp.supplierPrice, (long)temp.priority);
 //    }
-
+//
 
     // 取价格最高的渠道执行
     AdvSupplier *currentSupplier = suppliers.lastObject;
@@ -495,9 +494,14 @@
     }
     
     
-    AdvSupplier *currentSupplier = _supplierM.firstObject;
+    AdvSupplier *currentSupplier = _supplierM.lastObject;
     currentSupplier.isParallel = NO;
-    
+    currentSupplier.positionType = AdvanceSdkSupplierTypeWaterfall;
+    // bidding结束
+    if (self.delegate && [self.delegate respondsToSelector:@selector(advManagerBiddingEndWithWinSupplier:)]) {
+        [self.delegate advManagerBiddingEndWithWinSupplier:currentSupplier];
+    }
+
     
     //         NSLog(@"%s %@", __func__, currentSupplier.sdktag);
     [self notCPTLoadNextSuppluer:currentSupplier error:nil];
@@ -707,7 +711,7 @@
     
     NSError *parseErr = nil;
     AdvSupplierModel *a_model = [AdvSupplierModel adv_modelWithJSON:data];
-    NSLog(@"[JSON]%@", [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil]);
+//    NSLog(@"[JSON]%@", [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil]);
     if (parseErr || !a_model) {
         // parse error
         if (!saveOnly && [_delegate respondsToSelector:@selector(advSupplierManagerLoadError:)]) {

@@ -72,7 +72,7 @@
 }
 
 - (void)advanceBiddingEndWithPrice:(NSInteger)price {
-//    NSLog(@"%s %ld", __func__, price);
+    NSLog(@"%s %ld", __func__, price);
     self.price = price;
 }
 

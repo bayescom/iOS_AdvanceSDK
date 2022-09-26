@@ -119,7 +119,7 @@ Pod::Spec.new do |s|
 #        bidding.dependency 'AdvanceSDK/Core'
 #        bidding.dependency 'AdvanceSDK/Adspot'
 ##        bidding.dependency 'AdvBiddingSDK'
-#        bidding.dependency 'AdvBiddingSuppliers','0.0.2'
+#        bidding.dependency 'AdvBiddingSuppliers','0.0.3'
 #
 #        bidding.dependency 'Ads-CN'
 #        bidding.source_files =  ['AdvanceSDK/Adapter/Bidding/*{h,m}',
@@ -139,9 +139,6 @@ Pod::Spec.new do |s|
         advBidding.dependency 'AdvanceSDK/Adspot'
         advBidding.dependency 'AdvBiddingSDK', '1.0.2'
         advBidding.dependency 'AdvBiddingSuppliers', '0.0.3'
-
-
-#        valid_archs = ['armv7', 'armv7s', 'x86_64', 'arm64']
 
 
     end
