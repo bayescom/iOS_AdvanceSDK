@@ -494,7 +494,7 @@
     }
     
     
-    AdvSupplier *currentSupplier = _supplierM.lastObject;
+    AdvSupplier *currentSupplier = _supplierM.firstObject;
     currentSupplier.isParallel = NO;
     currentSupplier.positionType = AdvanceSdkSupplierTypeWaterfall;
     // bidding结束
