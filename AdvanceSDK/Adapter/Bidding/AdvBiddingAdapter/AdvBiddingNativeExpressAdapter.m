@@ -31,17 +31,8 @@
     if (self = [super initWithSupplier:supplier adspot:adspot]) {
         _adspot = adspot;
         _supplier = supplier;
-        
-        ABUAdUnit *slot = [[ABUAdUnit alloc] init];
-        ABUSize *imgSize = [[ABUSize alloc] init];
-        imgSize.width = 1080;
-        imgSize.height = 1920;
-        slot.imgSize = imgSize;
-        
-        slot.ID = _supplier.adspotid;
-        // 如果是模板广告，返回高度将不一定是300，而是按照414和对应代码位在平台的配置计算出的高度
-        slot.adSize = _adspot.adSize;
-        self.adManager = [[ABUNativeAdsManager alloc] initWithSlot:slot];
+
+        self.adManager = [[ABUNativeAdsManager alloc] initWithAdUnitID:_supplier.adspotid adSize:_adspot.adSize];
         self.adManager.rootViewController = _adspot.viewController;
         self.adManager.startMutedIfCan = YES;
         self.adManager.delegate = self;

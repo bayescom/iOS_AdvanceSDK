@@ -118,7 +118,7 @@ Pod::Spec.new do |s|
 #    s.subspec 'Bidding' do |bidding|
 #        bidding.dependency 'AdvanceSDK/Core'
 #        bidding.dependency 'AdvanceSDK/Adspot'
-##        bidding.dependency 'AdvBiddingSDK'
+#        bidding.dependency 'AdvBiddingSDK'
 #        bidding.dependency 'AdvBiddingSuppliers','0.0.3'
 #
 #        bidding.dependency 'Ads-CN'
@@ -137,7 +137,7 @@ Pod::Spec.new do |s|
     s.subspec 'AdvBidding' do |advBidding|
         advBidding.dependency 'AdvanceSDK/Core'
         advBidding.dependency 'AdvanceSDK/Adspot'
-        advBidding.dependency 'AdvBiddingSDK', '1.0.2'
+        advBidding.dependency 'AdvBiddingSDK', '1.0.3'
         advBidding.dependency 'AdvBiddingSuppliers', '0.0.3'
 
 
