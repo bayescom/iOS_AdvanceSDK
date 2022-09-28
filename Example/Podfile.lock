@@ -6,33 +6,33 @@ PODS:
   - Ads-CN/Dep_Accurate (4.7.1.0):
     - BUAdSDK (= 0.1.0.24)
     - BURelyFoundation/CSJ (= 0.0.3.6)
-  - AdvanceSDK (4.0.1.1):
-    - AdvanceSDK/Core (= 4.0.1.1)
-  - AdvanceSDK/Adspot (4.0.1.1):
+  - AdvanceSDK (4.0.1.2):
+    - AdvanceSDK/Core (= 4.0.1.2)
+  - AdvanceSDK/Adspot (4.0.1.2):
     - AdvanceSDK/Core
-  - AdvanceSDK/AdvBidding (4.0.1.1):
+  - AdvanceSDK/AdvBidding (4.0.1.2):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - AdvBiddingSDK (= 1.0.7)
     - AdvBiddingSuppliers (= 0.0.3)
-  - AdvanceSDK/BD (4.0.1.1):
+  - AdvanceSDK/BD (4.0.1.2):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - BaiduMobAdSDK (= 4.892)
-  - AdvanceSDK/Core (4.0.1.1)
-  - AdvanceSDK/CSJ (4.0.1.1):
+  - AdvanceSDK/Core (4.0.1.2)
+  - AdvanceSDK/CSJ (4.0.1.2):
     - Ads-CN (= 4.7.1.0)
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
-  - AdvanceSDK/GDT (4.0.1.1):
+  - AdvanceSDK/GDT (4.0.1.2):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - GDTMobSDK (= 4.13.83)
-  - AdvanceSDK/KS (4.0.1.1):
+  - AdvanceSDK/KS (4.0.1.2):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - KSAdSDK (= 3.3.29)
-  - AdvanceSDK/Mercury (4.0.1.1):
+  - AdvanceSDK/Mercury (4.0.1.2):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - MercurySDK (= 3.1.7.3)
@@ -117,7 +117,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Ads-CN: 2b4a13d0430272f1bd90d0e2589623f9e6fc4ce6
-  AdvanceSDK: 1e94c2c9509767b64f0d0beb55f362a2aca102b4
+  AdvanceSDK: ddf2c045d4537457b78288e878793e6633826bb1
   AdvBiddingSDK: 59a61c5850c8cc8c7d61fafa09780100270bfa8b
   AdvBiddingSuppliers: 9f065bf6862153d0ad03624d8ff116786feed104
   BaiduMobAdSDK: 1ec7243db12c6abacf35b89a1b4f7db43c2f6bff
