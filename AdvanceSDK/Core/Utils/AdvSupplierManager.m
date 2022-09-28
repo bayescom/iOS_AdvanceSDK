@@ -711,7 +711,7 @@
     
     NSError *parseErr = nil;
     AdvSupplierModel *a_model = [AdvSupplierModel adv_modelWithJSON:data];
-//    NSLog(@"[JSON]%@", [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil]);
+    NSLog(@"[JSON]%@", [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil]);
     if (parseErr || !a_model) {
         // parse error
         if (!saveOnly && [_delegate respondsToSelector:@selector(advSupplierManagerLoadError:)]) {

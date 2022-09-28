@@ -25,7 +25,7 @@
     self.adspotIdsArr = @[
         @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10002619"},
         @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10006483"},
-        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10006482"},
+        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10006611"},
         @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10006572"},
         @{@"addesc": @"mediaId-adspotId", @"adspotId": @"102213-10006560"},
     ];
