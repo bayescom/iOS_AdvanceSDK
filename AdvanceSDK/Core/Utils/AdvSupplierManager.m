@@ -182,14 +182,20 @@
 - (void)GMBiddingAction {
     AdvSupplier *GMObj = [AdvSupplier new];
     
-    GMObj.mediaid = self.model.setting.gromore_params.appid;
-    GMObj.adspotid = self.model.setting.gromore_params.adspotid;
-    GMObj.timeout = self.model.setting.gromore_params.timeout;
+    GMObj.mediaid = self.model.gro_more.gromore_params.appid;
+    GMObj.adspotid = self.model.gro_more.gromore_params.adspotid;
+    GMObj.timeout = self.model.gro_more.gromore_params.timeout;
     GMObj.identifier = SDK_ID_BIDDING;
     GMObj.isParallel = NO;
     GMObj.name = @"实时竞价";
     GMObj.sdktag = @"Bidding";
-    GMObj.imptk = self.model.setting.gmtk;
+    GMObj.imptk = self.model.gro_more.gmtk.imptk;
+    GMObj.loadedtk = self.model.gro_more.gmtk.loadedtk;
+    GMObj.failedtk = self.model.gro_more.gmtk.failedtk;
+    GMObj.succeedtk = self.model.gro_more.gmtk.succeedtk;
+    GMObj.imptk = self.model.gro_more.gmtk.imptk;
+    GMObj.biddingtk = self.model.gro_more.gmtk.biddingtk;
+
     // 初始化 biddingCongfig单例
     id biddingConfig = ((id(*)(id,SEL))objc_msgSend)(NSClassFromString(@"AdvBiddingCongfig"), @selector(defaultManager));
     // 将策略Model 付给BiddingCongfig 用来在customAdapter里初始化新的开屏广告位
@@ -813,7 +819,10 @@
         [_supplierM removeObject:supplier];
         [self.lock unlock];
 
+    } else if (repoType == AdvanceSdkSupplierRepoGMBidding) {
+        uploadArr =  [self.tkUploadTool imptkUrlWithArr:supplier.biddingtk price:(supplier.supplierPrice == 0) ? supplier.sdk_price : supplier.supplierPrice];
     }
+    
     if (!uploadArr || uploadArr.count <= 0) {
         // TODO: 上报地址不存在
         return;

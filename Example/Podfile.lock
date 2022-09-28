@@ -13,7 +13,7 @@ PODS:
   - AdvanceSDK/AdvBidding (4.0.1.1):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
-    - AdvBiddingSDK (= 1.0.5)
+    - AdvBiddingSDK (= 1.0.7)
     - AdvBiddingSuppliers (= 0.0.3)
   - AdvanceSDK/BD (4.0.1.1):
     - AdvanceSDK/Adspot
@@ -36,7 +36,7 @@ PODS:
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - MercurySDK (= 3.1.7.3)
-  - AdvBiddingSDK (1.0.5)
+  - AdvBiddingSDK (1.0.7)
   - AdvBiddingSuppliers (0.0.3)
   - BaiduMobAdSDK (4.892)
   - BUAdSDK (0.1.0.24):
@@ -117,8 +117,8 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Ads-CN: 2b4a13d0430272f1bd90d0e2589623f9e6fc4ce6
-  AdvanceSDK: 04880dc3a8ea6270742d5f93a30cedac4c125912
-  AdvBiddingSDK: 33a345c4a7f961a6fba4a6b02ce4978ebcc8bdab
+  AdvanceSDK: 1e94c2c9509767b64f0d0beb55f362a2aca102b4
+  AdvBiddingSDK: 59a61c5850c8cc8c7d61fafa09780100270bfa8b
   AdvBiddingSuppliers: 9f065bf6862153d0ad03624d8ff116786feed104
   BaiduMobAdSDK: 1ec7243db12c6abacf35b89a1b4f7db43c2f6bff
   BUAdSDK: 5528f72f7b9b478a12743ea23af7bdb9746efc00

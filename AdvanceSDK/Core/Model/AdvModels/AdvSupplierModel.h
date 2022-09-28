@@ -12,6 +12,10 @@
 @class AdvSupplier;
 @class AdvPriorityMap;
 @class AdvBiddingModel;
+@class Gro_more;
+@class Gmtk;
+@class Gromore_params;
+
 typedef NS_ENUM(NSUInteger, AdvanceSdkSupplierRepoType) {
     /// 发起加载请求上报
     AdvanceSdkSupplierRepoLoaded,
@@ -23,9 +27,10 @@ typedef NS_ENUM(NSUInteger, AdvanceSdkSupplierRepoType) {
     AdvanceSdkSupplierRepoImped,
     /// 失败上报
     AdvanceSdkSupplierRepoFaileded,
-    
-    /// bidding上报 目前未使用
-    AdvanceSdkSupplierRepoBidding
+    /// bidding结果上报
+    AdvanceSdkSupplierRepoBidding,
+    /// bidding广告位生命周期上报
+    AdvanceSdkSupplierRepoGMBidding
 
 };
 
@@ -61,6 +66,7 @@ NSString * ADVStringFromNAdvanceSdkSupplierRepoType(AdvanceSdkSupplierRepoType t
 #pragma mark - Object interfaces
 
 @interface AdvSupplierModel : NSObject
+@property (nonatomic, strong) Gro_more  *gro_more;
 @property (nonatomic, strong) AdvSetting *setting;
 @property (nonatomic, strong)   NSMutableArray<AdvSupplier *> *suppliers;
 @property (nonatomic, copy)   NSString *msg;
@@ -101,6 +107,31 @@ NSString * ADVStringFromNAdvanceSdkSupplierRepoType(AdvanceSdkSupplierRepoType t
 
 @end
 
+@interface Gmtk :NSObject
+@property (nonatomic , strong) NSArray <NSString *>              * failedtk;
+@property (nonatomic , strong) NSArray <NSString *>              * imptk;
+@property (nonatomic , strong) NSArray <NSString *>              * biddingtk;
+@property (nonatomic , strong) NSArray <NSString *>              * succeedtk;
+@property (nonatomic , strong) NSArray <NSString *>              * clicktk;
+@property (nonatomic , strong) NSArray <NSString *>              * loadedtk;
+
+@end
+
+
+@interface Gromore_params :NSObject
+@property (nonatomic , copy) NSString              * appid;
+@property (nonatomic , copy) NSString              * adspotid;
+@property (nonatomic , assign) NSInteger              timeout;
+
+@end
+
+
+@interface Gro_more :NSObject
+@property (nonatomic , strong) Gmtk              *gmtk;
+@property (nonatomic , strong) Gromore_params    *gromore_params;
+
+@end
+
 
 
 @interface AdvSupplier : NSObject
@@ -126,6 +157,8 @@ NSString * ADVStringFromNAdvanceSdkSupplierRepoType(AdvanceSdkSupplierRepoType t
 @property (nonatomic, copy)   NSArray<NSString *> *imptk;
 @property (nonatomic, copy)   NSArray<NSString *> *succeedtk;
 @property (nonatomic, copy)   NSArray<NSString *> *failedtk;
+@property (nonatomic, copy)   NSArray<NSString *> *biddingtk;// 只有gm使用
+
 @property (nonatomic, assign) AdvanceSdkSupplierBiddingType positionType;
 
 

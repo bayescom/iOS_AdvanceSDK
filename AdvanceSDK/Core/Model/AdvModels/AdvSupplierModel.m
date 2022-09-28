@@ -70,6 +70,21 @@ NSString *const DEFAULT_LOADEDTK = @"http://cruiser.bayescom.cn/loaded?action=lo
 
 
 
+@implementation Gmtk
+
+
+@end
+
+
+@implementation Gromore_params
+
+@end
+
+
+@implementation Gro_more 
+
+@end
+
 @implementation AdvSupplier
 
 + (NSDictionary *)modelCustomPropertyMapper {
