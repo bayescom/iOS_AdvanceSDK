@@ -44,7 +44,16 @@
 - (void)supplierStateLoad {
     ADV_LEVEL_INFO_LOG(@"加载Bidding supplier: %@", _supplier);
     _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
-    [self.adManager loadAdDataWithCount:1];
+    
+    if([ABUAdSDKManager configDidLoad]){
+        [self.adManager loadAdDataWithCount:1];
+    }else{
+        [ABUAdSDKManager addConfigLoadSuccessObserver:self withAction:^(AdvBiddingNativeExpressAdapter  *observer) {
+            [observer.adManager loadAdDataWithCount:1];
+        }];
+    }
+
+//    [self.adManager loadAdDataWithCount:1];
 }
 
 - (void)supplierStateInPull {

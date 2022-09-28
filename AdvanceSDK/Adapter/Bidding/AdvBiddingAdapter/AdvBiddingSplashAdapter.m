@@ -74,9 +74,13 @@
         bottomView.frame = CGRectMake(0, [UIScreen mainScreen].bounds.size.height-real_h, [UIScreen mainScreen].bounds.size.width, real_h);
         self.splashAd.customBottomView = bottomView;
     }
-
-    [self.splashAd loadAdData];
-
+    if([ABUAdSDKManager configDidLoad]){
+        [self.splashAd loadAdData];
+    }else{
+        [ABUAdSDKManager addConfigLoadSuccessObserver:self withAction:^(AdvBiddingSplashAdapter  *observer) {
+            [observer.splashAd loadAdData];
+        }];
+    }
 }
 
 - (void)supplierStateInPull {
