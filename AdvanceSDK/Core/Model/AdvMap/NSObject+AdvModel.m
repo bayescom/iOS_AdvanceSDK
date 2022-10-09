@@ -1440,7 +1440,7 @@ static NSString *ModelDescription(NSObject *model) {
 
 + (instancetype)adv_modelWithJSON:(id)json {
     NSDictionary *dic = [self _adv_dictionaryWithJSON:json];
-//    NSLog(@"[JSON]:%@", [self by_jsonStringCompactFormatForDictionary:dic]);
+    NSLog(@"[JSON]:%@", [self by_jsonStringCompactFormatForDictionary:dic]);
     return [self adv_modelWithDictionary:dic];
 }
 
