@@ -82,9 +82,8 @@
     self.adspotId = adspotId;
     self.tkUploadTool = [[AdvUploadTKUtil alloc] init];
     self.ext = [ext mutableCopy];
-    self.arrayWaterfall = [NSMutableArray array];
     self.arrayHeadBidding = [NSMutableArray array];
-
+    self.arrayWaterfall = [NSMutableArray array];
     
     
     // model不存在
@@ -216,9 +215,7 @@
     // 目前参加Waterfall分层的方式去执行渠道
     NSMutableArray *waterfallPriority = self.model.setting.parallelGroup.firstObject;
     
-    __weak typeof(self) _self = self;
     [waterfallPriority enumerateObjectsUsingBlock:^(NSNumber  *_Nonnull priority, NSUInteger idx, BOOL * _Nonnull stop) {
-        __strong typeof(_self) self = _self;
         // 想要分组并发->广告位必须要支持并发->必须支持load 和show 分离
         AdvSupplier *parallelSupplier = [self getSupplierByPriority:[priority integerValue]];
         // 该广告位支持并行
@@ -239,6 +236,7 @@
     NSMutableArray *biddingSuppiers = [NSMutableArray array];
     biddingSuppiers = self.model.setting.headBiddingGroup;
     
+    __weak typeof(self) _self = self;
     [biddingSuppiers enumerateObjectsUsingBlock:^(NSNumber  *_Nonnull priority, NSUInteger idx, BOOL * _Nonnull stop) {
         __strong typeof(_self) self = _self;
         // 执行bidding组的Supplier parallelSupplier
@@ -415,13 +413,12 @@
     
 //    NSLog(@"suppliers = %@",suppliers);
 //    NSLog(@"arrayHeadBidding = %@",self.arrayHeadBidding);
-    __weak typeof(self) _self = self;
+
     [tempBidding enumerateObjectsUsingBlock:^(AdvSupplier * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        __strong typeof(_self) self = _self;
 //        NSLog(@"%ld  %ld", obj.supplierPrice, _waterfallMinPrice);
         NSInteger obj_price = (obj.supplierPrice > 0) ? obj.supplierPrice : obj.sdk_price;
         if (obj_price > _waterfallMinPrice) {
-            [suppliers  addObject:obj];
+            [suppliers addObject:obj];
             [self.arrayHeadBidding removeObject:obj];
         }
     }];
@@ -640,8 +637,8 @@
     NSLog(@"%@", [self jsonStringCompactFormatForDictionary:deviceInfo]);
     NSError *parseError = nil;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:deviceInfo options:NSJSONWritingPrettyPrinted error:&parseError];
-//    NSURL *url = [NSURL URLWithString:AdvanceSdkRequestUrl];
-    NSURL *url = [NSURL URLWithString:AdvanceSdkRequestMockUrl];
+    NSURL *url = [NSURL URLWithString:AdvanceSdkRequestUrl];
+//    NSURL *url = [NSURL URLWithString:AdvanceSdkRequestMockUrl];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:self.fetchTime];
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     request.HTTPBody = jsonData;
@@ -859,7 +856,6 @@
     return _lock;
 }
 
-
 - (void)setModel:(AdvSupplierModel *)model {
     if (_model != model) {
         _model = nil;
@@ -879,7 +875,6 @@
         _arrayHeadBidding = nil;
         _arrayHeadBidding = arrayHeadBidding;
     }
-
 }
 
 - (void)deallocTimer {
@@ -897,6 +892,5 @@
     self.arrayWaterfall = nil;
     self.arrayHeadBidding = nil;
     self.supplierM = nil;
-
 }
 @end

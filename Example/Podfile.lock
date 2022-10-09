@@ -6,37 +6,38 @@ PODS:
   - Ads-CN/Dep_Accurate (4.8.0.7):
     - BUAdSDK (= 0.1.0.24)
     - BURelyFoundation/CSJ (= 0.0.3.13)
-  - AdvanceSDK (4.0.1.2):
-    - AdvanceSDK/Core (= 4.0.1.2)
-  - AdvanceSDK/Adspot (4.0.1.2):
+  - AdvanceSDK (4.0.1.3):
+    - AdvanceSDK/Core (= 4.0.1.3)
+  - AdvanceSDK/Adspot (4.0.1.3):
     - AdvanceSDK/Core
-  - AdvanceSDK/BD (4.0.1.2):
+  - AdvanceSDK/AdvBidding (4.0.1.3):
+    - AdvanceSDK/Adspot
+    - AdvanceSDK/Core
+    - AdvBiddingSDK (= 1.0.8)
+    - AdvBiddingSuppliers (= 0.0.4)
+  - AdvanceSDK/BD (4.0.1.3):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - BaiduMobAdSDK (= 4.892)
-  - AdvanceSDK/Bidding (4.0.1.2):
-    - Ads-CN
-    - AdvanceSDK/Adspot
-    - AdvanceSDK/Core
-    - AdvBiddingSuppliers (= 0.0.3)
-  - AdvanceSDK/Core (4.0.1.2)
-  - AdvanceSDK/CSJ (4.0.1.2):
+  - AdvanceSDK/Core (4.0.1.3)
+  - AdvanceSDK/CSJ (4.0.1.3):
     - Ads-CN (= 4.8.0.7)
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
-  - AdvanceSDK/GDT (4.0.1.2):
+  - AdvanceSDK/GDT (4.0.1.3):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
-    - GDTMobSDK (= 4.13.83)
-  - AdvanceSDK/KS (4.0.1.2):
+    - GDTMobSDK (= 4.13.90)
+  - AdvanceSDK/KS (4.0.1.3):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
-    - KSAdSDK (= 3.3.29)
-  - AdvanceSDK/Mercury (4.0.1.2):
+    - KSAdSDK (= 3.3.31)
+  - AdvanceSDK/Mercury (4.0.1.3):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - MercurySDK (= 3.1.7.3)
-  - AdvBiddingSuppliers (0.0.3)
+  - AdvBiddingSDK (1.0.8)
+  - AdvBiddingSuppliers (0.0.4)
   - BaiduMobAdSDK (4.892)
   - BUAdSDK (0.1.0.24):
     - BUAdSDK/BUAdSDK (= 0.1.0.24)
@@ -69,11 +70,11 @@ PODS:
     - BURelyFoundation/Zip
   - BURelyFoundation/Zip (0.0.3.13):
     - BURelyFoundation/Foundation
-  - GDTMobSDK (4.13.83):
-    - GDTMobSDK/GDTMobSDK (= 4.13.83)
-  - GDTMobSDK/GDTMobSDK (4.13.83)
+  - GDTMobSDK (4.13.90):
+    - GDTMobSDK/GDTMobSDK (= 4.13.90)
+  - GDTMobSDK/GDTMobSDK (4.13.90)
   - JSONModel (1.8.0)
-  - KSAdSDK (3.3.29)
+  - KSAdSDK (3.3.31)
   - Masonry (1.1.0)
   - MercurySDK (3.1.7.3)
   - Reachability (3.2)
@@ -83,8 +84,8 @@ PODS:
 
 DEPENDENCIES:
   - AdvanceSDK (from `../`)
+  - AdvanceSDK/AdvBidding (from `../`)
   - AdvanceSDK/BD (from `../`)
-  - AdvanceSDK/Bidding (from `../`)
   - AdvanceSDK/CSJ (from `../`)
   - AdvanceSDK/GDT (from `../`)
   - AdvanceSDK/KS (from `../`)
@@ -97,6 +98,7 @@ DEPENDENCIES:
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
     - Ads-CN
+    - AdvBiddingSDK
     - AdvBiddingSuppliers
     - BaiduMobAdSDK
     - BUAdSDK
@@ -115,19 +117,20 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Ads-CN: 3faad259231222f264a3dd7f14de12d3788af271
-  AdvanceSDK: 88752075fdde77cd29adbc8284fcc8b4d3a848c7
-  AdvBiddingSuppliers: 9f065bf6862153d0ad03624d8ff116786feed104
+  AdvanceSDK: b519f95e05ea8de3fe842cfb8f3336e95d1d1562
+  AdvBiddingSDK: 8b08b238964d49c0a595b3530252c5bdcfd23541
+  AdvBiddingSuppliers: cf751b254a24cc1bb7707d6d39c3bfc12668433d
   BaiduMobAdSDK: 1ec7243db12c6abacf35b89a1b4f7db43c2f6bff
   BUAdSDK: 5528f72f7b9b478a12743ea23af7bdb9746efc00
   BURelyFoundation: 92b5a155543721655445b54ddbbf3035a0c6f16e
-  GDTMobSDK: b1d5956bc683886256fb903b4a740cbecee58f91
+  GDTMobSDK: c94d4870359052a47393916ba1d408ba2aad1d0a
   JSONModel: 02ab723958366a3fd27da57ea2af2113658762e9
-  KSAdSDK: fbbe3bc6a8710c949de94bbe9706cac82f0dabe7
+  KSAdSDK: 31f7c8aabe8a5d7e9c97a82e78fa92d7ceeb1377
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   MercurySDK: 92b776fa8f6e61afe3dd1d6f768682653eb9dff3
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
   SDWebImage: 4dc3e42d9ec0c1028b960a33ac6b637bb432207b
 
-PODFILE CHECKSUM: a16cb14694fa672cbbf38a28b60cf1fba94d45e1
+PODFILE CHECKSUM: 5ac894e863b53c7fd65aa73fd4e772ec1186e2d3
 
 COCOAPODS: 1.11.2

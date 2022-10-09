@@ -187,11 +187,15 @@
     
 
     if ([supplier.identifier isEqualToString:SDK_ID_GDT]) {
-        // 广点通SDK
-        static dispatch_once_t onceToken;
-        dispatch_once(&onceToken, ^{
-            [NSClassFromString(clsName) performSelector:@selector(registerAppId:) withObject:supplier.mediaid];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            // 广点通SDK
+            static dispatch_once_t onceToken;
+            dispatch_once(&onceToken, ^{
+                
+                [NSClassFromString(clsName) performSelector:@selector(registerAppId:) withObject:supplier.mediaid];
+            });
         });
+
     } else if ([supplier.identifier isEqualToString:SDK_ID_CSJ]) {
         // 穿山甲SDK
         static dispatch_once_t onceToken;
@@ -255,6 +259,7 @@
         
     }
 
+//    NSLog(@"---> %@", [NSThread currentThread]);
     // 加载渠道
     if ([_baseDelegate respondsToSelector:@selector(advanceBaseAdapterLoadSuppluer:error:)]) {
         [_baseDelegate advanceBaseAdapterLoadSuppluer:supplier error:error];
