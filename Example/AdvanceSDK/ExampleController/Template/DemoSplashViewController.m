@@ -20,7 +20,14 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    /**
+     - 超时时间只需要设置AdvanceSplash的 timeout属性, 如果在timeout时间内没有广告曝光, 则会强制移除开屏广告,并触发错误回调
+
+     - 每次加载需开屏广告需使用最新的实例, 不要进行本地存储, 或计时器持有的操作
+
+     - 保证在开屏广告生命周期内(包括请求,曝光成功后的展现时间内),不要更换rootVC, 也不要对Window进行操作
+
+     */
     self.initDefSubviewsFlag = YES;
     self.adspotIdsArr = @[
         @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10002619"},

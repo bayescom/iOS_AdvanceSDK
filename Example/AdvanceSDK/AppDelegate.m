@@ -52,7 +52,7 @@
 #pragma 开始集成前 请务必阅读文档中的注意事项及Checklist https://github.com/bayescom/AdvanceSDK
 #pragma 开始集成前 请务必阅读文档中的注意事项及Checklist https://github.com/bayescom/AdvanceSDK
 #pragma Demo 中有许多内容为开发调试的内容, 仅作为开发者调试自己的账号使用, 不一定会出广告
-
+    
     // 请现在 plist 文件中配置 NSUserTrackingUsageDescription
     /*
      <key>NSUserTrackingUsageDescription</key>
