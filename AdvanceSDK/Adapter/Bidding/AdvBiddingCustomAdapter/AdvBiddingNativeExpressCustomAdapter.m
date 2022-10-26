@@ -38,7 +38,7 @@
 }
 
 - (void)loadNativeAdWithSlotID:(nonnull NSString *)slotID andSize:(CGSize)size imageSize:(CGSize)imageSize parameter:(nonnull NSDictionary *)parameter {
-    NSLog(@"----------->自定义开屏adapter开始加载啦啦<------------");
+//    NSLog(@"----------->自定义开屏adapter开始加载啦啦<------------");
     
     AdvSupplierModel *model = [[AdvBiddingCongfig defaultManager] returnSupplierByAdspotId:slotID];
     
@@ -55,7 +55,7 @@
 
 - (void)renderForExpressAdView:(nonnull UIView *)expressAdView {
     // 如不adn广告不需要render，请尽量模拟回调renderSuccess
-    NSLog(@"renderForExpressAdView   %@", expressAdView);
+//    NSLog(@"renderForExpressAdView   %@", expressAdView);
 //    [self.bridge nativeAd:self renderSuccessWithExpressView:expressAdView];
     if ([expressAdView isKindOfClass:NSClassFromString(@"BUNativeExpressFeedVideoAdView")] ||
         [expressAdView isKindOfClass:NSClassFromString(@"BUNativeExpressAdView")] ||
@@ -78,7 +78,7 @@
 }
 
 - (void)setRootViewController:(nonnull UIViewController *)viewController forExpressAdView:(nonnull UIView *)expressAdView {
-    NSLog(@"setRootViewController   %@ %@", expressAdView, viewController);
+//    NSLog(@"setRootViewController   %@ %@", expressAdView, viewController);
     if ([expressAdView isKindOfClass:NSClassFromString(@"BUNativeExpressFeedVideoAdView")] ||
         [expressAdView isKindOfClass:NSClassFromString(@"BUNativeExpressAdView")] ||
         [expressAdView isKindOfClass:NSClassFromString(@"CSJNativeExpressAdView")]) {

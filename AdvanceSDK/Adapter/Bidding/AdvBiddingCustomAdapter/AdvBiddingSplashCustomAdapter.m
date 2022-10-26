@@ -45,19 +45,19 @@
 }
 
 - (void)dismissSplashAd {
-    NSLog(@"----------->自定义开屏adapter开始释放啦啦<------------");
+//    NSLog(@"----------->自定义开屏adapter开始释放啦啦<------------");
     self.advanceSplash = nil;
     self.customBottomView = nil;
 }
 
 
 - (void)initializeAdapterWithConfiguration:(ABUSdkInitConfig *_Nullable)initConfig {
-    NSLog(@"----------->自定义开屏adapter开始init啦啦 %@<------------", initConfig.appKey);
+//    NSLog(@"----------->自定义开屏adapter开始init啦啦 %@<------------", initConfig.appKey);
 
 }
 
 - (void)loadSplashAdWithSlotID:(nonnull NSString *)slotID andParameter:(nonnull NSDictionary *)parameter {
-    NSLog(@"----------->自定义开屏adapter开始加载啦啦<------------");
+//    NSLog(@"----------->自定义开屏adapter开始加载啦啦<------------");
     
     
     AdvSupplierModel *model = [[AdvBiddingCongfig defaultManager] returnSupplierByAdspotId:slotID];
@@ -109,14 +109,14 @@
 }
 
 - (void)advanceBiddingEndWithPrice:(NSInteger)price {
-    NSLog(@"%s %ld", __func__, price);
+//    NSLog(@"%s %ld", __func__, price);
     self.price = price;
     [self.bridge splashAd:self didLoadWithExt:@{ABUMediaAdLoadingExtECPM:[NSString stringWithFormat:@"%ld", self.price]}];
 }
 
 - (void)showSplashAdInWindow:(nonnull UIWindow *)window parameter:(nonnull NSDictionary *)parameter {
 
-    NSLog(@"----------->自定义开屏adapter开始展示啦啦<------------");
+//    NSLog(@"----------->自定义开屏adapter开始展示啦啦<------------");
 
 //    [self.splashView showInWindow:window];
 //    if (self.customBottomView) {

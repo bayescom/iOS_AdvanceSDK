@@ -34,15 +34,19 @@
     self.adspotIdsArr = @[
         @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10002619"},
         @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10006483"},
-        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10006611"},
-        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10006572"},
-        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"102213-10006560"},
-        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"102213-10006560"},
-        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"102213-10005519"},
         
+        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"101959-10006038"},
+
+//
     ];
     self.btn1Title = @"加载并显示广告";
 }
+//#define kBY_AdMediaId @"101959"
+//#define kBY_Ad_Splash_Id @"10006038"
+//#define kBY_Ad_Instrument_HomePage_Bottom_Banner_Id @"10006037"
+//#define kBY_Ad_Instrument_HomePage_Top_Express_Id @"10006024"
+//#define kBY_Ad_Instrument_EditResultPage_Express_Id @"10006023"
+//#define kBY_Ad_User_HomePage_Express_Id @"10006022"
 
 - (void)loadAdBtn1Action {
     if (![self checkAdspotId]) { return; }

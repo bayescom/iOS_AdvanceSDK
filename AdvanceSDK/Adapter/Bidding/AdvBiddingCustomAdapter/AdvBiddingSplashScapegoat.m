@@ -20,14 +20,14 @@
 @implementation AdvBiddingSplashScapegoat
 
 - (void)advanceBiddingEndWithPrice:(NSInteger)price {
-    NSLog(@"%s %ld", __func__, (long)price);
+//    NSLog(@"%s %ld", __func__, (long)price);
     self.price = price;
 }
 
 
 /// 广告数据拉取成功
 - (void)advanceUnifiedViewDidLoad {
-    NSLog(@"广告数据拉取成功 %s", __func__);
+//    NSLog(@"广告数据拉取成功 %s", __func__);
     [self.a.bridge splashAd:self.a didLoadWithExt:@{ABUMediaAdLoadingExtECPM:[NSString stringWithFormat:@"%ld", self.price]}];
 }
 

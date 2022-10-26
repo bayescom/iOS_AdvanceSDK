@@ -12,12 +12,12 @@
 // MARK: ======================= AdvanceNativeExpressDelegate =======================
 /// 广告数据拉取成功
 - (void)advanceNativeExpressOnAdLoadSuccess:(NSArray<AdvanceNativeExpressView *> *)views {
-    NSLog(@"广告拉取成功 %s", __func__);
+//    NSLog(@"广告拉取成功 %s", __func__);
     NSMutableArray *list = [NSMutableArray arrayWithCapacity:views.count];
     NSMutableArray *exts = [NSMutableArray arrayWithCapacity:views.count];
     for (NSInteger i = 0; i < views.count; i++) {
         AdvanceNativeExpressView *view = views[i];
-        NSLog(@"1111:  %@ %ld", view.identifier, view.price);
+//        NSLog(@"1111:  %@ %ld", view.identifier, view.price);
         [list addObject:view.expressView];
         [exts addObject:@{
             ABUMediaAdLoadingExtECPM : @(view.price),
@@ -31,13 +31,13 @@
 
 /// 广告曝光
 - (void)advanceNativeExpressOnAdShow:(AdvanceNativeExpressView *)adView {
-    NSLog(@"广告曝光 %s", __func__);
+//    NSLog(@"广告曝光 %s", __func__);
     [self.a.bridge nativeAd:self.a didVisibleWithMediatedNativeAd:adView.expressView];
 }
 
 /// 广告点击
 - (void)advanceNativeExpressOnAdClicked:(AdvanceNativeExpressView *)adView {
-    NSLog(@"广告点击 %s", __func__);
+//    NSLog(@"广告点击 %s", __func__);
     [self.a.bridge nativeAd:self.a didClickWithMediatedNativeAd:adView.expressView];
     [self.a.bridge nativeAd:self.a willPresentFullScreenModalWithMediatedNativeAd:adView.expressView];
 
@@ -49,7 +49,7 @@
 /// 该回调的含义是: 比如: 广点通拉取广告成功了并返回了一组view  但是其中某个view的渲染失败了
 /// 该回调会触发多次
 - (void)advanceNativeExpressOnAdRenderSuccess:(AdvanceNativeExpressView *)adView {
-    NSLog(@"广告渲染成功 %s %@", __func__, adView);
+//    NSLog(@"广告渲染成功 %s %@", __func__, adView);
     [self.a.bridge nativeAd:self.a renderSuccessWithExpressView:adView.expressView];
 
 }
@@ -60,13 +60,13 @@
 /// 该回调的含义是: 比如: 广点通拉取广告成功了并返回了一组view  但是其中某个view的渲染失败了
 /// 该回调会触发多次
 - (void)advanceNativeExpressOnAdRenderFail:(AdvanceNativeExpressView *)adView {
-    NSLog(@"广告渲染失败 %s %@", __func__, adView);
+//    NSLog(@"广告渲染失败 %s %@", __func__, adView);
 }
 
 /// 广告加载失败
 /// 该回调只会触发一次
 - (void)advanceFailedWithError:(NSError *)error description:(NSDictionary *)description{
-    NSLog(@"广告展示失败 %s  error: %@ 详情:%@", __func__, error, description);
+//    NSLog(@"广告展示失败 %s  error: %@ 详情:%@", __func__, error, description);
 
 }
 
@@ -85,7 +85,7 @@
 /// 广告被关闭
 - (void)advanceNativeExpressOnAdClosed:(AdvanceNativeExpressView *)adView {
     //需要从tableview中删除
-    NSLog(@"广告关闭 %s", __func__);
+//    NSLog(@"广告关闭 %s", __func__);
     [self.a.bridge nativeAd:self.a didCloseWithExpressView:adView.expressView closeReasons:@[]];
 }
 
