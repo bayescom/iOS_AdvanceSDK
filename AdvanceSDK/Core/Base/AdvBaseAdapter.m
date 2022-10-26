@@ -237,7 +237,7 @@
         dispatch_once(&onceToken, ^{
 //            [NSClassFromString(@"BUAdSDKManager") performSelector:@selector(setAppID:) withObject:supplier.mediaid];
             
-            [ABUAdSDKManager setupSDKWithAppId:@"5319684" config:^ABUUserConfig *(ABUUserConfig *c) {
+            [ABUAdSDKManager setupSDKWithAppId:supplier.mediaid config:^ABUUserConfig *(ABUUserConfig *c) {
                 c.logEnable = YES;
                 return c;
             }];

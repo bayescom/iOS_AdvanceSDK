@@ -105,6 +105,14 @@
 }
 
 - (void)loadDataWithSupplierModel:(AdvSupplierModel *)model {
+    if (!self.arrayHeadBidding) {
+        self.arrayHeadBidding = [NSMutableArray array];
+    }
+    
+    if (!self.arrayWaterfall) {
+        self.arrayWaterfall = [NSMutableArray array];
+    }
+
     self.model = model;
     self.model.setting.bidding_type = 0;
     self.supplierM = [self.model.suppliers mutableCopy];
@@ -186,7 +194,6 @@
     GMObj.mediaid = self.model.gro_more.gromore_params.appid;
     GMObj.adspotid = self.model.gro_more.gromore_params.adspotid;
     GMObj.timeout = self.model.gro_more.gromore_params.timeout;
-    GMObj.timeout = 2000;
     GMObj.identifier = SDK_ID_BIDDING;
     GMObj.isParallel = NO;
     GMObj.name = @"实时竞价";
@@ -197,6 +204,7 @@
     GMObj.succeedtk = self.model.gro_more.gmtk.succeedtk;
     GMObj.imptk = self.model.gro_more.gmtk.imptk;
     GMObj.biddingtk = self.model.gro_more.gmtk.biddingtk;
+    GMObj.clicktk = self.model.gro_more.gmtk.clicktk;
 
     // 初始化 biddingCongfig单例
     id biddingConfig = ((id(*)(id,SEL))objc_msgSend)(NSClassFromString(@"AdvBiddingCongfig"), @selector(defaultManager));
@@ -413,9 +421,9 @@
     
 //    NSLog(@"suppliers = %@",suppliers);
 //    NSLog(@"arrayHeadBidding = %@",self.arrayHeadBidding);
-
+//
     [tempBidding enumerateObjectsUsingBlock:^(AdvSupplier * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-//        NSLog(@"%ld  %ld", obj.supplierPrice, _waterfallMinPrice);
+//        NSLog(@"=1=> %ld  %ld", obj.supplierPrice, _waterfallMinPrice);
         NSInteger obj_price = (obj.supplierPrice > 0) ? obj.supplierPrice : obj.sdk_price;
         if (obj_price > _waterfallMinPrice) {
             [suppliers addObject:obj];

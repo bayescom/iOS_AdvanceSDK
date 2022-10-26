@@ -45,6 +45,9 @@
     _dataArrM = [NSMutableArray arrayWithArray:[CellBuilder dataFromJsonFile:@"cell01"]];
 //    _advanceFeed = [[AdvanceNativeExpress alloc] initWithAdspotId:@"11111112" viewController:self adSize:CGSizeMake(self.view.bounds.size.width, 300)];
 //    _advanceFeed = [[AdvanceNativeExpress alloc] initWithAdspotId:self.adspotId viewController:self adSize:CGSizeMake(self.view.bounds.size.width, 300)];
+    if (self.advanceFeed) {
+        self.advanceFeed = nil;
+    }
     _advanceFeed = [[AdvanceNativeExpress alloc] initWithAdspotId:self.adspotId customExt:self.ext viewController:self adSize:CGSizeMake(self.view.bounds.size.width, 0)];
 
     _advanceFeed.delegate = self;
@@ -123,6 +126,7 @@
     NSLog(@"广告关闭 %s", __func__);
     [_dataArrM removeObject: adView];
     [self.tableView reloadData];
+    self.advanceFeed = nil;
 }
 
 // MARK: ======================= UITableViewDelegate, UITableViewDataSource =======================
@@ -190,6 +194,9 @@
 
         return cell;
     }
+}
+- (void)dealloc {
+    self.advanceFeed = nil;
 }
 
 @end

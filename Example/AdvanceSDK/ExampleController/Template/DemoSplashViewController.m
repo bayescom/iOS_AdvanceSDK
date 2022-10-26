@@ -11,6 +11,8 @@
 #import "DemoUtils.h"
 
 #import <AdvanceSDK/AdvanceSplash.h>
+#import <objc/runtime.h>
+#import <objc/message.h>
 
 @interface DemoSplashViewController () <AdvanceSplashDelegate>
 @property(strong,nonatomic) AdvanceSplash *advanceSplash;
@@ -90,6 +92,12 @@
 /// 广告关闭
 - (void)advanceDidClose {
     NSLog(@"广告关闭了 %s", __func__);
+
+    // 获取控制摇一摇 的单例
+    id manager = ((id(*)(id, SEL))objc_msgSend)(NSClassFromString(@"MercuryMotionManager"), @selector(sharedManager));
+    // 调用停止摇一摇
+    ((void(*)(id, SEL))objc_msgSend)(manager, @selector(stopMotion));
+
 }
 
 /// 广告倒计时结束
