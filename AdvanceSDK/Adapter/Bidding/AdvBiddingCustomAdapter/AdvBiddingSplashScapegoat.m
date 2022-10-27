@@ -20,27 +20,29 @@
 @implementation AdvBiddingSplashScapegoat
 
 - (void)advanceBiddingEndWithPrice:(NSInteger)price {
-//    NSLog(@"%s %ld", __func__, (long)price);
+    NSLog(@"%s %ld", __func__, (long)price);
     self.price = price;
 }
 
 
 /// 广告数据拉取成功
 - (void)advanceUnifiedViewDidLoad {
-//    NSLog(@"广告数据拉取成功 %s", __func__);
+    NSLog(@"广告数据拉取成功 %s", __func__);
     [self.a.bridge splashAd:self.a didLoadWithExt:@{ABUMediaAdLoadingExtECPM:[NSString stringWithFormat:@"%ld", self.price]}];
 }
 
 /// 广告曝光成功
 - (void)advanceExposured {
-//    NSLog(@"广告曝光成功 %s", __func__);
+    NSLog(@"广告曝光成功 %s", __func__);
 //    [self.a.bridge splashAdWillVisible:self];
     [self.a.bridge splashAdWillVisible:self.a];
 }
 
 /// 广告加载失败
 - (void)advanceFailedWithError:(NSError *)error description:(NSDictionary *)description{
-//    NSLog(@"广告展示失败 %s  error: %@ 详情:%@", __func__, error, description);
+    NSLog(@"广告展示失败 %s  error: %@ 详情:%@", __func__, error, description);
+    [self.a.bridge splashAd:self.a didLoadFailWithError:error ext:description];
+//    - (void)splashAd:(id<ABUCustomSplashAdapter>_Nonnull)adapter didLoadFailWithError:(NSError *_Nullable)error ext:(NSDictionary *)ext;
 
 }
 

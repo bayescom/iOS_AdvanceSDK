@@ -29,7 +29,7 @@
 @implementation AdvBiddingSplashCustomAdapter
 
 - (AdvBiddingSplashScapegoat *)scapegoat{
-    if (_scapegoat == nil) {
+    if (!_scapegoat) {
         _scapegoat = [[AdvBiddingSplashScapegoat alloc]init];
         _scapegoat.a = self;
     }
@@ -106,12 +106,6 @@
     
     return imageRet;
     
-}
-
-- (void)advanceBiddingEndWithPrice:(NSInteger)price {
-//    NSLog(@"%s %ld", __func__, price);
-    self.price = price;
-    [self.bridge splashAd:self didLoadWithExt:@{ABUMediaAdLoadingExtECPM:[NSString stringWithFormat:@"%ld", self.price]}];
 }
 
 - (void)showSplashAdInWindow:(nonnull UIWindow *)window parameter:(nonnull NSDictionary *)parameter {

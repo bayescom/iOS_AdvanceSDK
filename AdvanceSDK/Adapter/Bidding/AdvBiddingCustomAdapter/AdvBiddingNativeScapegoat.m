@@ -61,13 +61,14 @@
 /// 该回调会触发多次
 - (void)advanceNativeExpressOnAdRenderFail:(AdvanceNativeExpressView *)adView {
 //    NSLog(@"广告渲染失败 %s %@", __func__, adView);
+    [self.a.bridge nativeAd:self.a renderFailWithExpressView:adView.expressView andError:nil];
 }
 
 /// 广告加载失败
 /// 该回调只会触发一次
 - (void)advanceFailedWithError:(NSError *)error description:(NSDictionary *)description{
 //    NSLog(@"广告展示失败 %s  error: %@ 详情:%@", __func__, error, description);
-
+    [self.a.bridge nativeAd:self.a didLoadFailWithError:error];
 }
 
 /// 内部渠道开始加载时调用

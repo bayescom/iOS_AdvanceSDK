@@ -158,7 +158,7 @@
 }
 
 - (void)splashAdDidClick:(ABUSplashAd *)splashAd {
-    
+    [_adspot reportWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(advanceClicked)]) {
         [self.delegate advanceClicked];
     }

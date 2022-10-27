@@ -96,7 +96,7 @@ NSString *const DEFAULT_LOADEDTK = @"http://cruiser.bayescom.cn/loaded?action=lo
 
 - (void)setSupplierPrice:(NSInteger)supplierPrice {
     _supplierPrice = supplierPrice;
-    if (supplierPrice == 0) {
+    if (supplierPrice == 0 || supplierPrice == -1) {
         _supplierPrice = self.sdk_price;
     }
 }
