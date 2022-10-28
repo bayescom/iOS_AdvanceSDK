@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
     s.name             = 'AdvanceSDK'
     
-    s.version          = '4.0.1.4'
+    s.version          = '4.0.1.5'
     s.ios.deployment_target = '9.0'
     s.platform     = :ios, "9.0"
     s.requires_arc = true
@@ -137,7 +137,7 @@ Pod::Spec.new do |s|
     s.subspec 'AdvBidding' do |advBidding|
         advBidding.dependency 'AdvanceSDK/Core'
         advBidding.dependency 'AdvanceSDK/Adspot'
-        advBidding.dependency 'AdvBiddingSDK', '1.0.9'
+        advBidding.dependency 'AdvBiddingSDK', '1.1.0'
         advBidding.dependency 'AdvBiddingSuppliers', '0.0.5'
 
 
