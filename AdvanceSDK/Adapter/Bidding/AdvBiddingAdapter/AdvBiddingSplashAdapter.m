@@ -76,7 +76,19 @@
         self.splashAd.customBottomView = bottomView;
     }
     
-    [self.splashAd loadAdData];
+    __weak typeof(self) _self = self;
+    _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
+    if([ABUAdSDKManager configDidLoad]) {
+        //当前配置拉取成功，直接loadAdData
+        [self.splashAd loadAdData];
+    } else {
+        //当前配置未拉取成功，在成功之后会调用该callback
+        [ABUAdSDKManager addConfigLoadSuccessObserver:self withAction:^(id  _Nonnull observer) {
+            __strong typeof(_self) self = _self;
+            [self.splashAd loadAdData];
+        }];
+    }
+
 }
 
 - (void)supplierStateInPull {
