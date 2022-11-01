@@ -10,15 +10,15 @@ PODS:
     - AdvanceSDK/Core (= 4.0.1.5)
   - AdvanceSDK/Adspot (4.0.1.5):
     - AdvanceSDK/Core
-  - AdvanceSDK/AdvBidding (4.0.1.5):
-    - AdvanceSDK/Adspot
-    - AdvanceSDK/Core
-    - AdvBiddingSDK (= 1.1.0)
-    - AdvBiddingSuppliers (= 0.0.5)
   - AdvanceSDK/BD (4.0.1.5):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - BaiduMobAdSDK (= 4.892)
+  - AdvanceSDK/Bidding (4.0.1.5):
+    - Ads-CN
+    - AdvanceSDK/Adspot
+    - AdvanceSDK/Core
+    - AdvBiddingSuppliers (= 0.0.5)
   - AdvanceSDK/Core (4.0.1.5)
   - AdvanceSDK/CSJ (4.0.1.5):
     - Ads-CN (= 4.8.0.7)
@@ -35,8 +35,7 @@ PODS:
   - AdvanceSDK/Mercury (4.0.1.5):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
-    - MercurySDK (= 3.1.7.3)
-  - AdvBiddingSDK (1.1.0)
+    - MercurySDK (= 3.1.7.4)
   - AdvBiddingSuppliers (0.0.5)
   - BaiduMobAdSDK (4.892)
   - BUAdSDK (0.1.0.24):
@@ -76,7 +75,7 @@ PODS:
   - JSONModel (1.8.0)
   - KSAdSDK (3.3.31)
   - Masonry (1.1.0)
-  - MercurySDK (3.1.7.3)
+  - MercurySDK (3.1.7.4)
   - Reachability (3.2)
   - SDWebImage (5.12.1):
     - SDWebImage/Core (= 5.12.1)
@@ -84,8 +83,8 @@ PODS:
 
 DEPENDENCIES:
   - AdvanceSDK (from `../`)
-  - AdvanceSDK/AdvBidding (from `../`)
   - AdvanceSDK/BD (from `../`)
+  - AdvanceSDK/Bidding (from `../`)
   - AdvanceSDK/CSJ (from `../`)
   - AdvanceSDK/GDT (from `../`)
   - AdvanceSDK/KS (from `../`)
@@ -98,7 +97,6 @@ DEPENDENCIES:
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
     - Ads-CN
-    - AdvBiddingSDK
     - AdvBiddingSuppliers
     - BaiduMobAdSDK
     - BUAdSDK
@@ -117,8 +115,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Ads-CN: 3faad259231222f264a3dd7f14de12d3788af271
-  AdvanceSDK: afbab04e54a8c1d8796f43150bef169909fe1780
-  AdvBiddingSDK: d57de0a06dcd0539db576f9e3aa3f9ae0e7d5c20
+  AdvanceSDK: 1c603108f8fabd4c75c3e3a326339d3523b511a9
   AdvBiddingSuppliers: 3add093fa1c5ae75b26a2de85e939770aa5ff99b
   BaiduMobAdSDK: 1ec7243db12c6abacf35b89a1b4f7db43c2f6bff
   BUAdSDK: 5528f72f7b9b478a12743ea23af7bdb9746efc00
@@ -127,10 +124,10 @@ SPEC CHECKSUMS:
   JSONModel: 02ab723958366a3fd27da57ea2af2113658762e9
   KSAdSDK: 31f7c8aabe8a5d7e9c97a82e78fa92d7ceeb1377
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
-  MercurySDK: 92b776fa8f6e61afe3dd1d6f768682653eb9dff3
+  MercurySDK: fb003c065cf4028d81261f9c2ced9fc764a52511
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
   SDWebImage: 4dc3e42d9ec0c1028b960a33ac6b637bb432207b
 
-PODFILE CHECKSUM: 4abacceea58e5fc0ee517e85e88e45d2eb4b2a1f
+PODFILE CHECKSUM: a16cb14694fa672cbbf38a28b60cf1fba94d45e1
 
 COCOAPODS: 1.11.2

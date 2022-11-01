@@ -53,7 +53,7 @@ Pod::Spec.new do |s|
     s.subspec 'Mercury' do |mer|
         mer.dependency 'AdvanceSDK/Core'
         mer.dependency 'AdvanceSDK/Adspot'
-        mer.dependency 'MercurySDK', '3.1.7.3'
+        mer.dependency 'MercurySDK', '3.1.7.4'
         mer.source_files = 'AdvanceSDK/Adapter/mercury/**/*.{h,m}'
         mer.frameworks = 'StoreKit', 'AVFoundation', 'CoreMotion'
     end
@@ -116,32 +116,32 @@ Pod::Spec.new do |s|
 #
 #
 #        end
-#    s.subspec 'Bidding' do |bidding|
-#        bidding.dependency 'AdvanceSDK/Core'
-#        bidding.dependency 'AdvanceSDK/Adspot'
-#        bidding.dependency 'AdvBiddingSuppliers','0.0.5'
-#
-#        bidding.dependency 'Ads-CN'
-#        bidding.source_files =  ['AdvanceSDK/Adapter/Bidding/*{h,m}',
-#        'AdvanceSDK/Adapter/Bidding/AdvBiddingAdapter/*{h,m}',
-#        'AdvanceSDK/Adapter/Bidding/AdvBiddingCustomAdapter/*{h,m}'
-#        ]
-#
-#
-#        valid_archs = ['armv7', 'armv7s', 'x86_64', 'arm64']
-#
-#
-#    end
+    s.subspec 'Bidding' do |bidding|
+        bidding.dependency 'AdvanceSDK/Core'
+        bidding.dependency 'AdvanceSDK/Adspot'
+        bidding.dependency 'AdvBiddingSuppliers','0.0.5'
 
-    
-    s.subspec 'AdvBidding' do |advBidding|
-        advBidding.dependency 'AdvanceSDK/Core'
-        advBidding.dependency 'AdvanceSDK/Adspot'
-        advBidding.dependency 'AdvBiddingSDK', '1.1.0'
-        advBidding.dependency 'AdvBiddingSuppliers', '0.0.5'
+        bidding.dependency 'Ads-CN'
+        bidding.source_files =  ['AdvanceSDK/Adapter/Bidding/*{h,m}',
+        'AdvanceSDK/Adapter/Bidding/AdvBiddingAdapter/*{h,m}',
+        'AdvanceSDK/Adapter/Bidding/AdvBiddingCustomAdapter/*{h,m}'
+        ]
+
+
+        valid_archs = ['armv7', 'armv7s', 'x86_64', 'arm64']
 
 
     end
+
+    
+#    s.subspec 'AdvBidding' do |advBidding|
+#        advBidding.dependency 'AdvanceSDK/Core'
+#        advBidding.dependency 'AdvanceSDK/Adspot'
+#        advBidding.dependency 'AdvBiddingSDK', '1.1.0'
+#        advBidding.dependency 'AdvBiddingSuppliers', '0.0.5'
+#
+#
+#    end
 
     
     

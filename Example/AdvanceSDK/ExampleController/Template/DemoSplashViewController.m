@@ -47,6 +47,8 @@
 //#define kBY_Ad_Instrument_HomePage_Top_Express_Id @"10006024"
 //#define kBY_Ad_Instrument_EditResultPage_Express_Id @"10006023"
 //#define kBY_Ad_User_HomePage_Express_Id @"10006022"
+//#define kBY_AdMediaId @"100255"
+//#define kBY_Ad_Splash_Id @"10006483"
 
 - (void)loadAdBtn1Action {
     if (![self checkAdspotId]) { return; }
@@ -97,10 +99,10 @@
 - (void)advanceDidClose {
     NSLog(@"广告关闭了 %s", __func__);
 
-    // 获取控制摇一摇 的单例
-    id manager = ((id(*)(id, SEL))objc_msgSend)(NSClassFromString(@"MercuryMotionManager"), @selector(sharedManager));
-    // 调用停止摇一摇
-    ((void(*)(id, SEL))objc_msgSend)(manager, @selector(stopMotion));
+//    // 获取控制摇一摇 的单例
+//    id manager = ((id(*)(id, SEL))objc_msgSend)(NSClassFromString(@"MercuryMotionManager"), @selector(sharedManager));
+//    // 调用停止摇一摇
+//    ((void(*)(id, SEL))objc_msgSend)(manager, @selector(stopMotion));
 
 }
 
