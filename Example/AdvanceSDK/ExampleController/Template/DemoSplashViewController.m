@@ -41,14 +41,6 @@
     ];
     self.btn1Title = @"加载并显示广告";
 }
-//#define kBY_AdMediaId @"101959"
-//#define kBY_Ad_Splash_Id @"10006038"
-//#define kBY_Ad_Instrument_HomePage_Bottom_Banner_Id @"10006037"
-//#define kBY_Ad_Instrument_HomePage_Top_Express_Id @"10006024"
-//#define kBY_Ad_Instrument_EditResultPage_Express_Id @"10006023"
-//#define kBY_Ad_User_HomePage_Express_Id @"10006022"
-//#define kBY_AdMediaId @"100255"
-//#define kBY_Ad_Splash_Id @"10006483"
 
 - (void)loadAdBtn1Action {
     if (![self checkAdspotId]) { return; }
@@ -59,13 +51,51 @@
     self.advanceSplash.isUploadSDKVersion = YES;
     self.advanceSplash.delegate = self;
     self.advanceSplash.showLogoRequire = YES;
-    self.advanceSplash.logoImage = [UIImage imageNamed:@"app_logo"];
+    
+    /**
+      logo图片不应该是仅是一张透明的logo 应该是一张有背景的logo, 且高度等于你设置的logo高度
+     
+      self.advanceSplash.logoImage = [UIImage imageNamed:@"app_logo"];
+
+     */
+    
+    // 如果想要对logo有特定的布局 则参照 -createLogoImageFromView 方法
+    self.advanceSplash.logoImage = [self createLogoImageFromView];
+    
     self.advanceSplash.backgroundImage = [UIImage imageNamed:@"LaunchImage_img"];
     self.advanceSplash.timeout = 5; // 如果使用bidding 功能 timeout时长必须要比 服务器下发的bidding等待时间要长 否则会严重影响变现效率
     [self.advanceSplash loadAd];
     
 
 }
+
+- (UIImage*)createLogoImageFromView
+
+{
+   // 300 170
+    
+    CGFloat width = self.view.frame.size.width;
+    
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, width, 120)];
+    view.backgroundColor = [UIColor blueColor];
+    UIImageView *imageV = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"app_logo"]];
+    [view addSubview:imageV];
+    imageV.frame = CGRectMake(0, 0, 100 * (300/170.f), 100);
+    imageV.center = view.center;
+    
+//obtain scale
+    CGFloat scale = [UIScreen mainScreen].scale;
+
+    UIGraphicsBeginImageContextWithOptions(CGSizeMake(view.frame.size.width,
+                                                      120), NO,scale);
+    [view.layer renderInContext:UIGraphicsGetCurrentContext()];
+    
+    //开始生成图片
+    UIImage* image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return image;
+}
+
 // MARK: ======================= AdvanceSplashDelegate =======================
 
 /// 广告数据拉取成功
