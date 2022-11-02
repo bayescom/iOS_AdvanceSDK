@@ -180,7 +180,7 @@
     if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdCountdownToZero)]) {
         [self.delegate advanceSplashOnAdCountdownToZero];
     }
-    [self deallocAdapter];
+//    [self deallocAdapter];
 
 }
 

@@ -116,13 +116,15 @@
     self.model = model;
     self.model.setting.bidding_type = 0;
     self.supplierM = [self.model.suppliers mutableCopy];
+    [self sortSupplierMByPriority];
+
     [self loadWaterfallSupplierAction];
     
 }
 
 - (void)loadNextSupplierIfHas {
     // 执行非CPT渠道逻辑
-    AdvSupplier *currentSupplier = _supplierM.firstObject;
+    AdvSupplier *currentSupplier = _supplierM.lastObject;
     // 不管是不是并行渠道, 到了该执行的时候 必须要按照串行渠道的逻辑去执行
     currentSupplier.isParallel = NO;
 //    NSInteger currentPriority = currentSupplier.priority;
@@ -463,13 +465,13 @@
         }
     }];
     
-//    for (AdvSupplier *temp in suppliers) {
-//        NSLog(@"------1-> %@ %ld %ld %ld", temp.sdktag, (long)temp.sdk_price, (long)temp.supplierPrice, (long)temp.priority);
-//    }
-//
-//    for (AdvSupplier *temp in self.arrayHeadBidding) {
-//        NSLog(@"------2-> %@ %ld %ld %ld", temp.sdktag, (long)temp.sdk_price, (long)temp.supplierPrice, (long)temp.priority);
-//    }
+    for (AdvSupplier *temp in suppliers) {
+        NSLog(@"------1-> %@ %ld %ld %ld", temp.sdktag, (long)temp.sdk_price, (long)temp.supplierPrice, (long)temp.priority);
+    }
+
+    for (AdvSupplier *temp in self.arrayHeadBidding) {
+        NSLog(@"------2-> %@ %ld %ld %ld", temp.sdktag, (long)temp.sdk_price, (long)temp.supplierPrice, (long)temp.priority);
+    }
 //
 
     // 取价格最高的渠道执行
@@ -510,7 +512,7 @@
     }
     
     
-    AdvSupplier *currentSupplier = _supplierM.firstObject;
+    AdvSupplier *currentSupplier = _supplierM.lastObject;
     currentSupplier.isParallel = NO;
     currentSupplier.positionType = AdvanceSdkSupplierTypeWaterfall;
     // bidding结束
@@ -645,8 +647,8 @@
     NSLog(@"%@", [self jsonStringCompactFormatForDictionary:deviceInfo]);
     NSError *parseError = nil;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:deviceInfo options:NSJSONWritingPrettyPrinted error:&parseError];
-    NSURL *url = [NSURL URLWithString:AdvanceSdkRequestUrl];
-//    NSURL *url = [NSURL URLWithString:AdvanceSdkRequestMockUrl];
+//    NSURL *url = [NSURL URLWithString:AdvanceSdkRequestUrl];
+    NSURL *url = [NSURL URLWithString:AdvanceSdkRequestMockUrl];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:self.fetchTime];
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     request.HTTPBody = jsonData;
@@ -787,17 +789,44 @@
 // MARK: ======================= Private =======================
 - (void)sortSupplierMByPriority {
     if (_supplierM.count > 1) {
-        [_supplierM sortWithOptions:NSSortStable usingComparator:^NSComparisonResult(id _Nonnull obj1, id _Nonnull obj2) {
+        [self.supplierM sortWithOptions:NSSortStable usingComparator:^NSComparisonResult(id _Nonnull obj1, id _Nonnull obj2) {
+            
             AdvSupplier *obj11 = obj1;
             AdvSupplier *obj22 = obj2;
-            if (obj11.priority > obj22.priority) {
+            
+            NSInteger obj11_price = (obj11.supplierPrice > 0) ? obj11.supplierPrice : obj11.sdk_price;
+            NSInteger obj22_price = (obj22.supplierPrice > 0) ? obj22.supplierPrice : obj22.sdk_price;
+    //        NSLog(@"------obj11_price-> %@  %ld %ld", obj11.sdktag, (long)obj11.supplierPrice, (long)obj11.priority);
+    //        NSLog(@"------obj22_price-> %@  %ld %ld", obj22.sdktag, (long)obj22.supplierPrice, (long)obj22.priority);
+
+            obj11.supplierPrice = obj11_price;
+            obj22.supplierPrice = obj22_price;
+            if (obj11_price > obj22_price) {
                 return NSOrderedDescending;
-            } else if (obj11.priority == obj22.priority) {
-                return NSOrderedSame;
+            } else if (obj11_price  == obj22_price) {
+                if (obj11.priority > obj22.priority) {// 价格相同的话 按照优先级排序
+                    return NSOrderedAscending;
+                } else if (obj11.priority == obj22.priority) {
+                    return NSOrderedSame;
+                } else {
+                    return NSOrderedDescending;
+                }
             } else {
                 return NSOrderedAscending;
             }
         }];
+
+//        [_supplierM sortWithOptions:NSSortStable usingComparator:^NSComparisonResult(id _Nonnull obj1, id _Nonnull obj2) {
+//            AdvSupplier *obj11 = obj1;
+//            AdvSupplier *obj22 = obj2;
+//            if (obj11.priority > obj22.priority) {
+//                return NSOrderedDescending;
+//            } else if (obj11.priority == obj22.priority) {
+//                return NSOrderedSame;
+//            } else {
+//                return NSOrderedAscending;
+//            }
+//        }];
     }
 }
 

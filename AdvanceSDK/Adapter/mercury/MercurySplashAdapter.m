@@ -38,6 +38,7 @@
         _supplier = supplier;
         _mercury_ad = [[MercurySplashAd alloc] initAdWithAdspotId:_supplier.adspotid delegate:self];
         _mercury_ad.placeholderImage = _adspot.backgroundImage;
+        _mercury_ad.showType = MercurySplashAdAutoAdaptScreen;
         _mercury_ad.logoImage = _adspot.logoImage;
     }
     return self;
@@ -51,9 +52,9 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         __strong typeof(_self) self = _self;
         
-        if (_adspot.showLogoRequire) {
-            _mercury_ad.showType = MercurySplashAdShowCutBottom;
-        }
+//        if (_adspot.showLogoRequire) {
+//            _mercury_ad.showType = MercurySplashAdAutoAdaptScreen;
+//        }
         if (_adspot.timeout) {
             if (_adspot.timeout > 500) {
                 _mercury_ad.fetchDelay = _supplier.timeout / 1000.0;
