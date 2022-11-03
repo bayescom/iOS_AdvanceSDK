@@ -45,12 +45,18 @@
 - (void)loadAdBtn1Action {
     if (![self checkAdspotId]) { return; }
     
+    if (self.advanceSplash) {
+        self.advanceSplash.delegate = nil;
+        self.advanceSplash = nil;
+    }
+    
+    // 每次加载广告请 使用新的实例  不要用懒加载, 不要对广告对象进行本地化存储相关的操作
     self.advanceSplash = [[AdvanceSplash alloc] initWithAdspotId:self.adspotId
                                                   viewController:self];
 
     self.advanceSplash.isUploadSDKVersion = YES;
     self.advanceSplash.delegate = self;
-    self.advanceSplash.showLogoRequire = YES;
+    
     
     /**
       logo图片不应该是仅是一张透明的logo 应该是一张有背景的logo, 且高度等于你设置的logo高度
@@ -60,8 +66,11 @@
      */
     
     // 如果想要对logo有特定的布局 则参照 -createLogoImageFromView 方法
+    // 建议设置logo 避免某些素材长图不足时屏幕下方留白
     self.advanceSplash.logoImage = [self createLogoImageFromView];
-    
+    // 设置logo时 该属性要设置为YES
+    self.advanceSplash.showLogoRequire = YES;
+
     self.advanceSplash.backgroundImage = [UIImage imageNamed:@"LaunchImage_img"];
     self.advanceSplash.timeout = 5; // 如果使用bidding 功能 timeout时长必须要比 服务器下发的bidding等待时间要长 否则会严重影响变现效率
     [self.advanceSplash loadAd];
@@ -72,6 +81,7 @@
 - (UIImage*)createLogoImageFromView
 
 {
+    // 在这个方法里你可以随意 定制化logo
    // 300 170
     
     CGFloat width = self.view.frame.size.width;
@@ -151,13 +161,4 @@
 {
     NSLog(@"%s 策略id为: %@",__func__ , reqId);
 }
-
-
-//- (void)advanceBiddingAction {
-//    NSLog(@"%s 开始bidding",__func__);
-//}
-//
-//- (void)advanceBiddingEnd {
-//    NSLog(@"%s 结束bidding",__func__);
-//}
 @end

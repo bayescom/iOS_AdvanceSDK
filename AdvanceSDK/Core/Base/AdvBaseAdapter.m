@@ -134,6 +134,7 @@
 }
 
 - (void)deallocAdapter {
+    // 该方法为AdvanceSDK 内部调用 开发者不要在外部手动调用 想要释放 直接将广告对象置为nil即可
     [self.mgr cacelDataTask];
     self.mgr = nil;
     self.baseDelegate = nil;
@@ -233,6 +234,9 @@
         });
     } else if ([supplier.identifier isEqualToString:SDK_ID_BIDDING]){
         // bidding 此之前已经对 biddingConfig进行了初始化 并赋值了
+        if (!supplier.mediaid) {
+            return;
+        }
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
 //            [NSClassFromString(@"BUAdSDKManager") performSelector:@selector(setAppID:) withObject:supplier.mediaid];

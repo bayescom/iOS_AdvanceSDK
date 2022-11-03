@@ -9,7 +9,9 @@
 #import "AdvSupplierModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
-
+/**
+ 该类当中的方法与属性 切勿在外部进行操作
+ */
 @interface AdvBaseAdapter : NSObject
 
 /// 并行渠道容器
@@ -63,10 +65,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 /// 取消当前策略请求
-- (void)deallocAdapter;
+- (void)deallocAdapter DEPRECATED_MSG_ATTRIBUTE("该方法在AdvanceSDK内部调用, 开发者不要手动调用该方法, 如想释放,只需把广告对象置为nil即可");
 
 /// 查找一下 容器里有没有并行的渠道
 - (id)adapterInParallelsWithSupplier:(AdvSupplier *)supplier;
+/**
+ 该类当中的方法与属性 切勿在外部进行操作
+ */
+
 @end
 
 NS_ASSUME_NONNULL_END
