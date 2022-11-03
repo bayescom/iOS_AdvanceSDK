@@ -13,11 +13,11 @@
 @optional
 /// 广告点击跳过
 #pragma 百度广告不支持该回调
-- (void)advanceSplashOnAdSkipClicked;
+- (void)advanceSplashOnAdSkipClicked DEPRECATED_MSG_ATTRIBUTE("该回调在使用AdvBidding功能时 不执行, 请在 -advanceDidClose 中处理关闭时的相关业务");
 
 /// 广告倒计时结束回调 百度广告不支持该回调
 #pragma 百度广告不支持该回调
-- (void)advanceSplashOnAdCountdownToZero;
+- (void)advanceSplashOnAdCountdownToZero DEPRECATED_MSG_ATTRIBUTE("该回调即将被废弃, 请在 -advanceDidClose 中处理相关闭时关业务");;
 
 
 @end
