@@ -107,7 +107,7 @@
             AdvanceNativeExpressView *TT = [[AdvanceNativeExpressView alloc] initWithViewController:_adspot.viewController];
             TT.expressView = view;
             TT.identifier = _supplier.identifier;
-            TT.price = view.eCPM;
+            TT.price = (view.eCPM == 0) ?  _supplier.supplierPrice : view.eCPM;
             [temp addObject:TT];
 
         }
