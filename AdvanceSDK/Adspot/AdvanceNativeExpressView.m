@@ -8,7 +8,7 @@
 #import "AdvanceNativeExpressView.h"
 
 @interface AdvanceNativeExpressView ()
-@property (nonatomic, strong) UIViewController *controller;
+@property (nonatomic, weak) UIViewController *controller;
 @end
 
 @implementation AdvanceNativeExpressView

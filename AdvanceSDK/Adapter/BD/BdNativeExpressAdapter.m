@@ -22,7 +22,6 @@
 @interface BdNativeExpressAdapter ()<BaiduMobAdNativeAdDelegate, BaiduMobAdNativeInterationDelegate>
 @property (nonatomic, strong) BaiduMobAdNative *bd_ad;
 @property (nonatomic, weak) AdvanceNativeExpress *adspot;
-@property (nonatomic, weak) UIViewController *controller;
 @property (nonatomic, strong) AdvSupplier *supplier;
 @property (nonatomic, strong) NSMutableArray<__kindof AdvanceNativeExpressView *> *views;
 

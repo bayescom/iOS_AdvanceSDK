@@ -18,7 +18,6 @@
 @interface CsjNativeExpressAdapter () <BUNativeExpressAdViewDelegate>
 @property (nonatomic, strong) BUNativeExpressAdManager *csj_ad;
 @property (nonatomic, weak) AdvanceNativeExpress *adspot;
-@property (nonatomic, weak) UIViewController *controller;
 @property (nonatomic, strong) AdvSupplier *supplier;
 @property (nonatomic, strong) NSArray <__kindof AdvanceNativeExpressView *> * views;
 

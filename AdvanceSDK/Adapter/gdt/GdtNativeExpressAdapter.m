@@ -26,7 +26,6 @@
 @interface GdtNativeExpressAdapter () <GDTNativeExpressAdDelegete>
 @property (nonatomic, strong) GDTNativeExpressAd *gdt_ad;
 @property (nonatomic, weak) AdvanceNativeExpress *adspot;
-@property (nonatomic, weak) UIViewController *controller;
 @property (nonatomic, strong) AdvSupplier *supplier;
 @property (nonatomic, strong) NSArray<__kindof AdvanceNativeExpressView *> *views;
 @end

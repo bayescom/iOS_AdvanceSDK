@@ -19,7 +19,6 @@
 @interface KsNativeExpressAdapter ()<KSFeedAdsManagerDelegate, KSFeedAdDelegate>
 @property (nonatomic, strong) KSFeedAdsManager *ks_ad;
 @property (nonatomic, weak) AdvanceNativeExpress *adspot;
-@property (nonatomic, weak) UIViewController *controller;
 @property (nonatomic, strong) AdvSupplier *supplier;
 @property (nonatomic, strong) NSArray<AdvanceNativeExpressView *> * views;
 
