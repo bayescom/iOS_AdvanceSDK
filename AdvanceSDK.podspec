@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
     s.name             = 'AdvanceSDK'
     
-    s.version          = '4.0.1.7'
+    s.version          = '4.0.1.8'
     s.ios.deployment_target = '9.0'
     s.platform     = :ios, "9.0"
     s.requires_arc = true
@@ -53,7 +53,7 @@ Pod::Spec.new do |s|
     s.subspec 'Mercury' do |mer|
         mer.dependency 'AdvanceSDK/Core'
         mer.dependency 'AdvanceSDK/Adspot'
-        mer.dependency 'MercurySDK', '3.1.7.4'
+        mer.dependency 'MercurySDK', '3.1.7.6'
         mer.source_files = 'AdvanceSDK/Adapter/mercury/**/*.{h,m}'
         mer.frameworks = 'StoreKit', 'AVFoundation', 'CoreMotion'
     end
@@ -137,8 +137,8 @@ Pod::Spec.new do |s|
     s.subspec 'AdvBidding' do |advBidding|
         advBidding.dependency 'AdvanceSDK/Core'
         advBidding.dependency 'AdvanceSDK/Adspot'
-        advBidding.dependency 'AdvBiddingSDK', '1.1.2'
-        advBidding.dependency 'AdvBiddingSuppliers', '0.0.5'
+        advBidding.dependency 'AdvBiddingSDK', '1.1.3'
+        advBidding.dependency 'AdvBiddingSuppliers', '0.0.6'
 
 
     end
