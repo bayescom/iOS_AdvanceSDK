@@ -8,19 +8,25 @@
 #import "AdvBiddingNativeExpressCustomAdapter.h"
 #import <AdvanceSDK/AdvanceNativeExpress.h>
 #import <AdvanceSDK/AdvanceNativeExpressView.h>
+#import "AdvBiddingNativeScapegoat.h"
 #import "AdvBiddingCongfig.h"
 #import "AdvSupplierModel.h"
-# if __has_include(<ABUAdSDK/ABUAdSDK.h>)
-#import <ABUAdSDK/ABUAdSDK.h>
-#else
-#import <Ads-Mediation-CN/ABUAdSDK.h>
-#endif
-@interface AdvBiddingNativeExpressCustomAdapter ()<AdvanceNativeExpressDelegate, ABUCustomNativeAdapter>
+@interface AdvBiddingNativeExpressCustomAdapter ()
 @property(strong,nonatomic) AdvanceNativeExpress *advanceFeed;
+@property (nonatomic, strong) AdvBiddingNativeScapegoat *scapegoat;
 
 @end
 
 @implementation AdvBiddingNativeExpressCustomAdapter
+
+- (AdvBiddingNativeScapegoat *)scapegoat{
+    if (_scapegoat == nil) {
+        _scapegoat = [[AdvBiddingNativeScapegoat alloc]init];
+        _scapegoat.a = self;
+    }
+    return _scapegoat;
+}
+
 /// 当前加载的广告的状态，native模板广告
 - (ABUMediatedAdStatus)mediatedAdStatusWithExpressView:(UIView *)view {
     return ABUMediatedAdStatusUnknown;
@@ -38,7 +44,7 @@
     
     _advanceFeed = [[AdvanceNativeExpress alloc] initWithAdspotId:slotID customExt:nil viewController:self.bridge.viewControllerForPresentingModalView adSize:size];
 
-    _advanceFeed.delegate = self;
+    _advanceFeed.delegate = self.scapegoat;
     [_advanceFeed loadAdWithSupplierModel:model];
 
 }
@@ -72,7 +78,7 @@
 }
 
 - (void)setRootViewController:(nonnull UIViewController *)viewController forExpressAdView:(nonnull UIView *)expressAdView {
-    NSLog(@"setRootViewController   %@ %@", expressAdView, viewController);
+//    NSLog(@"setRootViewController   %@ %@", expressAdView, viewController);
     if ([expressAdView isKindOfClass:NSClassFromString(@"BUNativeExpressFeedVideoAdView")] ||
         [expressAdView isKindOfClass:NSClassFromString(@"BUNativeExpressAdView")] ||
         [expressAdView isKindOfClass:NSClassFromString(@"CSJNativeExpressAdView")]) {
@@ -100,84 +106,9 @@
     // 在此处理Client Bidding的结果回调
 }
 
-
-// MARK: ======================= AdvanceNativeExpressDelegate =======================
-/// 广告数据拉取成功
-- (void)advanceNativeExpressOnAdLoadSuccess:(NSArray<AdvanceNativeExpressView *> *)views {
-//    NSLog(@"广告拉取成功 %s", __func__);
-    NSMutableArray *list = [NSMutableArray arrayWithCapacity:views.count];
-    NSMutableArray *exts = [NSMutableArray arrayWithCapacity:views.count];
-    for (NSInteger i = 0; i < views.count; i++) {
-        AdvanceNativeExpressView *view = views[i];
-        [list addObject:view.expressView];
-        [exts addObject:@{
-            ABUMediaAdLoadingExtECPM : @(view.price),
-        }];
-    }
+- (void)dealloc {
     
-    [self.bridge nativeAd:self didLoadWithExpressViews:[list copy] exts:exts.copy];
-
 }
 
-
-/// 广告曝光
-- (void)advanceNativeExpressOnAdShow:(AdvanceNativeExpressView *)adView {
-//    NSLog(@"广告曝光 %s", __func__);
-    [self.bridge nativeAd:self didVisibleWithMediatedNativeAd:adView.expressView];
-}
-
-/// 广告点击
-- (void)advanceNativeExpressOnAdClicked:(AdvanceNativeExpressView *)adView {
-//    NSLog(@"广告点击 %s", __func__);
-    [self.bridge nativeAd:self didClickWithMediatedNativeAd:adView.expressView];
-    [self.bridge nativeAd:self willPresentFullScreenModalWithMediatedNativeAd:adView.expressView];
-
-}
-
-/// 广告渲染成功
-/// 注意和广告数据拉取成功的区别  广告数据拉取成功, 但是渲染可能会失败
-/// 广告加载失败 是广点通 穿山甲 mercury 在拉取广告的时候就全部失败了
-/// 该回调的含义是: 比如: 广点通拉取广告成功了并返回了一组view  但是其中某个view的渲染失败了
-/// 该回调会触发多次
-- (void)advanceNativeExpressOnAdRenderSuccess:(AdvanceNativeExpressView *)adView {
-//    NSLog(@"广告渲染成功 %s %@", __func__, adView);
-    [self.bridge nativeAd:self renderSuccessWithExpressView:adView.expressView];
-
-}
-
-/// 广告渲染失败
-/// 注意和广告加载失败的区别  广告数据拉取成功, 但是渲染可能会失败
-/// 广告加载失败 是广点通 穿山甲 mercury 在拉取广告的时候就全部失败了
-/// 该回调的含义是: 比如: 广点通拉取广告成功了并返回了一组view  但是其中某个view的渲染失败了
-/// 该回调会触发多次
-- (void)advanceNativeExpressOnAdRenderFail:(AdvanceNativeExpressView *)adView {
-//    NSLog(@"广告渲染失败 %s %@", __func__, adView);
-}
-
-/// 广告加载失败
-/// 该回调只会触发一次
-- (void)advanceFailedWithError:(NSError *)error description:(NSDictionary *)description{
-//    NSLog(@"广告展示失败 %s  error: %@ 详情:%@", __func__, error, description);
-
-}
-
-/// 内部渠道开始加载时调用
-- (void)advanceSupplierWillLoad:(NSString *)supplierId {
-//    NSLog(@"内部渠道开始加载 %s  supplierId: %@", __func__, supplierId);
-
-}
-
-/// 加载策略成功
-- (void)advanceOnAdReceived:(NSString *)reqId
-{
-//    NSLog(@"%s 策略id为: %@",__func__ , reqId);
-}
-
-/// 广告被关闭
-- (void)advanceNativeExpressOnAdClosed:(AdvanceNativeExpressView *)adView {
-    //需要从tableview中删除
-//    NSLog(@"广告关闭 %s", __func__);
-    [self.bridge nativeAd:self didCloseWithExpressView:adView.expressView closeReasons:@[]];
-}
 
 @end

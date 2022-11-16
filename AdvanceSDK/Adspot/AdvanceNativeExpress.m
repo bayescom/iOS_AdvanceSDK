@@ -129,7 +129,6 @@
             // 标记当前的adapter 为了让当串行执行到的时候 获取这个adapter
             // 没有设置代理
 //            ADVLog(@"并行: %@", adapter);
-            ((void (*)(id, SEL, id))objc_msgSend)((id)_adapter, @selector(setController:), _viewController);
             ((void (*)(id, SEL, NSInteger))objc_msgSend)((id)adapter, @selector(setTag:), supplier.priority);
             ((void (*)(id, SEL))objc_msgSend)((id)adapter, @selector(loadAd));
             if (adapter) {
@@ -144,7 +143,6 @@
             }
 //            ADVLog(@"串行 %@ %ld %ld", _adapter, (long)[_adapter tag], supplier.priority);
             // 设置代理
-            ((void (*)(id, SEL, id))objc_msgSend)((id)_adapter, @selector(setController:), _viewController);
             ((void (*)(id, SEL, id))objc_msgSend)((id)_adapter, @selector(setDelegate:), _delegate);
             ((void (*)(id, SEL))objc_msgSend)((id)_adapter, @selector(loadAd));
 

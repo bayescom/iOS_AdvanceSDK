@@ -118,7 +118,7 @@
                 AdvanceNativeExpressView *TT = [[AdvanceNativeExpressView alloc] initWithViewController:strongSelf->_adspot.viewController];
                 TT.expressView = module.view;
                 TT.identifier = strongSelf->_supplier.identifier;
-                TT.price = (model.eCPM == nil) ? 0 : model.eCPM.integerValue;
+                TT.price = (model.eCPM == nil) ? strongSelf->_supplier.supplierPrice : model.eCPM.integerValue;
 
                 [temp addObject:TT];
             }

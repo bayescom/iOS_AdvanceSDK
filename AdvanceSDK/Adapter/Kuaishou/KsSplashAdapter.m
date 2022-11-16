@@ -239,7 +239,7 @@
     }
     
     [self ksadDidClose];
-    [self deallocAdapter];
+//    [self deallocAdapter];
 }
 /**
  * splash ad close conversion viewcontroller (no subsequent callbacks, remove & release KSSplashAdView here)

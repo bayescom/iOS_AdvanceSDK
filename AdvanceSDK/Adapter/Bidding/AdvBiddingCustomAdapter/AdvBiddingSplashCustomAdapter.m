@@ -6,32 +6,54 @@
 //
 
 #import "AdvBiddingSplashCustomAdapter.h"
+#import "AdvBiddingSplashScapegoat.h"
 #import <AdvanceSDK/AdvanceSplash.h>
 //#import "ABUDCustomSplashView.h"
-#import "AdvBiddingCongfig.h"
-#import "AdvSupplierModel.h"
-# if __has_include(<ABUAdSDK/ABUAdSDK.h>)
-#import <ABUAdSDK/ABUAdSDK.h>
-#else
-#import <Ads-Mediation-CN/ABUAdSDK.h>
-#endif
+//#import "AdvBiddingCongfig.h"
+//#import "AdvSupplierModel.h"
+//# if __has_include(<ABUAdSDK/ABUAdSDK.h>)
+//#import <ABUAdSDK/ABUAdSDK.h>
+//#else
+//#import <Ads-Mediation-CN/ABUAdSDK.h>
+//#endif
 
-@interface AdvBiddingSplashCustomAdapter ()<AdvanceSplashDelegate, ABUCustomSplashAdapter>
+@interface AdvBiddingSplashCustomAdapter ()
 @property(strong,nonatomic) AdvanceSplash *advanceSplash;
 //@property (nonatomic, strong) ABUDCustomSplashView *splashView;
 @property (nonatomic, strong) UIView *customBottomView;
 @property (nonatomic, assign) NSInteger price;
+@property (nonatomic, strong) AdvBiddingSplashScapegoat *scapegoat;
+
 @end
 
 @implementation AdvBiddingSplashCustomAdapter
+
+- (AdvBiddingSplashScapegoat *)scapegoat{
+    if (!_scapegoat) {
+        _scapegoat = [[AdvBiddingSplashScapegoat alloc]init];
+        _scapegoat.a = self;
+    }
+    return _scapegoat;
+}
+
 - (ABUMediatedAdStatus)mediatedAdStatus {
     return ABUMediatedAdStatusNormal;
+}
+
+- (ABUCustomAdapterVersion *)basedOnCustomAdapterVersion {
+    return ABUCustomAdapterVersion1_1;
 }
 
 - (void)dismissSplashAd {
 //    NSLog(@"----------->自定义开屏adapter开始释放啦啦<------------");
     self.advanceSplash = nil;
     self.customBottomView = nil;
+}
+
+
+- (void)initializeAdapterWithConfiguration:(ABUSdkInitConfig *_Nullable)initConfig {
+//    NSLog(@"----------->自定义开屏adapter开始init啦啦 %@<------------", initConfig.appKey);
+
 }
 
 - (void)loadSplashAdWithSlotID:(nonnull NSString *)slotID andParameter:(nonnull NSDictionary *)parameter {
@@ -51,10 +73,25 @@
         self.advanceSplash.logoImage = [self convertViewToImage:self.customBottomView];
         self.advanceSplash.showLogoRequire = YES;
     }
-    self.advanceSplash.delegate = self;
+    self.advanceSplash.delegate = self.scapegoat;
     [self.advanceSplash loadAdWithSupplierModel:model];
 
 //    [self.bridge splashAd:self didLoadWithExt:@{ABUMediaAdLoadingExtECPM:@"100000"}];
+
+}
+
+/// adapter的版本号
+- (NSString *_Nonnull)adapterVersion {
+    return @"1.0.0";
+}
+
+/// adn的版本号
+- (NSString *_Nonnull)networkSdkVersion {
+    return @"4.0.1.1";
+}
+
+///// 隐私权限更新，用户更新隐私配置时触发，初始化方法调用前一定会触发一次
+- (void)didRequestAdPrivacyConfigUpdate:(NSDictionary *)config {
 
 }
 
@@ -71,11 +108,6 @@
     
 }
 
-- (void)advanceBiddingEndWithPrice:(NSInteger)price {
-//    NSLog(@"%s %ld", __func__, price);
-    self.price = price;
-}
-
 - (void)showSplashAdInWindow:(nonnull UIWindow *)window parameter:(nonnull NSDictionary *)parameter {
 
 //    NSLog(@"----------->自定义开屏adapter开始展示啦啦<------------");
@@ -88,58 +120,6 @@
 //    [self.advanceSplash showAd];
     // 模拟广告展示回调
 }
-
-/// 广告数据拉取成功
-- (void)advanceUnifiedViewDidLoad {
-//    NSLog(@"广告数据拉取成功 %s", __func__);
-    [self.bridge splashAd:self didLoadWithExt:@{ABUMediaAdLoadingExtECPM:[NSString stringWithFormat:@"%ld", self.price]}];
-}
-
-/// 广告曝光成功
-- (void)advanceExposured {
-//    NSLog(@"广告曝光成功 %s", __func__);
-//    [self.bridge splashAdWillVisible:self];
-    [self.bridge splashAdWillVisible:self];
-}
-
-/// 广告加载失败
-- (void)advanceFailedWithError:(NSError *)error description:(NSDictionary *)description{
-//    NSLog(@"广告展示失败 %s  error: %@ 详情:%@", __func__, error, description);
-
-}
-
-/// 广告点击
-- (void)advanceClicked {
-//    NSLog(@"广告点击 %s", __func__);
-    [self.bridge splashAdDidClick:self];
-}
-
-/// 广告关闭
-- (void)advanceDidClose {
-//    NSLog(@"广告关闭了 %s", __func__);
-    [self.bridge splashAdDidClose:self];
-}
-
-/// 广告倒计时结束
-- (void)advanceSplashOnAdCountdownToZero {
-//    NSLog(@"广告倒计时结束 %s", __func__);
-    [self.bridge splashAdDidCountDownToZero:self];
-}
-
-/// 点击了跳过
-- (void)advanceSplashOnAdSkipClicked {
-//    NSLog(@"点击了跳过 %s", __func__);
-    [self.bridge splashAdDidClickSkip:self];
-//    [self.bridge splashAdDidClose:self];
-}
-
-// 策略请求成功
-- (void)advanceOnAdReceived:(NSString *)reqId
-{
-//    NSLog(@"%s 策略id为: %@",__func__ , reqId);
-}
-
-
 
 
 - (void)didReceiveBidResult:(ABUMediaBidResult *)result {

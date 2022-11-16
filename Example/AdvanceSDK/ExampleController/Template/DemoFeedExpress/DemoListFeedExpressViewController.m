@@ -45,6 +45,10 @@
     _dataArrM = [NSMutableArray arrayWithArray:[CellBuilder dataFromJsonFile:@"cell01"]];
 //    _advanceFeed = [[AdvanceNativeExpress alloc] initWithAdspotId:@"11111112" viewController:self adSize:CGSizeMake(self.view.bounds.size.width, 300)];
 //    _advanceFeed = [[AdvanceNativeExpress alloc] initWithAdspotId:self.adspotId viewController:self adSize:CGSizeMake(self.view.bounds.size.width, 300)];
+    if (self.advanceFeed) {
+        self.advanceFeed = nil;
+    }
+    // adSize 高度设置0
     _advanceFeed = [[AdvanceNativeExpress alloc] initWithAdspotId:self.adspotId customExt:self.ext viewController:self adSize:CGSizeMake(self.view.bounds.size.width, 0)];
 
     _advanceFeed.delegate = self;
@@ -123,6 +127,7 @@
     NSLog(@"广告关闭 %s", __func__);
     [_dataArrM removeObject: adView];
     [self.tableView reloadData];
+    self.advanceFeed = nil;
 }
 
 // MARK: ======================= UITableViewDelegate, UITableViewDataSource =======================
@@ -174,6 +179,8 @@
         view.tag = 1000;
         [cell.contentView addSubview:view];
         cell.accessibilityIdentifier = @"nativeTemp_ad";
+        
+        // 展示广告的cell高度 -tableView:heightForRowAtIndexPath:
         if ([adView.identifier isEqualToString:SDK_ID_TANX]) { // tanx 的广告不带padding 需要自己调节
             [view mas_remakeConstraints:^(MASConstraintMaker *make) {
                 make.top.equalTo(cell.contentView);
@@ -190,6 +197,10 @@
 
         return cell;
     }
+}
+- (void)dealloc {
+    NSLog(@"%s", __func__);
+    self.advanceFeed = nil;
 }
 
 @end

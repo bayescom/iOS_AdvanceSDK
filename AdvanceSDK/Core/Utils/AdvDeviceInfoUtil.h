@@ -11,13 +11,14 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface AdvDeviceInfoUtil : NSObject
+/// 设备信息单例对象
++ (instancetype)sharedInstance;
 
-+ (NSString *)getIdfa;
-+ (NSString *)getAuctionId;
+- (NSString *)getIdfa;
+- (NSString *)getAuctionId;
 
-+ (NSMutableDictionary *)getDeviceInfoWithMediaId:(NSString *)mediaId adspotId:(NSString *)adspotId;
+- (NSMutableDictionary *)getDeviceInfoWithMediaId:(NSString *)mediaId adspotId:(NSString *)adspotId;
 
-+ (NSMutableDictionary *)getSDKTrackEventDeviceInfoWithMediaId:(NSString *)mediaId adspotId:(NSString *)adspotId;
 
 @end
 

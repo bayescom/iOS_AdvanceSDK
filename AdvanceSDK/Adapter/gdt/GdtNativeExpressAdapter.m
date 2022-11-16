@@ -26,7 +26,6 @@
 @interface GdtNativeExpressAdapter () <GDTNativeExpressAdDelegete>
 @property (nonatomic, strong) GDTNativeExpressAd *gdt_ad;
 @property (nonatomic, weak) AdvanceNativeExpress *adspot;
-@property (nonatomic, weak) UIViewController *controller;
 @property (nonatomic, strong) AdvSupplier *supplier;
 @property (nonatomic, strong) NSArray<__kindof AdvanceNativeExpressView *> *views;
 @end
@@ -108,7 +107,7 @@
             AdvanceNativeExpressView *TT = [[AdvanceNativeExpressView alloc] initWithViewController:_adspot.viewController];
             TT.expressView = view;
             TT.identifier = _supplier.identifier;
-            TT.price = view.eCPM;
+            TT.price = (view.eCPM == 0) ?  _supplier.supplierPrice : view.eCPM;
             [temp addObject:TT];
 
         }

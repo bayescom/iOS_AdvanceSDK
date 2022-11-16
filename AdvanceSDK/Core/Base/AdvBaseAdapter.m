@@ -134,6 +134,7 @@
 }
 
 - (void)deallocAdapter {
+    // 该方法为AdvanceSDK 内部调用 开发者不要在外部手动调用 想要释放 直接将广告对象置为nil即可
     [self.mgr cacelDataTask];
     self.mgr = nil;
     self.baseDelegate = nil;
@@ -187,11 +188,15 @@
     
 
     if ([supplier.identifier isEqualToString:SDK_ID_GDT]) {
-        // 广点通SDK
-        static dispatch_once_t onceToken;
-        dispatch_once(&onceToken, ^{
-            [NSClassFromString(clsName) performSelector:@selector(registerAppId:) withObject:supplier.mediaid];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            // 广点通SDK
+            static dispatch_once_t onceToken;
+            dispatch_once(&onceToken, ^{
+                
+                [NSClassFromString(clsName) performSelector:@selector(registerAppId:) withObject:supplier.mediaid];
+            });
         });
+
     } else if ([supplier.identifier isEqualToString:SDK_ID_CSJ]) {
         // 穿山甲SDK
         static dispatch_once_t onceToken;
@@ -229,19 +234,36 @@
         });
     } else if ([supplier.identifier isEqualToString:SDK_ID_BIDDING]){
         // bidding 此之前已经对 biddingConfig进行了初始化 并赋值了
+        if (!supplier.mediaid) {
+            return;
+        }
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
+//            [NSClassFromString(@"BUAdSDKManager") performSelector:@selector(setAppID:) withObject:supplier.mediaid];
+            
+//            [ABUAdSDKManager setupSDKWithAppId:supplier.mediaid config:^ABUUserConfig *(ABUUserConfig *c) {
+//                c.logEnable = YES;
+//                return c;
+//            }];
+//            ABUSplashAd *splashAd = [[ABUSplashAd alloc] initWithAdUnitID:@"102106530"];
+//            splashAd.rootViewController = [[[UIApplication sharedApplication] keyWindow] rootViewController];
+//            [ABUAdSDKManager preloadAdsWithInfos:@[splashAd] andInterval:5 andConcurrent:4];
+
             [NSClassFromString(clsName) performSelector:@selector(setupSDKWithAppId:config:) withObject:supplier.mediaid withObject:nil];
 //            [ABUAdSDKManager setupSDKWithAppId:supplier.mediaid config:^ABUUserConfig *(ABUUserConfig *c) {
 //                c.logEnable = YES;
 //                return c;
 //            }];
+//            ABUSplashAd *splashAd = [[ABUSplashAd alloc] initWithAdUnitID:supplier.adspotid];
+//            splashAd.rootViewController = [[[UIApplication sharedApplication] keyWindow] rootViewController];
+//            [ABUAdSDKManager preloadAdsWithInfos:@[splashAd] andInterval:2 andConcurrent:2];
         });
 
     } else {
         
     }
 
+//    NSLog(@"---> %@", [NSThread currentThread]);
     // 加载渠道
     if ([_baseDelegate respondsToSelector:@selector(advanceBaseAdapterLoadSuppluer:error:)]) {
         [_baseDelegate advanceBaseAdapterLoadSuppluer:supplier error:error];

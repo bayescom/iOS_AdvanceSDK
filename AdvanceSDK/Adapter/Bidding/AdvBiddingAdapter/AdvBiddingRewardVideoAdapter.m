@@ -162,6 +162,7 @@
     ADV_LEVEL_INFO_LOG(@"requestID:%@", info.requestID ?: @"None");
     _supplier.supplierPrice = (info.ecpm) ? info.ecpm.integerValue : 0;
     [self.adspot reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoGMBidding supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(advanceExposured)]) {
         [self.delegate advanceExposured];
     }

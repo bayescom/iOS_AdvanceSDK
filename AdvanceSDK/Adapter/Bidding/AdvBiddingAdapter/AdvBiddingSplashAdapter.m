@@ -59,8 +59,9 @@
         parallel_timeout = 3000;
     }
 
-    self.splashAd.tolerateTimeout = parallel_timeout / 1000.0;
-    
+//    self.splashAd.tolerateTimeout = parallel_timeout / 1000.0;
+    self.splashAd.tolerateTimeout = 1.5;
+
     _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
     
     // 设置logo
@@ -74,8 +75,19 @@
         bottomView.frame = CGRectMake(0, [UIScreen mainScreen].bounds.size.height-real_h, [UIScreen mainScreen].bounds.size.width, real_h);
         self.splashAd.customBottomView = bottomView;
     }
-
-    [self.splashAd loadAdData];
+    
+    __weak typeof(self) _self = self;
+    _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
+    if([ABUAdSDKManager configDidLoad]) {
+        //当前配置拉取成功，直接loadAdData
+        [self.splashAd loadAdData];
+    } else {
+        //当前配置未拉取成功，在成功之后会调用该callback
+        [ABUAdSDKManager addConfigLoadSuccessObserver:self withAction:^(id  _Nonnull observer) {
+            __strong typeof(_self) self = _self;
+            [self.splashAd loadAdData];
+        }];
+    }
 
 }
 
@@ -150,6 +162,7 @@
     ADV_LEVEL_INFO_LOG(@"requestID:%@", info.requestID ?: @"None");
     _supplier.supplierPrice = (info.ecpm) ? info.ecpm.integerValue : 0;
     [self.adspot reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoGMBidding supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(advanceExposured)]) {
         [self.delegate advanceExposured];
     }
@@ -157,7 +170,7 @@
 }
 
 - (void)splashAdDidClick:(ABUSplashAd *)splashAd {
-    
+    [_adspot reportWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(advanceClicked)]) {
         [self.delegate advanceClicked];
     }
@@ -167,7 +180,7 @@
     if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdCountdownToZero)]) {
         [self.delegate advanceSplashOnAdCountdownToZero];
     }
-    [self deallocAdapter];
+//    [self deallocAdapter];
 
 }
 

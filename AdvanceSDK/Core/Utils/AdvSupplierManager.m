@@ -14,7 +14,6 @@
 #import "AdvModel.h"
 #import "AdvAdsportInfoUtil.h"
 #import "AdvUploadTKUtil.h"
-#import "AdvTrackEventUtil.h"
 #import <objc/runtime.h>
 #import <objc/message.h>
 
@@ -83,29 +82,8 @@
     self.adspotId = adspotId;
     self.tkUploadTool = [[AdvUploadTKUtil alloc] init];
     self.ext = [ext mutableCopy];
-    
-    // 获取本地数据
-    _model = [AdvSupplierModel loadDataWithMediaId:mediaId adspotId:adspotId];
-    
-//    ADVTRACK(self.mediaId, self.adspotId, AdvTrackEventCase_getInfo);
-    
-    
-    // 是否实时
-    if (!_model.setting.useCache) {
-        _model = nil;
-        ADV_LEVEL_INFO_LOG(@"无本地策略");
-    }
-
-    // 是否超时
-    if (_model.setting.cacheTime > 0) {
-        if (_model.setting.cacheTime <= [[NSDate date] timeIntervalSince1970]) {
-            [_model clearLocalModel];
-            _model = nil;
-            ADV_LEVEL_INFO_LOG(@"无本地策略");
-        }
-    }
-    
-    
+    self.arrayHeadBidding = [NSMutableArray array];
+    self.arrayWaterfall = [NSMutableArray array];
     
     
     // model不存在
@@ -127,16 +105,26 @@
 }
 
 - (void)loadDataWithSupplierModel:(AdvSupplierModel *)model {
+    if (!self.arrayHeadBidding) {
+        self.arrayHeadBidding = [NSMutableArray array];
+    }
+    
+    if (!self.arrayWaterfall) {
+        self.arrayWaterfall = [NSMutableArray array];
+    }
+
     self.model = model;
     self.model.setting.bidding_type = 0;
     self.supplierM = [self.model.suppliers mutableCopy];
+    [self sortSupplierMByPriority];
+
     [self loadWaterfallSupplierAction];
     
 }
 
 - (void)loadNextSupplierIfHas {
     // 执行非CPT渠道逻辑
-    AdvSupplier *currentSupplier = _supplierM.firstObject;
+    AdvSupplier *currentSupplier = _supplierM.lastObject;
     // 不管是不是并行渠道, 到了该执行的时候 必须要按照串行渠道的逻辑去执行
     currentSupplier.isParallel = NO;
 //    NSInteger currentPriority = currentSupplier.priority;
@@ -205,14 +193,21 @@
 - (void)GMBiddingAction {
     AdvSupplier *GMObj = [AdvSupplier new];
     
-    GMObj.mediaid = self.model.setting.gromore_params.appid;
-    GMObj.adspotid = self.model.setting.gromore_params.adspotid;
-    GMObj.timeout = self.model.setting.gromore_params.timeout;
+    GMObj.mediaid = self.model.gro_more.gromore_params.appid;
+    GMObj.adspotid = self.model.gro_more.gromore_params.adspotid;
+    GMObj.timeout = self.model.gro_more.gromore_params.timeout;
     GMObj.identifier = SDK_ID_BIDDING;
     GMObj.isParallel = NO;
     GMObj.name = @"实时竞价";
     GMObj.sdktag = @"Bidding";
-    GMObj.imptk = self.model.setting.gmtk;
+    GMObj.imptk = self.model.gro_more.gmtk.imptk;
+    GMObj.loadedtk = self.model.gro_more.gmtk.loadedtk;
+    GMObj.failedtk = self.model.gro_more.gmtk.failedtk;
+    GMObj.succeedtk = self.model.gro_more.gmtk.succeedtk;
+    GMObj.imptk = self.model.gro_more.gmtk.imptk;
+    GMObj.biddingtk = self.model.gro_more.gmtk.biddingtk;
+    GMObj.clicktk = self.model.gro_more.gmtk.clicktk;
+
     // 初始化 biddingCongfig单例
     id biddingConfig = ((id(*)(id,SEL))objc_msgSend)(NSClassFromString(@"AdvBiddingCongfig"), @selector(defaultManager));
     // 将策略Model 付给BiddingCongfig 用来在customAdapter里初始化新的开屏广告位
@@ -263,7 +258,6 @@
     }];
     
     [self.model.setting.headBiddingGroup removeAllObjects];
-
 
     // tempWaterfall = 0意味着所有parallelGroup 的渠道都没展现 这个时候 _incomeWaterfallCount应置为0, 避免卡住问题
     if (tempWaterfall.count > 0) {
@@ -429,9 +423,9 @@
     
 //    NSLog(@"suppliers = %@",suppliers);
 //    NSLog(@"arrayHeadBidding = %@",self.arrayHeadBidding);
-
+//
     [tempBidding enumerateObjectsUsingBlock:^(AdvSupplier * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-//        NSLog(@"%ld  %ld", obj.supplierPrice, _waterfallMinPrice);
+//        NSLog(@"=1=> %ld  %ld", obj.supplierPrice, _waterfallMinPrice);
         NSInteger obj_price = (obj.supplierPrice > 0) ? obj.supplierPrice : obj.sdk_price;
         if (obj_price > _waterfallMinPrice) {
             [suppliers addObject:obj];
@@ -478,7 +472,7 @@
 //    for (AdvSupplier *temp in self.arrayHeadBidding) {
 //        NSLog(@"------2-> %@ %ld %ld %ld", temp.sdktag, (long)temp.sdk_price, (long)temp.supplierPrice, (long)temp.priority);
 //    }
-
+//
 
     // 取价格最高的渠道执行
     AdvSupplier *currentSupplier = suppliers.lastObject;
@@ -517,10 +511,16 @@
         return;
     }
     
-    
-    AdvSupplier *currentSupplier = _supplierM.firstObject;
+
+    [self sortSupplierMByPriority];
+    AdvSupplier *currentSupplier = _supplierM.lastObject;
     currentSupplier.isParallel = NO;
-    
+    currentSupplier.positionType = AdvanceSdkSupplierTypeWaterfall;
+    // bidding结束
+    if (self.delegate && [self.delegate respondsToSelector:@selector(advManagerBiddingEndWithWinSupplier:)]) {
+        [self.delegate advManagerBiddingEndWithWinSupplier:currentSupplier];
+    }
+
     
     //         NSLog(@"%s %@", __func__, currentSupplier.sdktag);
     [self notCPTLoadNextSuppluer:currentSupplier error:nil];
@@ -629,7 +629,7 @@
 // MARK: ======================= Net Work =======================
 /// 拉取线上数据 如果是仅仅储存 不会触发任何回调，仅存储策略信息
 - (void)fetchData:(BOOL)saveOnly {
-    NSMutableDictionary *deviceInfo = [AdvDeviceInfoUtil getDeviceInfoWithMediaId:_mediaId adspotId:_adspotId];
+    NSMutableDictionary *deviceInfo = [[AdvDeviceInfoUtil sharedInstance] getDeviceInfoWithMediaId:_mediaId adspotId:_adspotId];
     
     if (self.ext) {
         
@@ -642,9 +642,10 @@
         
         ADV_LEVEL_INFO_LOG(@"自定义扩展字段 ext : %@", self.ext);
     }
-    
+    // 1200411781 5073996413293680
     
     ADV_LEVEL_INFO_LOG(@"请求参数 %@", deviceInfo);
+    NSLog(@"%@", [self jsonStringCompactFormatForDictionary:deviceInfo]);
     NSError *parseError = nil;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:deviceInfo options:NSJSONWritingPrettyPrinted error:&parseError];
     NSURL *url = [NSURL URLWithString:AdvanceSdkRequestUrl];
@@ -670,6 +671,21 @@
         });
     }];
     [self.dataTask resume];
+}
+
+- (NSString *)jsonStringCompactFormatForDictionary:(NSDictionary *)dicJson {
+
+    if (![dicJson isKindOfClass:[NSDictionary class]] || ![NSJSONSerialization isValidJSONObject:dicJson]) {
+
+        return nil;
+
+    }
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dicJson options:0 error:nil];
+
+    NSString *strJson = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+
+    return strJson;
+
 }
 
 - (void)cacelDataTask {
@@ -714,7 +730,7 @@
     
     NSError *parseErr = nil;
     AdvSupplierModel *a_model = [AdvSupplierModel adv_modelWithJSON:data];
-//    NSLog(@"[JSON]%@", [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil]);
+    NSLog(@"[JSON]%@", [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil]);
     if (parseErr || !a_model) {
         // parse error
         if (!saveOnly && [_delegate respondsToSelector:@selector(advSupplierManagerLoadError:)]) {
@@ -768,24 +784,53 @@
         // 现在全都走新逻辑
         [self loadBiddingSupplier];
     }
-    [a_model saveData:data];
 }
 
 
 // MARK: ======================= Private =======================
 - (void)sortSupplierMByPriority {
     if (_supplierM.count > 1) {
-        [_supplierM sortWithOptions:NSSortStable usingComparator:^NSComparisonResult(id _Nonnull obj1, id _Nonnull obj2) {
+        [self.supplierM sortWithOptions:NSSortStable usingComparator:^NSComparisonResult(id _Nonnull obj1, id _Nonnull obj2) {
+            
             AdvSupplier *obj11 = obj1;
             AdvSupplier *obj22 = obj2;
-            if (obj11.priority > obj22.priority) {
+            
+            NSInteger obj11_price = (obj11.supplierPrice > 0) ? obj11.supplierPrice : obj11.sdk_price;
+            NSInteger obj22_price = (obj22.supplierPrice > 0) ? obj22.supplierPrice : obj22.sdk_price;
+    //        NSLog(@"------obj11_price-> %@  %ld %ld", obj11.sdktag, (long)obj11.supplierPrice, (long)obj11.priority);
+    //        NSLog(@"------obj22_price-> %@  %ld %ld", obj22.sdktag, (long)obj22.supplierPrice, (long)obj22.priority);
+
+            obj11.supplierPrice = obj11_price;
+            obj22.supplierPrice = obj22_price;
+            if (obj11_price > obj22_price) {
                 return NSOrderedDescending;
-            } else if (obj11.priority == obj22.priority) {
-                return NSOrderedSame;
+            } else if (obj11_price  == obj22_price) {
+                if (obj11.priority > obj22.priority) {// 价格相同的话 按照优先级排序
+                    return NSOrderedAscending;
+                } else if (obj11.priority == obj22.priority) {
+                    return NSOrderedSame;
+                } else {
+                    return NSOrderedDescending;
+                }
             } else {
                 return NSOrderedAscending;
             }
         }];
+//        for (AdvSupplier *temp in self.supplierM) {
+//            NSLog(@"------3-> %@ %ld %ld %ld", temp.sdktag, (long)temp.sdk_price, (long)temp.supplierPrice, (long)temp.priority);
+//        }
+
+//        [_supplierM sortWithOptions:NSSortStable usingComparator:^NSComparisonResult(id _Nonnull obj1, id _Nonnull obj2) {
+//            AdvSupplier *obj11 = obj1;
+//            AdvSupplier *obj22 = obj2;
+//            if (obj11.priority > obj22.priority) {
+//                return NSOrderedDescending;
+//            } else if (obj11.priority == obj22.priority) {
+//                return NSOrderedSame;
+//            } else {
+//                return NSOrderedAscending;
+//            }
+//        }];
     }
 }
 
@@ -817,7 +862,10 @@
         [_supplierM removeObject:supplier];
         [self.lock unlock];
 
+    } else if (repoType == AdvanceSdkSupplierRepoGMBidding) {
+        uploadArr =  [self.tkUploadTool imptkUrlWithArr:supplier.biddingtk price:(supplier.supplierPrice == 0) ? supplier.sdk_price : supplier.supplierPrice];
     }
+    
     if (!uploadArr || uploadArr.count <= 0) {
         // TODO: 上报地址不存在
         return;
@@ -849,24 +897,24 @@
     return _lock;
 }
 
-- (NSMutableArray *)arrayWaterfall {
-    if (!_arrayWaterfall) {
-        _arrayWaterfall = [NSMutableArray array];
-    }
-    return _arrayWaterfall;
-}
-
-- (NSMutableArray *)arrayHeadBidding {
-    if (!_arrayHeadBidding) {
-        _arrayHeadBidding = [NSMutableArray array];
-    }
-    return _arrayHeadBidding;
-}
-
 - (void)setModel:(AdvSupplierModel *)model {
     if (_model != model) {
         _model = nil;
         _model = model;
+    }
+}
+
+- (void)setArrayWaterfall:(NSMutableArray *)arrayWaterfall {
+    if (_arrayWaterfall != arrayWaterfall) {
+        _arrayWaterfall = nil;
+        _arrayWaterfall = arrayWaterfall;
+    }
+}
+
+- (void)setArrayHeadBidding:(NSMutableArray *)arrayHeadBidding {
+    if (_arrayHeadBidding != arrayHeadBidding) {
+        _arrayHeadBidding = nil;
+        _arrayHeadBidding = arrayHeadBidding;
     }
 }
 
@@ -882,5 +930,8 @@
     [self deallocTimer];
     self.model = nil;
     self.tkUploadTool = nil;
+    self.arrayWaterfall = nil;
+    self.arrayHeadBidding = nil;
+    self.supplierM = nil;
 }
 @end

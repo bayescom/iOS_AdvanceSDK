@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
     s.name             = 'AdvanceSDK'
     
-    s.version          = '4.0.0.6'
+    s.version          = '4.0.1.8'
     s.ios.deployment_target = '9.0'
     s.platform     = :ios, "9.0"
     s.requires_arc = true
@@ -53,7 +53,7 @@ Pod::Spec.new do |s|
     s.subspec 'Mercury' do |mer|
         mer.dependency 'AdvanceSDK/Core'
         mer.dependency 'AdvanceSDK/Adspot'
-        mer.dependency 'MercurySDK', '3.1.7.2'
+        mer.dependency 'MercurySDK', '3.1.7.6'
         mer.source_files = 'AdvanceSDK/Adapter/mercury/**/*.{h,m}'
         mer.frameworks = 'StoreKit', 'AVFoundation', 'CoreMotion'
     end
@@ -61,10 +61,11 @@ Pod::Spec.new do |s|
     s.subspec 'CSJ' do |csj|
         csj.dependency 'AdvanceSDK/Core'
         csj.dependency 'AdvanceSDK/Adspot'
-        csj.dependency 'Ads-CN' ,'4.7.1.0'
+        csj.dependency 'Ads-CN' ,'4.8.0.7'
         csj.source_files = 'AdvanceSDK/Adapter/csj/**/*.{h,m}'
         csj.frameworks = 'UIKit', 'MapKit', 'WebKit', 'MediaPlayer', 'CoreLocation', 'AdSupport', 'CoreMedia', 'AVFoundation', 'CoreTelephony', 'StoreKit', 'SystemConfiguration', 'MobileCoreServices', 'CoreMotion', 'Accelerate','AudioToolbox','JavaScriptCore','Security','CoreImage','AudioToolbox','ImageIO','QuartzCore','CoreGraphics','CoreText'
         csj.libraries = 'c++', 'resolv', 'z', 'sqlite3', 'bz2', 'xml2', 'iconv', 'c++abi'
+        csj.weak_frameworks = 'AppTrackingTransparency', 'DeviceCheck'
         #    valid_archs = ['armv7', 'i386', 'x86_64', 'arm64']
         
     end
@@ -72,7 +73,7 @@ Pod::Spec.new do |s|
     s.subspec 'GDT' do |gdt|
         gdt.dependency 'AdvanceSDK/Core'
         gdt.dependency 'AdvanceSDK/Adspot'
-        gdt.dependency 'GDTMobSDK', '4.13.83'
+        gdt.dependency 'GDTMobSDK', '4.13.90'
         gdt.source_files =  'AdvanceSDK/Adapter/gdt/**/*.{h,m}'
         gdt.frameworks = 'AdSupport', 'CoreLocation', 'QuartzCore', 'SystemConfiguration', 'CoreTelephony', 'Security', 'StoreKit', 'AVFoundation', 'WebKit'
         gdt.libraries     = 'xml2', 'z'
@@ -81,7 +82,7 @@ Pod::Spec.new do |s|
     s.subspec 'KS' do |ks|
         ks.dependency 'AdvanceSDK/Core'
         ks.dependency 'AdvanceSDK/Adspot'
-        ks.dependency 'KSAdSDK', '3.3.29'
+        ks.dependency 'KSAdSDK', '3.3.31'
         ks.source_files = 'AdvanceSDK/Adapter/Kuaishou/**/*.{h,m}'
         ks.frameworks = ["Foundation", "UIKit", "MobileCoreServices", "CoreGraphics", "Security", "SystemConfiguration", "CoreTelephony", "AdSupport", "CoreData", "StoreKit", "AVFoundation", "MediaPlayer", "CoreMedia", "WebKit", "Accelerate", "CoreLocation", "AVKit", "MessageUI", "QuickLook", "AudioToolBox", "AddressBook"]
         ks.libraries =  ["z", "resolv.9", "sqlite3", "c++", "c++abi"]
@@ -100,26 +101,25 @@ Pod::Spec.new do |s|
         
     end
     
-    #    s.subspec 'TANX' do |tanx|
-    #        tanx.dependency 'AdvanceSDK/Core'
-    #        tanx.dependency 'AdvanceSDK/Adspot'
-    #        tanx.dependency 'JSONModel', '1.8.0'
-    #        tanx.dependency 'Reachability', '3.2'
-    #        tanx.dependency 'SDWebImage', '5.12.1'
-    #        tanx.source_files =  'AdvanceSDK/Adapter/Tanx/*{h,m}'
-    #        tanx.ios.vendored_frameworks = 'AdvanceSDK/Adapter/Tanx/TanxSDKFolder/TanxSDK.framework'
-    ##        tanx.vendored_frameworks = 'TanxSDK.framework'
-    #
-    #
-    #        valid_archs = ['armv7', 'armv7s', 'x86_64', 'arm64']
-    #
-    #
-    #    end
+#        s.subspec 'TANX' do |tanx|
+#            tanx.dependency 'AdvanceSDK/Core'
+#            tanx.dependency 'AdvanceSDK/Adspot'
+#            tanx.dependency 'JSONModel', '1.8.0'
+#            tanx.dependency 'Reachability', '3.2'
+#            tanx.dependency 'SDWebImage', '5.12.1'
+#            tanx.source_files =  'AdvanceSDK/Adapter/Tanx/*{h,m}'
+#            tanx.ios.vendored_frameworks = 'AdvanceSDK/Adapter/Tanx/TanxSDKFolder/TanxSDK.framework'
+#    #        tanx.vendored_frameworks = 'TanxSDK.framework'
+#
+#
+#            valid_archs = ['armv7', 'armv7s', 'x86_64', 'arm64']
+#
+#
+#        end
 #    s.subspec 'Bidding' do |bidding|
 #        bidding.dependency 'AdvanceSDK/Core'
 #        bidding.dependency 'AdvanceSDK/Adspot'
-##        bidding.dependency 'AdvBiddingSDK'
-#        bidding.dependency 'AdvBiddingSuppliers','0.0.2'
+#        bidding.dependency 'AdvBiddingSuppliers','0.0.5'
 #
 #        bidding.dependency 'Ads-CN'
 #        bidding.source_files =  ['AdvanceSDK/Adapter/Bidding/*{h,m}',
@@ -132,20 +132,17 @@ Pod::Spec.new do |s|
 #
 #
 #    end
-    
+
     
     s.subspec 'AdvBidding' do |advBidding|
         advBidding.dependency 'AdvanceSDK/Core'
         advBidding.dependency 'AdvanceSDK/Adspot'
-        advBidding.dependency 'AdvBiddingSDK', '1.0.2'
-        advBidding.dependency 'AdvBiddingSuppliers', '0.0.2'
-
-
-#        valid_archs = ['armv7', 'armv7s', 'x86_64', 'arm64']
+        advBidding.dependency 'AdvBiddingSDK', '1.1.3'
+        advBidding.dependency 'AdvBiddingSuppliers', '0.0.6'
 
 
     end
-    
+
     
     
     s.xcconfig = {

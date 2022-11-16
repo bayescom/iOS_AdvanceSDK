@@ -18,7 +18,6 @@
 @interface MercuryNativeExpressAdapter () <MercuryNativeExpressAdDelegete>
 @property (nonatomic, strong) MercuryNativeExpressAd *mercury_ad;
 @property (nonatomic, weak) AdvanceNativeExpress *adspot;
-@property (nonatomic, weak) UIViewController *controller;
 @property (nonatomic, strong) AdvSupplier *supplier;
 @property (nonatomic, strong) NSArray<AdvanceNativeExpressView *> * views;
 
@@ -42,20 +41,20 @@
 - (void)loadAd {
     int adCount = 1;
     _mercury_ad.delegate = self;
-    ADV_LEVEL_INFO_LOG(@"加载观点通 supplier: %@", _supplier);
+    ADV_LEVEL_INFO_LOG(@"加载MercurySDK supplier: %@", _supplier);
     if (_supplier.state == AdvanceSdkSupplierStateSuccess) {// 并行请求保存的状态 再次轮到该渠道加载的时候 直接show
-        ADV_LEVEL_INFO_LOG(@"广点通 成功");
+        ADV_LEVEL_INFO_LOG(@"MercurySDK 成功");
         if ([self.delegate respondsToSelector:@selector(advanceNativeExpressOnAdLoadSuccess:)]) {
             [self.delegate advanceNativeExpressOnAdLoadSuccess:self.views];
         }
 //        [self showAd];
     } else if (_supplier.state == AdvanceSdkSupplierStateFailed) { //失败的话直接对外抛出回调
-        ADV_LEVEL_INFO_LOG(@"广点通 失败 %@", _supplier);
+        ADV_LEVEL_INFO_LOG(@"MercurySDK 失败 %@", _supplier);
         [self.adspot loadNextSupplierIfHas];
     } else if (_supplier.state == AdvanceSdkSupplierStateInPull) { // 正在请求广告时 什么都不用做等待就行
-        ADV_LEVEL_INFO_LOG(@"广点通 正在加载中");
+        ADV_LEVEL_INFO_LOG(@"MercurySDK 正在加载中");
     } else {
-        ADV_LEVEL_INFO_LOG(@"广点通 load ad");
+        ADV_LEVEL_INFO_LOG(@"MercurySDK load ad");
         _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
         [_mercury_ad loadAdWithCount:adCount];
     }
@@ -93,7 +92,7 @@
                 AdvanceNativeExpressView *TT = [[AdvanceNativeExpressView alloc] initWithViewController:_adspot.viewController];
                 TT.expressView = view;
                 TT.identifier = _supplier.identifier;
-                TT.price = view.price;
+                TT.price = (view.price == 0) ?  _supplier.supplierPrice : view.price;
                 [temp addObject:TT];
             }
         }

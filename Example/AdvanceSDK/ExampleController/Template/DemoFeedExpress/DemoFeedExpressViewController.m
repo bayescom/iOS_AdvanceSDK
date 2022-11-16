@@ -22,8 +22,11 @@
     self.adspotIdsArr = @[
         @{@"addesc": @"图片信息流", @"adspotId": @"100255-10002698"},
         @{@"addesc": @"图片信息流", @"adspotId": @"100255-10006500"},
-        
-        
+        @{@"addesc": @"图片信息流", @"adspotId": @"100255-10006582"},
+        @{@"addesc": @"图片信息流", @"adspotId": @"101959-10006024"},
+        @{@"addesc": @"图片信息流", @"adspotId": @"101959-10006023"},
+        @{@"addesc": @"图片信息流", @"adspotId": @"101959-10006022"},
+        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"102323-10006806"},
     ];
     self.btn1Title = @"展示广告";
 }

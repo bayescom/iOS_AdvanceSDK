@@ -19,7 +19,6 @@
 @interface KsNativeExpressAdapter ()<KSFeedAdsManagerDelegate, KSFeedAdDelegate>
 @property (nonatomic, strong) KSFeedAdsManager *ks_ad;
 @property (nonatomic, weak) AdvanceNativeExpress *adspot;
-@property (nonatomic, weak) UIViewController *controller;
 @property (nonatomic, strong) AdvSupplier *supplier;
 @property (nonatomic, strong) NSArray<AdvanceNativeExpressView *> * views;
 
@@ -95,7 +94,7 @@
             AdvanceNativeExpressView *TT = [[AdvanceNativeExpressView alloc] initWithViewController:_adspot.viewController];
             TT.expressView = ad.feedView;
             TT.identifier = _supplier.identifier;
-            TT.price = ad.ecpm;
+            TT.price = (ad.ecpm == 0) ?  _supplier.supplierPrice : ad.ecpm;
             [temp addObject:TT];
 
         }
