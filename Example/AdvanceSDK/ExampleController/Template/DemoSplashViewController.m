@@ -30,13 +30,14 @@
      - 保证在开屏广告生命周期内(包括请求,曝光成功后的展现时间内),不要更换rootVC, 也不要对Window进行操作
 
      */
+    // demo 中的id 为开发环境id
+    // 需要id调试的媒体请联系运营同学开通
     self.initDefSubviewsFlag = YES;
     self.adspotIdsArr = @[
 //        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10002619"},
         @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10006483"},
         
         @{@"addesc": @"mediaId-adspotId", @"adspotId": @"101959-10006038"},
-        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"102323-10006806"},
         
 
 //
