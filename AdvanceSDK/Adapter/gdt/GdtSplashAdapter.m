@@ -96,7 +96,8 @@
 }
 
 - (void)deallocAdapter {
-    _gdt_ad = nil;
+    ADV_LEVEL_INFO_LOG(@"%s %@", __func__, self);
+    self.gdt_ad = nil;
 }
 
 - (void)gmShowAd {
@@ -221,5 +222,8 @@
     [self showAd];
 }
 
+- (void)dealloc {
+    ADV_LEVEL_INFO_LOG(@"%s %@", __func__, self);
 
+}
 @end

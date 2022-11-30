@@ -112,9 +112,9 @@
 
 
 - (void)deallocAdapter {
-    __weak typeof(self) _self = self;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        __strong typeof(_self) self = _self;
+//    __weak typeof(self) _self = self;
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        __strong typeof(_self) self = _self;
         if ([self.delegate respondsToSelector:@selector(advanceDidClose)]) {
             [self.delegate advanceDidClose];
         }
@@ -124,7 +124,7 @@
         self.templateView = nil;
         self.imgV = nil;
         self.splashManager = nil;
-    });
+//    });
 }
 
 - (void)gmShowAd {
@@ -295,4 +295,8 @@
     return _imgV;
 }
 
+- (void)dealloc
+{
+    ADV_LEVEL_INFO_LOG(@"%s", __func__);
+}
 @end

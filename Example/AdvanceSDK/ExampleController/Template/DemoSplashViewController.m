@@ -38,6 +38,7 @@
         @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10006483"},
         
         @{@"addesc": @"mediaId-adspotId", @"adspotId": @"101959-10006038"},
+        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"101959-10006806"},
         
 
 //
@@ -114,6 +115,9 @@
 /// 广告数据拉取成功
 - (void)advanceUnifiedViewDidLoad {
     NSLog(@"广告数据拉取成功 %s", __func__);
+    [self.advanceSplash ddddd];
+    self.advanceSplash = nil;
+    self.advanceSplash.delegate = nil;
 //    [self loadAdBtn1Action];
 
 }
@@ -126,6 +130,8 @@
 /// 广告加载失败
 - (void)advanceFailedWithError:(NSError *)error description:(NSDictionary *)description{
     NSLog(@"广告展示失败 %s  error: %@ 详情:%@", __func__, error, description);
+    self.advanceSplash = nil;
+    self.advanceSplash.delegate = nil;
 
 }
 /// 内部渠道开始加载时调用
@@ -142,6 +148,8 @@
 - (void)advanceDidClose {
     NSLog(@"广告关闭了 %s", __func__);
 
+    self.advanceSplash = nil;
+    self.advanceSplash.delegate = nil;
 //    // 获取控制摇一摇 的单例
 //    id manager = ((id(*)(id, SEL))objc_msgSend)(NSClassFromString(@"MercuryMotionManager"), @selector(sharedManager));
 //    // 调用停止摇一摇
@@ -163,5 +171,12 @@
 - (void)advanceOnAdReceived:(NSString *)reqId
 {
     NSLog(@"%s 策略id为: %@",__func__ , reqId);
+}
+
+- (void)dealloc {
+    NSLog(@"%s",__func__);
+    self.advanceSplash = nil;
+    self.advanceSplash.delegate = nil;
+
 }
 @end

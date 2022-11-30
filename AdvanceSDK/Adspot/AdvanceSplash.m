@@ -75,16 +75,12 @@
 
 /// Override
 - (void)deallocSelf {
-//    NSLog(@"--fafdsfdsa");
-//    NSLog(@"%@",[NSThread currentThread]);
-    dispatch_async(dispatch_get_main_queue(), ^{
-//        ADV_LEVEL_INFO_LOG(@"%@", [NSThread currentThread]);
-        [_bgImgV removeFromSuperview];
-        _bgImgV = nil;
-        [_timeoutCheckTimer invalidate];
-        _timeoutCheckTimer = nil;
-        _timeout_stamp = 0;
-    });
+    NSLog(@"%@",[NSThread currentThread]);
+    [self.bgImgV removeFromSuperview];
+    self.bgImgV = nil;
+    [self.timeoutCheckTimer invalidate];
+    self.timeoutCheckTimer = nil;
+    self.timeout_stamp = 0;
 
 }
 
@@ -105,6 +101,11 @@
         [self deallocDelegate:YES];
         [self deallocSelf];
     }
+}
+
+- (void)ddddd {
+    [self deallocDelegate:YES];
+    [self deallocSelf];
 }
 
 // 返回策略id
@@ -317,8 +318,9 @@
 
 }
 
-//- (void)dealloc {
-//    [self deallocSelf];
-//}
+- (void)dealloc {
+    ADV_LEVEL_INFO_LOG(@"%s %@ %@", __func__, _adapter , self);
+    _adapter = nil;
+}
 
 @end

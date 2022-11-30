@@ -93,20 +93,17 @@
 }
 
 - (void)deallocAdapter {
-    ADV_LEVEL_INFO_LOG(@"%s", __func__);
-//    ADV_LEVEL_INFO_LOG(@"%@", [NSThread currentThread]);
-
-    dispatch_async(dispatch_get_main_queue(), ^{
-//        ADV_LEVEL_INFO_LOG(@"%@", [NSThread currentThread]);
-        if (_csj_ad) {
-    //        NSLog(@"穿山甲 释放了");
-            [_csj_ad removeSplashView];
-            _csj_ad = nil;
-            [_imgV removeFromSuperview];
-            _imgV = nil;
-        }
-    });
-
+    ADV_LEVEL_INFO_LOG(@"%s %@", __func__, self.csj_ad);
+    
+    //        ADV_LEVEL_INFO_LOG(@"%@", [NSThread currentThread]);
+    if (self.csj_ad) {
+        //        NSLog(@"穿山甲 释放了");
+        [self.csj_ad removeSplashView];
+        self.csj_ad = nil;
+        [self.imgV removeFromSuperview];
+        self.imgV = nil;
+    }
+    
 }
 
 - (void)gmShowAd {
@@ -254,6 +251,12 @@
         [self.delegate advanceDidClose];
 
     }
+    [self deallocAdapter];
+
+}
+
+- (void)dealloc {
+    ADV_LEVEL_INFO_LOG(@"%s %@", __func__, self);
     [self deallocAdapter];
 
 }

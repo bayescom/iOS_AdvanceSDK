@@ -926,7 +926,7 @@
 
 - (void)dealloc
 {
-    ADV_LEVEL_INFO_LOG(@"mgr 释放啦");
+    ADV_LEVEL_INFO_LOG(@"%s %@", __func__, self);
     [self deallocTimer];
     self.model = nil;
     self.tkUploadTool = nil;
