@@ -70,11 +70,16 @@
 }
 
 - (void)deallocAdapter {
-    
+    ADV_LEVEL_INFO_LOG(@"%s", __func__);
+    if (self.csj_ad) {
+        self.csj_ad.delegate = nil;
+        self.csj_ad = nil;
+    }
 }
 
 - (void)dealloc {
     ADV_LEVEL_INFO_LOG(@"%s", __func__);
+    [self deallocAdapter];
 }
 
 // MARK: ======================= BUNativeExpressAdViewDelegate =======================
