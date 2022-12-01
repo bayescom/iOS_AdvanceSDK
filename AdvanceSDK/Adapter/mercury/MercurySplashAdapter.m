@@ -38,8 +38,20 @@
         _supplier = supplier;
         _mercury_ad = [[MercurySplashAd alloc] initAdWithAdspotId:_supplier.adspotid delegate:self];
         _mercury_ad.placeholderImage = _adspot.backgroundImage;
-        _mercury_ad.showType = MercurySplashAdAutoAdaptScreen;
         _mercury_ad.logoImage = _adspot.logoImage;
+        NSNumber *showLogoType = _adspot.extParameter[MercuryLogoShowTypeKey];
+        NSNumber *blankGap = _adspot.extParameter[MercuryLogoShowBlankGapKey];
+        NSLog(@"====> %@  %@  %@", _adspot.extParameter, showLogoType, blankGap);
+
+        
+        if (showLogoType) {
+            _mercury_ad.showType = (showLogoType.integerValue);
+        } else {
+            _mercury_ad.showType = MercurySplashAdAutoAdaptScreenWithLogoFirst;
+        }
+
+        _mercury_ad.blankGap = blankGap.integerValue;
+
     }
     return self;
 }

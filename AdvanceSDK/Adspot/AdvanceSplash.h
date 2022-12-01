@@ -31,6 +31,9 @@ NS_ASSUME_NONNULL_BEGIN
 /// 控制器
 @property(nonatomic, weak) UIViewController *viewController;
 
+/// 初始化时传入的ext字段
+@property(nonatomic, strong, readonly) NSDictionary *extParameter;
+
 /// 总超时时间
 /// 如果使用bidding 功能 timeout时长必须要比 服务器下发的bidding等待时间要长 否则会严重影响变现效率
 @property (nonatomic, assign) NSInteger timeout;
@@ -47,7 +50,6 @@ NS_ASSUME_NONNULL_BEGIN
                        customExt:(NSDictionary *_Nonnull)ext
                   viewController:(UIViewController *)viewController;
 
-- (void)ddddd;
 
 @end
 

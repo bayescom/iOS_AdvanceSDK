@@ -24,7 +24,7 @@
 @property (nonatomic, strong) CADisplayLink *timeoutCheckTimer;
 @property (nonatomic, copy) NSString *reqId;
 @property (nonatomic, strong) NSNumber *isGMBidding;
-
+@property (nonatomic, strong, readwrite) NSDictionary *extParameter;
 @end
 
 @implementation AdvanceSplash
@@ -40,10 +40,15 @@
         ext = [NSMutableDictionary dictionary];
     }
     [ext setValue:AdvSdkTypeAdNameSplash forKey: AdvSdkTypeAdName];
+    _extParameter = [ext mutableCopy];
     if (self = [super initWithMediaId:@"" adspotId:adspotid customExt:ext]) {
         _viewController = viewController;
     }
     return self;
+}
+
+- (NSDictionary *)extParameter {
+    return _extParameter;
 }
 
 - (void)loadAd {
@@ -101,11 +106,6 @@
         [self deallocDelegate:YES];
         [self deallocSelf];
     }
-}
-
-- (void)ddddd {
-    [self deallocDelegate:YES];
-    [self deallocSelf];
 }
 
 // 返回策略id

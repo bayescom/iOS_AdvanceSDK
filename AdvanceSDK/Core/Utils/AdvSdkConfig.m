@@ -88,6 +88,9 @@ NSString * const AdvanceSDKOneMonthKey = @"AdvanceSDKOneMonthKey";
 NSString * const AdvanceSDKHourKey = @"AdvanceSDKHourKey";
 NSString * const AdvanceSDKSecretKey = @"bayescom1000000w";
 
+NSString * const MercuryLogoShowTypeKey = @"MercuryLogoShowTypeKey";
+NSString * const MercuryLogoShowBlankGapKey = @"MercuryLogoShowBlankGapKey";
+
 
 static AdvSdkConfig *instance = nil;
 
