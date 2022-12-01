@@ -74,11 +74,16 @@
 }
 
 - (void)deallocAdapter {
-    _mercury_ad = nil;
+    ADV_LEVEL_INFO_LOG(@"%s", __func__);
+    if (_mercury_ad) {
+        _mercury_ad.delegate = nil;
+        _mercury_ad = nil;
+    }
 }
 
 - (void)dealloc {
-    ADVLog(@"%s", __func__);
+    ADV_LEVEL_INFO_LOG(@"%s", __func__);
+    [self deallocAdapter];
 }
 
 // MARK: ======================= MercuryRewardVideoAdDelegate =======================

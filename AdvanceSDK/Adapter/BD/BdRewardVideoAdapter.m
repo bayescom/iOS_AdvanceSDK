@@ -72,12 +72,17 @@
 }
 
 - (void)deallocAdapter {
-    _bd_ad = nil;
+    ADV_LEVEL_INFO_LOG(@"%s", __func__);
+    if (_bd_ad) {
+        _bd_ad.delegate = nil;
+        _bd_ad = nil;
+    }
 }
 
 
 - (void)dealloc {
-    ADVLog(@"%s", __func__);
+    ADV_LEVEL_INFO_LOG(@"%s", __func__);
+    [self deallocAdapter];
 }
 
 - (void)rewardedAdLoadSuccess:(BaiduMobAdRewardVideo *)video {

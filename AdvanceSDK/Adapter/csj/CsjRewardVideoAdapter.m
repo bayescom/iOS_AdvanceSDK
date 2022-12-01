@@ -84,12 +84,17 @@
 }
 
 - (void)deallocAdapter {
-    _csj_ad = nil;
+    ADV_LEVEL_INFO_LOG(@"%s", __func__);
+    if (_csj_ad) {
+        _csj_ad.delegate = nil;
+        _csj_ad = nil;
+    }
 }
 
 
 - (void)dealloc {
-    ADVLog(@"%s", __func__);
+    ADV_LEVEL_INFO_LOG(@"%s", __func__);
+    [self deallocAdapter];
 }
 
 // MARK: ======================= BUNativeExpressRewardedVideoAdDelegate =======================

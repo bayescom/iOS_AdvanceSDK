@@ -73,12 +73,17 @@
 }
 
 - (void)deallocAdapter {
-    _gdt_ad = nil;
+    ADV_LEVEL_INFO_LOG(@"%s", __func__);
+    if (_gdt_ad) {
+        _gdt_ad.delegate = nil;
+        _gdt_ad = nil;
+    }
 }
 
 
 - (void)dealloc {
-    ADVLog(@"%s", __func__);
+    ADV_LEVEL_INFO_LOG(@"%s", __func__);
+    [self deallocAdapter];
 }
 
 // MARK: ======================= GdtRewardVideoAdDelegate =======================

@@ -76,7 +76,9 @@
     self.advanceSplash.showLogoRequire = YES;
 
     self.advanceSplash.backgroundImage = [UIImage imageNamed:@"LaunchImage_img"];
-    self.advanceSplash.timeout = 5; // 如果使用bidding 功能 timeout时长必须要比 服务器下发的bidding等待时间要长 否则会严重影响变现效率
+    // 如果开发者有自己的超时时间限制 那timeout 应该比 开发者 最好比自己的超时时间限制要短
+    // 当到达 timeout 后 不出广告advanceSplash内部会强制移除广告的不需要开发者手动移除
+    self.advanceSplash.timeout = 5;//<---- 确保timeout 时长内不对advanceSplash进行移除的操作
     [self.advanceSplash loadAd];
     
 
