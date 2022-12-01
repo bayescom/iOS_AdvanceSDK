@@ -18,7 +18,7 @@ PODS:
   - AdvanceSDK/BD (4.0.1.8):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
-    - BaiduMobAdSDK (= 4.892)
+    - BaiduMobAdSDK (= 5.10)
   - AdvanceSDK/Core (4.0.1.8)
   - AdvanceSDK/CSJ (4.0.1.8):
     - Ads-CN (= 4.8.0.7)
@@ -38,7 +38,7 @@ PODS:
     - MercurySDK (= 3.1.7.7)
   - AdvBiddingSDK (1.1.3)
   - AdvBiddingSuppliers (0.0.6)
-  - BaiduMobAdSDK (4.892)
+  - BaiduMobAdSDK (5.10)
   - BUAdSDK (0.1.0.24):
     - BUAdSDK/BUAdSDK (= 0.1.0.24)
   - BUAdSDK/BUAdSDK (0.1.0.24)
@@ -117,10 +117,10 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Ads-CN: 3faad259231222f264a3dd7f14de12d3788af271
-  AdvanceSDK: d5b9dc2b06faddc66974d55735c3df9b18515155
+  AdvanceSDK: e0fbdf50415f1c3e1be74f097182b4a075b98c9c
   AdvBiddingSDK: 0d17f2fb891bebc129a1448468cba30406ce0c8e
   AdvBiddingSuppliers: 4da909dbebe5008b0e5e8c1ba631ddfdd847127d
-  BaiduMobAdSDK: 1ec7243db12c6abacf35b89a1b4f7db43c2f6bff
+  BaiduMobAdSDK: 4caeb7927b41b7837a56a92f2c581056d8ab62e9
   BUAdSDK: 5528f72f7b9b478a12743ea23af7bdb9746efc00
   BURelyFoundation: 92b5a155543721655445b54ddbbf3035a0c6f16e
   GDTMobSDK: d7d798e4c2453d246f899487a6df35e194b12e78
