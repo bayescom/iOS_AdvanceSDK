@@ -48,27 +48,23 @@
 
 - (void)supplierStateLoad {
     ADV_LEVEL_INFO_LOG(@"加载广点通 supplier: %@", _supplier);
-    __weak typeof(self) _self = self;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        __strong typeof(_self) self = _self;
-        
-        if (!_gdt_ad) {
-            return;
-        }
-        _adspot.viewController.modalPresentationStyle = 0;
-        // 设置 backgroundImage
-        _gdt_ad.backgroundImage = _adspot.backgroundImage;
-        _gdt_ad.delegate = self;
-        
-        NSInteger parallel_timeout = _supplier.timeout;
-        if (parallel_timeout == 0) {
-            parallel_timeout = 3000;
-        }
-        _gdt_ad.fetchDelay = parallel_timeout / 1000.0;
-
-        _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
-        [_gdt_ad loadAd];
-    });
+    
+    if (!_gdt_ad) {
+        return;
+    }
+    _adspot.viewController.modalPresentationStyle = 0;
+    // 设置 backgroundImage
+    _gdt_ad.backgroundImage = _adspot.backgroundImage;
+    _gdt_ad.delegate = self;
+    
+    NSInteger parallel_timeout = _supplier.timeout;
+    if (parallel_timeout == 0) {
+        parallel_timeout = 3000;
+    }
+    _gdt_ad.fetchDelay = parallel_timeout / 1000.0;
+    
+    _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
+    [_gdt_ad loadAd];
 }
 
 - (void)supplierStateInPull {
