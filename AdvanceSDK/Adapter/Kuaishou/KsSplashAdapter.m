@@ -68,7 +68,7 @@
     _ks_ad.timeoutInterval = parallel_timeout / 1000.0;
     
     _ks_ad.delegate = self;
-    _ks_ad.needShowMiniWindow = NO;
+//    _ks_ad.needShowMiniWindow = NO;
     _ks_ad.rootViewController = _adspot.viewController;
     [_ks_ad loadAdData];
 }

@@ -111,10 +111,12 @@
 
 - (void)deallocAdapter {
 //    _gdt_ad = nil;
-    [self.bd_ad stop];
-    self.bd_ad = nil;
-    [self.customSplashView removeFromSuperview];
-    [self.imgV removeFromSuperview];
+    if (self.bd_ad) {
+        [self.bd_ad stop];
+        self.bd_ad = nil;
+        [self.customSplashView removeFromSuperview];
+        [self.imgV removeFromSuperview];
+    }
 }
 
 - (void)gmShowAd {

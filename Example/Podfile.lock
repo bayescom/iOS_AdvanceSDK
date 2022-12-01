@@ -31,7 +31,7 @@ PODS:
   - AdvanceSDK/KS (4.0.1.8):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
-    - KSAdSDK (= 3.3.31)
+    - KSAdSDK (= 3.3.34)
   - AdvanceSDK/Mercury (4.0.1.8):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
@@ -74,7 +74,7 @@ PODS:
     - GDTMobSDK/GDTMobSDK (= 4.14.00)
   - GDTMobSDK/GDTMobSDK (4.14.00)
   - JSONModel (1.8.0)
-  - KSAdSDK (3.3.31)
+  - KSAdSDK (3.3.34)
   - Masonry (1.1.0)
   - MercurySDK (3.1.7.7)
   - Reachability (3.2)
@@ -117,7 +117,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Ads-CN: 3faad259231222f264a3dd7f14de12d3788af271
-  AdvanceSDK: e0fbdf50415f1c3e1be74f097182b4a075b98c9c
+  AdvanceSDK: ecd7283756c07a4add8726890a5cf70746a3c56a
   AdvBiddingSDK: 0d17f2fb891bebc129a1448468cba30406ce0c8e
   AdvBiddingSuppliers: 4da909dbebe5008b0e5e8c1ba631ddfdd847127d
   BaiduMobAdSDK: 4caeb7927b41b7837a56a92f2c581056d8ab62e9
@@ -125,7 +125,7 @@ SPEC CHECKSUMS:
   BURelyFoundation: 92b5a155543721655445b54ddbbf3035a0c6f16e
   GDTMobSDK: d7d798e4c2453d246f899487a6df35e194b12e78
   JSONModel: 02ab723958366a3fd27da57ea2af2113658762e9
-  KSAdSDK: 31f7c8aabe8a5d7e9c97a82e78fa92d7ceeb1377
+  KSAdSDK: 96017d76a6d00e65ae001da7a61776fc4c6a6cbb
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   MercurySDK: 5ea3d7c252a7d122d64c3f827c013ac0e0fc9760
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96

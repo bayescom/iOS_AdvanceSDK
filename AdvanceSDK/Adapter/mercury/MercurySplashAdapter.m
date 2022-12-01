@@ -141,22 +141,21 @@
 
 - (void)deallocAdapter {
 //    ADV_LEVEL_INFO_LOG(@"11===> %s %@", __func__, [NSThread currentThread]);
-    id timer0 = [_mercury_ad performSelector:@selector(timer0)];
-    [timer0 performSelector:@selector(stopTimer)];
+    if (self.mercury_ad) {
+        id timer0 = [_mercury_ad performSelector:@selector(timer0)];
+        [timer0 performSelector:@selector(stopTimer)];
 
-    
-    id timer = [_mercury_ad performSelector:@selector(timer)];
-    [timer performSelector:@selector(stopTimer)];
-    
-    UIViewController *vc = [_mercury_ad performSelector:@selector(splashVC)];
-    [vc dismissViewControllerAnimated:NO completion:nil];
-    [vc.view removeFromSuperview];
-    
-    self.delegate = nil;
-    _mercury_ad.delegate = nil;
-    _mercury_ad = nil;
-
+        id timer = [_mercury_ad performSelector:@selector(timer)];
+        [timer performSelector:@selector(stopTimer)];
         
+        UIViewController *vc = [_mercury_ad performSelector:@selector(splashVC)];
+        [vc dismissViewControllerAnimated:NO completion:nil];
+        [vc.view removeFromSuperview];
+        
+        self.delegate = nil;
+        _mercury_ad.delegate = nil;
+        _mercury_ad = nil;
+    }
 }
 
 // MARK: ======================= MercurySplashAdDelegate =======================
