@@ -135,8 +135,8 @@
 
 
 - (void)dealloc {
-    ADVLog(@"%s", __func__);
-//    [self deallocAdapter];
+    ADV_LEVEL_INFO_LOG(@"%s", __func__);
+    [self deallocAdapter];
 }
 
 - (void)deallocAdapter {

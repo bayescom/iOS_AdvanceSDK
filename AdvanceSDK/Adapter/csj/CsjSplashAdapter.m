@@ -115,16 +115,12 @@
     [self showAdAction];
 }
 - (void)showAdAction {
-    __weak typeof(self) _self = self;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        __strong typeof(_self) self = _self;
-
-//        [[UIApplication sharedApplication].keyWindow addSubview:_csj_ad];
-        [[UIApplication sharedApplication].keyWindow bringSubviewToFront:[_adspot performSelector:@selector(bgImgV)]];
-        
-        [_csj_ad showSplashViewInRootViewController:[UIApplication sharedApplication].adv_getCurrentWindow.rootViewController];
-    });
-
+    
+    //        [[UIApplication sharedApplication].keyWindow addSubview:_csj_ad];
+    [[UIApplication sharedApplication].keyWindow bringSubviewToFront:[_adspot performSelector:@selector(bgImgV)]];
+    
+    [_csj_ad showSplashViewInRootViewController:[UIApplication sharedApplication].adv_getCurrentWindow.rootViewController];
+    
 }
 // MARK: ======================= BUSplashAdDelegate =======================
 

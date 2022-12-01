@@ -133,25 +133,20 @@
 }
 
 - (void)showAdAction {
-    __weak typeof(self) _self = self;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        __strong typeof(_self) self = _self;
-
-        // 设置logo
-        UIWindow *window = [UIApplication sharedApplication].adv_getCurrentWindow;
-        if (self.imgV) {
-            [window addSubview:self.imgV];
-        }
+    // 设置logo
+    UIWindow *window = [UIApplication sharedApplication].adv_getCurrentWindow;
+    if (self.imgV) {
+        [window addSubview:self.imgV];
+    }
+    
+    if (self.bd_ad) {
+        [window addSubview:self.customSplashView];
+        self.customSplashView.frame = CGRectMake(window.frame.origin.x, window.frame.origin.y, window.frame.size.width, window.frame.size.height - self.imgV.frame.size.height);
+        self.customSplashView.backgroundColor = [UIColor whiteColor];
+        [self.bd_ad showInContainerView:self.customSplashView];
         
-        if (self.bd_ad) {
-            [window addSubview:self.customSplashView];
-            self.customSplashView.frame = CGRectMake(window.frame.origin.x, window.frame.origin.y, window.frame.size.width, window.frame.size.height - self.imgV.frame.size.height);
-            self.customSplashView.backgroundColor = [UIColor whiteColor];
-            [self.bd_ad showInContainerView:self.customSplashView];
-            
-            //        NSLog(@"百度开屏展示%@",self.bd_ad);
-        }
-    });
+        //        NSLog(@"百度开屏展示%@",self.bd_ad);
+    }
 }
 
 - (UIView *)customSplashView {
