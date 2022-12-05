@@ -41,7 +41,6 @@
         _mercury_ad.logoImage = _adspot.logoImage;
         NSNumber *showLogoType = _adspot.extParameter[MercuryLogoShowTypeKey];
         NSNumber *blankGap = _adspot.extParameter[MercuryLogoShowBlankGapKey];
-        NSLog(@"====> %@  %@  %@", _adspot.extParameter, showLogoType, blankGap);
 
         
         if (showLogoType) {
@@ -140,6 +139,7 @@
 
 - (void)deallocAdapter {
 //    ADV_LEVEL_INFO_LOG(@"11===> %s %@", __func__, [NSThread currentThread]);
+    ADV_LEVEL_INFO_LOG(@"%s %@", __func__, self);
     if (self.mercury_ad) {
         id timer0 = [_mercury_ad performSelector:@selector(timer0)];
         [timer0 performSelector:@selector(stopTimer)];

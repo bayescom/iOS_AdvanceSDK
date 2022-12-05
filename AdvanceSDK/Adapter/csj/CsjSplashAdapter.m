@@ -92,10 +92,11 @@
     ADV_LEVEL_INFO_LOG(@"%s %@", __func__, self.csj_ad);
     
     //        ADV_LEVEL_INFO_LOG(@"%@", [NSThread currentThread]);
-    if (self.csj_ad) {
+    if (_csj_ad) {
         //        NSLog(@"穿山甲 释放了");
-        [self.csj_ad removeSplashView];
-        self.csj_ad = nil;
+        [_csj_ad removeSplashView];
+        _csj_ad.delegate = nil;
+        _csj_ad = nil;
         [self.imgV removeFromSuperview];
         self.imgV = nil;
     }
@@ -128,10 +129,11 @@
 
 - (void)splashAdLoadSuccess:(nonnull BUSplashAd *)splashAd {
 //    NSLog(@"11111111111");
+    _supplier.state = AdvanceSdkSupplierStateSuccess;
     [self.adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
 //    NSLog(@"穿山甲开屏拉取成功");
-    _supplier.state = AdvanceSdkSupplierStateSuccess;
+//    _supplier = nil;
     if (_supplier.isParallel == YES) {
         return;
     }
@@ -157,8 +159,8 @@
 
 
 - (void)splashAdLoadFail:(nonnull BUSplashAd *)splashAd error:(BUAdError * _Nullable)error {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
     _supplier.state = AdvanceSdkSupplierStateFailed;
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
 //    NSLog(@"========>>>>>>>> %ld %@", (long)_supplier.priority, error);
     if (_supplier.isParallel == YES) { // 并行不释放 只上报
         

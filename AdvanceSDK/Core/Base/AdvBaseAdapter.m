@@ -8,7 +8,7 @@
 #import "AdvBaseAdapter.h"
 #import "AdvSupplierManager.h"
 #import "AdvanceSupplierDelegate.h"
-
+#import "AdvLog.h"
 #import "AdvSdkConfig.h"
 #import <objc/runtime.h>
 #import <objc/message.h>
@@ -41,6 +41,14 @@
         _mediaId = mediaId;
         _adspotid = adspotid;
         _ext = [ext mutableCopy];
+        if (!_arrParallelSupplier) {
+            _arrParallelSupplier = [NSMutableArray array];
+        }
+
+        if (!_errorDescriptions) {
+            _errorDescriptions = [NSMutableDictionary dictionary];
+        }
+
     }
     return self;
 }
@@ -78,7 +86,7 @@
     if (repoType == AdvanceSdkSupplierRepoBidding && supplier.positionType == AdvanceSdkSupplierTypeWaterfall) {
         [_mgr inWaterfallQueueWithSupplier:supplier];
     }
-    
+     
     // headBidding 广告位进入headBidding队列
     if (repoType == AdvanceSdkSupplierRepoBidding && supplier.positionType == AdvanceSdkSupplierTypeHeadBidding) {
 //        NSLog(@"|||111--- %@ %ld %@",supplier.sdktag, (long)supplier.priority, supplier);
@@ -135,10 +143,12 @@
 
 - (void)deallocAdapter {
     // 该方法为AdvanceSDK 内部调用 开发者不要在外部手动调用 想要释放 直接将广告对象置为nil即可
-    [self.mgr cacelDataTask];
-    self.mgr = nil;
-    self.baseDelegate = nil;
-    
+    ADV_LEVEL_INFO_LOG(@"%s %@", __func__, self);
+    [_mgr cacelDataTask];
+    _mgr = nil;
+    _baseDelegate = nil;
+    [_arrParallelSupplier removeAllObjects];
+    _arrParallelSupplier = nil;
 }
 
 //- (void)setDefaultAdvSupplierWithMediaId:(NSString *)mediaId
@@ -334,19 +344,6 @@
     return _mgr;
 }
 
-- (NSMutableArray *)arrParallelSupplier {
-    if (!_arrParallelSupplier) {
-        _arrParallelSupplier = [NSMutableArray array];
-    }
-    return _arrParallelSupplier;
-}
-
-- (NSMutableDictionary *)errorDescriptions {
-    if (!_errorDescriptions) {
-        _errorDescriptions = [NSMutableDictionary dictionary];
-    }
-    return _errorDescriptions;;
-}
 
 // 查找一下 容器里有没有并行的渠道
 - (id)adapterInParallelsWithSupplier:(AdvSupplier *)supplier {
@@ -362,5 +359,8 @@
     return adapterT;
 }
 
+- (void)dealloc {
+    [self deallocAdapter];
+}
 
 @end

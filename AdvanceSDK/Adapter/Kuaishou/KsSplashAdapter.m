@@ -95,18 +95,18 @@
 }
 
 - (void)deallocAdapter {
-//    _gdt_ad = nil;
-//    dispatch_async(dispatch_get_main_queue(), ^{
-        
-        if (self.ks_ad) {
-            [self.ks_ad removeFromSuperview];
-            self.ks_ad.delegate = nil;
-            self.ks_ad = nil;
-        }
-        [self.imgV removeFromSuperview];
-        self.imgV = nil;
-//    });
-
+    //    _gdt_ad = nil;
+    //    dispatch_async(dispatch_get_main_queue(), ^{
+    ADV_LEVEL_INFO_LOG(@"%s %@", __func__, self);
+    if (_ks_ad) {
+        [_ks_ad removeFromSuperview];
+        _ks_ad.delegate = nil;
+        _ks_ad = nil;
+    }
+    [self.imgV removeFromSuperview];
+    self.imgV = nil;
+    //    });
+    
 }
 
 - (void)gmShowAd {

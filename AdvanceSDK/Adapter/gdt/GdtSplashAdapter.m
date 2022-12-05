@@ -93,9 +93,9 @@
 
 - (void)deallocAdapter {
     ADV_LEVEL_INFO_LOG(@"%s %@", __func__, self);
-    if (self.gdt_ad) {
-        self.gdt_ad.delegate = nil;
-        self.gdt_ad = nil;
+    if (_gdt_ad) {
+        _gdt_ad.delegate = nil;
+        _gdt_ad = nil;
     }
 }
 

@@ -80,12 +80,11 @@
 
 /// Override
 - (void)deallocSelf {
-    NSLog(@"%@",[NSThread currentThread]);
-    [self.bgImgV removeFromSuperview];
-    self.bgImgV = nil;
-    [self.timeoutCheckTimer invalidate];
-    self.timeoutCheckTimer = nil;
-    self.timeout_stamp = 0;
+    [_bgImgV removeFromSuperview];
+    _bgImgV = nil;
+    [_timeoutCheckTimer invalidate];
+    _timeoutCheckTimer = nil;
+    _timeout_stamp = 0;
 
 }
 

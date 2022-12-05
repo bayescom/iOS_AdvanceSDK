@@ -857,11 +857,6 @@
         
         uploadArr =  [self.tkUploadTool failedtkUrlWithArr:supplier.failedtk error:error];
         
-        // 加载失败的无论串并发都从 supplierM中删除
-        [self.lock lock];
-        [_supplierM removeObject:supplier];
-        [self.lock unlock];
-
     } else if (repoType == AdvanceSdkSupplierRepoGMBidding) {
         uploadArr =  [self.tkUploadTool imptkUrlWithArr:supplier.biddingtk price:(supplier.supplierPrice == 0) ? supplier.sdk_price : supplier.supplierPrice];
     }
@@ -928,10 +923,13 @@
 {
     ADV_LEVEL_INFO_LOG(@"%s %@", __func__, self);
     [self deallocTimer];
-    self.model = nil;
-    self.tkUploadTool = nil;
-    self.arrayWaterfall = nil;
-    self.arrayHeadBidding = nil;
-    self.supplierM = nil;
+    _model = nil;
+    _tkUploadTool = nil;
+    [_arrayWaterfall removeAllObjects];
+    _arrayWaterfall = nil;
+    [_arrayHeadBidding removeAllObjects];
+    _arrayHeadBidding = nil;
+    [_supplierM removeAllObjects];
+    _supplierM = nil;
 }
 @end

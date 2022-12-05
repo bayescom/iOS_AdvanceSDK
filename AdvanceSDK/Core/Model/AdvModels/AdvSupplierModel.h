@@ -86,7 +86,7 @@ NSString * ADVStringFromNAdvanceSdkSupplierRepoType(AdvanceSdkSupplierRepoType t
 @property (nonatomic, copy)   NSString *cptEnd;
 @property (nonatomic, copy)   NSString *cptSupplier;
 @property (nonatomic, assign) BOOL isBidding; // 策略告知是本次是否有bidding渠道, 这个字段决定了parallelGroup 拿到第一组优先级后 是否走bidding逻辑
-@property (nonatomic, copy)   NSArray<NSString *> *parallelIDS;
+@property (nonatomic, strong) NSArray<NSString *> *parallelIDS;
 @property (nonatomic, strong) NSMutableArray<NSMutableArray<NSNumber *> *> *parallelGroup;
 @property (nonatomic, strong) NSMutableArray<NSNumber *> *headBiddingGroup;
 @property (nonatomic, assign) NSTimeInterval cacheTime;
@@ -95,7 +95,7 @@ NSString * ADVStringFromNAdvanceSdkSupplierRepoType(AdvanceSdkSupplierRepoType t
 @property (nonatomic , assign) NSInteger bidding_type;
 @property (nonatomic , assign) NSInteger parallel_timeout;
 @property (nonatomic , strong) AdvBiddingModel *gromore_params;
-@property (nonatomic , copy)   NSArray<NSString *> *gmtk;
+@property (nonatomic , strong) NSArray<NSString *> *gmtk;
 
 
 @end
@@ -152,12 +152,12 @@ NSString * ADVStringFromNAdvanceSdkSupplierRepoType(AdvanceSdkSupplierRepoType t
 
 @property (nonatomic, assign) BOOL isParallel;// 是否并行
 @property (nonatomic, assign) AdvanceSdkSupplierState state;// 渠道状态
-@property (nonatomic, copy)   NSArray<NSString *> *clicktk;
-@property (nonatomic, copy)   NSArray<NSString *> *loadedtk;
-@property (nonatomic, copy)   NSArray<NSString *> *imptk;
-@property (nonatomic, copy)   NSArray<NSString *> *succeedtk;
-@property (nonatomic, copy)   NSArray<NSString *> *failedtk;
-@property (nonatomic, copy)   NSArray<NSString *> *biddingtk;// 只有gm使用
+@property (nonatomic, strong)   NSArray<NSString *> *clicktk;
+@property (nonatomic, strong)   NSArray<NSString *> *loadedtk;
+@property (nonatomic, strong)   NSArray<NSString *> *imptk;
+@property (nonatomic, strong)   NSArray<NSString *> *succeedtk;
+@property (nonatomic, strong)   NSArray<NSString *> *failedtk;
+@property (nonatomic, strong)   NSArray<NSString *> *biddingtk;// 只有gm使用
 
 @property (nonatomic, assign) AdvanceSdkSupplierBiddingType positionType;
 

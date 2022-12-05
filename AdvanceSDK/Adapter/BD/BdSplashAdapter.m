@@ -111,10 +111,11 @@
 
 - (void)deallocAdapter {
 //    _gdt_ad = nil;
-    if (self.bd_ad) {
-        [self.bd_ad stop];
-        self.bd_ad.delegate = nil;
-        self.bd_ad = nil;
+    ADV_LEVEL_INFO_LOG(@"%s %@", __func__, self);
+    if (_bd_ad) {
+        [_bd_ad stop];
+        _bd_ad.delegate = nil;
+        _bd_ad = nil;
         [self.customSplashView removeFromSuperview];
         [self.imgV removeFromSuperview];
     }
