@@ -35,9 +35,18 @@
 }
 
 - (void)deallocAdapter {
-    
+    ADV_LEVEL_INFO_LOG(@"%s", __func__);
+    if (_mercury_ad) {
+        _mercury_ad.delegate = nil;
+        _mercury_ad = nil;
+    }
 }
 
+- (void)dealloc
+{
+    ADV_LEVEL_INFO_LOG(@"%s", __func__);
+    [self deallocAdapter];
+}
 
 - (void)supplierStateLoad {
     ADV_LEVEL_INFO_LOG(@"加载Mercury supplier: %@", _supplier);
@@ -70,10 +79,6 @@
     [_mercury_ad presentAdFromViewController:_adspot.viewController];
 }
 
-- (void)dealloc {
-    ADVLog(@"%s", __func__);
-}
-
 
 // MARK: ======================= MercuryInterstitialAdDelegate =======================
 /// 插屏广告预加载成功回调，当接收服务器返回的广告数据成功且预加载后调用该函数
@@ -99,7 +104,10 @@
         _supplier.state = AdvanceSdkSupplierStateFailed;
         return;
     }
-    _mercury_ad = nil;
+    
+    if (_mercury_ad) {
+        _mercury_ad = nil;
+    }
 //    if ([self.delegate respondsToSelector:@selector(advanceInterstitialOnAdFailedWithSdkId:error:)]) {
 //        [self.delegate advanceInterstitialOnAdFailedWithSdkId:_supplier.identifier error:error];
 //    }
@@ -108,7 +116,10 @@
 /// 插屏广告视图曝光失败回调，插屏广告曝光失败回调该函数
 - (void)mercury_interstitialFailToPresent:(MercuryInterstitialAd *)interstitialAd {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:[NSError errorWithDomain:@"广告素材渲染失败" code:301 userInfo:@{@"msg": @"广告素材渲染失败"}]];
-    _mercury_ad = nil;
+    if (_mercury_ad) {
+        _mercury_ad = nil;
+    }
+
 //    if ([self.delegate respondsToSelector:@selector(advanceInterstitialOnAdRenderFailed)]) {
 //        [self.delegate advanceInterstitialOnAdRenderFailed];
 //    }

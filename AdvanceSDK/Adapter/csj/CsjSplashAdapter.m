@@ -48,6 +48,7 @@
             adFrame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height-real_h);
         }
         _csj_ad = [[BUSplashAd alloc] initWithSlotID:_supplier.adspotid adSize:adFrame.size];
+        _csj_ad.delegate = self;
     }
     return self;
 }
@@ -61,7 +62,6 @@
     }
     _csj_ad.tolerateTimeout = parallel_timeout / 1000.0;
     
-    _csj_ad.delegate = self;
     _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
     [self.csj_ad loadAdData];
 }

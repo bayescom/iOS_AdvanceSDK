@@ -42,6 +42,7 @@
         _supplier = supplier;
         _leftTime = 5;  // 默认5s
         _gdt_ad = [[GDTSplashAd alloc] initWithPlacementId:_supplier.adspotid];
+        _gdt_ad.delegate = self;
     }
     return self;
 }
@@ -55,7 +56,6 @@
     _adspot.viewController.modalPresentationStyle = 0;
     // 设置 backgroundImage
     _gdt_ad.backgroundImage = _adspot.backgroundImage;
-    _gdt_ad.delegate = self;
     
     NSInteger parallel_timeout = _supplier.timeout;
     if (parallel_timeout == 0) {
@@ -93,7 +93,10 @@
 
 - (void)deallocAdapter {
     ADV_LEVEL_INFO_LOG(@"%s %@", __func__, self);
-    self.gdt_ad = nil;
+    if (self.gdt_ad) {
+        self.gdt_ad.delegate = nil;
+        self.gdt_ad = nil;
+    }
 }
 
 - (void)gmShowAd {

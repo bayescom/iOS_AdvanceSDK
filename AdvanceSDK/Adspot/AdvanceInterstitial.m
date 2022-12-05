@@ -146,6 +146,11 @@
 }
 
 
+- (void)dealloc {
+    ADV_LEVEL_INFO_LOG(@"%s %@ %@", __func__, _adapter , self);
+    _adapter = nil;
+}
+
 - (void)showAd {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wundeclared-selector"

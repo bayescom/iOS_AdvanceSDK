@@ -176,6 +176,5 @@
     NSLog(@"%s",__func__);
     self.advanceSplash = nil;
     self.advanceSplash.delegate = nil;
-
 }
 @end

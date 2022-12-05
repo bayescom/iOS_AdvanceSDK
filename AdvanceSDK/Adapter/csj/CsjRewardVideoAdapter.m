@@ -39,13 +39,13 @@
         BURewardedVideoModel *model = [[BURewardedVideoModel alloc] init];
         [model setUserId:@"playable"];
         _csj_ad = [[BUNativeExpressRewardedVideoAd alloc] initWithSlotID:_supplier.adspotid rewardedVideoModel:model];
+        _csj_ad.delegate = self;
     }
     return self;
 }
 
 - (void)supplierStateLoad {
     ADV_LEVEL_INFO_LOG(@"加载穿山甲 supplier: %@", _supplier);
-    _csj_ad.delegate = self;
     _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
     [self.csj_ad loadAdData];
 }

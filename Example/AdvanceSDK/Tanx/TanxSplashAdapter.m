@@ -123,6 +123,7 @@
         [self.imgV removeFromSuperview];
         self.templateView = nil;
         self.imgV = nil;
+    self.splashManager.delegate = nil;
         self.splashManager = nil;
 //    });
 }

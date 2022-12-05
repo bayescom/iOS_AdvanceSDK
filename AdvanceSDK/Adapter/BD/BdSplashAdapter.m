@@ -48,6 +48,7 @@
         _leftTime = 5;  // 默认5s
         self.bd_ad = [[BaiduMobAdSplash alloc] init];
         self.bd_ad.AdUnitTag = supplier.adspotid;
+        self.bd_ad.delegate = self;
     }
     return self;
 }
@@ -58,7 +59,6 @@
         [self deallocAdapter];
         return;
     }
-    _bd_ad.delegate = self;
     NSInteger parallel_timeout = _supplier.timeout;
     if (parallel_timeout == 0) {
         parallel_timeout = 3000;
@@ -113,6 +113,7 @@
 //    _gdt_ad = nil;
     if (self.bd_ad) {
         [self.bd_ad stop];
+        self.bd_ad.delegate = nil;
         self.bd_ad = nil;
         [self.customSplashView removeFromSuperview];
         [self.imgV removeFromSuperview];

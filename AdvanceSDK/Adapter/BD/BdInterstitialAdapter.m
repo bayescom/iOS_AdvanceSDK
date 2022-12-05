@@ -69,7 +69,17 @@
 
 
 - (void)deallocAdapter {
-    
+    ADV_LEVEL_INFO_LOG(@"%s", __func__);
+    if (_bd_ad) {
+        _bd_ad.delegate = nil;
+        _bd_ad = nil;
+    }
+}
+
+- (void)dealloc
+{
+    ADV_LEVEL_INFO_LOG(@"%s", __func__);
+    [self deallocAdapter];
 }
 
 
@@ -77,9 +87,7 @@
     [self.bd_ad showFromViewController:self.adspot.viewController];
 }
 
-- (void)dealloc {
-    ADVLog(@"%s", __func__);
-}
+
 
 - (void)interstitialAdLoaded:(BaiduMobAdExpressInterstitial *)interstitial {
     ADV_LEVEL_INFO_LOG(@"ExpressInterstitial loaded 请求成功");
@@ -114,7 +122,7 @@
     ADV_LEVEL_INFO_LOG(@"ExpressInterstitial downloadFailed 缓存失败");
     NSError *error = [[NSError alloc]initWithDomain:@"BDAdErrorDomain" code:1000220 userInfo:@{@"desc":@"百度广告缓存错误"}];
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
-    self.bd_ad = nil;
+    [self deallocAdapter];
 }
 
 - (void)interstitialAdExposure:(BaiduMobAdExpressInterstitial *)interstitial {
@@ -129,7 +137,7 @@
     ADV_LEVEL_INFO_LOG(@"ExpressInterstitial exposure 展现失败");
     NSError *error = [[NSError alloc]initWithDomain:@"BDAdErrorDomain" code:1000120 + reason userInfo:@{@"desc":@"百度广告展现错误"}];
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
-    self.bd_ad = nil;
+    [self deallocAdapter];
 }
 
 - (void)interstitialAdDidClick:(BaiduMobAdExpressInterstitial *)interstitial {

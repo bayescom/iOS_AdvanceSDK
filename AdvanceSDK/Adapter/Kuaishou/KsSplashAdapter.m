@@ -53,6 +53,9 @@
         _supplier = supplier;
         _leftTime = 5;  // 默认5s
         _ks_ad = [[KSSplashAdView alloc] initWithPosId:_supplier.adspotid];
+        _ks_ad.delegate = self;
+    //    _ks_ad.needShowMiniWindow = NO;
+        _ks_ad.rootViewController = _adspot.viewController;
     }
     return self;
 }
@@ -67,9 +70,6 @@
     }
     _ks_ad.timeoutInterval = parallel_timeout / 1000.0;
     
-    _ks_ad.delegate = self;
-//    _ks_ad.needShowMiniWindow = NO;
-    _ks_ad.rootViewController = _adspot.viewController;
     [_ks_ad loadAdData];
 }
 
@@ -100,6 +100,7 @@
         
         if (self.ks_ad) {
             [self.ks_ad removeFromSuperview];
+            self.ks_ad.delegate = nil;
             self.ks_ad = nil;
         }
         [self.imgV removeFromSuperview];

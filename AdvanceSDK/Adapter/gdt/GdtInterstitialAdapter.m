@@ -62,7 +62,7 @@
 
 - (void)supplierStateFailed {
     ADV_LEVEL_INFO_LOG(@"广点通 失败 %@", _supplier);
-    _gdt_ad = nil;
+    [self deallocAdapter];
     [self.adspot loadNextSupplierIfHas];
 }
 
@@ -74,13 +74,17 @@
 }
 
 - (void)deallocAdapter {
-    
+    if (_gdt_ad) {
+        _gdt_ad.delegate = nil;
+        _gdt_ad = nil;
+    }
 }
 
 
 
 - (void)dealloc {
-    ADVLog(@"%s", __func__);
+    ADV_LEVEL_INFO_LOG(@"%s", __func__);
+    [self deallocAdapter];
 }
 
 
@@ -113,7 +117,8 @@
         _supplier.state = AdvanceSdkSupplierStateFailed;
         return;
     }
-    _gdt_ad = nil;
+    
+    [self deallocAdapter];
 //    if ([self.delegate respondsToSelector:@selector(advanceInterstitialOnAdFailedWithSdkId:error:)]) {
 //        [self.delegate advanceInterstitialOnAdFailedWithSdkId:_supplier.identifier error:error];
 //    }
