@@ -6,7 +6,13 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <AdvanceSDK/AdvanceRewardVideo.h>
+//#import "AdvBidding.h"
+#import "AdvanceRewardVideoDelegate.h"
+# if __has_include(<ABUAdSDK/ABUAdSDK.h>)
+#import <ABUAdSDK/ABUAdSDK.h>
+#else
+#import <Ads-Mediation-CN/ABUAdSDK.h>
+#endif
 NS_ASSUME_NONNULL_BEGIN
 @class AdvBiddingRewardVideoCustomAdapter;
 @interface AdvBiddingRewardVideoScapegoat : NSObject<AdvanceRewardVideoDelegate>

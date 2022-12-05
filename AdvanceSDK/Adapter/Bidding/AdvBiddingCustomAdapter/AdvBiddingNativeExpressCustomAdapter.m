@@ -6,8 +6,8 @@
 //
 
 #import "AdvBiddingNativeExpressCustomAdapter.h"
-#import <AdvanceSDK/AdvanceNativeExpress.h>
-#import <AdvanceSDK/AdvanceNativeExpressView.h>
+//#import <AdvanceSDK/AdvanceNativeExpress.h>
+//#import <AdvanceSDK/AdvanceNativeExpressView.h>
 #import "AdvBiddingNativeScapegoat.h"
 #import "AdvBiddingCongfig.h"
 #import "AdvSupplierModel.h"

@@ -9,7 +9,7 @@
 #import "AdvBiddingSplashScapegoat.h"
 #import <AdvanceSDK/AdvanceSplash.h>
 //#import "ABUDCustomSplashView.h"
-//#import "AdvBiddingCongfig.h"
+#import "AdvBiddingCongfig.h"
 //#import "AdvSupplierModel.h"
 //# if __has_include(<ABUAdSDK/ABUAdSDK.h>)
 //#import <ABUAdSDK/ABUAdSDK.h>
@@ -71,7 +71,7 @@
     
     if (self.customBottomView) {
         self.advanceSplash.logoImage = [self convertViewToImage:self.customBottomView];
-        self.advanceSplash.showLogoRequire = YES;
+//        self.advanceSplash.showLogoRequire = YES;
     }
     self.advanceSplash.delegate = self.scapegoat;
     [self.advanceSplash loadAdWithSupplierModel:model];

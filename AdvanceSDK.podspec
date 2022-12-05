@@ -61,7 +61,7 @@ Pod::Spec.new do |s|
     s.subspec 'CSJ' do |csj|
         csj.dependency 'AdvanceSDK/Core'
         csj.dependency 'AdvanceSDK/Adspot'
-        csj.dependency 'Ads-CN' ,'4.8.0.7'
+        csj.dependency 'Ads-CN' ,'4.9.0.6'
         csj.source_files = 'AdvanceSDK/Adapter/csj/**/*.{h,m}'
         csj.frameworks = 'UIKit', 'MapKit', 'WebKit', 'MediaPlayer', 'CoreLocation', 'AdSupport', 'CoreMedia', 'AVFoundation', 'CoreTelephony', 'StoreKit', 'SystemConfiguration', 'MobileCoreServices', 'CoreMotion', 'Accelerate','AudioToolbox','JavaScriptCore','Security','CoreImage','AudioToolbox','ImageIO','QuartzCore','CoreGraphics','CoreText'
         csj.libraries = 'c++', 'resolv', 'z', 'sqlite3', 'bz2', 'xml2', 'iconv', 'c++abi'
@@ -78,7 +78,7 @@ Pod::Spec.new do |s|
         gdt.frameworks = 'AdSupport', 'CoreLocation', 'QuartzCore', 'SystemConfiguration', 'CoreTelephony', 'Security', 'StoreKit', 'AVFoundation', 'WebKit'
         gdt.libraries     = 'xml2', 'z'
     end
-    
+     
     s.subspec 'KS' do |ks|
         ks.dependency 'AdvanceSDK/Core'
         ks.dependency 'AdvanceSDK/Adspot'
@@ -116,32 +116,32 @@ Pod::Spec.new do |s|
 #
 #
 #        end
-#    s.subspec 'Bidding' do |bidding|
-#        bidding.dependency 'AdvanceSDK/Core'
-#        bidding.dependency 'AdvanceSDK/Adspot'
-#        bidding.dependency 'AdvBiddingSuppliers','0.0.5'
-#
-#        bidding.dependency 'Ads-CN'
-#        bidding.source_files =  ['AdvanceSDK/Adapter/Bidding/*{h,m}',
-#        'AdvanceSDK/Adapter/Bidding/AdvBiddingAdapter/*{h,m}',
-#        'AdvanceSDK/Adapter/Bidding/AdvBiddingCustomAdapter/*{h,m}'
-#        ]
-#
-#
-#        valid_archs = ['armv7', 'armv7s', 'x86_64', 'arm64']
-#
-#
-#    end
+    s.subspec 'Bidding' do |bidding|
+        bidding.dependency 'AdvanceSDK/Core'
+        bidding.dependency 'AdvanceSDK/Adspot'
+        bidding.dependency 'AdvBiddingSuppliers','0.0.7'
 
-    
-    s.subspec 'AdvBidding' do |advBidding|
-        advBidding.dependency 'AdvanceSDK/Core'
-        advBidding.dependency 'AdvanceSDK/Adspot'
-        advBidding.dependency 'AdvBiddingSDK', '1.1.3'
-        advBidding.dependency 'AdvBiddingSuppliers', '0.0.6'
+        bidding.dependency 'Ads-CN'
+        bidding.source_files =  ['AdvanceSDK/Adapter/Bidding/*{h,m}',
+        'AdvanceSDK/Adapter/Bidding/AdvBiddingAdapter/*{h,m}',
+        'AdvanceSDK/Adapter/Bidding/AdvBiddingCustomAdapter/*{h,m}'
+        ]
+
+
+        valid_archs = ['armv7', 'armv7s', 'x86_64', 'arm64']
 
 
     end
+
+    
+#    s.subspec 'AdvBidding' do |advBidding|
+#        advBidding.dependency 'AdvanceSDK/Core'
+#        advBidding.dependency 'AdvanceSDK/Adspot'
+#        advBidding.dependency 'AdvBiddingSDK', '1.1.3'
+#        advBidding.dependency 'AdvBiddingSuppliers', '0.0.7'
+#
+#
+#    end
 
     
     

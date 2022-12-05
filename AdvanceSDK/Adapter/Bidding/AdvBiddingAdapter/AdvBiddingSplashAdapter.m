@@ -59,8 +59,8 @@
         parallel_timeout = 3000;
     }
 
-//    self.splashAd.tolerateTimeout = parallel_timeout / 1000.0;
-    self.splashAd.tolerateTimeout = 1.5;
+    self.splashAd.tolerateTimeout = parallel_timeout / 1000.0;
+//    self.splashAd.tolerateTimeout = 1.5;
 
     _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
     

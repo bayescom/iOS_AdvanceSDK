@@ -8,6 +8,8 @@
 #import "AdvBaseAdPosition.h"
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+//#import "AdvBidding.h"
+
 #import "AdvanceNativeExpressDelegate.h"
 
 @class AdvSupplier;

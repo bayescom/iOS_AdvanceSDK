@@ -19,7 +19,6 @@
 @interface AdvBiddingNativeExpressAdapter ()<ABUNativeAdsManagerDelegate, ABUNativeAdViewDelegate, ABUNativeAdVideoDelegate>
 @property (nonatomic, strong) ABUNativeAdsManager *adManager;
 @property (nonatomic, weak) AdvanceNativeExpress *adspot;
-@property (nonatomic, weak) UIViewController *controller;
 @property (nonatomic, strong) AdvSupplier *supplier;
 @property (nonatomic, strong) NSArray<__kindof AdvanceNativeExpressView *> *views;
 
