@@ -66,8 +66,19 @@
 }
 
 - (void)dealloc {
-    ADVLog(@"%s", __func__);
+    ADV_LEVEL_INFO_LOG(@"%s", __func__);
+    [self deallocAdapter];
 }
+
+- (void)deallocAdapter {
+    ADV_LEVEL_INFO_LOG(@"%s", __func__);
+
+    if (self.ks_ad) {
+        self.ks_ad.delegate = nil;
+        self.ks_ad = nil;
+    }
+}
+
 
 - (void)feedAdsManagerSuccessToLoad:(KSFeedAdsManager *)adsManager nativeAds:(NSArray<KSFeedAd *> *_Nullable)feedAdDataArray {
 //    self.title = @"数据加载成功";

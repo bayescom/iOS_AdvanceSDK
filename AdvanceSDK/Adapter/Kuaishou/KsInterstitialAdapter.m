@@ -59,10 +59,20 @@
     [self.adspot loadNextSupplierIfHas];
 }
 
-
 - (void)deallocAdapter {
-    _ks_ad = nil;
+    ADV_LEVEL_INFO_LOG(@"%s", __func__);
+    if (_ks_ad) {
+        _ks_ad.delegate = nil;
+        _ks_ad = nil;
+    }
 }
+
+- (void)dealloc
+{
+    ADV_LEVEL_INFO_LOG(@"%s", __func__);
+    [self deallocAdapter];
+}
+
 
 - (void)loadAd {
     [super loadAd];
@@ -75,9 +85,6 @@
     [_ks_ad showFromViewController:_adspot.viewController];
 }
 
-- (void)dealloc {
-
-}
 
 /**
  * interstitial ad data loaded

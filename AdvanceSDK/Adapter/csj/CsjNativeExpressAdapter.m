@@ -36,6 +36,7 @@
         slot.position = BUAdSlotPositionFeed;
         slot.imgSize = [BUSize sizeBy:BUProposalSize_Feed228_150];
         _csj_ad = [[BUNativeExpressAdManager alloc] initWithSlot:slot adSize:_adspot.adSize];
+        _csj_ad.delegate = self;
 
     }
     return self;
@@ -43,7 +44,6 @@
 
 - (void)supplierStateLoad {
     ADV_LEVEL_INFO_LOG(@"加载穿山甲 supplier: %@", _supplier);
-    _csj_ad.delegate = self;
     _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
     [_csj_ad loadAdDataWithCount:1];
 }
@@ -70,11 +70,16 @@
 }
 
 - (void)deallocAdapter {
-    
+    ADV_LEVEL_INFO_LOG(@"%s", __func__);
+    if (self.csj_ad) {
+        self.csj_ad.delegate = nil;
+        self.csj_ad = nil;
+    }
 }
 
 - (void)dealloc {
     ADV_LEVEL_INFO_LOG(@"%s", __func__);
+    [self deallocAdapter];
 }
 
 // MARK: ======================= BUNativeExpressAdViewDelegate =======================

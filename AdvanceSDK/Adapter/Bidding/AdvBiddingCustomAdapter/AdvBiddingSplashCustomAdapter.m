@@ -9,7 +9,7 @@
 #import "AdvBiddingSplashScapegoat.h"
 #import <AdvanceSDK/AdvanceSplash.h>
 //#import "ABUDCustomSplashView.h"
-//#import "AdvBiddingCongfig.h"
+#import "AdvBiddingCongfig.h"
 //#import "AdvSupplierModel.h"
 //# if __has_include(<ABUAdSDK/ABUAdSDK.h>)
 //#import <ABUAdSDK/ABUAdSDK.h>
@@ -62,19 +62,19 @@
     
     AdvSupplierModel *model = [[AdvBiddingCongfig defaultManager] returnSupplierByAdspotId:slotID];
     
-    self.advanceSplash = [[AdvanceSplash alloc] initWithAdspotId:slotID
+    _advanceSplash = [[AdvanceSplash alloc] initWithAdspotId:slotID
                                                   viewController:self.bridge.viewControllerForPresentingModalView];
 
-    [self.advanceSplash performSelector:@selector(setIsGMBidding:) withObject:@(1)];
+    [_advanceSplash performSelector:@selector(setIsGMBidding:) withObject:@(1)];
 
-    self.customBottomView = parameter[ABUAdLoadingParamSPCustomBottomView];
+    _customBottomView = parameter[ABUAdLoadingParamSPCustomBottomView];
     
-    if (self.customBottomView) {
-        self.advanceSplash.logoImage = [self convertViewToImage:self.customBottomView];
+    if (_customBottomView) {
+        _advanceSplash.logoImage = [self convertViewToImage:self.customBottomView];
         self.advanceSplash.showLogoRequire = YES;
     }
-    self.advanceSplash.delegate = self.scapegoat;
-    [self.advanceSplash loadAdWithSupplierModel:model];
+    _advanceSplash.delegate = self.scapegoat;
+    [_advanceSplash loadAdWithSupplierModel:model];
 
 //    [self.bridge splashAd:self didLoadWithExt:@{ABUMediaAdLoadingExtECPM:@"100000"}];
 
@@ -87,7 +87,7 @@
 
 /// adn的版本号
 - (NSString *_Nonnull)networkSdkVersion {
-    return @"4.0.1.1";
+    return @"4.0.1.9";
 }
 
 ///// 隐私权限更新，用户更新隐私配置时触发，初始化方法调用前一定会触发一次
@@ -116,7 +116,7 @@
 //    if (self.customBottomView) {
 //        [window addSubview:self.customBottomView];
 //    }
-    [self.advanceSplash performSelector:@selector(gmShowAd)];
+    [_advanceSplash performSelector:@selector(gmShowAd)];
 //    [self.advanceSplash showAd];
     // 模拟广告展示回调
 }
@@ -127,5 +127,19 @@
 //    NSLog(@"----------->自定义开屏adapter有结果啦啦 %d %ld %@ %@ %@ %@<------------", result.win, result.winnerPrice, result.lossDescription, result.winnerAdnID, result.ext, result.originNativeAdData);
 }
 
+- (void)dealloc {
+    NSLog(@"%s", __func__);
+    if (_scapegoat) {
+        _scapegoat = nil;
+    }
+    if (_advanceSplash){
+        _advanceSplash.delegate = nil;
+        _advanceSplash = nil;
+    }
+    if (_customBottomView) {
+        [_customBottomView removeFromSuperview];
+        _customBottomView = nil;
+    }
+}
 
 @end

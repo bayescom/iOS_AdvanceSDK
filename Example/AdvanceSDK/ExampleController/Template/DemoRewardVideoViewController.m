@@ -89,6 +89,8 @@
 - (void)advanceFailedWithError:(NSError *)error description:(NSDictionary *)description{
     NSLog(@"广告展示失败 %s  error: %@ 详情:%@", __func__, error,description);
     [JDStatusBarNotification showWithStatus:@"广告加载失败" dismissAfter:1.5];
+    self.advanceRewardVideo.delegate = nil;
+    self.advanceRewardVideo = nil;
 
 }
 
@@ -100,6 +102,8 @@
 /// 广告关闭
 - (void)advanceDidClose {
     NSLog(@"广告关闭了 %s", __func__);
+    self.advanceRewardVideo.delegate = nil;
+    self.advanceRewardVideo = nil;
 }
 
 /// 播放完成
@@ -113,6 +117,12 @@
     NSLog(@"%s 策略id为: %@",__func__ , reqId);
 }
 
+
+- (void)dealloc {
+    NSLog(@"%s", __func__);
+    self.advanceRewardVideo.delegate = nil;
+    self.advanceRewardVideo = nil;
+}
 
 //- (void)advanceBiddingAction {
 //    NSLog(@"%s 开始bidding",__func__);

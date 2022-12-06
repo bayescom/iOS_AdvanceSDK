@@ -70,11 +70,17 @@
 }
 
 - (void)deallocAdapter {
-    
+    ADV_LEVEL_INFO_LOG(@"%s", __func__);
+    if (self.bd_ad) {
+        self.bd_ad.adDelegate = nil;
+        self.bd_ad = nil;
+    }
 }
 
 - (void)dealloc {
-//    ADVLog(@"%s", __func__);
+    ADV_LEVEL_INFO_LOG(@"%s", __func__);
+
+    [self deallocAdapter];
 }
 
 

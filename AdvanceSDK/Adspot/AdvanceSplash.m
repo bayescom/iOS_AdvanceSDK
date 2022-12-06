@@ -24,7 +24,7 @@
 @property (nonatomic, strong) CADisplayLink *timeoutCheckTimer;
 @property (nonatomic, copy) NSString *reqId;
 @property (nonatomic, strong) NSNumber *isGMBidding;
-
+@property (nonatomic, strong, readwrite) NSDictionary *extParameter;
 @end
 
 @implementation AdvanceSplash
@@ -40,10 +40,15 @@
         ext = [NSMutableDictionary dictionary];
     }
     [ext setValue:AdvSdkTypeAdNameSplash forKey: AdvSdkTypeAdName];
+    _extParameter = [ext mutableCopy];
     if (self = [super initWithMediaId:@"" adspotId:adspotid customExt:ext]) {
         _viewController = viewController;
     }
     return self;
+}
+
+- (NSDictionary *)extParameter {
+    return _extParameter;
 }
 
 - (void)loadAd {
@@ -75,25 +80,21 @@
 
 /// Override
 - (void)deallocSelf {
-//    NSLog(@"--fafdsfdsa");
-//    NSLog(@"%@",[NSThread currentThread]);
-    dispatch_async(dispatch_get_main_queue(), ^{
-//        ADV_LEVEL_INFO_LOG(@"%@", [NSThread currentThread]);
-        [_bgImgV removeFromSuperview];
-        _bgImgV = nil;
-        [_timeoutCheckTimer invalidate];
-        _timeoutCheckTimer = nil;
-        _timeout_stamp = 0;
-    });
+    ADV_LEVEL_INFO_LOG(@"%s", __func__);
+    [_bgImgV removeFromSuperview];
+    _bgImgV = nil;
+    [_timeoutCheckTimer invalidate];
+    _timeoutCheckTimer = nil;
+    _timeout_stamp = 0;
 
 }
 
 - (void)deallocDelegate:(BOOL)execute {
-    
+    ADV_LEVEL_INFO_LOG(@"%s", __func__);
     if([_delegate respondsToSelector:@selector(advanceFailedWithError:description:)] && execute) {
         [_delegate advanceFailedWithError:[AdvError errorWithCode:AdvErrorCode_115].toNSError description:[self.errorDescriptions copy]];
         [_adapter performSelector:@selector(deallocAdapter)];
-        [self uploadTimeOutError];
+//        [self uploadTimeOutError];
         [self deallocAdapter];
     }
     _delegate = nil;
@@ -317,8 +318,9 @@
 
 }
 
-//- (void)dealloc {
-//    [self deallocSelf];
-//}
+- (void)dealloc {
+    ADV_LEVEL_INFO_LOG(@"%s %@ %@", __func__, _adapter , self);
+    _adapter = nil;
+}
 
 @end

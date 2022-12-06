@@ -83,12 +83,17 @@
 }
 
 - (void)deallocAdapter {
-    self.ks_ad = nil;
+    ADV_LEVEL_INFO_LOG(@"%s", __func__);
+    if (self.ks_ad) {
+        self.ks_ad.delegate = nil;
+        self.ks_ad = nil;
+    }
 }
 
 
 - (void)dealloc {
-    ADVLog(@"%s", __func__);
+    ADV_LEVEL_INFO_LOG(@"%s", __func__);
+    [self deallocAdapter];
 }
 
 /**

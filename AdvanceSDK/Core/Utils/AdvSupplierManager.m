@@ -78,12 +78,12 @@
 - (void)loadDataWithMediaId:(NSString *)mediaId
                    adspotId:(NSString *)adspotId
                   customExt:(NSDictionary * _Nonnull)ext {
-    self.mediaId = mediaId;
-    self.adspotId = adspotId;
-    self.tkUploadTool = [[AdvUploadTKUtil alloc] init];
-    self.ext = [ext mutableCopy];
-    self.arrayHeadBidding = [NSMutableArray array];
-    self.arrayWaterfall = [NSMutableArray array];
+    _mediaId = mediaId;
+    _adspotId = adspotId;
+    _tkUploadTool = [[AdvUploadTKUtil alloc] init];
+    _ext = [ext mutableCopy];
+    _arrayHeadBidding = [NSMutableArray array];
+    _arrayWaterfall = [NSMutableArray array];
     
     
     // model不存在
@@ -425,9 +425,9 @@
 //    NSLog(@"arrayHeadBidding = %@",self.arrayHeadBidding);
 //
     [tempBidding enumerateObjectsUsingBlock:^(AdvSupplier * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-//        NSLog(@"=1=> %ld  %ld", obj.supplierPrice, _waterfallMinPrice);
+        NSLog(@"=1=> %ld  %ld", obj.supplierPrice, _waterfallMinPrice);
         NSInteger obj_price = (obj.supplierPrice > 0) ? obj.supplierPrice : obj.sdk_price;
-        if (obj_price > _waterfallMinPrice) {
+        if (obj_price >= _waterfallMinPrice) {
             [suppliers addObject:obj];
             [self.arrayHeadBidding removeObject:obj];
         }
@@ -465,14 +465,14 @@
         }
     }];
     
-//    for (AdvSupplier *temp in suppliers) {
-//        NSLog(@"------1-> %@ %ld %ld %ld", temp.sdktag, (long)temp.sdk_price, (long)temp.supplierPrice, (long)temp.priority);
-//    }
-//
-//    for (AdvSupplier *temp in self.arrayHeadBidding) {
-//        NSLog(@"------2-> %@ %ld %ld %ld", temp.sdktag, (long)temp.sdk_price, (long)temp.supplierPrice, (long)temp.priority);
-//    }
-//
+    for (AdvSupplier *temp in suppliers) {
+        NSLog(@"------1-> %@ %ld %ld %ld", temp.sdktag, (long)temp.sdk_price, (long)temp.supplierPrice, (long)temp.priority);
+    }
+
+    for (AdvSupplier *temp in self.arrayHeadBidding) {
+        NSLog(@"------2-> %@ %ld %ld %ld", temp.sdktag, (long)temp.sdk_price, (long)temp.supplierPrice, (long)temp.priority);
+    }
+
 
     // 取价格最高的渠道执行
     AdvSupplier *currentSupplier = suppliers.lastObject;
@@ -857,11 +857,6 @@
         
         uploadArr =  [self.tkUploadTool failedtkUrlWithArr:supplier.failedtk error:error];
         
-        // 加载失败的无论串并发都从 supplierM中删除
-        [self.lock lock];
-        [_supplierM removeObject:supplier];
-        [self.lock unlock];
-
     } else if (repoType == AdvanceSdkSupplierRepoGMBidding) {
         uploadArr =  [self.tkUploadTool imptkUrlWithArr:supplier.biddingtk price:(supplier.supplierPrice == 0) ? supplier.sdk_price : supplier.supplierPrice];
     }
@@ -926,12 +921,15 @@
 
 - (void)dealloc
 {
-    ADV_LEVEL_INFO_LOG(@"mgr 释放啦");
+    ADV_LEVEL_INFO_LOG(@"%s %@", __func__, self);
     [self deallocTimer];
-    self.model = nil;
-    self.tkUploadTool = nil;
-    self.arrayWaterfall = nil;
-    self.arrayHeadBidding = nil;
-    self.supplierM = nil;
+    _model = nil;
+    _tkUploadTool = nil;
+    [_arrayWaterfall removeAllObjects];
+    _arrayWaterfall = nil;
+    [_arrayHeadBidding removeAllObjects];
+    _arrayHeadBidding = nil;
+    [_supplierM removeAllObjects];
+    _supplierM = nil;
 }
 @end

@@ -53,28 +53,24 @@
         _supplier = supplier;
         _leftTime = 5;  // 默认5s
         _ks_ad = [[KSSplashAdView alloc] initWithPosId:_supplier.adspotid];
+        _ks_ad.delegate = self;
+    //    _ks_ad.needShowMiniWindow = NO;
+        _ks_ad.rootViewController = _adspot.viewController;
     }
     return self;
 }
 
 - (void)supplierStateLoad {
     ADV_LEVEL_INFO_LOG(@"加载快手 supplier: %@", _supplier);
-    __weak typeof(self) _self = self;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        __strong typeof(_self) self = _self;
-        
-        _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
-        NSInteger parallel_timeout = _supplier.timeout;
-        if (parallel_timeout == 0) {
-            parallel_timeout = 3000;
-        }
-        _ks_ad.timeoutInterval = parallel_timeout / 1000.0;
-        
-        _ks_ad.delegate = self;
-        _ks_ad.needShowMiniWindow = NO;
-        _ks_ad.rootViewController = _adspot.viewController;
-        [_ks_ad loadAdData];
-    });
+    
+    _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
+    NSInteger parallel_timeout = _supplier.timeout;
+    if (parallel_timeout == 0) {
+        parallel_timeout = 3000;
+    }
+    _ks_ad.timeoutInterval = parallel_timeout / 1000.0;
+    
+    [_ks_ad loadAdData];
 }
 
 - (void)supplierStateInPull {
@@ -99,17 +95,18 @@
 }
 
 - (void)deallocAdapter {
-//    _gdt_ad = nil;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        
-        if (_ks_ad) {
-            [_ks_ad removeFromSuperview];
-            _ks_ad = nil;
-        }
-        [_imgV removeFromSuperview];
-        _imgV = nil;
-    });
-
+    //    _gdt_ad = nil;
+    //    dispatch_async(dispatch_get_main_queue(), ^{
+    ADV_LEVEL_INFO_LOG(@"%s %@", __func__, self);
+    if (_ks_ad) {
+        [_ks_ad removeFromSuperview];
+        _ks_ad.delegate = nil;
+        _ks_ad = nil;
+    }
+    [self.imgV removeFromSuperview];
+    self.imgV = nil;
+    //    });
+    
 }
 
 - (void)gmShowAd {
@@ -300,4 +297,8 @@
     [self showAd];
 }
 
+- (void)dealloc {
+    ADV_LEVEL_INFO_LOG(@"%s", __func__);
+    [self deallocAdapter];
+}
 @end

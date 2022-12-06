@@ -7,12 +7,7 @@
 
 #import "AdvBiddingSplashScapegoat.h"
 #import "AdvBiddingSplashCustomAdapter.h"
-# if __has_include(<ABUAdSDK/ABUAdSDK.h>)
-#import <ABUAdSDK/ABUAdSDK.h>
-#else
-#import <Ads-Mediation-CN/ABUAdSDK.h>
-#endif
-
+#import "AdvLog.h"
 @interface AdvBiddingSplashScapegoat ()<ABUCustomSplashAdapter>
 @property (nonatomic, assign) NSInteger price;
 @end
@@ -28,6 +23,7 @@
 /// 广告数据拉取成功
 - (void)advanceUnifiedViewDidLoad {
 //    NSLog(@"广告数据拉取成功 %s", __func__);
+    ADV_LEVEL_INFO_LOG(@"倍业聚合 出价: %ld",self.price);
     [self.a.bridge splashAd:self.a didLoadWithExt:@{ABUMediaAdLoadingExtECPM:[NSString stringWithFormat:@"%ld", self.price]}];
 }
 
@@ -41,6 +37,7 @@
 /// 广告加载失败
 - (void)advanceFailedWithError:(NSError *)error description:(NSDictionary *)description{
 //    NSLog(@"广告展示失败 %s  error: %@ 详情:%@", __func__, error, description);
+    ADV_LEVEL_INFO_LOG(@"倍业聚合 加载失败: %@", description);
     [self.a.bridge splashAd:self.a didLoadFailWithError:error ext:description];
 //    - (void)splashAd:(id<ABUCustomSplashAdapter>_Nonnull)adapter didLoadFailWithError:(NSError *_Nullable)error ext:(NSDictionary *)ext;
 
@@ -77,5 +74,8 @@
 //    NSLog(@"%s 策略id为: %@",__func__ , reqId);
 }
 
-
+- (void)dealloc {
+    ADV_LEVEL_INFO_LOG(@"%s", __func__);
+    
+}
 @end

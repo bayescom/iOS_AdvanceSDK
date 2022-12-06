@@ -42,33 +42,29 @@
         _supplier = supplier;
         _leftTime = 5;  // 默认5s
         _gdt_ad = [[GDTSplashAd alloc] initWithPlacementId:_supplier.adspotid];
+        _gdt_ad.delegate = self;
     }
     return self;
 }
 
 - (void)supplierStateLoad {
     ADV_LEVEL_INFO_LOG(@"加载广点通 supplier: %@", _supplier);
-    __weak typeof(self) _self = self;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        __strong typeof(_self) self = _self;
-        
-        if (!_gdt_ad) {
-            return;
-        }
-        _adspot.viewController.modalPresentationStyle = 0;
-        // 设置 backgroundImage
-        _gdt_ad.backgroundImage = _adspot.backgroundImage;
-        _gdt_ad.delegate = self;
-        
-        NSInteger parallel_timeout = _supplier.timeout;
-        if (parallel_timeout == 0) {
-            parallel_timeout = 3000;
-        }
-        _gdt_ad.fetchDelay = parallel_timeout / 1000.0;
-
-        _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
-        [_gdt_ad loadAd];
-    });
+    
+    if (!_gdt_ad) {
+        return;
+    }
+    _adspot.viewController.modalPresentationStyle = 0;
+    // 设置 backgroundImage
+    _gdt_ad.backgroundImage = _adspot.backgroundImage;
+    
+    NSInteger parallel_timeout = _supplier.timeout;
+    if (parallel_timeout == 0) {
+        parallel_timeout = 3000;
+    }
+    _gdt_ad.fetchDelay = parallel_timeout / 1000.0;
+    
+    _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
+    [_gdt_ad loadAd];
 }
 
 - (void)supplierStateInPull {
@@ -96,7 +92,11 @@
 }
 
 - (void)deallocAdapter {
-    _gdt_ad = nil;
+    ADV_LEVEL_INFO_LOG(@"%s %@", __func__, self);
+    if (_gdt_ad) {
+        _gdt_ad.delegate = nil;
+        _gdt_ad = nil;
+    }
 }
 
 - (void)gmShowAd {
@@ -114,26 +114,22 @@
 }
 - (void)showAdAction {
     // 设置logo
-    __weak typeof(self) _self = self;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        __strong typeof(_self) self = _self;
-        UIImageView *imgV;
-        if (_adspot.logoImage) {
-            CGFloat real_w = [UIScreen mainScreen].bounds.size.width;
-            CGFloat real_h = _adspot.logoImage.size.height*(real_w/_adspot.logoImage.size.width);
-            imgV = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, real_w, real_h)];
-            imgV.userInteractionEnabled = YES;
-            imgV.image = _adspot.logoImage;
-        }
-        if (self.gdt_ad) {
+    UIImageView *imgV;
+    if (_adspot.logoImage) {
+        CGFloat real_w = [UIScreen mainScreen].bounds.size.width;
+        CGFloat real_h = _adspot.logoImage.size.height*(real_w/_adspot.logoImage.size.width);
+        imgV = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, real_w, real_h)];
+        imgV.userInteractionEnabled = YES;
+        imgV.image = _adspot.logoImage;
+    }
+    if (self.gdt_ad) {
+        
+        if ([self.gdt_ad isAdValid]) {
+            [_gdt_ad showAdInWindow:[UIApplication sharedApplication].adv_getCurrentWindow withBottomView:_adspot.showLogoRequire?imgV:nil skipView:nil];
+        } else {
             
-            if ([self.gdt_ad isAdValid]) {
-                [_gdt_ad showAdInWindow:[UIApplication sharedApplication].adv_getCurrentWindow withBottomView:_adspot.showLogoRequire?imgV:nil skipView:nil];
-            } else {
-                
-            }
         }
-    });
+    }
 }
 
 - (void)splashAdDidLoad:(GDTSplashAd *)splashAd {
@@ -221,5 +217,9 @@
     [self showAd];
 }
 
+- (void)dealloc {
+    ADV_LEVEL_INFO_LOG(@"%s %@", __func__, self);
+    [self deallocAdapter];
 
+}
 @end

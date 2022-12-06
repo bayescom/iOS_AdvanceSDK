@@ -48,26 +48,22 @@
             adFrame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height-real_h);
         }
         _csj_ad = [[BUSplashAd alloc] initWithSlotID:_supplier.adspotid adSize:adFrame.size];
+        _csj_ad.delegate = self;
     }
     return self;
 }
 
 - (void)supplierStateLoad {
     ADV_LEVEL_INFO_LOG(@"加载穿山甲 supplier: %@", _supplier);
-    __weak typeof(self) _self = self;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        __strong typeof(_self) self = _self;
-        
-        NSInteger parallel_timeout = _supplier.timeout;
-        if (parallel_timeout == 0) {
-            parallel_timeout = 3000;
-        }
-        _csj_ad.tolerateTimeout = parallel_timeout / 1000.0;
-        
-        _csj_ad.delegate = self;
-        _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
-        [self.csj_ad loadAdData];
-    });
+    
+    NSInteger parallel_timeout = _supplier.timeout;
+    if (parallel_timeout == 0) {
+        parallel_timeout = 3000;
+    }
+    _csj_ad.tolerateTimeout = parallel_timeout / 1000.0;
+    
+    _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
+    [self.csj_ad loadAdData];
 }
 
 - (void)supplierStateInPull {
@@ -82,7 +78,7 @@
 
 - (void)supplierStateFailed {
     ADV_LEVEL_INFO_LOG(@"穿山甲 失败");
-    [self.adspot loadNextSupplierIfHas];
+    [_adspot loadNextSupplierIfHas];
     [self deallocAdapter];
 }
 
@@ -93,20 +89,18 @@
 }
 
 - (void)deallocAdapter {
-    ADV_LEVEL_INFO_LOG(@"%s", __func__);
-//    ADV_LEVEL_INFO_LOG(@"%@", [NSThread currentThread]);
-
-    dispatch_async(dispatch_get_main_queue(), ^{
-//        ADV_LEVEL_INFO_LOG(@"%@", [NSThread currentThread]);
-        if (_csj_ad) {
-    //        NSLog(@"穿山甲 释放了");
-            [_csj_ad removeSplashView];
-            _csj_ad = nil;
-            [_imgV removeFromSuperview];
-            _imgV = nil;
-        }
-    });
-
+    ADV_LEVEL_INFO_LOG(@"%s %@", __func__, self.csj_ad);
+    
+    //        ADV_LEVEL_INFO_LOG(@"%@", [NSThread currentThread]);
+    if (_csj_ad) {
+        //        NSLog(@"穿山甲 释放了");
+        [_csj_ad removeSplashView];
+        _csj_ad.delegate = nil;
+        _csj_ad = nil;
+        [self.imgV removeFromSuperview];
+        self.imgV = nil;
+    }
+    
 }
 
 - (void)gmShowAd {
@@ -122,16 +116,12 @@
     [self showAdAction];
 }
 - (void)showAdAction {
-    __weak typeof(self) _self = self;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        __strong typeof(_self) self = _self;
-
-//        [[UIApplication sharedApplication].keyWindow addSubview:_csj_ad];
-        [[UIApplication sharedApplication].keyWindow bringSubviewToFront:[_adspot performSelector:@selector(bgImgV)]];
-        
-        [_csj_ad showSplashViewInRootViewController:[UIApplication sharedApplication].adv_getCurrentWindow.rootViewController];
-    });
-
+    
+    //        [[UIApplication sharedApplication].keyWindow addSubview:_csj_ad];
+    [[UIApplication sharedApplication].keyWindow bringSubviewToFront:[_adspot performSelector:@selector(bgImgV)]];
+    
+    [_csj_ad showSplashViewInRootViewController:[UIApplication sharedApplication].adv_getCurrentWindow.rootViewController];
+    
 }
 // MARK: ======================= BUSplashAdDelegate =======================
 
@@ -139,10 +129,11 @@
 
 - (void)splashAdLoadSuccess:(nonnull BUSplashAd *)splashAd {
 //    NSLog(@"11111111111");
+    _supplier.state = AdvanceSdkSupplierStateSuccess;
     [self.adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
 //    NSLog(@"穿山甲开屏拉取成功");
-    _supplier.state = AdvanceSdkSupplierStateSuccess;
+//    _supplier = nil;
     if (_supplier.isParallel == YES) {
         return;
     }
@@ -168,8 +159,8 @@
 
 
 - (void)splashAdLoadFail:(nonnull BUSplashAd *)splashAd error:(BUAdError * _Nullable)error {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
     _supplier.state = AdvanceSdkSupplierStateFailed;
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
 //    NSLog(@"========>>>>>>>> %ld %@", (long)_supplier.priority, error);
     if (_supplier.isParallel == YES) { // 并行不释放 只上报
         
@@ -254,6 +245,12 @@
         [self.delegate advanceDidClose];
 
     }
+    [self deallocAdapter];
+
+}
+
+- (void)dealloc {
+    ADV_LEVEL_INFO_LOG(@"%s %@", __func__, self);
     [self deallocAdapter];
 
 }

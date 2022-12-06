@@ -8,16 +8,16 @@
 #import "AdvBaseAdapter.h"
 #import "AdvSupplierManager.h"
 #import "AdvanceSupplierDelegate.h"
-
+#import "AdvLog.h"
 #import "AdvSdkConfig.h"
 #import <objc/runtime.h>
 #import <objc/message.h>
 
-//# if __has_include(<ABUAdSDK/ABUAdSDK.h>)
-//#import <ABUAdSDK/ABUAdSDK.h>
-//#else
-//#import <Ads-Mediation-CN/ABUAdSDK.h>
-//#endif
+# if __has_include(<ABUAdSDK/ABUAdSDK.h>)
+#import <ABUAdSDK/ABUAdSDK.h>
+#else
+#import <Ads-Mediation-CN/ABUAdSDK.h>
+#endif
 
 @interface AdvBaseAdapter ()  <AdvSupplierManagerDelegate, AdvanceSupplierDelegate>
 @property (nonatomic, strong) AdvSupplierManager *mgr;
@@ -41,6 +41,17 @@
         _mediaId = mediaId;
         _adspotid = adspotid;
         _ext = [ext mutableCopy];
+        _mgr = [AdvSupplierManager manager];
+        _mgr.delegate = self;
+        _baseDelegate = self;
+        if (!_arrParallelSupplier) {
+            _arrParallelSupplier = [NSMutableArray array];
+        }
+
+        if (!_errorDescriptions) {
+            _errorDescriptions = [NSMutableDictionary dictionary];
+        }
+
     }
     return self;
 }
@@ -49,12 +60,12 @@
     if (_isUploadSDKVersion) {
         [self setSDKVersion];
     }
-    [self.mgr loadDataWithMediaId:_mediaId adspotId:_adspotid customExt:_ext];
+    [_mgr loadDataWithMediaId:_mediaId adspotId:_adspotid customExt:_ext];
 }
 
 /// 加载策略
 - (void)loadAdWithSupplierModel:(AdvSupplierModel *)model {
-    [self.mgr loadDataWithSupplierModel:model];
+    [_mgr loadDataWithSupplierModel:model];
 }
 
 - (void)loadNextSupplierIfHas {
@@ -78,7 +89,7 @@
     if (repoType == AdvanceSdkSupplierRepoBidding && supplier.positionType == AdvanceSdkSupplierTypeWaterfall) {
         [_mgr inWaterfallQueueWithSupplier:supplier];
     }
-    
+     
     // headBidding 广告位进入headBidding队列
     if (repoType == AdvanceSdkSupplierRepoBidding && supplier.positionType == AdvanceSdkSupplierTypeHeadBidding) {
 //        NSLog(@"|||111--- %@ %ld %@",supplier.sdktag, (long)supplier.priority, supplier);
@@ -135,10 +146,12 @@
 
 - (void)deallocAdapter {
     // 该方法为AdvanceSDK 内部调用 开发者不要在外部手动调用 想要释放 直接将广告对象置为nil即可
-    [self.mgr cacelDataTask];
-    self.mgr = nil;
-    self.baseDelegate = nil;
-    
+    ADV_LEVEL_INFO_LOG(@"%s %@", __func__, self);
+    [_mgr cacelDataTask];
+    _mgr = nil;
+    _baseDelegate = nil;
+    [_arrParallelSupplier removeAllObjects];
+    _arrParallelSupplier = nil;
 }
 
 //- (void)setDefaultAdvSupplierWithMediaId:(NSString *)mediaId
@@ -241,15 +254,15 @@
         dispatch_once(&onceToken, ^{
 //            [NSClassFromString(@"BUAdSDKManager") performSelector:@selector(setAppID:) withObject:supplier.mediaid];
             
-//            [ABUAdSDKManager setupSDKWithAppId:supplier.mediaid config:^ABUUserConfig *(ABUUserConfig *c) {
-//                c.logEnable = YES;
-//                return c;
-//            }];
+            [ABUAdSDKManager setupSDKWithAppId:supplier.mediaid config:^ABUUserConfig *(ABUUserConfig *c) {
+                c.logEnable = YES;
+                return c;
+            }];
 //            ABUSplashAd *splashAd = [[ABUSplashAd alloc] initWithAdUnitID:@"102106530"];
 //            splashAd.rootViewController = [[[UIApplication sharedApplication] keyWindow] rootViewController];
 //            [ABUAdSDKManager preloadAdsWithInfos:@[splashAd] andInterval:5 andConcurrent:4];
 
-            [NSClassFromString(clsName) performSelector:@selector(setupSDKWithAppId:config:) withObject:supplier.mediaid withObject:nil];
+//            [NSClassFromString(clsName) performSelector:@selector(setupSDKWithAppId:config:) withObject:supplier.mediaid withObject:nil];
 //            [ABUAdSDKManager setupSDKWithAppId:supplier.mediaid config:^ABUUserConfig *(ABUUserConfig *c) {
 //                c.logEnable = YES;
 //                return c;
@@ -325,28 +338,15 @@
 
 
 // MARK: ======================= get =======================
-- (AdvSupplierManager *)mgr {
-    if (!_mgr) {
-        _mgr = [AdvSupplierManager manager];
-        _mgr.delegate = self;
-        _baseDelegate = self;
-    }
-    return _mgr;
-}
+//- (AdvSupplierManager *)mgr {
+//    if (!_mgr) {
+//        _mgr = [AdvSupplierManager manager];
+//        _mgr.delegate = self;
+//        _baseDelegate = self;
+//    }
+//    return _mgr;
+//}
 
-- (NSMutableArray *)arrParallelSupplier {
-    if (!_arrParallelSupplier) {
-        _arrParallelSupplier = [NSMutableArray array];
-    }
-    return _arrParallelSupplier;
-}
-
-- (NSMutableDictionary *)errorDescriptions {
-    if (!_errorDescriptions) {
-        _errorDescriptions = [NSMutableDictionary dictionary];
-    }
-    return _errorDescriptions;;
-}
 
 // 查找一下 容器里有没有并行的渠道
 - (id)adapterInParallelsWithSupplier:(AdvSupplier *)supplier {
@@ -362,5 +362,9 @@
     return adapterT;
 }
 
+- (void)dealloc {
+    ADV_LEVEL_INFO_LOG(@"%s %@", __func__, self);
+    [self deallocAdapter];
+}
 
 @end

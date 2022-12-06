@@ -16,6 +16,10 @@
 
 @interface DemoSplashViewController () <AdvanceSplashDelegate>
 @property(strong,nonatomic) AdvanceSplash *advanceSplash;
+
+
+@property (nonatomic, strong) CADisplayLink *timeoutCheckTimer;
+@property (nonatomic, assign) NSInteger timeout_stamp;
 @end
 
 @implementation DemoSplashViewController
@@ -38,7 +42,9 @@
         @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10006483"},
         
         @{@"addesc": @"mediaId-adspotId", @"adspotId": @"101959-10006038"},
-        
+        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"101959-10006806"},
+        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"102342-10006833"},
+
 
 //
     ];
@@ -75,9 +81,29 @@
     self.advanceSplash.showLogoRequire = YES;
 
     self.advanceSplash.backgroundImage = [UIImage imageNamed:@"LaunchImage_img"];
-    self.advanceSplash.timeout = 5; // 如果使用bidding 功能 timeout时长必须要比 服务器下发的bidding等待时间要长 否则会严重影响变现效率
+    // 如果开发者有自己的超时时间限制 那timeout 应该比 开发者 最好比自己的超时时间限制要短
+    // 当到达 timeout 后 不出广告advanceSplash内部会强制移除广告的不需要开发者手动移除
+    self.advanceSplash.timeout = 5;//<---- 确保timeout 时长内不对advanceSplash进行移除的操作
     [self.advanceSplash loadAd];
     
+//    _timeout_stamp = ([[NSDate date] timeIntervalSince1970] + 0.3)*1000;
+//    // 开启定时器监听过期
+//    [_timeoutCheckTimer invalidate];
+//
+//    _timeoutCheckTimer = [CADisplayLink displayLinkWithTarget:self selector:@selector(timeoutCheckTimerAction)];
+//    [_timeoutCheckTimer addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
+
+
+}
+
+- (void)timeoutCheckTimerAction {
+    if ([[NSDate date] timeIntervalSince1970]*1000 > _timeout_stamp) {
+        NSLog(@"%s", __func__);
+        [self.timeoutCheckTimer invalidate];
+        self.timeoutCheckTimer = nil;
+        self.timeout_stamp = 0;
+        self.advanceSplash = nil;
+    }
 
 }
 
@@ -126,6 +152,8 @@
 /// 广告加载失败
 - (void)advanceFailedWithError:(NSError *)error description:(NSDictionary *)description{
     NSLog(@"广告展示失败 %s  error: %@ 详情:%@", __func__, error, description);
+    self.advanceSplash.delegate = nil;
+    self.advanceSplash = nil;
 
 }
 /// 内部渠道开始加载时调用
@@ -141,11 +169,8 @@
 /// 广告关闭
 - (void)advanceDidClose {
     NSLog(@"广告关闭了 %s", __func__);
-
-//    // 获取控制摇一摇 的单例
-//    id manager = ((id(*)(id, SEL))objc_msgSend)(NSClassFromString(@"MercuryMotionManager"), @selector(sharedManager));
-//    // 调用停止摇一摇
-//    ((void(*)(id, SEL))objc_msgSend)(manager, @selector(stopMotion));
+    self.advanceSplash.delegate = nil;
+    self.advanceSplash = nil;
 
 }
 
@@ -163,5 +188,11 @@
 - (void)advanceOnAdReceived:(NSString *)reqId
 {
     NSLog(@"%s 策略id为: %@",__func__ , reqId);
+}
+
+- (void)dealloc {
+    NSLog(@"%s",__func__);
+    self.advanceSplash.delegate = nil;
+    self.advanceSplash = nil;
 }
 @end

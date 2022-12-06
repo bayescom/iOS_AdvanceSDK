@@ -73,12 +73,21 @@
 }
 
 - (void)deallocAdapter {
-    
+    ADV_LEVEL_INFO_LOG(@"%s", __func__);
+    if (self.gdt_ad) {
+        self.gdt_ad.delegate = nil;
+        self.gdt_ad = nil;
+    }
 }
 
 - (void)dealloc {
+    ADV_LEVEL_INFO_LOG(@"%s", __func__);
 
+    [self deallocAdapter];
+//    ADVLog(@"%s", __func__);
 }
+
+
 
 // MARK: ======================= GDTNativeExpressAdDelegete =======================
 /**

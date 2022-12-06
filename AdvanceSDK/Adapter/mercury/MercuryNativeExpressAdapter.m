@@ -62,8 +62,21 @@
 }
 
 - (void)dealloc {
-    ADVLog(@"%s", __func__);
+    ADV_LEVEL_INFO_LOG(@"%s", __func__);
+
+    [self deallocAdapter];
+//    ADVLog(@"%s", __func__);
 }
+
+- (void)deallocAdapter {
+    ADV_LEVEL_INFO_LOG(@"%s", __func__);
+
+    if (self.mercury_ad) {
+        self.mercury_ad.delegate = nil;
+        self.mercury_ad = nil;
+    }
+}
+
 
 // MARK: ======================= MercuryNativeExpressAdDelegete =======================
 /// 拉取原生模板广告成功 | (注意: nativeExpressAdView在此方法执行结束不被强引用，nativeExpressAd中的对象会被自动释放)

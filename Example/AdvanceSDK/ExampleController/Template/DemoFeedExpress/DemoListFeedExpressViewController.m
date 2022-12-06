@@ -188,13 +188,7 @@
                 make.right.equalTo(@(-10));
                 make.bottom.equalTo(@(10));
             }];
-
-        } else{
-            [view mas_remakeConstraints:^(MASConstraintMaker *make) {
-                make.edges.equalTo(@0);
-            }];
         }
-
         return cell;
     }
 }

@@ -32,6 +32,7 @@
         _adspot = (AdvanceInterstitial *)adspot;
         _supplier = supplier;
         _csj_ad = [[BUNativeExpressInterstitialAd alloc] initWithSlotID:_supplier.adspotid adSize:CGSizeMake(300, 450)];
+        _csj_ad.delegate = self;
     }
     return self;
 }
@@ -43,7 +44,6 @@
 
 - (void)supplierStateLoad {
     ADV_LEVEL_INFO_LOG(@"加载穿山甲 supplier: %@", _supplier);
-    _csj_ad.delegate = self;
     _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
     [self.csj_ad loadAdData];
 }
@@ -65,17 +65,25 @@
 }
 
 
+
 - (void)deallocAdapter {
-    
+    ADV_LEVEL_INFO_LOG(@"%s", __func__);
+    if (_csj_ad) {
+        _csj_ad.delegate = nil;
+        _csj_ad = nil;
+    }
 }
+
+- (void)dealloc
+{
+    ADV_LEVEL_INFO_LOG(@"%s", __func__);
+    [self deallocAdapter];
+}
+
 
 
 - (void)showAd {
     [_csj_ad showAdFromRootViewController:_adspot.viewController];
-}
-
-- (void)dealloc {
-    ADVLog(@"%s", __func__);
 }
 
 // MARK: ======================= BUNativeExpresInterstitialAdDelegate =======================
@@ -91,7 +99,7 @@
         return;
     }
 
-    _csj_ad = nil;
+    [self deallocAdapter];
 //    if ([self.delegate respondsToSelector:@selector(advanceInterstitialOnAdFailedWithSdkId:error:)]) {
 //        [self.delegate advanceInterstitialOnAdFailedWithSdkId:_supplier.identifier error:error];
 //    }
@@ -100,7 +108,8 @@
 /// 插屏广告渲染失败
 - (void)nativeExpresInterstitialAdRenderFail:(BUNativeExpressInterstitialAd *)interstitialAd error:(NSError *)error {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
-    _csj_ad = nil;
+    
+    [self deallocAdapter];
 //    if ([self.delegate respondsToSelector:@selector(advanceInterstitialOnAdRenderFailed)]) {
 //        [self.delegate advanceInterstitialOnAdRenderFailed];
 //    }

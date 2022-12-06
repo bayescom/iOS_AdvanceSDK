@@ -38,8 +38,20 @@
         _supplier = supplier;
         _mercury_ad = [[MercurySplashAd alloc] initAdWithAdspotId:_supplier.adspotid delegate:self];
         _mercury_ad.placeholderImage = _adspot.backgroundImage;
-        _mercury_ad.showType = MercurySplashAdAutoAdaptScreen;
         _mercury_ad.logoImage = _adspot.logoImage;
+        NSNumber *showLogoType = _adspot.extParameter[MercuryLogoShowTypeKey];
+        NSNumber *blankGap = _adspot.extParameter[MercuryLogoShowBlankGapKey];
+
+        
+        if (showLogoType) {
+            _mercury_ad.showType = (showLogoType.integerValue);
+        } else {
+            _mercury_ad.showType = MercurySplashAdAutoAdaptScreenWithLogoFirst;
+        }
+
+        _mercury_ad.blankGap = blankGap.integerValue;
+        _mercury_ad.delegate = self;
+        _mercury_ad.controller = _adspot.viewController;
     }
     return self;
 }
@@ -48,23 +60,16 @@
 
 - (void)supplierStateLoad {
     ADV_LEVEL_INFO_LOG(@"加载Mercury supplier: %@", _supplier);
-    __weak typeof(self) _self = self;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        __strong typeof(_self) self = _self;
-        
-//        if (_adspot.showLogoRequire) {
-//            _mercury_ad.showType = MercurySplashAdAutoAdaptScreen;
-//        }
-        if (_adspot.timeout) {
-            if (_adspot.timeout > 500) {
-                _mercury_ad.fetchDelay = _supplier.timeout / 1000.0;
-            }
+    //        if (_adspot.showLogoRequire) {
+    //            _mercury_ad.showType = MercurySplashAdAutoAdaptScreen;
+    //        }
+    if (_adspot.timeout) {
+        if (_adspot.timeout > 500) {
+            _mercury_ad.fetchDelay = _supplier.timeout / 1000.0;
         }
-        _mercury_ad.delegate = self;
-        _mercury_ad.controller = _adspot.viewController;
-        
-        [_mercury_ad loadAd];
-    });
+    }
+    
+    [_mercury_ad loadAd];
 }
 
 - (void)supplierStateInPull {
@@ -128,28 +133,28 @@
 
 
 - (void)dealloc {
-    ADVLog(@"%s", __func__);
-//    [self deallocAdapter];
+    ADV_LEVEL_INFO_LOG(@"%s", __func__);
+    [self deallocAdapter];
 }
 
 - (void)deallocAdapter {
 //    ADV_LEVEL_INFO_LOG(@"11===> %s %@", __func__, [NSThread currentThread]);
-    id timer0 = [_mercury_ad performSelector:@selector(timer0)];
-    [timer0 performSelector:@selector(stopTimer)];
+    ADV_LEVEL_INFO_LOG(@"%s %@", __func__, self);
+    if (self.mercury_ad) {
+        id timer0 = [_mercury_ad performSelector:@selector(timer0)];
+        [timer0 performSelector:@selector(stopTimer)];
 
-    
-    id timer = [_mercury_ad performSelector:@selector(timer)];
-    [timer performSelector:@selector(stopTimer)];
-    
-    UIViewController *vc = [_mercury_ad performSelector:@selector(splashVC)];
-    [vc dismissViewControllerAnimated:NO completion:nil];
-    [vc.view removeFromSuperview];
-    
-    self.delegate = nil;
-    _mercury_ad.delegate = nil;
-    _mercury_ad = nil;
-
+        id timer = [_mercury_ad performSelector:@selector(timer)];
+        [timer performSelector:@selector(stopTimer)];
         
+        UIViewController *vc = [_mercury_ad performSelector:@selector(splashVC)];
+        [vc dismissViewControllerAnimated:NO completion:nil];
+        [vc.view removeFromSuperview];
+        
+        self.delegate = nil;
+        _mercury_ad.delegate = nil;
+        _mercury_ad = nil;
+    }
 }
 
 // MARK: ======================= MercurySplashAdDelegate =======================

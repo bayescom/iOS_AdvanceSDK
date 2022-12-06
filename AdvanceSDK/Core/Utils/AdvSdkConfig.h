@@ -58,7 +58,8 @@ extern NSString *const AdvanceSDKTimeOutForeverKey;
 extern NSString *const AdvanceSDKOneMonthKey;
 extern NSString *const AdvanceSDKHourKey;
 extern NSString *const AdvanceSDKSecretKey;
-
+extern NSString *const MercuryLogoShowTypeKey;
+extern NSString *const MercuryLogoShowBlankGapKey;
 
 extern int const ADVANCE_RECEIVED;
 extern int const ADVANCE_ERROR;
