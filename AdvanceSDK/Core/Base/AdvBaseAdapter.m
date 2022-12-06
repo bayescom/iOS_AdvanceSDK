@@ -13,11 +13,11 @@
 #import <objc/runtime.h>
 #import <objc/message.h>
 
-# if __has_include(<ABUAdSDK/ABUAdSDK.h>)
-#import <ABUAdSDK/ABUAdSDK.h>
-#else
-#import <Ads-Mediation-CN/ABUAdSDK.h>
-#endif
+//# if __has_include(<ABUAdSDK/ABUAdSDK.h>)
+//#import <ABUAdSDK/ABUAdSDK.h>
+//#else
+//#import <Ads-Mediation-CN/ABUAdSDK.h>
+//#endif
 
 @interface AdvBaseAdapter ()  <AdvSupplierManagerDelegate, AdvanceSupplierDelegate>
 @property (nonatomic, strong) AdvSupplierManager *mgr;
@@ -252,24 +252,7 @@
         }
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
-//            [NSClassFromString(@"BUAdSDKManager") performSelector:@selector(setAppID:) withObject:supplier.mediaid];
-            
-            [ABUAdSDKManager setupSDKWithAppId:supplier.mediaid config:^ABUUserConfig *(ABUUserConfig *c) {
-                c.logEnable = YES;
-                return c;
-            }];
-//            ABUSplashAd *splashAd = [[ABUSplashAd alloc] initWithAdUnitID:@"102106530"];
-//            splashAd.rootViewController = [[[UIApplication sharedApplication] keyWindow] rootViewController];
-//            [ABUAdSDKManager preloadAdsWithInfos:@[splashAd] andInterval:5 andConcurrent:4];
-
-//            [NSClassFromString(clsName) performSelector:@selector(setupSDKWithAppId:config:) withObject:supplier.mediaid withObject:nil];
-//            [ABUAdSDKManager setupSDKWithAppId:supplier.mediaid config:^ABUUserConfig *(ABUUserConfig *c) {
-//                c.logEnable = YES;
-//                return c;
-//            }];
-//            ABUSplashAd *splashAd = [[ABUSplashAd alloc] initWithAdUnitID:supplier.adspotid];
-//            splashAd.rootViewController = [[[UIApplication sharedApplication] keyWindow] rootViewController];
-//            [ABUAdSDKManager preloadAdsWithInfos:@[splashAd] andInterval:2 andConcurrent:2];
+            [NSClassFromString(clsName) performSelector:@selector(setupSDKWithAppId:config:) withObject:supplier.mediaid withObject:nil];
         });
 
     } else {
