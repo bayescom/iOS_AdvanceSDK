@@ -78,7 +78,7 @@
 
 - (void)supplierStateFailed {
     ADV_LEVEL_INFO_LOG(@"穿山甲 失败");
-    [self.adspot loadNextSupplierIfHas];
+    [_adspot loadNextSupplierIfHas];
     [self deallocAdapter];
 }
 

@@ -74,5 +74,8 @@
 //    NSLog(@"%s 策略id为: %@",__func__ , reqId);
 }
 
-
+- (void)dealloc {
+    ADV_LEVEL_INFO_LOG(@"%s", __func__);
+    
+}
 @end

@@ -118,10 +118,14 @@
 
 - (void)deallocAdapter {
 //    ADV_LEVEL_INFO_LOG(@"===> %s %@", __func__, [NSThread currentThread]);
+    ADV_LEVEL_INFO_LOG(@"%s %@", __func__, self);
 
-    [self.splashAd destoryAd];
-    self.splashAd = nil;
-    [self.imgV removeFromSuperview];
+    if (_splashAd) {
+        [_splashAd destoryAd];
+        _splashAd.delegate = nil;
+        _splashAd = nil;
+        [_imgV removeFromSuperview];
+    }
 }
 
 - (void)showAd {
@@ -141,7 +145,7 @@
 - (void)splashAd:(ABUSplashAd *)splashAd didFailWithError:(NSError *)error {
     ADV_LEVEL_INFO_LOG(@"%s-error:%@", __func__, error);
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
-    [self deallocAdapter];
+//    [self deallocAdapter];
 }
 
 - (void)splashAdDidClose:(ABUSplashAd *_Nonnull)splashAd {
@@ -149,7 +153,7 @@
     if ([self.delegate respondsToSelector:@selector(advanceDidClose)]) {
         [self.delegate advanceDidClose];
     }
-    [self deallocAdapter];
+//    [self deallocAdapter];
     
 }
 
@@ -177,13 +181,18 @@
 }
 
 - (void)splashAdCountdownToZero:(ABUSplashAd *)splashAd {
-    if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdCountdownToZero)]) {
-        [self.delegate advanceSplashOnAdCountdownToZero];
-    }
+//    if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdCountdownToZero)]) {
+//        [self.delegate advanceSplashOnAdCountdownToZero];
+//    }
 //    [self deallocAdapter];
 
 }
 
+- (void)dealloc
+{
+    ADV_LEVEL_INFO_LOG(@"%s", __func__);
+    [self deallocAdapter];
+}
 
 
 @end

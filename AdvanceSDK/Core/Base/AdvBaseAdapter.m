@@ -41,6 +41,9 @@
         _mediaId = mediaId;
         _adspotid = adspotid;
         _ext = [ext mutableCopy];
+        _mgr = [AdvSupplierManager manager];
+        _mgr.delegate = self;
+        _baseDelegate = self;
         if (!_arrParallelSupplier) {
             _arrParallelSupplier = [NSMutableArray array];
         }
@@ -57,12 +60,12 @@
     if (_isUploadSDKVersion) {
         [self setSDKVersion];
     }
-    [self.mgr loadDataWithMediaId:_mediaId adspotId:_adspotid customExt:_ext];
+    [_mgr loadDataWithMediaId:_mediaId adspotId:_adspotid customExt:_ext];
 }
 
 /// 加载策略
 - (void)loadAdWithSupplierModel:(AdvSupplierModel *)model {
-    [self.mgr loadDataWithSupplierModel:model];
+    [_mgr loadDataWithSupplierModel:model];
 }
 
 - (void)loadNextSupplierIfHas {
@@ -335,14 +338,14 @@
 
 
 // MARK: ======================= get =======================
-- (AdvSupplierManager *)mgr {
-    if (!_mgr) {
-        _mgr = [AdvSupplierManager manager];
-        _mgr.delegate = self;
-        _baseDelegate = self;
-    }
-    return _mgr;
-}
+//- (AdvSupplierManager *)mgr {
+//    if (!_mgr) {
+//        _mgr = [AdvSupplierManager manager];
+//        _mgr.delegate = self;
+//        _baseDelegate = self;
+//    }
+//    return _mgr;
+//}
 
 
 // 查找一下 容器里有没有并行的渠道
@@ -360,6 +363,7 @@
 }
 
 - (void)dealloc {
+    ADV_LEVEL_INFO_LOG(@"%s %@", __func__, self);
     [self deallocAdapter];
 }
 

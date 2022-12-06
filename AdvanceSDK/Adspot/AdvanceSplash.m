@@ -80,6 +80,7 @@
 
 /// Override
 - (void)deallocSelf {
+    ADV_LEVEL_INFO_LOG(@"%s", __func__);
     [_bgImgV removeFromSuperview];
     _bgImgV = nil;
     [_timeoutCheckTimer invalidate];
@@ -89,11 +90,11 @@
 }
 
 - (void)deallocDelegate:(BOOL)execute {
-    
+    ADV_LEVEL_INFO_LOG(@"%s", __func__);
     if([_delegate respondsToSelector:@selector(advanceFailedWithError:description:)] && execute) {
         [_delegate advanceFailedWithError:[AdvError errorWithCode:AdvErrorCode_115].toNSError description:[self.errorDescriptions copy]];
         [_adapter performSelector:@selector(deallocAdapter)];
-        [self uploadTimeOutError];
+//        [self uploadTimeOutError];
         [self deallocAdapter];
     }
     _delegate = nil;

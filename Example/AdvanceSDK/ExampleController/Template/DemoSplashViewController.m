@@ -85,10 +85,27 @@
     // 当到达 timeout 后 不出广告advanceSplash内部会强制移除广告的不需要开发者手动移除
     self.advanceSplash.timeout = 5;//<---- 确保timeout 时长内不对advanceSplash进行移除的操作
     [self.advanceSplash loadAd];
+    
+//    _timeout_stamp = ([[NSDate date] timeIntervalSince1970] + 0.3)*1000;
+//    // 开启定时器监听过期
+//    [_timeoutCheckTimer invalidate];
+//
+//    _timeoutCheckTimer = [CADisplayLink displayLinkWithTarget:self selector:@selector(timeoutCheckTimerAction)];
+//    [_timeoutCheckTimer addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
 
 
 }
 
+- (void)timeoutCheckTimerAction {
+    if ([[NSDate date] timeIntervalSince1970]*1000 > _timeout_stamp) {
+        NSLog(@"%s", __func__);
+        [self.timeoutCheckTimer invalidate];
+        self.timeoutCheckTimer = nil;
+        self.timeout_stamp = 0;
+        self.advanceSplash = nil;
+    }
+
+}
 
 - (UIImage*)createLogoImageFromView
 

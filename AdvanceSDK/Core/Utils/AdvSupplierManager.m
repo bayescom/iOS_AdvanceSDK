@@ -78,12 +78,12 @@
 - (void)loadDataWithMediaId:(NSString *)mediaId
                    adspotId:(NSString *)adspotId
                   customExt:(NSDictionary * _Nonnull)ext {
-    self.mediaId = mediaId;
-    self.adspotId = adspotId;
-    self.tkUploadTool = [[AdvUploadTKUtil alloc] init];
-    self.ext = [ext mutableCopy];
-    self.arrayHeadBidding = [NSMutableArray array];
-    self.arrayWaterfall = [NSMutableArray array];
+    _mediaId = mediaId;
+    _adspotId = adspotId;
+    _tkUploadTool = [[AdvUploadTKUtil alloc] init];
+    _ext = [ext mutableCopy];
+    _arrayHeadBidding = [NSMutableArray array];
+    _arrayWaterfall = [NSMutableArray array];
     
     
     // model不存在
