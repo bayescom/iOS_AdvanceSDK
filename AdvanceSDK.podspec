@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
     s.name             = 'AdvanceSDK'
     
-    s.version          = '4.0.1.8'
+    s.version          = '4.0.1.9'
     s.ios.deployment_target = '9.0'
     s.platform     = :ios, "9.0"
     s.requires_arc = true
@@ -116,32 +116,32 @@ Pod::Spec.new do |s|
 #
 #
 #        end
-    s.subspec 'Bidding' do |bidding|
-        bidding.dependency 'AdvanceSDK/Core'
-        bidding.dependency 'AdvanceSDK/Adspot'
-        bidding.dependency 'AdvBiddingSuppliers','0.0.7'
-
-        bidding.dependency 'Ads-CN'
-        bidding.source_files =  ['AdvanceSDK/Adapter/Bidding/*{h,m}',
-        'AdvanceSDK/Adapter/Bidding/AdvBiddingAdapter/*{h,m}',
-        'AdvanceSDK/Adapter/Bidding/AdvBiddingCustomAdapter/*{h,m}'
-        ]
-
-
-        valid_archs = ['armv7', 'armv7s', 'x86_64', 'arm64']
-
-
-    end
-
-    
-#    s.subspec 'AdvBidding' do |advBidding|
-#        advBidding.dependency 'AdvanceSDK/Core'
-#        advBidding.dependency 'AdvanceSDK/Adspot'
-#        advBidding.dependency 'AdvBiddingSDK', '1.1.3'
-#        advBidding.dependency 'AdvBiddingSuppliers', '0.0.7'
+#    s.subspec 'Bidding' do |bidding|
+#        bidding.dependency 'AdvanceSDK/Core'
+#        bidding.dependency 'AdvanceSDK/Adspot'
+#        bidding.dependency 'AdvBiddingSuppliers','0.0.7'
+#
+#        bidding.dependency 'Ads-CN'
+#        bidding.source_files =  ['AdvanceSDK/Adapter/Bidding/*{h,m}',
+#        'AdvanceSDK/Adapter/Bidding/AdvBiddingAdapter/*{h,m}',
+#        'AdvanceSDK/Adapter/Bidding/AdvBiddingCustomAdapter/*{h,m}'
+#        ]
+#
+#
+#        valid_archs = ['armv7', 'armv7s', 'x86_64', 'arm64']
 #
 #
 #    end
+
+    
+    s.subspec 'AdvBidding' do |advBidding|
+        advBidding.dependency 'AdvanceSDK/Core'
+        advBidding.dependency 'AdvanceSDK/Adspot'
+        advBidding.dependency 'AdvBiddingSDK', '1.1.4'
+        advBidding.dependency 'AdvBiddingSuppliers', '0.0.7'
+
+
+    end
 
     
     
