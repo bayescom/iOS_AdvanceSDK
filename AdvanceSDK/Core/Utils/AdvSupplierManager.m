@@ -224,8 +224,9 @@
     
     // 目前参加Waterfall分层的方式去执行渠道
     NSMutableArray *waterfallPriority = self.model.setting.parallelGroup.firstObject;
-    
+    __weak typeof(self) _self = self;
     [waterfallPriority enumerateObjectsUsingBlock:^(NSNumber  *_Nonnull priority, NSUInteger idx, BOOL * _Nonnull stop) {
+        __strong typeof(_self) self = _self;
         // 想要分组并发->广告位必须要支持并发->必须支持load 和show 分离
         AdvSupplier *parallelSupplier = [self getSupplierByPriority:[priority integerValue]];
         // 该广告位支持并行
@@ -240,13 +241,11 @@
     
     [_model.setting.parallelGroup removeObject:waterfallPriority];
     
-    
     // 将headBidding的渠道 标记好后加入到tempWaterfall 中 一起并发
     // 加入到tempWaterfall 之后 需要把headBiddingGroup 的元素置空, 避免第二层开始的时候 又重复添加, 因为headBidding只和第一层对比
     NSMutableArray *biddingSuppiers = [NSMutableArray array];
     biddingSuppiers = self.model.setting.headBiddingGroup;
     
-    __weak typeof(self) _self = self;
     [biddingSuppiers enumerateObjectsUsingBlock:^(NSNumber  *_Nonnull priority, NSUInteger idx, BOOL * _Nonnull stop) {
         __strong typeof(_self) self = _self;
         // 执行bidding组的Supplier parallelSupplier
@@ -423,9 +422,10 @@
     
 //    NSLog(@"suppliers = %@",suppliers);
 //    NSLog(@"arrayHeadBidding = %@",self.arrayHeadBidding);
-//
+    __weak typeof(self) _self = self;
     [tempBidding enumerateObjectsUsingBlock:^(AdvSupplier * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        NSLog(@"=1=> %ld  %ld", obj.supplierPrice, _waterfallMinPrice);
+        __strong typeof(_self) self = _self;
+//        NSLog(@"=1=> %ld  %ld", obj.supplierPrice, _waterfallMinPrice);
         NSInteger obj_price = (obj.supplierPrice > 0) ? obj.supplierPrice : obj.sdk_price;
         if (obj_price >= _waterfallMinPrice) {
             [suppliers addObject:obj];
@@ -439,7 +439,7 @@
 //     价格由低到高排序
 //    NSLog(@"------1111111-> %@  %ld %ld", suppliers[0].sdktag, (long)obj11.supplierPrice, (long)obj11.priority);
     [suppliers sortWithOptions:NSSortStable usingComparator:^NSComparisonResult(id _Nonnull obj1, id _Nonnull obj2) {
-        
+        __strong typeof(_self) self = _self;
         AdvSupplier *obj11 = obj1;
         AdvSupplier *obj22 = obj2;
         
@@ -623,6 +623,8 @@
     if ([_delegate respondsToSelector:@selector(advSupplierLoadSuppluer:error:)]) {
         [_delegate advSupplierLoadSuppluer:supplier error:error];
     }
+    ADV_LEVEL_INFO_LOG(@"执行过后执行的渠道:%@ 是否并行:%d 优先级:%ld name:%@", supplier, supplier.isParallel, (long)supplier.priority, supplier.name);
+
 }
 
 
@@ -662,16 +664,22 @@
     
     ADV_LEVEL_INFO_LOG(@"开始请求时间戳: %f", [[NSDate date] timeIntervalSince1970]);
     
+    __weak typeof(self) weakSelf = self;
     self.dataTask = [sharedSession dataTaskWithRequest:request
                                                       completionHandler:^(NSData *_Nullable data, NSURLResponse *_Nullable response, NSError *_Nullable error) {
+        __strong typeof(self) strongSelf = weakSelf;//第一层
+        __weak typeof(self) weakSelf2 = strongSelf;
         dispatch_async(dispatch_get_main_queue(), ^{
+            __strong typeof(self) strongSelf2 = weakSelf2;//第二层
             ADV_LEVEL_INFO_LOG(@"请求完成时间戳: %f", [[NSDate date] timeIntervalSince1970]);
 //            ADVTRACK(self.mediaId, self.adspotId, AdvTrackEventCase_getAction);
-            [self doResultData:data response:response error:error saveOnly:saveOnly];
+            [strongSelf2 doResultData:data response:response error:error saveOnly:saveOnly];
         });
+        
     }];
     [self.dataTask resume];
 }
+
 
 - (NSString *)jsonStringCompactFormatForDictionary:(NSDictionary *)dicJson {
 
@@ -689,10 +697,9 @@
 }
 
 - (void)cacelDataTask {
-    if (self.dataTask) {
-        [self.dataTask cancel];
+    if (_dataTask) {
+        [_dataTask cancel];
     }
-    self.model = nil;
 }
 
 
@@ -923,7 +930,7 @@
 {
     ADV_LEVEL_INFO_LOG(@"%s %@", __func__, self);
     [self deallocTimer];
-    _model = nil;
+    [self cacelDataTask];
     _tkUploadTool = nil;
     [_arrayWaterfall removeAllObjects];
     _arrayWaterfall = nil;
@@ -931,5 +938,7 @@
     _arrayHeadBidding = nil;
     [_supplierM removeAllObjects];
     _supplierM = nil;
+    _model = nil;
+
 }
 @end

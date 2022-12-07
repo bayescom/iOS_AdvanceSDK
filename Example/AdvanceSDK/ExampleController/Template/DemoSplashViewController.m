@@ -174,6 +174,12 @@
 
 }
 
+- (void)dealloc {
+    NSLog(@"%s",__func__);
+    self.advanceSplash.delegate = nil;
+    self.advanceSplash = nil;
+}
+
 /// 广告倒计时结束
 - (void)advanceSplashOnAdCountdownToZero {
     NSLog(@"广告倒计时结束 %s", __func__);
@@ -190,9 +196,4 @@
     NSLog(@"%s 策略id为: %@",__func__ , reqId);
 }
 
-- (void)dealloc {
-    NSLog(@"%s",__func__);
-    self.advanceSplash.delegate = nil;
-    self.advanceSplash = nil;
-}
 @end

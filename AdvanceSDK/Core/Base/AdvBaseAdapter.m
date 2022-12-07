@@ -201,62 +201,60 @@
     
 
     if ([supplier.identifier isEqualToString:SDK_ID_GDT]) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            // 广点通SDK
-            static dispatch_once_t onceToken;
-            dispatch_once(&onceToken, ^{
-                
-                [NSClassFromString(clsName) performSelector:@selector(registerAppId:) withObject:supplier.mediaid];
-            });
-        });
-
+        // 广点通SDK
+//        static dispatch_once_t onceToken;
+//        dispatch_once(&onceToken, ^{
+            
+            [NSClassFromString(clsName) performSelector:@selector(registerAppId:) withObject:supplier.mediaid];
+//        });
+        
     } else if ([supplier.identifier isEqualToString:SDK_ID_CSJ]) {
         // 穿山甲SDK
-        static dispatch_once_t onceToken;
-        dispatch_once(&onceToken, ^{
+//        static dispatch_once_t onceToken;
+//        dispatch_once(&onceToken, ^{
             [NSClassFromString(clsName) performSelector:@selector(setAppID:) withObject:supplier.mediaid];
-        });
+//        });
     } else if ([supplier.identifier isEqualToString:SDK_ID_MERCURY]) {
         // MercurySDK
-        static dispatch_once_t onceToken;
-        dispatch_once(&onceToken, ^{
+//        static dispatch_once_t onceToken;
+//        dispatch_once(&onceToken, ^{
             [NSClassFromString(clsName) performSelector:@selector(setAppID:mediaKey:) withObject:supplier.mediaid withObject:supplier.mediakey];
-        });
+//        });
     } else if ([supplier.identifier isEqualToString:SDK_ID_KS]) {
         // 快手
-        static dispatch_once_t onceToken;
-        dispatch_once(&onceToken, ^{
+//        static dispatch_once_t onceToken;
+//        dispatch_once(&onceToken, ^{
             [NSClassFromString(clsName) performSelector:@selector(setAppId:) withObject:supplier.mediaid];
-        });
+//        });
 
     } else if ([supplier.identifier isEqualToString:SDK_ID_BAIDU]) {
         // 百度
-        static dispatch_once_t onceToken;
-        dispatch_once(&onceToken, ^{
+//        static dispatch_once_t onceToken;
+//        dispatch_once(&onceToken, ^{
             id bdSetting = ((id(*)(id,SEL))objc_msgSend)(NSClassFromString(clsName), @selector(sharedInstance));
             [bdSetting performSelector:@selector(setSupportHttps:) withObject:NO];
 
-        });
+//        });
     } else if ([supplier.identifier isEqualToString:SDK_ID_TANX]) {
         // Tanx
-        static dispatch_once_t onceToken;
-        dispatch_once(&onceToken, ^{
+//        static dispatch_once_t onceToken;
+//        dispatch_once(&onceToken, ^{
 
             [NSClassFromString(clsName) performSelector:@selector(setupSDKWithAppID:andAppKey:) withObject:supplier.mediaid withObject:supplier.mediakey];
 
-        });
+//        });
     } else if ([supplier.identifier isEqualToString:SDK_ID_BIDDING]){
         // bidding 此之前已经对 biddingConfig进行了初始化 并赋值了
         if (!supplier.mediaid) {
             return;
         }
-        static dispatch_once_t onceToken;
-        dispatch_once(&onceToken, ^{
+//        static dispatch_once_t onceToken;
+//        dispatch_once(&onceToken, ^{
             BOOL isEmpty = [self isEmptyString:supplier.mediaid];
             if (isEmpty == NO) {
                 [NSClassFromString(clsName) performSelector:@selector(setupSDKWithAppId:config:) withObject:supplier.mediaid withObject:nil];
             }
-        });
+//        });
 
     } else {
         
