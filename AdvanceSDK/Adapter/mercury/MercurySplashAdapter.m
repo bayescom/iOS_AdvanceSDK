@@ -20,7 +20,7 @@
 
 #import <objc/runtime.h>
 #import <objc/message.h>
-#import <MercurySDK/MercurySDK.h>
+//#import <MercurySDK/MercurySDK.h>
 @interface MercurySplashAdapter () <MercurySplashAdDelegate>
 @property (nonatomic, strong) MercurySplashAd *mercury_ad;
 @property (nonatomic, strong) AdvSupplier *supplier;
@@ -36,7 +36,7 @@
     if (self = [super initWithSupplier:supplier adspot:adspot]) {
         _adspot = adspot;
         _supplier = supplier;
-        [MercuryConfigManager openDebug:YES];
+//        [MercuryConfigManager openDebug:YES];
         _mercury_ad = [[MercurySplashAd alloc] initAdWithAdspotId:_supplier.adspotid delegate:self];
         _mercury_ad.placeholderImage = _adspot.backgroundImage;
         _mercury_ad.logoImage = _adspot.logoImage;
