@@ -6,36 +6,36 @@ PODS:
   - Ads-CN/Dep_Accurate (4.9.0.6):
     - BUAdSDK (= 0.1.0.24)
     - BURelyFoundation/CSJ (= 0.0.3.19)
-  - AdvanceSDK (4.0.2.1):
-    - AdvanceSDK/Core (= 4.0.2.1)
-  - AdvanceSDK/Adspot (4.0.2.1):
+  - AdvanceSDK (4.0.2.3):
+    - AdvanceSDK/Core (= 4.0.2.3)
+  - AdvanceSDK/Adspot (4.0.2.3):
     - AdvanceSDK/Core
-  - AdvanceSDK/AdvBidding (4.0.2.1):
+  - AdvanceSDK/AdvBidding (4.0.2.3):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - AdvBiddingSDK (= 1.1.4)
     - AdvBiddingSuppliers (= 0.0.7)
-  - AdvanceSDK/BD (4.0.2.1):
+  - AdvanceSDK/BD (4.0.2.3):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - BaiduMobAdSDK (= 5.10)
-  - AdvanceSDK/Core (4.0.2.1)
-  - AdvanceSDK/CSJ (4.0.2.1):
+  - AdvanceSDK/Core (4.0.2.3)
+  - AdvanceSDK/CSJ (4.0.2.3):
     - Ads-CN (= 4.9.0.6)
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
-  - AdvanceSDK/GDT (4.0.2.1):
+  - AdvanceSDK/GDT (4.0.2.3):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - GDTMobSDK (= 4.14.00)
-  - AdvanceSDK/KS (4.0.2.1):
+  - AdvanceSDK/KS (4.0.2.3):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - KSAdSDK (= 3.3.34)
-  - AdvanceSDK/Mercury (4.0.2.1):
+  - AdvanceSDK/Mercury (4.0.2.3):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
-    - MercurySDK (= 3.1.7.8)
+    - MercurySDK (= 3.1.7.9)
   - AdvBiddingSDK (1.1.4)
   - AdvBiddingSuppliers (0.0.7)
   - BaiduMobAdSDK (5.10)
@@ -76,7 +76,7 @@ PODS:
   - JSONModel (1.8.0)
   - KSAdSDK (3.3.34)
   - Masonry (1.1.0)
-  - MercurySDK (3.1.7.8)
+  - MercurySDK (3.1.7.9)
   - Reachability (3.2)
   - SDWebImage (5.12.1):
     - SDWebImage/Core (= 5.12.1)
@@ -117,7 +117,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Ads-CN: af14052d0c6dc1b7a80cf4eccabfb9ce5e7edc7e
-  AdvanceSDK: 2cbae287fe782b02135978ceb74d1b4ec0f6e21c
+  AdvanceSDK: 8c9463554e2be61203b0a842ad6777eef8cc79a4
   AdvBiddingSDK: c03884a994a1159d66c16b347e8a7163e8ca3c1d
   AdvBiddingSuppliers: 1bd3248daec8588eab9dd15d4b98b104641163bc
   BaiduMobAdSDK: 4caeb7927b41b7837a56a92f2c581056d8ab62e9
@@ -127,7 +127,7 @@ SPEC CHECKSUMS:
   JSONModel: 02ab723958366a3fd27da57ea2af2113658762e9
   KSAdSDK: 96017d76a6d00e65ae001da7a61776fc4c6a6cbb
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
-  MercurySDK: b98c2b046fdeb15d431c2906cafb89262041bff6
+  MercurySDK: 2cb281ad0b22f480f02a97c9240a9b220f2c2f97
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
   SDWebImage: 4dc3e42d9ec0c1028b960a33ac6b637bb432207b
 
