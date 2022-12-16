@@ -465,13 +465,13 @@
         }
     }];
     
-    for (AdvSupplier *temp in suppliers) {
-        NSLog(@"------1-> %@ %ld %ld %ld", temp.sdktag, (long)temp.sdk_price, (long)temp.supplierPrice, (long)temp.priority);
-    }
-
-    for (AdvSupplier *temp in self.arrayHeadBidding) {
-        NSLog(@"------2-> %@ %ld %ld %ld", temp.sdktag, (long)temp.sdk_price, (long)temp.supplierPrice, (long)temp.priority);
-    }
+//    for (AdvSupplier *temp in suppliers) {
+//        NSLog(@"------1-> %@ %ld %ld %ld", temp.sdktag, (long)temp.sdk_price, (long)temp.supplierPrice, (long)temp.priority);
+//    }
+//
+//    for (AdvSupplier *temp in self.arrayHeadBidding) {
+//        NSLog(@"------2-> %@ %ld %ld %ld", temp.sdktag, (long)temp.sdk_price, (long)temp.supplierPrice, (long)temp.priority);
+//    }
 
 
     // 取价格最高的渠道执行
