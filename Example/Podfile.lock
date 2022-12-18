@@ -6,33 +6,33 @@ PODS:
   - Ads-CN/Dep_Accurate (4.9.0.6):
     - BUAdSDK (= 0.1.0.24)
     - BURelyFoundation/CSJ (= 0.0.3.19)
-  - AdvanceSDK (4.0.2.3):
-    - AdvanceSDK/Core (= 4.0.2.3)
-  - AdvanceSDK/Adspot (4.0.2.3):
+  - AdvanceSDK (4.0.2.4):
+    - AdvanceSDK/Core (= 4.0.2.4)
+  - AdvanceSDK/Adspot (4.0.2.4):
     - AdvanceSDK/Core
-  - AdvanceSDK/AdvBidding (4.0.2.3):
+  - AdvanceSDK/AdvBidding (4.0.2.4):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - AdvBiddingSDK (= 1.1.4)
     - AdvBiddingSuppliers (= 0.0.7)
-  - AdvanceSDK/BD (4.0.2.3):
+  - AdvanceSDK/BD (4.0.2.4):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - BaiduMobAdSDK (= 5.10)
-  - AdvanceSDK/Core (4.0.2.3)
-  - AdvanceSDK/CSJ (4.0.2.3):
+  - AdvanceSDK/Core (4.0.2.4)
+  - AdvanceSDK/CSJ (4.0.2.4):
     - Ads-CN (= 4.9.0.6)
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
-  - AdvanceSDK/GDT (4.0.2.3):
+  - AdvanceSDK/GDT (4.0.2.4):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
-    - GDTMobSDK (= 4.14.00)
-  - AdvanceSDK/KS (4.0.2.3):
+    - GDTMobSDK (= 4.14.02)
+  - AdvanceSDK/KS (4.0.2.4):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - KSAdSDK (= 3.3.34)
-  - AdvanceSDK/Mercury (4.0.2.3):
+  - AdvanceSDK/Mercury (4.0.2.4):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - MercurySDK (= 3.1.7.9)
@@ -70,9 +70,9 @@ PODS:
     - BURelyFoundation/Zip
   - BURelyFoundation/Zip (0.0.3.19):
     - BURelyFoundation/Foundation
-  - GDTMobSDK (4.14.00):
-    - GDTMobSDK/GDTMobSDK (= 4.14.00)
-  - GDTMobSDK/GDTMobSDK (4.14.00)
+  - GDTMobSDK (4.14.02):
+    - GDTMobSDK/GDTMobSDK (= 4.14.02)
+  - GDTMobSDK/GDTMobSDK (4.14.02)
   - JSONModel (1.8.0)
   - KSAdSDK (3.3.34)
   - Masonry (1.1.0)
@@ -117,13 +117,13 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Ads-CN: af14052d0c6dc1b7a80cf4eccabfb9ce5e7edc7e
-  AdvanceSDK: 8c9463554e2be61203b0a842ad6777eef8cc79a4
+  AdvanceSDK: 55ded07ffc2221e442b8f3944b1f6d3e79438a4e
   AdvBiddingSDK: c03884a994a1159d66c16b347e8a7163e8ca3c1d
   AdvBiddingSuppliers: 1bd3248daec8588eab9dd15d4b98b104641163bc
   BaiduMobAdSDK: 4caeb7927b41b7837a56a92f2c581056d8ab62e9
   BUAdSDK: 5528f72f7b9b478a12743ea23af7bdb9746efc00
   BURelyFoundation: c97aafe4c63e92bd54714fde509a60fa2d705e24
-  GDTMobSDK: d7d798e4c2453d246f899487a6df35e194b12e78
+  GDTMobSDK: d1f45f95df9df74ba0253ae9e1036a5f30d23c4c
   JSONModel: 02ab723958366a3fd27da57ea2af2113658762e9
   KSAdSDK: 96017d76a6d00e65ae001da7a61776fc4c6a6cbb
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
