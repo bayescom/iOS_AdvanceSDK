@@ -250,7 +250,7 @@
 }
 
 - (void)dealloc {
-    ADV_LEVEL_INFO_LOG(@"%s %@", __func__, self);
+    ADV_LEVEL_INFO_LOG(@"%s", __func__);
     [self deallocAdapter];
 
 }

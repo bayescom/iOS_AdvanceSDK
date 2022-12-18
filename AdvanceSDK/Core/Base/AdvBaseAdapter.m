@@ -147,11 +147,11 @@
 - (void)deallocAdapter {
     // 该方法为AdvanceSDK 内部调用 开发者不要在外部手动调用 想要释放 直接将广告对象置为nil即可
     ADV_LEVEL_INFO_LOG(@"%s %@", __func__, self);
+    [_arrParallelSupplier removeAllObjects];
+    _arrParallelSupplier = nil;
     [_mgr cacelDataTask];
     _mgr = nil;
     _baseDelegate = nil;
-    [_arrParallelSupplier removeAllObjects];
-    _arrParallelSupplier = nil;
 }
 
 //- (void)setDefaultAdvSupplierWithMediaId:(NSString *)mediaId
@@ -335,9 +335,9 @@
 // 查找一下 容器里有没有并行的渠道
 - (id)adapterInParallelsWithSupplier:(AdvSupplier *)supplier {
     id adapterT;
-    for (NSInteger i = 0 ; i < self.arrParallelSupplier.count; i++) {
+    for (NSInteger i = 0 ; i < _arrParallelSupplier.count; i++) {
         
-        id temp = self.arrParallelSupplier[i];
+        id temp = _arrParallelSupplier[i];
         NSInteger tag = ((NSInteger (*)(id, SEL))objc_msgSend)((id)temp, @selector(tag));
         if (tag == supplier.priority) {
             adapterT = temp;

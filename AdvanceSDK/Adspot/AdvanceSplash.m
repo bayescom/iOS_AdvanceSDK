@@ -319,7 +319,8 @@
 }
 
 - (void)dealloc {
-    ADV_LEVEL_INFO_LOG(@"%s %@ %@", __func__, _adapter , self);
+    ADV_LEVEL_INFO_LOG(@"%s", __func__);
+    ((void (*)(id, SEL))objc_msgSend)((id)_adapter, @selector(deallocAdapter));
     _adapter = nil;
 }
 
