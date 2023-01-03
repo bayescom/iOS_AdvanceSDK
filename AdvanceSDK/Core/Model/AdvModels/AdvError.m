@@ -49,7 +49,7 @@
         @(AdvErrorCode_111) : @"CPT但本地无策略",
         @(AdvErrorCode_112) : @"本地有策略但未命中CPT目标渠道",
         @(AdvErrorCode_113) : @"非CPT本地无策略",
-        @(AdvErrorCode_114) : @"非CPT本地策略都执行失败",
+        @(AdvErrorCode_114) : @"策略都执行失败, 请输出错误回调中的description查看详细原因",
         @(AdvErrorCode_115) : @"请求超出设定总时长",
         @(AdvErrorCode_116) : @"策略中未配置渠道",
         @(AdvErrorCode_117) : @"所有bidding渠道均未返回广告",

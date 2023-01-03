@@ -44,6 +44,7 @@
         @{@"addesc": @"mediaId-adspotId", @"adspotId": @"101959-10006038"},
         @{@"addesc": @"mediaId-adspotId", @"adspotId": @"101959-10006806"},
         @{@"addesc": @"mediaId-adspotId", @"adspotId": @"102342-10006833"},
+        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"102342-10006591"},
 
 
 //
