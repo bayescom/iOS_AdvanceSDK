@@ -62,7 +62,7 @@
     
     // 每次加载广告请 使用新的实例  不要用懒加载, 不要对广告对象进行本地化存储相关的操作
     self.advanceSplash = [[AdvanceSplash alloc] initWithAdspotId:self.adspotId
-                                                  viewController:self];
+                                                       customExt:@{} viewController:self];
 
     self.advanceSplash.isUploadSDKVersion = YES;
     self.advanceSplash.delegate = self;

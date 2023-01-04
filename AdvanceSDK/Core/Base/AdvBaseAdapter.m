@@ -12,6 +12,7 @@
 #import "AdvSdkConfig.h"
 #import <objc/runtime.h>
 #import <objc/message.h>
+#import "AdvanceAESCipher.h"
 
 //# if __has_include(<ABUAdSDK/ABUAdSDK.h>)
 //#import <ABUAdSDK/ABUAdSDK.h>
@@ -218,7 +219,15 @@
         // MercurySDK
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
-            [NSClassFromString(clsName) performSelector:@selector(setAppID:mediaKey:) withObject:supplier.mediaid withObject:supplier.mediakey];
+            Class cls = NSClassFromString(clsName);
+            [cls performSelector:@selector(setAppID:mediaKey:) withObject:supplier.mediaid withObject:supplier.mediakey];
+            
+            NSString *ua = [self.ext objectForKey:AdvanceSDKUaKey];
+            if (ua) {
+                NSString *uaEncrypt = advanceAesEncryptString(ua, AdvanceSDKSecretKey);
+
+                [cls performSelector:@selector(setDefaultUserAgent:) withObject:uaEncrypt];
+            }
         });
     } else if ([supplier.identifier isEqualToString:SDK_ID_KS]) {
         // 快手

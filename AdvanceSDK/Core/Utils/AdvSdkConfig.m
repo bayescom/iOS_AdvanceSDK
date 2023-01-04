@@ -80,6 +80,7 @@ NSString * const AdvSdkTypeAdNameRewardVideo = @"REWARDVIDEO_AD";
 NSString * const AdvanceSDKModelKey = @"AdvanceSDKModelKey";
 NSString * const AdvanceSDKIdfaKey = @"AdvanceSDKIdfaKey";
 NSString * const AdvanceSDKIdfvKey = @"AdvanceSDKIdfvKey";
+NSString * const AdvanceSDKUaKey = @"AdvanceSDKUaKey";
 NSString * const AdvanceSDKCarrierKey = @"AdvanceSDKCarrierKey";
 NSString * const AdvanceSDKNetworkKey = @"AdvanceSDKNetworkKey";
 //timeKeys
