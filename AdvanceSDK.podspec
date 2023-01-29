@@ -73,7 +73,7 @@ Pod::Spec.new do |s|
     s.subspec 'GDT' do |gdt|
         gdt.dependency 'AdvanceSDK/Core'
         gdt.dependency 'AdvanceSDK/Adspot'
-        gdt.dependency 'GDTMobSDK', '4.14.02'
+        gdt.dependency 'GDTMobSDK', '4.14.10'
         gdt.source_files =  'AdvanceSDK/Adapter/gdt/**/*.{h,m}'
         gdt.frameworks = 'AdSupport', 'CoreLocation', 'QuartzCore', 'SystemConfiguration', 'CoreTelephony', 'Security', 'StoreKit', 'AVFoundation', 'WebKit'
         gdt.libraries     = 'xml2', 'z'
@@ -82,7 +82,7 @@ Pod::Spec.new do |s|
     s.subspec 'KS' do |ks|
         ks.dependency 'AdvanceSDK/Core'
         ks.dependency 'AdvanceSDK/Adspot'
-        ks.dependency 'KSAdSDK', '3.3.36'
+        ks.dependency 'KSAdSDK', '3.3.38'
         ks.source_files = 'AdvanceSDK/Adapter/Kuaishou/**/*.{h,m}'
         ks.frameworks = ["Foundation", "UIKit", "MobileCoreServices", "CoreGraphics", "Security", "SystemConfiguration", "CoreTelephony", "AdSupport", "CoreData", "StoreKit", "AVFoundation", "MediaPlayer", "CoreMedia", "WebKit", "Accelerate", "CoreLocation", "AVKit", "MessageUI", "QuickLook", "AudioToolBox", "AddressBook"]
         ks.libraries =  ["z", "resolv.9", "sqlite3", "c++", "c++abi"]
@@ -91,7 +91,7 @@ Pod::Spec.new do |s|
     s.subspec 'BD' do |bd|
         bd.dependency 'AdvanceSDK/Core'
         bd.dependency 'AdvanceSDK/Adspot'
-        bd.dependency 'BaiduMobAdSDK', '5.10'
+        bd.dependency 'BaiduMobAdSDK', '5.101'
         bd.source_files =  'AdvanceSDK/Adapter/bd/**/*.{h,m}'
         bd.frameworks = 'CoreLocation', 'SystemConfiguration', 'CoreGraphics', 'CoreMotion', 'CoreTelephony', 'AdSupport', 'SystemConfiguration', 'QuartzCore', 'WebKit', 'MessageUI','SafariServices','AVFoundation','EventKit','QuartzCore','CoreMedia','StoreKit'
         bd.libraries     = 'c++'

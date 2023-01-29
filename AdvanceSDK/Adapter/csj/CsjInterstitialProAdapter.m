@@ -18,6 +18,7 @@
 @property (nonatomic, strong) BUNativeExpressFullscreenVideoAd *csj_ad;
 @property (nonatomic, weak) AdvanceInterstitial *adspot;
 @property (nonatomic, strong) AdvSupplier *supplier;
+@property (nonatomic, assign) BOOL isCanch;
 
 @end
 
@@ -47,9 +48,7 @@
 
 - (void)supplierStateSuccess {
     ADV_LEVEL_INFO_LOG(@"穿山甲 成功");
-    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
-        [self.delegate advanceUnifiedViewDidLoad];
-    }
+    [self unifiedDelegate];
 }
 
 - (void)supplierStateFailed {
@@ -69,27 +68,22 @@
 }
 
 - (void)dealloc {
-    ADVLog(@"%s", __func__);
+    ADV_LEVEL_INFO_LOG(@"%s", __func__);
+    [self deallocAdapter];
 }
 
 - (void)deallocAdapter {
-    
+    if (_csj_ad) {
+        _csj_ad.delegate = nil;
+        _csj_ad = nil;
+    }
 }
 
 
 // MARK: ======================= BUNativeExpressFullscreenVideoAdDelegate =======================
 /// 广告预加载成功回调
 - (void)nativeExpressFullscreenVideoAdDidLoad:(BUNativeExpressFullscreenVideoAd *)fullscreenVideoAd {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded  supplier:_supplier error:nil];
-//    NSLog(@"穿山甲插屏视频拉取成功");
-    _supplier.state = AdvanceSdkSupplierStateSuccess;
-    if (_supplier.isParallel == YES) {
-        return;
-    }
-
-    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
-        [self.delegate advanceUnifiedViewDidLoad];
-    }
+    
 }
 
 /// 广告预加载失败回调
@@ -99,16 +93,30 @@
     if (_supplier.isParallel == YES) { // 并行不释放 只上报
         return;
     }
-    _csj_ad = nil;
+    [self deallocAdapter];
 //    if ([self.delegate respondsToSelector:@selector(advanceFullScreenVideoOnAdFailedWithSdkId:error:)]) {
 //        [self.delegate advanceFullScreenVideoOnAdFailedWithSdkId:_supplier.identifier error:error];
 //    }
 }
 
+- (void)nativeExpressFullscreenVideoAdDidDownLoadVideo:(BUNativeExpressFullscreenVideoAd *)fullscreenVideoAd {
+//回调后再去展示广告，可保证播放和展示效果
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
+    _supplier.state = AdvanceSdkSupplierStateSuccess;
+    if (_supplier.isParallel == YES) {
+        return;
+    }
+    [self unifiedDelegate];
+}
+
+- (void)nativeExpressFullscreenVideoAdViewRenderSuccess:(BUNativeExpressFullscreenVideoAd *)rewardedVideoAd {
+}
+
 /// 渲染失败
 - (void)nativeExpressFullscreenVideoAdViewRenderFail:(BUNativeExpressFullscreenVideoAd *)rewardedVideoAd error:(NSError *_Nullable)error {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
-    _csj_ad = nil;
+    [self deallocAdapter];
 //    if ([self.delegate respondsToSelector:@selector(advanceFullScreenVideoOnAdFailedWithSdkId:error:)]) {
 //        [self.delegate advanceFullScreenVideoOnAdFailedWithSdkId:_supplier.identifier error:error];
 //    }
@@ -144,6 +152,16 @@
 //            [self.delegate advanceFullScreenVideoOnAdPlayFinish];
 //        }
 //    }
+}
+
+- (void)unifiedDelegate {
+    if (_isCanch) {
+        return;
+    }
+    _isCanch = YES;
+    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
+        [self.delegate advanceUnifiedViewDidLoad];
+    }
 }
 
 @end
