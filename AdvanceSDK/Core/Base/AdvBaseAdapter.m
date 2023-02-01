@@ -12,6 +12,7 @@
 #import "AdvSdkConfig.h"
 #import <objc/runtime.h>
 #import <objc/message.h>
+#import "AdvanceAESCipher.h"
 
 //# if __has_include(<ABUAdSDK/ABUAdSDK.h>)
 //#import <ABUAdSDK/ABUAdSDK.h>
@@ -75,7 +76,7 @@
 - (void)reportWithType:(AdvanceSdkSupplierRepoType)repoType supplier:(AdvSupplier *)supplier error:(NSError *)error {
 //    NSLog(@"|||--- %@ %ld %@",supplier.sdktag, (long)supplier.priority, supplier);
     [_mgr reportWithType:repoType supplier:supplier error:error];
-    
+     
     // 搜集各渠道的错误信息
     if (error) {
         [self collectErrorWithSupplier:supplier error:error];
@@ -147,11 +148,11 @@
 - (void)deallocAdapter {
     // 该方法为AdvanceSDK 内部调用 开发者不要在外部手动调用 想要释放 直接将广告对象置为nil即可
     ADV_LEVEL_INFO_LOG(@"%s %@", __func__, self);
+    _baseDelegate = nil;
     [_arrParallelSupplier removeAllObjects];
     _arrParallelSupplier = nil;
     [_mgr cacelDataTask];
     _mgr = nil;
-    _baseDelegate = nil;
 }
 
 //- (void)setDefaultAdvSupplierWithMediaId:(NSString *)mediaId
@@ -218,7 +219,15 @@
         // MercurySDK
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
-            [NSClassFromString(clsName) performSelector:@selector(setAppID:mediaKey:) withObject:supplier.mediaid withObject:supplier.mediakey];
+            Class cls = NSClassFromString(clsName);
+            [cls performSelector:@selector(setAppID:mediaKey:) withObject:supplier.mediaid withObject:supplier.mediakey];
+            
+            NSString *ua = [self.ext objectForKey:AdvanceSDKUaKey];
+            if (ua) {
+                NSString *uaEncrypt = advanceAesEncryptString(ua, AdvanceSDKSecretKey);
+
+                [cls performSelector:@selector(setDefaultUserAgent:) withObject:uaEncrypt];
+            }
         });
     } else if ([supplier.identifier isEqualToString:SDK_ID_KS]) {
         // 快手

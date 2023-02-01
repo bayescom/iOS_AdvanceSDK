@@ -98,7 +98,7 @@
     if ([supplier.identifier isEqualToString:SDK_ID_GDT]) {
         clsName = @"GdtInterstitialAdapter";
     } else if ([supplier.identifier isEqualToString:SDK_ID_CSJ]) {
-        clsName = @"CsjInterstitialAdapter";
+        clsName = @"CsjInterstitialProAdapter";
     } else if ([supplier.identifier isEqualToString:SDK_ID_MERCURY]) {
         clsName = @"MercuryInterstitialAdapter";
     } else if ([supplier.identifier isEqualToString:SDK_ID_KS]) {
@@ -121,6 +121,7 @@
                 [self.arrParallelSupplier addObject:adapter];
             }
         } else {
+            [_adapter performSelector:@selector(deallocAdapter)];
             _adapter = [self adapterInParallelsWithSupplier:supplier];
             if (!_adapter) {
                 _adapter = ((id (*)(id, SEL, id, id))objc_msgSend)((id)[NSClassFromString(clsName) alloc], @selector(initWithSupplier:adspot:), supplier, self);
