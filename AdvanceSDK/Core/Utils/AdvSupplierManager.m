@@ -485,7 +485,9 @@
 //    NSLog(@"%s %@ %ld",__func__, currentSupplier.sdktag, currentSupplier.sdk_price);
     [self notCPTLoadNextSuppluer:currentSupplier error:nil];
     // 执行的都从 arrayWaterfall里面删除
-    [self.arrayWaterfall removeObject:currentSupplier];
+    if (self.arrayWaterfall) {
+        [self.arrayWaterfall removeObject:currentSupplier];
+    }
 
 }
 
@@ -932,10 +934,13 @@
     [self deallocTimer];
     [self cacelDataTask];
     _tkUploadTool = nil;
-    [_arrayWaterfall removeAllObjects];
-    _arrayWaterfall = nil;
+    
     [_arrayHeadBidding removeAllObjects];
     _arrayHeadBidding = nil;
+    
+    [_arrayWaterfall removeAllObjects];
+    _arrayWaterfall = nil;
+
     [_supplierM removeAllObjects];
     _supplierM = nil;
     _model = nil;

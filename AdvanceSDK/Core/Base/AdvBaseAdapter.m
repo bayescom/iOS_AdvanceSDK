@@ -76,7 +76,7 @@
 - (void)reportWithType:(AdvanceSdkSupplierRepoType)repoType supplier:(AdvSupplier *)supplier error:(NSError *)error {
 //    NSLog(@"|||--- %@ %ld %@",supplier.sdktag, (long)supplier.priority, supplier);
     [_mgr reportWithType:repoType supplier:supplier error:error];
-    
+     
     // 搜集各渠道的错误信息
     if (error) {
         [self collectErrorWithSupplier:supplier error:error];
@@ -148,11 +148,11 @@
 - (void)deallocAdapter {
     // 该方法为AdvanceSDK 内部调用 开发者不要在外部手动调用 想要释放 直接将广告对象置为nil即可
     ADV_LEVEL_INFO_LOG(@"%s %@", __func__, self);
+    _baseDelegate = nil;
     [_arrParallelSupplier removeAllObjects];
     _arrParallelSupplier = nil;
     [_mgr cacelDataTask];
     _mgr = nil;
-    _baseDelegate = nil;
 }
 
 //- (void)setDefaultAdvSupplierWithMediaId:(NSString *)mediaId
