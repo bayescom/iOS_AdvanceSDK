@@ -23,7 +23,7 @@
 @property (nonatomic, assign) BOOL isCanch;
 
 @end
-
+ 
 @implementation KsInterstitialAdapter
 
 - (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(id)adspot {
@@ -117,8 +117,8 @@
 
     } else {// 如果没有load 报错 则为 loadfail
         [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
+        _supplier.state = AdvanceSdkSupplierStateFailed;
         if (_supplier.isParallel == YES) { // 并行不释放 只上报
-            _supplier.state = AdvanceSdkSupplierStateFailed;
             return;
         }
     }

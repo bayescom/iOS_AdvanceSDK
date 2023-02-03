@@ -148,7 +148,9 @@
 - (void)deallocAdapter {
     // 该方法为AdvanceSDK 内部调用 开发者不要在外部手动调用 想要释放 直接将广告对象置为nil即可
     ADV_LEVEL_INFO_LOG(@"%s %@", __func__, self);
+    
     _baseDelegate = nil;
+    _mgr.delegate = nil;
     [_arrParallelSupplier removeAllObjects];
     _arrParallelSupplier = nil;
     [_mgr cacelDataTask];
