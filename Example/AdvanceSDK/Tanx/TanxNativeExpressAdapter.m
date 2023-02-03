@@ -138,8 +138,8 @@
 
         } else {
             [strongSelf->_adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:strongSelf->_supplier error:nil];
+            strongSelf->_supplier.state = AdvanceSdkSupplierStateFailed;
             if (strongSelf->_supplier.isParallel == YES) {
-                strongSelf->_supplier.state = AdvanceSdkSupplierStateFailed;
                 return;
             }
         }

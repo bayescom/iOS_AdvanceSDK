@@ -119,8 +119,8 @@
 //    ADVLog(@"全屏视频缓存失败，failReason：%d", reason);
     NSError *error = [[NSError alloc]initWithDomain:@"BDAdErrorDomain" code:1000030 + reason userInfo:@{@"desc":@"百度广告拉取失败"}];
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded  supplier:_supplier error:error];
+    _supplier.state = AdvanceSdkSupplierStateFailed;
     if (_supplier.isParallel == YES) {
-        _supplier.state = AdvanceSdkSupplierStateFailed;
         return;
     }
     _bd_ad = nil;

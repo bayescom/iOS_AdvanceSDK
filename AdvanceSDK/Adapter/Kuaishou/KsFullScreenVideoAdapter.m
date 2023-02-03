@@ -108,8 +108,8 @@
  */
 - (void)fullscreenVideoAd:(KSFullscreenVideoAd *)fullscreenVideoAd didFailWithError:(NSError *_Nullable)error {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded  supplier:_supplier error:error];
+    _supplier.state = AdvanceSdkSupplierStateFailed;
     if (_supplier.isParallel == YES) {
-        _supplier.state = AdvanceSdkSupplierStateFailed;
         return;
     }
 }

@@ -87,8 +87,8 @@
 //            [self.delegate advanceNativeExpressOnAdFailedWithSdkId:_supplier.identifier
 //                                                                 error:[NSError errorWithDomain:@"" code:100000 userInfo:@{@"msg": @"无广告返回"}]];
 //        }
+        _supplier.state = AdvanceSdkSupplierStateFailed;
         if (_supplier.isParallel == YES) {
-            _supplier.state = AdvanceSdkSupplierStateFailed;
             return;
         }
 
@@ -126,8 +126,8 @@
 /// 拉取原生模板广告失败
 - (void)mercury_nativeExpressAdFailToLoadWithError:(NSError *)error {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
+    _supplier.state = AdvanceSdkSupplierStateFailed;
     if (_supplier.isParallel == YES) {
-        _supplier.state = AdvanceSdkSupplierStateFailed;
         return;
     }
     _mercury_ad = nil;

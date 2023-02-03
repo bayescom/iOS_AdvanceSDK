@@ -108,8 +108,8 @@
 /// 广告加载失败回调
 - (void)gdt_rewardVideoAd:(GDTRewardVideoAd *)rewardedVideoAd didFailWithError:(NSError *)error {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
+    _supplier.state = AdvanceSdkSupplierStateFailed;
     if (_supplier.isParallel == YES) {
-        _supplier.state = AdvanceSdkSupplierStateFailed;
         return;
     }
 

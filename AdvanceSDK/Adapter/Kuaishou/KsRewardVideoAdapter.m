@@ -123,8 +123,8 @@
 - (void)rewardedVideoAd:(KSRewardedVideoAd *)rewardedVideoAd didFailWithError:(NSError *_Nullable)error {
 //    NSLog(@"快手 错误 %@", error);
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
+    _supplier.state = AdvanceSdkSupplierStateFailed;
     if (_supplier.isParallel == YES) {
-        _supplier.state = AdvanceSdkSupplierStateFailed;
         return;
     }
 

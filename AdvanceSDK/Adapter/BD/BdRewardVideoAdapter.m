@@ -104,8 +104,8 @@
 - (void)rewardedAdLoadFail:(BaiduMobAdRewardVideo *)video {
     NSError *error = [[NSError alloc]initWithDomain:@"BDAdErrorDomain" code:1000000 userInfo:@{@"desc":@"百度广告请求错误"}];
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
+    _supplier.state = AdvanceSdkSupplierStateFailed;
     if (_supplier.isParallel == YES) {
-        _supplier.state = AdvanceSdkSupplierStateFailed;
         return;
     }
 }

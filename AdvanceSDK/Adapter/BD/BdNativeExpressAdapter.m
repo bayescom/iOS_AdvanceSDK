@@ -87,8 +87,8 @@
 - (void)nativeAdObjectsSuccessLoad:(NSArray*)nativeAds nativeAd:(BaiduMobAdNative *)nativeAd {
     if (nativeAds == nil || nativeAds.count == 0) {
         [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:[NSError errorWithDomain:@"" code:100000 userInfo:@{@"msg":@"无广告返回"}]];
+        _supplier.state = AdvanceSdkSupplierStateFailed;
         if (_supplier.isParallel == YES) {
-            _supplier.state = AdvanceSdkSupplierStateFailed;
             return;
         }
 
@@ -141,9 +141,8 @@
 - (void)nativeAdsFailLoad:(BaiduMobFailReason)reason {
     NSError *error = [[NSError alloc]initWithDomain:@"BDAdErrorDomain" code:1000030 + reason userInfo:@{@"desc":@"百度广告拉取失败"}];
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
-
+    _supplier.state = AdvanceSdkSupplierStateFailed;
     if (_supplier.isParallel == YES) {
-        _supplier.state = AdvanceSdkSupplierStateFailed;
         return;
     }
 

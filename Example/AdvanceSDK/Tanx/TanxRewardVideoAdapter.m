@@ -121,8 +121,8 @@
 /// @param error 错误
 - (void)rewardVideoAd:(TXAdRewardVideoAd *)rewardVideoAd didLoadFailWithError:(NSError *)error {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
+    _supplier.state = AdvanceSdkSupplierStateFailed;
     if (_supplier.isParallel == YES) {
-        _supplier.state = AdvanceSdkSupplierStateFailed;
         return;
     }
 }
@@ -148,8 +148,8 @@
 /// @param error 错误
 - (void)rewardVideoAd:(TXAdRewardVideoAd *)rewardVideoAd didShowFailWithError:(NSError *)error {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
+    _supplier.state = AdvanceSdkSupplierStateFailed;
     if (_supplier.isParallel == YES) {
-        _supplier.state = AdvanceSdkSupplierStateFailed;
         return;
     }
 }

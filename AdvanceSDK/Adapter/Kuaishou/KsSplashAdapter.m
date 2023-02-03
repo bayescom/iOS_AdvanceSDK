@@ -171,8 +171,8 @@
  */
 - (void)ksad_splashAd:(KSSplashAdView *)splashAdView didFailWithError:(NSError *)error {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
+    _supplier.state = AdvanceSdkSupplierStateFailed;
     if (_supplier.isParallel == YES) {
-        _supplier.state = AdvanceSdkSupplierStateFailed;
         return;
     }
     [self deallocAdapter];

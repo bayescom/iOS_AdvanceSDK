@@ -17,9 +17,8 @@
 @interface DemoSplashViewController () <AdvanceSplashDelegate>
 @property(strong,nonatomic) AdvanceSplash *advanceSplash;
 
+@property (nonatomic, strong) NSLock *lock;
 
-@property (nonatomic, strong) CADisplayLink *timeoutCheckTimer;
-@property (nonatomic, assign) NSInteger timeout_stamp;
 @end
 
 @implementation DemoSplashViewController
@@ -118,6 +117,14 @@
     UIGraphicsEndImageContext();
     return image;
 }
+
+- (NSLock *)lock {
+    if (!_lock) {
+        _lock = [NSLock new];
+    }
+    return _lock;
+}
+
 
 // MARK: ======================= AdvanceSplashDelegate =======================
 

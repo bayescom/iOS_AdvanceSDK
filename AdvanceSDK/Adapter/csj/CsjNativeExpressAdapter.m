@@ -86,8 +86,8 @@
 - (void)nativeExpressAdSuccessToLoad:(id)nativeExpressAd views:(nonnull NSArray<__kindof BUNativeExpressAdView *> *)views {
     if (views == nil || views.count == 0) {
         [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:[NSError errorWithDomain:@"" code:100000 userInfo:@{@"msg":@"无广告返回"}]];
+        _supplier.state = AdvanceSdkSupplierStateFailed;
         if (_supplier.isParallel == YES) { // 并行不释放 只上报
-            _supplier.state = AdvanceSdkSupplierStateFailed;
             return;
         }
 
@@ -128,8 +128,8 @@
 //    if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdFailedWithSdkId:error:)]) {
 //        [_delegate advanceNativeExpressOnAdFailedWithSdkId:_supplier.identifier error:error];
 //    }
+    _supplier.state = AdvanceSdkSupplierStateFailed;
     if (_supplier.isParallel == YES) { // 并行不释放 只上报
-        _supplier.state = AdvanceSdkSupplierStateFailed;
         return;
     }
 
