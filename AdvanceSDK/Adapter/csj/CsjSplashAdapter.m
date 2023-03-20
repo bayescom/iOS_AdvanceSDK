@@ -197,9 +197,9 @@
 - (void)splashAdDidClose:(nonnull BUSplashAd *)splashAd closeType:(BUSplashAdCloseType)closeType {
     
     if (closeType == BUSplashAdCloseType_CountdownToZero) {
-        if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdCountdownToZero)]) {
-            [self.delegate advanceSplashOnAdCountdownToZero];
-        }
+//        if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdCountdownToZero)]) {
+//            [self.delegate advanceSplashOnAdCountdownToZero];
+//        }
     }
     
     if (closeType == BUSplashAdCloseType_ClickSkip) {

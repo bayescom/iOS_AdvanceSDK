@@ -17,7 +17,7 @@
 
 /// 广告倒计时结束回调 百度广告不支持该回调
 #pragma 百度广告不支持该回调
-- (void)advanceSplashOnAdCountdownToZero DEPRECATED_MSG_ATTRIBUTE("该回调即将被废弃, 请在 -advanceDidClose 中处理相关闭时关业务");;
+- (void)advanceSplashOnAdCountdownToZero DEPRECATED_MSG_ATTRIBUTE("该回调已经被废弃, 请在 -advanceDidClose 中处理相关闭时关业务");;
 
 
 @end

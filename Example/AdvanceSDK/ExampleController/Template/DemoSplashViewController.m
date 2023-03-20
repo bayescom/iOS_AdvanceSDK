@@ -171,10 +171,10 @@
     self.advanceSplash = nil;
 }
 
-/// 广告倒计时结束
-- (void)advanceSplashOnAdCountdownToZero {
-    NSLog(@"广告倒计时结束 %s", __func__);
-}
+///// 广告倒计时结束
+//- (void)advanceSplashOnAdCountdownToZero {
+//    NSLog(@"广告倒计时结束 %s", __func__);
+//}
 
 /// 点击了跳过
 - (void)advanceSplashOnAdSkipClicked {

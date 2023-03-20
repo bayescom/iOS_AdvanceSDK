@@ -178,9 +178,9 @@
             [self.delegate advanceSplashOnAdSkipClicked];
         }
     } else {
-        if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdCountdownToZero)]) {
-            [self.delegate advanceSplashOnAdCountdownToZero];
-        }
+//        if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdCountdownToZero)]) {
+//            [self.delegate advanceSplashOnAdCountdownToZero];
+//        }
     }
     [self.customSplashView removeFromSuperview];
     [self.imgV removeFromSuperview];

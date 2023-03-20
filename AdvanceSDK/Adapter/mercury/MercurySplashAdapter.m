@@ -203,9 +203,9 @@
 }
 
 - (void)mercury_splashAdLifeTime:(NSUInteger)time {
-    if (time <= 0 && [self.delegate respondsToSelector:@selector(advanceSplashOnAdCountdownToZero)]) {
-        [self.delegate advanceSplashOnAdCountdownToZero];
-    }
+//    if (time <= 0 && [self.delegate respondsToSelector:@selector(advanceSplashOnAdCountdownToZero)]) {
+//        [self.delegate advanceSplashOnAdCountdownToZero];
+//    }
     
     if (self.isGMBidding == 0) {
         return;
