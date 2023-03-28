@@ -21,17 +21,24 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, weak) UIViewController *viewController;
 
+@property (nonatomic, assign, readonly) CGSize adSize;
+
+
+
 - (instancetype)initWithAdspotId:(NSString *)adspotid
-                  viewController:(UIViewController *)viewController;
+                  viewController:(UIViewController *)viewController
+                          adSize:(CGSize)adSize;
 
 
 /// 构造函数
 /// @param adspotid adspotid
 /// @param ext 自定义拓展参数
 /// @param viewController viewController
+/// @param adSize 广告素材的期望尺寸, 仅部分支持, 渠道也只是会返回近似尺寸的素材,不会严格按照传入的尺寸展示
 - (instancetype)initWithAdspotId:(NSString *)adspotid
                        customExt:(NSDictionary *_Nonnull)ext
-                  viewController:(UIViewController *)viewController;
+                  viewController:(UIViewController *)viewController
+                          adSize:(CGSize)adSize;
 
 - (void)showAd;
 
