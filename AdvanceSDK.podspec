@@ -120,7 +120,7 @@ Pod::Spec.new do |s|
     s.subspec 'Bidding' do |bidding|
         bidding.dependency 'AdvanceSDK/Core'
         bidding.dependency 'AdvanceSDK/Adspot'
-        bidding.dependency 'AdvBiddingSuppliers','0.0.7'
+        bidding.dependency 'AdvBiddingSuppliers','0.0.8'
 
 #        bidding.dependency 'Ads-CN'
         bidding.source_files =  ['AdvanceSDK/Adapter/Bidding/*{h,m}',
