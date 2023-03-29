@@ -9,9 +9,9 @@
 Pod::Spec.new do |s|
     s.name             = 'AdvanceSDK'
     
-    s.version          = '4.0.2.8'
-    s.ios.deployment_target = '9.0'
-    s.platform     = :ios, "9.0"
+    s.version          = '4.0.2.9'
+    s.ios.deployment_target = '10.0'
+    s.platform     = :ios, "10.0"
     s.requires_arc = true
     
     s.license          = { :type => 'MIT', :file => 'LICENSE' }
@@ -53,7 +53,7 @@ Pod::Spec.new do |s|
     s.subspec 'Mercury' do |mer|
         mer.dependency 'AdvanceSDK/Core'
         mer.dependency 'AdvanceSDK/Adspot'
-        mer.dependency 'MercurySDK', '3.1.8.1'
+        mer.dependency 'MercurySDK', '3.1.8.5'
         mer.source_files = 'AdvanceSDK/Adapter/mercury/**/*.{h,m}'
         mer.frameworks = 'StoreKit', 'AVFoundation', 'CoreMotion'
     end
@@ -82,7 +82,7 @@ Pod::Spec.new do |s|
     s.subspec 'KS' do |ks|
         ks.dependency 'AdvanceSDK/Core'
         ks.dependency 'AdvanceSDK/Adspot'
-        ks.dependency 'KSAdSDK', '3.3.36'
+        ks.dependency 'KSAdSDK', '3.3.40'
         ks.source_files = 'AdvanceSDK/Adapter/Kuaishou/**/*.{h,m}'
         ks.frameworks = ["Foundation", "UIKit", "MobileCoreServices", "CoreGraphics", "Security", "SystemConfiguration", "CoreTelephony", "AdSupport", "CoreData", "StoreKit", "AVFoundation", "MediaPlayer", "CoreMedia", "WebKit", "Accelerate", "CoreLocation", "AVKit", "MessageUI", "QuickLook", "AudioToolBox", "AddressBook"]
         ks.libraries =  ["z", "resolv.9", "sqlite3", "c++", "c++abi"]
