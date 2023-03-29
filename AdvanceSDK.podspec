@@ -10,8 +10,8 @@ Pod::Spec.new do |s|
     s.name             = 'AdvanceSDK'
     
     s.version          = '4.0.2.9'
-    s.ios.deployment_target = '9.0'
-    s.platform     = :ios, "9.0"
+    s.ios.deployment_target = '10.0'
+    s.platform     = :ios, "10.0"
     s.requires_arc = true
     
     s.license          = { :type => 'MIT', :file => 'LICENSE' }
@@ -53,7 +53,7 @@ Pod::Spec.new do |s|
     s.subspec 'Mercury' do |mer|
         mer.dependency 'AdvanceSDK/Core'
         mer.dependency 'AdvanceSDK/Adspot'
-        mer.dependency 'MercurySDK', '3.1.8.1'
+        mer.dependency 'MercurySDK', '3.1.8.5'
         mer.source_files = 'AdvanceSDK/Adapter/mercury/**/*.{h,m}'
         mer.frameworks = 'StoreKit', 'AVFoundation', 'CoreMotion'
     end
