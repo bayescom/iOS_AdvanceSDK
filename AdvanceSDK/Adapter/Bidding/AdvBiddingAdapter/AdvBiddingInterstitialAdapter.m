@@ -29,6 +29,7 @@
         _adspot = adspot;
         _supplier = supplier;
         
+        NSLog(@"===> %@", NSStringFromCGSize(_adspot.adSize));
         self.interstitialAd = [[ABUInterstitialAd alloc] initWithAdUnitID:supplier.adspotid size:_adspot.adSize];
         self.interstitialAd.delegate = self;
         self.interstitialAd.mutedIfCan = YES;

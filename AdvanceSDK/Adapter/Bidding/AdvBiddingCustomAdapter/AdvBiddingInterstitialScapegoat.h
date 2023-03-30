@@ -6,10 +6,18 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "AdvanceInterstitialDelegate.h"
+
+# if __has_include(<ABUAdSDK/ABUAdSDK.h>)
+#import <ABUAdSDK/ABUAdSDK.h>
+#else
+#import <Ads-Mediation-CN/ABUAdSDK.h>
+#endif
 
 NS_ASSUME_NONNULL_BEGIN
-
-@interface AdvBiddingInterstitialScapegoat : NSObject
+@class AdvBiddingInterstitialCustomAdapter;
+@interface AdvBiddingInterstitialScapegoat : NSObject<AdvanceInterstitialDelegate>
+@property (nonatomic, weak)AdvBiddingInterstitialCustomAdapter *a;
 
 @end
 

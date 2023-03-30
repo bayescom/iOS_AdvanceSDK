@@ -7,11 +7,47 @@
 
 #import "AdvBiddingInterstitialCustomAdapter.h"
 #import <AdvanceSDK/AdvanceInterstitial.h>
-#import "AdvBiddingRewardVideoScapegoat.h"
+#import "AdvBiddingInterstitialScapegoat.h"
 #import "AdvBiddingCongfig.h"
 #import "AdvSupplierModel.h"
 #import "UIApplication+Adv.h"
+@interface AdvBiddingInterstitialCustomAdapter ()
+@property (nonatomic, strong) AdvBiddingInterstitialScapegoat *scapegoat;
+
+@property (nonatomic, strong) AdvanceInterstitial *interstitialAd;
+
+@end
 
 @implementation AdvBiddingInterstitialCustomAdapter
+- (AdvBiddingInterstitialScapegoat *)scapegoat {
+    if (_scapegoat == nil) {
+        _scapegoat = [[AdvBiddingInterstitialScapegoat alloc]init];
+        _scapegoat.a = self;
+    }
+    return _scapegoat;
+}
+
+- (void)loadInterstitialAdWithSlotID:(NSString *)slotID andSize:(CGSize)size parameter:(NSDictionary *)parameter {
+    NSLog(@"1111===> %@", NSStringFromCGSize(size));
+    [self _setupWithWithSlotID:slotID adSize:size andParameter:parameter];
+    
+    if (self.interstitialAd) {
+        [self.interstitialAd loadAd];
+    } else {
+        [self.bridge interstitialAd:self didLoadFailWithError:nil ext:@{}];
+    }
+
+}
+
+#pragma mark - Private
+- (void)_setupWithWithSlotID:(NSString *)slotID adSize:(CGSize)adSize andParameter:(NSDictionary *)parameter {
+    // 非模板或者较新版本不区分模板类，统一使用一个类
+        self.interstitialAd = [[AdvanceInterstitial alloc] initWithAdspotId:slotID
+                                                             viewController:[UIApplication sharedApplication].adv_getCurrentWindow.rootViewController
+                                                                     adSize:adSize];
+        
+        // ↓↓↓ 尽量不要使用adapter作为接收adn广告的delegate对象，可传入包装类用于接收adn的广告回调 ↓↓↓
+        [self.interstitialAd setDelegate:self.scapegoat];
+}
 
 @end
