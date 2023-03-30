@@ -87,13 +87,14 @@
 # pragma mark ---<ABUNativeAdsManagerDelegate>---
 - (void)nativeAdsManagerSuccessToLoad:(ABUNativeAdsManager *_Nonnull)adsManager nativeAds:(NSArray<ABUNativeAdView *> *_Nullable)nativeAdViewArray {
     if (nativeAdViewArray == nil || nativeAdViewArray.count == 0) {
+        _supplier.state = AdvanceSdkSupplierStateFailed;
         [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:nil];
         if (_supplier.isParallel == YES) {
-            _supplier.state = AdvanceSdkSupplierStateFailed;
             return;
         }
 
     } else {
+        _supplier.state = AdvanceSdkSupplierStateSuccess;
         [_adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
         
         NSMutableArray *temp = [NSMutableArray array];
@@ -113,7 +114,6 @@
         self.views = temp;
         if (_supplier.isParallel == YES) {
 //            NSLog(@"修改状态: %@", _supplier);
-            _supplier.state = AdvanceSdkSupplierStateSuccess;
             return;
         }
 
@@ -128,8 +128,8 @@
 - (void)nativeAdsManager:(ABUNativeAdsManager *_Nonnull)adsManager didFailWithError:(NSError *_Nullable)error {
     ADV_LEVEL_INFO_LOG(@"%s:%@", __func__, error);
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
+    _supplier.state = AdvanceSdkSupplierStateFailed;
     if (_supplier.isParallel == YES) {
-        _supplier.state = AdvanceSdkSupplierStateFailed;
         return;
     }
 

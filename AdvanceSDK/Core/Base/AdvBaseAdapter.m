@@ -267,7 +267,7 @@
 //            }
             
             // Gromore SDK初始化方法
-            [ABUAdSDKManager setupSDKWithAppId:@"5000546" config:^ABUUserConfig *(ABUUserConfig *c) {
+            [ABUAdSDKManager setupSDKWithAppId:supplier.mediaid config:^ABUUserConfig *(ABUUserConfig *c) {
         #ifdef DEBUG
                 // 打开日志开关，线上环境请关闭
                 c.logEnable = YES;

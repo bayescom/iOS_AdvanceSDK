@@ -173,9 +173,7 @@
  * interstitial ad did close other controller
  */
 - (void)ksad_interstitialAdDidCloseOtherController:(KSInterstitialAd *)interstitialAd interactionType:(KSAdInteractionType)interactionType {
-    if ([self.delegate respondsToSelector:@selector(advanceDidClose)]) {
-        [self.delegate advanceDidClose];
-    }
+    
 }
 
 - (void)unifiedDelegate {

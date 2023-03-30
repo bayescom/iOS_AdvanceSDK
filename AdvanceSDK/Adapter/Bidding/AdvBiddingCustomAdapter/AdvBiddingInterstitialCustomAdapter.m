@@ -11,6 +11,7 @@
 #import "AdvBiddingCongfig.h"
 #import "AdvSupplierModel.h"
 #import "UIApplication+Adv.h"
+#import "AdvLog.h"
 @interface AdvBiddingInterstitialCustomAdapter ()
 @property (nonatomic, strong) AdvBiddingInterstitialScapegoat *scapegoat;
 
@@ -32,12 +33,25 @@
     [self _setupWithWithSlotID:slotID adSize:size andParameter:parameter];
     
     if (self.interstitialAd) {
-        [self.interstitialAd loadAd];
+        AdvSupplierModel *model = [[AdvBiddingCongfig defaultManager] returnSupplierByAdspotId:slotID];
+        [self.interstitialAd loadAdWithSupplierModel:model];
     } else {
         [self.bridge interstitialAd:self didLoadFailWithError:nil ext:@{}];
     }
 
 }
+
+- (BOOL)showAdFromRootViewController:(UIViewController *)viewController parameter:(NSDictionary *)parameter {
+    if (self.interstitialAd) {
+        [self.interstitialAd showAd];
+    } else {
+        [self.bridge interstitialAdDidShowFailed:self error:nil];
+        return NO;
+    }
+    
+    return YES;
+}
+
 
 #pragma mark - Private
 - (void)_setupWithWithSlotID:(NSString *)slotID adSize:(CGSize)adSize andParameter:(NSDictionary *)parameter {
@@ -48,6 +62,11 @@
         
         // ↓↓↓ 尽量不要使用adapter作为接收adn广告的delegate对象，可传入包装类用于接收adn的广告回调 ↓↓↓
         [self.interstitialAd setDelegate:self.scapegoat];
+}
+
+- (void)dealloc {
+    ADV_LEVEL_INFO_LOG(@"%s",__func__);
+    self.interstitialAd = nil;
 }
 
 @end

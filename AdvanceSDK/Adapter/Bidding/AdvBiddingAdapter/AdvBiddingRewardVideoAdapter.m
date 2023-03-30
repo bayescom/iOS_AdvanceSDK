@@ -103,12 +103,12 @@
 /// @param rewardedVideoAd 广告管理对象
 - (void)rewardedVideoAdDidLoad:(ABURewardedVideoAd *_Nonnull)rewardedVideoAd {
     ADV_LEVEL_INFO_LOG(@"%s",__func__);
+    _supplier.state = AdvanceSdkSupplierStateSuccess;
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
     
 //    NSLog(@"Bidding激励视频拉取成功 %@",self.gdt_ad);
     if (_supplier.isParallel == YES) {
 //        NSLog(@"修改状态: %@", _supplier);
-        _supplier.state = AdvanceSdkSupplierStateSuccess;
         return;
     }
 
@@ -124,8 +124,8 @@
 - (void)rewardedVideoAd:(ABURewardedVideoAd *_Nonnull)rewardedVideoAd didFailWithError:(NSError *_Nullable)error {
     ADV_LEVEL_INFO_LOG(@"%s error:%@", __func__, error);
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
+    _supplier.state = AdvanceSdkSupplierStateFailed;
     if (_supplier.isParallel == YES) {
-        _supplier.state = AdvanceSdkSupplierStateFailed;
         return;
     }
 

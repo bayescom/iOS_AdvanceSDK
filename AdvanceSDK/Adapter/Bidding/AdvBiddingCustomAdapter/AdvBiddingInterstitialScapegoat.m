@@ -58,4 +58,8 @@
     [self.a.bridge interstitialAdDidClose:self.a];
 }
 
+- (void)dealloc {
+    ADV_LEVEL_INFO_LOG(@"%s", __func__);
+}
+
 @end
