@@ -36,7 +36,8 @@
     
 
     self.advanceInterstitial = [[AdvanceInterstitial alloc] initWithAdspotId:self.adspotId
-                                                              viewController:self];
+                                                              viewController:self
+                                                                      adSize:CGSizeMake(414, 300)];
         self.advanceInterstitial.delegate = self;
     _isAdLoaded=false;
     [self.advanceInterstitial loadAd];
@@ -95,5 +96,10 @@
     NSLog(@"%s 策略id为: %@",__func__ , reqId);
 }
 
+
+- (void)dealloc {
+    NSLog(@"%s",__func__);
+
+}
 
 @end

@@ -21,11 +21,11 @@
 
 @implementation AdvanceInterstitial
 
-- (instancetype)initWithAdspotId:(NSString *)adspotid viewController:(nonnull UIViewController *)viewController {
-    return [self initWithAdspotId:adspotid customExt:nil viewController:viewController];
+- (instancetype)initWithAdspotId:(NSString *)adspotid viewController:(nonnull UIViewController *)viewController adSize:(CGSize)adSize {
+    return [self initWithAdspotId:adspotid customExt:nil viewController:viewController adSize:adSize];
 }
 
-- (instancetype)initWithAdspotId:(NSString *)adspotid customExt:(NSDictionary * _Nonnull)ext viewController:(nonnull UIViewController *)viewController{
+- (instancetype)initWithAdspotId:(NSString *)adspotid customExt:(NSDictionary * _Nonnull)ext viewController:(nonnull UIViewController *)viewController adSize:(CGSize)adSize{
     ext = [ext mutableCopy];
     if (!ext) {
         ext = [NSMutableDictionary dictionary];
@@ -33,6 +33,7 @@
     [ext setValue:AdvSdkTypeAdNameInterstitial forKey: AdvSdkTypeAdName];
     if (self = [super initWithMediaId:@"" adspotId:adspotid customExt:ext]) {
         _viewController = viewController;
+        _adSize = adSize;
     }
     return self;
 }
@@ -98,13 +99,15 @@
     if ([supplier.identifier isEqualToString:SDK_ID_GDT]) {
         clsName = @"GdtInterstitialAdapter";
     } else if ([supplier.identifier isEqualToString:SDK_ID_CSJ]) {
-        clsName = @"CsjInterstitialProAdapter";
+        clsName = @"CsjInterstitialAdapter";
     } else if ([supplier.identifier isEqualToString:SDK_ID_MERCURY]) {
         clsName = @"MercuryInterstitialAdapter";
     } else if ([supplier.identifier isEqualToString:SDK_ID_KS]) {
         clsName = @"KsInterstitialAdapter";
     } else if ([supplier.identifier isEqualToString:SDK_ID_BAIDU]) {
         clsName = @"BdInterstitialAdapter";
+    } else if ([supplier.identifier isEqualToString:SDK_ID_BIDDING]) {
+        clsName = @"AdvBiddingInterstitialAdapter";
     }
     if (NSClassFromString(clsName)) {
 #pragma clang diagnostic push

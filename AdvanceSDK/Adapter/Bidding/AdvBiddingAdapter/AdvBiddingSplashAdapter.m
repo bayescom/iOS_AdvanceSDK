@@ -18,10 +18,10 @@
 
 @interface AdvBiddingSplashAdapter ()<ABUSplashAdDelegate>
 {
-     
+    
     NSInteger _timeout;
     NSInteger _timeout_stamp;
-
+    
 }
 @property (nonatomic, strong) ABUSplashAd *splashAd;
 @property (nonatomic, weak) AdvanceSplash *adspot;

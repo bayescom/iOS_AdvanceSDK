@@ -1,7 +1,6 @@
-use_frameworks!
-
-platform :ios, '10.0'
 source 'https://github.com/CocoaPods/Specs.git'
+use_frameworks!
+platform :ios, '10.0'
 target 'AdvanceSDK_Example' do
 
   pod 'AdvanceSDK', :path => '../'
@@ -10,8 +9,8 @@ target 'AdvanceSDK_Example' do
   pod 'AdvanceSDK/GDT', :path => '../'
   pod 'AdvanceSDK/KS', :path => '../'
   pod 'AdvanceSDK/BD', :path => '../'
-#  pod 'AdvanceSDK/Bidding', :path => '../'
-  pod 'AdvanceSDK/AdvBidding', :path => '../'
+  pod 'AdvanceSDK/Bidding', :path => '../'
+#  pod 'AdvanceSDK/AdvBidding', :path => '../'
   pod 'JSONModel', '1.8.0'
   pod 'Reachability', '3.2'
   pod 'SDWebImage', '5.12.1'

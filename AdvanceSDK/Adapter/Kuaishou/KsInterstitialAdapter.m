@@ -31,7 +31,8 @@
         _adspot = adspot;
         _supplier = supplier;
         _isDidLoad = NO;
-        _ks_ad = [[KSInterstitialAd alloc] initWithPosId:_supplier.adspotid containerSize:_adspot.viewController.navigationController.view.bounds.size];
+        _ks_ad =
+        _ks_ad = [[KSInterstitialAd alloc] initWithPosId:_supplier.adspotid];
     }
     return self;
 }
@@ -172,9 +173,7 @@
  * interstitial ad did close other controller
  */
 - (void)ksad_interstitialAdDidCloseOtherController:(KSInterstitialAd *)interstitialAd interactionType:(KSAdInteractionType)interactionType {
-    if ([self.delegate respondsToSelector:@selector(advanceDidClose)]) {
-        [self.delegate advanceDidClose];
-    }
+    
 }
 
 - (void)unifiedDelegate {
