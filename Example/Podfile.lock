@@ -27,7 +27,7 @@ PODS:
   - AdvanceSDK/GDT (4.0.3.1):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
-    - GDTMobSDK (= 4.14.10)
+    - GDTMobSDK (= 4.14.22)
   - AdvanceSDK/KS (4.0.3.1):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
@@ -35,7 +35,7 @@ PODS:
   - AdvanceSDK/Mercury (4.0.3.1):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
-    - MercurySDK (= 3.1.8.5)
+    - MercurySDK (= 3.1.8.6)
   - AdvBiddingSDK (1.1.5)
   - AdvBiddingSuppliers (0.0.8)
   - BaiduMobAdSDK (5.101)
@@ -78,13 +78,13 @@ PODS:
     - BURelyFoundation/Zip
   - BURelyFoundation/Zip (0.1.0.17):
     - BURelyFoundation/Foundation
-  - GDTMobSDK (4.14.10):
-    - GDTMobSDK/GDTMobSDK (= 4.14.10)
-  - GDTMobSDK/GDTMobSDK (4.14.10)
+  - GDTMobSDK (4.14.22):
+    - GDTMobSDK/GDTMobSDK (= 4.14.22)
+  - GDTMobSDK/GDTMobSDK (4.14.22)
   - JSONModel (1.8.0)
   - KSAdSDK (3.3.40)
   - Masonry (1.1.0)
-  - MercurySDK (3.1.8.5)
+  - MercurySDK (3.1.8.6)
   - Reachability (3.2)
   - SDWebImage (5.12.1):
     - SDWebImage/Core (= 5.12.1)
@@ -125,20 +125,20 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Ads-CN: 396987a7511948ed83ec8d6503acf202ed0ccca2
-  AdvanceSDK: e74354ec481460696cda7e4e2dacc30d0f13ebd2
+  AdvanceSDK: 5662db27ea9057652a867a7efdcf6ffb73d44884
   AdvBiddingSDK: 0872d70c24e10fb4f45522c5ca78190075f99e11
   AdvBiddingSuppliers: c359eda112b7fff4c0be80edf52fc2fb429c90b9
   BaiduMobAdSDK: b6256b85b452708720c0f435ac8c2d88ab5134d5
   BUAdSDK: 002b735289815f703efc9108f66347ac61f1892a
   BURelyFoundation: 32bdaa57bbbaf5732b55382490c9d2bf0af2f5f4
-  GDTMobSDK: 1374b9d6066b860e9d90229bd0bd46988227aa00
+  GDTMobSDK: f154476f3f8fbdc70fbb1da858eca5d77037f75e
   JSONModel: 02ab723958366a3fd27da57ea2af2113658762e9
   KSAdSDK: cb9e9baa29a93ca4dc5f8fec0674627e04b3c896
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
-  MercurySDK: adcd06439434f108495ae2daf93c96ca31cc3c45
+  MercurySDK: 7e36f4ea7d1e1a9e7fc3f0255345747f7a578476
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
   SDWebImage: 4dc3e42d9ec0c1028b960a33ac6b637bb432207b
 
-PODFILE CHECKSUM: 956c8218f1a4637122cbf03960bc97254229b327
+PODFILE CHECKSUM: 37b50cd3942792a57cb28ac70589cccff17ccddc
 
 COCOAPODS: 1.11.2

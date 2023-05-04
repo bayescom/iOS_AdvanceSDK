@@ -110,8 +110,8 @@
 
         }
         self.views = temp;
+        _supplier.state = AdvanceSdkSupplierStateSuccess;
         if (_supplier.isParallel == YES) {
-            _supplier.state = AdvanceSdkSupplierStateSuccess;
             return;
         }
 
@@ -125,6 +125,10 @@
 
 - (void)feedAdsManager:(KSFeedAdsManager *)adsManager didFailWithError:(NSError *)error {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
+    _supplier.state = AdvanceSdkSupplierStateFailed;
+    if (_supplier.isParallel == YES) { // 并行不释放 只上报
+        return;
+    }
 }
 
 - (void)feedAdViewWillShow:(KSFeedAd *)feedAd {
