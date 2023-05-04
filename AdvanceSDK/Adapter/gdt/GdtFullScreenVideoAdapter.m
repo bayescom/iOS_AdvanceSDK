@@ -90,9 +90,9 @@
     [self.adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
 //    NSLog(@"广点通全屏视频拉取成功 %@",self.gdt_ad);
+    _supplier.state = AdvanceSdkSupplierStateSuccess;
     if (_supplier.isParallel == YES) {
 //        NSLog(@"修改状态: %@", _supplier);
-        _supplier.state = AdvanceSdkSupplierStateSuccess;
         return;
     }
 

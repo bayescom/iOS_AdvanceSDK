@@ -122,9 +122,9 @@
         }
         
         self.views = temp;
+        _supplier.state = AdvanceSdkSupplierStateSuccess;
         if (_supplier.isParallel == YES) {
 //            NSLog(@"修改状态: %@", _supplier);
-            _supplier.state = AdvanceSdkSupplierStateSuccess;
             return;
         }
 

@@ -91,9 +91,9 @@
 - (void)fullscreenVideoAdDidLoad:(KSFullscreenVideoAd *)fullscreenVideoAd {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
 //    ADVLog(@"快手全屏视频拉取成功 %@",self.ks_ad);
+    _supplier.state = AdvanceSdkSupplierStateSuccess;
     if (_supplier.isParallel == YES) {
 //        NSLog(@"修改状态: %@", _supplier);
-        _supplier.state = AdvanceSdkSupplierStateSuccess;
         return;
     }
 
