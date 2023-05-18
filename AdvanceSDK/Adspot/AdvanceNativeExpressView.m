@@ -6,6 +6,8 @@
 //
 
 #import "AdvanceNativeExpressView.h"
+#import <objc/runtime.h>
+#import <objc/message.h>
 
 @interface AdvanceNativeExpressView ()
 @property (nonatomic, weak) UIViewController *controller;
@@ -53,6 +55,13 @@
 
 - (void)setExpressView:(UIView *)expressView {
     _expressView = expressView;
+}
+
+- (void)setIsStopMotion:(BOOL)isStopMotion {
+    _isStopMotion = isStopMotion;
+    if ([self.expressView isKindOfClass:NSClassFromString(@"MercuryNativeExpressAdView")]) {
+        ((void (*)(id, SEL, BOOL))objc_msgSend)(self.expressView, @selector(setIsStopMotion:), isStopMotion);
+    }
 }
 
 - (void)dealloc

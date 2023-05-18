@@ -62,9 +62,9 @@
     self.arrViewsM = [views mutableCopy];
     for (NSInteger i = 0; i < self.arrViewsM.count; i++) {
         AdvanceNativeExpressView *view = self.arrViewsM[i];
+//        view.isStopMotion = YES;
         [view render];
         [_dataArrM insertObject:self.arrViewsM[i] atIndex:1];
-        NSLog(@"=11===> %@  %@",view, view.expressView);
     }
     [self.tableView reloadData];
 
@@ -147,7 +147,6 @@
         
         
         UIView *view = [adView expressView];
-        NSLog(@"====> %@  %@",adView, view);
         CGFloat height = view.frame.size.height;
         if ([adView.identifier isEqualToString:SDK_ID_TANX]) {
             return height + 10;
