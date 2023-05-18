@@ -120,7 +120,7 @@
     //        [[UIApplication sharedApplication].keyWindow addSubview:_csj_ad];
     [[UIApplication sharedApplication].keyWindow bringSubviewToFront:[_adspot performSelector:@selector(bgImgV)]];
     
-    [_csj_ad showSplashViewInRootViewController:[UIApplication sharedApplication].adv_getCurrentWindow.rootViewController];
+    [_csj_ad showSplashViewInRootViewController:_adspot.viewController.view.window.rootViewController];
     
 }
 // MARK: ======================= BUSplashAdDelegate =======================

@@ -136,7 +136,7 @@
 
 - (void)showAdAction {
     // 设置logo
-    UIWindow *window = [UIApplication sharedApplication].adv_getCurrentWindow;
+    UIWindow *window = _adspot.viewController.view.window;
     if (self.imgV) {
         [window addSubview:self.imgV];
     }
@@ -153,7 +153,7 @@
 
 - (UIView *)customSplashView {
     if (!_customSplashView) {
-        _customSplashView = [[UIView alloc]initWithFrame:[UIApplication sharedApplication].adv_getCurrentWindow.frame];
+        _customSplashView = [[UIView alloc]initWithFrame:_adspot.viewController.view.window.frame];
         _customSplashView.hidden = YES;
     }
     return _customSplashView;

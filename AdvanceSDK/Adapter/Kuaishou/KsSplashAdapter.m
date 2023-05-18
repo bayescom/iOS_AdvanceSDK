@@ -141,7 +141,7 @@
         [[UIApplication sharedApplication].adv_getCurrentWindow addSubview:self.imgV];
     }
     _ks_ad.frame = adFrame;
-    [_ks_ad showInView:[UIApplication sharedApplication].adv_getCurrentWindow];
+    [_ks_ad showInView:_adspot.viewController.view.window];
 
 }
 
