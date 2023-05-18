@@ -125,7 +125,7 @@
     if (self.gdt_ad) {
         
         if ([self.gdt_ad isAdValid]) {
-            [_gdt_ad showAdInWindow:[UIApplication sharedApplication].adv_getCurrentWindow withBottomView:_adspot.showLogoRequire?imgV:nil skipView:nil];
+            [_gdt_ad showAdInWindow:_adspot.viewController.view.window withBottomView:_adspot.showLogoRequire?imgV:nil skipView:nil];
         } else {
             
         }

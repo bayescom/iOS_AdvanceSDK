@@ -112,9 +112,6 @@
 - (void)showAdAction {
 //    [[UIApplication sharedApplication].keyWindow addSubview:_csj_ad];
 //    [[UIApplication sharedApplication].keyWindow bringSubviewToFront:[_adspot performSelector:@selector(bgImgV)]];
-    __weak typeof(self) _self = self;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        __strong typeof(_self) self = _self;
         UIImageView *imgV;
         if (_adspot.showLogoRequire) {
             // 添加Logo
@@ -125,9 +122,9 @@
             imgV.userInteractionEnabled = YES;
             imgV.image = _adspot.logoImage;
         }
+    
+        [self.mercury_ad showAdInWindow:_adspot.viewController.view.window];
 
-            [self.mercury_ad showAdWithBottomView:_adspot.showLogoRequire?imgV:nil skipView:nil];
-    });
 }
 
 
@@ -142,24 +139,20 @@
 //    ADV_LEVEL_INFO_LOG(@"11===> %s %@", __func__, [NSThread currentThread]);
     ADV_LEVEL_INFO_LOG(@"%s %@", __func__, self);
     if (self.mercury_ad) {
-        id timer0 = [_mercury_ad performSelector:@selector(timer0)];
-        [timer0 performSelector:@selector(stopTimer)];
-
-        id timer = [_mercury_ad performSelector:@selector(timer)];
-        [timer performSelector:@selector(stopTimer)];
-        
-        UIViewController *vc = [_mercury_ad performSelector:@selector(splashVC)];
-        [vc dismissViewControllerAnimated:NO completion:nil];
-        [vc.view removeFromSuperview];
-        
         self.delegate = nil;
+        [_mercury_ad destory];
         _mercury_ad.delegate = nil;
         _mercury_ad = nil;
+        
     }
 }
 
 // MARK: ======================= MercurySplashAdDelegate =======================
 - (void)mercury_splashAdDidLoad:(MercurySplashAd *)splashAd {
+    
+}
+
+- (void)mercury_materialDidLoad:(MercurySplashAd *)splashAd isFromCache:(BOOL)isFromCache {
     _supplier.supplierPrice = splashAd.price;
     [self.adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
@@ -169,6 +162,7 @@
         return;
     }
     [self unifiedDelegate];
+
 }
 
 - (void)mercury_splashAdExposured:(MercurySplashAd *)splashAd {
