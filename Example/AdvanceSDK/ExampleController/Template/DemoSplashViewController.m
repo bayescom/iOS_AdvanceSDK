@@ -17,8 +17,6 @@
 @interface DemoSplashViewController () <AdvanceSplashDelegate>
 @property(strong,nonatomic) AdvanceSplash *advanceSplash;
 
-@property (nonatomic, strong) NSLock *lock;
-
 @end
 
 @implementation DemoSplashViewController
@@ -118,13 +116,9 @@
     return image;
 }
 
-- (NSLock *)lock {
-    if (!_lock) {
-        _lock = [NSLock new];
-    }
-    return _lock;
+- (void)showAd {
+    [self.advanceSplash showAd];
 }
-
 
 // MARK: ======================= AdvanceSplashDelegate =======================
 
@@ -132,7 +126,7 @@
 - (void)advanceUnifiedViewDidLoad {
     NSLog(@"广告数据拉取成功 %s", __func__);
 //    [self loadAdBtn1Action];
-
+    [self showAd];
 }
 
 /// 广告曝光成功
