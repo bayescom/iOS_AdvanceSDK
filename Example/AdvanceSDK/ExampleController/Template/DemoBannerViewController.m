@@ -10,7 +10,6 @@
 #import "ViewBuilder.h"
 #import "AdvSdkConfig.h"
 #import <AdvanceSDK/AdvanceBanner.h>
-
 @interface DemoBannerViewController () <AdvanceBannerDelegate>
 @property (nonatomic, strong) AdvanceBanner *advanceBanner;
 @property (nonatomic, strong) UIView *contentV;
@@ -33,14 +32,18 @@
     if (![self checkAdspotId]) { return; }
     if (!_contentV) {
         _contentV = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.width*5/32.0)];
+        _contentV.backgroundColor = [UIColor redColor];
     }
-    [self.adShowView addSubview:self.contentV];
-    self.adShowView.hidden = NO;
+//    [self.adShowView addSubview:self.contentV];
+//    self.adShowView.hidden = NO;
 
 //    self.advanceBanner = [[AdvanceBanner alloc] initWithAdspotId:@"11111113" adContainer:self.contentV viewController:self];
 //    self.advanceBanner = [[AdvanceBanner alloc] initWithAdspotId:self.adspotId adContainer:self.contentV viewController:self];
     self.advanceBanner = [[AdvanceBanner alloc] initWithAdspotId:self.adspotId adContainer:self.contentV customExt:self.ext viewController:self];
     self.advanceBanner.delegate = self;
+    self.advanceBanner.refreshInterval = 30;
+
+    
     
     [self.advanceBanner loadAd];
     
@@ -50,12 +53,24 @@
 /// 广告数据拉取成功回调
 - (void)advanceUnifiedViewDidLoad {
     NSLog(@"广告数据拉取成功 %s", __func__);
+//    [self.advanceBanner showAd];
+//    [self.adShowView addSubview:self.contentV];
+//    self.adShowView.hidden = NO;
+}
+
+- (void)advanceAdMaterialLoadSuccess {
+    NSLog(@"广告物料加载成功 %s", __func__);
+    [self.advanceBanner showAd];
+    [self.adShowView addSubview:self.contentV];
+    self.adShowView.hidden = NO;
 }
 
 /// 广告加载失败
 - (void)advanceFailedWithError:(NSError *)error description:(NSDictionary *)description{
     NSLog(@"广告展示失败 %s  error: %@ 详情:%@", __func__, error, description);
 
+//    _contentV = nil;
+//    [_contentV removeFromSuperview];
 }
 
 /// 内部渠道开始加载时调用
@@ -77,6 +92,8 @@
 /// 广告关闭回调
 - (void)advanceDidClose {
     NSLog(@"广告关闭了 %s", __func__);
+//    _contentV = nil;
+//    [_contentV removeFromSuperview];
 }
 
 /// 策略请求成功
@@ -84,4 +101,8 @@
     NSLog(@"%s 策略id为: %@",__func__ , reqId);
 }
 
+
+- (void)dealloc {
+    NSLog(@"%s", __func__);
+}
 @end

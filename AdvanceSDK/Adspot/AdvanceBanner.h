@@ -19,6 +19,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property(nonatomic, weak) UIView *adContainer;
 @property(nonatomic, weak) UIViewController *viewController;
+
+// 渠道要求设置在 30 - 120s
 @property(nonatomic, assign) int refreshInterval;
 
 - (instancetype)initWithAdspotId:(NSString *)adspotid
@@ -36,7 +38,7 @@ NS_ASSUME_NONNULL_BEGIN
                        customExt:(NSDictionary *_Nonnull)ext
                   viewController:(UIViewController *)viewController;
 
-
+- (void)showAd;
 @end
 
 NS_ASSUME_NONNULL_END

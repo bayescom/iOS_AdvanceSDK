@@ -13,7 +13,7 @@
 @optional
 
 #pragma 请移步AdvanceBaseDelegate 和 AdvanceCommonDelegate
-
+- (void)advanceAdMaterialLoadSuccess;
 @end
 
 #endif
