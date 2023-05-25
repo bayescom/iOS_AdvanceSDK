@@ -141,7 +141,6 @@
     if ([self.delegate respondsToSelector:@selector(advanceExposured)]) {
         [self.delegate advanceExposured];
     }
-    NSLog(@"-----------------  fdsafdsafdsafa");
 }
 
 /**

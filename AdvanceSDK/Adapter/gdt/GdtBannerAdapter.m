@@ -105,6 +105,7 @@
  *  当接收服务器返回的广告数据成功后调用该函数
  */
 - (void)unifiedBannerViewDidLoad:(GDTUnifiedBannerView *)unifiedBannerView {
+    _supplier.supplierPrice = [unifiedBannerView eCPM];
     _supplier.state = AdvanceSdkSupplierStateSuccess;
     if (!_isBided) {// 只让bidding触发一次即可
         [self.adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];

@@ -33,6 +33,7 @@
 }
 
 - (void)loadAdBtn1Action {
+    NSLog(@"%s", __func__);
     if (![self checkAdspotId]) { return; }
     
 

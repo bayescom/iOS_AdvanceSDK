@@ -153,7 +153,7 @@
 }
 
 - (void)mercury_materialDidLoad:(MercurySplashAd *)splashAd isFromCache:(BOOL)isFromCache {
-    _supplier.supplierPrice = splashAd.price;
+    _supplier.supplierPrice = [splashAd getPrice];
     [self.adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
 

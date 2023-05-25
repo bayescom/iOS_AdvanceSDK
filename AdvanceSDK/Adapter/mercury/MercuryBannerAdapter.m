@@ -35,7 +35,7 @@
         _adspot = adspot;
         _supplier = supplier;
         CGRect rect = CGRectMake(0, 0, _adspot.adContainer.frame.size.width, _adspot.adContainer.frame.size.height);
-        _mercury_ad = [[MercuryBannerAdView alloc] initWithFrame:rect adspotId:_supplier.adspotid delegate:self];
+        _mercury_ad = [[MercuryBannerAdView alloc] initWithFrame:rect adspotId:_adspot.adspotid delegate:self];
         _mercury_ad.controller = _adspot.viewController;
         _mercury_ad.animationOn = YES;
         _mercury_ad.showCloseBtn = YES;
@@ -101,6 +101,7 @@
 // 广告数据拉取成功回调
 - (void)mercury_bannerViewDidReceived:(MercuryBannerAdView *)banner {
     NSLog(@"%s", __func__);
+    _supplier.supplierPrice = banner.price;
     _supplier.state = AdvanceSdkSupplierStateSuccess;
     if (!_isBided) {// 只让bidding触发一次即可
         [self.adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
