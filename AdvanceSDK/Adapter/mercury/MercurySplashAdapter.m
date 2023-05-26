@@ -38,7 +38,7 @@
         _supplier = supplier;
         [MercuryConfigManager openDebug:YES];
         _mercury_ad = [[MercurySplashAd alloc] initAdWithAdspotId:_supplier.adspotid delegate:self];
-        _mercury_ad.placeholderImage = _adspot.backgroundImage;
+//        _mercury_ad.placeholderImage = _adspot.backgroundImage;
         _mercury_ad.logoImage = _adspot.logoImage;
         NSNumber *showLogoType = _adspot.extParameter[MercuryLogoShowTypeKey];
         NSNumber *blankGap = _adspot.extParameter[MercuryLogoShowBlankGapKey];
@@ -128,7 +128,9 @@
 }
 
 
-
+- (void)showInWindow:(UIWindow *)window {
+    
+}
 
 - (void)dealloc {
     ADV_LEVEL_INFO_LOG(@"%s", __func__);

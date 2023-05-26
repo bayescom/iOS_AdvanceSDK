@@ -123,6 +123,14 @@
     [_csj_ad showSplashViewInRootViewController:_adspot.viewController.view.window.rootViewController];
     
 }
+
+- (void)showInWindow:(UIWindow *)window {
+    
+    if (window && window.rootViewController) {
+        [_csj_ad showSplashViewInRootViewController:window.rootViewController];
+    }
+}
+
 // MARK: ======================= BUSplashAdDelegate =======================
 
 

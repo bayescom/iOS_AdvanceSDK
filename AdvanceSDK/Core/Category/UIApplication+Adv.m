@@ -16,6 +16,7 @@
     if (@available(iOS 13, *)) {
         // 判断设备
         if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) {
+            
             // iPhone设备直接取windows第一个元素
             for (UIWindow *a_w in [UIApplication sharedApplication].windows) {
                 if (a_w.isKeyWindow) {
@@ -30,6 +31,14 @@
                     window = [UIApplication sharedApplication].delegate.window;
                 }
             }
+            
+            for (UIWindowScene* windowScene in [UIApplication sharedApplication].connectedScenes) {
+                if (windowScene.activationState == UISceneActivationStateForegroundActive) {
+                    window = windowScene.windows.firstObject;
+                    break;
+                }
+            }
+
         } else if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
             // ipad设备获取keywindow
             for (UIWindow *a_w in [UIApplication sharedApplication].windows) {

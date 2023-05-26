@@ -10,15 +10,14 @@ PODS:
     - AdvanceSDK/Core (= 4.0.3.3)
   - AdvanceSDK/Adspot (4.0.3.3):
     - AdvanceSDK/Core
-  - AdvanceSDK/AdvBidding (4.0.3.3):
-    - AdvanceSDK/Adspot
-    - AdvanceSDK/Core
-    - AdvBiddingSDK (= 1.1.5)
-    - AdvBiddingSuppliers (= 0.0.8)
   - AdvanceSDK/BD (4.0.3.3):
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - BaiduMobAdSDK (= 5.101)
+  - AdvanceSDK/Bidding (4.0.3.3):
+    - AdvanceSDK/Adspot
+    - AdvanceSDK/Core
+    - AdvBiddingSuppliers (= 0.0.8)
   - AdvanceSDK/Core (4.0.3.3)
   - AdvanceSDK/CSJ (4.0.3.3):
     - Ads-CN (= 5.1.1.0)
@@ -36,7 +35,6 @@ PODS:
     - AdvanceSDK/Adspot
     - AdvanceSDK/Core
     - MercurySDK (= 3.1.8.7)
-  - AdvBiddingSDK (1.1.5)
   - AdvBiddingSuppliers (0.0.8)
   - BaiduMobAdSDK (5.101)
   - BUAdSDK (0.2.0.1):
@@ -92,8 +90,8 @@ PODS:
 
 DEPENDENCIES:
   - AdvanceSDK (from `../`)
-  - AdvanceSDK/AdvBidding (from `../`)
   - AdvanceSDK/BD (from `../`)
+  - AdvanceSDK/Bidding (from `../`)
   - AdvanceSDK/CSJ (from `../`)
   - AdvanceSDK/GDT (from `../`)
   - AdvanceSDK/KS (from `../`)
@@ -106,7 +104,6 @@ DEPENDENCIES:
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
     - Ads-CN
-    - AdvBiddingSDK
     - AdvBiddingSuppliers
     - BaiduMobAdSDK
     - BUAdSDK
@@ -125,8 +122,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Ads-CN: 396987a7511948ed83ec8d6503acf202ed0ccca2
-  AdvanceSDK: e8eafb4f2777c1b902a946f6c643560aa5dc090e
-  AdvBiddingSDK: 0872d70c24e10fb4f45522c5ca78190075f99e11
+  AdvanceSDK: d693b19039f064d1d3d276bb80ae2a8f1337d806
   AdvBiddingSuppliers: c359eda112b7fff4c0be80edf52fc2fb429c90b9
   BaiduMobAdSDK: b6256b85b452708720c0f435ac8c2d88ab5134d5
   BUAdSDK: 002b735289815f703efc9108f66347ac61f1892a
@@ -139,6 +135,6 @@ SPEC CHECKSUMS:
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
   SDWebImage: 4dc3e42d9ec0c1028b960a33ac6b637bb432207b
 
-PODFILE CHECKSUM: 37b50cd3942792a57cb28ac70589cccff17ccddc
+PODFILE CHECKSUM: 387be44bc7e680ac38a265741ee016a24587da0f
 
 COCOAPODS: 1.11.2

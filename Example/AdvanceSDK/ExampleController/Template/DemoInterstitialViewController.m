@@ -46,10 +46,8 @@
 }
 
 - (void)loadAdBtn2Action {
-    if (!_isAdLoaded) {
-       [JDStatusBarNotification showWithStatus:@"请先加载广告" dismissAfter:1.5];
-        return;
-    }
+    
+    
     [self.advanceInterstitial showAd];
 }
 

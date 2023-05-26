@@ -100,7 +100,7 @@
     if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
         [self.delegate advanceUnifiedViewDidLoad];
     }
-    [self showAd];
+//    [self showAd];
 
     
 }
@@ -139,7 +139,7 @@
     if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
         [self.delegate advanceUnifiedViewDidLoad];
     }
-    [self showAd];
+//    [self showAd];
 }
 
 - (void)splashAd:(ABUSplashAd *)splashAd didFailWithError:(NSError *)error {

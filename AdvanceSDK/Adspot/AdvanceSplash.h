@@ -25,8 +25,8 @@ NS_ASSUME_NONNULL_BEGIN
 /// 当 showLogoRequire = YES时, 必须设置logoImage
 @property(nonatomic, strong) UIImage *logoImage;
 
-/// 广告未加载出来时的占位图
-@property(nonatomic, strong) UIImage *backgroundImage;
+///// 广告未加载出来时的占位图
+//@property(nonatomic, strong) UIImage *backgroundImage; 该属性已经废弃 backgroundImage的逻辑请参考DemoSplashViewController中的bgImgV
 
 /// 控制器
 @property(nonatomic, weak) UIViewController *viewController;
@@ -34,7 +34,12 @@ NS_ASSUME_NONNULL_BEGIN
 /// 初始化时传入的ext字段
 @property(nonatomic, strong, readonly) NSDictionary *extParameter;
 
-/// 总超时时间
+/// 广告网络(广点通,穿山甲,快手等)是否有广告返回
+@property(nonatomic, assign, readonly) BOOL isLoadAdSucceed;
+
+
+/// 请求广告超时时间, 默认5s
+/// 如果该时间内没有广告返回 即:未触发-advanceUnifiedViewDidLoad 回调, 则会结束本次广告加载,并触发错误回调
 /// 如果使用bidding 功能 timeout时长必须要比 服务器下发的bidding等待时间要长 否则会严重影响变现效率
 @property (nonatomic, assign) NSInteger timeout;
 
@@ -50,7 +55,12 @@ NS_ASSUME_NONNULL_BEGIN
                        customExt:(NSDictionary *_Nonnull)ext
                   viewController:(UIViewController *)viewController;
 
-- (void)showAd;
+// 只拉取广告, 不展示广告
+- (void)loadAd;
+
+// 展示广告
+// 展现在 初始化方法中 传入的viewController所在的window,  如果不传则取当前的keyWindow
+- (void)showInWindow:(UIWindow *)window;
 @end
 
 NS_ASSUME_NONNULL_END

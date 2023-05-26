@@ -55,7 +55,6 @@
     }
     _adspot.viewController.modalPresentationStyle = 0;
     // 设置 backgroundImage
-    _gdt_ad.backgroundImage = _adspot.backgroundImage;
     
     NSInteger parallel_timeout = _supplier.timeout;
     if (parallel_timeout == 0) {
@@ -130,6 +129,9 @@
             
         }
     }
+}
+
+- (void)showInWindow:(UIWindow *)window {
 }
 
 - (void)splashAdDidLoad:(GDTSplashAd *)splashAd {
