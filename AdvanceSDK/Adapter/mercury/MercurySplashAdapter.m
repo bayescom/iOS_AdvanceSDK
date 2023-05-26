@@ -129,7 +129,19 @@
 
 
 - (void)showInWindow:(UIWindow *)window {
-    
+    UIImageView *imgV;
+    if (_adspot.showLogoRequire) {
+        // 添加Logo
+        NSAssert(_adspot.logoImage != nil, @"showLogoRequire = YES时, 必须设置logoImage");
+        CGFloat real_w = [UIScreen mainScreen].bounds.size.width;
+        CGFloat real_h = _adspot.logoImage.size.height*(real_w/_adspot.logoImage.size.width);
+        UIImageView *imgV = [[UIImageView alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height-real_h, real_w, real_h)];
+        imgV.userInteractionEnabled = YES;
+        imgV.image = _adspot.logoImage;
+    }
+
+    [self.mercury_ad showAdInWindow:window];
+
 }
 
 - (void)dealloc {

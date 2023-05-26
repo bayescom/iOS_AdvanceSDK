@@ -133,6 +133,12 @@
     [self.splashAd showInWindow:[[UIApplication sharedApplication] keyWindow]];
 }
 
+- (void)showInWindow:(UIWindow *)window {
+    // 设置logo
+    [self.splashAd showInWindow:window];
+}
+
+
 - (void)splashAdDidLoad:(ABUSplashAd *)splashAd {
     ADV_LEVEL_INFO_LOG(@"%s", __func__);
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];

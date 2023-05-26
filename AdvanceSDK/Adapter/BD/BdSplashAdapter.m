@@ -151,6 +151,24 @@
     }
 }
 
+- (void)showInWindow:(UIWindow *)window {
+    // 设置logo
+    // 设置logo
+    if (self.imgV) {
+        [window addSubview:self.imgV];
+    }
+    
+    if (self.bd_ad) {
+        [window addSubview:self.customSplashView];
+        self.customSplashView.frame = CGRectMake(window.frame.origin.x, window.frame.origin.y, window.frame.size.width, window.frame.size.height - self.imgV.frame.size.height);
+        self.customSplashView.backgroundColor = [UIColor whiteColor];
+        [self.bd_ad showInContainerView:self.customSplashView];
+        
+        //        NSLog(@"百度开屏展示%@",self.bd_ad);
+    }
+}
+
+
 - (UIView *)customSplashView {
     if (!_customSplashView) {
         _customSplashView = [[UIView alloc]initWithFrame:_adspot.viewController.view.window.frame];

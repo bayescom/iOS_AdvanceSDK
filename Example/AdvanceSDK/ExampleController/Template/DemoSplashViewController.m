@@ -54,7 +54,7 @@
 }
 
 - (void)loadAdBtn2Action {
-    [self.advanceSplash showAd];
+    [self.advanceSplash showInWindow:self.view.window];
 }
 
 - (void)loadAdBtn1Action {
@@ -132,7 +132,7 @@
 
 - (void)showAd {
     if (self.advanceSplash.isLoadAdSucceed) {
-        [self.advanceSplash showAd];
+        [self.advanceSplash showInWindow:self.view.window];
     }
 }
 
