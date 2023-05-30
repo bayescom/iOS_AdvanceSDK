@@ -14,11 +14,11 @@
 #import <objc/message.h>
 #import "AdvanceAESCipher.h"
 
-# if __has_include(<ABUAdSDK/ABUAdSDK.h>)
-#import <ABUAdSDK/ABUAdSDK.h>
-#else
-#import <Ads-Mediation-CN/ABUAdSDK.h>
-#endif
+//# if __has_include(<ABUAdSDK/ABUAdSDK.h>)
+//#import <ABUAdSDK/ABUAdSDK.h>
+//#else
+//#import <Ads-Mediation-CN/ABUAdSDK.h>
+//#endif
 
 @interface AdvBaseAdapter ()  <AdvSupplierManagerDelegate, AdvanceSupplierDelegate>
 @property (nonatomic, strong) AdvSupplierManager *mgr;
@@ -263,19 +263,19 @@
         dispatch_once(&onceToken, ^{
             BOOL isEmpty = [self isEmptyString:supplier.mediaid];
             if (isEmpty == NO) {
-//                [NSClassFromString(clsName) performSelector:@selector(setupSDKWithAppId:config:) withObject:supplier.mediaid withObject:nil];
+                [NSClassFromString(clsName) performSelector:@selector(setupSDKWithAppId:config:) withObject:supplier.mediaid withObject:nil];
             }
             
             // Gromore SDK初始化方法
-            [ABUAdSDKManager setupSDKWithAppId:supplier.mediaid config:^ABUUserConfig *(ABUUserConfig *c) {
-        #ifdef DEBUG
-                // 打开日志开关，线上环境请关闭
-                c.logEnable = YES;
-                // 打开测试模式，线上环境请关闭
-//                c.testMode = YES;
-        #endif
-                return c;
-            }];
+//            [ABUAdSDKManager setupSDKWithAppId:supplier.mediaid config:^ABUUserConfig *(ABUUserConfig *c) {
+//        #ifdef DEBUG
+//                // 打开日志开关，线上环境请关闭
+//                c.logEnable = YES;
+//                // 打开测试模式，线上环境请关闭
+////                c.testMode = YES;
+//        #endif
+//                return c;
+//            }];
 
         });
 
