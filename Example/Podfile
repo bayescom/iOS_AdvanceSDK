@@ -12,7 +12,7 @@ target 'AdvanceSDK_Example' do
 
   #集成穿山甲所需
   pod 'AdvanceSDK/CSJ', :path => '../'
-  pod 'Ads-CN', '4.9.0.6'
+#  pod 'Ads-CN', '4.9.0.6'
   
   #集成广点通所需
   pod 'AdvanceSDK/GDT', :path => '../'
