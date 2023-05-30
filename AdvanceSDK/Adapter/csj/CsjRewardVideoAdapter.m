@@ -78,9 +78,9 @@
 }
 
 - (void)showAd {
-    if (_csj_ad.isAdValid) {
+//    if (_csj_ad.isAdValid) {
         [_csj_ad showAdFromRootViewController:_adspot.viewController];
-    }
+//    }
 }
 
 - (void)deallocAdapter {
