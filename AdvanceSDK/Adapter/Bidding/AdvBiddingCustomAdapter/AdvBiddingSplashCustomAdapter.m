@@ -64,6 +64,7 @@
     
     _advanceSplash = [[AdvanceSplash alloc] initWithAdspotId:slotID
                                                   viewController:self.bridge.viewControllerForPresentingModalView];
+    _advanceSplash.muted = YES;
 
     [_advanceSplash performSelector:@selector(setIsGMBidding:) withObject:@(1)];
 

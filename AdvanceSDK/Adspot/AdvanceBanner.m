@@ -35,6 +35,7 @@
         _adContainer = adContainer;
         _viewController = viewController;
         _refreshInterval = MAXINTERP;
+        _muted = YES;
     }
     return self;
 }

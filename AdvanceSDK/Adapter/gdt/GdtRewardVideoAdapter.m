@@ -30,6 +30,7 @@
         _adspot = adspot;
         _supplier = supplier;
         _gdt_ad = [[GDTRewardVideoAd alloc] initWithPlacementId:_supplier.adspotid];
+        _gdt_ad.videoMuted = _adspot.muted;
     }
     return self;
 }

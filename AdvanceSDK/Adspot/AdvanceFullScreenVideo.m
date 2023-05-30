@@ -33,6 +33,7 @@
     [ext setValue:AdvSdkTypeAdNameFullScreenVideo forKey: AdvSdkTypeAdName];
     if (self = [super initWithMediaId:@"" adspotId:adspotid customExt:ext]) {
         _viewController = viewController;
+        _muted = YES;
     }
     return self;
 }

@@ -99,9 +99,8 @@
         NSMutableArray *temp = [NSMutableArray array];
         for (KSFeedAd *ad in feedAdDataArray) {
             ad.delegate = self;
-//            ad.videoSoundEnable = NO;
-//            [ad setVideoSoundEnable:NO];
-            
+            ad.videoSoundEnable = !_adspot.muted;
+//            [ad setVideoSoundEnable:YES];
             AdvanceNativeExpressView *TT = [[AdvanceNativeExpressView alloc] initWithViewController:_adspot.viewController];
             TT.expressView = ad.feedView;
             TT.identifier = _supplier.identifier;

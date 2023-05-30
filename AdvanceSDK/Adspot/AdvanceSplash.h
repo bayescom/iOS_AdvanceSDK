@@ -37,6 +37,15 @@ NS_ASSUME_NONNULL_BEGIN
 /// 广告网络(广点通,穿山甲,快手等)是否有广告返回
 @property(nonatomic, assign, readonly) BOOL isLoadAdSucceed;
 
+///  设定是否静音播放视频，YES = 静音，NO = 非静音 默认为YES
+/*
+PS:
+①仅gdt、ks、支持设定mute
+②仅适用于视频播放器设定生效
+ (只对客户端可以控制的部分生效, 有些需要到网盟后台去设置比如穿山甲)
+重点：请在loadAd前设置,否则不生效
+*/
+@property(nonatomic, assign) BOOL muted;
 
 /// 请求广告超时时间, 默认5s
 /// 如果该时间内没有广告返回 即:未触发-advanceUnifiedViewDidLoad 回调, 则会结束本次广告加载,并触发错误回调

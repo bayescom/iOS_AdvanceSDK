@@ -31,8 +31,8 @@
         _adspot = adspot;
         _supplier = supplier;
         _isDidLoad = NO;
-        _ks_ad =
         _ks_ad = [[KSInterstitialAd alloc] initWithPosId:_supplier.adspotid];
+        _ks_ad.videoSoundEnabled = !_adspot.muted;
     }
     return self;
 }
