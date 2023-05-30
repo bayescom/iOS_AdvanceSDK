@@ -55,7 +55,6 @@
     }
     _adspot.viewController.modalPresentationStyle = 0;
     // 设置 backgroundImage
-    _gdt_ad.backgroundImage = _adspot.backgroundImage;
     
     NSInteger parallel_timeout = _supplier.timeout;
     if (parallel_timeout == 0) {
@@ -126,6 +125,26 @@
         
         if ([self.gdt_ad isAdValid]) {
             [_gdt_ad showAdInWindow:_adspot.viewController.view.window withBottomView:_adspot.showLogoRequire?imgV:nil skipView:nil];
+        } else {
+            
+        }
+    }
+}
+
+- (void)showInWindow:(UIWindow *)window {
+    // 设置logo
+    UIImageView *imgV;
+    if (_adspot.logoImage) {
+        CGFloat real_w = [UIScreen mainScreen].bounds.size.width;
+        CGFloat real_h = _adspot.logoImage.size.height*(real_w/_adspot.logoImage.size.width);
+        imgV = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, real_w, real_h)];
+        imgV.userInteractionEnabled = YES;
+        imgV.image = _adspot.logoImage;
+    }
+    if (self.gdt_ad) {
+        
+        if ([self.gdt_ad isAdValid]) {
+            [_gdt_ad showAdInWindow:window withBottomView:_adspot.showLogoRequire?imgV:nil skipView:nil];
         } else {
             
         }
@@ -214,7 +233,7 @@
     if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
         [self.delegate advanceUnifiedViewDidLoad];
     }
-    [self showAd];
+//    [self showAd];
 }
 
 - (void)dealloc {

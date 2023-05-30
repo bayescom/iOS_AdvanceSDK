@@ -20,6 +20,7 @@
 @property (nonatomic, strong) MercuryInterstitialAd *mercury_ad;
 @property (nonatomic, weak) AdvanceInterstitial *adspot;
 @property (nonatomic, strong) AdvSupplier *supplier;
+@property (nonatomic, assign) BOOL isCanch;
 
 @end
 
@@ -60,9 +61,7 @@
 
 - (void)supplierStateSuccess {
     ADV_LEVEL_INFO_LOG(@"Mercury 成功");
-    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
-        [self.delegate advanceUnifiedViewDidLoad];
-    }
+    [self unifiedDelegate];
 }
 
 - (void)supplierStateFailed {
@@ -76,6 +75,7 @@
 }
 
 - (void)showAd {
+    NSLog(@"%s", __func__);
     [_mercury_ad presentAdFromViewController:_adspot.viewController];
 }
 
@@ -92,9 +92,7 @@
         return;
     }
 
-    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
-        [self.delegate advanceUnifiedViewDidLoad];
-    }
+    [self unifiedDelegate];
 }
 
 /// 插屏广告预加载失败回调，当接收服务器返回的广告数据失败后调用该函数
@@ -147,6 +145,18 @@
     if ([self.delegate respondsToSelector:@selector(advanceDidClose)]) {
         [self.delegate advanceDidClose];
     }
+}
+
+
+- (void)unifiedDelegate {
+    if (_isCanch) {
+        return;
+    }
+    _isCanch = YES;
+    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
+        [self.delegate advanceUnifiedViewDidLoad];
+    }
+//    [self showAd];
 }
 
 @end

@@ -35,7 +35,7 @@
         self.rewardedVideoAd = [[ABURewardedVideoAd alloc] initWithAdUnitID:_supplier.adspotid];
         // 如果需要场景，请设置该属性
         self.rewardedVideoAd.delegate = self;
-        self.rewardedVideoAd.mutedIfCan = NO; //静音
+        self.rewardedVideoAd.mutedIfCan = _adspot.muted; //静音
 
     }
     return self;

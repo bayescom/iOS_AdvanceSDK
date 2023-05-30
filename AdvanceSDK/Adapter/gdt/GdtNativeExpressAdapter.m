@@ -39,7 +39,8 @@
         _supplier = supplier;
         _gdt_ad = [[GDTNativeExpressAd alloc] initWithPlacementId:_supplier.adspotid
                                                            adSize:_adspot.adSize];
-        _gdt_ad.videoMuted = YES;
+        _gdt_ad.videoMuted = _adspot.muted;
+        _gdt_ad.detailPageVideoMuted = _adspot.muted;
     }
     return self;
 }

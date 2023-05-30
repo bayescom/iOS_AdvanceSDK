@@ -34,6 +34,7 @@
     if (self = [super initWithMediaId:@"" adspotId:adspotid customExt:ext]) {
         _viewController = viewController;
         _adSize = adSize;
+        _muted = YES;
     }
     return self;
 }
@@ -71,9 +72,10 @@
 
 // bidding结束
 - (void)advanceBaseAdapterBiddingEndWithWinSupplier:(AdvSupplier *_Nonnull)supplier {
-//    if (self.delegate && [self.delegate respondsToSelector:@selector(advanceBiddingEnd)]) {
-//        [self.delegate advanceBiddingEnd];
-//    }
+    if (self.delegate && [self.delegate respondsToSelector:@selector(advanceBiddingEndWithPrice:)]) {
+        NSInteger price = (supplier.supplierPrice == 0) ? supplier.sdk_price : supplier.supplierPrice;
+        [self.delegate advanceBiddingEndWithPrice:price];
+    }
 }
 
 /// 返回下一个渠道的参数

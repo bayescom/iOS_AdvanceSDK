@@ -41,6 +41,7 @@
     if (self = [super initWithMediaId:@"" adspotId:adspotid customExt:ext]) {
         _viewController = viewController;
         _adSize = size;
+        _muted = YES;
     }
     return self;
 }

@@ -32,6 +32,7 @@
         KSRewardedVideoModel *model = [KSRewardedVideoModel new];
         _ks_ad = [[KSRewardedVideoAd alloc] initWithPosId:supplier.adspotid rewardedVideoModel:model];
         _ks_ad.showDirection = KSAdShowDirection_Vertical;
+        _ks_ad.shouldMuted = _adspot.muted;
     }
     return self;
 }

@@ -13,11 +13,10 @@
 #import <AdvanceSDK/AdvanceSplash.h>
 #import <objc/runtime.h>
 #import <objc/message.h>
-
+#import "UIApplication+Adv.h"
 @interface DemoSplashViewController () <AdvanceSplashDelegate>
 @property(strong,nonatomic) AdvanceSplash *advanceSplash;
-
-@property (nonatomic, strong) NSLock *lock;
+@property (nonatomic, strong) UIImageView *bgImgV;
 
 @end
 
@@ -48,11 +47,23 @@
 
 //
     ];
-    self.btn1Title = @"加载并显示广告";
+    self.btn1Title = @"加载广告";
+    self.btn2Title = @"展示广告";
+
+
+}
+
+- (void)loadAdBtn2Action {
+    [self.advanceSplash showInWindow:self.view.window];
 }
 
 - (void)loadAdBtn1Action {
     if (![self checkAdspotId]) { return; }
+    
+    [self.view.window addSubview:self.bgImgV];
+    self.bgImgV.image = [UIImage imageNamed:@"LaunchImage_img"];
+    
+    
     
     if (self.advanceSplash) {
         self.advanceSplash.delegate = nil;
@@ -77,15 +88,16 @@
     // 如果想要对logo有特定的布局 则参照 -createLogoImageFromView 方法
     // 建议设置logo 避免某些素材长图不足时屏幕下方留白
     self.advanceSplash.logoImage = [self createLogoImageFromView];
+    
     // 设置logo时 该属性要设置为YES
     self.advanceSplash.showLogoRequire = YES;
 
-    self.advanceSplash.backgroundImage = [UIImage imageNamed:@"LaunchImage_img"];
-    // 如果开发者有自己的超时时间限制 那timeout 应该比 开发者 最好比自己的超时时间限制要短
-    // 当到达 timeout 后 不出广告advanceSplash内部会强制移除广告的不需要开发者手动移除
+    
+    
+    // 如果该时间内没有广告返回 即:未触发-advanceUnifiedViewDidLoad 回调, 则会结束本次广告加载,并触发错误回调
     self.advanceSplash.timeout = 5;//<---- 确保timeout 时长内不对advanceSplash进行移除的操作
     [self.advanceSplash loadAd];
-    
+    NSLog(@"是否有广告返回 : %d", self.advanceSplash.isLoadAdSucceed);
 
 }
 
@@ -118,26 +130,28 @@
     return image;
 }
 
-- (NSLock *)lock {
-    if (!_lock) {
-        _lock = [NSLock new];
+- (void)showAd {
+    if (self.advanceSplash.isLoadAdSucceed) {
+        [self.advanceSplash showInWindow:self.view.window];
     }
-    return _lock;
 }
-
 
 // MARK: ======================= AdvanceSplashDelegate =======================
 
 /// 广告数据拉取成功
 - (void)advanceUnifiedViewDidLoad {
     NSLog(@"广告数据拉取成功 %s", __func__);
-//    [self loadAdBtn1Action];
 
+//    [self loadAdBtn1Action];
+    [self showAd];
 }
 
 /// 广告曝光成功
 - (void)advanceExposured {
     NSLog(@"广告曝光成功 %s", __func__);
+    [self.bgImgV removeFromSuperview];
+    self.bgImgV.image = nil;
+    self.bgImgV = nil;
 }
 
 /// 广告加载失败
@@ -160,15 +174,15 @@
 /// 广告关闭
 - (void)advanceDidClose {
     NSLog(@"广告关闭了 %s", __func__);
-    self.advanceSplash.delegate = nil;
-    self.advanceSplash = nil;
+//    self.advanceSplash.delegate = nil;
+//    self.advanceSplash = nil;
 
 }
 
 - (void)dealloc {
     NSLog(@"%s",__func__);
-    self.advanceSplash.delegate = nil;
-    self.advanceSplash = nil;
+//    self.advanceSplash.delegate = nil;
+//    self.advanceSplash = nil;
 }
 
 ///// 广告倒计时结束
@@ -187,4 +201,13 @@
     NSLog(@"%s 策略id为: %@",__func__ , reqId);
 }
 
+
+- (UIImageView *)bgImgV {
+    if (!_bgImgV) {
+        _bgImgV = [[UIImageView alloc] init];
+    }
+    _bgImgV.frame = [UIScreen mainScreen].bounds;
+//    _bgImgV.userInteractionEnabled = YES;
+    return _bgImgV;
+}
 @end

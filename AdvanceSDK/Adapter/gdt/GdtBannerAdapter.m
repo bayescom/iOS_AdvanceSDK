@@ -15,12 +15,18 @@
 #endif
 
 #import "AdvanceBanner.h"
+#import "AdvLog.h"
 
 
 @interface GdtBannerAdapter () <GDTUnifiedBannerViewDelegate>
 @property (nonatomic, strong) GDTUnifiedBannerView *gdt_ad;
 @property (nonatomic, weak) AdvanceBanner *adspot;
 @property (nonatomic, strong) AdvSupplier *supplier;
+
+
+@property (nonatomic, assign) BOOL isBided;
+@property (nonatomic, assign) BOOL isDidload;
+@property (nonatomic, assign) BOOL isClose;
 
 @end
 
@@ -30,20 +36,68 @@
     if (self = [super initWithSupplier:supplier adspot:adspot]) {
         _adspot = adspot;
         _supplier = supplier;
+        CGRect rect = CGRectMake(0, 0, _adspot.adContainer.frame.size.width, _adspot.adContainer.frame.size.height);
+        _gdt_ad = [[GDTUnifiedBannerView alloc] initWithFrame:rect placementId:_supplier.adspotid viewController:_adspot.viewController];
+        _gdt_ad.animated = NO;
+        _gdt_ad.autoSwitchInterval = _adspot.refreshInterval;
+        _gdt_ad.delegate = self;
+
     }
     return self;
 }
 
-- (void)loadAd {
-    
-    CGRect rect = CGRectMake(0, 0, _adspot.adContainer.frame.size.width, _adspot.adContainer.frame.size.height);
-    _gdt_ad = [[GDTUnifiedBannerView alloc] initWithFrame:rect placementId:_supplier.adspotid viewController:_adspot.viewController];
-    _gdt_ad.animated = NO;
-    _gdt_ad.autoSwitchInterval = _adspot.refreshInterval;
-    _gdt_ad.delegate = self;
-    [_adspot.adContainer addSubview:_gdt_ad];
+- (void)supplierStateLoad {
+    ADV_LEVEL_INFO_LOG(@"加载广点通 supplier: %@", _supplier);
+        
+    _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
     [_gdt_ad loadAdAndShow];
 }
+
+- (void)supplierStateInPull {
+    ADV_LEVEL_INFO_LOG(@"广点通加载中...");
+}
+
+- (void)supplierStateSuccess {
+    ADV_LEVEL_INFO_LOG(@"广点通 成功");
+    if (_isDidload) {
+        return;
+    }
+    [self unifiedDelegate];
+    
+}
+
+- (void)supplierStateFailed {
+    ADV_LEVEL_INFO_LOG(@"广点通 失败");
+    [_adspot loadNextSupplierIfHas];
+    [self deallocAdapter];
+}
+
+
+- (void)loadAd {
+    [super loadAd];
+}
+
+- (void)deallocAdapter {
+    ADV_LEVEL_INFO_LOG(@"%s %@", __func__, self.gdt_ad);
+    
+    if (_gdt_ad) {
+        //        NSLog(@"广点通 释放了");
+        [_gdt_ad removeFromSuperview];
+        _gdt_ad.delegate = nil;
+        _gdt_ad = nil;
+        [_adspot.adContainer removeFromSuperview];
+    }
+}
+    
+- (void)showAd {
+    if (_gdt_ad) {
+        [_adspot.adContainer addSubview:_gdt_ad];
+    } else {
+        [self deallocAdapter];
+    }
+
+}
+
 
 // MARK: ======================= GDTUnifiedBannerViewDelegate =======================
 /**
@@ -51,10 +105,17 @@
  *  当接收服务器返回的广告数据成功后调用该函数
  */
 - (void)unifiedBannerViewDidLoad:(GDTUnifiedBannerView *)unifiedBannerView {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
-    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
-        [self.delegate advanceUnifiedViewDidLoad];
+    _supplier.supplierPrice = [unifiedBannerView eCPM];
+    _supplier.state = AdvanceSdkSupplierStateSuccess;
+    if (!_isBided) {// 只让bidding触发一次即可
+        [self.adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
+        _isBided = YES;
     }
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
+    if (_supplier.isParallel == YES) {
+        return;
+    }
+    [self unifiedDelegate];
 }
 
 /**
@@ -64,11 +125,14 @@
 
 - (void)unifiedBannerViewFailedToLoad:(GDTUnifiedBannerView *)unifiedBannerView error:(NSError *)error {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded  supplier:_supplier error:error];
-//    if ([self.delegate respondsToSelector:@selector(advanceBannerOnAdFailedWithSdkId:error:)]) {
-//        [self.delegate advanceBannerOnAdFailedWithSdkId:_supplier.identifier error:error];
-//    }
-    [_gdt_ad removeFromSuperview];
-    _gdt_ad = nil;
+    _supplier.state = AdvanceSdkSupplierStateFailed;
+//    NSLog(@"========>>>>>>>> %ld %@", (long)_supplier.priority, error);
+    if (_supplier.isParallel == YES) { // 并行不释放 只上报
+        
+        return;
+    } else { //
+        [self deallocAdapter];
+    }
 }
 
 /**
@@ -100,6 +164,36 @@
     if ([self.delegate respondsToSelector:@selector(advanceDidClose)]) {
         [self.delegate advanceDidClose];
     }
+}
+
+
+- (void)unifiedDelegate {
+    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
+        [self.delegate advanceUnifiedViewDidLoad];
+    }
+    
+    if ([self.delegate respondsToSelector:@selector(advanceAdMaterialLoadSuccess)]) {
+        [self.delegate advanceAdMaterialLoadSuccess];
+    }
+    //    [self showAd];
+}
+
+- (void)closeDelegate {
+    if (_isClose) {
+        return;
+    }
+    _isClose = YES;
+    
+    if ([self.delegate respondsToSelector:@selector(advanceDidClose)]) {
+        [self.delegate advanceDidClose];
+        
+    }
+    [self deallocAdapter];
+    
+}
+
+- (void)dealloc {
+    ADV_LEVEL_INFO_LOG(@"%s",__func__);
 }
 
 @end

@@ -15,6 +15,7 @@
 #import "AdvLog.h"
 #import "AdvError.h"
 #import "AdvUploadTKUtil.h"
+
 @interface AdvanceSplash ()
 @property (nonatomic, strong) id adapter;
 
@@ -25,6 +26,8 @@
 @property (nonatomic, copy) NSString *reqId;
 @property (nonatomic, strong) NSNumber *isGMBidding;
 @property (nonatomic, strong, readwrite) NSDictionary *extParameter;
+@property(nonatomic, assign, readwrite) BOOL isLoadAdSucceed;
+
 @end
 
 @implementation AdvanceSplash
@@ -41,8 +44,10 @@
     }
     [ext setValue:AdvSdkTypeAdNameSplash forKey: AdvSdkTypeAdName];
     _extParameter = [ext mutableCopy];
+    _isLoadAdSucceed = NO;
     if (self = [super initWithMediaId:@"" adspotId:adspotid customExt:ext]) {
         _viewController = viewController;
+        _muted = YES;
     }
     return self;
 }
@@ -53,9 +58,9 @@
 
 - (void)loadAd {
     // 占位图
-    [[UIApplication sharedApplication].adv_getCurrentWindow addSubview:self.bgImgV];
+//    [[UIApplication sharedApplication].adv_getCurrentWindow addSubview:self.bgImgV];
         
-    if (_timeout <= 0) { _timeout = 60; }
+    if (_timeout <= 0) { _timeout = 5; }
     // 记录过期的时间
     _timeout_stamp = ([[NSDate date] timeIntervalSince1970] + _timeout)*1000;
     // 开启定时器监听过期
@@ -68,12 +73,10 @@
 
 - (void)reportWithType:(AdvanceSdkSupplierRepoType)repoType supplier:(nonnull AdvSupplier *)supplier error:(nonnull NSError *)error {
     [super reportWithType:repoType supplier:supplier error:error];
-    if (repoType == AdvanceSdkSupplierRepoImped) {
+    if (repoType == AdvanceSdkSupplierRepoSucceeded) {
 //        ADVLog(@"曝光成功 计时器清零");
-        [_timeoutCheckTimer invalidate];
-        _timeoutCheckTimer = nil;
-        [_bgImgV removeFromSuperview];
-        _bgImgV = nil;
+        _isLoadAdSucceed = YES;
+        [self deallocSelf];
     }
 }
 
@@ -263,20 +266,22 @@
 
 - (UIImageView *)bgImgV {
     if (!_bgImgV) {
-        _bgImgV = [[UIImageView alloc] initWithImage:_backgroundImage];
+        _bgImgV = [[UIImageView alloc] init];
     }
     _bgImgV.frame = [UIScreen mainScreen].bounds;
     _bgImgV.userInteractionEnabled = YES;
     return _bgImgV;
 }
 
-- (void)showAd {
+- (void)showInWindow:(UIWindow *)window {
+    if (!window) {
+        window = [UIApplication sharedApplication].adv_getCurrentWindow;
+    }
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wundeclared-selector"
+    NSLog(@"%s", __func__);
     dispatch_async(dispatch_get_main_queue(), ^{
-       // UI更新代码
-        ((void (*)(id, SEL))objc_msgSend)((id)_adapter, @selector(showAd));
-
+        ((void (*)(id, SEL, id))objc_msgSend)((id)_adapter, @selector(showInWindow:), window);
     });
 
 

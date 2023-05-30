@@ -33,22 +33,21 @@
 }
 
 - (void)loadAdBtn1Action {
+    NSLog(@"%s", __func__);
     if (![self checkAdspotId]) { return; }
     
 
     self.advanceInterstitial = [[AdvanceInterstitial alloc] initWithAdspotId:self.adspotId
                                                               viewController:self
                                                                       adSize:CGSizeMake(414, 300)];
-        self.advanceInterstitial.delegate = self;
+    self.advanceInterstitial.delegate = self;
     _isAdLoaded=false;
     [self.advanceInterstitial loadAd];
 }
 
 - (void)loadAdBtn2Action {
-    if (!_isAdLoaded) {
-       [JDStatusBarNotification showWithStatus:@"请先加载广告" dismissAfter:1.5];
-        return;
-    }
+    
+    
     [self.advanceInterstitial showAd];
 }
 

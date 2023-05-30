@@ -45,6 +45,7 @@
     _advanceFeed = [[AdvanceNativeExpress alloc] initWithAdspotId:slotID customExt:nil viewController:self.bridge.viewControllerForPresentingModalView adSize:size];
 
     _advanceFeed.delegate = self.scapegoat;
+    _advanceFeed.muted = [parameter[ABUAdLoadingParamNAIsMute] boolValue];
     [_advanceFeed loadAdWithSupplierModel:model];
 
 }

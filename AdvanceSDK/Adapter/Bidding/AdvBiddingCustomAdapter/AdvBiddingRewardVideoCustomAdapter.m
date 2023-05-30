@@ -48,7 +48,7 @@
                                                             viewController:[UIApplication sharedApplication].adv_getCurrentWindow.rootViewController];
 
     self.advanceRewardVideo.delegate = self.scapegoat;
-
+    self.advanceRewardVideo.muted = [parameter[ABUAdLoadingParamRVIsMute] boolValue];
     [self.advanceRewardVideo loadAdWithSupplierModel:model];
 
 

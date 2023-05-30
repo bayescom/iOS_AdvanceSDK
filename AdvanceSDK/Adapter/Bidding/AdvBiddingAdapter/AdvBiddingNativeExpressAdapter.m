@@ -35,6 +35,7 @@
         self.adManager.rootViewController = _adspot.viewController;
         self.adManager.startMutedIfCan = YES;
         self.adManager.delegate = self;
+        self.adManager.startMutedIfCan = _adspot.muted;
 
     }
     return self;

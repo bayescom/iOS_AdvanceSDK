@@ -31,6 +31,7 @@
         _supplier = supplier;
         _ks_ad = [[KSFullscreenVideoAd alloc] initWithPosId:_supplier.adspotid];
         _ks_ad.showDirection = KSAdShowDirection_Vertical;
+        _ks_ad.shouldMuted = _adspot.muted;
     }
     return self;
 }

@@ -38,7 +38,7 @@
         _supplier = supplier;
         [MercuryConfigManager openDebug:YES];
         _mercury_ad = [[MercurySplashAd alloc] initAdWithAdspotId:_supplier.adspotid delegate:self];
-        _mercury_ad.placeholderImage = _adspot.backgroundImage;
+//        _mercury_ad.placeholderImage = _adspot.backgroundImage;
         _mercury_ad.logoImage = _adspot.logoImage;
         NSNumber *showLogoType = _adspot.extParameter[MercuryLogoShowTypeKey];
         NSNumber *blankGap = _adspot.extParameter[MercuryLogoShowBlankGapKey];
@@ -128,7 +128,21 @@
 }
 
 
+- (void)showInWindow:(UIWindow *)window {
+    UIImageView *imgV;
+    if (_adspot.showLogoRequire) {
+        // 添加Logo
+        NSAssert(_adspot.logoImage != nil, @"showLogoRequire = YES时, 必须设置logoImage");
+        CGFloat real_w = [UIScreen mainScreen].bounds.size.width;
+        CGFloat real_h = _adspot.logoImage.size.height*(real_w/_adspot.logoImage.size.width);
+        UIImageView *imgV = [[UIImageView alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height-real_h, real_w, real_h)];
+        imgV.userInteractionEnabled = YES;
+        imgV.image = _adspot.logoImage;
+    }
 
+    [self.mercury_ad showAdInWindow:window];
+
+}
 
 - (void)dealloc {
     ADV_LEVEL_INFO_LOG(@"%s", __func__);
@@ -153,7 +167,7 @@
 }
 
 - (void)mercury_materialDidLoad:(MercurySplashAd *)splashAd isFromCache:(BOOL)isFromCache {
-    _supplier.supplierPrice = splashAd.price;
+    _supplier.supplierPrice = [splashAd getPrice];
     [self.adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
 
@@ -229,7 +243,7 @@
     if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
         [self.delegate advanceUnifiedViewDidLoad];
     }
-    [self showAd];
+//    [self showAd];
 }
 
 @end

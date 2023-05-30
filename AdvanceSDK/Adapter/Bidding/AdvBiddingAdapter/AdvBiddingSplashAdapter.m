@@ -100,7 +100,7 @@
     if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
         [self.delegate advanceUnifiedViewDidLoad];
     }
-    [self showAd];
+//    [self showAd];
 
     
 }
@@ -133,13 +133,19 @@
     [self.splashAd showInWindow:[[UIApplication sharedApplication] keyWindow]];
 }
 
+- (void)showInWindow:(UIWindow *)window {
+    // 设置logo
+    [self.splashAd showInWindow:window];
+}
+
+
 - (void)splashAdDidLoad:(ABUSplashAd *)splashAd {
     ADV_LEVEL_INFO_LOG(@"%s", __func__);
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
         [self.delegate advanceUnifiedViewDidLoad];
     }
-    [self showAd];
+//    [self showAd];
 }
 
 - (void)splashAd:(ABUSplashAd *)splashAd didFailWithError:(NSError *)error {

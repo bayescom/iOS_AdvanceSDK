@@ -3,14 +3,40 @@ use_frameworks!
 platform :ios, '10.0'
 target 'AdvanceSDK_Example' do
 
+  #必须集成
   pod 'AdvanceSDK', :path => '../'
+  
+  #集成倍业所需
   pod 'AdvanceSDK/Mercury', :path => '../'
+  pod 'MercurySDK', '3.1.8.7'
+
+  #集成穿山甲所需
   pod 'AdvanceSDK/CSJ', :path => '../'
+  pod 'Ads-CN', '4.9.0.6'
+  
+  #集成广点通所需
   pod 'AdvanceSDK/GDT', :path => '../'
+  pod 'GDTMobSDK', '4.14.10'
+
+  #集成快手所需
   pod 'AdvanceSDK/KS', :path => '../'
+  pod 'KSAdSDK', '3.3.40'
+
+  # 集成百度 所需
   pod 'AdvanceSDK/BD', :path => '../'
-#  pod 'AdvanceSDK/Bidding', :path => '../'
+  pod 'BaiduMobAdSDK', '5.101'
+
+  # 集成advBidding 所需
   pod 'AdvanceSDK/AdvBidding', :path => '../'
+  pod 'AdvBiddingSDK', '1.1.8'
+  pod 'AdvBiddingSuppliers', '0.0.8'
+
+  
+  
+  
+  
+  
+  
   pod 'JSONModel', '1.8.0'
   pod 'Reachability', '3.2'
   pod 'SDWebImage', '5.12.1'
