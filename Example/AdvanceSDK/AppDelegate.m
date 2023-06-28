@@ -69,6 +69,31 @@
      */
     // 调试阶段尽量用真机, 以便获取idfa, 如果获取不到idfa, 则打开idfa开关
     // iphone 打开idfa 开关的的过程:设置 -> 隐私 -> 跟踪 -> 允许App请求跟踪
+    
+//    __block NSString *idfa = @"";
+//    ASIdentifierManager *manager = [ASIdentifierManager sharedManager];
+//    if (@available(iOS 14, *)) {
+//        [ATTrackingManager requestTrackingAuthorizationWithCompletionHandler:^(ATTrackingManagerAuthorizationStatus status) {
+//            if (status == ATTrackingManagerAuthorizationStatusAuthorized) {
+//                idfa = [[manager advertisingIdentifier] UUIDString];
+//            }
+//            dispatch_async(dispatch_get_main_queue(), ^{
+//                // do something
+//                [AdvSdkConfig shareInstance].level = AdvLogLevel_Debug;
+//            });
+//        }];
+//    }else{
+//        if ([manager isAdvertisingTrackingEnabled]) {
+//            idfa = [[manager advertisingIdentifier] UUIDString];
+//        }
+//
+//    }
+    
+    return YES;
+}
+
+- (void)applicationDidBecomeActive:(UIApplication *)application {
+   // 申请权限代码 requestAppTrackAuth ;
     __block NSString *idfa = @"";
     ASIdentifierManager *manager = [ASIdentifierManager sharedManager];
     if (@available(iOS 14, *)) {
@@ -79,16 +104,18 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 // do something
                 [AdvSdkConfig shareInstance].level = AdvLogLevel_Debug;
+//                [EasyAdSdkConfig shareInstance].appId = @"100255";
+//                [self loadSplash];
             });
         }];
     }else{
         if ([manager isAdvertisingTrackingEnabled]) {
             idfa = [[manager advertisingIdentifier] UUIDString];
+//            [EasyAdSdkConfig shareInstance].appId = @"100255";
+//            [self loadSplash];
         }
-
     }
-    
-    return YES;
+
 }
 
 

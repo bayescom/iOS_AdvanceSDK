@@ -13,6 +13,7 @@
 #import "DemoUtils.h"
 #import <AdvanceSDK/AdvanceNativeExpress.h>
 #import <AdvanceSDK/AdvanceNativeExpressView.h>
+#define kScreenWidth [UIScreen mainScreen].bounds.size.width
 @interface DemoListFeedExpressViewController () <UITableViewDelegate, UITableViewDataSource, AdvanceNativeExpressDelegate>
 @property (strong, nonatomic) UITableView *tableView;
 
@@ -49,6 +50,7 @@
         self.advanceFeed = nil;
     }
     // adSize 高度设置0
+    CGFloat width = kScreenWidth;
     _advanceFeed = [[AdvanceNativeExpress alloc] initWithAdspotId:self.adspotId customExt:self.ext viewController:self adSize:CGSizeMake(self.view.bounds.size.width, 0)];
 
     _advanceFeed.delegate = self;

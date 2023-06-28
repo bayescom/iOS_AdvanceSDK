@@ -1,6 +1,0 @@
-framework module TanxSDK {
-  umbrella header "TanxSDK.h"
-
-  export *
-  module * { export * }
-}

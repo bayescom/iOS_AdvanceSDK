@@ -23,10 +23,15 @@
     
     self.initDefSubviewsFlag = YES;
     self.adspotIdsArr = @[
-        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10000559"},
-        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10006501"},
-        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"102194-10007006"},
-        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"102194-10007395"},
+//        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10000559"},
+//        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10006501"},
+//        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"102194-10007006"},
+//        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"102194-10007395"},
+        @{@"addesc": @"插屏-倍业", @"adspotId": @"102768-10007791"},
+        @{@"addesc": @"插屏-穿山甲", @"adspotId": @"102768-10007801"},
+        @{@"addesc": @"插屏-优良汇", @"adspotId": @"102768-10007810"},
+        @{@"addesc": @"插屏-快手", @"adspotId": @"102768-10007818"},
+        @{@"addesc": @"插屏-百度", @"adspotId": @"102768-10007836"},
     ];
     self.btn1Title = @"加载广告";
     self.btn2Title = @"显示广告";

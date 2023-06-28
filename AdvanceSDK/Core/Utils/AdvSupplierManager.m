@@ -678,7 +678,7 @@
     ADV_LEVEL_INFO_LOG(@"开始请求时间戳: %f", [[NSDate date] timeIntervalSince1970]);
     
     __weak typeof(self) weakSelf = self;
-    NSURLSessionDataTask *dataTask = [sharedSession dataTaskWithRequest:request
+    self.dataTask = [sharedSession dataTaskWithRequest:request
                                                       completionHandler:^(NSData *_Nullable data, NSURLResponse *_Nullable response, NSError *_Nullable error) {
         __strong typeof(self) strongSelf = weakSelf;//第一层
         __weak typeof(self) weakSelf2 = strongSelf;
@@ -692,7 +692,7 @@
         });
         
     }];
-    [dataTask resume];
+    [self.dataTask resume];
 }
 
 

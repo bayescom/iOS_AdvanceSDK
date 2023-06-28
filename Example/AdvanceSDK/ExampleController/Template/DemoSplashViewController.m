@@ -36,16 +36,19 @@
     // 需要id调试的媒体请联系运营同学开通
     self.initDefSubviewsFlag = YES;
     self.adspotIdsArr = @[
-//        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10002619"},
-        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10006483"},
+//        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10006483"},
         
-        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"101959-10006038"},
-        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"101959-10006806"},
-        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"102342-10006833"},
-        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"102342-10006591"},
-
-
-//
+//        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"101959-10006038"},
+//        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"101959-10006806"},
+//        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"102342-10006833"},
+//        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"102342-10006591"},
+//        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"111111-10007675"},
+        
+        @{@"addesc": @"开屏-倍业", @"adspotId": @"102768-10007788"},
+        @{@"addesc": @"开屏-穿山甲", @"adspotId": @"102768-10007798"},
+        @{@"addesc": @"开屏-优良汇", @"adspotId": @"102768-10007807"},
+        @{@"addesc": @"开屏-快手", @"adspotId": @"102768-10007816"},
+        @{@"addesc": @"开屏-百度", @"adspotId": @"102768-10007833"},
     ];
     self.btn1Title = @"加载广告";
     self.btn2Title = @"展示广告";
@@ -76,7 +79,6 @@
 
     self.advanceSplash.isUploadSDKVersion = YES;
     self.advanceSplash.delegate = self;
-    
     
     /**
       logo图片不应该是仅是一张透明的logo 应该是一张有背景的logo, 且高度等于你设置的logo高度
@@ -142,7 +144,6 @@
 - (void)advanceUnifiedViewDidLoad {
     NSLog(@"广告数据拉取成功 %s", __func__);
 
-//    [self loadAdBtn1Action];
     [self showAd];
 }
 
@@ -174,21 +175,11 @@
 /// 广告关闭
 - (void)advanceDidClose {
     NSLog(@"广告关闭了 %s", __func__);
-//    self.advanceSplash.delegate = nil;
-//    self.advanceSplash = nil;
-
 }
 
 - (void)dealloc {
     NSLog(@"%s",__func__);
-//    self.advanceSplash.delegate = nil;
-//    self.advanceSplash = nil;
 }
-
-///// 广告倒计时结束
-//- (void)advanceSplashOnAdCountdownToZero {
-//    NSLog(@"广告倒计时结束 %s", __func__);
-//}
 
 /// 点击了跳过
 - (void)advanceSplashOnAdSkipClicked {
@@ -207,7 +198,6 @@
         _bgImgV = [[UIImageView alloc] init];
     }
     _bgImgV.frame = [UIScreen mainScreen].bounds;
-//    _bgImgV.userInteractionEnabled = YES;
     return _bgImgV;
 }
 @end
