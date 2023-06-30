@@ -11,7 +11,6 @@
 @interface ViewController () <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSArray<NSDictionary<NSString *, NSString *> *> *dataArr;
-
 @property (nonatomic, strong) UIImageView *logoImgV;
 
 @end

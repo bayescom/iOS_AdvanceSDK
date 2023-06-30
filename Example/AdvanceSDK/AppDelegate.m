@@ -19,9 +19,7 @@
 //#import <JPFPSStatus.h>
 
 #import "ViewController.h"
-
 #import <AdvanceSplash.h>
-
 #import <AdvanceSDK/AdvanceSplash.h>
 #import <AdvSdkConfig.h>
 
