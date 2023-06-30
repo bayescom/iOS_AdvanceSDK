@@ -23,6 +23,7 @@
 #import <AdvanceSDK/AdvanceSplash.h>
 #import <AdvSdkConfig.h>
 
+
 #define kPublicKey  @"用文本编辑打开pub_for_sdk.cer即可获取"
 
 #define kPublicForApiKey @"用文本编辑打开public_for_api.pem即可获取"
