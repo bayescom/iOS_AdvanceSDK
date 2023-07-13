@@ -7,13 +7,9 @@
 #
 
 Pod::Spec.new do |s|
+    
     s.name             = 'AdvanceSDK'
-    
     s.version          = '4.0.3.5'
-    s.ios.deployment_target = '10.0'
-    s.platform     = :ios, "10.0"
-    s.requires_arc = true
-    
     s.license          = { :type => 'MIT', :file => 'LICENSE' }
     s.summary          = 'bayescom iOS AdvabceSDK'
     s.description      = <<-DESC
@@ -35,10 +31,12 @@ Pod::Spec.new do |s|
     s.pod_target_xcconfig = { 'ENABLE_BITCODE' => 'NO'}
     s.user_target_xcconfig = { 'ENABLE_BITCODE' => 'NO'}
     
-    s.default_subspec = 'Core'
-    
+    s.ios.deployment_target = '10.0'
+    s.platform     = :ios, "10.0"
     s.requires_arc = true
     s.static_framework = true
+    
+    s.default_subspec = 'Core'
     
     s.subspec 'Core' do |core|
         core.source_files = 'AdvanceSDK/Core/**/*.{h,m}'
