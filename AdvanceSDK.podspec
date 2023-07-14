@@ -36,6 +36,7 @@ Pod::Spec.new do |s|
     s.requires_arc = true
     s.static_framework = true
     
+    # 默认的使用模块
     s.default_subspec = 'Core'
     
     s.subspec 'Core' do |core|
@@ -115,34 +116,22 @@ Pod::Spec.new do |s|
 #
 #
 #        end
-#    s.subspec 'Bidding' do |bidding|
-#        bidding.dependency 'AdvanceSDK/Core'
-#        bidding.dependency 'AdvanceSDK/Adspot'
-#        bidding.dependency 'AdvBiddingSuppliers','0.0.8'
-#
-##        bidding.dependency 'Ads-CN'
-#        bidding.source_files =  ['AdvanceSDK/Adapter/Bidding/*{h,m}',
-#        'AdvanceSDK/Adapter/Bidding/AdvBiddingAdapter/*{h,m}',
-#        'AdvanceSDK/Adapter/Bidding/AdvBiddingCustomAdapter/*{h,m}'
-#        ]
-#
-#
-#        valid_archs = ['armv7', 'armv7s', 'x86_64', 'arm64']
-#
-#
-#    end
 
-    
-    s.subspec 'AdvBidding' do |advBidding|
-        advBidding.dependency 'AdvanceSDK/Core'
-        advBidding.dependency 'AdvanceSDK/Adspot'
-        advBidding.dependency 'AdvBiddingSDK'
-        advBidding.dependency 'AdvBiddingSuppliers'
-
-
+    s.subspec 'Bidding' do |bidding|
+        bidding.dependency 'AdvanceSDK/Core'
+        bidding.dependency 'AdvanceSDK/Adspot'
+        bidding.dependency 'AdvBiddingSuppliers','0.0.8'
+        bidding.source_files = 'AdvanceSDK/Adapter/Bidding/**/*.{h,m}'
     end
 
     
+#    s.subspec 'AdvBidding' do |advBidding|
+#        advBidding.dependency 'AdvanceSDK/Core'
+#        advBidding.dependency 'AdvanceSDK/Adspot'
+#        advBidding.dependency 'AdvBiddingSDK'
+#        advBidding.dependency 'AdvBiddingSuppliers'
+#    end
+
     
     s.xcconfig = {
         'VALID_ARCHS' =>  valid_archs.join(' '),

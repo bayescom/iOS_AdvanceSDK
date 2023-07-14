@@ -27,9 +27,9 @@ target 'AdvanceSDK_Example' do
   pod 'BaiduMobAdSDK', '5.101'
 
   # 集成advBidding 所需
-  pod 'AdvanceSDK/AdvBidding', :path => '../'
-  pod 'AdvBiddingSDK', '1.1.8'
-  pod 'AdvBiddingSuppliers', '0.0.8'
+  pod 'AdvanceSDK/Bidding', :path => '../'
+#  pod 'AdvBiddingSDK', '1.1.8'
+#  pod 'AdvBiddingSuppliers', '0.0.8'
 
   
   
