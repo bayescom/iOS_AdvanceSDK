@@ -4,7 +4,7 @@
 //
 //  Created by MS on 2021/6/1.
 //
-#import "AdvBaseAdPosition.h"
+#import "AdvanceBaseAdapter.h"
 #import <Foundation/Foundation.h>
 #import "AdvanceFullScreenVideoDelegate.h"
 
@@ -13,7 +13,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface BdFullScreenVideoAdapter : AdvBaseAdPosition
+@interface BdFullScreenVideoAdapter : AdvanceBaseAdapter
 @property (nonatomic, weak) id<AdvanceFullScreenVideoDelegate> delegate;
 
 

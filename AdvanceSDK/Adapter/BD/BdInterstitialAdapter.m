@@ -93,7 +93,7 @@
     ADV_LEVEL_INFO_LOG(@"ExpressInterstitial loaded 请求成功");
     _supplier.supplierPrice = [[interstitial getECPMLevel] integerValue];
     [self.adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
 //    ADV_LEVEL_INFO_LOG(@"穿山甲插屏视频拉取成功");
     _supplier.state = AdvanceSdkSupplierStateSuccess;
     if (_supplier.isParallel == YES) {
@@ -106,7 +106,7 @@
     ADV_LEVEL_INFO_LOG(@"ExpressInterstitial failed 请求失败");
     NSError *error = [[NSError alloc]initWithDomain:@"BDAdErrorDomain" code:1000020 + reason userInfo:@{@"desc":@"百度广告请求错误"}];
     
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
     _supplier.state = AdvanceSdkSupplierStateFailed;
     if (_supplier.isParallel == YES) { // 并行不释放 只上报
         return;
@@ -121,7 +121,7 @@
 - (void)interstitialAdDownLoadFailed:(BaiduMobAdExpressInterstitial *)interstitial {
     ADV_LEVEL_INFO_LOG(@"ExpressInterstitial downloadFailed 缓存失败");
     NSError *error = [[NSError alloc]initWithDomain:@"BDAdErrorDomain" code:1000220 userInfo:@{@"desc":@"百度广告缓存错误"}];
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
     [self deallocAdapter];
 }
 
@@ -136,7 +136,7 @@
 - (void)interstitialAdExposureFail:(BaiduMobAdExpressInterstitial *)interstitial withError:(int)reason {
     ADV_LEVEL_INFO_LOG(@"ExpressInterstitial exposure 展现失败");
     NSError *error = [[NSError alloc]initWithDomain:@"BDAdErrorDomain" code:1000120 + reason userInfo:@{@"desc":@"百度广告展现错误"}];
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
     [self deallocAdapter];
 }
 

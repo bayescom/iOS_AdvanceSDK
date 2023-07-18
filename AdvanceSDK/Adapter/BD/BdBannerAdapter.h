@@ -4,7 +4,7 @@
 //
 //  Created by MS on 2021/5/28.
 //
-#import "AdvBaseAdPosition.h"
+#import "AdvanceBaseAdapter.h"
 #import <Foundation/Foundation.h>
 #import "AdvanceBannerDelegate.h"
 
@@ -13,7 +13,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface BdBannerAdapter : AdvBaseAdPosition
+@interface BdBannerAdapter : AdvanceBaseAdapter
 @property (nonatomic, weak) id<AdvanceBannerDelegate> delegate;
 
 @end

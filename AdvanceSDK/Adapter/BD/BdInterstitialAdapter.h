@@ -5,7 +5,7 @@
 //  Created by MS on 2022/6/21.
 //
 
-#import "AdvBaseAdPosition.h"
+#import "AdvanceBaseAdapter.h"
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "AdvanceInterstitialDelegate.h"
@@ -14,7 +14,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface BdInterstitialAdapter : AdvBaseAdPosition
+@interface BdInterstitialAdapter : AdvanceBaseAdapter
 @property (nonatomic, weak) id<AdvanceInterstitialDelegate> delegate;
 
 @end

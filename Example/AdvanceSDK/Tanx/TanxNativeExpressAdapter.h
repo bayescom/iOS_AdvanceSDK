@@ -5,7 +5,7 @@
 //  Created by MS on 2022/7/14.
 //
 
-#import "AdvBaseAdPosition.h"
+#import "AdvanceBaseAdapter.h"
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "AdvanceNativeExpressDelegate.h"
@@ -15,7 +15,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface TanxNativeExpressAdapter : AdvBaseAdPosition
+@interface TanxNativeExpressAdapter : AdvanceBaseAdapter
 @property (nonatomic, weak) id<AdvanceNativeExpressDelegate> delegate;
 
 @end

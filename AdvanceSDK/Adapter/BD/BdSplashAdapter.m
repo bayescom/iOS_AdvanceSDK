@@ -242,7 +242,7 @@
     _supplier.supplierPrice = [[splash getECPMLevel] integerValue];
 //    _supplier.supplierPrice = 10000;
     [self.adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
     if (_supplier.isParallel == YES) {
 //        NSLog(@"修改状态: %@", _supplier);
         _supplier.state = AdvanceSdkSupplierStateSuccess;
@@ -255,7 +255,7 @@
                      message:(NSString *)message
                     splashAd:(BaiduMobAdSplash *)nativeAd {
     NSError *error = [[NSError alloc]initWithDomain:@"BDAdErrorDomain" code:[errCode integerValue] userInfo:@{@"desc":message}];
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
     _supplier.state = AdvanceSdkSupplierStateFailed;
     if (_supplier.isParallel == YES) {
         return;

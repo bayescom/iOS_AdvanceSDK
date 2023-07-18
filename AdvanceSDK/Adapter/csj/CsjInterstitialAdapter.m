@@ -94,7 +94,7 @@
 
 /// 广告预加载失败回调
 - (void)nativeExpressFullscreenVideoAd:(BUNativeExpressFullscreenVideoAd *)fullscreenVideoAd didFailWithError:(NSError *_Nullable)error {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
     _supplier.state = AdvanceSdkSupplierStateFailed;
     if (_supplier.isParallel == YES) { // 并行不释放 只上报
         return;
@@ -108,7 +108,7 @@
 - (void)nativeExpressFullscreenVideoAdDidDownLoadVideo:(BUNativeExpressFullscreenVideoAd *)fullscreenVideoAd {
 //回调后再去展示广告，可保证播放和展示效果
     [self.adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
     _supplier.state = AdvanceSdkSupplierStateSuccess;
     if (_supplier.isParallel == YES) {
         return;
@@ -121,7 +121,7 @@
 
 /// 渲染失败
 - (void)nativeExpressFullscreenVideoAdViewRenderFail:(BUNativeExpressFullscreenVideoAd *)rewardedVideoAd error:(NSError *_Nullable)error {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
     [self deallocAdapter];
 //    if ([self.delegate respondsToSelector:@selector(advanceFullScreenVideoOnAdFailedWithSdkId:error:)]) {
 //        [self.delegate advanceFullScreenVideoOnAdFailedWithSdkId:_supplier.identifier error:error];

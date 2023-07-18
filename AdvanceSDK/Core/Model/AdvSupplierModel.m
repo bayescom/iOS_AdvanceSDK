@@ -18,11 +18,11 @@ NSString * ADVStringFromNAdvanceSdkSupplierRepoType(AdvanceSdkSupplierRepoType t
             return @"AdvanceSdkSupplierRepoLoaded(发起加载请求上报)";
         case AdvanceSdkSupplierRepoClicked:
             return @"AdvanceSdkSupplierRepoClicked(点击上报)";
-        case AdvanceSdkSupplierRepoSucceeded:
+        case AdvanceSdkSupplierRepoSucceed:
             return @"AdvanceSdkSupplierRepoSucceeded(数据加载成功上报)";
         case AdvanceSdkSupplierRepoImped:
             return @"AdvanceSdkSupplierRepoImped(曝光上报)";
-        case AdvanceSdkSupplierRepoFaileded:
+        case AdvanceSdkSupplierRepoFailed:
             return @"AdvanceSdkSupplierRepoFaileded(失败上报)";
         default:
             return @"MercuryBaseAdRepoTKEventTypeUnknow(未知类型上报)";

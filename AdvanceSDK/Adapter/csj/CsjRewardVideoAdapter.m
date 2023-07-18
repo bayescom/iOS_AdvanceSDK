@@ -101,7 +101,7 @@
 /// 广告数据加载成功回调
 - (void)nativeExpressRewardedVideoAdDidLoad:(BUNativeExpressRewardedVideoAd *)rewardedVideoAd {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
 //    NSLog(@"穿山甲激励视频拉取成功");
     _supplier.state = AdvanceSdkSupplierStateSuccess;
     NSLog(@"--1> %@ %d", _supplier, _supplier.isParallel);
@@ -116,7 +116,7 @@
 
 /// 广告加载失败回调
 - (void)nativeExpressRewardedVideoAdViewRenderFail:(BUNativeExpressRewardedVideoAd *)rewardedVideoAd error:(NSError *)error {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
 //    NSLog(@"穿山甲激励视频拉取失败 %@", error);
     _csj_ad = nil;
 //    if ([self.delegate respondsToSelector:@selector(advanceRewardVideoOnAdFailedWithSdkId:error:)]) {
@@ -178,7 +178,7 @@
 
 - (void)nativeExpressRewardedVideoAdServerRewardDidFail:(BUNativeExpressRewardedVideoAd *)rewardedVideoAd error:(NSError *)error
 {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
     _csj_ad = nil;
 //    if ([self.delegate respondsToSelector:@selector(advanceRewardVideoOnAdFailedWithSdkId:error:)]) {
 //        [self.delegate advanceRewardVideoOnAdFailedWithSdkId:_supplier.identifier error:error];
@@ -189,7 +189,7 @@
 // 加载错误
 - (void)nativeExpressRewardedVideoAd:(BUNativeExpressRewardedVideoAd *)rewardedVideoAd didFailWithError:(NSError *_Nullable)error
 {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
     _supplier.state = AdvanceSdkSupplierStateFailed;
     if (_supplier.isParallel == YES) { // 并行不释放 只上报
         return;

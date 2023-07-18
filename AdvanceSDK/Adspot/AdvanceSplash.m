@@ -73,7 +73,7 @@
 
 - (void)reportWithType:(AdvanceSdkSupplierRepoType)repoType supplier:(nonnull AdvSupplier *)supplier error:(nonnull NSError *)error {
     [super reportWithType:repoType supplier:supplier error:error];
-    if (repoType == AdvanceSdkSupplierRepoSucceeded) {
+    if (repoType == AdvanceSdkSupplierRepoSucceed) {
 //        ADVLog(@"曝光成功 计时器清零");
         _isLoadAdSucceed = YES;
         [self deallocSelf];
@@ -111,20 +111,13 @@
     }
 }
 
-// 返回策略id
-- (void)advanceOnAdReceivedWithReqId:(NSString *)reqId
-{
-    self.reqId = reqId;
-    if ([_delegate respondsToSelector:@selector(advanceOnAdReceived:)]) {
-        [_delegate advanceOnAdReceived:reqId];
-    }
-}
-
 // MARK: ======================= AdvanceSupplierDelegate =======================
 /// 加载策略Model成功
 - (void)advanceBaseAdapterLoadSuccess:(nonnull AdvSupplierModel *)model {
-    // 返回策略id
-    [self advanceOnAdReceivedWithReqId:model.reqid];
+    self.reqId = model.reqid;
+    if ([_delegate respondsToSelector:@selector(advanceOnAdReceived:)]) {
+        [_delegate advanceOnAdReceived:self.reqId];
+    }
 }
 
 /// 加载策略Model失败

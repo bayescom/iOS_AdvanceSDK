@@ -21,12 +21,12 @@ typedef NS_ENUM(NSUInteger, AdvanceSdkSupplierRepoType) {
     AdvanceSdkSupplierRepoLoaded,
     /// 点击上报
     AdvanceSdkSupplierRepoClicked,
-    /// 数据加载成功上报
-    AdvanceSdkSupplierRepoSucceeded,
+    /// 数据加载成功上报v
+    AdvanceSdkSupplierRepoSucceed,
     /// 曝光上报
     AdvanceSdkSupplierRepoImped,
     /// 失败上报
-    AdvanceSdkSupplierRepoFaileded,
+    AdvanceSdkSupplierRepoFailed,
     /// bidding结果上报
     AdvanceSdkSupplierRepoBidding,
     /// bidding广告位生命周期上报
@@ -52,9 +52,9 @@ typedef NS_ENUM(NSUInteger, AdvanceSdkSupplierState) {
 };
 
 typedef NS_ENUM(NSUInteger, AdvanceSdkSupplierBiddingType) {
-    /// 瀑布流式广告
+    /// 瀑布流式
     AdvanceSdkSupplierTypeWaterfall,
-    /// headBidding类型广告
+    /// headBidding头部竞价
     AdvanceSdkSupplierTypeHeadBidding,
 };
 
@@ -68,7 +68,7 @@ NSString * ADVStringFromNAdvanceSdkSupplierRepoType(AdvanceSdkSupplierRepoType t
 @interface AdvSupplierModel : NSObject
 @property (nonatomic, strong) Gro_more  *gro_more;
 @property (nonatomic, strong) AdvSetting *setting;
-@property (nonatomic, strong)   NSMutableArray<AdvSupplier *> *suppliers;
+@property (nonatomic, strong) NSMutableArray<AdvSupplier *> *suppliers;
 @property (nonatomic, copy)   NSString *msg;
 @property (nonatomic, assign) NSInteger code;
 @property (nonatomic, copy)   NSString *reqid;

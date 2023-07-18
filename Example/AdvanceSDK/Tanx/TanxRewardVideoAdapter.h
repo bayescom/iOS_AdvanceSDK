@@ -5,7 +5,7 @@
 //  Created by MS on 2022/7/15.
 //
 
-#import "AdvBaseAdPosition.h"
+#import "AdvanceBaseAdapter.h"
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "AdvanceRewardVideoDelegate.h"
@@ -16,7 +16,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface TanxRewardVideoAdapter : AdvBaseAdPosition
+@interface TanxRewardVideoAdapter : AdvanceBaseAdapter
 @property (nonatomic, weak) id<AdvanceRewardVideoDelegate> delegate;
 
 @end

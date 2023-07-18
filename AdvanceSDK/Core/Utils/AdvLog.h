@@ -25,7 +25,6 @@
 
 
 #define ADVLog(format,...)  [AdvLog customLogWithFunction:__FUNCTION__ lineNumber:__LINE__ formatString:[NSString stringWithFormat:format, ##__VA_ARGS__]]
-#define ADVLogJSONData(data)  [AdvLog logJsonData:data]
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -36,9 +35,6 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)customLogWithFunction:(const char *)function lineNumber:(int)lineNumber formatString:(NSString *)formatString level:(AdvLogLevel)level;
 
 + (void)customLogWithFunction:(const char *)function lineNumber:(int)lineNumber formatString:(NSString *)formatString;
-
-// 记录data类型数据
-+ (void)logJsonData:(NSData *)data;
 
 @end
 

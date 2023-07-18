@@ -181,7 +181,7 @@
 - (void)ksad_splashAdContentDidLoad:(KSSplashAdView *)splashAdView {
     _supplier.supplierPrice = splashAdView.ecpm;
     [self.adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
     _supplier.state = AdvanceSdkSupplierStateSuccess;
     if (_supplier.isParallel == YES) {
         return;
@@ -193,7 +193,7 @@
  * splash ad (material) failed to load
  */
 - (void)ksad_splashAd:(KSSplashAdView *)splashAdView didFailWithError:(NSError *)error {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
     _supplier.state = AdvanceSdkSupplierStateFailed;
     if (_supplier.isParallel == YES) {
         return;

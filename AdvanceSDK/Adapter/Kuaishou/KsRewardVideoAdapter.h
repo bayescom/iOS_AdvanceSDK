@@ -7,12 +7,12 @@
 
 #import <Foundation/Foundation.h>
 #import "AdvanceRewardVideoDelegate.h"
-#import "AdvBaseAdPosition.h"
+#import "AdvanceBaseAdapter.h"
 NS_ASSUME_NONNULL_BEGIN
 @class AdvSupplier;
 @class AdvanceRewardVideo;
 
-@interface KsRewardVideoAdapter : AdvBaseAdPosition
+@interface KsRewardVideoAdapter : AdvanceBaseAdapter
 @property (nonatomic, weak) id<AdvanceRewardVideoDelegate> delegate;
 
 @end

@@ -104,7 +104,7 @@
 - (void)rewardedVideoAdDidLoad:(ABURewardedVideoAd *_Nonnull)rewardedVideoAd {
     ADV_LEVEL_INFO_LOG(@"%s",__func__);
     _supplier.state = AdvanceSdkSupplierStateSuccess;
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
     
 //    NSLog(@"Bidding激励视频拉取成功 %@",self.gdt_ad);
     if (_supplier.isParallel == YES) {
@@ -123,7 +123,7 @@
 /// @param error 错误信息
 - (void)rewardedVideoAd:(ABURewardedVideoAd *_Nonnull)rewardedVideoAd didFailWithError:(NSError *_Nullable)error {
     ADV_LEVEL_INFO_LOG(@"%s error:%@", __func__, error);
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
     _supplier.state = AdvanceSdkSupplierStateFailed;
     if (_supplier.isParallel == YES) {
         return;
@@ -136,7 +136,7 @@
 /// @param error 展示失败的原因
 - (void)rewardedVideoAdDidShowFailed:(ABURewardedVideoAd *_Nonnull)rewardedVideoAd error:(NSError *_Nonnull)error {
     ADV_LEVEL_INFO_LOG(@"%s error:%@", __func__, error);
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
 }
 
 /// 广告已加载视频素材回调

@@ -6,7 +6,7 @@
 //  Copyright © 2020 Gdt. All rights reserved.
 //
 
-#import "AdvBaseAdPosition.h"
+#import "AdvanceBaseAdapter.h"
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "AdvanceSplashDelegate.h"
@@ -16,7 +16,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface GdtSplashAdapter : AdvBaseAdPosition
+@interface GdtSplashAdapter : AdvanceBaseAdapter
 @property (nonatomic, weak) id<AdvanceSplashDelegate> delegate;
 
 @end

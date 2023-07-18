@@ -141,7 +141,7 @@
 
 - (void)splashAdDidLoad:(ABUSplashAd *)splashAd {
     ADV_LEVEL_INFO_LOG(@"%s", __func__);
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
         [self.delegate advanceUnifiedViewDidLoad];
     }
@@ -150,7 +150,7 @@
 
 - (void)splashAd:(ABUSplashAd *)splashAd didFailWithError:(NSError *)error {
     ADV_LEVEL_INFO_LOG(@"%s-error:%@", __func__, error);
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
 //    [self deallocAdapter];
 }
 

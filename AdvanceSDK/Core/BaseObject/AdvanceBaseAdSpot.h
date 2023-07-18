@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  该类当中的方法与属性 切勿在外部进行操作
  */
-@interface AdvBaseAdapter : NSObject
+@interface AdvanceBaseAdSpot : NSObject
 
 /// 并行渠道容器
 @property (nonatomic, strong) NSMutableArray * arrParallelSupplier;

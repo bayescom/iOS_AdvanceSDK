@@ -85,7 +85,7 @@
 - (void)mercury_interstitialSuccess:(MercuryInterstitialAd *)interstitialAd  {
     _supplier.supplierPrice = interstitialAd.price;
     [self.adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
     _supplier.state = AdvanceSdkSupplierStateSuccess;
     if (_supplier.isParallel == YES) {
 //        NSLog(@"修改状态: %@", _supplier);
@@ -97,7 +97,7 @@
 
 /// 插屏广告预加载失败回调，当接收服务器返回的广告数据失败后调用该函数
 - (void)mercury_interstitialFailError:(NSError *)error {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
     _supplier.state = AdvanceSdkSupplierStateFailed;
     if (_supplier.isParallel == YES) {
         return;
@@ -113,7 +113,7 @@
 
 /// 插屏广告视图曝光失败回调，插屏广告曝光失败回调该函数
 - (void)mercury_interstitialFailToPresent:(MercuryInterstitialAd *)interstitialAd {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:[NSError errorWithDomain:@"广告素材渲染失败" code:301 userInfo:@{@"msg": @"广告素材渲染失败"}]];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:[NSError errorWithDomain:@"广告素材渲染失败" code:301 userInfo:@{@"msg": @"广告素材渲染失败"}]];
     if (_mercury_ad) {
         _mercury_ad = nil;
     }

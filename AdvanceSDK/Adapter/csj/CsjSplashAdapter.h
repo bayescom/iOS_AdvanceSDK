@@ -5,7 +5,7 @@
 //  Created by CherryKing on 2020/4/8.
 //  Copyright © 2020 Mercury. All rights reserved.
 //
-#import "AdvBaseAdPosition.h"
+#import "AdvanceBaseAdapter.h"
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "AdvanceSplashDelegate.h"
@@ -15,7 +15,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface CsjSplashAdapter : AdvBaseAdPosition
+@interface CsjSplashAdapter : AdvanceBaseAdapter
 @property (nonatomic, weak) id<AdvanceSplashDelegate> delegate;
 
 @end

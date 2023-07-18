@@ -14,9 +14,6 @@ NS_ASSUME_NONNULL_BEGIN
 /// 设备信息单例对象
 + (instancetype)sharedInstance;
 
-- (NSString *)getIdfa;
-- (NSString *)getAuctionId;
-
 - (NSMutableDictionary *)getDeviceInfoWithMediaId:(NSString *)mediaId adspotId:(NSString *)adspotId;
 
 

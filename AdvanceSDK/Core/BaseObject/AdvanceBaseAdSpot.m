@@ -5,7 +5,7 @@
 //  Created by CherryKing on 2020/11/20.
 //
 
-#import "AdvBaseAdapter.h"
+#import "AdvanceBaseAdSpot.h"
 #import "AdvSupplierManager.h"
 #import "AdvanceSupplierDelegate.h"
 #import "AdvLog.h"
@@ -20,7 +20,7 @@
 //#import <Ads-Mediation-CN/ABUAdSDK.h>
 //#endif
 
-@interface AdvBaseAdapter ()  <AdvSupplierManagerDelegate, AdvanceSupplierDelegate>
+@interface AdvanceBaseAdSpot ()  <AdvSupplierManagerDelegate, AdvanceSupplierDelegate>
 @property (nonatomic, strong) AdvSupplierManager *mgr;
 
 @property (nonatomic, weak) id<AdvanceSupplierDelegate> baseDelegate;
@@ -28,7 +28,7 @@
 
 @end
 
-@implementation AdvBaseAdapter
+@implementation AdvanceBaseAdSpot
 
 -  (instancetype)initWithMediaId:(NSString *)mediaId
                         adspotId:(NSString *)adspotid {
@@ -102,7 +102,7 @@
     // 失败了 并且不是并行才会走下一个渠道
     // 由于bidding渠道isParallel=yes 所以bidding是不会走这个逻辑的
     // 但是bidding结束后会选择一个胜出的渠道, 胜出的渠道isParallel = NO 所以会走这个逻辑
-    if (repoType == AdvanceSdkSupplierRepoFaileded && !supplier.isParallel) {
+    if (repoType == AdvanceSdkSupplierRepoFailed && !supplier.isParallel) {
 //        NSLog(@"%@ |||   %ld %@",supplier.sdktag, (long)supplier.priority, supplier);
         
         // 如果渠道非并发 且不支持bidding 且失败了, 则为原来的业务渠道, 走原来的业务逻辑
@@ -117,7 +117,7 @@
     }
 
     // 如果并发渠道失败了 要通知mananger那边 _inwaterfallcount -1
-    if (repoType == AdvanceSdkSupplierRepoFaileded && supplier.isParallel) {
+    if (repoType == AdvanceSdkSupplierRepoFailed && supplier.isParallel) {
         [_mgr inParallelWithErrorSupplier:supplier];
     }
 }
@@ -153,7 +153,7 @@
     _mgr.delegate = nil;
     [_arrParallelSupplier removeAllObjects];
     _arrParallelSupplier = nil;
-    [_mgr cacelDataTask];
+    [_mgr cancelDataTask];
     _mgr = nil;
 }
 

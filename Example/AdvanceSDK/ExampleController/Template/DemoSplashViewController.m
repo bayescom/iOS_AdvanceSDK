@@ -95,7 +95,7 @@
     
     
     // 如果该时间内没有广告返回 即:未触发-advanceUnifiedViewDidLoad 回调, 则会结束本次广告加载,并触发错误回调
-    self.advanceSplash.timeout = 5;//<---- 确保timeout 时长内不对advanceSplash进行移除的操作
+    self.advanceSplash.timeout = 30;//<---- 确保timeout 时长内不对advanceSplash进行移除的操作
     [self.advanceSplash loadAd];
     NSLog(@"是否有广告返回 : %d", self.advanceSplash.isLoadAdSucceed);
 
@@ -159,6 +159,9 @@
     NSLog(@"广告展示失败 %s  error: %@ 详情:%@", __func__, error, description);
     self.advanceSplash.delegate = nil;
     self.advanceSplash = nil;
+    [self.bgImgV removeFromSuperview];
+    self.bgImgV.image = nil;
+    self.bgImgV = nil;
 
 }
 /// 内部渠道开始加载时调用

@@ -7,13 +7,13 @@
 
 #import <Foundation/Foundation.h>
 #import "AdvanceInterstitialDelegate.h"
-#import "AdvBaseAdPosition.h"
+#import "AdvanceBaseAdapter.h"
 
 NS_ASSUME_NONNULL_BEGIN
 @class AdvSupplier;
 @class AdvanceInterstitial;
 
-@interface KsInterstitialAdapter : AdvBaseAdPosition
+@interface KsInterstitialAdapter : AdvanceBaseAdapter
 @property (nonatomic, weak) id<AdvanceInterstitialDelegate> delegate;
 
 

@@ -91,7 +91,7 @@
 - (void)mercury_rewardVideoAdDidLoad:(MercuryRewardVideoAd *)rewardVideoAd {
     _supplier.supplierPrice = rewardVideoAd.price;
     [self.adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
     _supplier.state = AdvanceSdkSupplierStateSuccess;
     if (_supplier.isParallel == YES) {
 //        NSLog(@"修改状态: %@", _supplier);
@@ -105,7 +105,7 @@
 
 /// 广告加载失败回调
 - (void)mercury_rewardAdFailError:(nullable NSError *)error {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
     _supplier.state = AdvanceSdkSupplierStateFailed;
     if (_supplier.isParallel == YES) {
         return;

@@ -5,7 +5,7 @@
 //  Created by CherryKing on 2020/4/9.
 //  Copyright © 2020 bayescom. All rights reserved.
 //
-#import "AdvBaseAdPosition.h"
+#import "AdvanceBaseAdapter.h"
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "AdvanceNativeExpressDelegate.h"
@@ -15,7 +15,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface GdtNativeExpressAdapter : AdvBaseAdPosition
+@interface GdtNativeExpressAdapter : AdvanceBaseAdapter
 @property (nonatomic, weak) id<AdvanceNativeExpressDelegate> delegate;
 
 @end

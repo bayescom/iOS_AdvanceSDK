@@ -103,7 +103,7 @@
 - (void)rewardedVideoAdDidLoad:(KSRewardedVideoAd *)rewardedVideoAd {
     _supplier.supplierPrice = rewardedVideoAd.ecpm;
     [self.adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
     _supplier.state = AdvanceSdkSupplierStateSuccess;
 //    NSLog(@"广点通激励视频拉取成功 %@",self.ks_ad);
     if (_supplier.isParallel == YES) {
@@ -122,7 +122,7 @@
  */
 - (void)rewardedVideoAd:(KSRewardedVideoAd *)rewardedVideoAd didFailWithError:(NSError *_Nullable)error {
 //    NSLog(@"快手 错误 %@", error);
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
     _supplier.state = AdvanceSdkSupplierStateFailed;
     if (_supplier.isParallel == YES) {
         return;

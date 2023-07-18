@@ -101,7 +101,7 @@
             
             
             [strongSelf->_adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:strongSelf->_supplier error:nil];
-            [strongSelf->_adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:strongSelf->_supplier error:nil];
+            [strongSelf->_adspot reportWithType:AdvanceSdkSupplierRepoSucceed supplier:strongSelf->_supplier error:nil];
 
             //第二步获取模板信息
             strongSelf.config.verticalPadding = strongSelf.config.horizontalPadding = 10.f;
@@ -137,7 +137,7 @@
             }
 
         } else {
-            [strongSelf->_adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:strongSelf->_supplier error:nil];
+            [strongSelf->_adspot reportWithType:AdvanceSdkSupplierRepoFailed supplier:strongSelf->_supplier error:nil];
             strongSelf->_supplier.state = AdvanceSdkSupplierStateFailed;
             if (strongSelf->_supplier.isParallel == YES) {
                 return;
@@ -209,7 +209,7 @@
 /// @param feedModel  feedModel模型
 /// @param error 错误信息
 - (void)onFailureFeed:(TXAdFeedModel *)feedModel andError:(NSError *)error {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:nil];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:nil];
     
     AdvanceNativeExpressView *expressView = self.views.firstObject;
     

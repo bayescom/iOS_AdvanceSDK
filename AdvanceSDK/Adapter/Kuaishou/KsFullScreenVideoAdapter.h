@@ -5,14 +5,14 @@
 //  Created by MS on 2021/4/23.
 //
 
-#import "AdvBaseAdPosition.h"
+#import "AdvanceBaseAdapter.h"
 #import <Foundation/Foundation.h>
 #import "AdvanceFullScreenVideoDelegate.h"
 NS_ASSUME_NONNULL_BEGIN
 @class AdvSupplier;
 @class AdvanceFullScreenVideo;
 
-@interface KsFullScreenVideoAdapter : AdvBaseAdPosition
+@interface KsFullScreenVideoAdapter : AdvanceBaseAdapter
 @property (nonatomic, weak) id<AdvanceFullScreenVideoDelegate> delegate;
 
 

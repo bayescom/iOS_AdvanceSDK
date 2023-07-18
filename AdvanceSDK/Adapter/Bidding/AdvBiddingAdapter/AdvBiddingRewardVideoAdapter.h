@@ -5,7 +5,7 @@
 //  Created by MS on 2022/8/10.
 //
 
-#import "AdvBaseAdPosition.h"
+#import "AdvanceBaseAdapter.h"
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 //#import "AdvBidding.h"
@@ -16,7 +16,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface AdvBiddingRewardVideoAdapter : AdvBaseAdPosition
+@interface AdvBiddingRewardVideoAdapter : AdvanceBaseAdapter
 @property (nonatomic, weak) id<AdvanceRewardVideoDelegate> delegate;
 
 @end

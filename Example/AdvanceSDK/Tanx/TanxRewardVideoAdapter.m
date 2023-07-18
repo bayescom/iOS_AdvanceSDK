@@ -90,7 +90,7 @@
     
     _supplier.supplierPrice = (rewardVideoAd.model.eCPM == nil) ? 0 : rewardVideoAd.model.eCPM.integerValue;
     [self.adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
     
 //    NSLog(@"广点通激励视频拉取成功 %@",self.gdt_ad);
     if (_supplier.isParallel == YES) {
@@ -120,7 +120,7 @@
 /// @param rewardVideoAd 广告管理对象
 /// @param error 错误
 - (void)rewardVideoAd:(TXAdRewardVideoAd *)rewardVideoAd didLoadFailWithError:(NSError *)error {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
     _supplier.state = AdvanceSdkSupplierStateFailed;
     if (_supplier.isParallel == YES) {
         return;
@@ -147,7 +147,7 @@
 /// @param rewardVideoAd 广告管理对象
 /// @param error 错误
 - (void)rewardVideoAd:(TXAdRewardVideoAd *)rewardVideoAd didShowFailWithError:(NSError *)error {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
     _supplier.state = AdvanceSdkSupplierStateFailed;
     if (_supplier.isParallel == YES) {
         return;

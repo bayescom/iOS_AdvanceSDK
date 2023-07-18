@@ -96,7 +96,7 @@
  */
 - (void)nativeExpressAdSuccessToLoad:(GDTNativeExpressAd *)nativeExpressAd views:(NSArray<__kindof GDTNativeExpressAdView *> *)views {
     if (views == nil || views.count == 0) {
-        [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:nil];
+        [self.adspot reportWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:nil];
         _supplier.state = AdvanceSdkSupplierStateFailed;
         if (_supplier.isParallel == YES) {
             return;
@@ -108,7 +108,7 @@
     } else {
         _supplier.supplierPrice = views.firstObject.eCPM;
         [_adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
-        [_adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
+        [_adspot reportWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
         
         NSMutableArray *temp = [NSMutableArray array];
         for (GDTNativeExpressAdView *view in views) {
@@ -141,7 +141,7 @@
  * 拉取广告失败的回调
  */
 - (void)nativeExpressAdFailToLoad:(GDTNativeExpressAd *)nativeExpressAd error:(NSError *)error {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
 //    if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdFailedWithSdkId:error:)]) {
 //        [_delegate advanceNativeExpressOnAdFailedWithSdkId:_supplier.identifier error:error];
 //    }
@@ -157,7 +157,7 @@
  * 渲染原生模板广告失败
  */
 - (void)nativeExpressAdViewRenderFail:(GDTNativeExpressAdView *)nativeExpressAdView {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:nil];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:nil];
     
     AdvanceNativeExpressView *expressView = [self returnExpressViewWithAdView:(UIView *)nativeExpressAdView];
     if (expressView) {

@@ -6,14 +6,14 @@
 //  Copyright © 2020 Mercury. All rights reserved.
 //
 
-#import "AdvBaseAdapter.h"
+#import "AdvanceBaseAdSpot.h"
 #import "AdvSdkConfig.h"
 #import "AdvanceBannerDelegate.h"
 #import <UIKit/UIKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface AdvanceBanner : AdvBaseAdapter
+@interface AdvanceBanner : AdvanceBaseAdSpot
 /// 广告方法回调代理
 @property (nonatomic, weak) id<AdvanceBannerDelegate> delegate;
 

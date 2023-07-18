@@ -99,7 +99,7 @@
 - (void)ksad_interstitialAdRenderSuccess:(KSInterstitialAd *)interstitialAd {
     _supplier.supplierPrice = interstitialAd.ecpm;
     [self.adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
     _isDidLoad = YES;
 //    ADVLog(@"快手插屏视频拉取成功");
     _supplier.state = AdvanceSdkSupplierStateSuccess;
@@ -114,10 +114,10 @@
  */
 - (void)ksad_interstitialAdRenderFail:(KSInterstitialAd *)interstitialAd error:(NSError * _Nullable)error {
     if (_isDidLoad) {// 如果已经load 报错 为renderFail
-        [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
+        [self.adspot reportWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
 
     } else {// 如果没有load 报错 则为 loadfail
-        [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
+        [self.adspot reportWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
         _supplier.state = AdvanceSdkSupplierStateFailed;
         if (_supplier.isParallel == YES) { // 并行不释放 只上报
             return;

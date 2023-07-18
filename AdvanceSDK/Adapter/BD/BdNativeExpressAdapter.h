@@ -4,7 +4,7 @@
 //
 //  Created by MS on 2021/5/31.
 //
-#import "AdvBaseAdPosition.h"
+#import "AdvanceBaseAdapter.h"
 #import <Foundation/Foundation.h>
 #import "AdvanceNativeExpressDelegate.h"
 
@@ -14,7 +14,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface BdNativeExpressAdapter : AdvBaseAdPosition
+@interface BdNativeExpressAdapter : AdvanceBaseAdapter
 @property (nonatomic, weak) id<AdvanceNativeExpressDelegate> delegate;
 
 @end

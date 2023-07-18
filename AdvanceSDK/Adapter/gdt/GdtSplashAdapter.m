@@ -155,7 +155,7 @@
 //    NSLog(@"广点通开屏拉取成功 %@ %d",self.gdt_ad ,[self.gdt_ad isAdValid]);
     _supplier.supplierPrice = splashAd.eCPM;
     [self.adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
 //    NSLog(@"广点通开屏拉取成功 %d",splashAd.eCPM);
 
     _supplier.state = AdvanceSdkSupplierStateSuccess;
@@ -175,7 +175,7 @@
 
 - (void)splashAdFailToPresent:(GDTSplashAd *)splashAd withError:(NSError *)error {
     
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
     _supplier.state = AdvanceSdkSupplierStateFailed;
     if (_supplier.isParallel == YES) {
         return;

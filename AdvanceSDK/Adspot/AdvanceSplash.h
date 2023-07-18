@@ -7,13 +7,13 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import "AdvBaseAdapter.h"
+#import "AdvanceBaseAdSpot.h"
 #import "AdvSdkConfig.h"
 #import "AdvanceSplashDelegate.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface AdvanceSplash : AdvBaseAdapter
+@interface AdvanceSplash : AdvanceBaseAdSpot
 
 /// 广告方法回调代理
 @property (nonatomic, weak) id<AdvanceSplashDelegate> delegate;

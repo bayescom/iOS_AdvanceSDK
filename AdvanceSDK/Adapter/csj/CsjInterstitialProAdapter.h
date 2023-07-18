@@ -6,7 +6,7 @@
 //
 
 
-#import "AdvBaseAdPosition.h"
+#import "AdvanceBaseAdapter.h"
 #import <Foundation/Foundation.h>
 #import "AdvanceInterstitialDelegate.h"
 
@@ -16,7 +16,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface CsjInterstitialProAdapter : AdvBaseAdPosition
+@interface CsjInterstitialProAdapter : AdvanceBaseAdapter
 @property (nonatomic, weak) id<AdvanceInterstitialDelegate> delegate;
 
 @end

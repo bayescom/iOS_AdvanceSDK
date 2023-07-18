@@ -189,7 +189,7 @@
     
     _supplier.supplierPrice = (model.eCPM == nil) ? 0 : model.eCPM.integerValue ;
     [self.adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
 
     if (_supplier.isParallel == YES) {
 //        ADV_LEVEL_INFO_LOG(@"修改状态: %@", _supplier);
@@ -275,7 +275,7 @@
 
 // 加载失败
 - (void)tanxSplashAdFailToPresentWithError:(NSError *)error {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
     _supplier.state = AdvanceSdkSupplierStateFailed;
     if (_supplier.isParallel == YES) {
         return;

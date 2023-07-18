@@ -6,7 +6,7 @@
 //  Copyright © 2022 Cheng455153666. All rights reserved.
 //
 
-#import "AdvBaseAdPosition.h"
+#import "AdvanceBaseAdapter.h"
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "AdvanceSplashDelegate.h"
@@ -17,7 +17,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface TanxSplashAdapter : AdvBaseAdPosition
+@interface TanxSplashAdapter : AdvanceBaseAdapter
 @property (nonatomic, weak) id<AdvanceSplashDelegate> delegate;
 
 @end

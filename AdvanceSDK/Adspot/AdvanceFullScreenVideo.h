@@ -6,7 +6,7 @@
 //  Copyright © 2020 bayescom. All rights reserved.
 //
 
-#import "AdvBaseAdapter.h"
+#import "AdvanceBaseAdSpot.h"
 
 #import <UIKit/UIKit.h>
 
@@ -15,7 +15,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface AdvanceFullScreenVideo : AdvBaseAdapter
+@interface AdvanceFullScreenVideo : AdvanceBaseAdSpot
 /// 广告方法回调代理
 @property (nonatomic, weak) id<AdvanceFullScreenVideoDelegate> delegate;
 

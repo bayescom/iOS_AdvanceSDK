@@ -88,9 +88,6 @@ extern int const ADVANCE_ERROR;
 /// 5 全部打印
 @property (nonatomic, assign) AdvLogLevel level;
 
-// caid设置
-//@property (nonatomic, strong) NSDictionary *caidConfig;
-
 @end
 
 NS_ASSUME_NONNULL_END

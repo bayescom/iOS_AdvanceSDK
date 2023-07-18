@@ -107,7 +107,7 @@
         [self.adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
         _isBided = YES;
     }
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
     if (_supplier.isParallel == YES) {
         return;
     }
@@ -118,7 +118,7 @@
 
 /// 请求广告条数据失败后调用
 - (void)mercury_bannerViewFailToReceived:(MercuryBannerAdView *_Nonnull)banner error:(nullable NSError *)error {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded  supplier:_supplier error:error];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFailed  supplier:_supplier error:error];
     _supplier.state = AdvanceSdkSupplierStateFailed;
 //    NSLog(@"========>>>>>>>> %ld %@", (long)_supplier.priority, error);
     if (_supplier.isParallel == YES) { // 并行不释放 只上报

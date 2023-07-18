@@ -12,7 +12,6 @@
 #import "AdvError.h"
 #import "AdvLog.h"
 #import "AdvModel.h"
-#import "AdvAdsportInfoUtil.h"
 #import "AdvUploadTKUtil.h"
 #import <objc/runtime.h>
 #import <objc/message.h>
@@ -711,7 +710,7 @@
 
 }
 
-- (void)cacelDataTask {
+- (void)cancelDataTask {
     if (_dataTask) {
         [_dataTask cancel];
     }
@@ -864,7 +863,7 @@
         uploadArr = [self.tkUploadTool loadedtkUrlWithArr:supplier.loadedtk];
     } else if (repoType == AdvanceSdkSupplierRepoClicked) {
         uploadArr =  supplier.clicktk;
-    } else if (repoType == AdvanceSdkSupplierRepoSucceeded) {
+    } else if (repoType == AdvanceSdkSupplierRepoSucceed) {
 
         uploadArr =  [self.tkUploadTool succeedtkUrlWithArr:supplier.succeedtk price:(supplier.supplierPrice == 0) ? supplier.sdk_price : supplier.supplierPrice];
         // 曝光成功 更新本地策略
@@ -874,7 +873,7 @@
         }
     } else if (repoType == AdvanceSdkSupplierRepoImped) {
         uploadArr =  [self.tkUploadTool imptkUrlWithArr:supplier.imptk price:(supplier.supplierPrice == 0) ? supplier.sdk_price : supplier.supplierPrice];
-    } else if (repoType == AdvanceSdkSupplierRepoFaileded) {
+    } else if (repoType == AdvanceSdkSupplierRepoFailed) {
         
         
         uploadArr =  [self.tkUploadTool failedtkUrlWithArr:supplier.failedtk error:error];
@@ -945,7 +944,7 @@
 {
     ADV_LEVEL_INFO_LOG(@"%s %@", __func__, self);
     [self deallocTimer];
-    [self cacelDataTask];
+    [self cancelDataTask];
     _tkUploadTool = nil;
     
     [_arrayHeadBidding removeAllObjects];

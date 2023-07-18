@@ -90,7 +90,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 /// 取消正在进行的策略请求
-- (void)cacelDataTask;
+- (void)cancelDataTask;
 
 /// 进入bidding队列
 - (void)inWaterfallQueueWithSupplier:(AdvSupplier *)supplier;

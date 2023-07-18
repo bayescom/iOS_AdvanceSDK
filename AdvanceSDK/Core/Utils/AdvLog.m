@@ -7,7 +7,6 @@
 //
 
 #import "AdvLog.h"
-#import "AdvSdkConfig.h"
 #import <CommonCrypto/CommonDigest.h>
 
 NSString *const LOG_LEVEL_NONE_SCHEME   = @"0";
@@ -16,27 +15,6 @@ NSString *const LOG_LEVEL_ERROR_SCHEME  = @"ADV_LEVEL_ERROR";
 NSString *const LOG_LEVEL_WARING_SCHEME = @"ADV_LEVE_WARNING";
 NSString *const LOG_LEVEL_INFO_SCHEME   = @"ADV_LEVE_INFO";
 NSString *const LOG_LEVEL_DEBUG_SCHEME  = @"ADV_LEVE_DEBUG";
-
-@interface NSString (MD5)
-
-- (NSString *)md5;
-
-@end
-
-@implementation NSString (MD5)
-
-- (NSString *)md5 {
-    const char* character = [self UTF8String];
-    unsigned char result[CC_MD5_DIGEST_LENGTH];
-    CC_MD5(character, strlen(character), result);
-    NSMutableString *md5String = [NSMutableString stringWithCapacity:CC_MD5_DIGEST_LENGTH];
-    for(int i = 0; i < CC_MD5_DIGEST_LENGTH; i++) {
-        [md5String appendFormat:@"%02x",result[i]];
-    }
-    return md5String;
-}
-
-@end
 
 
 @implementation AdvLog
@@ -81,15 +59,6 @@ NSString *const LOG_LEVEL_DEBUG_SCHEME  = @"ADV_LEVE_DEBUG";
     }
     NSLog(@"\n%s[line:%d][%@] %@", function, lineNumber, scheme, formatString);
     
-}
-
-+ (void)logJsonData:(NSData *)data {
-//    NSDictionary *res = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-//    NSString *md5 = [[res description] md5];
-//    [[NSUserDefaults standardUserDefaults] setObject:data forKey:md5];
-    
-//    ADVLog(@"[JSON][-%@-]", md5);
-//    ADV_LEVEL_INFO_LOG(@"%@", res);
 }
 
 @end

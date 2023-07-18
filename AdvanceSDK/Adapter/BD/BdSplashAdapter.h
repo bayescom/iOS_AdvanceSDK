@@ -7,13 +7,13 @@
 
 #import <Foundation/Foundation.h>
 #import "AdvanceSplashDelegate.h"
-#import "AdvBaseAdPosition.h"
+#import "AdvanceBaseAdapter.h"
 @class AdvSupplier;
 @class AdvanceSplash;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface BdSplashAdapter : AdvBaseAdPosition
+@interface BdSplashAdapter : AdvanceBaseAdapter
 
 @property (nonatomic, weak) id<AdvanceSplashDelegate> delegate;
 @end

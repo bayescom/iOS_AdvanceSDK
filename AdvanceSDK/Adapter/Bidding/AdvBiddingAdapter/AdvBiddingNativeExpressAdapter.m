@@ -89,14 +89,14 @@
 - (void)nativeAdsManagerSuccessToLoad:(ABUNativeAdsManager *_Nonnull)adsManager nativeAds:(NSArray<ABUNativeAdView *> *_Nullable)nativeAdViewArray {
     if (nativeAdViewArray == nil || nativeAdViewArray.count == 0) {
         _supplier.state = AdvanceSdkSupplierStateFailed;
-        [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:nil];
+        [self.adspot reportWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:nil];
         if (_supplier.isParallel == YES) {
             return;
         }
 
     } else {
         _supplier.state = AdvanceSdkSupplierStateSuccess;
-        [_adspot reportWithType:AdvanceSdkSupplierRepoSucceeded supplier:_supplier error:nil];
+        [_adspot reportWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
         
         NSMutableArray *temp = [NSMutableArray array];
         for (ABUNativeAdView *view in nativeAdViewArray) {
@@ -128,7 +128,7 @@
 
 - (void)nativeAdsManager:(ABUNativeAdsManager *_Nonnull)adsManager didFailWithError:(NSError *_Nullable)error {
     ADV_LEVEL_INFO_LOG(@"%s:%@", __func__, error);
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
     _supplier.state = AdvanceSdkSupplierStateFailed;
     if (_supplier.isParallel == YES) {
         return;
@@ -154,7 +154,7 @@
  */
 - (void)nativeAdExpressViewRenderFail:(ABUNativeAdView *_Nonnull)nativeExpressAdView error:(NSError *_Nullable)error {
     ADV_LEVEL_INFO_LOG(@"%s:%@", __func__, error);
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:nil];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:nil];
     
     AdvanceNativeExpressView *expressView = [self returnExpressViewWithAdView:(UIView *)nativeExpressAdView];
     if (expressView) {
