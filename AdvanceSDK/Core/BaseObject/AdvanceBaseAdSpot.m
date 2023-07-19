@@ -45,13 +45,8 @@
         _mgr = [AdvSupplierManager manager];
         _mgr.delegate = self;
         _baseDelegate = self;
-        if (!_arrParallelSupplier) {
-            _arrParallelSupplier = [NSMutableArray array];
-        }
-
-        if (!_errorDescriptions) {
-            _errorDescriptions = [NSMutableDictionary dictionary];
-        }
+        _arrParallelSupplier = [NSMutableArray array];
+        _errorDescriptions = [NSMutableDictionary dictionary];
 
     }
     return self;
@@ -122,21 +117,6 @@
     }
 }
 
-// 开始bidding
-- (void)advManagerBiddingActionWithSuppliers:(NSMutableArray<AdvSupplier *> *)suppliers {
-    if (self.baseDelegate && [self.baseDelegate respondsToSelector:@selector(advanceBaseAdapterBiddingAction:)]) {
-        [self.baseDelegate advanceBaseAdapterBiddingAction:suppliers];
-    }
-}
-
-// bidding结束
-- (void)advManagerBiddingEndWithWinSupplier:(AdvSupplier *)winSupplier {
-    // 抛出去 下个版本会在每个广告位的 advanceBaseAdapterBiddingEndWithWinSupplier 里 执行GroMore的逻辑
-    if (self.baseDelegate && [self.baseDelegate respondsToSelector:@selector(advanceBaseAdapterBiddingEndWithWinSupplier:)]) {
-        [self.baseDelegate advanceBaseAdapterBiddingEndWithWinSupplier:winSupplier];
-    }
-}
-
 - (void)collectErrorWithSupplier:(AdvSupplier *)supplier error:(NSError *)error {
     // key: 渠道名-优先级
     if (error) {
@@ -163,6 +143,21 @@
 //                                   sdkId:(nonnull NSString *)sdkid {
 //    [self.mgr setDefaultAdvSupplierWithMediaId:mediaId adspotId:adspotid mediaKey:mediakey sdkId:sdkid];
 //}
+
+// 开始bidding
+- (void)advManagerBiddingActionWithSuppliers:(NSMutableArray<AdvSupplier *> *)suppliers {
+    if (self.baseDelegate && [self.baseDelegate respondsToSelector:@selector(advanceBaseAdapterBiddingAction:)]) {
+        [self.baseDelegate advanceBaseAdapterBiddingAction:suppliers];
+    }
+}
+
+// bidding结束
+- (void)advManagerBiddingEndWithWinSupplier:(AdvSupplier *)winSupplier {
+    // 抛出去 下个版本会在每个广告位的 advanceBaseAdapterBiddingEndWithWinSupplier 里 执行GroMore的逻辑
+    if (self.baseDelegate && [self.baseDelegate respondsToSelector:@selector(advanceBaseAdapterBiddingEndWithWinSupplier:)]) {
+        [self.baseDelegate advanceBaseAdapterBiddingEndWithWinSupplier:winSupplier];
+    }
+}
 
 // MARK: ======================= AdvSupplierManagerDelegate =======================
 /// 加载策略Model成功
@@ -243,7 +238,7 @@
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
             id bdSetting = ((id(*)(id,SEL))objc_msgSend)(NSClassFromString(clsName), @selector(sharedInstance));
-            [bdSetting performSelector:@selector(setSupportHttps:) withObject:NO];
+            [bdSetting performSelector:@selector(setSupportHttps:) withObject:@NO];
 
         });
     } else if ([supplier.identifier isEqualToString:SDK_ID_TANX]) {
@@ -279,8 +274,6 @@
 
         });
 
-    } else {
-        
     }
 
 //    NSLog(@"---> %@", [NSThread currentThread]);
@@ -342,17 +335,6 @@
         [_ext setValue:version forKey:key];
     }
 }
-
-
-// MARK: ======================= get =======================
-//- (AdvSupplierManager *)mgr {
-//    if (!_mgr) {
-//        _mgr = [AdvSupplierManager manager];
-//        _mgr.delegate = self;
-//        _baseDelegate = self;
-//    }
-//    return _mgr;
-//}
 
 
 // 查找一下 容器里有没有并行的渠道
