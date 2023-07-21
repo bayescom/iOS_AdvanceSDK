@@ -58,9 +58,9 @@ NS_ASSUME_NONNULL_BEGIN
 + (instancetype)manager;
 
 /**
- * 同步数据
+ * 获取策略数据
  * 如果本地存在有效数据，直接加载本地数据
- * 数据不存在则同步数据
+ * 数据不存在则网络获取数据
  * @param mediaId 媒体id
  * @param adspotId 广告位id
  * @param ext 自定义拓展字段
