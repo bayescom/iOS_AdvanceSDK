@@ -7,52 +7,18 @@
 
 #import <Foundation/Foundation.h>
 #import "AdvSupplierModel.h"
+#import "AdvanceSupplierDelegate.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@protocol AdvSupplierManagerDelegate <NSObject>
-
-// MARK: ======================= 策略回调 =======================
-
-/// 加载策略Model成功
-- (void)advSupplierManagerLoadSuccess:(AdvSupplierModel *)model;
-
-/// 加载策略Model失败
-- (void)advSupplierManagerLoadError:(NSError *)error;
-
-/// 返回下一个渠道的参数
-- (void)advSupplierLoadSuppluer:(nullable AdvSupplier *)supplier error:(nullable NSError *)error;
-
-
-/// bidding相关
-/// 开始bidding
-/// @param suppliers 参加bidding的渠道
-- (void)advManagerBiddingActionWithSuppliers:(NSMutableArray <AdvSupplier*>*)suppliers;
-
-/// bidding相关
-/// 结束bidding
-/// @param supplier 参加bidding的渠道
-- (void)advManagerBiddingEndWithWinSupplier:(AdvSupplier *)supplier;
-
-/// bidding失败(即规定时间内,所有bidding广告为 都没有返回广告)
-- (void)advManagerBiddingFailed;
-
-@end
+@protocol AdvanceSupplierDelegate;
 
 @interface AdvSupplierManager : NSObject
 
 /// 网络请求超时时间（默认: 5秒）
 @property (nonatomic, assign) NSTimeInterval fetchTime;
 
-
-/// 数据加载回调
-@property (nonatomic, weak) id<AdvSupplierManagerDelegate> delegate;
-
-/// 设置打底渠道
-//- (void)setDefaultAdvSupplierWithMediaId:(NSString *)mediaId
-//                                adspotId:(NSString *)adspotid
-//                                mediaKey:(NSString *)mediakey
-//                                   sdkId:(nonnull NSString *)sdkid;
+@property (nonatomic, weak) id<AdvanceSupplierDelegate> delegate;
 
 /// 数据管理对象
 + (instancetype)manager;

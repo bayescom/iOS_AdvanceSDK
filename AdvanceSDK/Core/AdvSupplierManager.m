@@ -92,8 +92,8 @@
         ADV_LEVEL_INFO_LOG(@"执行本地策略");
         _supplierM = [_model.suppliers mutableCopy];
         [self sortSupplierMByPriority];
-        if ([_delegate respondsToSelector:@selector(advSupplierManagerLoadSuccess:)]) {
-            [_delegate advSupplierManagerLoadSuccess:self.model];
+        if ([_delegate respondsToSelector:@selector(advanceBaseAdapterLoadSuccess:)]) {
+            [_delegate advanceBaseAdapterLoadSuccess:self.model];
         }
         // 开始执行策略
         [self loadBiddingSupplier];
@@ -156,10 +156,10 @@
 - (void)loadBiddingSupplier {
     if (_model == nil) {
         ADV_LEVEL_ERROR_LOG(@"策略请求失败");
-        if ([_delegate respondsToSelector:@selector(advSupplierManagerLoadError:)]) {
-            [_delegate advSupplierManagerLoadError:[AdvError errorWithCode:AdvErrorCode_102].toNSError];
-        }
 
+        if ([_delegate respondsToSelector:@selector(advanceBaseAdapterLoadError:)]) {
+            [_delegate advanceBaseAdapterLoadError:[AdvError errorWithCode:AdvErrorCode_102].toNSError];
+        }
 
         return;
     }
@@ -269,8 +269,8 @@
     } else {
         
         // Waterfall开始
-        if (self.delegate && [self.delegate respondsToSelector:@selector(advManagerBiddingActionWithSuppliers:)]) {
-            [self.delegate advManagerBiddingActionWithSuppliers:tempWaterfall];
+        if ([self.delegate respondsToSelector:@selector(advanceBaseAdapterBiddingAction:)]) {
+            [self.delegate advanceBaseAdapterBiddingAction:tempWaterfall];
             
         }
         
@@ -462,8 +462,8 @@
     currentSupplier.isParallel = NO;
     currentSupplier.positionType = AdvanceSdkSupplierTypeWaterfall;
     // bidding结束
-    if (self.delegate && [self.delegate respondsToSelector:@selector(advManagerBiddingEndWithWinSupplier:)]) {
-        [self.delegate advManagerBiddingEndWithWinSupplier:currentSupplier];
+    if ([self.delegate respondsToSelector:@selector(advanceBaseAdapterBiddingEndWithWinSupplier:)]) {
+        [self.delegate advanceBaseAdapterBiddingEndWithWinSupplier:currentSupplier];
     }
     
     // 执行的都从 arrayWaterfall里面删除
@@ -482,19 +482,18 @@
 - (void)loadNextSupplier {
     if (_model == nil) {
         ADV_LEVEL_ERROR_LOG(@"策略请求失败");
-        if ([_delegate respondsToSelector:@selector(advSupplierManagerLoadError:)]) {
-            [_delegate advSupplierManagerLoadError:[AdvError errorWithCode:AdvErrorCode_102].toNSError];
+        
+        if ([_delegate respondsToSelector:@selector(advanceBaseAdapterLoadError:)]) {
+            [_delegate advanceBaseAdapterLoadError:[AdvError errorWithCode:AdvErrorCode_102].toNSError];
         }
-        
-        
         return;
     }
     
     // 非包天 model无渠道信息
     if (_model.suppliers.count <= 0) {
         
-        if ([_delegate respondsToSelector:@selector(advSupplierManagerLoadError:)]) {
-            [_delegate advSupplierManagerLoadError:[AdvError errorWithCode:AdvErrorCode_116].toNSError];
+        if ([_delegate respondsToSelector:@selector(advanceBaseAdapterLoadError:)]) {
+            [_delegate advanceBaseAdapterLoadError:[AdvError errorWithCode:AdvErrorCode_116].toNSError];
         }
         
         return;
@@ -506,8 +505,8 @@
     currentSupplier.isParallel = NO;
     currentSupplier.positionType = AdvanceSdkSupplierTypeWaterfall;
     // bidding结束
-    if (self.delegate && [self.delegate respondsToSelector:@selector(advManagerBiddingEndWithWinSupplier:)]) {
-        [self.delegate advManagerBiddingEndWithWinSupplier:currentSupplier];
+    if ([self.delegate respondsToSelector:@selector(advanceBaseAdapterBiddingEndWithWinSupplier:)]) {
+        [self.delegate advanceBaseAdapterBiddingEndWithWinSupplier:currentSupplier];
     }
 
     
@@ -571,8 +570,8 @@
     // 非包天 选择渠道执行都失败
     if (supplier == nil || _supplierM.count <= 0) {
         // 抛异常
-        if ([_delegate respondsToSelector:@selector(advSupplierLoadSuppluer:error:)]) {
-            [_delegate advSupplierLoadSuppluer:nil error:[AdvError errorWithCode:AdvErrorCode_114].toNSError];
+        if ([_delegate respondsToSelector:@selector(advanceBaseAdapterLoadSuppluer:error:)]) {
+            [_delegate advanceBaseAdapterLoadSuppluer:nil error:[AdvError errorWithCode:AdvErrorCode_114].toNSError];
         }
         return;
     }
@@ -606,8 +605,8 @@
         [self reportWithType:AdvanceSdkSupplierRepoLoaded supplier:supplier error:nil];
     }
     
-    if ([_delegate respondsToSelector:@selector(advSupplierLoadSuppluer:error:)]) {
-        [_delegate advSupplierLoadSuppluer:supplier error:error];
+    if ([_delegate respondsToSelector:@selector(advanceBaseAdapterLoadSuppluer:error:)]) {
+        [_delegate advanceBaseAdapterLoadSuppluer:supplier error:error];
     }
     ADV_LEVEL_INFO_LOG(@"执行过后执行的渠道:%@ 是否并行:%d 优先级:%ld name:%@", supplier, supplier.isParallel, (long)supplier.priority, supplier.name);
 
@@ -691,25 +690,26 @@
 - (void)doResultData:(NSData * )data response:(NSURLResponse *)response error:(NSError *)error saveOnly:(BOOL)saveOnly {
     if (error) {
         // error
-        if (saveOnly && [_delegate respondsToSelector:@selector(advSupplierManagerLoadError:)]) {
-            [_delegate advSupplierManagerLoadError:[AdvError errorWithCode:AdvErrorCode_101 obj:error].toNSError];
+        if (saveOnly && [_delegate respondsToSelector:@selector(advanceBaseAdapterLoadError:)]) {
+            [_delegate advanceBaseAdapterLoadError:[AdvError errorWithCode:AdvErrorCode_101 obj:error].toNSError];
         }
         return;
     }
     
     if (!data || !response) {
         // no result
-        if (!saveOnly && [_delegate respondsToSelector:@selector(advSupplierManagerLoadError:)]) {
-            [_delegate advSupplierManagerLoadError:[AdvError errorWithCode:AdvErrorCode_102].toNSError];
+        if (!saveOnly && [_delegate respondsToSelector:@selector(advanceBaseAdapterLoadError:)]) {
+            [_delegate advanceBaseAdapterLoadError:[AdvError errorWithCode:AdvErrorCode_102 obj:error].toNSError];
         }
         return;
     }
     
+    
     NSHTTPURLResponse *httpResp = (NSHTTPURLResponse *)response;
     if (httpResp.statusCode != 200) {
         // code no statusCode
-        if (!saveOnly && [_delegate respondsToSelector:@selector(advSupplierManagerLoadError:)]) {
-            [_delegate advSupplierManagerLoadError:[AdvError errorWithCode:AdvErrorCode_103 obj:error].toNSError];
+        if (!saveOnly && [_delegate respondsToSelector:@selector(advanceBaseAdapterLoadError:)]) {
+            [_delegate advanceBaseAdapterLoadError:[AdvError errorWithCode:AdvErrorCode_103 obj:error].toNSError];
         }
         ADV_LEVEL_ERROR_LOG(@"statusCode != 200, 策略返回出错");
         return;
@@ -720,8 +720,8 @@
     NSLog(@"[JSON]%@", [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil]);
     if (parseErr || !a_model) {
         // parse error
-        if (!saveOnly && [_delegate respondsToSelector:@selector(advSupplierManagerLoadError:)]) {
-            [_delegate advSupplierManagerLoadError:[AdvError errorWithCode:AdvErrorCode_104 obj:parseErr].toNSError];
+        if (!saveOnly && [_delegate respondsToSelector:@selector(advanceBaseAdapterLoadError:)]) {
+            [_delegate advanceBaseAdapterLoadError:[AdvError errorWithCode:AdvErrorCode_104 obj:parseErr].toNSError];
         }
         return;
         ADV_LEVEL_ERROR_LOG(@"策略解析出错");
@@ -729,8 +729,8 @@
     
     if (a_model.code != 200) {
         // result code not 200
-        if (!saveOnly && [_delegate respondsToSelector:@selector(advSupplierManagerLoadError:)]) {
-            [_delegate advSupplierManagerLoadError:[AdvError errorWithCode:AdvErrorCode_105 obj:error].toNSError];
+        if (!saveOnly && [_delegate respondsToSelector:@selector(advanceBaseAdapterLoadError:)]) {
+            [_delegate advanceBaseAdapterLoadError:[AdvError errorWithCode:AdvErrorCode_105 obj:error].toNSError];
         }
         ADV_LEVEL_ERROR_LOG(@"statusCode != 200, 策略返回出错");
         return;
@@ -755,8 +755,8 @@
         _supplierM = [_model.suppliers mutableCopy];
         [self sortSupplierMByPriority];
         
-        if ([_delegate respondsToSelector:@selector(advSupplierManagerLoadSuccess:)]) {
-            [_delegate advSupplierManagerLoadSuccess:self.model];
+        if ([_delegate respondsToSelector:@selector(advanceBaseAdapterLoadSuccess:)]) {
+            [_delegate advanceBaseAdapterLoadSuccess:self.model];
         }
                 
         // 现在全都走新逻辑

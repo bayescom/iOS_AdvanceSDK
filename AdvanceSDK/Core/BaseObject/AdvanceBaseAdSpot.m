@@ -14,17 +14,9 @@
 #import <objc/message.h>
 #import "AdvanceAESCipher.h"
 
-//# if __has_include(<ABUAdSDK/ABUAdSDK.h>)
-//#import <ABUAdSDK/ABUAdSDK.h>
-//#else
-//#import <Ads-Mediation-CN/ABUAdSDK.h>
-//#endif
+@interface AdvanceBaseAdSpot ()
 
-@interface AdvanceBaseAdSpot ()  <AdvSupplierManagerDelegate, AdvanceSupplierDelegate>
 @property (nonatomic, strong) AdvSupplierManager *mgr;
-
-@property (nonatomic, weak) id<AdvanceSupplierDelegate> baseDelegate;
-
 
 @end
 
@@ -44,7 +36,6 @@
         _ext = [ext mutableCopy];
         _mgr = [AdvSupplierManager manager];
         _mgr.delegate = self;
-        _baseDelegate = self;
         _arrParallelSupplier = [NSMutableArray array];
         _errorDescriptions = [NSMutableDictionary dictionary];
 
@@ -128,159 +119,11 @@
 - (void)deallocAdapter {
     // 该方法为AdvanceSDK 内部调用 开发者不要在外部手动调用 想要释放 直接将广告对象置为nil即可
     ADV_LEVEL_INFO_LOG(@"%s %@", __func__, self);
-    
-    _baseDelegate = nil;
     _mgr.delegate = nil;
     [_arrParallelSupplier removeAllObjects];
     _arrParallelSupplier = nil;
     [_mgr cancelDataTask];
     _mgr = nil;
-}
-
-//- (void)setDefaultAdvSupplierWithMediaId:(NSString *)mediaId
-//                                adspotId:(NSString *)adspotid
-//                                mediaKey:(NSString *)mediakey
-//                                   sdkId:(nonnull NSString *)sdkid {
-//    [self.mgr setDefaultAdvSupplierWithMediaId:mediaId adspotId:adspotid mediaKey:mediakey sdkId:sdkid];
-//}
-
-// 开始bidding
-- (void)advManagerBiddingActionWithSuppliers:(NSMutableArray<AdvSupplier *> *)suppliers {
-    if (self.baseDelegate && [self.baseDelegate respondsToSelector:@selector(advanceBaseAdapterBiddingAction:)]) {
-        [self.baseDelegate advanceBaseAdapterBiddingAction:suppliers];
-    }
-}
-
-// bidding结束
-- (void)advManagerBiddingEndWithWinSupplier:(AdvSupplier *)winSupplier {
-    // 抛出去 下个版本会在每个广告位的 advanceBaseAdapterBiddingEndWithWinSupplier 里 执行GroMore的逻辑
-    if (self.baseDelegate && [self.baseDelegate respondsToSelector:@selector(advanceBaseAdapterBiddingEndWithWinSupplier:)]) {
-        [self.baseDelegate advanceBaseAdapterBiddingEndWithWinSupplier:winSupplier];
-    }
-}
-
-// MARK: ======================= AdvSupplierManagerDelegate =======================
-/// 加载策略Model成功
-- (void)advSupplierManagerLoadSuccess:(AdvSupplierModel *)model {
-    if ([_baseDelegate respondsToSelector:@selector(advanceBaseAdapterLoadSuccess:)]) {
-        [_baseDelegate advanceBaseAdapterLoadSuccess:model];
-    }
-}
-
-/// 加载策略Model失败
-- (void)advSupplierManagerLoadError:(NSError *)error {
-    if ([_baseDelegate respondsToSelector:@selector(advanceBaseAdapterLoadError:)]) {
-        [_baseDelegate advanceBaseAdapterLoadError:error];
-    }
-}
-
-/// 返回下一个渠道的参数
-- (void)advSupplierLoadSuppluer:(nullable AdvSupplier *)supplier error:(nullable NSError *)error {
-
-    
-    // 初始化渠道参数
-    NSString *clsName = @"";
-    if ([supplier.identifier isEqualToString:SDK_ID_GDT]) {
-        clsName = @"GDTSDKConfig";
-    } else if ([supplier.identifier isEqualToString:SDK_ID_CSJ]) {
-        clsName = @"BUAdSDKManager";
-    } else if ([supplier.identifier isEqualToString:SDK_ID_MERCURY]) {
-        clsName = @"MercuryConfigManager";
-    } else if ([supplier.identifier isEqualToString:SDK_ID_KS]) {
-        clsName = @"KSAdSDKManager";
-    } else if ([supplier.identifier isEqualToString:SDK_ID_BAIDU]){
-        clsName = @"BaiduMobAdSetting";
-    } else if ([supplier.identifier isEqualToString:SDK_ID_TANX]){
-        clsName = @"TXAdSDKInitializtion";
-    } else if ([supplier.identifier isEqualToString:SDK_ID_BIDDING]){
-        clsName = @"ABUAdSDKManager";
-    }
-    
-    
-
-    if ([supplier.identifier isEqualToString:SDK_ID_GDT]) {
-        // 广点通SDK
-        static dispatch_once_t onceToken;
-        dispatch_once(&onceToken, ^{
-            
-            [NSClassFromString(clsName) performSelector:@selector(registerAppId:) withObject:supplier.mediaid];
-        });
-        
-    } else if ([supplier.identifier isEqualToString:SDK_ID_CSJ]) {
-        // 穿山甲SDK
-        static dispatch_once_t onceToken;
-        dispatch_once(&onceToken, ^{
-            [NSClassFromString(clsName) performSelector:@selector(setAppID:) withObject:supplier.mediaid];
-        });
-    } else if ([supplier.identifier isEqualToString:SDK_ID_MERCURY]) {
-        // MercurySDK
-        static dispatch_once_t onceToken;
-        dispatch_once(&onceToken, ^{
-            Class cls = NSClassFromString(clsName);
-            [cls performSelector:@selector(setAppID:mediaKey:) withObject:supplier.mediaid withObject:supplier.mediakey];
-            
-            NSString *ua = [self.ext objectForKey:AdvanceSDKUaKey];
-            if (ua) {
-                NSString *uaEncrypt = advanceAesEncryptString(ua, AdvanceSDKSecretKey);
-
-                [cls performSelector:@selector(setDefaultUserAgent:) withObject:uaEncrypt];
-            }
-        });
-    } else if ([supplier.identifier isEqualToString:SDK_ID_KS]) {
-        // 快手
-        static dispatch_once_t onceToken;
-        dispatch_once(&onceToken, ^{
-            [NSClassFromString(clsName) performSelector:@selector(setAppId:) withObject:supplier.mediaid];
-        });
-
-    } else if ([supplier.identifier isEqualToString:SDK_ID_BAIDU]) {
-        // 百度
-        static dispatch_once_t onceToken;
-        dispatch_once(&onceToken, ^{
-            id bdSetting = ((id(*)(id,SEL))objc_msgSend)(NSClassFromString(clsName), @selector(sharedInstance));
-            [bdSetting performSelector:@selector(setSupportHttps:) withObject:@NO];
-
-        });
-    } else if ([supplier.identifier isEqualToString:SDK_ID_TANX]) {
-        // Tanx
-        static dispatch_once_t onceToken;
-        dispatch_once(&onceToken, ^{
-
-            [NSClassFromString(clsName) performSelector:@selector(setupSDKWithAppID:andAppKey:) withObject:supplier.mediaid withObject:supplier.mediakey];
-
-        });
-    } else if ([supplier.identifier isEqualToString:SDK_ID_BIDDING]){
-        // bidding 此之前已经对 biddingConfig进行了初始化 并赋值了
-        if (!supplier.mediaid) {
-            return;
-        }
-        static dispatch_once_t onceToken;
-        dispatch_once(&onceToken, ^{
-            BOOL isEmpty = [self isEmptyString:supplier.mediaid];
-            if (isEmpty == NO) {
-                [NSClassFromString(clsName) performSelector:@selector(setupSDKWithAppId:config:) withObject:supplier.mediaid withObject:nil];
-            }
-            
-            // Gromore SDK初始化方法
-//            [ABUAdSDKManager setupSDKWithAppId:supplier.mediaid config:^ABUUserConfig *(ABUUserConfig *c) {
-//        #ifdef DEBUG
-//                // 打开日志开关，线上环境请关闭
-//                c.logEnable = YES;
-//                // 打开测试模式，线上环境请关闭
-////                c.testMode = YES;
-//        #endif
-//                return c;
-//            }];
-
-        });
-
-    }
-
-//    NSLog(@"---> %@", [NSThread currentThread]);
-    // 加载渠道
-    if ([_baseDelegate respondsToSelector:@selector(advanceBaseAdapterLoadSuppluer:error:)]) {
-        [_baseDelegate advanceBaseAdapterLoadSuppluer:supplier error:error];
-    }
 }
 
 - (void)setSDKVersion {
@@ -327,9 +170,6 @@
 }
 
 
-
-
-
 - (void)setSDKVersionForKey:(NSString *)key version:(NSString *)version {
     if (version) {
         [_ext setValue:version forKey:key];
@@ -350,23 +190,6 @@
     }
     return adapterT;
 }
-
-- (BOOL)isEmptyString:(NSString *)string{
-       if(string == nil) {
-            return YES;
-        }
-        if (string == NULL) {
-            return YES;
-        }
-        if ([string isKindOfClass:[NSNull class]]) {
-            return YES;
-        }
-        if ([[string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] length]==0) {
-            return YES;
-        }
-    return NO;
-}
-
 
 - (void)dealloc {
     ADV_LEVEL_INFO_LOG(@"%s %@", __func__, self);

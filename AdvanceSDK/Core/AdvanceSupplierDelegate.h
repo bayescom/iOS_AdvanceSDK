@@ -26,11 +26,16 @@
 /// @param error 异常信息
 - (void)advanceBaseAdapterLoadSuppluer:(nullable AdvSupplier *)supplier error:(nullable NSError *)error;
 
-// 开始bidding
+/// 开始bidding
+/// @param suppliers 参加bidding的渠道
 - (void)advanceBaseAdapterBiddingAction:(NSMutableArray <AdvSupplier *> *_Nullable)suppliers;
 
-// bidding结束
+/// 结束bidding
+/// @param supplier 竞胜渠道
 - (void)advanceBaseAdapterBiddingEndWithWinSupplier:(AdvSupplier *_Nonnull)supplier;
+
+/// bidding失败(即规定时间内,所有bidding广告为 都没有返回广告)
+- (void)advBaseAdapterBiddingFailed;
 
 @end
 
