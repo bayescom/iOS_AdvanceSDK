@@ -12,7 +12,7 @@
 @protocol AdvanceBannerDelegate <AdvanceBaseDelegate>
 @optional
 
-#pragma 请移步AdvanceBaseDelegate 和 AdvanceCommonDelegate
+#pragma 请移步AdvanceBaseDelegate
 - (void)advanceAdMaterialLoadSuccess;
 @end
 

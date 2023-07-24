@@ -80,10 +80,10 @@
         return;
     }
     
-    // 开始加载渠道前通知调用者
-    if ([self.delegate respondsToSelector:@selector(advanceSupplierWillLoad:)]) {
-        [self.delegate advanceSupplierWillLoad:supplier.identifier];
-    }
+//    // 开始加载渠道前通知调用者
+//    if ([self.delegate respondsToSelector:@selector(advanceSupplierWillLoad:)]) {
+//        [self.delegate advanceSupplierWillLoad:supplier.identifier];
+//    }
 
     // 根据渠道id自定义初始化
     NSString *clsName = @"";

@@ -7,11 +7,25 @@
 
 #ifndef AdvanceBaseDelegate_h
 #define AdvanceBaseDelegate_h
-#import "AdvanceCommonDelegate.h"
-// 策略相关的代理
-@protocol AdvanceBaseDelegate <AdvanceCommonDelegate>
+
+@protocol AdvanceBaseDelegate <NSObject>
 
 @optional
+
+/// 策略请求成功
+/// @param reqId 策略id
+/// 若 reqId = bottom_default 则执行的是打底渠道
+- (void)advanceOnAdReceived:(NSString *)reqId;
+
+/// 策略请求失败
+/// @param error 聚合SDK的错误
+/// @param description 每个渠道的错误详情, 部分情况下为nil  key的命名规则: 渠道名-优先级
+- (void)advanceFailedWithError:(NSError *)error description:(NSDictionary *)description;
+
+//// bidding结束
+- (void)advanceBiddingEndWithPrice:(NSInteger)price;
+
+
 
 /// 广告曝光成功
 - (void)advanceExposured;

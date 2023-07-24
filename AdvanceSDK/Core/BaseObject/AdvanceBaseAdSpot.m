@@ -7,14 +7,11 @@
 
 #import "AdvanceBaseAdSpot.h"
 #import "AdvSupplierManager.h"
-#import "AdvanceSupplierDelegate.h"
 #import "AdvLog.h"
-#import "AdvSdkConfig.h"
 #import <objc/runtime.h>
 #import <objc/message.h>
-#import "AdvanceAESCipher.h"
 
-@interface AdvanceBaseAdSpot ()
+@interface AdvanceBaseAdSpot () <AdvanceSupplierDelegate>
 
 @property (nonatomic, strong) AdvSupplierManager *mgr;
 
@@ -134,6 +131,12 @@
     [self setTanxSDKVersion];
 }
 
+- (void)setSDKVersionForKey:(NSString *)key version:(NSString *)version {
+    if (version) {
+        [_ext setValue:version forKey:key];
+    }
+}
+
 - (void)setGdtSDKVersion {
     id cls = NSClassFromString(@"GDTSDKConfig");
     NSString *gdtVersion = [cls performSelector:@selector(sdkVersion)];
@@ -168,14 +171,6 @@
     
     [self setSDKVersionForKey:@"tanx_v" version:tanxVersion];
 }
-
-
-- (void)setSDKVersionForKey:(NSString *)key version:(NSString *)version {
-    if (version) {
-        [_ext setValue:version forKey:key];
-    }
-}
-
 
 // 查找一下 容器里有没有并行的渠道
 - (id)adapterInParallelsWithSupplier:(AdvSupplier *)supplier {

@@ -109,11 +109,11 @@
 
 }
 
-/// 内部渠道开始加载时调用
-- (void)advanceSupplierWillLoad:(NSString *)supplierId {
-    NSLog(@"内部渠道开始加载 %s  supplierId: %@", __func__, supplierId);
-
-}
+///// 内部渠道开始加载时调用
+//- (void)advanceSupplierWillLoad:(NSString *)supplierId {
+//    NSLog(@"内部渠道开始加载 %s  supplierId: %@", __func__, supplierId);
+//
+//}
 
 /// 加载策略成功
 - (void)advanceOnAdReceived:(NSString *)reqId

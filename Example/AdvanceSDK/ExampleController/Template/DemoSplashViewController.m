@@ -165,10 +165,10 @@
 
 }
 /// 内部渠道开始加载时调用
-- (void)advanceSupplierWillLoad:(NSString *)supplierId {
-    NSLog(@"内部渠道开始加载 %s  supplierId: %@", __func__, supplierId);
-
-}
+//- (void)advanceSupplierWillLoad:(NSString *)supplierId {
+//    NSLog(@"内部渠道开始加载 %s  supplierId: %@", __func__, supplierId);
+//
+//}
 /// 广告点击
 - (void)advanceClicked {
     NSLog(@"广告点击 %s", __func__);

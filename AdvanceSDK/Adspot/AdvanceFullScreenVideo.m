@@ -94,12 +94,12 @@
         return;
     }
     
-    if (supplier.isParallel == NO) {// 只有当串行队列执行该渠道时 才会回调用代理 并行渠道不调用该代理
-        // 开始加载渠道前通知调用者
-        if ([self.delegate respondsToSelector:@selector(advanceSupplierWillLoad:)]) {
-            [self.delegate advanceSupplierWillLoad:supplier.identifier];
-        }
-    }
+//    if (supplier.isParallel == NO) {// 只有当串行队列执行该渠道时 才会回调用代理 并行渠道不调用该代理
+//        // 开始加载渠道前通知调用者
+//        if ([self.delegate respondsToSelector:@selector(advanceSupplierWillLoad:)]) {
+//            [self.delegate advanceSupplierWillLoad:supplier.identifier];
+//        }
+//    }
     // 根据渠道id自定义初始化b
     NSString *clsName = @"";
     if ([supplier.identifier isEqualToString:SDK_ID_GDT]) {

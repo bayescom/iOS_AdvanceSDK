@@ -47,9 +47,9 @@
 
 
 /// 内部渠道开始加载时调用
-- (void)advanceSupplierWillLoad:(NSString *)supplierId {
-
-}
+//- (void)advanceSupplierWillLoad:(NSString *)supplierId {
+//
+//}
 
 
 /// 广告关闭了
