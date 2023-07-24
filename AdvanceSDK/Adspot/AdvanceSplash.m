@@ -9,7 +9,7 @@
 #import <objc/message.h>
 
 #import "AdvanceSplash.h"
-#import "AdvanceSupplierDelegate.h"
+#import "AdvPolicyServiceDelegate.h"
 #import "AdvSupplierModel.h"
 #import "UIApplication+Adv.h"
 #import "AdvLog.h"
@@ -114,7 +114,7 @@
 
 // MARK: ======================= AdvanceSupplierDelegate =======================
 /// 加载策略Model成功
-- (void)advanceBaseAdapterLoadSuccess:(nonnull AdvSupplierModel *)model {
+- (void)advPolicyServiceLoadSuccessWithModel:(nonnull AdvSupplierModel *)model {
     self.reqId = model.reqid;
     if ([_delegate respondsToSelector:@selector(advanceOnAdReceived:)]) {
         [_delegate advanceOnAdReceived:self.reqId];
@@ -122,7 +122,7 @@
 }
 
 /// 加载策略Model失败
-- (void)advanceBaseAdapterLoadError:(nullable NSError *)error {
+- (void)advPolicyServiceLoadFailedWithError:(nullable NSError *)error {
     if ([_delegate respondsToSelector:@selector(advanceFailedWithError:description:)]) {
         [_delegate advanceFailedWithError:error description:[self.errorDescriptions copy]];
     }
@@ -131,14 +131,14 @@
 }
 
 // 开始bidding
-- (void)advanceBaseAdapterBiddingAction:(NSMutableArray <AdvSupplier *> *_Nullable)suppliers {
+- (void)advPolicyServiceStartBiddingWithSuppliers:(NSMutableArray <AdvSupplier *> *_Nullable)suppliers {
 //    if (self.delegate && [self.delegate respondsToSelector:@selector(advanceBiddingAction)]) {
 //        [self.delegate advanceBiddingAction];
 //    }
 }
 
 // bidding结束
-- (void)advanceBaseAdapterBiddingEndWithWinSupplier:(AdvSupplier *_Nonnull)supplier {
+- (void)advPolicyServiceFinishBiddingWithWinSupplier:(AdvSupplier *_Nonnull)supplier {
     if (self.delegate && [self.delegate respondsToSelector:@selector(advanceBiddingEndWithPrice:)]) {
         NSInteger price = (supplier.supplierPrice == 0) ? supplier.sdk_price : supplier.supplierPrice;
         [self.delegate advanceBiddingEndWithPrice:price];
@@ -147,7 +147,7 @@
 
 
 
-- (void)advanceBaseAdapterLoadSuppluer:(nullable AdvSupplier *)supplier error:(nullable NSError *)error {
+- (void)advPolicyServiceLoadSupplier:(nullable AdvSupplier *)supplier error:(nullable NSError *)error {
     
     // 加载渠道SDK进行初始化调用
     [[AdvSupplierLoader defaultInstance] loadSupplier:supplier extra:self.ext];
