@@ -182,9 +182,8 @@
 - (void)mercury_splashAdExposured:(MercurySplashAd *)splashAd {
 
     [self.adspot reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
-    if ([self.delegate respondsToSelector:@selector(advanceExposured)] && self.mercury_ad) {
-
-        [self.delegate advanceExposured];
+    if ([self.delegate respondsToSelector:@selector(splashDidShowForSpotId:extra:)] && self.mercury_ad) {
+        [self.delegate splashDidShowForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
 }
 
@@ -205,21 +204,18 @@
 
 - (void)mercury_splashAdClicked:(MercurySplashAd *)splashAd {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
-    if ([self.delegate respondsToSelector:@selector(advanceClicked)]) {
-        [self.delegate advanceClicked];
+    if ([self.delegate respondsToSelector:@selector(splashDidClickForSpotId:extra:)]) {
+        [self.delegate splashDidClickForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
 }
 
 - (void)mercury_splashAdLifeTime:(NSUInteger)time {
-//    if (time <= 0 && [self.delegate respondsToSelector:@selector(advanceSplashOnAdCountdownToZero)]) {
-//        [self.delegate advanceSplashOnAdCountdownToZero];
-//    }
     
     if (self.isGMBidding == 0) {
         return;
     }
-    if (time <= 0 && [self.delegate respondsToSelector:@selector(advanceDidClose)]) {
-        [self.delegate advanceDidClose];
+    if (time <= 0 && [self.delegate respondsToSelector:@selector(splashDidCloseForSpotId:extra:)]) {
+        [self.delegate splashDidCloseForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
 }
 
@@ -230,8 +226,8 @@
 }
 
 - (void)mercury_splashAdClosed:(MercurySplashAd *)splashAd {
-    if ([self.delegate respondsToSelector:@selector(advanceDidClose)]) {
-        [self.delegate advanceDidClose];
+    if ([self.delegate respondsToSelector:@selector(splashDidCloseForSpotId:extra:)]) {
+        [self.delegate splashDidCloseForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
 }
 
@@ -240,8 +236,8 @@
         return;
     }
     _isCanch = YES;
-    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
-        [self.delegate advanceUnifiedViewDidLoad];
+    if ([self.delegate respondsToSelector:@selector(didFinishLoadingSplashADWithSpotId:)]) {
+        [self.delegate didFinishLoadingSplashADWithSpotId:self.adspot.adspotid];
     }
 //    [self showAd];
 }

@@ -10,9 +10,6 @@
 #import <UIKit/UIKit.h>
 #import "AdvanceSplashDelegate.h"
 
-@class AdvSupplier;
-@class AdvanceSplash;
-
 NS_ASSUME_NONNULL_BEGIN
 
 @interface MercurySplashAdapter : AdvanceBaseAdapter

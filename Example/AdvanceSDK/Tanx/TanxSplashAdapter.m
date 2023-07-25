@@ -20,27 +20,27 @@
 #import <objc/message.h>
 
 #if !__has_feature(objc_arc)
-    // Safe releases
+// Safe releases
 
-    //iOS 4 and above. to avoid retain cycles
-    #define ADVTXAdBlockWeakObject(obj, wobj)  __block __typeof__((__typeof__(obj))obj) wobj = obj
-    #define ADVTXAdBlockStrongObject(obj, sobj) __typeof__((__typeof__(obj))obj) sobj = [[obj retain] autorelease]
+//iOS 4 and above. to avoid retain cycles
+#define ADVTXAdBlockWeakObject(obj, wobj)  __block __typeof__((__typeof__(obj))obj) wobj = obj
+#define ADVTXAdBlockStrongObject(obj, sobj) __typeof__((__typeof__(obj))obj) sobj = [[obj retain] autorelease]
 
 #else // !__has_feature(objc_arc)
-    // Safe releases
+// Safe releases
 
-    //iOS 4 and above. to avoid retain cycles
-    #define ADVTXAdBlockWeakObject(obj, wobj)  __weak __typeof__((__typeof__(obj))obj) wobj = obj
-    #define ADVTXAdBlockStrongObject(obj, sobj) __typeof__((__typeof__(obj))obj) sobj = obj
+//iOS 4 and above. to avoid retain cycles
+#define ADVTXAdBlockWeakObject(obj, wobj)  __weak __typeof__((__typeof__(obj))obj) wobj = obj
+#define ADVTXAdBlockStrongObject(obj, sobj) __typeof__((__typeof__(obj))obj) sobj = obj
 
 #endif // !__has_feature(objc_arc)
 
 @interface TanxSplashAdapter ()<TXAdSplashManagerDelegate>
 {
-     
+    
     NSInteger _timeout;
     NSInteger _timeout_stamp;
-
+    
 }
 @property(nonatomic, strong) TXAdSplashManager *splashManager;
 @property(nonatomic, strong) UIView *templateView;
@@ -62,7 +62,7 @@
         TXAdSplashManager *splashManager = [[TXAdSplashManager alloc] init];
         splashManager.delegate = self;
         self.splashManager = splashManager;
-
+        
     }
     return self;
 }
@@ -81,8 +81,8 @@
                 [blockObj tanxSplashAdDidLoadWithModels:splashModels];
             }
         }
-            
-
+        
+        
     } withPid:_supplier.adspotid];
 }
 
@@ -92,8 +92,8 @@
 
 - (void)supplierStateSuccess {
     ADV_LEVEL_INFO_LOG(@"Tanx 成功");
-    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
-        [self.delegate advanceUnifiedViewDidLoad];
+    if ([self.delegate respondsToSelector:@selector(didFinishLoadingSplashADWithSpotId:)]) {
+        [self.delegate didFinishLoadingSplashADWithSpotId:self.adspot.adspotid];
     }
     [self showAd];
     
@@ -112,20 +112,20 @@
 
 
 - (void)deallocAdapter {
-//    __weak typeof(self) _self = self;
-//    dispatch_async(dispatch_get_main_queue(), ^{
-//        __strong typeof(_self) self = _self;
-        if ([self.delegate respondsToSelector:@selector(advanceDidClose)]) {
-            [self.delegate advanceDidClose];
-        }
-        [self.splashManager removeLocalAssets];
-        [self.templateView removeFromSuperview];
-        [self.imgV removeFromSuperview];
-        self.templateView = nil;
-        self.imgV = nil;
+    //    __weak typeof(self) _self = self;
+    //    dispatch_async(dispatch_get_main_queue(), ^{
+    //        __strong typeof(_self) self = _self;
+    if ([self.delegate respondsToSelector:@selector(splashDidCloseForSpotId:extra:)]) {
+        [self.delegate splashDidCloseForSpotId:self.adspot.adspotid extra:self.adspot.ext];
+    }
+    [self.splashManager removeLocalAssets];
+    [self.templateView removeFromSuperview];
+    [self.imgV removeFromSuperview];
+    self.templateView = nil;
+    self.imgV = nil;
     self.splashManager.delegate = nil;
-        self.splashManager = nil;
-//    });
+    self.splashManager = nil;
+    //    });
 }
 
 - (void)gmShowAd {
@@ -134,7 +134,7 @@
 
 - (void)showAd {
     NSNumber *isGMBidding = ((NSNumber * (*)(id, SEL))objc_msgSend)((id)self.adspot, @selector(isGMBidding));
-
+    
     if (isGMBidding.integerValue == 1) {
         return;
     }
@@ -179,7 +179,7 @@
             [self biddingWithSplashModel:splashModel isWin:YES];
         }
     });
-
+    
 }
 
 // 加载成功
@@ -190,40 +190,39 @@
     _supplier.supplierPrice = (model.eCPM == nil) ? 0 : model.eCPM.integerValue ;
     [self.adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
-
+    
     if (_supplier.isParallel == YES) {
-//        ADV_LEVEL_INFO_LOG(@"修改状态: %@", _supplier);
+        //        ADV_LEVEL_INFO_LOG(@"修改状态: %@", _supplier);
         _supplier.state = AdvanceSdkSupplierStateSuccess;
         return;
     }
-    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
-        [self.delegate advanceUnifiedViewDidLoad];
+    if ([self.delegate respondsToSelector:@selector(didFinishLoadingSplashADWithSpotId:)]) {
+        [self.delegate didFinishLoadingSplashADWithSpotId:self.adspot.adspotid];
     }
-
+    
     [self showAd];
-
+    
 }
 
 - (void)onSplashClickWithWebUrl:(NSString *)webUrl {
     ADV_LEVEL_INFO_LOG(@"%s  %@",__func__, webUrl);
-     
+    
     [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
-    if ([self.delegate respondsToSelector:@selector(advanceClicked)]) {
-        [self.delegate advanceClicked];
+    if ([self.delegate respondsToSelector:@selector(splashDidClickForSpotId:extra:)]) {
+        [self.delegate splashDidClickForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
     _isClick = YES;
-
+    
     [self.splashManager removeLocalAssets];
     [self.templateView removeFromSuperview];
     [self.imgV removeFromSuperview];
     self.templateView = nil;
     self.imgV = nil;
     self.splashManager = nil;
-    if ([self.delegate respondsToSelector:@selector(advanceDidClose)]) {
-        [self.delegate advanceDidClose];
+    if ([self.delegate respondsToSelector:@selector(splashDidCloseForSpotId:extra:)]) {
+        [self.delegate splashDidCloseForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
-//    [self deallocAdapter];
-
+    
 }
 
 
@@ -231,15 +230,15 @@
 - (void)onSplashShow {
     ADV_LEVEL_INFO_LOG(@"%s",__func__);
     [self.adspot reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
-    if (self.delegate && [self.delegate respondsToSelector:@selector(advanceExposured)]) {
-        [self.delegate advanceExposured];
+    if ([self.delegate respondsToSelector:@selector(splashDidShowForSpotId:extra:)]) {
+        [self.delegate splashDidShowForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
-
+    
     _timeout = 5;
     // 记录过期的时间
     _timeout_stamp = ([[NSDate date] timeIntervalSince1970] + _timeout)*1000;
-
-
+    
+    
 }
 
 /// 开屏关闭
@@ -247,7 +246,7 @@
     ADV_LEVEL_INFO_LOG(@"%s",__func__);
     
     if ([[NSDate date] timeIntervalSince1970]*1000 < _timeout_stamp && _isClick == NO) {// 关闭时的时间小于过期时间 且 没有被点击广告区域  则点击了跳过
-//        ADV_LEVEL_INFO_LOG(@"%f, %ld",[[NSDate date] timeIntervalSince1970]*1000,  _timeout_stamp);
+        //        ADV_LEVEL_INFO_LOG(@"%f, %ld",[[NSDate date] timeIntervalSince1970]*1000,  _timeout_stamp);
         if (self.delegate && [self.delegate respondsToSelector:@selector(advanceSplashOnAdSkipClicked)]) {
             [self.delegate advanceSplashOnAdSkipClicked];
         }
@@ -265,11 +264,11 @@
     self.templateView = nil;
     self.imgV = nil;
     self.splashManager = nil;
-    if ([self.delegate respondsToSelector:@selector(advanceDidClose)]) {
-        [self.delegate advanceDidClose];
+    if ([self.delegate respondsToSelector:@selector(splashDidCloseForSpotId:extra:)]) {
+        [self.delegate splashDidCloseForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
-
-//    [self deallocAdapter];
+    
+    //    [self deallocAdapter];
 }
 
 
@@ -280,7 +279,7 @@
     if (_supplier.isParallel == YES) {
         return;
     }
-
+    
 }
 
 // 上报价格

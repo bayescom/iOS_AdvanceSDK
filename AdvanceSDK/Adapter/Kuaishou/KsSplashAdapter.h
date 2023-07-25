@@ -9,8 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "AdvanceSplashDelegate.h"
 NS_ASSUME_NONNULL_BEGIN
-@class AdvSupplier;
-@class AdvanceSplash;
 
 @interface KsSplashAdapter : AdvanceBaseAdapter
 

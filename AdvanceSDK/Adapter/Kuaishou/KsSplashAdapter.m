@@ -205,8 +205,8 @@
  */
 - (void)ksad_splashAdDidVisible:(KSSplashAdView *)splashAdView {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
-    if ([self.delegate respondsToSelector:@selector(advanceExposured)]) {
-        [self.delegate advanceExposured];
+    if ([self.delegate respondsToSelector:@selector(splashDidShowForSpotId:extra:)]) {
+        [self.delegate splashDidShowForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
     
     _timeout = 5;
@@ -227,8 +227,8 @@
  */
 - (void)ksad_splashAd:(KSSplashAdView *)splashAdView didClick:(BOOL)inMiniWindow {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
-    if ([self.delegate respondsToSelector:@selector(advanceClicked)]) {
-        [self.delegate advanceClicked];
+    if ([self.delegate respondsToSelector:@selector(splashDidClickForSpotId:extra:)]) {
+        [self.delegate splashDidClickForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
     [self ksadDidClose];
     [_imgV removeFromSuperview];
@@ -287,15 +287,9 @@
 }
 
 - (void)ksadDidClose {
-    if ([[NSDate date] timeIntervalSince1970]*1000 < _timeout_stamp) {// 关闭时的时间小于过期时间则点击了跳过
-
-    } else {
-//        if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdCountdownToZero)]) {
-//            [self.delegate advanceSplashOnAdCountdownToZero];
-//        }
-    }
-    if ([self.delegate respondsToSelector:@selector(advanceDidClose)]) {
-        [self.delegate advanceDidClose];
+   
+    if ([self.delegate respondsToSelector:@selector(splashDidClickForSpotId:extra:)]) {
+        [self.delegate splashDidClickForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
     [self deallocAdapter];
 
@@ -314,8 +308,8 @@
         return;
     }
     _isCanch = YES;
-    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
-        [self.delegate advanceUnifiedViewDidLoad];
+    if ([self.delegate respondsToSelector:@selector(didFinishLoadingSplashADWithSpotId:)]) {
+        [self.delegate didFinishLoadingSplashADWithSpotId:self.adspot.adspotid];
     }
 //    [self showAd];
 }

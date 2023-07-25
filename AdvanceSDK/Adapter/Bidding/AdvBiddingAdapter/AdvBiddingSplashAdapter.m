@@ -142,8 +142,8 @@
 - (void)splashAdDidLoad:(ABUSplashAd *)splashAd {
     ADV_LEVEL_INFO_LOG(@"%s", __func__);
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
-    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
-        [self.delegate advanceUnifiedViewDidLoad];
+    if ([self.delegate respondsToSelector:@selector(didFinishLoadingSplashADWithSpotId:)]) {
+        [self.delegate didFinishLoadingSplashADWithSpotId:self.adspot.adspotid];
     }
 //    [self showAd];
 }
@@ -156,8 +156,8 @@
 
 - (void)splashAdDidClose:(ABUSplashAd *_Nonnull)splashAd {
     ADV_LEVEL_INFO_LOG(@"%s", __func__);
-    if ([self.delegate respondsToSelector:@selector(advanceDidClose)]) {
-        [self.delegate advanceDidClose];
+    if ([self.delegate respondsToSelector:@selector(splashDidCloseForSpotId:extra:)]) {
+        [self.delegate splashDidCloseForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
 //    [self deallocAdapter];
     
@@ -173,16 +173,16 @@
     _supplier.supplierPrice = (info.ecpm) ? info.ecpm.integerValue : 0;
     [self.adspot reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
     [self.adspot reportWithType:AdvanceSdkSupplierRepoGMBidding supplier:_supplier error:nil];
-    if ([self.delegate respondsToSelector:@selector(advanceExposured)]) {
-        [self.delegate advanceExposured];
+    if ([self.delegate respondsToSelector:@selector(splashDidShowForSpotId:extra:)]) {
+        [self.delegate splashDidShowForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
 
 }
 
 - (void)splashAdDidClick:(ABUSplashAd *)splashAd {
     [_adspot reportWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
-    if ([self.delegate respondsToSelector:@selector(advanceClicked)]) {
-        [self.delegate advanceClicked];
+    if ([self.delegate respondsToSelector:@selector(splashDidClickForSpotId:extra:)]) {
+        [self.delegate splashDidClickForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
 }
 

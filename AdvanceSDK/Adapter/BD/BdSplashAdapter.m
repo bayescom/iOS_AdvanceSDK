@@ -200,18 +200,19 @@
 //            [self.delegate advanceSplashOnAdCountdownToZero];
 //        }
     }
+    
     [self.customSplashView removeFromSuperview];
     [self.imgV removeFromSuperview];
-    if ([self.delegate respondsToSelector:@selector(advanceDidClose)]) {
-        [self.delegate advanceDidClose];
+    if ([self.delegate respondsToSelector:@selector(splashDidCloseForSpotId:extra:)]) {
+        [self.delegate splashDidCloseForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
 }
 
 - (void)splashDidExposure:(BaiduMobAdSplash *)splash {
 //    NSLog(@"开屏广告曝光成功");
     [self.adspot reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
-    if ([self.delegate respondsToSelector:@selector(advanceExposured)] && self.bd_ad) {
-        [self.delegate advanceExposured];
+    if ([self.delegate respondsToSelector:@selector(splashDidShowForSpotId:extra:)] && self.bd_ad) {
+        [self.delegate splashDidShowForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
 }
 
@@ -232,8 +233,8 @@
 - (void)splashDidClicked:(BaiduMobAdSplash *)splash {
 //    NSLog(@"开屏广告被点击");
     [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
-    if ([self.delegate respondsToSelector:@selector(advanceClicked)]) {
-        [self.delegate advanceClicked];
+    if ([self.delegate respondsToSelector:@selector(splashDidClickForSpotId:extra:)]) {
+        [self.delegate splashDidClickForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
 }
 
@@ -274,8 +275,8 @@
         return;
     }
     _isCanch = YES;
-    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
-        [self.delegate advanceUnifiedViewDidLoad];
+    if ([self.delegate respondsToSelector:@selector(didFinishLoadingSplashADWithSpotId:)]) {
+        [self.delegate didFinishLoadingSplashADWithSpotId:self.adspot.adspotid];
     }
 //    [self showAd];
 }

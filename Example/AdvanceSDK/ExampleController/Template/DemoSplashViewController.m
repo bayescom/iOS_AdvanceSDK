@@ -138,23 +138,12 @@
 
 // MARK: ======================= AdvanceSplashDelegate =======================
 
-/// 广告数据拉取成功
-- (void)advanceUnifiedViewDidLoad {
-    NSLog(@"广告数据拉取成功 %s", __func__);
-
-//    [self loadAdBtn1Action];
-    [self showAd];
+// 广告策略加载成功
+- (void)didFinishLoadingADPolicyWithSpotId:(NSString *)spotId {
+    NSLog(@"%s 广告位id为: %@",__func__ , spotId);
 }
 
-/// 广告曝光成功
-- (void)advanceExposured {
-    NSLog(@"广告曝光成功 %s", __func__);
-    [self.bgImgV removeFromSuperview];
-    self.bgImgV.image = nil;
-    self.bgImgV = nil;
-}
-
-/// 广告加载失败
+/// 广告策略加载失败
 - (void)didFailLoadingADPolicyWithSpotId:(NSString *)spotId error:(NSError *)error description:(NSDictionary *)description {
     NSLog(@"广告展示失败 %s  error: %@ 详情:%@", __func__, error, description);
     self.advanceSplash.delegate = nil;
@@ -162,45 +151,35 @@
     [self.bgImgV removeFromSuperview];
     self.bgImgV.image = nil;
     self.bgImgV = nil;
-
 }
+
 /// 广告位中某一个广告源开始加载广告
 - (void)didStartLoadingADSourceWithSpotId:(NSString *)spotId sourceId:(NSString *)sourceId {
     NSLog(@"广告位中某一个广告源开始加载广告 %s  sourceId: %@", __func__, sourceId);
 }
 
+/// 开屏广告数据拉取成功
+- (void)didFinishLoadingSplashADWithSpotId:(NSString *)spotId {
+    NSLog(@"广告数据拉取成功 %s", __func__);
+    [self showAd];
+}
+
+/// 广告曝光成功
+- (void)splashDidShowForSpotId:(NSString *)spotId extra:(NSDictionary *)extra {
+    NSLog(@"广告曝光成功 %s", __func__);
+    [self.bgImgV removeFromSuperview];
+    self.bgImgV.image = nil;
+    self.bgImgV = nil;
+}
+
 /// 广告点击
-- (void)advanceClicked {
+- (void)splashDidClickForSpotId:(NSString *)spotId extra:(NSDictionary *)extra {
     NSLog(@"广告点击 %s", __func__);
 }
 
 /// 广告关闭
-- (void)advanceDidClose {
+- (void)splashDidCloseForSpotId:(NSString *)spotId extra:(NSDictionary *)extra {
     NSLog(@"广告关闭了 %s", __func__);
-//    self.advanceSplash.delegate = nil;
-//    self.advanceSplash = nil;
-
-}
-
-- (void)dealloc {
-    NSLog(@"%s",__func__);
-//    self.advanceSplash.delegate = nil;
-//    self.advanceSplash = nil;
-}
-
-///// 广告倒计时结束
-//- (void)advanceSplashOnAdCountdownToZero {
-//    NSLog(@"广告倒计时结束 %s", __func__);
-//}
-
-/// 点击了跳过
-- (void)advanceSplashOnAdSkipClicked {
-    NSLog(@"点击了跳过 %s", __func__);
-}
-
-// 策略请求成功
-- (void)didFinishLoadingADPolicyWithSpotId:(NSString *)spotId {
-    NSLog(@"%s 广告位id为: %@",__func__ , spotId);
 }
 
 

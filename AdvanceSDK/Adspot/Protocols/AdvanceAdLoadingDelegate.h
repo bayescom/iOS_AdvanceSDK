@@ -10,6 +10,7 @@
 
 @protocol AdvanceAdLoadingDelegate <NSObject>
 
+@optional
 /// 广告策略服务加载成功
 - (void)didFinishLoadingADPolicyWithSpotId:(NSString *)spotId;
 
@@ -20,8 +21,6 @@
 - (void)didFailLoadingADPolicyWithSpotId:(NSString *)spotId
                                  error:(NSError *)error
                            description:(NSDictionary *)description;
-
-@optional
 
 /// Ad start loading
 /// @param spotId 广告位id
