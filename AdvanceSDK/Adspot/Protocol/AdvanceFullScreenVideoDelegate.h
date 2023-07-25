@@ -8,8 +8,8 @@
 
 #ifndef AdvanceFullScreenVideoDelegate_h
 #define AdvanceFullScreenVideoDelegate_h
-#import "AdvanceBaseDelegate.h"
-@protocol AdvanceFullScreenVideoDelegate <AdvanceBaseDelegate>
+#import "AdvanceAdLoadingDelegate.h"
+@protocol AdvanceFullScreenVideoDelegate <AdvanceAdLoadingDelegate>
 @optional
 /// 视频播放完成
 - (void)advanceFullScreenVideoOnAdPlayFinish;

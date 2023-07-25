@@ -14,7 +14,7 @@
 
 @implementation AdvBiddingInterstitialScapegoat
 
-- (void)advanceBiddingEndWithPrice:(NSInteger)price {
+- (void)didFinishBiddingADWithSpotId:(NSString *)spotId price:(NSInteger)price {
     self.price = price;
 }
 
@@ -38,7 +38,7 @@
 }
 
 /// 广告加载失败
-- (void)advanceFailedWithError:(NSError *)error description:(NSDictionary *)description {
+- (void)didFailLoadingADPolicyWithSpotId:(NSString *)spotId error:(NSError *)error description:(NSDictionary *)description {
     ADV_LEVEL_INFO_LOG(@"广告展示失败 %s  error: %@ 详情:%@", __func__, error, description);
 
     [self.a.bridge interstitialAd:self.a didLoadFailWithError:error ext:@{}];
@@ -46,10 +46,10 @@
 
 
 
-/// 内部渠道开始加载时调用
-//- (void)advanceSupplierWillLoad:(NSString *)supplierId {
-//
-//}
+/// 广告位中某一个广告源开始加载广告
+- (void)didStartLoadingADSourceWithSpotId:(NSString *)spotId sourceId:(NSString *)sourceId {
+    //NSLog(@"广告位中某一个广告源开始加载广告 %s  sourceId: %@", __func__, sourceId);
+}
 
 
 /// 广告关闭了

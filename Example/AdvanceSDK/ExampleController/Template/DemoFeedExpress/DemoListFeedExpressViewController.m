@@ -104,21 +104,19 @@
 
 /// 广告加载失败
 /// 该回调只会触发一次
-- (void)advanceFailedWithError:(NSError *)error description:(NSDictionary *)description{
+- (void)didFailLoadingADPolicyWithSpotId:(NSString *)spotId error:(NSError *)error description:(NSDictionary *)description{
     NSLog(@"广告展示失败 %s  error: %@ 详情:%@", __func__, error, description);
 
 }
 
-///// 内部渠道开始加载时调用
-//- (void)advanceSupplierWillLoad:(NSString *)supplierId {
-//    NSLog(@"内部渠道开始加载 %s  supplierId: %@", __func__, supplierId);
-//
-//}
+/// 广告位中某一个广告源开始加载广告
+- (void)didStartLoadingADSourceWithSpotId:(NSString *)spotId sourceId:(NSString *)sourceId {
+    NSLog(@"广告位中某一个广告源开始加载广告 %s  sourceId: %@", __func__, sourceId);
+}
 
 /// 加载策略成功
-- (void)advanceOnAdReceived:(NSString *)reqId
-{
-    NSLog(@"%s 策略id为: %@",__func__ , reqId);
+- (void)didFinishLoadingADPolicyWithSpotId:(NSString *)spotId {
+    NSLog(@"%s 广告位id为: %@",__func__ , spotId);
 }
 
 /// 广告被关闭

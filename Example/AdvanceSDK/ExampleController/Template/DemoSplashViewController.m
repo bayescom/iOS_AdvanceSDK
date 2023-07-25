@@ -155,7 +155,7 @@
 }
 
 /// 广告加载失败
-- (void)advanceFailedWithError:(NSError *)error description:(NSDictionary *)description{
+- (void)didFailLoadingADPolicyWithSpotId:(NSString *)spotId error:(NSError *)error description:(NSDictionary *)description {
     NSLog(@"广告展示失败 %s  error: %@ 详情:%@", __func__, error, description);
     self.advanceSplash.delegate = nil;
     self.advanceSplash = nil;
@@ -164,11 +164,11 @@
     self.bgImgV = nil;
 
 }
-/// 内部渠道开始加载时调用
-//- (void)advanceSupplierWillLoad:(NSString *)supplierId {
-//    NSLog(@"内部渠道开始加载 %s  supplierId: %@", __func__, supplierId);
-//
-//}
+/// 广告位中某一个广告源开始加载广告
+- (void)didStartLoadingADSourceWithSpotId:(NSString *)spotId sourceId:(NSString *)sourceId {
+    NSLog(@"广告位中某一个广告源开始加载广告 %s  sourceId: %@", __func__, sourceId);
+}
+
 /// 广告点击
 - (void)advanceClicked {
     NSLog(@"广告点击 %s", __func__);
@@ -199,9 +199,8 @@
 }
 
 // 策略请求成功
-- (void)advanceOnAdReceived:(NSString *)reqId
-{
-    NSLog(@"%s 策略id为: %@",__func__ , reqId);
+- (void)didFinishLoadingADPolicyWithSpotId:(NSString *)spotId {
+    NSLog(@"%s 广告位id为: %@",__func__ , spotId);
 }
 
 

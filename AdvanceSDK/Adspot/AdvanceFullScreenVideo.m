@@ -39,35 +39,26 @@
     return self;
 }
 
-// 返回策略id
-- (void)advanceOnAdReceivedWithReqId:(NSString *)reqId
-{
-    if ([_delegate respondsToSelector:@selector(advanceOnAdReceived:)]) {
-        [_delegate advanceOnAdReceived:reqId];
-    }
-}
-
 // MARK: ======================= AdvanceSupplierDelegate =======================
 /// 加载策略Model成功
 - (void)advPolicyServiceLoadSuccessWithModel:(nonnull AdvSupplierModel *)model {
-//    if ([_delegate respondsToSelector:@selector(advanceSplashOnAdReceived)]) {
-//        [_delegate advanceSplashOnAdReceived];
-//    }
-    [self advanceOnAdReceivedWithReqId:model.reqid];
+    if ([_delegate respondsToSelector:@selector(didFinishLoadingADPolicyWithSpotId:)]) {
+        [_delegate didFinishLoadingADPolicyWithSpotId:self.adspotid];
+    }
 }
 
 /// 加载策略Model失败
 - (void)advPolicyServiceLoadFailedWithError:(nullable NSError *)error {
-    if ([_delegate respondsToSelector:@selector(advanceFailedWithError:description:)]) {
-        [_delegate advanceFailedWithError:error description:[self.errorDescriptions copy]];
+    if ([_delegate respondsToSelector:@selector(didFailLoadingADPolicyWithSpotId:error:description:)]) {
+        [_delegate didFailLoadingADPolicyWithSpotId:self.adspotid error:error description:[self.errorDescriptions copy]];
     }
 }
 
 // 开始bidding
 - (void)advPolicyServiceStartBiddingWithSuppliers:(NSMutableArray <AdvSupplier *> *_Nullable)suppliers {
-//    if (self.delegate && [self.delegate respondsToSelector:@selector(advanceBiddingAction)]) {
-//        [self.delegate advanceBiddingAction];
-//    }
+    if ([_delegate respondsToSelector:@selector(didStartBiddingADWithSpotId:)]) {
+        [_delegate didStartBiddingADWithSpotId:self.adspotid];
+    }
 }
 
 // bidding结束
@@ -87,19 +78,19 @@
     // 返回渠道有问题 则不用再执行下面的渠道了
     if (error) {
         // 错误回调只调用一次
-        if (self.delegate != nil && [self.delegate respondsToSelector:@selector(advanceFailedWithError:description:)]) {
-            [self.delegate advanceFailedWithError:error description:[self.errorDescriptions copy]];
+        if ([_delegate respondsToSelector:@selector(didFailLoadingADPolicyWithSpotId:error:description:)]) {
+            [_delegate didFailLoadingADPolicyWithSpotId:self.adspotid error:error description:[self.errorDescriptions copy]];
         }
         [self deallocDelegate:NO];
         return;
     }
     
-//    if (supplier.isParallel == NO) {// 只有当串行队列执行该渠道时 才会回调用代理 并行渠道不调用该代理
-//        // 开始加载渠道前通知调用者
-//        if ([self.delegate respondsToSelector:@selector(advanceSupplierWillLoad:)]) {
-//            [self.delegate advanceSupplierWillLoad:supplier.identifier];
-//        }
-//    }
+    if (supplier.isParallel == NO) {// 只有当串行队列执行该渠道时 才会回调用代理 并行渠道不调用该代理
+        // 开始加载渠道前通知调用者
+        if ([self.delegate respondsToSelector:@selector(didStartLoadingADSourceWithSpotId:sourceId:)]) {
+            [self.delegate didStartLoadingADSourceWithSpotId:self.adspotid sourceId:supplier.identifier];
+        }
+    }
     // 根据渠道id自定义初始化b
     NSString *clsName = @"";
     if ([supplier.identifier isEqualToString:SDK_ID_GDT]) {

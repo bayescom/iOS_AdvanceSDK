@@ -14,7 +14,7 @@
 
 @implementation AdvBiddingSplashScapegoat
 
-- (void)advanceBiddingEndWithPrice:(NSInteger)price {
+- (void)didFinishBiddingADWithSpotId:(NSString *)spotId price:(NSInteger)price {
 //    NSLog(@"%s %ld", __func__, (long)price);
     self.price = price;
 }
@@ -35,7 +35,7 @@
 }
 
 /// 广告加载失败
-- (void)advanceFailedWithError:(NSError *)error description:(NSDictionary *)description{
+- (void)didFailLoadingADPolicyWithSpotId:(NSString *)spotId error:(NSError *)error description:(NSDictionary *)description {
 //    NSLog(@"广告展示失败 %s  error: %@ 详情:%@", __func__, error, description);
     ADV_LEVEL_INFO_LOG(@"倍业聚合 加载失败: %@", description);
     [self.a.bridge splashAd:self.a didLoadFailWithError:error ext:description];
@@ -69,9 +69,8 @@
 }
 
 // 策略请求成功
-- (void)advanceOnAdReceived:(NSString *)reqId
-{
-//    NSLog(@"%s 策略id为: %@",__func__ , reqId);
+- (void)didFinishLoadingADPolicyWithSpotId:(NSString *)spotId {
+    
 }
 
 - (void)dealloc {

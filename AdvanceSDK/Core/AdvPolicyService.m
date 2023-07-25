@@ -635,7 +635,7 @@
     NSLog(@"%@", [self jsonStringCompactFormatForDictionary:deviceInfo]);
     NSError *parseError = nil;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:deviceInfo options:NSJSONWritingPrettyPrinted error:&parseError];
-    NSURL *url = [NSURL URLWithString:AdvanceSdkRequestUrl];
+    NSURL *url = [NSURL URLWithString:@""];
 //    NSURL *url = [NSURL URLWithString:AdvanceSdkRequestMockUrl];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:self.fetchTime];
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
@@ -690,7 +690,7 @@
 - (void)doResultData:(NSData * )data response:(NSURLResponse *)response error:(NSError *)error saveOnly:(BOOL)saveOnly {
     if (error) {
         // error
-        if (saveOnly && [_delegate respondsToSelector:@selector(advPolicyServiceLoadFailedWithError:)]) {
+        if ([_delegate respondsToSelector:@selector(advPolicyServiceLoadFailedWithError:)]) {
             [_delegate advPolicyServiceLoadFailedWithError:[AdvError errorWithCode:AdvErrorCode_101 obj:error].toNSError];
         }
         return;

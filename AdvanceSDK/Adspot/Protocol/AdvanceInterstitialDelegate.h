@@ -8,8 +8,8 @@
 
 #ifndef AdvanceInterstitialProtocol_h
 #define AdvanceInterstitialProtocol_h
-#import "AdvanceBaseDelegate.h"
-@protocol AdvanceInterstitialDelegate <AdvanceBaseDelegate>
+#import "AdvanceAdLoadingDelegate.h"
+@protocol AdvanceInterstitialDelegate <AdvanceAdLoadingDelegate>
 @optional
 
 #pragma 请移步AdvanceBaseDelegate

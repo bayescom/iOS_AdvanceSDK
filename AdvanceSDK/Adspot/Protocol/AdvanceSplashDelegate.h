@@ -8,8 +8,8 @@
 
 #ifndef AdvanceSplashProtocol_h
 #define AdvanceSplashProtocol_h
-#import "AdvanceBaseDelegate.h"
-@protocol AdvanceSplashDelegate <AdvanceBaseDelegate>
+#import "AdvanceAdLoadingDelegate.h"
+@protocol AdvanceSplashDelegate <AdvanceAdLoadingDelegate>
 @optional
 /// 广告点击跳过
 #pragma 百度广告不支持该回调

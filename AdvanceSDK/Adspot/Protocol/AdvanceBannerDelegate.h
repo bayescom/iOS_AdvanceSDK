@@ -8,8 +8,8 @@
 
 #ifndef AdvanceBannerProtocol_h
 #define AdvanceBannerProtocol_h
-#import "AdvanceBaseDelegate.h"
-@protocol AdvanceBannerDelegate <AdvanceBaseDelegate>
+#import "AdvanceAdLoadingDelegate.h"
+@protocol AdvanceBannerDelegate <AdvanceAdLoadingDelegate>
 @optional
 
 #pragma 请移步AdvanceBaseDelegate

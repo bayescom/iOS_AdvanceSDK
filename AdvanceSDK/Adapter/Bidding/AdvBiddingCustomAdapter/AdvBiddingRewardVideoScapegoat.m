@@ -18,7 +18,7 @@
 @end
 
 @implementation AdvBiddingRewardVideoScapegoat
-- (void)advanceBiddingEndWithPrice:(NSInteger)price {
+- (void)didFinishBiddingADWithSpotId:(NSString *)spotId price:(NSInteger)price {
     self.price = price;
 //    NSLog(@"bidding结束 %s %ld", __func__, self.price);
 }
@@ -56,7 +56,7 @@
 }
 
 /// 广告加载失败
-- (void)advanceFailedWithError:(NSError *)error description:(NSDictionary *)description{
+- (void)didFailLoadingADPolicyWithSpotId:(NSString *)spotId error:(NSError *)error description:(NSDictionary *)description {
 //    NSLog(@"广告展示失败 %s  error: %@ 详情:%@", __func__, error,description);
 
     [self.a.bridge rewardedVideoAd:self.a didLoadFailWithError:error ext:description];
