@@ -48,8 +48,6 @@
 		6003F5B0195388D20070C39A /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F5AF195388D20070C39A /* XCTest.framework */; };
 		6003F5B1195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F5B2195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
-		6003F5BA195388D20070C39A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5B8195388D20070C39A /* InfoPlist.strings */; };
-		6003F5BC195388D20070C39A /* Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F5BB195388D20070C39A /* Tests.m */; };
 		71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 71719F9D1E33DC2100824A3D /* LaunchScreen.storyboard */; };
 		873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 873B8AEA1B1F5CCA007FD442 /* Main.storyboard */; };
 		A97ADC769580ADB7377B6871 /* Pods_AdvanceSDK_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E33D807387F6C88EC879C30 /* Pods_AdvanceSDK_Tests.framework */; };
@@ -158,10 +156,6 @@
 		6003F5A8195388D20070C39A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		6003F5AE195388D20070C39A /* AdvanceSDK_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AdvanceSDK_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F5AF195388D20070C39A /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
-		6003F5B7195388D20070C39A /* Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Tests-Info.plist"; sourceTree = "<group>"; };
-		6003F5B9195388D20070C39A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		6003F5BB195388D20070C39A /* Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Tests.m; sourceTree = "<group>"; };
-		606FC2411953D9B200FFA9A0 /* Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Tests-Prefix.pch"; sourceTree = "<group>"; };
 		71719F9E1E33DC2100824A3D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		873B8AEA1B1F5CCA007FD442 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		B2181D0EB3A4AD12D3CEEEF5 /* Pods_AdvanceSDK_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AdvanceSDK_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -270,15 +264,7 @@
 			path = ViewController;
 			sourceTree = "<group>";
 		};
-		31FE7BE124482D2200CB2062 /* ExampleController */ = {
-			isa = PBXGroup;
-			children = (
-				31FE7BE224482D2200CB2062 /* Template */,
-			);
-			path = ExampleController;
-			sourceTree = "<group>";
-		};
-		31FE7BE224482D2200CB2062 /* Template */ = {
+		31FE7BE124482D2200CB2062 /* ADExampleControllers */ = {
 			isa = PBXGroup;
 			children = (
 				31FE7BE624482D2200CB2062 /* DemoBannerViewController.h */,
@@ -291,12 +277,12 @@
 				31FE7BE724482D2200CB2062 /* DemoRewardVideoViewController.m */,
 				31FE7BEF24482D2300CB2062 /* DemoSplashViewController.h */,
 				31FE7BE324482D2200CB2062 /* DemoSplashViewController.m */,
-				31FE7BE824482D2200CB2062 /* DemoFeedExpress */,
+				31FE7BE824482D2200CB2062 /* FeedExpress */,
 			);
-			path = Template;
+			path = ADExampleControllers;
 			sourceTree = "<group>";
 		};
-		31FE7BE824482D2200CB2062 /* DemoFeedExpress */ = {
+		31FE7BE824482D2200CB2062 /* FeedExpress */ = {
 			isa = PBXGroup;
 			children = (
 				31FE7BE924482D2200CB2062 /* DemoFeedExpressViewController.h */,
@@ -304,7 +290,7 @@
 				31FE7BEA24482D2200CB2062 /* DemoListFeedExpressViewController.h */,
 				31FE7BEC24482D2200CB2062 /* DemoListFeedExpressViewController.m */,
 			);
-			path = DemoFeedExpress;
+			path = FeedExpress;
 			sourceTree = "<group>";
 		};
 		4EFB345928A0B2A10047E75A /* Tanx */ = {
@@ -334,7 +320,6 @@
 			children = (
 				60FF7A9C1954A5C5007DD14C /* Podspec Metadata */,
 				6003F593195388D20070C39A /* Example for AdvanceSDK */,
-				6003F5B5195388D20070C39A /* Tests */,
 				6003F58C195388D20070C39A /* Frameworks */,
 				6003F58B195388D20070C39A /* Products */,
 				E83AE15FC750AB7F519C6B2E /* Pods */,
@@ -377,6 +362,7 @@
 		6003F593195388D20070C39A /* Example for AdvanceSDK */ = {
 			isa = PBXGroup;
 			children = (
+				31FE7BAA24482CEE00CB2062 /* AppViewBuilder */,
 				4EFB345928A0B2A10047E75A /* Tanx */,
 				31FE7BD424482D0000CB2062 /* NSTimeUtils.h */,
 				31FE7BD024482CF800CB2062 /* NSTimeUtils.m */,
@@ -386,8 +372,7 @@
 				31FE7BD124482CFA00CB2062 /* CustomListViewController.m */,
 				31FE7BD524482D0300CB2062 /* ViewController.h */,
 				31FE7BD624482D0500CB2062 /* ViewController.m */,
-				31FE7BAA24482CEE00CB2062 /* AppViewBuilder */,
-				31FE7BE124482D2200CB2062 /* ExampleController */,
+				31FE7BE124482D2200CB2062 /* ADExampleControllers */,
 				873B8AEA1B1F5CCA007FD442 /* Main.storyboard */,
 				31FE7BD324482CFE00CB2062 /* PrefixHeader.pch */,
 				71719F9D1E33DC2100824A3D /* LaunchScreen.storyboard */,
@@ -404,25 +389,6 @@
 				6003F595195388D20070C39A /* AdvanceSDK-Info.plist */,
 				6003F596195388D20070C39A /* InfoPlist.strings */,
 				6003F599195388D20070C39A /* main.m */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		6003F5B5195388D20070C39A /* Tests */ = {
-			isa = PBXGroup;
-			children = (
-				6003F5BB195388D20070C39A /* Tests.m */,
-				6003F5B6195388D20070C39A /* Supporting Files */,
-			);
-			path = Tests;
-			sourceTree = "<group>";
-		};
-		6003F5B6195388D20070C39A /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				6003F5B7195388D20070C39A /* Tests-Info.plist */,
-				6003F5B8195388D20070C39A /* InfoPlist.strings */,
-				606FC2411953D9B200FFA9A0 /* Tests-Prefix.pch */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -547,7 +513,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6003F5BA195388D20070C39A /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -685,7 +650,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6003F5BC195388D20070C39A /* Tests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -704,14 +668,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				6003F597195388D20070C39A /* en */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		6003F5B8195388D20070C39A /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				6003F5B9195388D20070C39A /* en */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";

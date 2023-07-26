@@ -57,9 +57,34 @@
 
 // MARK: ======================= AdvanceFullScreenVideoDelegate =======================
 
-/// 请求广告数据成功后调用
+// 广告策略加载成功
+- (void)didFinishLoadingADPolicyWithSpotId:(NSString *)spotId {
+    NSLog(@"%s 广告位id为: %@",__func__ , spotId);
+}
+
+/// 广告策略加载失败
+- (void)didFailLoadingADPolicyWithSpotId:(NSString *)spotId error:(NSError *)error description:(NSDictionary *)description {
+    [JDStatusBarNotification showWithStatus:@"广告加载失败" dismissAfter:1.5];
+    NSLog(@"广告展示失败 %s  error: %@ 详情:%@", __func__, error, description);
+}
+
+/// 广告位中某一个广告源开始加载广告
+- (void)didStartLoadingADSourceWithSpotId:(NSString *)spotId sourceId:(NSString *)sourceId {
+    NSLog(@"广告位中某一个广告源开始加载广告 %s  sourceId: %@", __func__, sourceId);
+}
+
+/// 全屏视频广告数据拉取成功
 - (void)advanceUnifiedViewDidLoad {
     NSLog(@"请求广告数据成功后调用 %s", __func__);
+}
+
+/// 广告视频缓存完成
+- (void)advanceFullScreenVideoOnAdVideoCached {
+    NSLog(@"广告缓存成功 %s", __func__);
+    _isAdLoaded=true;
+    [JDStatusBarNotification showWithStatus:@"广告加载成功" dismissAfter:1.5];
+    [self loadAdBtn2Action];
+
 }
 
 /// 广告曝光
@@ -70,17 +95,6 @@
 /// 广告点击
 - (void)advanceClicked {
     NSLog(@"广告点击 %s", __func__);
-}
-
-
-- (void)didFailLoadingADPolicyWithSpotId:(NSString *)spotId error:(NSError *)error description:(NSDictionary *)description {
-    [JDStatusBarNotification showWithStatus:@"广告加载失败" dismissAfter:1.5];
-    NSLog(@"广告展示失败 %s  error: %@ 详情:%@", __func__, error, description);
-}
-
-/// 广告位中某一个广告源开始加载广告
-- (void)didStartLoadingADSourceWithSpotId:(NSString *)spotId sourceId:(NSString *)sourceId {
-    NSLog(@"广告位中某一个广告源开始加载广告 %s  sourceId: %@", __func__, sourceId);
 }
 
 /// 点击跳过
@@ -96,20 +110,6 @@
 /// 广告播放完成
 - (void)advanceFullScreenVideoOnAdPlayFinish {
     NSLog(@"广告播放完成 %s", __func__);
-}
-
-/// 广告视频缓存完成
-- (void)advanceFullScreenVideoOnAdVideoCached {
-    NSLog(@"广告缓存成功 %s", __func__);
-    _isAdLoaded=true;
-    [JDStatusBarNotification showWithStatus:@"广告加载成功" dismissAfter:1.5];
-    [self loadAdBtn2Action];
-
-}
-
-/// 策略加载成功
-- (void)didFinishLoadingADPolicyWithSpotId:(NSString *)spotId {
-    NSLog(@"%s 广告位id为: %@",__func__ , spotId);
 }
 
 @end
