@@ -8,14 +8,14 @@
 
 @optional
 
-/// Splash ad is loaded successfully
+/// Splash ad loaded successfully
 - (void)didFinishLoadingSplashADWithSpotId:(NSString *)spotId;
 
-/// Splash ad is displayed successfully
+/// Splash ad displayed successfully
 - (void)splashDidShowForSpotId:(NSString *)spotId
                          extra:(NSDictionary *)extra;
 
-/// Splash ad click
+/// Splash ad clicked
 - (void)splashDidClickForSpotId:(NSString *)spotId
                           extra:(NSDictionary *)extra;
 

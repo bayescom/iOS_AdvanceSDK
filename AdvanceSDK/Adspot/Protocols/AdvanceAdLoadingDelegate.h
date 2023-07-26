@@ -53,4 +53,4 @@
 
 @end
 
-#endif /* AdvanceAdLoadingDelegate_h */
+#endif

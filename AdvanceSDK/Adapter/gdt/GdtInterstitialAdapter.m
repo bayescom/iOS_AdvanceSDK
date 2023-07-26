@@ -129,23 +129,23 @@
 /// 插屏广告曝光回调
 - (void)unifiedInterstitialWillExposure:(GDTUnifiedInterstitialAd *)unifiedInterstitial {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
-    if ([self.delegate respondsToSelector:@selector(advanceExposured)]) {
-        [self.delegate advanceExposured];
+    if ([self.delegate respondsToSelector:@selector(interstitialDidShowForSpotId:extra:)]) {
+        [self.delegate interstitialDidShowForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
 }
 
 /// 插屏广告点击回调
 - (void)unifiedInterstitialClicked:(GDTUnifiedInterstitialAd *)unifiedInterstitial {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
-    if ([self.delegate respondsToSelector:@selector(advanceClicked)]) {
-        [self.delegate advanceClicked];
+    if ([self.delegate respondsToSelector:@selector(interstitialDidClickForSpotId:extra:)]) {
+        [self.delegate interstitialDidClickForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
 }
 
 /// 插屏广告曝光结束回调，插屏广告曝光结束回调该函数
 - (void)unifiedInterstitialDidDismissScreen:(id)unifiedInterstitial {
-    if ([self.delegate respondsToSelector:@selector(advanceDidClose)]) {
-        [self.delegate advanceDidClose];
+    if ([self.delegate respondsToSelector:@selector(interstitialDidCloseForSpotId:extra:)]) {
+        [self.delegate interstitialDidCloseForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
 }
 
@@ -154,8 +154,8 @@
         return;
     }
     _isCanch = YES;
-    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
-        [self.delegate advanceUnifiedViewDidLoad];
+    if ([self.delegate respondsToSelector:@selector(didFinishLoadingInterstitialADWithSpotId:)]) {
+        [self.delegate didFinishLoadingInterstitialADWithSpotId:self.adspot.adspotid];
     }
 }
 

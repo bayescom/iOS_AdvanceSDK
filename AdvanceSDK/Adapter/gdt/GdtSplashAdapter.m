@@ -199,7 +199,7 @@
 - (void)splashAdLifeTime:(NSUInteger)time {
     _leftTime = time;
     
-    // 当GMBidding的时候 会有一个splashAdClosed 不执行的bug 所以需要用这个逻辑来触发 advanceDidClose
+    // 当GMBidding的时候 会有一个splashAdClosed 不执行的bug 所以需要用这个逻辑来触发 splashDidCloseForSpotId
     if (self.isGMBidding == 0) {
         return;
     }

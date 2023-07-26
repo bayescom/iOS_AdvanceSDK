@@ -53,8 +53,24 @@
 
 // MARK: ======================= AdvanceInterstitialDelegate =======================
 
-/// 请求广告数据成功后调用
-- (void)advanceUnifiedViewDidLoad {
+// 广告策略加载成功
+- (void)didFinishLoadingADPolicyWithSpotId:(NSString *)spotId {
+    NSLog(@"%s 广告位id为: %@",__func__ , spotId);
+}
+
+/// 广告策略加载失败
+- (void)didFailLoadingADPolicyWithSpotId:(NSString *)spotId error:(NSError *)error description:(NSDictionary *)description {
+    [JDStatusBarNotification showWithStatus:@"广告加载失败" dismissAfter:1.5];
+    NSLog(@"广告展示失败 %s  error: %@ 详情:%@", __func__, error, description);
+}
+
+/// 广告位中某一个广告源开始加载广告
+- (void)didStartLoadingADSourceWithSpotId:(NSString *)spotId sourceId:(NSString *)sourceId {
+    NSLog(@"广告位中某一个广告源开始加载广告 %s  sourceId: %@", __func__, sourceId);
+}
+
+/// 插屏广告数据拉取成功
+- (void)didFinishLoadingInterstitialADWithSpotId:(NSString *)spotId {
     NSLog(@"广告数据拉取成功 %s", __func__);
     _isAdLoaded=true;
     [JDStatusBarNotification showWithStatus:@"广告加载成功" dismissAfter:1.5];
@@ -62,35 +78,18 @@
 }
 
 /// 广告曝光
-- (void)advanceExposured {
+- (void)interstitialDidShowForSpotId:(NSString *)spotId extra:(NSDictionary *)extra {
     NSLog(@"广告曝光回调 %s", __func__);
 }
 
 /// 广告点击
-- (void)advanceClicked {
+- (void)interstitialDidClickForSpotId:(NSString *)spotId extra:(NSDictionary *)extra {
     NSLog(@"广告点击 %s", __func__);
 }
 
-- (void)didFailLoadingADPolicyWithSpotId:(NSString *)spotId error:(NSError *)error description:(NSDictionary *)description {
-    [JDStatusBarNotification showWithStatus:@"广告加载失败" dismissAfter:1.5];
-    NSLog(@"广告展示失败 %s  error: %@ 详情:%@", __func__, error, description);
-}
-
-
-
-/// 广告位中某一个广告源开始加载广告
-- (void)didStartLoadingADSourceWithSpotId:(NSString *)spotId sourceId:(NSString *)sourceId {
-    NSLog(@"广告位中某一个广告源开始加载广告 %s  sourceId: %@", __func__, sourceId);
-}
-
-/// 广告关闭了
-- (void)advanceDidClose {
+/// 广告关闭
+- (void)interstitialDidCloseForSpotId:(NSString *)spotId extra:(NSDictionary *)extra {
     NSLog(@"广告关闭了 %s", __func__);
-}
-
-/// 策略请求成功
-- (void)didFinishLoadingADPolicyWithSpotId:(NSString *)spotId {
-    NSLog(@"%s 广告位id为: %@",__func__ , spotId);
 }
 
 

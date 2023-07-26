@@ -61,8 +61,8 @@
 
 - (void)supplierStateSuccess {
     ADV_LEVEL_INFO_LOG(@"Bidding 成功");
-    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
-        [self.delegate advanceUnifiedViewDidLoad];
+    if ([self.delegate respondsToSelector:@selector(didFinishLoadingInterstitialADWithSpotId:)]) {
+        [self.delegate didFinishLoadingInterstitialADWithSpotId:self.adspot.adspotid];
     }
 }
 
@@ -130,8 +130,8 @@
     
     // 展示后可获取信息如下
     [self.adspot reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
-    if ([self.delegate respondsToSelector:@selector(advanceExposured)]) {
-        [self.delegate advanceExposured];
+    if ([self.delegate respondsToSelector:@selector(interstitialDidShowForSpotId:extra:)]) {
+        [self.delegate interstitialDidShowForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
 }
 
@@ -146,16 +146,16 @@
 /// 广告点击回调
 - (void)interstitialProAdDidClick:(ABUInterstitialProAd *)interstitialProAd {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
-    if ([self.delegate respondsToSelector:@selector(advanceClicked)]) {
-        [self.delegate advanceClicked];
+    if ([self.delegate respondsToSelector:@selector(interstitialDidClickForSpotId:extra:)]) {
+        [self.delegate interstitialDidClickForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
 
 }
 
 /// 广告关闭回调
 - (void)interstitialProAdDidClose:(ABUInterstitialProAd *)interstitialProAd {
-    if ([self.delegate respondsToSelector:@selector(advanceDidClose)]) {
-        [self.delegate advanceDidClose];
+    if ([self.delegate respondsToSelector:@selector(interstitialDidCloseForSpotId:extra:)]) {
+        [self.delegate interstitialDidCloseForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
 }
 
@@ -188,8 +188,8 @@
         return;
     }
     _isCached = YES;
-    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
-        [self.delegate advanceUnifiedViewDidLoad];
+    if ([self.delegate respondsToSelector:@selector(didFinishLoadingInterstitialADWithSpotId:)]) {
+        [self.delegate didFinishLoadingInterstitialADWithSpotId:self.adspot.adspotid];
     }
 }
 
