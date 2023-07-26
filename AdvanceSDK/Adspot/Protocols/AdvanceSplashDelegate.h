@@ -1,6 +1,6 @@
 
-#ifndef AdvanceSplashProtocol_h
-#define AdvanceSplashProtocol_h
+#ifndef AdvanceSplashDelegate_h
+#define AdvanceSplashDelegate_h
 
 #import "AdvanceAdLoadingDelegate.h"
 

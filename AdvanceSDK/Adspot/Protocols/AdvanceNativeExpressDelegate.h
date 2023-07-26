@@ -1,6 +1,6 @@
 
-#ifndef AdvanceNativeExpressProtocol_h
-#define AdvanceNativeExpressProtocol_h
+#ifndef AdvanceNativeExpressDelegate_h
+#define AdvanceNativeExpressDelegate_h
 #import "AdvanceAdLoadingDelegate.h"
 @class AdvanceNativeExpressView;
 @protocol AdvanceNativeExpressDelegate <AdvanceAdLoadingDelegate>

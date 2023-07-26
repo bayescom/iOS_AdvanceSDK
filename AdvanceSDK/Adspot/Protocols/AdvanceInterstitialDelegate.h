@@ -1,6 +1,6 @@
 
-#ifndef AdvanceInterstitialProtocol_h
-#define AdvanceInterstitialProtocol_h
+#ifndef AdvanceInterstitialDelegate_h
+#define AdvanceInterstitialDelegate_h
 
 #import "AdvanceAdLoadingDelegate.h"
 

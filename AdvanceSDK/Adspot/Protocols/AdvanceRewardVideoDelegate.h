@@ -1,6 +1,6 @@
 
-#ifndef AdvanceRewardVideoProtocol_h
-#define AdvanceRewardVideoProtocol_h
+#ifndef AdvanceRewardVideoDelegate_h
+#define AdvanceRewardVideoDelegate_h
 #import "AdvanceAdLoadingDelegate.h"
 @protocol AdvanceRewardVideoDelegate <AdvanceAdLoadingDelegate>
 @optional

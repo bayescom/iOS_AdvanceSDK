@@ -1,12 +1,26 @@
 
-#ifndef AdvanceBannerProtocol_h
-#define AdvanceBannerProtocol_h
+#ifndef AdvanceBannerDelegate_h
+#define AdvanceBannerDelegate_h
+
 #import "AdvanceAdLoadingDelegate.h"
+
 @protocol AdvanceBannerDelegate <AdvanceAdLoadingDelegate>
+
 @optional
 
-#pragma 请移步AdvanceBaseDelegate
-- (void)advanceAdMaterialLoadSuccess;
+/// Banner ad loaded successfully
+- (void)didFinishLoadingBannerADWithSpotId:(NSString *)spotId;
+
+/// Banner ad displayed
+- (void)bannerView:(UIView *)bannerView didShowAdWithSpotId:(NSString *)spotId extra:(NSDictionary *)extra;
+
+/// Banner ad clicked
+- (void)bannerView:(UIView *)bannerView didClickAdWithSpotId:(NSString *)spotId extra:(NSDictionary *)extra;
+
+/// Banner ad closed
+- (void)bannerView:(UIView *)bannerView didCloseAdWithSpotId:(NSString *)spotId extra:(NSDictionary *)extra;
+
+
 @end
 
 #endif

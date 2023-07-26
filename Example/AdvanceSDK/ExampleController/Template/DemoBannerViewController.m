@@ -50,22 +50,13 @@
 }
 
 // MARK: ======================= AdvanceBannerDelegate =======================
-/// 广告数据拉取成功回调
-- (void)advanceUnifiedViewDidLoad {
-    NSLog(@"广告数据拉取成功 %s", __func__);
-//    [self.advanceBanner showAd];
-//    [self.adShowView addSubview:self.contentV];
-//    self.adShowView.hidden = NO;
+
+/// 策略请求成功
+- (void)didFinishLoadingADPolicyWithSpotId:(NSString *)spotId {
+    NSLog(@"%s 广告位id为: %@",__func__ , spotId);
 }
 
-- (void)advanceAdMaterialLoadSuccess {
-    NSLog(@"广告物料加载成功 %s", __func__);
-    [self.advanceBanner showAd];
-    [self.adShowView addSubview:self.contentV];
-    self.adShowView.hidden = NO;
-}
-
-/// 广告加载失败
+/// 广告策略加载失败
 - (void)didFailLoadingADPolicyWithSpotId:(NSString *)spotId error:(NSError *)error description:(NSDictionary *)description {
     NSLog(@"广告展示失败 %s  error: %@ 详情:%@", __func__, error, description);
 }
@@ -75,30 +66,31 @@
     NSLog(@"广告位中某一个广告源开始加载广告 %s  sourceId: %@", __func__, sourceId);
 }
 
+/// Banner广告数据拉取成功
+- (void)didFinishLoadingBannerADWithSpotId:(NSString *)spotId {
+    NSLog(@"广告数据拉取成功 %s", __func__);
+    [self.advanceBanner showAd];
+    [self.adShowView addSubview:self.contentV];
+    self.adShowView.hidden = NO;
+}
+
 /// 广告曝光
-- (void)advanceExposured {
+- (void)bannerView:(UIView *)bannerView didShowAdWithSpotId:(NSString *)spotId extra:(NSDictionary *)extra {
     NSLog(@"广告曝光回调 %s", __func__);
 }
 
 /// 广告点击
-- (void)advanceClicked {
+- (void)bannerView:(UIView *)bannerView didClickAdWithSpotId:(NSString *)spotId extra:(NSDictionary *)extra {
     NSLog(@"广告点击 %s", __func__);
 }
 
-/// 广告关闭回调
-- (void)advanceDidClose {
+/// 广告关闭
+- (void)bannerView:(UIView *)bannerView didCloseAdWithSpotId:(NSString *)spotId extra:(NSDictionary *)extra {
     NSLog(@"广告关闭了 %s", __func__);
-//    _contentV = nil;
-//    [_contentV removeFromSuperview];
 }
-
-/// 策略请求成功
-- (void)didFinishLoadingADPolicyWithSpotId:(NSString *)spotId {
-    NSLog(@"%s 广告位id为: %@",__func__ , spotId);
-}
-
 
 - (void)dealloc {
     NSLog(@"%s", __func__);
 }
+
 @end
