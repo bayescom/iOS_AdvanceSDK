@@ -50,13 +50,13 @@
 
 - (void)supplierStateSuccess {
     ADV_LEVEL_INFO_LOG(@"快手 成功");
-    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
-        [self.delegate advanceUnifiedViewDidLoad];
+    if ([self.delegate respondsToSelector:@selector(didFinishLoadingRewardedVideoADWithSpotId:)]) {
+        [self.delegate didFinishLoadingRewardedVideoADWithSpotId:self.adspot.adspotid];
     }
     
     if (_isCached) {
-        if ([self.delegate respondsToSelector:@selector(advanceRewardVideoOnAdVideoCached)]) {
-            [self.delegate advanceRewardVideoOnAdVideoCached];
+        if ([self.delegate respondsToSelector:@selector(rewardedVideoDidDownLoadForSpotId:extra:)]) {
+            [self.delegate rewardedVideoDidDownLoadForSpotId:self.adspot.adspotid extra:self.adspot.ext];
         }
     }
 }
@@ -111,8 +111,8 @@
         return;
     }
 
-    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
-        [self.delegate advanceUnifiedViewDidLoad];
+    if ([self.delegate respondsToSelector:@selector(didFinishLoadingRewardedVideoADWithSpotId:)]) {
+        [self.delegate didFinishLoadingRewardedVideoADWithSpotId:self.adspot.adspotid];
     }
 
 }
@@ -137,8 +137,8 @@
         _isCached = YES;
         return;
     }
-    if ([self.delegate respondsToSelector:@selector(advanceRewardVideoOnAdVideoCached)]) {
-        [self.delegate advanceRewardVideoOnAdVideoCached];
+    if ([self.delegate respondsToSelector:@selector(rewardedVideoDidDownLoadForSpotId:extra:)]) {
+        [self.delegate rewardedVideoDidDownLoadForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
 }
 /**
@@ -152,9 +152,6 @@
  */
 - (void)rewardedVideoAdDidVisible:(KSRewardedVideoAd *)rewardedVideoAd {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
-    if ([self.delegate respondsToSelector:@selector(advanceExposured)]) {
-        [self.delegate advanceExposured];
-    }
 }
 /**
  This method is called when video ad is about to close.
@@ -166,8 +163,8 @@
  This method is called when video ad is closed.
  */
 - (void)rewardedVideoAdDidClose:(KSRewardedVideoAd *)rewardedVideoAd {
-    if ([self.delegate respondsToSelector:@selector(advanceDidClose)]) {
-        [self.delegate advanceDidClose];
+    if ([self.delegate respondsToSelector:@selector(rewardedVideoDidCloseForSpotId:extra:)]) {
+        [self.delegate rewardedVideoDidCloseForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
 }
 
@@ -176,41 +173,38 @@
  */
 - (void)rewardedVideoAdDidClick:(KSRewardedVideoAd *)rewardedVideoAd  {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
-    if ([self.delegate respondsToSelector:@selector(advanceClicked)]) {
-        [self.delegate advanceClicked];
+    if ([self.delegate respondsToSelector:@selector(rewardedVideoDidClickForSpotId:extra:)]) {
+        [self.delegate rewardedVideoDidClickForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
 }
+
+/**
+ This method is called when the video begin to play.
+ */
+- (void)rewardedVideoAdStartPlay:(KSRewardedVideoAd *)rewardedVideoAd {
+    if ([self.delegate respondsToSelector:@selector(rewardedVideoDidStartPlayingForSpotId:extra:)]) {
+        [self.delegate rewardedVideoDidStartPlayingForSpotId:self.adspot.adspotid extra:self.adspot.ext];
+    }
+}
+
 /**
  This method is called when video ad play completed or an error occurred.
  @param error : the reason of error
  */
 - (void)rewardedVideoAdDidPlayFinish:(KSRewardedVideoAd *)rewardedVideoAd didFailWithError:(NSError *_Nullable)error {
     if (!error) {
-        if ([self.delegate respondsToSelector:@selector(advanceRewardVideoAdDidPlayFinish)]) {
-            [self.delegate advanceRewardVideoAdDidPlayFinish];
+        if ([self.delegate respondsToSelector:@selector(rewardedVideoDidEndPlayingForSpotId:extra:)]) {
+            [self.delegate rewardedVideoDidEndPlayingForSpotId:self.adspot.adspotid extra:self.adspot.ext];
         }
     }
 }
+
 /**
- This method is called when the user clicked skip button.
- */
-- (void)rewardedVideoAdDidClickSkip:(KSRewardedVideoAd *)rewardedVideoAd {
-    
-}
-/**
- This method is called when the video begin to play.
- */
-- (void)rewardedVideoAdStartPlay:(KSRewardedVideoAd *)rewardedVideoAd {
-    
-}
-/**
- This method is called when the user close video ad.
+ This method is called when the user is rewarded.
  */
 - (void)rewardedVideoAd:(KSRewardedVideoAd *)rewardedVideoAd hasReward:(BOOL)hasReward {
-    if (hasReward) {
-        if ([self.delegate respondsToSelector:@selector(advanceRewardVideoAdDidRewardEffective:)]) {
-            [self.delegate advanceRewardVideoAdDidRewardEffective:hasReward];
-        }
+    if ([self.delegate respondsToSelector:@selector(rewardedVideoDidRewardSuccessForSpotId:extra:rewarded:)]) {
+        [self.delegate rewardedVideoDidRewardSuccessForSpotId:self.adspot.adspotid extra:self.adspot.ext rewarded:hasReward];
     }
 }
 

@@ -1,3 +1,9 @@
+//
+//  AdvanceNativeExpressDelegate.h
+//  AdvanceSDK
+//
+//  Created by guangyao on 2023/7/24.
+//
 
 #ifndef AdvanceNativeExpressDelegate_h
 #define AdvanceNativeExpressDelegate_h

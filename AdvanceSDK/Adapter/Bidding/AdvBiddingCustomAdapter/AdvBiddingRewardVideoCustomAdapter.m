@@ -17,7 +17,7 @@
 #import <Ads-Mediation-CN/ABUAdSDK.h>
 #endif
 
-@interface AdvBiddingRewardVideoCustomAdapter ()<AdvanceRewardVideoDelegate>
+@interface AdvBiddingRewardVideoCustomAdapter ()<AdvanceRewardedVideoDelegate>
 @property (nonatomic, strong) AdvanceRewardVideo *advanceRewardVideo;
 @property (nonatomic, strong) AdvBiddingRewardVideoScapegoat *scapegoat;
 @property (nonatomic, weak) UIViewController *viewController;

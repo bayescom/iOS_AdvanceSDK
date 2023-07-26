@@ -1,3 +1,9 @@
+//
+//  AdvanceBannerDelegate.h
+//  AdvanceSDK
+//
+//  Created by guangyao on 2023/7/24.
+//
 
 #ifndef AdvanceBannerDelegate_h
 #define AdvanceBannerDelegate_h

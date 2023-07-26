@@ -49,13 +49,13 @@
 
 - (void)supplierStateSuccess {
     ADV_LEVEL_INFO_LOG(@"Tanx 成功");
-    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
-        [self.delegate advanceUnifiedViewDidLoad];
+    if ([self.delegate respondsToSelector:@selector(didFinishLoadingRewardedVideoADWithSpotId:)]) {
+        [self.delegate didFinishLoadingRewardedVideoADWithSpotId:self.adspot.adspotid];
     }
     
     if (_isCached) {
-        if ([self.delegate respondsToSelector:@selector(advanceRewardVideoOnAdVideoCached)]) {
-            [self.delegate advanceRewardVideoOnAdVideoCached];
+        if ([self.delegate respondsToSelector:@selector(rewardedVideoDidDownLoadForSpotId:extra:)]) {
+            [self.delegate rewardedVideoDidDownLoadForSpotId:self.adspot.adspotid extra:self.adspot.ext];
         }
     }
 }
@@ -99,8 +99,8 @@
         return;
     }
 
-    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
-        [self.delegate advanceUnifiedViewDidLoad];
+    if ([self.delegate respondsToSelector:@selector(didFinishLoadingRewardedVideoADWithSpotId:)]) {
+        [self.delegate didFinishLoadingRewardedVideoADWithSpotId:self.adspot.adspotid];
     }
 
 }
@@ -111,8 +111,8 @@
         _isCached = YES;
         return;
     }
-    if ([self.delegate respondsToSelector:@selector(advanceRewardVideoOnAdVideoCached)]) {
-        [self.delegate advanceRewardVideoOnAdVideoCached];
+    if ([self.delegate respondsToSelector:@selector(rewardedVideoDidDownLoadForSpotId:extra:)]) {
+        [self.delegate rewardedVideoDidDownLoadForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
 }
 
@@ -138,8 +138,8 @@
 /// @param rewardVideoAd 广告管理对象
 - (void)rewardVideoAdDidShow:(TXAdRewardVideoAd *)rewardVideoAd {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
-    if ([self.delegate respondsToSelector:@selector(advanceExposured)]) {
-        [self.delegate advanceExposured];
+    if ([self.delegate respondsToSelector:@selector(rewardedVideoDidStartPlayingForSpotId:extra:)]) {
+        [self.delegate rewardedVideoDidStartPlayingForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
 }
 
@@ -163,8 +163,8 @@
 /// 广告关闭回调
 /// @param rewardVideoAd 广告管理对象
 - (void)rewardVideoAdDidClose:(TXAdRewardVideoAd *)rewardVideoAd {
-    if ([self.delegate respondsToSelector:@selector(advanceDidClose)]) {
-        [self.delegate advanceDidClose];
+    if ([self.delegate respondsToSelector:@selector(rewardedVideoDidCloseForSpotId:extra:)]) {
+        [self.delegate rewardedVideoDidCloseForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
 }
 
@@ -173,8 +173,8 @@
 /// @param error nil 时代表成功
 - (void)rewardVideoAd:(TXAdRewardVideoAd *)rewardVideoAd didFinishPlayingWithError:(nullable NSError *)error {
     if (!error) {
-        if ([self.delegate respondsToSelector:@selector(advanceRewardVideoAdDidPlayFinish)]) {
-            [self.delegate advanceRewardVideoAdDidPlayFinish];
+        if ([self.delegate respondsToSelector:@selector(rewardedVideoDidEndPlayingForSpotId:extra:)]) {
+            [self.delegate rewardedVideoDidEndPlayingForSpotId:self.adspot.adspotid extra:self.adspot.ext];
         }
     }
 }
@@ -183,8 +183,8 @@
 /// @param rewardVideoAd 广告管理对象
 /// @param rewardInfo 发奖信息
 - (void)rewardVideoAd:(TXAdRewardVideoAd *)rewardVideoAd didReceiveRewardInfo:(TXAdRewardVideoRewardInfo *)rewardInfo {
-    if ([self.delegate respondsToSelector:@selector(advanceRewardVideoAdDidRewardEffective:)]) {
-        [self.delegate advanceRewardVideoAdDidRewardEffective:rewardInfo.isValid];
+    if ([self.delegate respondsToSelector:@selector(rewardedVideoDidRewardSuccessForSpotId:extra:rewarded:)]) {
+        [self.delegate rewardedVideoDidRewardSuccessForSpotId:self.adspot.adspotid extra:self.adspot.ext rewarded:rewardInfo.isValid];
     }
 }
 

@@ -9,7 +9,7 @@
 #import "AdvanceBaseAdapter.h"
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import "AdvanceRewardVideoDelegate.h"
+#import "AdvanceRewardedVideoDelegate.h"
 
 @class AdvSupplier;
 @class AdvanceRewardVideo;
@@ -17,7 +17,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface MercuryRewardVideoAdapter : AdvanceBaseAdapter
-@property (nonatomic, weak) id<AdvanceRewardVideoDelegate> delegate;
+@property (nonatomic, weak) id<AdvanceRewardedVideoDelegate> delegate;
 
 @end
 

@@ -1,3 +1,9 @@
+//
+//  AdvanceInterstitialDelegate.h
+//  AdvanceSDK
+//
+//  Created by guangyao on 2023/7/24.
+//
 
 #ifndef AdvanceInterstitialDelegate_h
 #define AdvanceInterstitialDelegate_h

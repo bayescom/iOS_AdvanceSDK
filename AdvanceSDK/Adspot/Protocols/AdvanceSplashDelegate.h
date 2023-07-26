@@ -1,3 +1,9 @@
+//
+//  AdvanceSplashDelegate.h
+//  AdvanceSDK
+//
+//  Created by guangyao on 2023/7/24.
+//
 
 #ifndef AdvanceSplashDelegate_h
 #define AdvanceSplashDelegate_h

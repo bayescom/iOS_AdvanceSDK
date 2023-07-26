@@ -1,3 +1,9 @@
+//
+//  AdvanceFullScreenVideoDelegate.h
+//  AdvanceSDK
+//
+//  Created by guangyao on 2023/7/24.
+//
 
 #ifndef AdvanceFullScreenVideoDelegate_h
 #define AdvanceFullScreenVideoDelegate_h

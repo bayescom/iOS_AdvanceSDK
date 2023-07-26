@@ -11,13 +11,13 @@
 #import <UIKit/UIKit.h>
 
 #import "AdvSdkConfig.h"
-#import "AdvanceRewardVideoDelegate.h"
+#import "AdvanceRewardedVideoDelegate.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface AdvanceRewardVideo : AdvanceBaseAdSpot
 /// 广告方法回调代理
-@property (nonatomic, weak) id<AdvanceRewardVideoDelegate> delegate;
+@property (nonatomic, weak) id<AdvanceRewardedVideoDelegate> delegate;
 
 @property(weak) UIViewController *viewController;
 ///  设定是否静音播放视频，YES = 静音，NO = 非静音 默认为YES
