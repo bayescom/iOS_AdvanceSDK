@@ -57,7 +57,7 @@
 
 // MARK: ======================= AdvanceFullScreenVideoDelegate =======================
 
-// 广告策略加载成功
+/// 广告策略加载成功
 - (void)didFinishLoadingADPolicyWithSpotId:(NSString *)spotId {
     NSLog(@"%s 广告位id为: %@",__func__ , spotId);
 }
@@ -74,12 +74,12 @@
 }
 
 /// 全屏视频广告数据拉取成功
-- (void)advanceUnifiedViewDidLoad {
+- (void)didFinishLoadingFullscreenVideoADWithSpotId:(NSString *)spotId {
     NSLog(@"请求广告数据成功后调用 %s", __func__);
 }
 
-/// 广告视频缓存完成
-- (void)advanceFullScreenVideoOnAdVideoCached {
+/// 全屏视频存成功
+- (void)fullscreenVideoDidDownLoadForSpotId:(NSString *)spotId extra:(NSDictionary *)extra {
     NSLog(@"广告缓存成功 %s", __func__);
     _isAdLoaded=true;
     [JDStatusBarNotification showWithStatus:@"广告加载成功" dismissAfter:1.5];
@@ -87,29 +87,31 @@
 
 }
 
-/// 广告曝光
-- (void)advanceExposured {
+/// 全屏视频开始播放
+- (void)fullscreenVideoDidStartPlayingForSpotId:(NSString *)spotId extra:(NSDictionary *)extra {
     NSLog(@"广告曝光回调 %s", __func__);
 }
 
-/// 广告点击
-- (void)advanceClicked {
+/// 全屏视频播放完成
+- (void)fullscreenVideoDidEndPlayingForSpotId:(NSString *)spotId extra:(NSDictionary *)extra {
+    NSLog(@"广告播放完成 %s", __func__);
+}
+
+/// 全屏视频广告点击
+- (void)fullscreenVideoDidClickForSpotId:(NSString *)spotId extra:(NSDictionary *)extra {
     NSLog(@"广告点击 %s", __func__);
 }
 
-/// 点击跳过
-- (void)advanceFullScreenVideodDidClickSkip {
+/// 全屏视频点击跳过
+- (void)fullscreenVideoDidClickSkipForSpotId:(NSString *)spotId extra:(NSDictionary *)extra {
     NSLog(@"点击了跳过 %s", __func__);
 }
 
-/// 广告关闭
-- (void)advanceDidClose {
+/// 全屏视频广告关闭
+- (void)fullscreenVideoDidCloseForSpotId:(NSString *)spotId extra:(NSDictionary *)extra {
     NSLog(@"广告关闭了 %s", __func__);
 }
 
-/// 广告播放完成
-- (void)advanceFullScreenVideoOnAdPlayFinish {
-    NSLog(@"广告播放完成 %s", __func__);
-}
+
 
 @end

@@ -38,19 +38,6 @@
 - (void)didFailBiddingADWithSpotId:(NSString *)spotId
                              error:(NSError *)error;
 
-
-/// 广告曝光成功
-- (void)advanceExposured;
-
-/// 广告点击回调
-- (void)advanceClicked;
-
-/// 广告数据请求成功后调用
-- (void)advanceUnifiedViewDidLoad;
-
-/// 广告关闭的回调
-- (void)advanceDidClose;
-
 @end
 
 #endif

@@ -53,7 +53,7 @@
 
 // MARK: ======================= AdvanceInterstitialDelegate =======================
 
-// 广告策略加载成功
+/// 广告策略加载成功
 - (void)didFinishLoadingADPolicyWithSpotId:(NSString *)spotId {
     NSLog(@"%s 广告位id为: %@",__func__ , spotId);
 }

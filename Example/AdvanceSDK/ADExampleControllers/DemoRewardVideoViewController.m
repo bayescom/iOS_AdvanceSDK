@@ -55,7 +55,7 @@
 
 // MARK: ======================= AdvanceRewardVideoDelegate =======================
 
-// 广告策略加载成功
+/// 广告策略加载成功
 - (void)didFinishLoadingADPolicyWithSpotId:(NSString *)spotId {
     NSLog(@"%s 广告位id为: %@",__func__ , spotId);
 }
@@ -109,7 +109,7 @@
     NSLog(@"广告点击 %s", __func__);
 }
 
-/// 广告关闭
+/// 激励视频广告关闭
 - (void)rewardedVideoDidCloseForSpotId:(NSString *)spotId extra:(NSDictionary *)extra {
     NSLog(@"广告关闭了 %s", __func__);
     self.advanceRewardVideo.delegate = nil;

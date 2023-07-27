@@ -49,13 +49,13 @@
 
 - (void)supplierStateSuccess {
     ADV_LEVEL_INFO_LOG(@"快手 成功");
-    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
-        [self.delegate advanceUnifiedViewDidLoad];
+    if ([self.delegate respondsToSelector:@selector(didFinishLoadingFullscreenVideoADWithSpotId:)]) {
+        [self.delegate didFinishLoadingFullscreenVideoADWithSpotId:self.adspot.adspotid];
     }
     
     if (_isCached) {
-        if ([self.delegate respondsToSelector:@selector(advanceFullScreenVideoOnAdVideoCached)]) {
-            [self.delegate advanceFullScreenVideoOnAdVideoCached];
+        if ([self.delegate respondsToSelector:@selector(fullscreenVideoDidDownLoadForSpotId:extra:)]) {
+            [self.delegate fullscreenVideoDidDownLoadForSpotId:self.adspot.adspotid extra:self.adspot.ext];
         }
     }
 }
@@ -98,8 +98,8 @@
         return;
     }
 
-    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
-        [self.delegate advanceUnifiedViewDidLoad];
+    if ([self.delegate respondsToSelector:@selector(didFinishLoadingFullscreenVideoADWithSpotId:)]) {
+        [self.delegate didFinishLoadingFullscreenVideoADWithSpotId:self.adspot.adspotid];
     }
 
 }
@@ -123,8 +123,8 @@
         _isCached = YES;
         return;
     }
-    if ([self.delegate respondsToSelector:@selector(advanceFullScreenVideoOnAdVideoCached)]) {
-        [self.delegate advanceFullScreenVideoOnAdVideoCached];
+    if ([self.delegate respondsToSelector:@selector(fullscreenVideoDidDownLoadForSpotId:extra:)]) {
+        [self.delegate fullscreenVideoDidDownLoadForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
 }
 /**
@@ -138,9 +138,6 @@
  */
 - (void)fullscreenVideoAdDidVisible:(KSFullscreenVideoAd *)fullscreenVideoAd {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
-    if ([self.delegate respondsToSelector:@selector(advanceExposured)]) {
-        [self.delegate advanceExposured];
-    }
 }
 /**
  This method is called when video ad is about to close.
@@ -152,8 +149,8 @@
  This method is called when video ad is closed.
  */
 - (void)fullscreenVideoAdDidClose:(KSFullscreenVideoAd *)fullscreenVideoAd {
-    if ([self.delegate respondsToSelector:@selector(advanceDidClose)]) {
-        [self.delegate advanceDidClose];
+    if ([self.delegate respondsToSelector:@selector(fullscreenVideoDidCloseForSpotId:extra:)]) {
+        [self.delegate fullscreenVideoDidCloseForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
 }
 
@@ -162,8 +159,8 @@
  */
 - (void)fullscreenVideoAdDidClick:(KSFullscreenVideoAd *)fullscreenVideoAd {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
-    if ([self.delegate respondsToSelector:@selector(advanceClicked)]) {
-        [self.delegate advanceClicked];
+    if ([self.delegate respondsToSelector:@selector(fullscreenVideoDidClickForSpotId:extra:)]) {
+        [self.delegate fullscreenVideoDidClickForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
 }
 /**
@@ -172,8 +169,8 @@
  */
 - (void)fullscreenVideoAdDidPlayFinish:(KSFullscreenVideoAd *)fullscreenVideoAd didFailWithError:(NSError *_Nullable)error {
     if (!error) {
-        if ([self.delegate respondsToSelector:@selector(advanceFullScreenVideoOnAdPlayFinish)]) {
-            [self.delegate advanceFullScreenVideoOnAdPlayFinish];
+        if ([self.delegate respondsToSelector:@selector(fullscreenVideoDidEndPlayingForSpotId:extra:)]) {
+            [self.delegate fullscreenVideoDidEndPlayingForSpotId:self.adspot.adspotid extra:self.adspot.ext];
         }
     }
 }
@@ -181,14 +178,16 @@
  This method is called when the video begin to play.
  */
 - (void)fullscreenVideoAdStartPlay:(KSFullscreenVideoAd *)fullscreenVideoAd {
-    
+    if ([self.delegate respondsToSelector:@selector(fullscreenVideoDidStartPlayingForSpotId:extra:)]) {
+        [self.delegate fullscreenVideoDidStartPlayingForSpotId:self.adspot.adspotid extra:self.adspot.ext];
+    }
 }
 /**
  This method is called when the user clicked skip button.
  */
 - (void)fullscreenVideoAdDidClickSkip:(KSFullscreenVideoAd *)fullscreenVideoAd {
-    if ([self.delegate respondsToSelector:@selector(advanceFullScreenVideodDidClickSkip)]) {
-        [self.delegate advanceFullScreenVideodDidClickSkip];
+    if ([self.delegate respondsToSelector:@selector(fullscreenVideoDidClickSkipForSpotId:extra:)]) {
+        [self.delegate fullscreenVideoDidClickSkipForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
 }
 

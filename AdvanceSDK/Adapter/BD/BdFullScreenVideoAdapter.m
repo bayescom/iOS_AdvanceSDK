@@ -49,13 +49,13 @@
 
 - (void)supplierStateSuccess {
     ADV_LEVEL_INFO_LOG(@"百度 成功");
-    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
-        [self.delegate advanceUnifiedViewDidLoad];
+    if ([self.delegate respondsToSelector:@selector(didFinishLoadingFullscreenVideoADWithSpotId:)]) {
+        [self.delegate didFinishLoadingFullscreenVideoADWithSpotId:self.adspot.adspotid];
     }
     
     if (_isCached) {
-        if ([self.delegate respondsToSelector:@selector(advanceFullScreenVideoOnAdVideoCached)]) {
-            [self.delegate advanceFullScreenVideoOnAdVideoCached];
+        if ([self.delegate respondsToSelector:@selector(fullscreenVideoDidDownLoadForSpotId:extra:)]) {
+            [self.delegate fullscreenVideoDidDownLoadForSpotId:self.adspot.adspotid extra:self.adspot.ext];
         }
     }
 
@@ -97,8 +97,8 @@
         _supplier.state = AdvanceSdkSupplierStateSuccess;
         return;
     }
-    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
-        [self.delegate advanceUnifiedViewDidLoad];
+    if ([self.delegate respondsToSelector:@selector(didFinishLoadingFullscreenVideoADWithSpotId:)]) {
+        [self.delegate didFinishLoadingFullscreenVideoADWithSpotId:self.adspot.adspotid];
     }
 
 
@@ -110,8 +110,8 @@
         _isCached = YES;
         return;
     }
-    if ([self.delegate respondsToSelector:@selector(advanceFullScreenVideoOnAdVideoCached)]) {
-        [self.delegate advanceFullScreenVideoOnAdVideoCached];
+    if ([self.delegate respondsToSelector:@selector(fullscreenVideoDidDownLoadForSpotId:extra:)]) {
+        [self.delegate fullscreenVideoDidDownLoadForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
 }
 
@@ -136,39 +136,39 @@
 - (void)fullScreenVideoAdDidStarted:(BaiduMobAdExpressFullScreenVideo *)video {
 //    NSLog(@"全屏视频开始播放");
     [self.adspot reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
-    if ([self.delegate respondsToSelector:@selector(advanceExposured)]) {
-        [self.delegate advanceExposured];
+    if ([self.delegate respondsToSelector:@selector(fullscreenVideoDidStartPlayingForSpotId:extra:)]) {
+        [self.delegate fullscreenVideoDidStartPlayingForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
 }
 
 - (void)fullScreenVideoAdDidPlayFinish:(BaiduMobAdExpressFullScreenVideo *)video {
     
 //    NSLog(@"全屏视频完成播放");
-    if ([self.delegate respondsToSelector:@selector(advanceFullScreenVideoOnAdPlayFinish)]) {
-        [self.delegate advanceFullScreenVideoOnAdPlayFinish];
+    if ([self.delegate respondsToSelector:@selector(fullscreenVideoDidEndPlayingForSpotId:extra:)]) {
+        [self.delegate fullscreenVideoDidEndPlayingForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
 }
 
 - (void)fullScreenVideoAdDidClick:(BaiduMobAdExpressFullScreenVideo *)video withPlayingProgress:(CGFloat)progress {
 //    NSLog(@"全屏视频被点击，progress:%f", progress);
     [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
-    if ([self.delegate respondsToSelector:@selector(advanceClicked)]) {
-        [self.delegate advanceClicked];
+    if ([self.delegate respondsToSelector:@selector(fullscreenVideoDidClickForSpotId:extra:)]) {
+        [self.delegate fullscreenVideoDidClickForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
 }
 
 
 - (void)fullScreenVideoAdDidClose:(BaiduMobAdExpressFullScreenVideo *)video withPlayingProgress:(CGFloat)progress {
 //    NSLog(@"全屏视频点击关闭，progress:%f", progress);
-    if ([self.delegate respondsToSelector:@selector(advanceDidClose)]) {
-        [self.delegate advanceDidClose];
+    if ([self.delegate respondsToSelector:@selector(fullscreenVideoDidCloseForSpotId:extra:)]) {
+        [self.delegate fullscreenVideoDidCloseForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
 }
 
 - (void)fullScreenVideoAdDidSkip:(BaiduMobAdExpressFullScreenVideo *)video withPlayingProgress:(CGFloat)progress{
 //    NSLog(@"全屏视频点击跳过，progress:%f", progress);
-    if ([self.delegate respondsToSelector:@selector(advanceFullScreenVideodDidClickSkip)]) {
-        [self.delegate advanceFullScreenVideodDidClickSkip];
+    if ([self.delegate respondsToSelector:@selector(fullscreenVideoDidClickSkipForSpotId:extra:)]) {
+        [self.delegate fullscreenVideoDidClickSkipForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
 
 }
