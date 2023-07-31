@@ -20,8 +20,8 @@
 /// @param error 聚合SDK的错误信息
 /// @param description 每个渠道的错误描述，部分情况下为nil； key的命名规则: 渠道名-优先级
 - (void)didFailLoadingADPolicyWithSpotId:(NSString *)spotId
-                                 error:(NSError *)error
-                           description:(NSDictionary *)description;
+                                   error:(NSError *)error
+                             description:(NSDictionary *)description;
 
 /// Ad start loading
 /// @param spotId 广告位id
@@ -31,7 +31,7 @@
 
 /// Ad start bidding
 - (void)didStartBiddingADWithSpotId:(NSString *)spotId;
-                              
+
 /// Ad bidding success
 - (void)didFinishBiddingADWithSpotId:(NSString *)spotId
                                price:(NSInteger)price;

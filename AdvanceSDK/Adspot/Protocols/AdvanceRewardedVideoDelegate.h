@@ -19,7 +19,7 @@
 
 /// Rewarded video ad local cached
 - (void)rewardedVideoDidDownLoadForSpotId:(NSString *)spotId
-                                        extra:(NSDictionary *)extra;
+                                    extra:(NSDictionary *)extra;
 
 /// Rewarded video ad play starts
 - (void)rewardedVideoDidStartPlayingForSpotId:(NSString *)spotId

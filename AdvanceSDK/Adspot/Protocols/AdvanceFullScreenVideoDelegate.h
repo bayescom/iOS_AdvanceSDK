@@ -19,27 +19,27 @@
 
 /// Fullscreen video ad local cached
 - (void)fullscreenVideoDidDownLoadForSpotId:(NSString *)spotId
-                                        extra:(NSDictionary *)extra;
+                                      extra:(NSDictionary *)extra;
 
 /// Fullscreen video ad play starts
 - (void)fullscreenVideoDidStartPlayingForSpotId:(NSString *)spotId
-                                        extra:(NSDictionary *)extra;
+                                          extra:(NSDictionary *)extra;
 
 /// Fullscreen video ad play ends
 - (void)fullscreenVideoDidEndPlayingForSpotId:(NSString *)spotId
-                                      extra:(NSDictionary *)extra;
+                                        extra:(NSDictionary *)extra;
 
 /// Fullscreen video ad clicked
 - (void)fullscreenVideoDidClickForSpotId:(NSString *)spotId
-                                 extra:(NSDictionary *)extra;
+                                   extra:(NSDictionary *)extra;
 
 /// Fullscreen video ad closed
 - (void)fullscreenVideoDidCloseForSpotId:(NSString *)spotId
-                                 extra:(NSDictionary *)extra;
+                                   extra:(NSDictionary *)extra;
 
 /// Fullscreen video ad skiped
 - (void)fullscreenVideoDidClickSkipForSpotId:(NSString *)spotId
-                                 extra:(NSDictionary *)extra;
+                                       extra:(NSDictionary *)extra;
 
 
 @end

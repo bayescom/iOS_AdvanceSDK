@@ -17,7 +17,7 @@
 @property (strong, nonatomic) UITableView *tableView;
 
 @property(strong,nonatomic) AdvanceNativeExpress *advanceFeed;
-@property (nonatomic, strong) NSMutableArray *dataArrM;
+@property (nonatomic, strong) NSMutableArray *arrayData;
 @property (nonatomic, strong) NSMutableArray *arrNativeAds;
 
 @end
@@ -42,7 +42,7 @@
 }
 
 - (void)loadBtnAction:(id)sender {
-    _dataArrM = [NSMutableArray arrayWithArray:[CellBuilder dataFromJsonFile:@"cell01"]];
+    _arrayData = [NSMutableArray arrayWithArray:[CellBuilder dataFromJsonFile:@"cell01"]];
 //    _advanceFeed = [[AdvanceNativeExpress alloc] initWithAdspotId:@"11111112" viewController:self adSize:CGSizeMake(self.view.bounds.size.width, 300)];
 //    _advanceFeed = [[AdvanceNativeExpress alloc] initWithAdspotId:self.adspotId viewController:self adSize:CGSizeMake(self.view.bounds.size.width, 300)];
     if (self.advanceFeed) {
@@ -79,7 +79,7 @@
         AdvanceNativeExpressAd *nativeAd = self.arrNativeAds[i];
 //        view.isStopMotion = YES;
         [nativeAd render];
-        [_dataArrM insertObject:nativeAd atIndex:1];
+        [_arrayData insertObject:nativeAd atIndex:1];
     }
     [self.tableView reloadData];
 }
@@ -101,7 +101,7 @@
 /// 该回调会触发多次
 - (void)nativeExpressAdViewRenderFail:(AdvanceNativeExpressAd *)nativeAd spotId:(NSString *)spotId extra:(NSDictionary *)extra {
     NSLog(@"广告渲染失败 %s %@", __func__, nativeAd);
-    [_dataArrM removeObject: nativeAd];
+    [_arrayData removeObject: nativeAd];
     [self.tableView reloadData];
 }
 
@@ -120,7 +120,7 @@
 -(void)didCloseNativeExpressAd:(AdvanceNativeExpressAd *)nativeAd spotId:(NSString *)spotId extra:(NSDictionary *)extra {
     //需要从tableview中删除
     NSLog(@"广告关闭 %s", __func__);
-    [_dataArrM removeObject: nativeAd];
+    [_arrayData removeObject: nativeAd];
     [self.tableView reloadData];
     self.advanceFeed = nil;
 }
@@ -128,17 +128,16 @@
 // MARK: ======================= UITableViewDelegate, UITableViewDataSource =======================
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-//    return _expressAdViews.count*2;
-//    return 2;
-    return _dataArrM.count;
+
+    return _arrayData.count;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if ([_dataArrM[indexPath.row] isKindOfClass:[BYExamCellModelElement class]]) {
-        return ((BYExamCellModelElement *)_dataArrM[indexPath.row]).cellh;
+    if ([_arrayData[indexPath.row] isKindOfClass:[BYExamCellModelElement class]]) {
+        return ((BYExamCellModelElement *)_arrayData[indexPath.row]).cellh;
     } else {
         
-        AdvanceNativeExpressAd *nativeAd = _dataArrM[indexPath.row];
+        AdvanceNativeExpressAd *nativeAd = _arrayData[indexPath.row];
         
         
         UIView *view = [nativeAd expressView];
@@ -153,9 +152,9 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell;
-    if ([_dataArrM[indexPath.row] isKindOfClass:[BYExamCellModelElement class]]) {
+    if ([_arrayData[indexPath.row] isKindOfClass:[BYExamCellModelElement class]]) {
         cell = [tableView dequeueReusableCellWithIdentifier:@"ExamTableViewCell"];
-        ((ExamTableViewCell *)cell).item = _dataArrM[indexPath.row];
+        ((ExamTableViewCell *)cell).item = _arrayData[indexPath.row];
         return cell;
     } else {
         cell = [self.tableView dequeueReusableCellWithIdentifier:@"nativeexpresscell" forIndexPath:indexPath];
@@ -165,7 +164,7 @@
         if ([subView superview]) {
             [subView removeFromSuperview];
         }
-        AdvanceNativeExpressAd *nativeAd = _dataArrM[indexPath.row];
+        AdvanceNativeExpressAd *nativeAd = _arrayData[indexPath.row];
         
         
         UIView *view = [nativeAd expressView];
