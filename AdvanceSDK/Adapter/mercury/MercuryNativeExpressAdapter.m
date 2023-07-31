@@ -14,12 +14,12 @@
 #endif
 #import "AdvanceNativeExpress.h"
 #import "AdvLog.h"
-#import "AdvanceNativeExpressView.h"
+#import "AdvanceNativeExpressAd.h"
 @interface MercuryNativeExpressAdapter () <MercuryNativeExpressAdDelegete>
 @property (nonatomic, strong) MercuryNativeExpressAd *mercury_ad;
 @property (nonatomic, weak) AdvanceNativeExpress *adspot;
 @property (nonatomic, strong) AdvSupplier *supplier;
-@property (nonatomic, strong) NSArray<AdvanceNativeExpressView *> * views;
+@property (nonatomic, strong) NSArray<AdvanceNativeExpressAd *> * nativeAds;
 
 @end
 
@@ -45,7 +45,7 @@
     if (_supplier.state == AdvanceSdkSupplierStateSuccess) {// 并行请求保存的状态 再次轮到该渠道加载的时候 直接show
         ADV_LEVEL_INFO_LOG(@"MercurySDK 成功");
         if ([self.delegate respondsToSelector:@selector(advanceNativeExpressOnAdLoadSuccess:)]) {
-            [self.delegate advanceNativeExpressOnAdLoadSuccess:self.views];
+            [self.delegate advanceNativeExpressOnAdLoadSuccess:self.nativeAds];
         }
 //        [self showAd];
     } else if (_supplier.state == AdvanceSdkSupplierStateFailed) { //失败的话直接对外抛出回调
@@ -102,7 +102,7 @@
         for (MercuryNativeExpressAdView *view in views) {
             if ([view isKindOfClass:NSClassFromString(@"MercuryNativeExpressAdView")]) {
                 
-                AdvanceNativeExpressView *TT = [[AdvanceNativeExpressView alloc] initWithViewController:_adspot.viewController];
+                AdvanceNativeExpressAd *TT = [[AdvanceNativeExpressAd alloc] initWithViewController:_adspot.viewController];
                 TT.expressView = view;
                 TT.identifier = _supplier.identifier;
                 TT.price = (view.price == 0) ?  _supplier.supplierPrice : view.price;
@@ -110,7 +110,7 @@
             }
         }
         
-        self.views = temp;
+        self.nativeAds = temp;
         _supplier.state = AdvanceSdkSupplierStateSuccess;
         if (_supplier.isParallel == YES) {
 //            NSLog(@"修改状态: %@", _supplier);
@@ -118,7 +118,7 @@
         }
 
         if ([self.delegate respondsToSelector:@selector(advanceNativeExpressOnAdLoadSuccess:)]) {
-            [self.delegate advanceNativeExpressOnAdLoadSuccess:self.views];
+            [self.delegate advanceNativeExpressOnAdLoadSuccess:self.nativeAds];
         }
     }
 }
@@ -139,10 +139,10 @@
 /// 原生模板广告渲染成功, 此时的 nativeExpressAdView.size.height 根据 size.width 完成了动态更新。
 - (void)mercury_nativeExpressAdViewRenderSuccess:(MercuryNativeExpressAdView *)nativeExpressAdView {
     
-    AdvanceNativeExpressView *expressView = [self returnExpressViewWithAdView:(UIView *)nativeExpressAdView];
-    if (expressView) {
+    AdvanceNativeExpressAd *nativeAd = [self returnExpressViewWithAdView:(UIView *)nativeExpressAdView];
+    if (nativeAd) {
         if ([self.delegate respondsToSelector:@selector(advanceNativeExpressOnAdRenderSuccess:)]) {
-            [self.delegate advanceNativeExpressOnAdRenderSuccess:expressView];
+            [self.delegate advanceNativeExpressOnAdRenderSuccess:nativeAd];
         }
     }
 
@@ -151,11 +151,11 @@
 /// 原生模板广告渲染失败
 - (void)mercury_nativeExpressAdViewRenderFail:(MercuryNativeExpressAdView *)nativeExpressAdView {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:[NSError errorWithDomain:@"广告素材渲染失败" code:301 userInfo:@{@"msg": @"广告素材渲染失败"}]];
-    AdvanceNativeExpressView *expressView = [self returnExpressViewWithAdView:(UIView *)nativeExpressAdView];
+    AdvanceNativeExpressAd *nativeAd = [self returnExpressViewWithAdView:(UIView *)nativeExpressAdView];
 
-    if (expressView) {
+    if (nativeAd) {
         if ([self.delegate respondsToSelector:@selector(advanceNativeExpressOnAdRenderFail:)]) {
-            [self.delegate advanceNativeExpressOnAdRenderFail:expressView];
+            [self.delegate advanceNativeExpressOnAdRenderFail:nativeAd];
         }
     }
 }
@@ -164,11 +164,11 @@
 - (void)mercury_nativeExpressAdViewExposure:(MercuryNativeExpressAdView *)nativeExpressAdView {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
     
-    AdvanceNativeExpressView *expressView = [self returnExpressViewWithAdView:(UIView *)nativeExpressAdView];
+    AdvanceNativeExpressAd *nativeAd = [self returnExpressViewWithAdView:(UIView *)nativeExpressAdView];
 
-    if (expressView) {
+    if (nativeAd) {
         if ([self.delegate respondsToSelector:@selector(advanceNativeExpressOnAdShow:)]) {
-            [self.delegate advanceNativeExpressOnAdShow:expressView];
+            [self.delegate advanceNativeExpressOnAdShow:nativeAd];
         }
     }
 }
@@ -177,28 +177,28 @@
 - (void)mercury_nativeExpressAdViewClicked:(MercuryNativeExpressAdView *)nativeExpressAdView {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
     
-    AdvanceNativeExpressView *expressView = [self returnExpressViewWithAdView:(UIView *)nativeExpressAdView];
+    AdvanceNativeExpressAd *nativeAd = [self returnExpressViewWithAdView:(UIView *)nativeExpressAdView];
 
-    if (expressView) {
+    if (nativeAd) {
         if ([self.delegate respondsToSelector:@selector(advanceNativeExpressOnAdClicked:)]) {
-            [self.delegate advanceNativeExpressOnAdClicked:expressView];
+            [self.delegate advanceNativeExpressOnAdClicked:nativeAd];
         }
     }
 }
 
 /// 原生模板广告被关闭
 - (void)mercury_nativeExpressAdViewClosed:(MercuryNativeExpressAdView *)nativeExpressAdView {
-    AdvanceNativeExpressView *expressView = [self returnExpressViewWithAdView:(UIView *)nativeExpressAdView];
-    if (expressView) {
+    AdvanceNativeExpressAd *nativeAd = [self returnExpressViewWithAdView:(UIView *)nativeExpressAdView];
+    if (nativeAd) {
         if ([self.delegate respondsToSelector:@selector(advanceNativeExpressOnAdClosed:)]) {
-            [self.delegate advanceNativeExpressOnAdClosed:expressView];
+            [self.delegate advanceNativeExpressOnAdClosed:nativeAd];
         }
     }
 }
 
-- (AdvanceNativeExpressView *)returnExpressViewWithAdView:(UIView *)adView {
-    for (NSInteger i = 0; i < self.views.count; i++) {
-        AdvanceNativeExpressView *temp = self.views[i];
+- (AdvanceNativeExpressAd *)returnExpressViewWithAdView:(UIView *)adView {
+    for (NSInteger i = 0; i < self.nativeAds.count; i++) {
+        AdvanceNativeExpressAd *temp = self.nativeAds[i];
         if (temp.expressView == adView) {
             return temp;
         }

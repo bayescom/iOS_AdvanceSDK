@@ -1,19 +1,19 @@
 //
-//  AdvanceNativeExpressView.m
+//  AdvanceNativeExpressAd.m
 //  AdvanceSDK
 //
 //  Created by MS on 2021/8/4.
 //
 
-#import "AdvanceNativeExpressView.h"
+#import "AdvanceNativeExpressAd.h"
 #import <objc/runtime.h>
 #import <objc/message.h>
 
-@interface AdvanceNativeExpressView ()
+@interface AdvanceNativeExpressAd ()
 @property (nonatomic, weak) UIViewController *controller;
 @end
 
-@implementation AdvanceNativeExpressView
+@implementation AdvanceNativeExpressAd
 - (instancetype)initWithViewController:(UIViewController *)controller {
     self = [super init];
     if (self) {

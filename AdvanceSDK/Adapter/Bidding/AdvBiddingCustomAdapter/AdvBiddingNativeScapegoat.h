@@ -11,7 +11,7 @@
 
 
 #import <AdvanceSDK/AdvanceNativeExpress.h>
-#import <AdvanceSDK/AdvanceNativeExpressView.h>
+#import <AdvanceSDK/AdvanceNativeExpressAd.h>
 
 
 

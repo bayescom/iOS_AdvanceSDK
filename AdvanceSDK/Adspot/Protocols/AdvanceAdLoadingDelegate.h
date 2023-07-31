@@ -11,6 +11,7 @@
 @protocol AdvanceAdLoadingDelegate <NSObject>
 
 @optional
+
 /// 广告策略服务加载成功
 - (void)didFinishLoadingADPolicyWithSpotId:(NSString *)spotId;
 

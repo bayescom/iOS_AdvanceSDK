@@ -14,12 +14,12 @@
 #endif
 #import "AdvanceNativeExpress.h"
 #import "AdvLog.h"
-#import "AdvanceNativeExpressView.h"
+#import "AdvanceNativeExpressAd.h"
 @interface CsjNativeExpressAdapter () <BUNativeExpressAdViewDelegate>
 @property (nonatomic, strong) BUNativeExpressAdManager *csj_ad;
 @property (nonatomic, weak) AdvanceNativeExpress *adspot;
 @property (nonatomic, strong) AdvSupplier *supplier;
-@property (nonatomic, strong) NSArray <__kindof AdvanceNativeExpressView *> * views;
+@property (nonatomic, strong) NSArray <__kindof AdvanceNativeExpressAd *> * nativeAds;
 
 @end
 
@@ -55,7 +55,7 @@
 - (void)supplierStateSuccess {
     ADV_LEVEL_INFO_LOG(@"穿山甲 成功");
     if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdLoadSuccess:)]) {
-        [_delegate advanceNativeExpressOnAdLoadSuccess:self.views];
+        [_delegate advanceNativeExpressOnAdLoadSuccess:self.nativeAds];
     }
 }
 
@@ -103,7 +103,7 @@
         for (BUNativeExpressAdView *view in views) {
 //            view.rootViewController = _adspot.viewController;
             
-            AdvanceNativeExpressView *TT = [[AdvanceNativeExpressView alloc] initWithViewController:_adspot.viewController];
+            AdvanceNativeExpressAd *TT = [[AdvanceNativeExpressAd alloc] initWithViewController:_adspot.viewController];
             TT.expressView = view;
             TT.identifier = _supplier.identifier;
             TT.price = _supplier.sdk_price;
@@ -111,14 +111,14 @@
 
         }
         
-        self.views = temp;
+        self.nativeAds = temp;
         if (_supplier.isParallel == YES) {
             _supplier.state = AdvanceSdkSupplierStateSuccess;
             return;
         }
 
         if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdLoadSuccess:)]) {
-            [_delegate advanceNativeExpressOnAdLoadSuccess:self.views];
+            [_delegate advanceNativeExpressOnAdLoadSuccess:self.nativeAds];
         }
     }
 }
@@ -138,22 +138,22 @@
 
 - (void)nativeExpressAdViewRenderSuccess:(BUNativeExpressAdView *)nativeExpressAdView {
     
-    AdvanceNativeExpressView *expressView = [self returnExpressViewWithAdView:(UIView *)nativeExpressAdView];
+    AdvanceNativeExpressAd *nativeAd = [self returnExpressViewWithAdView:(UIView *)nativeExpressAdView];
 
-    if (expressView) {
+    if (nativeAd) {
         if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdRenderSuccess:)]) {
-            [_delegate advanceNativeExpressOnAdRenderSuccess:expressView];
+            [_delegate advanceNativeExpressOnAdRenderSuccess:nativeAd];
         }
     }
 }
 
 - (void)nativeExpressAdViewRenderFail:(BUNativeExpressAdView *)nativeExpressAdView error:(NSError *)error {
 //    [_adspot reportWithType:AdvanceSdkSupplierRepoFaileded error:error];
-    AdvanceNativeExpressView *expressView = [self returnExpressViewWithAdView:(UIView *)nativeExpressAdView];
+    AdvanceNativeExpressAd *nativeAd = [self returnExpressViewWithAdView:(UIView *)nativeExpressAdView];
 
-    if (expressView) {
+    if (nativeAd) {
         if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdRenderFail:)]) {
-            [_delegate advanceNativeExpressOnAdRenderFail:expressView];
+            [_delegate advanceNativeExpressOnAdRenderFail:nativeAd];
         }
     }
 //    _csj_ad = nil;
@@ -162,11 +162,11 @@
 - (void)nativeExpressAdViewWillShow:(BUNativeExpressAdView *)nativeExpressAdView {
     [_adspot reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
     
-    AdvanceNativeExpressView *expressView = [self returnExpressViewWithAdView:(UIView *)nativeExpressAdView];
+    AdvanceNativeExpressAd *nativeAd = [self returnExpressViewWithAdView:(UIView *)nativeExpressAdView];
 
-    if (expressView) {
+    if (nativeAd) {
         if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdShow:)]) {
-            [_delegate advanceNativeExpressOnAdShow:expressView];
+            [_delegate advanceNativeExpressOnAdShow:nativeAd];
         }
     }
 }
@@ -174,11 +174,11 @@
 - (void)nativeExpressAdViewDidClick:(BUNativeExpressAdView *)nativeExpressAdView {
     [_adspot reportWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
     
-    AdvanceNativeExpressView *expressView = [self returnExpressViewWithAdView:(UIView *)nativeExpressAdView];
+    AdvanceNativeExpressAd *nativeAd = [self returnExpressViewWithAdView:(UIView *)nativeExpressAdView];
 
-    if (expressView) {
+    if (nativeAd) {
         if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdClicked:)]) {
-            [_delegate advanceNativeExpressOnAdClicked:expressView];
+            [_delegate advanceNativeExpressOnAdClicked:nativeAd];
         }
     }
 }
@@ -193,7 +193,7 @@
 
 - (void)nativeExpressAdView:(BUNativeExpressAdView *)nativeExpressAdView dislikeWithReason:(NSArray<BUDislikeWords *> *)filterWords {
     
-    AdvanceNativeExpressView *expressView = [self returnExpressViewWithAdView:(UIView *)nativeExpressAdView];
+    AdvanceNativeExpressAd *expressView = [self returnExpressViewWithAdView:(UIView *)nativeExpressAdView];
 
     if (expressView) {
         if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdClosed:)]) {
@@ -206,9 +206,9 @@
 }
 
 
-- (AdvanceNativeExpressView *)returnExpressViewWithAdView:(UIView *)adView {
-    for (NSInteger i = 0; i < self.views.count; i++) {
-        AdvanceNativeExpressView *temp = self.views[i];
+- (AdvanceNativeExpressAd *)returnExpressViewWithAdView:(UIView *)adView {
+    for (NSInteger i = 0; i < self.nativeAds.count; i++) {
+        AdvanceNativeExpressAd *temp = self.nativeAds[i];
         if (temp.expressView == adView) {
             return temp;
         }

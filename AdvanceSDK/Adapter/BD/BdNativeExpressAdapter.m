@@ -18,12 +18,12 @@
 
 #import "AdvanceNativeExpress.h"
 #import "AdvLog.h"
-#import "AdvanceNativeExpressView.h"
+#import "AdvanceNativeExpressAd.h"
 @interface BdNativeExpressAdapter ()<BaiduMobAdNativeAdDelegate, BaiduMobAdNativeInterationDelegate>
 @property (nonatomic, strong) BaiduMobAdNative *bd_ad;
 @property (nonatomic, weak) AdvanceNativeExpress *adspot;
 @property (nonatomic, strong) AdvSupplier *supplier;
-@property (nonatomic, strong) NSMutableArray<__kindof AdvanceNativeExpressView *> *views;
+@property (nonatomic, strong) NSMutableArray<__kindof AdvanceNativeExpressAd *> *nativeAds;
 
 @end
 
@@ -55,7 +55,7 @@
 - (void)supplierStateSuccess {
     ADV_LEVEL_INFO_LOG(@"百度 成功");
     if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdLoadSuccess:)]) {
-        [_delegate advanceNativeExpressOnAdLoadSuccess:self.views];
+        [_delegate advanceNativeExpressOnAdLoadSuccess:self.nativeAds];
     }
 }
 
@@ -115,14 +115,14 @@
         [view reSize];
 
         // advanceView
-        AdvanceNativeExpressView *TT = [[AdvanceNativeExpressView alloc] initWithViewController:_adspot.viewController];
+        AdvanceNativeExpressAd *TT = [[AdvanceNativeExpressAd alloc] initWithViewController:_adspot.viewController];
         TT.expressView = view;
         TT.identifier = _supplier.identifier;
         TT.price = ([[object getECPMLevel] integerValue] == 0) ?  _supplier.supplierPrice : [[object getECPMLevel] integerValue];
 
         [temp addObject:TT];
 
-        self.views = temp;
+        self.nativeAds = temp;
         if (_supplier.isParallel == YES) {
 //            NSLog(@"修改状态: %@", _supplier);
             _supplier.state = AdvanceSdkSupplierStateSuccess;
@@ -131,7 +131,7 @@
 
         
         if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdLoadSuccess:)]) {
-            [_delegate advanceNativeExpressOnAdLoadSuccess:self.views];
+            [_delegate advanceNativeExpressOnAdLoadSuccess:self.nativeAds];
         }
     }
 
@@ -153,7 +153,7 @@
 // 负反馈点击选项回调
 - (void)nativeAdDislikeClick:(UIView *)adView reason:(BaiduMobAdDislikeReasonType)reason; {
 //    NSLog(@"智能优选负反馈点击：%@", object);
-    AdvanceNativeExpressView *temp = [self returnExpressViewWithAdView:adView];
+    AdvanceNativeExpressAd *temp = [self returnExpressViewWithAdView:adView];
     if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdClosed:)]) {
         [_delegate advanceNativeExpressOnAdClosed:temp];
     }
@@ -166,11 +166,11 @@
 //    NSLog(@"信息流被点击:%@ - %@", nativeAdView, object);
     [_adspot reportWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
     
-    AdvanceNativeExpressView *expressView = [self returnExpressViewWithAdView:nativeAdView];
+    AdvanceNativeExpressAd *nativeAd = [self returnExpressViewWithAdView:nativeAdView];
 
-    if (expressView) {
+    if (nativeAd) {
         if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdClicked:)]) {
-            [_delegate advanceNativeExpressOnAdClicked:expressView];
+            [_delegate advanceNativeExpressOnAdClicked:nativeAd];
         }
     }
 }
@@ -187,16 +187,16 @@
 //广告曝光成功
 - (void)nativeAdExposure:(UIView *)nativeAdView nativeAdDataObject:(BaiduMobAdNativeAdObject *)object {
 //    NSLog(@"信息流广告曝光成功:%@ - %@", nativeAdView, object);
-    AdvanceNativeExpressView *expressView = [self returnExpressViewWithAdView:nativeAdView];
+    AdvanceNativeExpressAd *nativeAd = [self returnExpressViewWithAdView:nativeAdView];
 
-    if (expressView) {
+    if (nativeAd) {
         if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdRenderSuccess:)]) {
-            [_delegate advanceNativeExpressOnAdRenderSuccess:expressView];
+            [_delegate advanceNativeExpressOnAdRenderSuccess:nativeAd];
         }
         
         [_adspot reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
         if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdShow:)]) {
-            [_delegate advanceNativeExpressOnAdShow:expressView];
+            [_delegate advanceNativeExpressOnAdShow:nativeAd];
         }
 
     }
@@ -208,13 +208,13 @@
 //    NSLog(@"信息流广告曝光失败:%@ - %@，reason：%d", nativeAdView, object, reason);
 //    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:nil];
     
-    AdvanceNativeExpressView *expressView = [self returnExpressViewWithAdView:nativeAdView];
+    AdvanceNativeExpressAd *nativeAd = [self returnExpressViewWithAdView:nativeAdView];
 
-    if (expressView) {
+    if (nativeAd) {
         if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdRenderFail:)]) {
-            [_delegate advanceNativeExpressOnAdRenderFail:expressView];
+            [_delegate advanceNativeExpressOnAdRenderFail:nativeAd];
         }
-        [self.views removeObject:expressView];
+        [self.nativeAds removeObject:nativeAd];
     }
 
 }
@@ -234,9 +234,9 @@
     }
 }
 
-- (AdvanceNativeExpressView *)returnExpressViewWithAdView:(UIView *)adView {
-    for (NSInteger i = 0; i < self.views.count; i++) {
-        AdvanceNativeExpressView *temp = self.views[i];
+- (AdvanceNativeExpressAd *)returnExpressViewWithAdView:(UIView *)adView {
+    for (NSInteger i = 0; i < self.nativeAds.count; i++) {
+        AdvanceNativeExpressAd *temp = self.nativeAds[i];
         if (temp.expressView == adView) {
             return temp;
         }

@@ -15,12 +15,12 @@
 
 #import "AdvanceNativeExpress.h"
 #import "AdvLog.h"
-#import "AdvanceNativeExpressView.h"
+#import "AdvanceNativeExpressAd.h"
 @interface KsNativeExpressAdapter ()<KSFeedAdsManagerDelegate, KSFeedAdDelegate>
 @property (nonatomic, strong) KSFeedAdsManager *ks_ad;
 @property (nonatomic, weak) AdvanceNativeExpress *adspot;
 @property (nonatomic, strong) AdvSupplier *supplier;
-@property (nonatomic, strong) NSArray<AdvanceNativeExpressView *> * views;
+@property (nonatomic, strong) NSArray<AdvanceNativeExpressAd *> * nativeAds;
 
 @end
 
@@ -50,7 +50,7 @@
 - (void)supplierStateSuccess {
     ADV_LEVEL_INFO_LOG(@"快手 成功");
     if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdLoadSuccess:)]) {
-        [_delegate advanceNativeExpressOnAdLoadSuccess:self.views];
+        [_delegate advanceNativeExpressOnAdLoadSuccess:self.nativeAds];
     }
 }
 
@@ -101,21 +101,21 @@
             ad.delegate = self;
             ad.videoSoundEnable = !_adspot.muted;
 //            [ad setVideoSoundEnable:YES];
-            AdvanceNativeExpressView *TT = [[AdvanceNativeExpressView alloc] initWithViewController:_adspot.viewController];
+            AdvanceNativeExpressAd *TT = [[AdvanceNativeExpressAd alloc] initWithViewController:_adspot.viewController];
             TT.expressView = ad.feedView;
             TT.identifier = _supplier.identifier;
             TT.price = (ad.ecpm == 0) ?  _supplier.supplierPrice : ad.ecpm;
             [temp addObject:TT];
 
         }
-        self.views = temp;
+        self.nativeAds = temp;
         _supplier.state = AdvanceSdkSupplierStateSuccess;
         if (_supplier.isParallel == YES) {
             return;
         }
 
         if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdLoadSuccess:)]) {
-            [_delegate advanceNativeExpressOnAdLoadSuccess:self.views];
+            [_delegate advanceNativeExpressOnAdLoadSuccess:self.nativeAds];
         }
     }
 
@@ -132,10 +132,10 @@
 
 - (void)feedAdViewWillShow:(KSFeedAd *)feedAd {
     [_adspot reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
-    AdvanceNativeExpressView *expressView = [self returnExpressViewWithAdView:(UIView *)feedAd.feedView];
-    if (expressView) {
+    AdvanceNativeExpressAd *nativeAd = [self returnExpressViewWithAdView:(UIView *)feedAd.feedView];
+    if (nativeAd) {
         if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdShow:)]) {
-            [_delegate advanceNativeExpressOnAdShow:expressView];
+            [_delegate advanceNativeExpressOnAdShow:nativeAd];
         }
     }
 
@@ -144,20 +144,20 @@
 
 - (void)feedAdDidClick:(KSFeedAd *)feedAd {
     [_adspot reportWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
-    AdvanceNativeExpressView *expressView = [self returnExpressViewWithAdView:(UIView *)feedAd.feedView];
+    AdvanceNativeExpressAd *nativeAd = [self returnExpressViewWithAdView:(UIView *)feedAd.feedView];
 
-    if (expressView) {
+    if (nativeAd) {
         if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdClicked:)]) {
-            [_delegate advanceNativeExpressOnAdClicked:expressView];
+            [_delegate advanceNativeExpressOnAdClicked:nativeAd];
         }
     }
 }
 
 - (void)feedAdDislike:(KSFeedAd *)feedAd {
-    AdvanceNativeExpressView *expressView = [self returnExpressViewWithAdView:(UIView *)feedAd.feedView];
-    if (expressView) {
+    AdvanceNativeExpressAd *nativeAd = [self returnExpressViewWithAdView:(UIView *)feedAd.feedView];
+    if (nativeAd) {
         if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdClosed:)]) {
-            [_delegate advanceNativeExpressOnAdClosed:expressView];
+            [_delegate advanceNativeExpressOnAdClosed:nativeAd];
         }
     }
 }
@@ -170,9 +170,9 @@
     
 }
 
-- (AdvanceNativeExpressView *)returnExpressViewWithAdView:(UIView *)adView {
-    for (NSInteger i = 0; i < self.views.count; i++) {
-        AdvanceNativeExpressView *temp = self.views[i];
+- (AdvanceNativeExpressAd *)returnExpressViewWithAdView:(UIView *)adView {
+    for (NSInteger i = 0; i < self.nativeAds.count; i++) {
+        AdvanceNativeExpressAd *temp = self.nativeAds[i];
         if (temp.expressView == adView) {
             return temp;
         }

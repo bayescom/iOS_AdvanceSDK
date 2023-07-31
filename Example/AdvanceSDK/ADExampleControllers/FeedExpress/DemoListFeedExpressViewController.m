@@ -12,13 +12,13 @@
 
 #import "DemoUtils.h"
 #import <AdvanceSDK/AdvanceNativeExpress.h>
-#import <AdvanceSDK/AdvanceNativeExpressView.h>
+#import <AdvanceSDK/AdvanceNativeExpressAd.h>
 @interface DemoListFeedExpressViewController () <UITableViewDelegate, UITableViewDataSource, AdvanceNativeExpressDelegate>
 @property (strong, nonatomic) UITableView *tableView;
 
 @property(strong,nonatomic) AdvanceNativeExpress *advanceFeed;
 @property (nonatomic, strong) NSMutableArray *dataArrM;
-@property (nonatomic, strong) NSMutableArray *arrViewsM;
+@property (nonatomic, strong) NSMutableArray *arrNativeAds;
 
 @end
 
@@ -57,14 +57,14 @@
 
 // MARK: ======================= AdvanceNativeExpressDelegate =======================
 /// 广告数据拉取成功
-- (void)advanceNativeExpressOnAdLoadSuccess:(NSArray<AdvanceNativeExpressView *> *)views {
+- (void)advanceNativeExpressOnAdLoadSuccess:(NSArray<AdvanceNativeExpressAd *> *)views {
     NSLog(@"广告拉取成功 %s", __func__);
-    self.arrViewsM = [views mutableCopy];
-    for (NSInteger i = 0; i < self.arrViewsM.count; i++) {
-        AdvanceNativeExpressView *view = self.arrViewsM[i];
+    self.arrNativeAds = [views mutableCopy];
+    for (NSInteger i = 0; i < self.arrNativeAds.count; i++) {
+        AdvanceNativeExpressAd *nativeAd = self.arrNativeAds[i];
 //        view.isStopMotion = YES;
-        [view render];
-        [_dataArrM insertObject:self.arrViewsM[i] atIndex:1];
+        [nativeAd render];
+        [_dataArrM insertObject:nativeAd atIndex:1];
     }
     [self.tableView reloadData];
 
@@ -72,12 +72,12 @@
 
 
 /// 广告曝光
-- (void)advanceNativeExpressOnAdShow:(AdvanceNativeExpressView *)adView {
+- (void)advanceNativeExpressOnAdShow:(AdvanceNativeExpressAd *)adView {
     NSLog(@"广告曝光 %s", __func__);
 }
 
 /// 广告点击
-- (void)advanceNativeExpressOnAdClicked:(AdvanceNativeExpressView *)adView {
+- (void)advanceNativeExpressOnAdClicked:(AdvanceNativeExpressAd *)adView {
     NSLog(@"广告点击 %s", __func__);
 }
 
@@ -86,7 +86,7 @@
 /// 广告加载失败 是广点通 穿山甲 mercury 在拉取广告的时候就全部失败了
 /// 该回调的含义是: 比如: 广点通拉取广告成功了并返回了一组view  但是其中某个view的渲染失败了
 /// 该回调会触发多次
-- (void)advanceNativeExpressOnAdRenderSuccess:(AdvanceNativeExpressView *)adView {
+- (void)advanceNativeExpressOnAdRenderSuccess:(AdvanceNativeExpressAd *)adView {
     NSLog(@"广告渲染成功 %s %@", __func__, adView);
     [self.tableView reloadData];
 }
@@ -96,7 +96,7 @@
 /// 广告加载失败 是广点通 穿山甲 mercury 在拉取广告的时候就全部失败了
 /// 该回调的含义是: 比如: 广点通拉取广告成功了并返回了一组view  但是其中某个view的渲染失败了
 /// 该回调会触发多次
-- (void)advanceNativeExpressOnAdRenderFail:(AdvanceNativeExpressView *)adView {
+- (void)advanceNativeExpressOnAdRenderFail:(AdvanceNativeExpressAd *)adView {
     NSLog(@"广告渲染失败 %s %@", __func__, adView);
     [_dataArrM removeObject: adView];
     [self.tableView reloadData];
@@ -120,7 +120,7 @@
 }
 
 /// 广告被关闭
-- (void)advanceNativeExpressOnAdClosed:(AdvanceNativeExpressView *)adView {
+- (void)advanceNativeExpressOnAdClosed:(AdvanceNativeExpressAd *)adView {
     //需要从tableview中删除
     NSLog(@"广告关闭 %s", __func__);
     [_dataArrM removeObject: adView];
@@ -141,12 +141,12 @@
         return ((BYExamCellModelElement *)_dataArrM[indexPath.row]).cellh;
     } else {
         
-        AdvanceNativeExpressView *adView = _dataArrM[indexPath.row];
+        AdvanceNativeExpressAd *nativeAd = _dataArrM[indexPath.row];
         
         
-        UIView *view = [adView expressView];
+        UIView *view = [nativeAd expressView];
         CGFloat height = view.frame.size.height;
-        if ([adView.identifier isEqualToString:SDK_ID_TANX]) {
+        if ([nativeAd.identifier isEqualToString:SDK_ID_TANX]) {
             return height + 10;
         } else {
             return height;
@@ -168,17 +168,17 @@
         if ([subView superview]) {
             [subView removeFromSuperview];
         }
-        AdvanceNativeExpressView *adView = _dataArrM[indexPath.row];
+        AdvanceNativeExpressAd *nativeAd = _dataArrM[indexPath.row];
         
         
-        UIView *view = [adView expressView];
+        UIView *view = [nativeAd expressView];
 
         view.tag = 1000;
         [cell.contentView addSubview:view];
         cell.accessibilityIdentifier = @"nativeTemp_ad";
         
         // 展示广告的cell高度 -tableView:heightForRowAtIndexPath:
-        if ([adView.identifier isEqualToString:SDK_ID_TANX]) { // tanx 的广告不带padding 需要自己调节
+        if ([nativeAd.identifier isEqualToString:SDK_ID_TANX]) { // tanx 的广告不带padding 需要自己调节
             [view mas_remakeConstraints:^(MASConstraintMaker *make) {
                 make.top.equalTo(cell.contentView);
                 make.left.equalTo(@(10));
