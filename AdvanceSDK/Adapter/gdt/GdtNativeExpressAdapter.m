@@ -58,8 +58,8 @@
 
 - (void)supplierStateSuccess {
     ADV_LEVEL_INFO_LOG(@"广点通 成功");
-    if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdLoadSuccess:)]) {
-        [_delegate advanceNativeExpressOnAdLoadSuccess:self.nativeAds];
+    if ([_delegate respondsToSelector:@selector(didFinishLoadingNativeExpressAds:spotId:)]) {
+        [_delegate didFinishLoadingNativeExpressAds:self.nativeAds spotId:self.adspot.adspotid];
     }
 }
 
@@ -130,8 +130,8 @@
         }
 
         
-        if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdLoadSuccess:)]) {
-            [_delegate advanceNativeExpressOnAdLoadSuccess:temp];
+        if ([_delegate respondsToSelector:@selector(didFinishLoadingNativeExpressAds:spotId:)]) {
+            [_delegate didFinishLoadingNativeExpressAds:self.nativeAds spotId:self.adspot.adspotid];
         }
         
     }
@@ -161,13 +161,10 @@
     
     AdvanceNativeExpressAd *nativeAd = [self returnExpressViewWithAdView:(UIView *)nativeExpressAdView];
     if (nativeAd) {
-        if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdRenderFail:)]) {
-            [_delegate advanceNativeExpressOnAdRenderFail:nativeAd];
+        if ([_delegate respondsToSelector:@selector(nativeExpressAdViewRenderFail:spotId:extra:)]) {
+            [_delegate nativeExpressAdViewRenderFail:nativeAd spotId:self.adspot.adspotid extra:self.adspot.ext];
         }
     }
-//    if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdFailedWithSdkId:error:)]) {
-//        [_delegate advanceNativeExpressOnAdFailedWithSdkId:_supplier.identifier error:[NSError errorWithDomain:@"" code:10000 userInfo:@{@"msg": @"渲染原生模板广告失败"}]];
-//    }
     _gdt_ad = nil;
 }
 
@@ -176,8 +173,8 @@
     AdvanceNativeExpressAd *nativeAd = [self returnExpressViewWithAdView:(UIView *)nativeExpressAdView];
 
     if (nativeAd) {
-        if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdRenderSuccess:)]) {
-            [_delegate advanceNativeExpressOnAdRenderSuccess:nativeAd];
+        if ([_delegate respondsToSelector:@selector(nativeExpressAdViewRenderSuccess:spotId:extra:)]) {
+            [_delegate nativeExpressAdViewRenderSuccess:nativeAd spotId:self.adspot.adspotid extra:self.adspot.ext];
         }
     }
     
@@ -188,8 +185,8 @@
     AdvanceNativeExpressAd *nativeAd = [self returnExpressViewWithAdView:(UIView *)nativeExpressAdView];
     
     if (nativeAd) {
-        if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdClicked:)]) {
-            [_delegate advanceNativeExpressOnAdClicked:nativeAd];
+        if ([_delegate respondsToSelector:@selector(didClickNativeExpressAd:spotId:extra:)]) {
+            [_delegate didClickNativeExpressAd:nativeAd spotId:self.adspot.adspotid extra:self.adspot.ext];
         }
     }
 }
@@ -197,8 +194,8 @@
 - (void)nativeExpressAdViewClosed:(GDTNativeExpressAdView *)nativeExpressAdView {
     AdvanceNativeExpressAd *nativeAd = [self returnExpressViewWithAdView:(UIView *)nativeExpressAdView];
     if (nativeAd) {
-        if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdClosed:)]) {
-            [_delegate advanceNativeExpressOnAdClosed:nativeAd];
+        if ([_delegate respondsToSelector:@selector(didCloseNativeExpressAd:spotId:extra:)]) {
+            [_delegate didCloseNativeExpressAd:nativeAd spotId:self.adspot.adspotid extra:self.adspot.ext];
         }
     }
 }
@@ -208,8 +205,8 @@
     AdvanceNativeExpressAd *nativeAd = [self returnExpressViewWithAdView:(UIView *)nativeExpressAdView];
 
     if (nativeAd) {
-        if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdShow:)]) {
-            [_delegate advanceNativeExpressOnAdShow:nativeAd];
+        if ([_delegate respondsToSelector:@selector(didShowNativeExpressAd:spotId:extra:)]) {
+            [_delegate didShowNativeExpressAd:nativeAd spotId:self.adspot.adspotid extra:self.adspot.ext];
         }
     }
 }

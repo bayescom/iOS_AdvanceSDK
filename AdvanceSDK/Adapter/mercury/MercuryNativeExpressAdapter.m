@@ -44,8 +44,8 @@
     ADV_LEVEL_INFO_LOG(@"加载MercurySDK supplier: %@", _supplier);
     if (_supplier.state == AdvanceSdkSupplierStateSuccess) {// 并行请求保存的状态 再次轮到该渠道加载的时候 直接show
         ADV_LEVEL_INFO_LOG(@"MercurySDK 成功");
-        if ([self.delegate respondsToSelector:@selector(advanceNativeExpressOnAdLoadSuccess:)]) {
-            [self.delegate advanceNativeExpressOnAdLoadSuccess:self.nativeAds];
+        if ([_delegate respondsToSelector:@selector(didFinishLoadingNativeExpressAds:spotId:)]) {
+            [_delegate didFinishLoadingNativeExpressAds:self.nativeAds spotId:self.adspot.adspotid];
         }
 //        [self showAd];
     } else if (_supplier.state == AdvanceSdkSupplierStateFailed) { //失败的话直接对外抛出回调
@@ -117,8 +117,8 @@
             return;
         }
 
-        if ([self.delegate respondsToSelector:@selector(advanceNativeExpressOnAdLoadSuccess:)]) {
-            [self.delegate advanceNativeExpressOnAdLoadSuccess:self.nativeAds];
+        if ([_delegate respondsToSelector:@selector(didFinishLoadingNativeExpressAds:spotId:)]) {
+            [_delegate didFinishLoadingNativeExpressAds:self.nativeAds spotId:self.adspot.adspotid];
         }
     }
 }
@@ -141,8 +141,8 @@
     
     AdvanceNativeExpressAd *nativeAd = [self returnExpressViewWithAdView:(UIView *)nativeExpressAdView];
     if (nativeAd) {
-        if ([self.delegate respondsToSelector:@selector(advanceNativeExpressOnAdRenderSuccess:)]) {
-            [self.delegate advanceNativeExpressOnAdRenderSuccess:nativeAd];
+        if ([_delegate respondsToSelector:@selector(nativeExpressAdViewRenderSuccess:spotId:extra:)]) {
+            [_delegate nativeExpressAdViewRenderSuccess:nativeAd spotId:self.adspot.adspotid extra:self.adspot.ext];
         }
     }
 
@@ -154,8 +154,8 @@
     AdvanceNativeExpressAd *nativeAd = [self returnExpressViewWithAdView:(UIView *)nativeExpressAdView];
 
     if (nativeAd) {
-        if ([self.delegate respondsToSelector:@selector(advanceNativeExpressOnAdRenderFail:)]) {
-            [self.delegate advanceNativeExpressOnAdRenderFail:nativeAd];
+        if ([_delegate respondsToSelector:@selector(nativeExpressAdViewRenderFail:spotId:extra:)]) {
+            [_delegate nativeExpressAdViewRenderFail:nativeAd spotId:self.adspot.adspotid extra:self.adspot.ext];
         }
     }
 }
@@ -167,8 +167,8 @@
     AdvanceNativeExpressAd *nativeAd = [self returnExpressViewWithAdView:(UIView *)nativeExpressAdView];
 
     if (nativeAd) {
-        if ([self.delegate respondsToSelector:@selector(advanceNativeExpressOnAdShow:)]) {
-            [self.delegate advanceNativeExpressOnAdShow:nativeAd];
+        if ([_delegate respondsToSelector:@selector(didShowNativeExpressAd:spotId:extra:)]) {
+            [_delegate didShowNativeExpressAd:nativeAd spotId:self.adspot.adspotid extra:self.adspot.ext];
         }
     }
 }
@@ -180,8 +180,8 @@
     AdvanceNativeExpressAd *nativeAd = [self returnExpressViewWithAdView:(UIView *)nativeExpressAdView];
 
     if (nativeAd) {
-        if ([self.delegate respondsToSelector:@selector(advanceNativeExpressOnAdClicked:)]) {
-            [self.delegate advanceNativeExpressOnAdClicked:nativeAd];
+        if ([_delegate respondsToSelector:@selector(didClickNativeExpressAd:spotId:extra:)]) {
+            [_delegate didClickNativeExpressAd:nativeAd spotId:self.adspot.adspotid extra:self.adspot.ext];
         }
     }
 }
@@ -190,8 +190,8 @@
 - (void)mercury_nativeExpressAdViewClosed:(MercuryNativeExpressAdView *)nativeExpressAdView {
     AdvanceNativeExpressAd *nativeAd = [self returnExpressViewWithAdView:(UIView *)nativeExpressAdView];
     if (nativeAd) {
-        if ([self.delegate respondsToSelector:@selector(advanceNativeExpressOnAdClosed:)]) {
-            [self.delegate advanceNativeExpressOnAdClosed:nativeAd];
+        if ([_delegate respondsToSelector:@selector(didCloseNativeExpressAd:spotId:extra:)]) {
+            [_delegate didCloseNativeExpressAd:nativeAd spotId:self.adspot.adspotid extra:self.adspot.ext];
         }
     }
 }

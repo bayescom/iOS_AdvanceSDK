@@ -65,8 +65,8 @@
 
 - (void)supplierStateSuccess {
     ADV_LEVEL_INFO_LOG(@"Tanx 成功");
-    if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdLoadSuccess:)]) {
-        [_delegate advanceNativeExpressOnAdLoadSuccess:self.nativeAds];
+    if ([_delegate respondsToSelector:@selector(didFinishLoadingNativeExpressAds:spotId:)]) {
+        [_delegate didFinishLoadingNativeExpressAds:self.nativeAds spotId:self.adspot.adspotid];
     }
 }
 
@@ -132,8 +132,8 @@
             }
 
             
-            if ([strongSelf->_delegate respondsToSelector:@selector(advanceNativeExpressOnAdLoadSuccess:)]) {
-                [strongSelf->_delegate advanceNativeExpressOnAdLoadSuccess:temp];
+            if ([strongSelf->_delegate respondsToSelector:@selector(didFinishLoadingNativeExpressAds:spotId:)]) {
+                [strongSelf->_delegate didFinishLoadingNativeExpressAds:temp spotId:strongSelf.adspot.adspotid];
             }
 
         } else {
@@ -154,8 +154,8 @@
     AdvanceNativeExpressAd *nativeAd = self.nativeAds.firstObject;
     
     if (nativeAd) {
-        if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdClicked:)]) {
-            [_delegate advanceNativeExpressOnAdClicked:nativeAd];
+        if ([_delegate respondsToSelector:@selector(didClickNativeExpressAd:spotId:extra:)]) {
+            [_delegate didClickNativeExpressAd:nativeAd spotId:self.adspot.adspotid extra:self.adspot.ext];
         }
     }
 }
@@ -166,8 +166,8 @@
     AdvanceNativeExpressAd *nativeAd = self.nativeAds.firstObject;
     
     if (nativeAd) {
-        if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdRenderSuccess:)]) {
-            [_delegate advanceNativeExpressOnAdRenderSuccess:nativeAd];
+        if ([_delegate respondsToSelector:@selector(nativeExpressAdViewRenderSuccess:spotId:extra:)]) {
+            [_delegate nativeExpressAdViewRenderSuccess:nativeAd spotId:self.adspot.adspotid extra:self.adspot.ext];
         }
     }
 
@@ -179,8 +179,8 @@
     AdvanceNativeExpressAd *nativeAd = self.nativeAds.firstObject;
 
     if (nativeAd) {
-        if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdShow:)]) {
-            [_delegate advanceNativeExpressOnAdShow:nativeAd];
+        if ([_delegate respondsToSelector:@selector(didShowNativeExpressAd:spotId:extra:)]) {
+            [_delegate didShowNativeExpressAd:nativeAd spotId:self.adspot.adspotid extra:self.adspot.ext];
         }
     }
 
@@ -192,8 +192,8 @@
     AdvanceNativeExpressAd *nativeAd = self.nativeAds.firstObject;
     
     if (nativeAd) {
-        if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdClosed:)]) {
-            [_delegate advanceNativeExpressOnAdClosed:nativeAd];
+        if ([_delegate respondsToSelector:@selector(didCloseNativeExpressAd:spotId:extra:)]) {
+            [_delegate didCloseNativeExpressAd:nativeAd spotId:self.adspot.adspotid extra:self.adspot.ext];
         }
     }
 }
@@ -214,8 +214,8 @@
     AdvanceNativeExpressAd *nativeAd = self.nativeAds.firstObject;
     
     if (nativeAd) {
-        if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdRenderFail:)]) {
-            [_delegate advanceNativeExpressOnAdRenderFail:nativeAd];
+        if ([_delegate respondsToSelector:@selector(nativeExpressAdViewRenderFail:spotId:extra:)]) {
+            [_delegate nativeExpressAdViewRenderFail:nativeAd spotId:self.adspot.adspotid extra:self.adspot.ext];
         }
     }
 

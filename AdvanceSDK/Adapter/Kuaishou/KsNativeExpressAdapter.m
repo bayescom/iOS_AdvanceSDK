@@ -49,8 +49,8 @@
 
 - (void)supplierStateSuccess {
     ADV_LEVEL_INFO_LOG(@"快手 成功");
-    if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdLoadSuccess:)]) {
-        [_delegate advanceNativeExpressOnAdLoadSuccess:self.nativeAds];
+    if ([_delegate respondsToSelector:@selector(didFinishLoadingNativeExpressAds:spotId:)]) {
+        [_delegate didFinishLoadingNativeExpressAds:self.nativeAds spotId:self.adspot.adspotid];
     }
 }
 
@@ -114,8 +114,8 @@
             return;
         }
 
-        if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdLoadSuccess:)]) {
-            [_delegate advanceNativeExpressOnAdLoadSuccess:self.nativeAds];
+        if ([_delegate respondsToSelector:@selector(didFinishLoadingNativeExpressAds:spotId:)]) {
+            [_delegate didFinishLoadingNativeExpressAds:self.nativeAds spotId:self.adspot.adspotid];
         }
     }
 
@@ -134,8 +134,8 @@
     [_adspot reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
     AdvanceNativeExpressAd *nativeAd = [self returnExpressViewWithAdView:(UIView *)feedAd.feedView];
     if (nativeAd) {
-        if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdShow:)]) {
-            [_delegate advanceNativeExpressOnAdShow:nativeAd];
+        if ([_delegate respondsToSelector:@selector(didShowNativeExpressAd:spotId:extra:)]) {
+            [_delegate didShowNativeExpressAd:nativeAd spotId:self.adspot.adspotid extra:self.adspot.ext];
         }
     }
 
@@ -147,8 +147,8 @@
     AdvanceNativeExpressAd *nativeAd = [self returnExpressViewWithAdView:(UIView *)feedAd.feedView];
 
     if (nativeAd) {
-        if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdClicked:)]) {
-            [_delegate advanceNativeExpressOnAdClicked:nativeAd];
+        if ([_delegate respondsToSelector:@selector(didClickNativeExpressAd:spotId:extra:)]) {
+            [_delegate didClickNativeExpressAd:nativeAd spotId:self.adspot.adspotid extra:self.adspot.ext];
         }
     }
 }
@@ -156,8 +156,8 @@
 - (void)feedAdDislike:(KSFeedAd *)feedAd {
     AdvanceNativeExpressAd *nativeAd = [self returnExpressViewWithAdView:(UIView *)feedAd.feedView];
     if (nativeAd) {
-        if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdClosed:)]) {
-            [_delegate advanceNativeExpressOnAdClosed:nativeAd];
+        if ([_delegate respondsToSelector:@selector(didCloseNativeExpressAd:spotId:extra:)]) {
+            [_delegate didCloseNativeExpressAd:nativeAd spotId:self.adspot.adspotid extra:self.adspot.ext];
         }
     }
 }

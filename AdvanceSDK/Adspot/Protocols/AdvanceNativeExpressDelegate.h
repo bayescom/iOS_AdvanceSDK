@@ -1,5 +1,5 @@
 //
-//  AdvanceInterstitialDelegate.h
+//  AdvanceNativeExpressDelegate.h
 //  AdvanceSDK
 //
 //  Created by guangyao on 2023/7/24.
@@ -9,37 +9,48 @@
 #define AdvanceNativeExpressDelegate_h
 
 #import "AdvanceAdLoadingDelegate.h"
+
+NS_ASSUME_NONNULL_BEGIN
+
 @class AdvanceNativeExpressAd;
 
 @protocol AdvanceNativeExpressDelegate <AdvanceAdLoadingDelegate>
 
 @optional
 
-- (void)didShowNativeExpressAd:(AdvanceNativeExpressAd *_Nullable)nativeAd
-                        spotId:(NSString *_Nullable)spotId
-                         extra:(NSDictionary *_Nullable)extra;
+/// Native ad loaded successfully
+- (void)didFinishLoadingNativeExpressAds:(NSArray <AdvanceNativeExpressAd *>*)nativeAds spotId:(NSString *)spotId;
 
-- (void)dsjkfjgfdkspotId:(NSString *)spotId
-                   extra:(NSDictionary *)extra;
+/// Native adview rendered successfully
+- (void)nativeExpressAdViewRenderSuccess:(AdvanceNativeExpressAd *)nativeAd
+                                  spotId:(NSString *)spotId
+                                   extra:(NSDictionary *)extra;
 
-/// 广告数据拉取成功
-- (void)advanceNativeExpressOnAdLoadSuccess:(nullable NSArray<AdvanceNativeExpressAd *> *)views;
+/// Native adview failed to render
+- (void)nativeExpressAdViewRenderFail:(AdvanceNativeExpressAd *)nativeAd
+                               spotId:(NSString *)spotId
+                                extra:(NSDictionary *)extra;
 
-/// 广告渲染成功
-- (void)advanceNativeExpressOnAdRenderSuccess:(nullable AdvanceNativeExpressAd *)adView;
+/// Native ad displayed successfully
+- (void)didShowNativeExpressAd:(AdvanceNativeExpressAd *)nativeAd
+                        spotId:(NSString *)spotId
+                         extra:(NSDictionary *)extra;
 
-/// 广告渲染失败
-- (void)advanceNativeExpressOnAdRenderFail:(nullable AdvanceNativeExpressAd *)adView;
+/// Native ad clicked
+- (void)didClickNativeExpressAd:(AdvanceNativeExpressAd *)nativeAd
+                         spotId:(NSString *)spotId
+                          extra:(NSDictionary *)extra;
 
-/// 广告曝光
-- (void)advanceNativeExpressOnAdShow:(nullable AdvanceNativeExpressAd *)adView;
-
-/// 广告点击
-- (void)advanceNativeExpressOnAdClicked:(nullable AdvanceNativeExpressAd *)adView;
-
-/// 广告被关闭 （百度广告不支持该回调，若使用百青藤，则该回调功能请自行实现）
-- (void)advanceNativeExpressOnAdClosed:(nullable AdvanceNativeExpressAd *)adView;
+/// Native ad closed
+/// note: not support Baidu Ad, you should realize it yourself
+- (void)didCloseNativeExpressAd:(AdvanceNativeExpressAd *)nativeAd
+                         spotId:(NSString *)spotId
+                          extra:(NSDictionary *)extra;
 
 @end
 
+NS_ASSUME_NONNULL_END
+
 #endif
+
+

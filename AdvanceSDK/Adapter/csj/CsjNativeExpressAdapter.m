@@ -54,8 +54,8 @@
 
 - (void)supplierStateSuccess {
     ADV_LEVEL_INFO_LOG(@"穿山甲 成功");
-    if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdLoadSuccess:)]) {
-        [_delegate advanceNativeExpressOnAdLoadSuccess:self.nativeAds];
+    if ([_delegate respondsToSelector:@selector(didFinishLoadingNativeExpressAds:spotId:)]) {
+        [_delegate didFinishLoadingNativeExpressAds:self.nativeAds spotId:self.adspot.adspotid];
     }
 }
 
@@ -117,8 +117,8 @@
             return;
         }
 
-        if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdLoadSuccess:)]) {
-            [_delegate advanceNativeExpressOnAdLoadSuccess:self.nativeAds];
+        if ([_delegate respondsToSelector:@selector(didFinishLoadingNativeExpressAds:spotId:)]) {
+            [_delegate didFinishLoadingNativeExpressAds:self.nativeAds spotId:self.adspot.adspotid];
         }
     }
 }
@@ -141,8 +141,8 @@
     AdvanceNativeExpressAd *nativeAd = [self returnExpressViewWithAdView:(UIView *)nativeExpressAdView];
 
     if (nativeAd) {
-        if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdRenderSuccess:)]) {
-            [_delegate advanceNativeExpressOnAdRenderSuccess:nativeAd];
+        if ([_delegate respondsToSelector:@selector(nativeExpressAdViewRenderSuccess:spotId:extra:)]) {
+            [_delegate nativeExpressAdViewRenderSuccess:nativeAd spotId:self.adspot.adspotid extra:self.adspot.ext];
         }
     }
 }
@@ -152,8 +152,8 @@
     AdvanceNativeExpressAd *nativeAd = [self returnExpressViewWithAdView:(UIView *)nativeExpressAdView];
 
     if (nativeAd) {
-        if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdRenderFail:)]) {
-            [_delegate advanceNativeExpressOnAdRenderFail:nativeAd];
+        if ([_delegate respondsToSelector:@selector(nativeExpressAdViewRenderFail:spotId:extra:)]) {
+            [_delegate nativeExpressAdViewRenderFail:nativeAd spotId:self.adspot.adspotid extra:self.adspot.ext];
         }
     }
 //    _csj_ad = nil;
@@ -165,8 +165,8 @@
     AdvanceNativeExpressAd *nativeAd = [self returnExpressViewWithAdView:(UIView *)nativeExpressAdView];
 
     if (nativeAd) {
-        if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdShow:)]) {
-            [_delegate advanceNativeExpressOnAdShow:nativeAd];
+        if ([_delegate respondsToSelector:@selector(didShowNativeExpressAd:spotId:extra:)]) {
+            [_delegate didShowNativeExpressAd:nativeAd spotId:self.adspot.adspotid extra:self.adspot.ext];
         }
     }
 }
@@ -177,27 +177,20 @@
     AdvanceNativeExpressAd *nativeAd = [self returnExpressViewWithAdView:(UIView *)nativeExpressAdView];
 
     if (nativeAd) {
-        if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdClicked:)]) {
-            [_delegate advanceNativeExpressOnAdClicked:nativeAd];
+        if ([_delegate respondsToSelector:@selector(didClickNativeExpressAd:spotId:extra:)]) {
+            [_delegate didClickNativeExpressAd:nativeAd spotId:self.adspot.adspotid extra:self.adspot.ext];
         }
     }
 }
 
-- (void)nativeExpressAdViewPlayerDidPlayFinish:(BUNativeExpressAdView *)nativeExpressAdView error:(NSError *)error {
-//    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:error];
-//    if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdFailedWithSdkId:error:)]) {
-//        [_delegate advanceNativeExpressOnAdFailedWithSdkId:_supplier.identifier error:error];
-//    }
-//    _csj_ad = nil;
-}
 
 - (void)nativeExpressAdView:(BUNativeExpressAdView *)nativeExpressAdView dislikeWithReason:(NSArray<BUDislikeWords *> *)filterWords {
     
-    AdvanceNativeExpressAd *expressView = [self returnExpressViewWithAdView:(UIView *)nativeExpressAdView];
+    AdvanceNativeExpressAd *nativeAd = [self returnExpressViewWithAdView:(UIView *)nativeExpressAdView];
 
-    if (expressView) {
-        if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdClosed:)]) {
-            [_delegate advanceNativeExpressOnAdClosed:expressView];
+    if (nativeAd) {
+        if ([_delegate respondsToSelector:@selector(didCloseNativeExpressAd:spotId:extra:)]) {
+            [_delegate didCloseNativeExpressAd:nativeAd spotId:self.adspot.adspotid extra:self.adspot.ext];
         }
     }
 }

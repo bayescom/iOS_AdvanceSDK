@@ -11,7 +11,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface AdvanceNativeExpressAd : NSObject
 
-- (instancetype)initWithViewController:(UIViewController *)controller;
 // 信息流view
 @property (nonatomic, strong) UIView *expressView;
 
@@ -39,6 +38,8 @@ PS:
 // 在适当的时候 可以设置为NO 恢复摇一摇
 // 注意: 这只是暂时不让该信息流view响应摇一摇, 内部仍然在监听摇动!!!!!!!!
 @property (nonatomic, assign) BOOL isStopMotion;
+
+- (instancetype)initWithViewController:(UIViewController *)controller;
 
 - (void)render;
 

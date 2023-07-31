@@ -54,8 +54,8 @@
 
 - (void)supplierStateSuccess {
     ADV_LEVEL_INFO_LOG(@"百度 成功");
-    if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdLoadSuccess:)]) {
-        [_delegate advanceNativeExpressOnAdLoadSuccess:self.nativeAds];
+    if ([_delegate respondsToSelector:@selector(didFinishLoadingNativeExpressAds:spotId:)]) {
+        [_delegate didFinishLoadingNativeExpressAds:self.nativeAds spotId:self.adspot.adspotid];
     }
 }
 
@@ -130,8 +130,8 @@
         }
 
         
-        if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdLoadSuccess:)]) {
-            [_delegate advanceNativeExpressOnAdLoadSuccess:self.nativeAds];
+        if ([_delegate respondsToSelector:@selector(didFinishLoadingNativeExpressAds:spotId:)]) {
+            [_delegate didFinishLoadingNativeExpressAds:self.nativeAds spotId:self.adspot.adspotid];
         }
     }
 
@@ -153,9 +153,9 @@
 // 负反馈点击选项回调
 - (void)nativeAdDislikeClick:(UIView *)adView reason:(BaiduMobAdDislikeReasonType)reason; {
 //    NSLog(@"智能优选负反馈点击：%@", object);
-    AdvanceNativeExpressAd *temp = [self returnExpressViewWithAdView:adView];
-    if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdClosed:)]) {
-        [_delegate advanceNativeExpressOnAdClosed:temp];
+    AdvanceNativeExpressAd *nativeAd = [self returnExpressViewWithAdView:adView];
+    if ([_delegate respondsToSelector:@selector(didCloseNativeExpressAd:spotId:extra:)]) {
+        [_delegate didCloseNativeExpressAd:nativeAd spotId:self.adspot.adspotid extra:self.adspot.ext];
     }
 
 }
@@ -169,18 +169,14 @@
     AdvanceNativeExpressAd *nativeAd = [self returnExpressViewWithAdView:nativeAdView];
 
     if (nativeAd) {
-        if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdClicked:)]) {
-            [_delegate advanceNativeExpressOnAdClicked:nativeAd];
+        if ([_delegate respondsToSelector:@selector(didClickNativeExpressAd:spotId:extra:)]) {
+            [_delegate didClickNativeExpressAd:nativeAd spotId:self.adspot.adspotid extra:self.adspot.ext];
         }
     }
 }
 
 //广告详情页被关闭，如果为视频广告，可选择继续播放视频
 - (void)didDismissLandingPage:(UIView *)nativeAdView {
-//    NSLog(@"信息流落地页被关闭");
-//    if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdClosed:)]) {
-//        [_delegate advanceNativeExpressOnAdClosed:nativeAdView];
-//    }
 
 }
 
@@ -190,13 +186,13 @@
     AdvanceNativeExpressAd *nativeAd = [self returnExpressViewWithAdView:nativeAdView];
 
     if (nativeAd) {
-        if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdRenderSuccess:)]) {
-            [_delegate advanceNativeExpressOnAdRenderSuccess:nativeAd];
+        if ([_delegate respondsToSelector:@selector(nativeExpressAdViewRenderSuccess:spotId:extra:)]) {
+            [_delegate nativeExpressAdViewRenderSuccess:nativeAd spotId:self.adspot.adspotid extra:self.adspot.ext];
         }
         
         [_adspot reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
-        if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdShow:)]) {
-            [_delegate advanceNativeExpressOnAdShow:nativeAd];
+        if ([_delegate respondsToSelector:@selector(didShowNativeExpressAd:spotId:extra:)]) {
+            [_delegate didShowNativeExpressAd:nativeAd spotId:self.adspot.adspotid extra:self.adspot.ext];
         }
 
     }
@@ -211,8 +207,8 @@
     AdvanceNativeExpressAd *nativeAd = [self returnExpressViewWithAdView:nativeAdView];
 
     if (nativeAd) {
-        if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdRenderFail:)]) {
-            [_delegate advanceNativeExpressOnAdRenderFail:nativeAd];
+        if ([_delegate respondsToSelector:@selector(nativeExpressAdViewRenderFail:spotId:extra:)]) {
+            [_delegate nativeExpressAdViewRenderFail:nativeAd spotId:self.adspot.adspotid extra:self.adspot.ext];
         }
         [self.nativeAds removeObject:nativeAd];
     }
