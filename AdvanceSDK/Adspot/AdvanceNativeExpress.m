@@ -13,6 +13,7 @@
 #import "AdvSupplierLoader.h"
 
 @interface AdvanceNativeExpress ()
+
 @property (nonatomic, strong) id adapter;
 
 @end
@@ -22,27 +23,21 @@
 - (instancetype)initWithAdspotId:(NSString *)adspotid
                  viewController:(UIViewController *)viewController
                          adSize:(CGSize)size {
-    if (self = [super initWithMediaId:@"" adspotId:adspotid customExt:nil]) {
-        _viewController = viewController;
-        _adSize = size;
-    }
-    return self;
+    return [self initWithAdspotId:adspotid customExt:nil viewController:viewController adSize:size];
 }
 
 - (instancetype)initWithAdspotId:(NSString *)adspotid
-                       customExt:(NSDictionary * _Nonnull)ext
+                       customExt:(nullable NSDictionary *)ext
                   viewController:(UIViewController *)viewController
                           adSize:(CGSize)size {
-    ext = [ext mutableCopy];
-    if (!ext) {
-        ext = [NSMutableDictionary dictionary];
-    }
-    [ext setValue:AdvSdkTypeAdNameNativeExpress forKey: AdvSdkTypeAdName];
+    
+    NSMutableDictionary *extra = [NSMutableDictionary dictionaryWithDictionary:ext];
+    [extra setValue:AdvSdkTypeAdNameNativeExpress forKey: AdvSdkTypeAdName];
 
-    if (self = [super initWithMediaId:@"" adspotId:adspotid customExt:ext]) {
-        _viewController = viewController;
-        _adSize = size;
-        _muted = YES;
+    if (self = [super initWithMediaId:[AdvSdkConfig shareInstance].appId adspotId:adspotid customExt:extra]) {
+        self.viewController = viewController;
+        self.adSize = size;
+        self.muted = YES;
     }
     return self;
 }
@@ -160,11 +155,9 @@
     _adapter = nil;
 }
 
-- (void)showAd {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wundeclared-selector"
-    ((void (*)(id, SEL))objc_msgSend)((id)_adapter, @selector(showAd));
-#pragma clang diagnostic pop
+- (void)loadAd {
+    [super loadAd];
 }
+
 
 @end

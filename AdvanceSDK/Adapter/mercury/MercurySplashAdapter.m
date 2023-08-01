@@ -40,8 +40,8 @@
         _mercury_ad = [[MercurySplashAd alloc] initAdWithAdspotId:_supplier.adspotid delegate:self];
 //        _mercury_ad.placeholderImage = _adspot.backgroundImage;
         _mercury_ad.logoImage = _adspot.logoImage;
-        NSNumber *showLogoType = _adspot.extParameter[MercuryLogoShowTypeKey];
-        NSNumber *blankGap = _adspot.extParameter[MercuryLogoShowBlankGapKey];
+        NSNumber *showLogoType = _adspot.ext[MercuryLogoShowTypeKey];
+        NSNumber *blankGap = _adspot.ext[MercuryLogoShowBlankGapKey];
 
         
         if (showLogoType) {

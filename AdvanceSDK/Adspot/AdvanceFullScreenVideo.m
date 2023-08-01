@@ -13,28 +13,25 @@
 #import "AdvSupplierLoader.h"
 
 @interface AdvanceFullScreenVideo ()
-@property (nonatomic, strong) id adapter;
 
-@property (nonatomic, assign) CGRect frame;
-@property (nonatomic, strong) UIViewController *controller;
+@property (nonatomic, strong) id adapter;
 
 @end
 
 @implementation AdvanceFullScreenVideo
 
-- (instancetype)initWithAdspotId:(NSString *)adspotid viewController:(nonnull UIViewController *)viewController {
+- (instancetype)initWithAdspotId:(NSString *)adspotid viewController:(UIViewController *)viewController {
     return [self initWithAdspotId:adspotid customExt:nil viewController:viewController];
 }
 
-- (instancetype)initWithAdspotId:(NSString *)adspotid customExt:(NSDictionary * _Nonnull)ext viewController:(nonnull UIViewController *)viewController {
-    ext = [ext mutableCopy];
-    if (!ext) {
-        ext = [NSMutableDictionary dictionary];
-    }
-    [ext setValue:AdvSdkTypeAdNameFullScreenVideo forKey: AdvSdkTypeAdName];
-    if (self = [super initWithMediaId:@"" adspotId:adspotid customExt:ext]) {
-        _viewController = viewController;
-        _muted = YES;
+- (instancetype)initWithAdspotId:(NSString *)adspotid customExt:(nullable NSDictionary *)ext viewController:(UIViewController *)viewController {
+    
+    NSMutableDictionary *extra = [NSMutableDictionary dictionaryWithDictionary:ext];
+    [extra setValue:AdvSdkTypeAdNameFullScreenVideo forKey: AdvSdkTypeAdName];
+    
+    if (self = [super initWithMediaId:[AdvSdkConfig shareInstance].appId adspotId:adspotid customExt:extra]) {
+        self.viewController = viewController;
+        self.muted = YES;
     }
     return self;
 }
@@ -147,6 +144,10 @@
         [self deallocAdapter];
     }
     _delegate = nil;
+}
+
+- (void)loadAd {
+    [super loadAd];
 }
 
 - (void)showAd {

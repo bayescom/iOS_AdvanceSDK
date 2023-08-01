@@ -72,14 +72,14 @@
     
     // 每次加载广告请 使用新的实例  不要用懒加载, 不要对广告对象进行本地化存储相关的操作
     self.advanceSplash = [[AdvanceSplash alloc] initWithAdspotId:self.adspotId
-                                                       customExt:@{} viewController:self];
+                                                       customExt:@{@"testExt": @1} viewController:self];
 
     self.advanceSplash.isUploadSDKVersion = YES;
     self.advanceSplash.delegate = self;
     
     
     /**
-      logo图片不应该是仅是一张透明的logo 应该是一张有背景的logo, 且高度等于你设置的logo高度
+      logo图片不应该仅是一张透明的logo 应该是一张有背景的logo, 且高度等于你设置的logo高度
      
       self.advanceSplash.logoImage = [UIImage imageNamed:@"app_logo"];
 

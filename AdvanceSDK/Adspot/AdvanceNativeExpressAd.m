@@ -25,6 +25,11 @@
 - (void)setIdentifier:(NSString *)identifier {
     _identifier = identifier;
 }
+
+- (void)setExpressView:(UIView *)expressView {
+    _expressView = expressView;
+}
+
 - (void)render {
     if (self.controller == nil || self.expressView == nil) {
         return;
@@ -51,10 +56,6 @@
         
     }
 
-}
-
-- (void)setExpressView:(UIView *)expressView {
-    _expressView = expressView;
 }
 
 - (void)setIsStopMotion:(BOOL)isStopMotion {

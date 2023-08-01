@@ -16,29 +16,15 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface AdvanceInterstitial : AdvanceBaseAdSpot
+
 /// 广告方法回调代理
 @property (nonatomic, weak) id<AdvanceInterstitialDelegate> delegate;
 
-@property (nonatomic, weak) UIViewController *viewController;
+/// 素材尺寸
+@property (nonatomic, assign) CGSize adSize;
 
-@property (nonatomic, assign, readonly) CGSize adSize;
-
-///  设定是否静音播放视频，YES = 静音，NO = 非静音 默认为YES
-/*
-PS:
-①仅gdt、ks、支持设定mute
-②仅适用于视频播放器设定生效
- (只对客户端可以控制的部分生效, 有些需要到网盟后台去设置比如穿山甲)
-重点：请在loadAd前设置,否则不生效
-*/
+/// 设定是否静音播放视频，默认为YES
 @property(nonatomic, assign) BOOL muted;
-
-
-
-- (instancetype)initWithAdspotId:(NSString *)adspotid
-                  viewController:(UIViewController *)viewController
-                          adSize:(CGSize)adSize;
-
 
 /// 构造函数
 /// @param adspotid adspotid
@@ -46,9 +32,15 @@ PS:
 /// @param viewController viewController
 /// @param adSize 广告素材的期望尺寸, 仅部分支持, 渠道也只是会返回近似尺寸的素材,不会严格按照传入的尺寸展示
 - (instancetype)initWithAdspotId:(NSString *)adspotid
-                       customExt:(NSDictionary *_Nonnull)ext
+                       customExt:(nullable NSDictionary *)ext
                   viewController:(UIViewController *)viewController
                           adSize:(CGSize)adSize;
+
+- (instancetype)initWithAdspotId:(NSString *)adspotid
+                  viewController:(UIViewController *)viewController
+                          adSize:(CGSize)adSize;
+
+- (void)loadAd;
 
 - (void)showAd;
 

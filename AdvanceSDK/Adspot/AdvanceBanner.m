@@ -13,10 +13,8 @@
 #import "AdvSupplierLoader.h"
 
 @interface AdvanceBanner ()
-@property (nonatomic, strong) id adapter;
 
-@property (nonatomic, assign) CGRect frame;
-@property (nonatomic, strong) UIViewController *controller;
+@property (nonatomic, strong) id adapter;
 
 @end
 
@@ -24,19 +22,23 @@
 
 - (instancetype)initWithAdspotId:(NSString *)adspotid
                      adContainer:(UIView *)adContainer
-                  viewController:(nonnull UIViewController *)viewController {
+                  viewController:(UIViewController *)viewController {
     return [self initWithAdspotId:adspotid adContainer:adContainer customExt:nil viewController:viewController];
 }
 
 - (instancetype)initWithAdspotId:(NSString *)adspotid
                      adContainer:(UIView *)adContainer
-                       customExt:(NSDictionary * _Nonnull)ext
-                  viewController:(nonnull UIViewController *)viewController {
-    if (self = [super initWithMediaId:@"" adspotId:adspotid customExt:ext]) {
-        _adContainer = adContainer;
-        _viewController = viewController;
-        _refreshInterval = MAXINTERP;
-        _muted = YES;
+                       customExt:(nullable NSDictionary *)ext
+                  viewController:(UIViewController *)viewController {
+    
+    NSMutableDictionary *extra = [NSMutableDictionary dictionaryWithDictionary:ext];
+    [extra setValue:AdvSdkTypeAdNameBanner forKey: AdvSdkTypeAdName];
+    
+    if (self = [super initWithMediaId:[AdvSdkConfig shareInstance].appId adspotId:adspotid customExt:extra]) {
+        self.adContainer = adContainer;
+        self.viewController = viewController;
+        self.refreshInterval = MAXINTERP;
+        self.muted = YES;
     }
     return self;
 }
@@ -126,6 +128,9 @@
     }
 }
 
+- (void)loadAd {
+    [super loadAd];
+}
 
 - (void)showAd {
 #pragma clang diagnostic push

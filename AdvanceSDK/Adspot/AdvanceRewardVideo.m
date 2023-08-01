@@ -13,33 +13,28 @@
 #import "AdvSupplierLoader.h"
 
 @interface AdvanceRewardVideo ()
-@property (nonatomic, strong) id adapter;
 
-@property (nonatomic, assign) CGRect frame;
-@property (nonatomic, strong) UIViewController *controller;
+@property (nonatomic, strong) id adapter;
 
 @end
 
 @implementation AdvanceRewardVideo
 
 - (instancetype)initWithAdspotId:(NSString *)adspotid
-                  viewController:(nonnull UIViewController *)viewController {
+                  viewController:(UIViewController *)viewController {
     return [self initWithAdspotId:adspotid customExt:nil viewController:viewController];
 }
 
 - (instancetype)initWithAdspotId:(NSString *)adspotid
-                       customExt:(NSDictionary * _Nonnull)ext
-                  viewController:(nonnull UIViewController *)viewController {
-    ext = [ext mutableCopy];
-    if (!ext) {
-        ext = [NSMutableDictionary dictionary];
-    }
-    [ext setValue:AdvSdkTypeAdNameRewardVideo forKey: AdvSdkTypeAdName];
+                       customExt:(nullable NSDictionary *)ext
+                  viewController:(UIViewController *)viewController {
+    
+    NSMutableDictionary *extra = [NSMutableDictionary dictionaryWithDictionary:ext];
+    [extra setValue:AdvSdkTypeAdNameRewardedVideo forKey: AdvSdkTypeAdName];
 
-    if (self = [super initWithMediaId:@"" adspotId:adspotid customExt:ext]) {
-
-        _viewController = viewController;
-        _muted = YES;
+    if (self = [super initWithMediaId:[AdvSdkConfig shareInstance].appId adspotId:adspotid customExt:extra]) {
+        self.viewController = viewController;
+        self.muted = YES;
     }
     return self;
 }
@@ -171,6 +166,9 @@
     _adapter = nil;
 }
 
+- (void)loadAd {
+    [super loadAd];
+}
 
 - (void)showAd {
 #pragma clang diagnostic push

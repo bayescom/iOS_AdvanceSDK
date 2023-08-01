@@ -19,11 +19,6 @@
 
 @implementation AdvanceBaseAdSpot
 
--  (instancetype)initWithMediaId:(NSString *)mediaId
-                        adspotId:(NSString *)adspotid {
-    return [self initWithMediaId:mediaId adspotId:adspotid customExt:nil];
-}
-
 - (instancetype)initWithMediaId:(NSString *)mediaId
                        adspotId:(NSString *)adspotid
                       customExt:(NSDictionary *)ext {

@@ -73,7 +73,7 @@ NSString * const AdvSdkTypeAdNameBanner = @"BANNER_AD";
 NSString * const AdvSdkTypeAdNameInterstitial = @"INTERSTAITIAL_AD";
 NSString * const AdvSdkTypeAdNameFullScreenVideo = @"FULLSCREENVIDEO_AD";
 NSString * const AdvSdkTypeAdNameNativeExpress = @"NATIVEEXPRESS_AD";
-NSString * const AdvSdkTypeAdNameRewardVideo = @"REWARDVIDEO_AD";
+NSString * const AdvSdkTypeAdNameRewardedVideo = @"REWARDEDVIDEO_AD";
 
 // MARK: ======================= NSUserDefaultsKeys =======================
 
@@ -109,6 +109,13 @@ static AdvSdkConfig *instance = nil;
     return AdvanceSdkVersion;
 }
 
+- (NSString *)appId {
+    if (!_appId) {
+        _appId = @"";
+    }
+    return _appId;
+}
+
 //保证从-alloc-init和-new方法返回的对象是由shareInstance返回的
 + (instancetype)allocWithZone:(struct _NSZone *)zone {
     return [AdvSdkConfig shareInstance];
@@ -122,11 +129,6 @@ static AdvSdkConfig *instance = nil;
 //保证从mutableCopy获取的对象是由shareInstance返回的
 - (id)mutableCopyWithZone:(struct _NSZone *)zone {
     return [AdvSdkConfig shareInstance];
-}
-
-
-- (void)setLevel:(AdvLogLevel)level {
-    _level = level;
 }
 
 @end

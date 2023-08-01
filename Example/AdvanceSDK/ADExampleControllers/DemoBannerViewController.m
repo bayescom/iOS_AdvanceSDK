@@ -32,7 +32,7 @@
     if (![self checkAdspotId]) { return; }
     if (!_contentV) {
         _contentV = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.width*5/32.0)];
-        _contentV.backgroundColor = [UIColor redColor];
+        _contentV.backgroundColor = [UIColor greenColor];
     }
 //    [self.adShowView addSubview:self.contentV];
 //    self.adShowView.hidden = NO;

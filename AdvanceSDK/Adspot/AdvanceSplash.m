@@ -18,16 +18,11 @@
 #import "AdvSupplierLoader.h"
 
 @interface AdvanceSplash ()
+
 @property (nonatomic, strong) id adapter;
-
-@property (nonatomic, strong) UIImageView *bgImgV;
-
 @property (nonatomic, assign) NSInteger timeout_stamp;
 @property (nonatomic, strong) CADisplayLink *timeoutCheckTimer;
-@property (nonatomic, copy) NSString *reqId;
 @property (nonatomic, strong) NSNumber *isGMBidding;
-@property (nonatomic, strong, readwrite) NSDictionary *extParameter;
-@property(nonatomic, assign, readwrite) BOOL isLoadAdSucceed;
 
 @end
 
@@ -39,34 +34,23 @@
 
 - (instancetype)initWithAdspotId:(NSString *)adspotid customExt:(NSDictionary *)ext viewController:(UIViewController *)viewController {
     ADV_LEVEL_INFO_LOG(@"==================== 初始化开屏广告, id: %@====================", adspotid);
-    ext = [ext mutableCopy];
-    if (!ext) {
-        ext = [NSMutableDictionary dictionary];
-    }
-    [ext setValue:AdvSdkTypeAdNameSplash forKey: AdvSdkTypeAdName];
-    _extParameter = [ext mutableCopy];
-    _isLoadAdSucceed = NO;
-    if (self = [super initWithMediaId:@"" adspotId:adspotid customExt:ext]) {
-        _viewController = viewController;
-        _muted = YES;
+    NSMutableDictionary *extra = [NSMutableDictionary dictionaryWithDictionary:ext];
+    [extra setValue:AdvSdkTypeAdNameSplash forKey: AdvSdkTypeAdName];
+    
+    if (self = [super initWithMediaId:[AdvSdkConfig shareInstance].appId adspotId:adspotid customExt:extra]) {
+        self.viewController = viewController;
+        self.muted = YES;
     }
     return self;
 }
 
-- (NSDictionary *)extParameter {
-    return _extParameter;
-}
-
 - (void)loadAd {
-    // 占位图
-//    [[UIApplication sharedApplication].adv_getCurrentWindow addSubview:self.bgImgV];
         
     if (_timeout <= 0) { _timeout = 5; }
     // 记录过期的时间
-    _timeout_stamp = ([[NSDate date] timeIntervalSince1970] + _timeout)*1000;
+    _timeout_stamp = ([[NSDate date] timeIntervalSince1970] + _timeout) * 1000;
     // 开启定时器监听过期
     [_timeoutCheckTimer invalidate];
-
     _timeoutCheckTimer = [CADisplayLink displayLinkWithTarget:self selector:@selector(timeoutCheckTimerAction)];
     [_timeoutCheckTimer addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
     [super loadAd];
@@ -81,12 +65,8 @@
     }
 }
 
-
-/// Override
 - (void)deallocSelf {
     ADV_LEVEL_INFO_LOG(@"%s", __func__);
-    [_bgImgV removeFromSuperview];
-    _bgImgV = nil;
     [_timeoutCheckTimer invalidate];
     _timeoutCheckTimer = nil;
     _timeout_stamp = 0;
@@ -98,7 +78,6 @@
     if([_delegate respondsToSelector:@selector(didFailLoadingADPolicyWithSpotId:error:description:)] && execute) {
         [_delegate didFailLoadingADPolicyWithSpotId:self.adspotid error:[AdvError errorWithCode:AdvErrorCode_115].toNSError description:[self.errorDescriptions copy]];
         [_adapter performSelector:@selector(deallocAdapter)];
-//        [self uploadTimeOutError];
         [self deallocAdapter];
     }
     _delegate = nil;
@@ -106,7 +85,7 @@
 
 // 无论怎样到达超时时间时  都必须移除开屏广告
 - (void)timeoutCheckTimerAction {
-    if ([[NSDate date] timeIntervalSince1970]*1000 > _timeout_stamp) {
+    if ([[NSDate date] timeIntervalSince1970] * 1000 > _timeout_stamp) {
         [self deallocDelegate:YES];
         [self deallocSelf];
     }
@@ -115,7 +94,6 @@
 // MARK: ======================= AdvanceSupplierDelegate =======================
 /// 加载策略Model成功
 - (void)advPolicyServiceLoadSuccessWithModel:(nonnull AdvSupplierModel *)model {
-    self.reqId = model.reqid;
     if ([_delegate respondsToSelector:@selector(didFinishLoadingADPolicyWithSpotId:)]) {
         [_delegate didFinishLoadingADPolicyWithSpotId:self.adspotid];
     }
@@ -144,8 +122,6 @@
         [self.delegate didFinishBiddingADWithSpotId:self.adspotid price:price];
     }
 }
-
-
 
 - (void)advPolicyServiceLoadSupplier:(nullable AdvSupplier *)supplier error:(nullable NSError *)error {
     
@@ -253,24 +229,6 @@
     }
 }
 
-// MARK: ======================= get =======================
-- (UIViewController *)viewController {
-    if (_viewController) {
-        return _viewController;
-    } else {
-        return [UIApplication sharedApplication].adv_getCurrentWindow.rootViewController;
-    }
-}
-
-- (UIImageView *)bgImgV {
-    if (!_bgImgV) {
-        _bgImgV = [[UIImageView alloc] init];
-    }
-    _bgImgV.frame = [UIScreen mainScreen].bounds;
-    _bgImgV.userInteractionEnabled = YES;
-    return _bgImgV;
-}
-
 - (void)showInWindow:(UIWindow *)window {
     if (!window) {
         window = [UIApplication sharedApplication].adv_getCurrentWindow;
@@ -298,26 +256,6 @@
 
 
 #pragma clang diagnostic pop
-
-}
-- (void)uploadTimeOutError {
-    NSMutableDictionary *paramsM = [NSMutableDictionary dictionary];
-    
-    if (self.mediaId) {
-        [paramsM setObject:self.mediaId forKey:@"mediaid"];
-    }
-    if (self.adspotid) {
-        [paramsM setObject:self.adspotid forKey:@"adspotid"];
-    }
-    if (self.reqId) {
-        [paramsM setObject:self.reqId forKey:@"reqId"];
-    }
-    
-    [paramsM setObject:@"开屏广告超时,被强制关闭" forKey:@"msg"];
-    [paramsM setObject:@(1001) forKey:@"code"];
-
-    [AdvUploadTKUtil.new reportEventWithParams:paramsM];
-    
 
 }
 

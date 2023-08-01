@@ -16,25 +16,15 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface AdvanceNativeExpress : AdvanceBaseAdSpot
+
 /// 广告方法回调代理
 @property (nonatomic, weak) id<AdvanceNativeExpressDelegate> delegate;
-@property (nonatomic, weak) UIViewController *viewController;
+
+/// 素材尺寸
 @property (nonatomic, assign) CGSize adSize;
-///  设定是否静音播放视频，YES = 静音，NO = 非静音 默认为YES
-/*
-PS:
-①仅gdt、ks、支持设定mute
-②仅适用于视频播放器设定生效
- (只对客户端可以控制的部分生效, 有些需要到网盟后台去设置比如穿山甲)
-重点：请在loadAd前设置,否则不生效
-*/
 
+/// 设定是否静音播放视频，默认为YES
 @property(nonatomic, assign) BOOL muted;
-
-- (instancetype)initWithAdspotId:(NSString *)adspotid
-                  viewController:(UIViewController *)viewController
-                          adSize:(CGSize)size;
-
 
 /// 构造函数
 /// @param adspotid adspotid
@@ -42,9 +32,15 @@ PS:
 /// @param viewController viewController
 /// @param size 尺寸
 - (instancetype)initWithAdspotId:(NSString *)adspotid
-                       customExt:(NSDictionary *_Nonnull)ext
+                       customExt:(nullable NSDictionary *)ext
                   viewController:(UIViewController *)viewController
                           adSize:(CGSize)size;
+
+- (instancetype)initWithAdspotId:(NSString *)adspotid
+                  viewController:(UIViewController *)viewController
+                          adSize:(CGSize)size;
+
+-(void)loadAd;
 
 @end
 

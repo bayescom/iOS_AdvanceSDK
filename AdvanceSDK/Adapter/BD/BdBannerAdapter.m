@@ -73,7 +73,13 @@
     [super loadAd];
 }
 
-
+- (void)showAd {
+    if (_bd_ad) {
+        [_adspot.adContainer addSubview:_bd_ad];
+    } else {
+        [self deallocAdapter];
+    }
+}
 
 - (NSString *)publisherId {
     return  _supplier.mediaid; //@"your_own_app_id";
