@@ -19,7 +19,7 @@
 @property (nonatomic, strong) MercuryNativeExpressAd *mercury_ad;
 @property (nonatomic, weak) AdvanceNativeExpress *adspot;
 @property (nonatomic, strong) AdvSupplier *supplier;
-@property (nonatomic, strong) NSArray<AdvanceNativeExpressAd *> * nativeAds;
+@property (nonatomic, strong) NSMutableArray<AdvanceNativeExpressAd *> * nativeAds;
 
 @end
 
@@ -98,7 +98,7 @@
         [_adspot reportWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
         
 
-        NSMutableArray *temp = [NSMutableArray array];
+        self.nativeAds = [NSMutableArray array];
         for (MercuryNativeExpressAdView *view in views) {
             if ([view isKindOfClass:NSClassFromString(@"MercuryNativeExpressAdView")]) {
                 
@@ -106,11 +106,13 @@
                 TT.expressView = view;
                 TT.identifier = _supplier.identifier;
                 TT.price = (view.price == 0) ?  _supplier.supplierPrice : view.price;
-                [temp addObject:TT];
+                [self.nativeAds addObject:TT];
+                
+                view.controller = _adspot.viewController;
+                [view render];
             }
         }
         
-        self.nativeAds = temp;
         if (_supplier.isParallel == YES) {
             _supplier.state = AdvanceSdkSupplierStateSuccess;
 //            NSLog(@"修改状态: %@", _supplier);

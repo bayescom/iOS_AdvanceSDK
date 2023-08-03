@@ -30,7 +30,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithViewController:(UIViewController *)controller;
 
-- (void)render;
 
 @end
 

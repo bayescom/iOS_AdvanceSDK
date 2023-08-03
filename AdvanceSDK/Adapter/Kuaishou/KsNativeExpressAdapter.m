@@ -20,7 +20,7 @@
 @property (nonatomic, strong) KSFeedAdsManager *ks_ad;
 @property (nonatomic, weak) AdvanceNativeExpress *adspot;
 @property (nonatomic, strong) AdvSupplier *supplier;
-@property (nonatomic, strong) NSArray<AdvanceNativeExpressAd *> * nativeAds;
+@property (nonatomic, strong) NSMutableArray<AdvanceNativeExpressAd *> * nativeAds;
 
 @end
 
@@ -96,19 +96,23 @@
         _supplier.supplierPrice = feedAdDataArray.firstObject.ecpm;
         [_adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
         [_adspot reportWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
-        NSMutableArray *temp = [NSMutableArray array];
+        
+        self.nativeAds = [NSMutableArray array];
         for (KSFeedAd *ad in feedAdDataArray) {
             ad.delegate = self;
             ad.videoSoundEnable = !_adspot.muted;
-//            [ad setVideoSoundEnable:YES];
             AdvanceNativeExpressAd *TT = [[AdvanceNativeExpressAd alloc] initWithViewController:_adspot.viewController];
             TT.expressView = ad.feedView;
             TT.identifier = _supplier.identifier;
             TT.price = (ad.ecpm == 0) ?  _supplier.supplierPrice : ad.ecpm;
-            [temp addObject:TT];
+            [self.nativeAds addObject:TT];
+            
+            if (!_supplier.isParallel && [_delegate respondsToSelector:@selector(nativeExpressAdViewRenderSuccess:spotId:extra:)]) {
+                [_delegate nativeExpressAdViewRenderSuccess:TT spotId:self.adspot.adspotid extra:self.adspot.ext];
+            }
 
         }
-        self.nativeAds = temp;
+        
         if (_supplier.isParallel == YES) {
             _supplier.state = AdvanceSdkSupplierStateSuccess;
             return;

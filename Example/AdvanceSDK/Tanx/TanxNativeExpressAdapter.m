@@ -38,7 +38,7 @@
 @property (nonatomic, weak) AdvanceNativeExpress *adspot;
 @property (nonatomic, weak) UIViewController *controller;
 @property (nonatomic, strong) AdvSupplier *supplier;
-@property (nonatomic, strong) NSArray<__kindof AdvanceNativeExpressAd *> *nativeAds;
+@property (nonatomic, strong) NSMutableArray<__kindof AdvanceNativeExpressAd *> *nativeAds;
 @end
 
 @implementation TanxNativeExpressAdapter
@@ -112,7 +112,7 @@
             NSArray <TXAdFeedModule *>*views = [strongSelf.feedMgr renderFeedTemplateWithModel:viewModelArray joinBidding:NO andCreativeIds:creativeIds andTemplateConfig:strongSelf.config];
             
             
-            NSMutableArray *temp = [NSMutableArray array];
+            strongSelf.nativeAds = [NSMutableArray array];
 
             for (TXAdFeedModule *module in views) {
                 AdvanceNativeExpressAd *TT = [[AdvanceNativeExpressAd alloc] initWithViewController:strongSelf->_adspot.viewController];
@@ -120,10 +120,8 @@
                 TT.identifier = strongSelf->_supplier.identifier;
                 TT.price = (model.eCPM == nil) ? strongSelf->_supplier.supplierPrice : model.eCPM.integerValue;
 
-                [temp addObject:TT];
+                [strongSelf.nativeAds addObject:TT];
             }
-            
-            strongSelf.nativeAds = temp;
             
             if (strongSelf->_supplier.isParallel == YES) {
     //            NSLog(@"修改状态: %@", _supplier);
@@ -133,7 +131,7 @@
 
             
             if ([strongSelf->_delegate respondsToSelector:@selector(didFinishLoadingNativeExpressAds:spotId:)]) {
-                [strongSelf->_delegate didFinishLoadingNativeExpressAds:temp spotId:strongSelf.adspot.adspotid];
+                [strongSelf->_delegate didFinishLoadingNativeExpressAds:strongSelf.nativeAds spotId:strongSelf.adspot.adspotid];
             }
 
         } else {

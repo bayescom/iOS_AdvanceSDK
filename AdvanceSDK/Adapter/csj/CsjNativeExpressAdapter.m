@@ -19,7 +19,7 @@
 @property (nonatomic, strong) BUNativeExpressAdManager *csj_ad;
 @property (nonatomic, weak) AdvanceNativeExpress *adspot;
 @property (nonatomic, strong) AdvSupplier *supplier;
-@property (nonatomic, strong) NSArray <__kindof AdvanceNativeExpressAd *> * nativeAds;
+@property (nonatomic, strong) NSMutableArray <__kindof AdvanceNativeExpressAd *> * nativeAds;
 
 @end
 
@@ -98,20 +98,21 @@
         [_adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
         [_adspot reportWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
         
-        NSMutableArray *temp = [NSMutableArray array];
+        self.nativeAds = [NSMutableArray array];
 
         for (BUNativeExpressAdView *view in views) {
-//            view.rootViewController = _adspot.viewController;
             
             AdvanceNativeExpressAd *TT = [[AdvanceNativeExpressAd alloc] initWithViewController:_adspot.viewController];
             TT.expressView = view;
             TT.identifier = _supplier.identifier;
             TT.price = _supplier.sdk_price;
-            [temp addObject:TT];
+            [self.nativeAds addObject:TT];
+            
+            view.rootViewController = _adspot.viewController;
+            [view render];
 
         }
         
-        self.nativeAds = temp;
         if (_supplier.isParallel == YES) {
             _supplier.state = AdvanceSdkSupplierStateSuccess;
             return;

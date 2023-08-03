@@ -18,7 +18,6 @@
 
 @property(strong,nonatomic) AdvanceNativeExpress *advanceFeed;
 @property (nonatomic, strong) NSMutableArray *arrayData;
-@property (nonatomic, strong) NSMutableArray *arrNativeAds;
 
 @end
 
@@ -31,7 +30,6 @@
     _tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
     [self.view addSubview:_tableView];
     
-    [_tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"splitnativeexpresscell"];
     [_tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"nativeexpresscell"];
     [_tableView registerClass:[ExamTableViewCell class] forCellReuseIdentifier:@"ExamTableViewCell"];
     _tableView.delegate = self;
@@ -74,14 +72,7 @@
 
 /// 信息流广告数据拉取成功
 - (void)didFinishLoadingNativeExpressAds:(NSArray<AdvanceNativeExpressAd *> *)nativeAds spotId:(NSString *)spotId {
-    self.arrNativeAds = [nativeAds mutableCopy];
-    for (NSInteger i = 0; i < self.arrNativeAds.count; i++) {
-        AdvanceNativeExpressAd *nativeAd = self.arrNativeAds[i];
-//        view.isStopMotion = YES;
-        [nativeAd render];
-        [_arrayData insertObject:nativeAd atIndex:1];
-    }
-    [self.tableView reloadData];
+    NSLog(@"广告数据拉取成功 %s", __func__);
 }
 
 /// 信息流广告渲染成功
@@ -91,6 +82,7 @@
 /// 该回调会触发多次
 - (void)nativeExpressAdViewRenderSuccess:(AdvanceNativeExpressAd *)nativeAd spotId:(NSString *)spotId extra:(NSDictionary *)extra {
     NSLog(@"广告渲染成功 %s %@", __func__, nativeAd);
+    [_arrayData insertObject:nativeAd atIndex:1];
     [self.tableView reloadData];
 }
 
@@ -101,8 +93,6 @@
 /// 该回调会触发多次
 - (void)nativeExpressAdViewRenderFail:(AdvanceNativeExpressAd *)nativeAd spotId:(NSString *)spotId extra:(NSDictionary *)extra {
     NSLog(@"广告渲染失败 %s %@", __func__, nativeAd);
-    [_arrayData removeObject: nativeAd];
-    [self.tableView reloadData];
 }
 
 
@@ -134,12 +124,12 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     if ([_arrayData[indexPath.row] isKindOfClass:[BYExamCellModelElement class]]) {
+        
         return ((BYExamCellModelElement *)_arrayData[indexPath.row]).cellh;
+        
     } else {
         
         AdvanceNativeExpressAd *nativeAd = _arrayData[indexPath.row];
-        
-        
         UIView *view = [nativeAd expressView];
         CGFloat height = view.frame.size.height;
         if ([nativeAd.identifier isEqualToString:SDK_ID_TANX]) {
@@ -164,11 +154,9 @@
         if ([subView superview]) {
             [subView removeFromSuperview];
         }
+        
         AdvanceNativeExpressAd *nativeAd = _arrayData[indexPath.row];
-        
-        
         UIView *view = [nativeAd expressView];
-
         view.tag = 1000;
         [cell.contentView addSubview:view];
         cell.accessibilityIdentifier = @"nativeTemp_ad";

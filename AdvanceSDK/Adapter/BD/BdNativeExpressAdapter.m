@@ -8,17 +8,13 @@
 #import "BdNativeExpressAdapter.h"
 #if __has_include(<BaiduMobAdSDK/BaiduMobAdNative.h>)
 #import <BaiduMobAdSDK/BaiduMobAdNative.h>
-#import <BaiduMobAdSDK/BaiduMobAdSmartFeedView.h>
 #import <BaiduMobAdSDK/BaiduMobAdNativeAdView.h>
 #import <BaiduMobAdSDK/BaiduMobAdNativeAdObject.h>
-#import <BaiduMobAdSDK/BaiduMobAdNativeVideoView.h>
 #import <BaiduMobAdSDK/BaiduMobAdActButton.h>
 #else
 #import "BaiduMobAdSDK/BaiduMobAdNative.h"
-#import "BaiduMobAdSDK/BaiduMobAdSmartFeedView.h"
 #import "BaiduMobAdSDK/BaiduMobAdNativeAdView.h"
 #import "BaiduMobAdSDK/BaiduMobAdNativeAdObject.h"
-#import "BaiduMobAdSDK/BaiduMobAdNativeVideoView.h"
 #import "BaiduMobAdSDK/BaiduMobAdActButton.h"
 #endif
 
@@ -30,7 +26,6 @@
 @interface BdNativeExpressAdapter ()<BaiduMobAdNativeAdDelegate, BaiduMobAdNativeInterationDelegate>
 @property (nonatomic, strong) BaiduMobAdNative *bd_ad;
 @property (nonatomic, weak) AdvanceNativeExpress *adspot;
-@property (nonatomic, strong) NSMutableArray *adViewArray;
 @property (nonatomic, strong) AdvSupplier *supplier;
 @property (nonatomic, strong) NSMutableArray<__kindof AdvanceNativeExpressAd *> *nativeAds;
 
@@ -47,7 +42,6 @@
         _bd_ad.publisherId = _supplier.mediaid;
         _bd_ad.adUnitTag = _supplier.adspotid;
         _bd_ad.presentAdViewController = _adspot.viewController;
-        self.adViewArray = [NSMutableArray array];
     }
     return self;
 }
@@ -105,7 +99,8 @@
         _supplier.supplierPrice = [[nativeAds.firstObject getECPMLevel] integerValue];
         [_adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
         [_adspot reportWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
-        NSMutableArray *temp = [NSMutableArray array];
+        
+        self.nativeAds= [NSMutableArray array];
         
         for (int i = 0; i < nativeAds.count; i++) {
             
@@ -114,30 +109,33 @@
             object.interationDelegate = self;
             BaiduMobAdNativeAdView *view = [self createNativeAdViewWithframe:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, height) object:object];
             
-            if (view) {
-                [self.adViewArray addObject:view];
-            }
-            
             //展现前检查是否过期，通常广告过期时间为30分钟。如果过期，请放弃展示并重新请求
             if ([object isExpired]) {
                 continue;
             }
             
-            [view loadAndDisplayNativeAdWithObject:object completion:^(NSArray *errors) {
-                if (!errors) {
-                    NSLog(@"fdgf");
-                }
-            }];
-            
             AdvanceNativeExpressAd *TT = [[AdvanceNativeExpressAd alloc] initWithViewController:_adspot.viewController];
             TT.expressView = view;
             TT.identifier = _supplier.identifier;
             TT.price = ([[object getECPMLevel] integerValue] == 0) ?  _supplier.supplierPrice : [[object getECPMLevel] integerValue];
-
-            [temp addObject:TT];
+            [self.nativeAds addObject:TT];
+            
+            // 加载和显示广告内容
+            __weak typeof(self) weakSelf = self;
+            [view loadAndDisplayNativeAdWithObject:object completion:^(NSArray *errors) {
+                __strong typeof(self) strongSelf = weakSelf;
+                if (!errors) {
+                    if ([strongSelf.delegate respondsToSelector:@selector(nativeExpressAdViewRenderSuccess:spotId:extra:)]) {
+                        [strongSelf.delegate nativeExpressAdViewRenderSuccess:TT spotId:strongSelf.adspot.adspotid extra:strongSelf.adspot.ext];
+                    }
+                } else {
+                    if ([strongSelf.delegate respondsToSelector:@selector(nativeExpressAdViewRenderFail:spotId:extra:)]) {
+                        [strongSelf.delegate nativeExpressAdViewRenderFail:TT spotId:strongSelf.adspot.adspotid extra:strongSelf.adspot.ext];
+                    }
+                }
+            }];
         }
         
-        self.nativeAds = temp;
         if (_supplier.isParallel == YES) {
 //            NSLog(@"修改状态: %@", _supplier);
             _supplier.state = AdvanceSdkSupplierStateSuccess;
@@ -200,10 +198,6 @@
     AdvanceNativeExpressAd *nativeAd = [self returnExpressViewWithAdView:nativeAdView];
 
     if (nativeAd) {
-        if ([_delegate respondsToSelector:@selector(nativeExpressAdViewRenderSuccess:spotId:extra:)]) {
-            [_delegate nativeExpressAdViewRenderSuccess:nativeAd spotId:self.adspot.adspotid extra:self.adspot.ext];
-        }
-        
         [_adspot reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
         if ([_delegate respondsToSelector:@selector(didShowNativeExpressAd:spotId:extra:)]) {
             [_delegate didShowNativeExpressAd:nativeAd spotId:self.adspot.adspotid extra:self.adspot.ext];
@@ -234,15 +228,6 @@
 //    NSLog(@"信息流广告百香果点击回调");
 }
 
-- (void)tapGesture:(UIGestureRecognizer *)sender {
-    UIView *view = sender.view ;
-
-    if ([view isKindOfClass:[BaiduMobAdSmartFeedView class]]) {
-        BaiduMobAdSmartFeedView *adView = (BaiduMobAdSmartFeedView *)view;
-        [adView handleClick];
-        return;
-    }
-}
 
 - (AdvanceNativeExpressAd *)returnExpressViewWithAdView:(UIView *)adView {
     for (NSInteger i = 0; i < self.nativeAds.count; i++) {
@@ -255,7 +240,7 @@
 }
 
 #pragma mark - 创建广告视图
-
+/// 摘自百度SDK Demo
 - (BaiduMobAdNativeAdView *)createNativeAdViewWithframe:(CGRect)frame object:(BaiduMobAdNativeAdObject *)object {
     
     CGFloat screenWidth = UIScreen.mainScreen.bounds.size.width;

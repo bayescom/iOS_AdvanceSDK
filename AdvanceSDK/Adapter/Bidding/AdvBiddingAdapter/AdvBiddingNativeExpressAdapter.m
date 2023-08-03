@@ -20,7 +20,7 @@
 @property (nonatomic, strong) ABUNativeAdsManager *adManager;
 @property (nonatomic, weak) AdvanceNativeExpress *adspot;
 @property (nonatomic, strong) AdvSupplier *supplier;
-@property (nonatomic, strong) NSArray<__kindof AdvanceNativeExpressAd *> *nativeAds;
+@property (nonatomic, strong) NSMutableArray<__kindof AdvanceNativeExpressAd *> *nativeAds;
 
 @end
 
@@ -98,21 +98,22 @@
         _supplier.state = AdvanceSdkSupplierStateSuccess;
         [_adspot reportWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
         
-        NSMutableArray *temp = [NSMutableArray array];
+        self.nativeAds = [NSMutableArray array];
         for (ABUNativeAdView *view in nativeAdViewArray) {
-//            view.controller = _adspot.viewController;
-            view.rootViewController = _adspot.viewController;
-            view.delegate = self;
-            view.videoDelegate = self;
 
             AdvanceNativeExpressAd *TT = [[AdvanceNativeExpressAd alloc] initWithViewController:_adspot.viewController];
             TT.expressView = view;
             TT.identifier = _supplier.identifier;
-            [temp addObject:TT];
+            [self.nativeAds addObject:TT];
+            
+            view.delegate = self;
+            view.videoDelegate = self;
+            
+            view.rootViewController = _adspot.viewController;
+            [view render];
 
         }
         
-        self.nativeAds = temp;
         if (_supplier.isParallel == YES) {
 //            NSLog(@"修改状态: %@", _supplier);
             return;

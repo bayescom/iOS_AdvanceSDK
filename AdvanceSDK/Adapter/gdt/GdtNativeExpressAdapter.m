@@ -27,7 +27,7 @@
 @property (nonatomic, strong) GDTNativeExpressAd *gdt_ad;
 @property (nonatomic, weak) AdvanceNativeExpress *adspot;
 @property (nonatomic, strong) AdvSupplier *supplier;
-@property (nonatomic, strong) NSArray<__kindof AdvanceNativeExpressAd *> *nativeAds;
+@property (nonatomic, strong) NSMutableArray<__kindof AdvanceNativeExpressAd *> *nativeAds;
 @end
 
 @implementation GdtNativeExpressAdapter
@@ -110,19 +110,20 @@
         [_adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
         [_adspot reportWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
         
-        NSMutableArray *temp = [NSMutableArray array];
+        self.nativeAds = [NSMutableArray array];
         for (GDTNativeExpressAdView *view in views) {
-//            view.controller = _adspot.viewController;
             
             AdvanceNativeExpressAd *TT = [[AdvanceNativeExpressAd alloc] initWithViewController:_adspot.viewController];
             TT.expressView = view;
             TT.identifier = _supplier.identifier;
             TT.price = (view.eCPM == 0) ?  _supplier.supplierPrice : view.eCPM;
-            [temp addObject:TT];
+            [self.nativeAds addObject:TT];
+            
+            view.controller = _adspot.viewController;
+            [view render];
 
         }
         
-        self.nativeAds = temp;
         if (_supplier.isParallel == YES) {
             _supplier.state = AdvanceSdkSupplierStateSuccess;
 //            NSLog(@"修改状态: %@", _supplier);
