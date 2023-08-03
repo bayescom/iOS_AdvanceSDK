@@ -19,8 +19,8 @@
     //
 }
 
-/// 广告策略加载失败
-- (void)didFailLoadingADPolicyWithSpotId:(NSString *)spotId error:(NSError *)error description:(NSDictionary *)description {
+/// 广告策略或者渠道广告加载失败
+- (void)didFailLoadingADSourceWithSpotId:(NSString *)spotId error:(NSError *)error description:(NSDictionary *)description {
     ADV_LEVEL_INFO_LOG(@"广告展示失败 %s  error: %@ 详情:%@", __func__, error, description);
 
     [self.a.bridge interstitialAd:self.a didLoadFailWithError:error ext:@{}];

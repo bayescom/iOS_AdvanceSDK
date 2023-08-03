@@ -46,8 +46,8 @@
 
 /// 加载策略Model失败
 - (void)advPolicyServiceLoadFailedWithError:(nullable NSError *)error {
-    if ([_delegate respondsToSelector:@selector(didFailLoadingADPolicyWithSpotId:error:description:)]) {
-        [_delegate didFailLoadingADPolicyWithSpotId:self.adspotid error:error description:[self.errorDescriptions copy]];
+    if ([_delegate respondsToSelector:@selector(didFailLoadingADSourceWithSpotId:error:description:)]) {
+        [_delegate didFailLoadingADSourceWithSpotId:self.adspotid error:error description:[self.errorDescriptions copy]];
     }
 }
 
@@ -75,8 +75,8 @@
     // 返回渠道有问题 则不用再执行下面的渠道了
     if (error) {
         // 错误回调只调用一次
-        if ([_delegate respondsToSelector:@selector(didFailLoadingADPolicyWithSpotId:error:description:)]) {
-            [_delegate didFailLoadingADPolicyWithSpotId:self.adspotid error:error description:[self.errorDescriptions copy]];
+        if ([_delegate respondsToSelector:@selector(didFailLoadingADSourceWithSpotId:error:description:)]) {
+            [_delegate didFailLoadingADSourceWithSpotId:self.adspotid error:error description:[self.errorDescriptions copy]];
         }
         [self deallocDelegate:NO];
         return;

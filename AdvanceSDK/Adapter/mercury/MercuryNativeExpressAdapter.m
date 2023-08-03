@@ -111,8 +111,8 @@
         }
         
         self.nativeAds = temp;
-        _supplier.state = AdvanceSdkSupplierStateSuccess;
         if (_supplier.isParallel == YES) {
+            _supplier.state = AdvanceSdkSupplierStateSuccess;
 //            NSLog(@"修改状态: %@", _supplier);
             return;
         }

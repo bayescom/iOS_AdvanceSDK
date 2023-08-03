@@ -9,19 +9,28 @@
 #if __has_include(<BaiduMobAdSDK/BaiduMobAdNative.h>)
 #import <BaiduMobAdSDK/BaiduMobAdNative.h>
 #import <BaiduMobAdSDK/BaiduMobAdSmartFeedView.h>
+#import <BaiduMobAdSDK/BaiduMobAdNativeAdView.h>
 #import <BaiduMobAdSDK/BaiduMobAdNativeAdObject.h>
+#import <BaiduMobAdSDK/BaiduMobAdNativeVideoView.h>
+#import <BaiduMobAdSDK/BaiduMobAdActButton.h>
 #else
 #import "BaiduMobAdSDK/BaiduMobAdNative.h"
 #import "BaiduMobAdSDK/BaiduMobAdSmartFeedView.h"
+#import "BaiduMobAdSDK/BaiduMobAdNativeAdView.h"
 #import "BaiduMobAdSDK/BaiduMobAdNativeAdObject.h"
+#import "BaiduMobAdSDK/BaiduMobAdNativeVideoView.h"
+#import "BaiduMobAdSDK/BaiduMobAdActButton.h"
 #endif
 
 #import "AdvanceNativeExpress.h"
 #import "AdvLog.h"
 #import "AdvanceNativeExpressAd.h"
+@class BaiduMobAdActButton;
+
 @interface BdNativeExpressAdapter ()<BaiduMobAdNativeAdDelegate, BaiduMobAdNativeInterationDelegate>
 @property (nonatomic, strong) BaiduMobAdNative *bd_ad;
 @property (nonatomic, weak) AdvanceNativeExpress *adspot;
+@property (nonatomic, strong) NSMutableArray *adViewArray;
 @property (nonatomic, strong) AdvSupplier *supplier;
 @property (nonatomic, strong) NSMutableArray<__kindof AdvanceNativeExpressAd *> *nativeAds;
 
@@ -38,6 +47,7 @@
         _bd_ad.publisherId = _supplier.mediaid;
         _bd_ad.adUnitTag = _supplier.adspotid;
         _bd_ad.presentAdViewController = _adspot.viewController;
+        self.adViewArray = [NSMutableArray array];
     }
     return self;
 }
@@ -83,7 +93,6 @@
     [self deallocAdapter];
 }
 
-
 - (void)nativeAdObjectsSuccessLoad:(NSArray*)nativeAds nativeAd:(BaiduMobAdNative *)nativeAd {
     if (nativeAds == nil || nativeAds.count == 0) {
         [self.adspot reportWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:[NSError errorWithDomain:@"" code:100000 userInfo:@{@"msg":@"无广告返回"}]];
@@ -98,37 +107,42 @@
         [_adspot reportWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
         NSMutableArray *temp = [NSMutableArray array];
         
-        BaiduMobAdNativeAdObject *object = nativeAds.firstObject;
-        object.interationDelegate = self;
-//        if ([object isExpired]) {
-//            continue;
-//        }
-        // BDview
-        BaiduMobAdSmartFeedView *view = [[BaiduMobAdSmartFeedView alloc]initWithObject:object frame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, CGFLOAT_MIN)];
-//            UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapGesture:)];
-//            [view addGestureRecognizer:tapGesture];
+        for (int i = 0; i < nativeAds.count; i++) {
+            
+            CGFloat height = (UIScreen.mainScreen.bounds.size.width-30)*2/3+130;
+            BaiduMobAdNativeAdObject *object = nativeAds[i];
+            object.interationDelegate = self;
+            BaiduMobAdNativeAdView *view = [self createNativeAdViewWithframe:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, height) object:object];
+            
+            if (view) {
+                [self.adViewArray addObject:view];
+            }
+            
+            //展现前检查是否过期，通常广告过期时间为30分钟。如果过期，请放弃展示并重新请求
+            if ([object isExpired]) {
+                continue;
+            }
+            
+            [view loadAndDisplayNativeAdWithObject:object completion:^(NSArray *errors) {
+                if (!errors) {
+                    NSLog(@"fdgf");
+                }
+            }];
+            
+            AdvanceNativeExpressAd *TT = [[AdvanceNativeExpressAd alloc] initWithViewController:_adspot.viewController];
+            TT.expressView = view;
+            TT.identifier = _supplier.identifier;
+            TT.price = ([[object getECPMLevel] integerValue] == 0) ?  _supplier.supplierPrice : [[object getECPMLevel] integerValue];
 
-        [view setVideoMute:YES];
+            [temp addObject:TT];
+        }
         
-//            [view handleClick];
-//            [view trackImpression];
-        [view reSize];
-
-        // advanceView
-        AdvanceNativeExpressAd *TT = [[AdvanceNativeExpressAd alloc] initWithViewController:_adspot.viewController];
-        TT.expressView = view;
-        TT.identifier = _supplier.identifier;
-        TT.price = ([[object getECPMLevel] integerValue] == 0) ?  _supplier.supplierPrice : [[object getECPMLevel] integerValue];
-
-        [temp addObject:TT];
-
         self.nativeAds = temp;
         if (_supplier.isParallel == YES) {
 //            NSLog(@"修改状态: %@", _supplier);
             _supplier.state = AdvanceSdkSupplierStateSuccess;
             return;
         }
-
         
         if ([_delegate respondsToSelector:@selector(didFinishLoadingNativeExpressAds:spotId:)]) {
             [_delegate didFinishLoadingNativeExpressAds:self.nativeAds spotId:self.adspot.adspotid];
@@ -238,6 +252,116 @@
         }
     }
     return nil;
+}
+
+#pragma mark - 创建广告视图
+
+- (BaiduMobAdNativeAdView *)createNativeAdViewWithframe:(CGRect)frame object:(BaiduMobAdNativeAdObject *)object {
+    
+    CGFloat screenWidth = UIScreen.mainScreen.bounds.size.width;
+    CGFloat origin_x = 15;
+    CGFloat main_width = screenWidth - (origin_x*2);
+    CGFloat main_height = main_width*2/3;
+    
+    //标题
+    UILabel *titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(85, 20, main_width-85, 20)];
+    titleLabel.font = [UIFont systemFontOfSize:14.0];
+    
+    //描述
+    UILabel *textLabel = [[UILabel alloc]initWithFrame:CGRectMake(85, 50, main_width-85, 20)];
+    textLabel.font = [UIFont fontWithName:textLabel.font.familyName size:12];
+    if (!object.text || [object.text isEqualToString:@""]) {
+        object.text = @"广告描述信息";
+    }
+    
+    //Icon
+    UIImageView *iconImageView = [[UIImageView alloc]initWithFrame:CGRectMake(origin_x, origin_x, 60, 60)];
+    iconImageView.layer.cornerRadius = 3;
+    iconImageView.layer.masksToBounds = YES;
+    
+    //大图
+    UIImageView *mainImageView = [[UIImageView alloc]initWithFrame:CGRectMake(origin_x, 85, main_width, main_height)];
+    mainImageView.layer.cornerRadius = 5;
+    mainImageView.layer.masksToBounds = YES;
+    
+    //app名字
+    UILabel *brandLabel = [[UILabel alloc] initWithFrame:CGRectMake(origin_x, CGRectGetMaxY(mainImageView.frame) + 20, 60, 14)];
+    brandLabel.font = [UIFont fontWithName:brandLabel.font.familyName size:13];
+    brandLabel.textColor = [UIColor grayColor];
+    
+    //广告logo
+    UIImageView *baiduLogoView = [[UIImageView alloc] initWithFrame:CGRectMake(CGRectGetMaxX(brandLabel.frame), CGRectGetMinY(brandLabel.frame), 15, 14)];
+    UIImageView *adLogoView = [[UIImageView alloc] initWithFrame:CGRectMake(CGRectGetMaxX(baiduLogoView.frame), CGRectGetMinY(baiduLogoView.frame), 26, 14)];
+    
+    
+    BaiduMobAdActButton *actButton = [[BaiduMobAdActButton alloc] initWithFrame:CGRectMake(screenWidth - 80 - origin_x, CGRectGetMinY(brandLabel.frame) - 10, 80, 30)];
+    [actButton.titleLabel setFont:[UIFont systemFontOfSize:15]];
+    
+    //多图 Demo  单图和多图按需展示
+    NSMutableArray *imageViewArray = [NSMutableArray array];
+    if ([object.morepics count] > 0) {
+        //多图
+        CGFloat margin = 5;//图片间隙
+        CGFloat imageWidth = (screenWidth-2*origin_x-margin*(object.morepics.count-1))/object.morepics.count;
+        CGFloat imageHeight = imageWidth*2/3;
+        
+        //适配logo位置
+        actButton.frame = ({
+            CGRect frame = actButton.frame;
+            frame.origin.y = imageHeight + 10 + 85;
+            frame;
+        });
+        
+        baiduLogoView.frame = ({
+            CGRect frame = baiduLogoView.frame;
+            frame.origin.y = CGRectGetMinY(actButton.frame) + 10;
+            frame;
+        });
+        
+        adLogoView.frame = ({
+            CGRect frame = adLogoView.frame;
+            frame.origin.y = CGRectGetMinY(baiduLogoView.frame);
+            frame;
+        });
+        
+        brandLabel.frame = ({
+            CGRect frame = brandLabel.frame;
+            frame.origin.y = CGRectGetMinY(baiduLogoView.frame);
+            frame;
+        });
+        
+        
+        for (int i = 0; i<object.morepics.count; i++) {
+            UIImageView *mainImageView = [[UIImageView alloc]initWithFrame:CGRectMake(origin_x, 85, imageWidth, imageHeight)];
+            [imageViewArray addObject:mainImageView];
+            origin_x+=imageWidth+margin;
+        }
+    }
+    
+    BaiduMobAdNativeAdView *nativeAdView;
+    nativeAdView.backgroundColor = [UIColor whiteColor];
+    
+    if (object.materialType == NORMAL) {
+        
+        //多图 Demo  单图和多图按需展示
+        nativeAdView = [[BaiduMobAdNativeAdView alloc] initWithFrame:frame
+                                                           brandName:brandLabel
+                                                               title:titleLabel
+                                                                text:textLabel
+                                                                icon:iconImageView
+                                                           mainImage:mainImageView
+                                                            morepics:imageViewArray];
+        
+    }
+    // 自定义logo
+    nativeAdView.baiduLogoImageView = baiduLogoView;
+    [nativeAdView addSubview:baiduLogoView];
+    nativeAdView.adLogoImageView = adLogoView;
+    [nativeAdView addSubview:adLogoView];
+    nativeAdView.actButton = actButton;
+    [nativeAdView addSubview:actButton];
+    
+    return nativeAdView;
 }
 
 

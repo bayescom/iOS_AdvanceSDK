@@ -24,8 +24,13 @@
     
     self.initDefSubviewsFlag = YES;
     self.adspotIdsArr = @[
-        @{@"addesc": @"激励视频", @"adspotId": @"100255-10002595"},
-        @{@"addesc": @"激励视频", @"adspotId": @"100255-10006516"},
+//        @{@"addesc": @"激励视频", @"adspotId": @"100255-10002595"},
+//        @{@"addesc": @"激励视频", @"adspotId": @"100255-10006516"},
+        @{@"addesc": @"激励视频-倍业", @"adspotId": @"102768-10007792"},
+        @{@"addesc": @"激励视频-穿山甲", @"adspotId": @"102768-10007802"},
+        @{@"addesc": @"激励视频-优量汇", @"adspotId": @"102768-10007811"},
+        @{@"addesc": @"激励视频-快手", @"adspotId": @"102768-10007819"},
+        @{@"addesc": @"激励视频-百度", @"adspotId": @"102768-10007837"},
     ];
     
     self.btn1Title = @"加载广告";
@@ -60,8 +65,8 @@
     NSLog(@"%s 广告位id为: %@",__func__ , spotId);
 }
 
-/// 广告策略加载失败
-- (void)didFailLoadingADPolicyWithSpotId:(NSString *)spotId error:(NSError *)error description:(NSDictionary *)description {
+/// 广告策略或者渠道广告加载失败
+- (void)didFailLoadingADSourceWithSpotId:(NSString *)spotId error:(NSError *)error description:(NSDictionary *)description {
     NSLog(@"广告展示失败 %s  error: %@ 详情:%@", __func__, error,description);
     [JDStatusBarNotification showWithStatus:@"广告加载失败" dismissAfter:1.5];
     self.advanceRewardVideo.delegate = nil;

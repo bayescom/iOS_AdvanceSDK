@@ -75,8 +75,8 @@
 
 - (void)deallocDelegate:(BOOL)execute {
     ADV_LEVEL_INFO_LOG(@"%s", __func__);
-    if([_delegate respondsToSelector:@selector(didFailLoadingADPolicyWithSpotId:error:description:)] && execute) {
-        [_delegate didFailLoadingADPolicyWithSpotId:self.adspotid error:[AdvError errorWithCode:AdvErrorCode_115].toNSError description:[self.errorDescriptions copy]];
+    if([_delegate respondsToSelector:@selector(didFailLoadingADSourceWithSpotId:error:description:)] && execute) {
+        [_delegate didFailLoadingADSourceWithSpotId:self.adspotid error:[AdvError errorWithCode:AdvErrorCode_115].toNSError description:[self.errorDescriptions copy]];
         [_adapter performSelector:@selector(deallocAdapter)];
         [self deallocAdapter];
     }
@@ -101,8 +101,8 @@
 
 /// 加载策略Model失败
 - (void)advPolicyServiceLoadFailedWithError:(nullable NSError *)error {
-    if ([_delegate respondsToSelector:@selector(didFailLoadingADPolicyWithSpotId:error:description:)]) {
-        [_delegate didFailLoadingADPolicyWithSpotId:self.adspotid error:error description:[self.errorDescriptions copy]];
+    if ([_delegate respondsToSelector:@selector(didFailLoadingADSourceWithSpotId:error:description:)]) {
+        [_delegate didFailLoadingADSourceWithSpotId:self.adspotid error:error description:[self.errorDescriptions copy]];
     }
     [self deallocSelf];
     [self deallocDelegate:NO];
@@ -131,8 +131,8 @@
     // 返回渠道有问题 则不用再执行下面的渠道了
     if (error) {
         ADV_LEVEL_ERROR_LOG(@"%@", error);
-        if ([_delegate respondsToSelector:@selector(didFailLoadingADPolicyWithSpotId:error:description:)]) {
-            [_delegate didFailLoadingADPolicyWithSpotId:self.adspotid error:error description:[self.errorDescriptions copy]];
+        if ([_delegate respondsToSelector:@selector(didFailLoadingADSourceWithSpotId:error:description:)]) {
+            [_delegate didFailLoadingADSourceWithSpotId:self.adspotid error:error description:[self.errorDescriptions copy]];
         }
         [self deallocSelf];
         [self deallocDelegate:NO];

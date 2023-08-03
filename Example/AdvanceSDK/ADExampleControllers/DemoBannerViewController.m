@@ -23,7 +23,11 @@
     
     self.initDefSubviewsFlag = YES;
     self.adspotIdsArr = @[
-        @{@"addesc": @"Banner", @"adspotId": @"100255-10000558"},
+        //@{@"addesc": @"Banner", @"adspotId": @"100255-10000558"},
+        @{@"addesc": @"横幅-倍业", @"adspotId": @"102768-10007790"},
+        @{@"addesc": @"横幅-穿山甲", @"adspotId": @"102768-10007800"},
+        @{@"addesc": @"横幅-优量汇", @"adspotId": @"102768-10007809"},
+        @{@"addesc": @"横幅-百度", @"adspotId": @"102768-10007835"},
     ];
     self.btn1Title = @"加载并显示广告";
 }
@@ -56,8 +60,8 @@
     NSLog(@"%s 广告位id为: %@",__func__ , spotId);
 }
 
-/// 广告策略加载失败
-- (void)didFailLoadingADPolicyWithSpotId:(NSString *)spotId error:(NSError *)error description:(NSDictionary *)description {
+/// 广告策略或者渠道广告加载失败
+- (void)didFailLoadingADSourceWithSpotId:(NSString *)spotId error:(NSError *)error description:(NSDictionary *)description {
     NSLog(@"广告展示失败 %s  error: %@ 详情:%@", __func__, error, description);
 }
 

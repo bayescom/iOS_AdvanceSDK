@@ -104,6 +104,10 @@
 
 }
 
+- (void)fullScreenVideoAdLoadFailCode:(NSString *)errCode message:(NSString *)message fullScreenAd:(BaiduMobAdExpressFullScreenVideo *)video {
+    ADVLog(@"全屏视频加载失败，errCode:%@, message:%@", errCode, message);
+}
+
 - (void)fullScreenVideoAdLoaded:(BaiduMobAdExpressFullScreenVideo *)video {
 //    ADVLog(@"百度全屏视频缓存成功");
     if (_supplier.isParallel == YES) {

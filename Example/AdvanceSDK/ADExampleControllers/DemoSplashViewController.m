@@ -37,15 +37,13 @@
     self.initDefSubviewsFlag = YES;
     self.adspotIdsArr = @[
 //        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10002619"},
-        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10006483"},
+//        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10006483"},
         
-        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"101959-10006038"},
-        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"101959-10006806"},
-        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"102342-10006833"},
-        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"102342-10006591"},
-
-
-//
+        @{@"addesc": @"开屏-倍业", @"adspotId": @"102768-10007788"},
+        @{@"addesc": @"开屏-穿山甲", @"adspotId": @"102768-10007798"},
+        @{@"addesc": @"开屏-优量汇", @"adspotId": @"102768-10007807"},
+        @{@"addesc": @"开屏-快手", @"adspotId": @"102768-10007816"},
+        @{@"addesc": @"开屏-百度", @"adspotId": @"102768-10007833"},
     ];
     self.btn1Title = @"加载广告";
     self.btn2Title = @"展示广告";
@@ -143,8 +141,8 @@
     NSLog(@"%s 广告位id为: %@",__func__ , spotId);
 }
 
-/// 广告策略加载失败
-- (void)didFailLoadingADPolicyWithSpotId:(NSString *)spotId error:(NSError *)error description:(NSDictionary *)description {
+/// 广告策略或者渠道广告加载失败
+- (void)didFailLoadingADSourceWithSpotId:(NSString *)spotId error:(NSError *)error description:(NSDictionary *)description {
     NSLog(@"广告展示失败 %s  error: %@ 详情:%@", __func__, error, description);
     self.advanceSplash.delegate = nil;
     self.advanceSplash = nil;

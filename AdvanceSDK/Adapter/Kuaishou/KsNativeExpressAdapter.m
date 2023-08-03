@@ -109,8 +109,8 @@
 
         }
         self.nativeAds = temp;
-        _supplier.state = AdvanceSdkSupplierStateSuccess;
         if (_supplier.isParallel == YES) {
+            _supplier.state = AdvanceSdkSupplierStateSuccess;
             return;
         }
 
