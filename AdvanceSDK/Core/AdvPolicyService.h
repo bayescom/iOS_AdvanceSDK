@@ -6,7 +6,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "AdvSupplierModel.h"
+#import "AdvPolicyModel.h"
 #import "AdvPolicyServiceDelegate.h"
 
 NS_ASSUME_NONNULL_BEGIN
@@ -37,7 +37,7 @@ NS_ASSUME_NONNULL_BEGIN
                   customExt:(NSDictionary *_Nonnull)ext;
 
 /// 加载策略
-- (void)loadDataWithSupplierModel:(AdvSupplierModel *)model;
+- (void)loadDataWithSupplierModel:(AdvPolicyModel *)model;
 
 /**
  * 加载下个渠道

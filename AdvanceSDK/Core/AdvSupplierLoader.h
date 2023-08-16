@@ -6,7 +6,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "AdvSupplierModel.h"
+#import "AdvPolicyModel.h"
 
 //MARK: 渠道SDK初始化器
 @interface AdvSupplierLoader : NSObject

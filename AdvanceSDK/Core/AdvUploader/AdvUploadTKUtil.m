@@ -7,7 +7,7 @@
 
 #import "AdvUploadTKUtil.h"
 #import "AdvUploadTKManager.h"
-#import "AdvSupplierModel.h"
+#import "AdvPolicyModel.h"
 #import "AdvLog.h"
 
 #define MAXOPERATIONCOUNT 10

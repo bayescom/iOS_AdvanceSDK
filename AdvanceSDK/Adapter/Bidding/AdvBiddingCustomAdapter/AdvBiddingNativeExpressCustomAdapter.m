@@ -10,7 +10,7 @@
 //#import <AdvanceSDK/AdvanceNativeExpressView.h>
 #import "AdvBiddingNativeScapegoat.h"
 #import "AdvBiddingCongfig.h"
-#import "AdvSupplierModel.h"
+#import "AdvPolicyModel.h"
 @interface AdvBiddingNativeExpressCustomAdapter ()
 @property(strong,nonatomic) AdvanceNativeExpress *advanceFeed;
 @property (nonatomic, strong) AdvBiddingNativeScapegoat *scapegoat;
@@ -40,7 +40,7 @@
 - (void)loadNativeAdWithSlotID:(nonnull NSString *)slotID andSize:(CGSize)size imageSize:(CGSize)imageSize parameter:(nonnull NSDictionary *)parameter {
 //    NSLog(@"----------->自定义开屏adapter开始加载啦啦<------------");
     
-    AdvSupplierModel *model = [[AdvBiddingCongfig defaultManager] returnSupplierByAdspotId:slotID];
+    AdvPolicyModel *model = [[AdvBiddingCongfig defaultManager] returnSupplierByAdspotId:slotID];
     
     _advanceFeed = [[AdvanceNativeExpress alloc] initWithAdspotId:slotID customExt:nil viewController:self.bridge.viewControllerForPresentingModalView adSize:size];
 

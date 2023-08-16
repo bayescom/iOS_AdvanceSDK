@@ -6,8 +6,8 @@
 //
 
 #import "AdvBiddingCongfig.h"
-#import "AdvSupplierModel.h"
-#import "AdvModel.h"
+#import "AdvPolicyModel.h"
+
 @interface AdvBiddingCongfig ()
 @property (nonatomic, strong) NSMutableDictionary *dicts;
 @end
@@ -65,14 +65,14 @@ static AdvBiddingCongfig *defaultManager = nil;
     self.dicts = nil;
 }
 
-- (void)setAdDataModel:(AdvSupplierModel *)adDataModel adspotId:(NSString *)adspotId {
+- (void)setAdDataModel:(AdvPolicyModel *)adDataModel adspotId:(NSString *)adspotId {
 
     [self.dicts setObject:adDataModel forKey:adspotId];
 
 }
 
-- (AdvSupplierModel *)returnSupplierByAdspotId:(NSString *)adspotId {
-    AdvSupplierModel *model = [self.dicts objectForKey:adspotId];
+- (AdvPolicyModel *)returnSupplierByAdspotId:(NSString *)adspotId {
+    AdvPolicyModel *model = [self.dicts objectForKey:adspotId];
     return model;
 }
 

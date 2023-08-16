@@ -7,7 +7,7 @@
 
 #import "AdvanceBaseAdapter.h"
 #import "AdvLog.h"
-#import "AdvSupplierModel.h"
+#import "AdvPolicyModel.h"
 @interface AdvanceBaseAdapter ()
 @property (nonatomic, strong) AdvSupplier *supplier;
 

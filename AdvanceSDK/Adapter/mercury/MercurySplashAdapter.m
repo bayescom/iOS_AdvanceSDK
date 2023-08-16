@@ -14,7 +14,7 @@
 #import "MercurySplashAd.h"
 #endif
 
-#import "AdvSupplierModel.h"
+#import "AdvPolicyModel.h"
 #import "AdvanceSplash.h"
 #import "AdvLog.h"
 

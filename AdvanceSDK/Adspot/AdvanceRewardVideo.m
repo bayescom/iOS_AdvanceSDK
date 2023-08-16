@@ -46,7 +46,7 @@
 
 // MARK: ======================= AdvanceSupplierDelegate =======================
 /// 加载策略Model成功
-- (void)advPolicyServiceLoadSuccessWithModel:(nonnull AdvSupplierModel *)model {
+- (void)advPolicyServiceLoadSuccessWithModel:(nonnull AdvPolicyModel *)model {
     if ([_delegate respondsToSelector:@selector(didFinishLoadingADPolicyWithSpotId:)]) {
         [_delegate didFinishLoadingADPolicyWithSpotId:self.adspotid];
     }

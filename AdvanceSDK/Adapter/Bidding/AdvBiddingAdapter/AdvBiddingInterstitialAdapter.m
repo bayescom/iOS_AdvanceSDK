@@ -6,7 +6,7 @@
 //
 
 #import "AdvBiddingInterstitialAdapter.h"
-#import "AdvSupplierModel.h"
+#import "AdvPolicyModel.h"
 #import "AdvanceInterstitial.h"
 # if __has_include(<ABUAdSDK/ABUAdSDK.h>)
 #import <ABUAdSDK/ABUAdSDK.h>

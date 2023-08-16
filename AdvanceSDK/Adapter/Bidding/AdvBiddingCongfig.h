@@ -8,11 +8,11 @@
 #import <Foundation/Foundation.h>
 
 NS_ASSUME_NONNULL_BEGIN
-@class AdvSupplierModel;
+@class AdvPolicyModel;
 @interface AdvBiddingCongfig : NSObject
 + (AdvBiddingCongfig *)defaultManager;
 
-- (AdvSupplierModel *)returnSupplierByAdspotId:(NSString *)adspotId;
+- (AdvPolicyModel *)returnSupplierByAdspotId:(NSString *)adspotId;
 // 清空持有的adDataModel
 - (void)deleteAdDataModel;
 @end

@@ -43,7 +43,7 @@
 }
 
 /// 加载策略
-- (void)loadAdWithSupplierModel:(AdvSupplierModel *)model {
+- (void)loadAdWithSupplierModel:(AdvPolicyModel *)model {
     [_manager loadDataWithSupplierModel:model];
 }
 

@@ -4,14 +4,14 @@
 //  Created by guangyao on 2023/07/24.
 //
 
-@class AdvSupplierModel;
+@class AdvPolicyModel;
 @class AdvSupplier;
 @protocol AdvPolicyServiceDelegate <NSObject>
 
 @optional
 
 /// 策略服务加载成功
-- (void)advPolicyServiceLoadSuccessWithModel:(nonnull AdvSupplierModel *)model;
+- (void)advPolicyServiceLoadSuccessWithModel:(nonnull AdvPolicyModel *)model;
 
 /// 策略服务加载失败
 - (void)advPolicyServiceLoadFailedWithError:(nullable NSError *)error;

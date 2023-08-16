@@ -7,11 +7,11 @@
 
 #import "AdvPolicyService.h"
 #import "AdvDeviceInfoUtil.h"
-#import "AdvSupplierModel.h"
+#import "AdvPolicyModel.h"
 #import "AdvError.h"
 #import "AdvLog.h"
-#import "AdvModel.h"
 #import "AdvUploadTKUtil.h"
+#import "NSObject+AdvModel.h"
 #import <objc/runtime.h>
 #import <objc/message.h>
 
@@ -21,7 +21,7 @@
     NSInteger _waterfallMinPrice;
 
 }
-@property (nonatomic, strong) AdvSupplierModel *model;
+@property (nonatomic, strong) AdvPolicyModel *model;
 
 // 可执行渠道
 @property (nonatomic, strong) NSMutableArray<AdvSupplier *> *supplierM;
@@ -100,7 +100,7 @@
     }
 }
 
-- (void)loadDataWithSupplierModel:(AdvSupplierModel *)model {
+- (void)loadDataWithSupplierModel:(AdvPolicyModel *)model {
     if (!_arrayHeadBidding) {
         _arrayHeadBidding = [NSMutableArray array];
     }
@@ -636,7 +636,6 @@
     NSError *parseError = nil;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:deviceInfo options:NSJSONWritingPrettyPrinted error:&parseError];
     NSURL *url = [NSURL URLWithString:AdvanceSdkRequestUrl];
-//    NSURL *url = [NSURL URLWithString:AdvanceSdkRequestMockUrl];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:self.fetchTime];
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     request.HTTPBody = jsonData;
@@ -716,7 +715,7 @@
     }
     
     NSError *parseErr = nil;
-    AdvSupplierModel *a_model = [AdvSupplierModel adv_modelWithJSON:data];
+    AdvPolicyModel *a_model = [AdvPolicyModel adv_modelWithJSON:data];
     NSLog(@"[JSON]%@", [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil]);
     if (parseErr || !a_model) {
         // parse error
@@ -737,8 +736,8 @@
     }
     
     // success
-    a_model.advMediaId = self.mediaId;
-    a_model.advAdspotId = self.adspotId;
+//    a_model.advMediaId = self.mediaId;
+//    a_model.advAdspotId = self.adspotId;
     
     // 当使用缓存 但未赋值默认缓存时间 赋值缓存时间为3天
     if (a_model.setting.cacheDur <= 0 && a_model.setting.useCache) {
@@ -748,7 +747,7 @@
     }
     
     // 记录缓存过期时间
-    a_model.setting.cacheTime = [[NSDate date] timeIntervalSince1970] + a_model.setting.cacheDur;
+    //a_model.setting.cacheTime = [[NSDate date] timeIntervalSince1970] + a_model.setting.cacheDur;
 //    ADVLog(@"---------");
     if (!saveOnly) {
         self.model = a_model;
@@ -848,7 +847,7 @@
     return _fetchTime;
 }
 
-- (void)setModel:(AdvSupplierModel *)model {
+- (void)setModel:(AdvPolicyModel *)model {
     if (_model != model) {
         _model = nil;
         _model = model;

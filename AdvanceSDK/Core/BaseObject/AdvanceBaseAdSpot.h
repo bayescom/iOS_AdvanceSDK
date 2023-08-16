@@ -6,7 +6,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "AdvSupplierModel.h"
+#import "AdvPolicyModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 /**
@@ -47,7 +47,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)loadAd;
 
 /// 加载策略
-- (void)loadAdWithSupplierModel:(AdvSupplierModel *)model;
+- (void)loadAdWithSupplierModel:(AdvPolicyModel *)model;
 
 /// 加载下个渠道
 - (void)loadNextSupplierIfHas;

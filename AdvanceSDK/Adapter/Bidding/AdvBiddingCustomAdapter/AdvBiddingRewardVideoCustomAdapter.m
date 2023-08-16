@@ -9,7 +9,7 @@
 #import <AdvanceSDK/AdvanceRewardVideo.h>
 #import "AdvBiddingRewardVideoScapegoat.h"
 #import "AdvBiddingCongfig.h"
-#import "AdvSupplierModel.h"
+#import "AdvPolicyModel.h"
 #import "UIApplication+Adv.h"
 # if __has_include(<ABUAdSDK/ABUAdSDK.h>)
 #import <ABUAdSDK/ABUAdSDK.h>
@@ -41,7 +41,7 @@
 
 - (void)loadRewardedVideoAdWithSlotID:(nonnull NSString *)slotID andParameter:(nonnull NSDictionary *)parameter {
 //    NSLog(@"----------->自定义激励视频adapter开始加载啦啦<------------");
-    AdvSupplierModel *model = [[AdvBiddingCongfig defaultManager] returnSupplierByAdspotId:slotID];
+    AdvPolicyModel *model = [[AdvBiddingCongfig defaultManager] returnSupplierByAdspotId:slotID];
 
 //    NSLog(@"--> %@  ", [UIApplication sharedApplication].adv_getCurrentWindow.rootViewController);
     self.advanceRewardVideo = [[AdvanceRewardVideo alloc] initWithAdspotId:slotID

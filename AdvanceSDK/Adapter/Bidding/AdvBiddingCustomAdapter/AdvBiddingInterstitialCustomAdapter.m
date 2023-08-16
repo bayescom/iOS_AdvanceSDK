@@ -9,7 +9,7 @@
 #import <AdvanceSDK/AdvanceInterstitial.h>
 #import "AdvBiddingInterstitialScapegoat.h"
 #import "AdvBiddingCongfig.h"
-#import "AdvSupplierModel.h"
+#import "AdvPolicyModel.h"
 #import "UIApplication+Adv.h"
 #import "AdvLog.h"
 @interface AdvBiddingInterstitialCustomAdapter ()
@@ -32,7 +32,7 @@
     [self _setupWithWithSlotID:slotID adSize:size andParameter:parameter];
     
     if (self.interstitialAd) {
-        AdvSupplierModel *model = [[AdvBiddingCongfig defaultManager] returnSupplierByAdspotId:slotID];
+        AdvPolicyModel *model = [[AdvBiddingCongfig defaultManager] returnSupplierByAdspotId:slotID];
         [self.interstitialAd loadAdWithSupplierModel:model];
     } else {
         [self.bridge interstitialAd:self didLoadFailWithError:nil ext:@{}];
