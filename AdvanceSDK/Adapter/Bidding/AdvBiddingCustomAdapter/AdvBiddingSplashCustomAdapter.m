@@ -10,7 +10,7 @@
 #import <AdvanceSDK/AdvanceSplash.h>
 //#import "ABUDCustomSplashView.h"
 #import "AdvBiddingCongfig.h"
-//#import "AdvSupplierModel.h"
+//#import "AdvPolicyModel.h"
 //# if __has_include(<ABUAdSDK/ABUAdSDK.h>)
 //#import <ABUAdSDK/ABUAdSDK.h>
 //#else

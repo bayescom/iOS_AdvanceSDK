@@ -87,7 +87,8 @@
 
     }
     
-    [AdvSdkConfig shareInstance].appId = @"102768";
+//    [AdvSdkConfig shareInstance].appId = @"102768";
+    [AdvSdkConfig shareInstance].appId = @"100255";
     
     return YES;
 }

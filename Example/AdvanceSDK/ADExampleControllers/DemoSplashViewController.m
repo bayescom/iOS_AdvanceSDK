@@ -36,14 +36,14 @@
     // 需要id调试的媒体请联系运营同学开通
     self.initDefSubviewsFlag = YES;
     self.adspotIdsArr = @[
-//        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10002619"},
-//        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10006483"},
+        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10002619"},
+        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10006483"},
         
-        @{@"addesc": @"开屏-倍业", @"adspotId": @"102768-10007788"},
-        @{@"addesc": @"开屏-穿山甲", @"adspotId": @"102768-10007798"},
-        @{@"addesc": @"开屏-优量汇", @"adspotId": @"102768-10007807"},
-        @{@"addesc": @"开屏-快手", @"adspotId": @"102768-10007816"},
-        @{@"addesc": @"开屏-百度", @"adspotId": @"102768-10007833"},
+//        @{@"addesc": @"开屏-倍业", @"adspotId": @"102768-10007788"},
+//        @{@"addesc": @"开屏-穿山甲", @"adspotId": @"102768-10007798"},
+//        @{@"addesc": @"开屏-优量汇", @"adspotId": @"102768-10007807"},
+//        @{@"addesc": @"开屏-快手", @"adspotId": @"102768-10007816"},
+//        @{@"addesc": @"开屏-百度", @"adspotId": @"102768-10007833"},
     ];
     self.btn1Title = @"加载广告";
     self.btn2Title = @"展示广告";

@@ -1,5 +1,5 @@
 //
-//  AdvSupplierModel.h
+//  AdvPolicyModel.h
 //  Demo
 //
 //  Created by CherryKing on 2020/11/18.
@@ -67,9 +67,9 @@ NSString * ADVStringFromNAdvanceSdkSupplierRepoType(AdvanceSdkSupplierRepoType t
 @property (nonatomic, strong) Gro_more  *gro_more;
 @property (nonatomic, strong) AdvSetting *setting;
 @property (nonatomic, strong) NSMutableArray<AdvSupplier *> *suppliers;
-@property (nonatomic, copy)   NSString *msg;
+@property (nonatomic, copy) NSString *msg;
 @property (nonatomic, assign) NSInteger code;
-@property (nonatomic, copy)   NSString *reqid;
+@property (nonatomic, copy) NSString *reqid;
 
 
 //@property (nonatomic, copy)   NSString *advMediaId;
@@ -88,10 +88,10 @@ NSString * ADVStringFromNAdvanceSdkSupplierRepoType(AdvanceSdkSupplierRepoType t
 @property (nonatomic, copy) NSString *mediasecret; /// 媒体秘钥
 @property (nonatomic, assign) NSInteger priority; /// 上游sdk优先级，数值越小优先级越高 最高为1
 @property (nonatomic, assign) NSInteger timeout; /// 上游sdk请求超时时间（ms）
-@property (nonatomic, copy)   NSString *adspotid; /// 上游sdk分配给媒体的广告位id
+@property (nonatomic, copy) NSString *adspotid; /// 上游sdk分配给媒体的广告位id
 @property (nonatomic, assign) NSInteger sdk_price; /// 单位: 分
 
-/// 是否为头部竞价SDK 1-是 0-否，取决于渠道SDK是否支持head_bidding
+/// 此渠道广告是否勾选了头部竞价 1-是 0-否，如果该渠道SDK支持head_bidding，则去获取竞价
 @property (nonatomic, assign) NSInteger is_head_bidding;
 /// 竞价sdk用于和GroMore比价时的加强系数, 目前全是 1
 @property (nonatomic, assign) CGFloat bidRatio;
@@ -106,7 +106,7 @@ NSString * ADVStringFromNAdvanceSdkSupplierRepoType(AdvanceSdkSupplierRepoType t
 @property (nonatomic, strong) NSArray<NSString *> *biddingtk;/// gro_more使用
 
 /// 上游sdk竞胜上报（仅在开启竞价情况下返回）。SDK调用时机为，发起广告展现方法时
-@property (nonatomic, strong)   NSArray<NSString *> *wintk;
+@property (nonatomic, strong) NSArray<NSString *> *wintk;
 
 
 /// 该字段由各渠道SDK 返回并填充 用来做比价
@@ -125,9 +125,9 @@ NSString * ADVStringFromNAdvanceSdkSupplierRepoType(AdvanceSdkSupplierRepoType t
 /// 策略缓存时长
 @property (nonatomic, assign) NSInteger cacheDur;
 /// 聚合竞价模式：0表示普通竞价，1 为 GroMore 竞价
-@property (nonatomic , assign) NSInteger bidding_type;
+@property (nonatomic, assign) NSInteger bidding_type;
 /// SDK并行请求总体超时时长(ms)
-@property (nonatomic , assign) NSInteger parallel_timeout;
+@property (nonatomic, assign) NSInteger parallel_timeout;
 /// 并行策略组，该字段返回值为int型二维数组，每一组代表组内对应优先级的渠道需要并行，各个组之间需要串行
 @property (nonatomic, strong) NSMutableArray<NSMutableArray<NSNumber *> *> *parallelGroup;
 /// 需要进行headbidding的渠道SDK （存放is_head_bidding = 1 的 suppliers）
@@ -138,27 +138,27 @@ NSString * ADVStringFromNAdvanceSdkSupplierRepoType(AdvanceSdkSupplierRepoType t
 
 // gro_more对象
 @interface Gro_more :NSObject
-@property (nonatomic , strong) Gmtk              *gmtk;
-@property (nonatomic , strong) Gromore_params    *gromore_params;
+@property (nonatomic, strong) Gmtk              *gmtk;
+@property (nonatomic, strong) Gromore_params    *gromore_params;
 
 @end
 
 // gro_more的上报链接
 @interface Gmtk :NSObject
-@property (nonatomic , strong) NSArray <NSString *>  * failedtk;
-@property (nonatomic , strong) NSArray <NSString *>  * imptk;
-@property (nonatomic , strong) NSArray <NSString *>  * biddingtk;
-@property (nonatomic , strong) NSArray <NSString *>  * succeedtk;
-@property (nonatomic , strong) NSArray <NSString *>  * clicktk;
-@property (nonatomic , strong) NSArray <NSString *>  * loadedtk;
+@property (nonatomic, strong) NSArray <NSString *>  * failedtk;
+@property (nonatomic, strong) NSArray <NSString *>  * imptk;
+@property (nonatomic, strong) NSArray <NSString *>  * biddingtk;
+@property (nonatomic, strong) NSArray <NSString *>  * succeedtk;
+@property (nonatomic, strong) NSArray <NSString *>  * clicktk;
+@property (nonatomic, strong) NSArray <NSString *>  * loadedtk;
 
 @end
 
 // gro_more的配置参数
 @interface Gromore_params :NSObject
-@property (nonatomic , copy) NSString     * appid;
-@property (nonatomic , copy) NSString     * adspotid;
-@property (nonatomic , assign) NSInteger    timeout;
+@property (nonatomic, copy) NSString     * appid;
+@property (nonatomic, copy) NSString     * adspotid;
+@property (nonatomic, assign) NSInteger    timeout;
 
 @end
 
