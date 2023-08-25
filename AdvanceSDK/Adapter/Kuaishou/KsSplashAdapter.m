@@ -121,7 +121,7 @@
  */
 - (void)ksad_splashAdContentDidLoad:(KSSplashAdView *)splashAdView {
     _supplier.supplierPrice = splashAdView.ecpm;
-    [self.adspot.manager reportWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
+    [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
     [self.adspot.manager checkTargetWithResultfulSupplier:_supplier loadAdState:AdvanceSupplierLoadAdSuccess];
 
 }
@@ -129,14 +129,14 @@
  * splash ad (material) failed to load
  */
 - (void)ksad_splashAd:(KSSplashAdView *)splashAdView didFailWithError:(NSError *)error {
-    [self.adspot.manager reportWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
+    [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
     [self.adspot.manager checkTargetWithResultfulSupplier:_supplier loadAdState:AdvanceSupplierLoadAdFailed];
 }
 /**
  * splash ad did visible
  */
 - (void)ksad_splashAdDidVisible:(KSSplashAdView *)splashAdView {
-    [self.adspot.manager reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
+    [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(splashDidShowForSpotId:extra:)]) {
         [self.delegate splashDidShowForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
@@ -146,7 +146,7 @@
  * splash ad clicked
  */
 - (void)ksad_splashAdDidClick:(KSSplashAdView *)splashAdView {
-    [self.adspot.manager reportWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
+    [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(splashDidClickForSpotId:extra:)]) {
         [self.delegate splashDidClickForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }

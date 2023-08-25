@@ -89,8 +89,8 @@
 - (void)rewardVideoAdDidLoad:(TXAdRewardVideoAd *)rewardVideoAd {
     
     _supplier.supplierPrice = (rewardVideoAd.model.eCPM == nil) ? 0 : rewardVideoAd.model.eCPM.integerValue;
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
+    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
+    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
     
 //    NSLog(@"广点通激励视频拉取成功 %@",self.gdt_ad);
     if (_supplier.isParallel == YES) {
@@ -120,7 +120,7 @@
 /// @param rewardVideoAd 广告管理对象
 /// @param error 错误
 - (void)rewardVideoAd:(TXAdRewardVideoAd *)rewardVideoAd didLoadFailWithError:(NSError *)error {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
+    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
     _supplier.state = AdvanceSdkSupplierStateFailed;
     if (_supplier.isParallel == YES) {
         return;
@@ -137,7 +137,7 @@
 /// 广告弹出成功回调
 /// @param rewardVideoAd 广告管理对象
 - (void)rewardVideoAdDidShow:(TXAdRewardVideoAd *)rewardVideoAd {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
+    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(rewardedVideoDidStartPlayingForSpotId:extra:)]) {
         [self.delegate rewardedVideoDidStartPlayingForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
@@ -147,7 +147,7 @@
 /// @param rewardVideoAd 广告管理对象
 /// @param error 错误
 - (void)rewardVideoAd:(TXAdRewardVideoAd *)rewardVideoAd didShowFailWithError:(NSError *)error {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
+    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
     _supplier.state = AdvanceSdkSupplierStateFailed;
     if (_supplier.isParallel == YES) {
         return;

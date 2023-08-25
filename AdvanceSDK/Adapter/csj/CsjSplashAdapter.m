@@ -94,12 +94,12 @@
 // MARK: ======================= BUSplashAdDelegate =======================
 
 - (void)splashAdLoadSuccess:(nonnull BUSplashAd *)splashAd {
-    [self.adspot.manager reportWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
+    [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
     [self.adspot.manager checkTargetWithResultfulSupplier:_supplier loadAdState:AdvanceSupplierLoadAdSuccess];
 }
 
 - (void)splashAdLoadFail:(nonnull BUSplashAd *)splashAd error:(BUAdError * _Nullable)error {
-    [self.adspot.manager reportWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
+    [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
     [self.adspot.manager checkTargetWithResultfulSupplier:_supplier loadAdState:AdvanceSupplierLoadAdFailed];
 }
 
@@ -120,7 +120,7 @@
 }
 
 - (void)splashAdRenderFail:(nonnull BUSplashAd *)splashAd error:(BUAdError * _Nullable)error {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
+    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
 }
 
 - (void)splashAdWillShow:(nonnull BUSplashAd *)splashAd {
@@ -128,14 +128,14 @@
 }
 
 - (void)splashAdDidShow:(nonnull BUSplashAd *)splashAd {
-    [self.adspot.manager reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
+    [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(splashDidShowForSpotId:extra:)] && self.csj_ad) {
         [self.delegate splashDidShowForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
 }
 
 - (void)splashAdDidClick:(nonnull BUSplashAd *)splashAd {
-    [self.adspot.manager reportWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
+    [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(splashDidClickForSpotId:extra:)]) {
         [self.delegate splashDidClickForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }

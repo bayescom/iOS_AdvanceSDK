@@ -87,7 +87,7 @@
 
 - (void)nativeAdObjectsSuccessLoad:(NSArray*)nativeAds nativeAd:(BaiduMobAdNative *)nativeAd {
     if (nativeAds == nil || nativeAds.count == 0) {
-        [self.adspot reportWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:[NSError errorWithDomain:@"" code:100000 userInfo:@{@"msg":@"无广告返回"}]];
+        [self.adspot reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:[NSError errorWithDomain:@"" code:100000 userInfo:@{@"msg":@"无广告返回"}]];
         _supplier.state = AdvanceSdkSupplierStateFailed;
         if (_supplier.isParallel == YES) {
             return;
@@ -95,8 +95,8 @@
 
     } else {
         _supplier.supplierPrice = [[nativeAds.firstObject getECPMLevel] integerValue];
-        [_adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
-        [_adspot reportWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
+        [_adspot reportEventWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
+        [_adspot reportEventWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
         
         self.nativeAds= [NSMutableArray array];
         
@@ -147,7 +147,7 @@
 //广告返回失败
 - (void)nativeAdsFailLoad:(BaiduMobFailReason)reason {
     NSError *error = [[NSError alloc]initWithDomain:@"BDAdErrorDomain" code:1000030 + reason userInfo:@{@"desc":@"百度广告拉取失败"}];
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
+    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
     _supplier.state = AdvanceSdkSupplierStateFailed;
     if (_supplier.isParallel == YES) {
         return;
@@ -171,7 +171,7 @@
 //广告被点击，打开后续详情页面，如果为视频广告，可选择暂停视频
 - (void)nativeAdClicked:(UIView *)nativeAdView nativeAdDataObject:(BaiduMobAdNativeAdObject *)object {
 //    NSLog(@"信息流被点击:%@ - %@", nativeAdView, object);
-    [_adspot reportWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
+    [_adspot reportEventWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
     
     AdvanceNativeExpressAd *nativeAd = [self returnExpressViewWithAdView:nativeAdView];
 
@@ -193,7 +193,7 @@
     AdvanceNativeExpressAd *nativeAd = [self returnExpressViewWithAdView:nativeAdView];
 
     if (nativeAd) {
-        [_adspot reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
+        [_adspot reportEventWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
         if ([_delegate respondsToSelector:@selector(didShowNativeExpressAd:spotId:extra:)]) {
             [_delegate didShowNativeExpressAd:nativeAd spotId:self.adspot.adspotid extra:self.adspot.ext];
         }
@@ -205,7 +205,7 @@
 //广告曝光失败
 - (void)nativeAdExposureFail:(UIView *)nativeAdView nativeAdDataObject:(BaiduMobAdNativeAdObject *)object failReason:(int)reason {
 //    NSLog(@"信息流广告曝光失败:%@ - %@，reason：%d", nativeAdView, object, reason);
-//    [self.adspot reportWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:nil];
+//    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoFaileded supplier:_supplier error:nil];
     
     AdvanceNativeExpressAd *nativeAd = [self returnExpressViewWithAdView:nativeAdView];
 

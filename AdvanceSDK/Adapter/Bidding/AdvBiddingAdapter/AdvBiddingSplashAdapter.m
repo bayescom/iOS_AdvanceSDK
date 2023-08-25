@@ -141,7 +141,7 @@
 
 - (void)splashAdDidLoad:(ABUSplashAd *)splashAd {
     ADV_LEVEL_INFO_LOG(@"%s", __func__);
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
+    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(didFinishLoadingSplashADWithSpotId:)]) {
         [self.delegate didFinishLoadingSplashADWithSpotId:self.adspot.adspotid];
     }
@@ -150,7 +150,7 @@
 
 - (void)splashAd:(ABUSplashAd *)splashAd didFailWithError:(NSError *)error {
     ADV_LEVEL_INFO_LOG(@"%s-error:%@", __func__, error);
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
+    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
 //    [self deallocAdapter];
 }
 
@@ -171,8 +171,8 @@
     ADV_LEVEL_INFO_LOG(@"ritID:%@", info.slotID);
     ADV_LEVEL_INFO_LOG(@"requestID:%@", info.requestID ?: @"None");
     _supplier.supplierPrice = (info.ecpm) ? info.ecpm.integerValue : 0;
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoGMBidding supplier:_supplier error:nil];
+    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
+    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoGMBidding supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(splashDidShowForSpotId:extra:)]) {
         [self.delegate splashDidShowForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
@@ -180,7 +180,7 @@
 }
 
 - (void)splashAdDidClick:(ABUSplashAd *)splashAd {
-    [_adspot reportWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
+    [_adspot reportEventWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(splashDidClickForSpotId:extra:)]) {
         [self.delegate splashDidClickForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }

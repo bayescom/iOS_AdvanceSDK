@@ -100,8 +100,8 @@
             strongSelf->_supplier.supplierPrice = (model.eCPM == nil) ? 0 : model.eCPM.integerValue;
             
             
-            [strongSelf->_adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:strongSelf->_supplier error:nil];
-            [strongSelf->_adspot reportWithType:AdvanceSdkSupplierRepoSucceed supplier:strongSelf->_supplier error:nil];
+            [strongSelf->_adspot reportEventWithType:AdvanceSdkSupplierRepoBidding supplier:strongSelf->_supplier error:nil];
+            [strongSelf->_adspot reportEventWithType:AdvanceSdkSupplierRepoSucceed supplier:strongSelf->_supplier error:nil];
 
             //第二步获取模板信息
             strongSelf.config.verticalPadding = strongSelf.config.horizontalPadding = 10.f;
@@ -135,7 +135,7 @@
             }
 
         } else {
-            [strongSelf->_adspot reportWithType:AdvanceSdkSupplierRepoFailed supplier:strongSelf->_supplier error:nil];
+            [strongSelf->_adspot reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:strongSelf->_supplier error:nil];
             strongSelf->_supplier.state = AdvanceSdkSupplierStateFailed;
             if (strongSelf->_supplier.isParallel == YES) {
                 return;
@@ -148,7 +148,7 @@
 
 /// 点击了广告
 - (void)onClickingFeed:(TXAdFeedModel *)feedModel {
-    [_adspot reportWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
+    [_adspot reportEventWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
     AdvanceNativeExpressAd *nativeAd = self.nativeAds.firstObject;
     
     if (nativeAd) {
@@ -173,7 +173,7 @@
 
 /// 广告展示（曝光）
 - (void)onExposingFeed:(TXAdFeedModel *)feedModel {
-    [_adspot reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
+    [_adspot reportEventWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
     AdvanceNativeExpressAd *nativeAd = self.nativeAds.firstObject;
 
     if (nativeAd) {
@@ -207,7 +207,7 @@
 /// @param feedModel  feedModel模型
 /// @param error 错误信息
 - (void)onFailureFeed:(TXAdFeedModel *)feedModel andError:(NSError *)error {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:nil];
+    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:nil];
     
     AdvanceNativeExpressAd *nativeAd = self.nativeAds.firstObject;
     

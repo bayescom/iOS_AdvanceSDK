@@ -83,7 +83,7 @@
 - (void)feedAdsManagerSuccessToLoad:(KSFeedAdsManager *)adsManager nativeAds:(NSArray<KSFeedAd *> *_Nullable)feedAdDataArray {
 //    self.title = @"数据加载成功";
     if (feedAdDataArray == nil || feedAdDataArray.count == 0) {
-        [self.adspot reportWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:[NSError errorWithDomain:@"" code:100000 userInfo:@{@"msg":@"无广告返回"}]];
+        [self.adspot reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:[NSError errorWithDomain:@"" code:100000 userInfo:@{@"msg":@"无广告返回"}]];
         _supplier.state = AdvanceSdkSupplierStateFailed;
         if (_supplier.isParallel == YES) { // 并行不释放 只上报
             return;
@@ -94,8 +94,8 @@
 //        }
     } else {
         _supplier.supplierPrice = feedAdDataArray.firstObject.ecpm;
-        [_adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
-        [_adspot reportWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
+        [_adspot reportEventWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
+        [_adspot reportEventWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
         
         self.nativeAds = [NSMutableArray array];
         for (KSFeedAd *ad in feedAdDataArray) {
@@ -127,7 +127,7 @@
 }
 
 - (void)feedAdsManager:(KSFeedAdsManager *)adsManager didFailWithError:(NSError *)error {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
+    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
     _supplier.state = AdvanceSdkSupplierStateFailed;
     if (_supplier.isParallel == YES) { // 并行不释放 只上报
         return;
@@ -135,7 +135,7 @@
 }
 
 - (void)feedAdViewWillShow:(KSFeedAd *)feedAd {
-    [_adspot reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
+    [_adspot reportEventWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
     AdvanceNativeExpressAd *nativeAd = [self returnExpressViewWithAdView:(UIView *)feedAd.feedView];
     if (nativeAd) {
         if ([_delegate respondsToSelector:@selector(didShowNativeExpressAd:spotId:extra:)]) {
@@ -147,7 +147,7 @@
 }
 
 - (void)feedAdDidClick:(KSFeedAd *)feedAd {
-    [_adspot reportWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
+    [_adspot reportEventWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
     AdvanceNativeExpressAd *nativeAd = [self returnExpressViewWithAdView:(UIView *)feedAd.feedView];
 
     if (nativeAd) {

@@ -188,8 +188,8 @@
 //    TXAdSplashModel *model = self.splashModels.firstObject;
 //
 //    _supplier.supplierPrice = (model.eCPM == nil) ? 0 : model.eCPM.integerValue ;
-//    [self.adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
-//    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
+//    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
+//    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
 //
 //    if (_supplier.isParallel == YES) {
 //        //        ADV_LEVEL_INFO_LOG(@"修改状态: %@", _supplier);
@@ -207,7 +207,7 @@
 //- (void)onSplashClickWithWebUrl:(NSString *)webUrl {
 //    ADV_LEVEL_INFO_LOG(@"%s  %@",__func__, webUrl);
 //
-//    [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
+//    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
 //    if ([self.delegate respondsToSelector:@selector(splashDidClickForSpotId:extra:)]) {
 //        [self.delegate splashDidClickForSpotId:self.adspot.adspotid extra:self.adspot.ext];
 //    }
@@ -229,7 +229,7 @@
 ///// 开屏开始展示
 //- (void)onSplashShow {
 //    ADV_LEVEL_INFO_LOG(@"%s",__func__);
-//    [self.adspot reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
+//    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
 //    if ([self.delegate respondsToSelector:@selector(splashDidShowForSpotId:extra:)]) {
 //        [self.delegate splashDidShowForSpotId:self.adspot.adspotid extra:self.adspot.ext];
 //    }
@@ -274,7 +274,7 @@
 //
 //// 加载失败
 //- (void)tanxSplashAdFailToPresentWithError:(NSError *)error {
-//    [self.adspot reportWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
+//    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
 //    _supplier.state = AdvanceSdkSupplierStateFailed;
 //    if (_supplier.isParallel == YES) {
 //        return;

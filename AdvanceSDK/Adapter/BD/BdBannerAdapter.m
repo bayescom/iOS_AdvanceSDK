@@ -88,10 +88,10 @@
 - (void)willDisplayAd:(BaiduMobAdView *)adview {
     _supplier.state = AdvanceSdkSupplierStateSuccess;
     if (!_isBided) {// 只让bidding触发一次即可
-        [self.adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
+        [self.adspot reportEventWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
         _isBided = YES;
     }
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
+    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
     if (_supplier.isParallel == YES) {
         return;
     }
@@ -101,7 +101,7 @@
 
 - (void)failedDisplayAd:(BaiduMobFailReason)reason {
     NSError *error = [[NSError alloc]initWithDomain:@"BDAdErrorDomain" code:1000020 + reason userInfo:@{@"desc":@"百度广告展现错误"}];
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFailed  supplier:_supplier error:error];
+    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoFailed  supplier:_supplier error:error];
     _supplier.state = AdvanceSdkSupplierStateFailed;
 //    NSLog(@"========>>>>>>>> %ld %@", (long)_supplier.priority, error);
     if (_supplier.isParallel == YES) { // 并行不释放 只上报
@@ -113,14 +113,14 @@
 }
 
 - (void)didAdImpressed {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
+    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(bannerView:didShowAdWithSpotId:extra:)]) {
         [self.delegate bannerView:self.adspot.adContainer didShowAdWithSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
 }
 
 - (void)didAdClicked {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
+    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(bannerView:didClickAdWithSpotId:extra:)]) {
         [self.delegate bannerView:self.adspot.adContainer didClickAdWithSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }

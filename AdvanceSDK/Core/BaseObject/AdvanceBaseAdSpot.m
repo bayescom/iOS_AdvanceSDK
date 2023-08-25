@@ -45,9 +45,9 @@
     [_manager loadNextSupplierIfHas];
 }
 
-- (void)reportWithType:(AdvanceSdkSupplierRepoType)repoType supplier:(AdvSupplier *)supplier error:(NSError *)error {
+- (void)reportEventWithType:(AdvanceSdkSupplierRepoType)repoType supplier:(AdvSupplier *)supplier error:(NSError *)error {
 //    NSLog(@"|||--- %@ %ld %@",supplier.sdktag, (long)supplier.priority, supplier);
-//    [_manager reportWithType:repoType supplier:supplier error:error];
+//    [_manager reportEventWithType:repoType supplier:supplier error:error];
 //
 //    // 搜集各渠道的错误信息
 //    if (error) {

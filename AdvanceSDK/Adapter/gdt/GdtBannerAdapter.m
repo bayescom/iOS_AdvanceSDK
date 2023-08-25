@@ -108,10 +108,10 @@
     _supplier.supplierPrice = [unifiedBannerView eCPM];
     _supplier.state = AdvanceSdkSupplierStateSuccess;
     if (!_isBided) {// 只让bidding触发一次即可
-        [self.adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
+        [self.adspot reportEventWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
         _isBided = YES;
     }
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
+    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
     if (_supplier.isParallel == YES) {
         return;
     }
@@ -124,7 +124,7 @@
  */
 
 - (void)unifiedBannerViewFailedToLoad:(GDTUnifiedBannerView *)unifiedBannerView error:(NSError *)error {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFailed  supplier:_supplier error:error];
+    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoFailed  supplier:_supplier error:error];
     _supplier.state = AdvanceSdkSupplierStateFailed;
 //    NSLog(@"========>>>>>>>> %ld %@", (long)_supplier.priority, error);
     if (_supplier.isParallel == YES) { // 并行不释放 只上报
@@ -139,7 +139,7 @@
  *  banner2.0曝光回调
  */
 - (void)unifiedBannerViewWillExpose:(GDTUnifiedBannerView *)unifiedBannerView {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
+    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(bannerView:didShowAdWithSpotId:extra:)]) {
         [self.delegate bannerView:self.adspot.adContainer didShowAdWithSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
@@ -149,7 +149,7 @@
  *  banner2.0点击回调
  */
 - (void)unifiedBannerViewClicked:(GDTUnifiedBannerView *)unifiedBannerView {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
+    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(bannerView:didClickAdWithSpotId:extra:)]) {
         [self.delegate bannerView:self.adspot.adContainer didClickAdWithSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }

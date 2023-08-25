@@ -98,8 +98,8 @@
  */
 - (void)ksad_interstitialAdRenderSuccess:(KSInterstitialAd *)interstitialAd {
     _supplier.supplierPrice = interstitialAd.ecpm;
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
+    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
+    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
     _isDidLoad = YES;
 //    ADVLog(@"快手插屏视频拉取成功");
     _supplier.state = AdvanceSdkSupplierStateSuccess;
@@ -114,10 +114,10 @@
  */
 - (void)ksad_interstitialAdRenderFail:(KSInterstitialAd *)interstitialAd error:(NSError * _Nullable)error {
     if (_isDidLoad) {// 如果已经load 报错 为renderFail
-        [self.adspot reportWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
+        [self.adspot reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
 
     } else {// 如果没有load 报错 则为 loadfail
-        [self.adspot reportWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
+        [self.adspot reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
         _supplier.state = AdvanceSdkSupplierStateFailed;
         if (_supplier.isParallel == YES) { // 并行不释放 只上报
             return;
@@ -134,7 +134,7 @@
  * interstitial ad did visible
  */
 - (void)ksad_interstitialAdDidVisible:(KSInterstitialAd *)interstitialAd {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
+    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(interstitialDidShowForSpotId:extra:)]) {
         [self.delegate interstitialDidShowForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
@@ -150,7 +150,7 @@
  * interstitial ad did click
  */
 - (void)ksad_interstitialAdDidClick:(KSInterstitialAd *)interstitialAd {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
+    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(interstitialDidClickForSpotId:extra:)]) {
         [self.delegate interstitialDidClickForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }

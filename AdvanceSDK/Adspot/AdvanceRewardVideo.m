@@ -39,8 +39,8 @@
     return self;
 }
 
-- (void)reportWithType:(AdvanceSdkSupplierRepoType)repoType supplier:(nonnull AdvSupplier *)supplier error:(nonnull NSError *)error {
-    [super reportWithType:repoType supplier:supplier error:error];
+- (void)reportEventWithType:(AdvanceSdkSupplierRepoType)repoType supplier:(nonnull AdvSupplier *)supplier error:(nonnull NSError *)error {
+    [super reportEventWithType:repoType supplier:supplier error:error];
 }
 
 

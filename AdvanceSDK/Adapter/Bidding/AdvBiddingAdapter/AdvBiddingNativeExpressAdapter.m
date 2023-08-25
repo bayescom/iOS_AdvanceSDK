@@ -89,14 +89,14 @@
 - (void)nativeAdsManagerSuccessToLoad:(ABUNativeAdsManager *_Nonnull)adsManager nativeAds:(NSArray<ABUNativeAdView *> *_Nullable)nativeAdViewArray {
     if (nativeAdViewArray == nil || nativeAdViewArray.count == 0) {
         _supplier.state = AdvanceSdkSupplierStateFailed;
-        [self.adspot reportWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:nil];
+        [self.adspot reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:nil];
         if (_supplier.isParallel == YES) {
             return;
         }
 
     } else {
         _supplier.state = AdvanceSdkSupplierStateSuccess;
-        [_adspot reportWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
+        [_adspot reportEventWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
         
         self.nativeAds = [NSMutableArray array];
         for (ABUNativeAdView *view in nativeAdViewArray) {
@@ -129,7 +129,7 @@
 
 - (void)nativeAdsManager:(ABUNativeAdsManager *_Nonnull)adsManager didFailWithError:(NSError *_Nullable)error {
     ADV_LEVEL_INFO_LOG(@"%s:%@", __func__, error);
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
+    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
     _supplier.state = AdvanceSdkSupplierStateFailed;
     if (_supplier.isParallel == YES) {
         return;
@@ -155,7 +155,7 @@
  */
 - (void)nativeAdExpressViewRenderFail:(ABUNativeAdView *_Nonnull)nativeExpressAdView error:(NSError *_Nullable)error {
     ADV_LEVEL_INFO_LOG(@"%s:%@", __func__, error);
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:nil];
+    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:nil];
     
     AdvanceNativeExpressAd *nativeAd = [self returnExpressViewWithAdView:(UIView *)nativeExpressAdView];
     if (nativeAd) {
@@ -177,8 +177,8 @@
     ADV_LEVEL_INFO_LOG(@"ritID:%@", info.slotID);
     ADV_LEVEL_INFO_LOG(@"requestID:%@", info.requestID ?: @"None");
     _supplier.supplierPrice = (info.ecpm) ? info.ecpm.integerValue : 0;
-    [_adspot reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
-    [_adspot reportWithType:AdvanceSdkSupplierRepoGMBidding supplier:_supplier error:nil];
+    [_adspot reportEventWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
+    [_adspot reportEventWithType:AdvanceSdkSupplierRepoGMBidding supplier:_supplier error:nil];
     AdvanceNativeExpressAd *nativeAd = [self returnExpressViewWithAdView:(UIView *)nativeAdView];
     if (nativeAd) {
         if ([_delegate respondsToSelector:@selector(didShowNativeExpressAd:spotId:extra:)]) {
@@ -193,7 +193,7 @@
  */
 - (void)nativeAdDidClick:(ABUNativeAdView *_Nonnull)nativeAdView withView:(UIView *_Nullable)view {
     ADV_LEVEL_INFO_LOG(@"%s", __func__);
-    [_adspot reportWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
+    [_adspot reportEventWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
     AdvanceNativeExpressAd *nativeAd = [self returnExpressViewWithAdView:(UIView *)nativeAdView];
     
     if (nativeAd) {

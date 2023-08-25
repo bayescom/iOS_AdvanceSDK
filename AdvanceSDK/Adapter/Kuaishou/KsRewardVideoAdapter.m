@@ -102,8 +102,8 @@
  */
 - (void)rewardedVideoAdDidLoad:(KSRewardedVideoAd *)rewardedVideoAd {
     _supplier.supplierPrice = rewardedVideoAd.ecpm;
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
+    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
+    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
     _supplier.state = AdvanceSdkSupplierStateSuccess;
 //    NSLog(@"广点通激励视频拉取成功 %@",self.ks_ad);
     if (_supplier.isParallel == YES) {
@@ -122,7 +122,7 @@
  */
 - (void)rewardedVideoAd:(KSRewardedVideoAd *)rewardedVideoAd didFailWithError:(NSError *_Nullable)error {
 //    NSLog(@"快手 错误 %@", error);
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
+    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
     _supplier.state = AdvanceSdkSupplierStateFailed;
     if (_supplier.isParallel == YES) {
         return;
@@ -151,7 +151,7 @@
  This method is called when video ad slot has been shown.
  */
 - (void)rewardedVideoAdDidVisible:(KSRewardedVideoAd *)rewardedVideoAd {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
+    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
 }
 /**
  This method is called when video ad is about to close.
@@ -172,7 +172,7 @@
  This method is called when video ad is clicked.
  */
 - (void)rewardedVideoAdDidClick:(KSRewardedVideoAd *)rewardedVideoAd  {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
+    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(rewardedVideoDidClickForSpotId:extra:)]) {
         [self.delegate rewardedVideoDidClickForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }

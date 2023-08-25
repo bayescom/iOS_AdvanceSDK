@@ -63,7 +63,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)loadNextSupplierIfHas;
 
 /// 上报
-- (void)reportWithType:(AdvanceSdkSupplierRepoType)repoType supplier:(AdvSupplier *)supplier error:(NSError *)error;
+- (void)reportEventWithType:(AdvanceSdkSupplierRepoType)repoType supplier:(AdvSupplier *)supplier error:(NSError *)error;
 
 /// 取消当前策略请求
 - (void)deallocAdapter DEPRECATED_MSG_ATTRIBUTE("该方法在AdvanceSDK内部调用, 开发者不要手动调用该方法, 如想释放,只需把广告对象置为nil即可");

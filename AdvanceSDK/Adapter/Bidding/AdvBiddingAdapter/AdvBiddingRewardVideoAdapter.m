@@ -104,7 +104,7 @@
 - (void)rewardedVideoAdDidLoad:(ABURewardedVideoAd *_Nonnull)rewardedVideoAd {
     ADV_LEVEL_INFO_LOG(@"%s",__func__);
     _supplier.state = AdvanceSdkSupplierStateSuccess;
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
+    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
     
 //    NSLog(@"Bidding激励视频拉取成功 %@",self.gdt_ad);
     if (_supplier.isParallel == YES) {
@@ -123,7 +123,7 @@
 /// @param error 错误信息
 - (void)rewardedVideoAd:(ABURewardedVideoAd *_Nonnull)rewardedVideoAd didFailWithError:(NSError *_Nullable)error {
     ADV_LEVEL_INFO_LOG(@"%s error:%@", __func__, error);
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
+    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
     _supplier.state = AdvanceSdkSupplierStateFailed;
     if (_supplier.isParallel == YES) {
         return;
@@ -136,7 +136,7 @@
 /// @param error 展示失败的原因
 - (void)rewardedVideoAdDidShowFailed:(ABURewardedVideoAd *_Nonnull)rewardedVideoAd error:(NSError *_Nonnull)error {
     ADV_LEVEL_INFO_LOG(@"%s error:%@", __func__, error);
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
+    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
 }
 
 /// 广告已加载视频素材回调
@@ -161,8 +161,8 @@
     ADV_LEVEL_INFO_LOG(@"ritID:%@", info.slotID);
     ADV_LEVEL_INFO_LOG(@"requestID:%@", info.requestID ?: @"None");
     _supplier.supplierPrice = (info.ecpm) ? info.ecpm.integerValue : 0;
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoGMBidding supplier:_supplier error:nil];
+    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
+    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoGMBidding supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(rewardedVideoDidStartPlayingForSpotId:extra:)]) {
         [self.delegate rewardedVideoDidStartPlayingForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
@@ -182,7 +182,7 @@
 /// @param rewardedVideoAd 广告管理对象
 - (void)rewardedVideoAdDidClick:(ABURewardedVideoAd *_Nonnull)rewardedVideoAd {
     ADV_LEVEL_INFO_LOG(@"%s",__func__);
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
+    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(rewardedVideoDidClickForSpotId:extra:)]) {
         [self.delegate rewardedVideoDidClickForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }

@@ -105,8 +105,8 @@
 
 - (void)interstitialProAdDidDownLoadVideo:(ABUInterstitialProAd *)interstitialProAd {
     //回调后再去展示广告，可保证播放和展示效果
-        [self.adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
-        [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
+        [self.adspot reportEventWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
+        [self.adspot reportEventWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
         _supplier.state = AdvanceSdkSupplierStateSuccess;
         if (_supplier.isParallel == YES) {
             return;
@@ -116,7 +116,7 @@
 
 /// 加载失败回调
 - (void)interstitialProAd:(ABUInterstitialProAd *)interstitialProAd didFailWithError:(NSError *)error {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
+    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
     _supplier.state = AdvanceSdkSupplierStateFailed;
     if (_supplier.isParallel == YES) { // 并行不释放 只上报
         return;
@@ -129,7 +129,7 @@
 - (void)interstitialProAdDidVisible:(ABUInterstitialProAd *)interstitialProAd {
     
     // 展示后可获取信息如下
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
+    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(interstitialDidShowForSpotId:extra:)]) {
         [self.delegate interstitialDidShowForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
@@ -145,7 +145,7 @@
 
 /// 广告点击回调
 - (void)interstitialProAdDidClick:(ABUInterstitialProAd *)interstitialProAd {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
+    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(interstitialDidClickForSpotId:extra:)]) {
         [self.delegate interstitialDidClickForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }

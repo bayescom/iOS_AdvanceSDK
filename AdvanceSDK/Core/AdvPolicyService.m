@@ -120,7 +120,7 @@
             if ([_delegate respondsToSelector:@selector(advPolicyServiceLoadAnySupplier:)]) {
                 [_delegate advPolicyServiceLoadAnySupplier:supplier];
             }
-            [self reportWithType:AdvanceSdkSupplierRepoLoaded supplier:supplier error:nil];
+            [self reportEventWithType:AdvanceSdkSupplierRepoLoaded supplier:supplier error:nil];
         }];
         
         /// 执行完后移除该组渠道，确保再次调用此函数时能获取到下一组渠道
@@ -172,7 +172,7 @@
         if ([_delegate respondsToSelector:@selector(advPolicyServiceFinishBiddingWithWinSupplier:)]) {
             [_delegate advPolicyServiceFinishBiddingWithWinSupplier:target];
         }
-        [self reportWithType:AdvanceSdkSupplierRepoBidding supplier:target error:nil];
+        [self reportEventWithType:AdvanceSdkSupplierRepoBidding supplier:target error:nil];
     }
     
     // 该组渠道广告均返回失败，执行下一组渠道并发
@@ -382,7 +382,7 @@
         
     } else {
         supplier.state = AdvanceSdkSupplierStateInHand;
-        [self reportWithType:AdvanceSdkSupplierRepoLoaded supplier:supplier error:nil];
+        [self reportEventWithType:AdvanceSdkSupplierRepoLoaded supplier:supplier error:nil];
     }
     
     if ([_delegate respondsToSelector:@selector(advPolicyServiceLoadSupplier:error:)]) {
@@ -785,7 +785,7 @@
 }
 
 // MARK: ======================= 上报 =======================
-- (void)reportWithType:(AdvanceSdkSupplierRepoType)repoType supplier:(AdvSupplier *)supplier error:(nullable NSError *)error{
+- (void)reportEventWithType:(AdvanceSdkSupplierRepoType)repoType supplier:(AdvSupplier *)supplier error:(nullable NSError *)error{
     NSArray<NSString *> *uploadArr = nil;
     /// 按照类型判断上报地址
     if (repoType == AdvanceSdkSupplierRepoLoaded) {
