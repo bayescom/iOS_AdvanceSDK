@@ -51,10 +51,6 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)loadNextWaterfallSupplierIfHas;
 
-/// 数据上报
-/// @param repoType 上报的类型
-- (void)reportWithType:(AdvanceSdkSupplierRepoType)repoType supplier:(AdvSupplier *)supplier error:(NSError *)error;
-
 
 /// 取消正在进行的策略请求
 - (void)cancelDataTask;
@@ -67,6 +63,19 @@ NS_ASSUME_NONNULL_BEGIN
 
 // 接收失败的并发渠道
 - (void)inParallelWithErrorSupplier:(AdvSupplier *)errorSupplier;
+
+
+#pragma mark: - Refactor
+
+/// 检测是否命中用于展示的渠道
+/// - Parameters:
+///   - supplier: loadAd后返回结果的某个渠道
+///   - state: loadAd后返回结果状态
+- (void)checkTargetWithResultfulSupplier:(AdvSupplier *)supplier loadAdState:(AdvanceSupplierLoadAdState)state;
+
+/// 数据上报
+/// @param repoType 上报的类型
+- (void)reportWithType:(AdvanceSdkSupplierRepoType)repoType supplier:(AdvSupplier *)supplier error:(nullable NSError *)error;
 
 @end
 

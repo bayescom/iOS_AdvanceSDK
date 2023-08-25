@@ -36,14 +36,14 @@
     // 需要id调试的媒体请联系运营同学开通
     self.initDefSubviewsFlag = YES;
     self.adspotIdsArr = @[
-        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10002619"},
-        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10006483"},
+//        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10002619"},
+//        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10006483"},
         
-//        @{@"addesc": @"开屏-倍业", @"adspotId": @"102768-10007788"},
-//        @{@"addesc": @"开屏-穿山甲", @"adspotId": @"102768-10007798"},
-//        @{@"addesc": @"开屏-优量汇", @"adspotId": @"102768-10007807"},
-//        @{@"addesc": @"开屏-快手", @"adspotId": @"102768-10007816"},
-//        @{@"addesc": @"开屏-百度", @"adspotId": @"102768-10007833"},
+        @{@"addesc": @"开屏-倍业", @"adspotId": @"102768-10007788"},
+        @{@"addesc": @"开屏-穿山甲", @"adspotId": @"102768-10007798"},
+        @{@"addesc": @"开屏-优量汇", @"adspotId": @"102768-10007807"},
+        @{@"addesc": @"开屏-快手", @"adspotId": @"102768-10007816"},
+        @{@"addesc": @"开屏-百度", @"adspotId": @"102768-10007833"},
     ];
     self.btn1Title = @"加载广告";
     self.btn2Title = @"展示广告";
@@ -60,8 +60,6 @@
     
     [self.view.window addSubview:self.bgImgV];
     self.bgImgV.image = [UIImage imageNamed:@"LaunchImage_img"];
-    
-    
     
     if (self.advanceSplash) {
         self.advanceSplash.delegate = nil;
@@ -93,9 +91,9 @@
     
     
     // 如果该时间内没有广告返回 即:未触发-advanceUnifiedViewDidLoad 回调, 则会结束本次广告加载,并触发错误回调
-    self.advanceSplash.timeout = 30;//<---- 确保timeout 时长内不对advanceSplash进行移除的操作
+    //self.advanceSplash.timeout = 5;//<---- 确保timeout 时长内不对advanceSplash进行移除的操作
     [self.advanceSplash loadAd];
-    NSLog(@"是否有广告返回 : %d", self.advanceSplash.isLoadAdSucceed);
+    //NSLog(@"是否有广告返回 : %d", self.advanceSplash.isLoadAdSucceed);
 
 }
 
@@ -129,9 +127,7 @@
 }
 
 - (void)showAd {
-    if (self.advanceSplash.isLoadAdSucceed) {
-        [self.advanceSplash showInWindow:self.view.window];
-    }
+    [self.advanceSplash showInWindow:self.view.window];
 }
 
 // MARK: ======================= AdvanceSplashDelegate =======================
@@ -144,8 +140,7 @@
 /// 广告策略或者渠道广告加载失败
 - (void)didFailLoadingADSourceWithSpotId:(NSString *)spotId error:(NSError *)error description:(NSDictionary *)description {
     NSLog(@"广告展示失败 %s  error: %@ 详情:%@", __func__, error, description);
-    self.advanceSplash.delegate = nil;
-    self.advanceSplash = nil;
+//    self.advanceSplash = nil;
     [self.bgImgV removeFromSuperview];
     self.bgImgV.image = nil;
     self.bgImgV = nil;
@@ -178,6 +173,7 @@
 /// 广告关闭
 - (void)splashDidCloseForSpotId:(NSString *)spotId extra:(NSDictionary *)extra {
     NSLog(@"广告关闭了 %s", __func__);
+    self.advanceSplash = nil;
 }
 
 
@@ -189,4 +185,9 @@
 //    _bgImgV.userInteractionEnabled = YES;
     return _bgImgV;
 }
+
+- (void)dealloc {
+    
+}
+
 @end

@@ -11,7 +11,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface BdSplashAdapter : AdvanceBaseAdapter
+@interface BdSplashAdapter : NSObject
 
 @property (nonatomic, weak) id<AdvanceSplashDelegate> delegate;
 @end

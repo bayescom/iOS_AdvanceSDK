@@ -13,7 +13,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface GdtSplashAdapter : AdvanceBaseAdapter
+@interface GdtSplashAdapter : NSObject
 @property (nonatomic, weak) id<AdvanceSplashDelegate> delegate;
 
 @end

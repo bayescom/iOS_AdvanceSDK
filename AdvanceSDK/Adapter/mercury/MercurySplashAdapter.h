@@ -12,7 +12,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface MercurySplashAdapter : AdvanceBaseAdapter
+@interface MercurySplashAdapter : NSObject
 @property (nonatomic, weak) id<AdvanceSplashDelegate> delegate;
 
 @end

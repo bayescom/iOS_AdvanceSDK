@@ -17,7 +17,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface TanxSplashAdapter : AdvanceBaseAdapter
+@interface TanxSplashAdapter : NSObject
 @property (nonatomic, weak) id<AdvanceSplashDelegate> delegate;
 
 @end

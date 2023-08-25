@@ -10,7 +10,7 @@
 #import "AdvanceSplashDelegate.h"
 NS_ASSUME_NONNULL_BEGIN
 
-@interface KsSplashAdapter : AdvanceBaseAdapter
+@interface KsSplashAdapter : NSObject
 
 @property (nonatomic, weak) id<AdvanceSplashDelegate> delegate;
 

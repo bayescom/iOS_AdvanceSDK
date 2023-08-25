@@ -19,23 +19,21 @@
 #import "AdvLog.h"
 #import <objc/runtime.h>
 #import <objc/message.h>
+#import "AdvanceAdapter.h"
 
-@interface CsjSplashAdapter ()  <BUSplashAdDelegate>
+@interface CsjSplashAdapter ()  <BUSplashAdDelegate, AdvanceAdapter>
 
 @property (nonatomic, strong) BUSplashAd *csj_ad;
 @property (nonatomic, weak) AdvanceSplash *adspot;
 @property (nonatomic, strong) AdvSupplier *supplier;
 @property (nonatomic, strong) UIImageView *imgV;
 
-@property (nonatomic, assign) BOOL isCanch;
-@property (nonatomic, assign) BOOL isClose;
-
 @end
 
 @implementation CsjSplashAdapter
 
 - (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(id)adspot {
-    if (self = [super initWithSupplier:supplier adspot:adspot]) {
+    if (self = [super init]) {
         _adspot = adspot;
         _supplier = supplier;
         CGRect adFrame = [UIApplication sharedApplication].keyWindow.bounds;
@@ -49,58 +47,20 @@
         }
         _csj_ad = [[BUSplashAd alloc] initWithSlotID:_supplier.adspotid adSize:adFrame.size];
         _csj_ad.delegate = self;
+        _csj_ad.tolerateTimeout = _supplier.timeout * 1.0 / 1000.0;
     }
     return self;
 }
 
-- (void)supplierStateLoad {
-    ADV_LEVEL_INFO_LOG(@"加载穿山甲 supplier: %@", _supplier);
-    
-    NSInteger parallel_timeout = _supplier.timeout;
-    if (parallel_timeout == 0) {
-        parallel_timeout = 3000;
-    }
-    _csj_ad.tolerateTimeout = parallel_timeout / 1000.0;
-    
-    _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
+
+- (void)loadAd {
     [self.csj_ad loadAdData];
 }
 
-- (void)supplierStateInPull {
-    ADV_LEVEL_INFO_LOG(@"穿山甲加载中...");
-}
-
-- (void)supplierStateSuccess {
-    ADV_LEVEL_INFO_LOG(@"穿山甲 成功");
-    [self unifiedDelegate];
-    
-}
-
-- (void)supplierStateFailed {
-    ADV_LEVEL_INFO_LOG(@"穿山甲 失败");
-    [_adspot loadNextSupplierIfHas];
-    [self deallocAdapter];
-}
-
-
-- (void)loadAd {
-    [super loadAd];
-    
-}
-
-- (void)deallocAdapter {
-    ADV_LEVEL_INFO_LOG(@"%s %@", __func__, self.csj_ad);
-    
-    //        ADV_LEVEL_INFO_LOG(@"%@", [NSThread currentThread]);
-    if (_csj_ad) {
-        //        NSLog(@"穿山甲 释放了");
-        [_csj_ad removeSplashView];
-        _csj_ad.delegate = nil;
-        _csj_ad = nil;
-        [self.imgV removeFromSuperview];
-        self.imgV = nil;
+- (void)winnerAdapterToShowAd {
+    if ([self.delegate respondsToSelector:@selector(didFinishLoadingSplashADWithSpotId:)]) {
+        [self.delegate didFinishLoadingSplashADWithSpotId:self.adspot.adspotid];
     }
-    
 }
 
 - (void)gmShowAd {
@@ -133,24 +93,18 @@
 
 // MARK: ======================= BUSplashAdDelegate =======================
 
-
-
 - (void)splashAdLoadSuccess:(nonnull BUSplashAd *)splashAd {
-//    NSLog(@"11111111111");
-    _supplier.state = AdvanceSdkSupplierStateSuccess;
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
-//    NSLog(@"穿山甲开屏拉取成功");
-//    _supplier = nil;
-    if (_supplier.isParallel == YES) {
-        return;
-    }
-    [self unifiedDelegate];
+    [self.adspot.manager reportWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
+    [self.adspot.manager checkTargetWithResultfulSupplier:_supplier loadAdState:AdvanceSupplierLoadAdSuccess];
+}
+
+- (void)splashAdLoadFail:(nonnull BUSplashAd *)splashAd error:(BUAdError * _Nullable)error {
+    [self.adspot.manager reportWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
+    [self.adspot.manager checkTargetWithResultfulSupplier:_supplier loadAdState:AdvanceSupplierLoadAdFailed];
 }
 
 - (void)splashAdRenderSuccess:(nonnull BUSplashAd *)splashAd {
-//    NSLog(@"2222222222");
-    
+
     if (_adspot.showLogoRequire) {
         // 添加Logo
         NSAssert(_adspot.logoImage != nil, @"showLogoRequire = YES时, 必须设置logoImage");
@@ -165,20 +119,6 @@
     }
 }
 
-
-- (void)splashAdLoadFail:(nonnull BUSplashAd *)splashAd error:(BUAdError * _Nullable)error {
-    _supplier.state = AdvanceSdkSupplierStateFailed;
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
-//    NSLog(@"========>>>>>>>> %ld %@", (long)_supplier.priority, error);
-    if (_supplier.isParallel == YES) { // 并行不释放 只上报
-        
-        return;
-    } else { //
-        [self deallocAdapter];
-    }
-}
-
-
 - (void)splashAdRenderFail:(nonnull BUSplashAd *)splashAd error:(BUAdError * _Nullable)error {
     [self.adspot reportWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
 }
@@ -188,78 +128,46 @@
 }
 
 - (void)splashAdDidShow:(nonnull BUSplashAd *)splashAd {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
+    [self.adspot.manager reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(splashDidShowForSpotId:extra:)] && self.csj_ad) {
         [self.delegate splashDidShowForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
 }
 
 - (void)splashAdDidClick:(nonnull BUSplashAd *)splashAd {
-//    [self deallocAdapter];
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
+    [self.adspot.manager reportWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(splashDidClickForSpotId:extra:)]) {
         [self.delegate splashDidClickForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
 }
 
 - (void)splashAdDidClose:(nonnull BUSplashAd *)splashAd closeType:(BUSplashAdCloseType)closeType {
-    
-    if (closeType == BUSplashAdCloseType_CountdownToZero) {
-//        if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdCountdownToZero)]) {
-//            [self.delegate advanceSplashOnAdCountdownToZero];
-//        }
-    }
-    
-    if (closeType == BUSplashAdCloseType_ClickSkip) {
-        if ([self.delegate respondsToSelector:@selector(advanceSplashOnAdSkipClicked)]) {
-            [self.delegate advanceSplashOnAdSkipClicked];
-        }
-    }
-    
-    [self closeDelegate];
+    [self csjAdDidClose];
 }
 
 - (void)splashAdViewControllerDidClose:(BUSplashAd *)splashAd {
-    [self closeDelegate];
+    [self csjAdDidClose];
 }
 
 - (void)splashDidCloseOtherController:(nonnull BUSplashAd *)splashAd interactionType:(BUInteractionType)interactionType {
-    [self closeDelegate];
+    [self csjAdDidClose];
 }
 
 - (void)splashVideoAdDidPlayFinish:(nonnull BUSplashAd *)splashAd didFailWithError:(nonnull NSError *)error {
     
 }
 
-
-- (void)unifiedDelegate {
-    if (_isCanch) {
-        return;
-    }
-    _isCanch = YES;
-    if ([self.delegate respondsToSelector:@selector(didFinishLoadingSplashADWithSpotId:)]) {
-        [self.delegate didFinishLoadingSplashADWithSpotId:self.adspot.adspotid];
-    }
-//    [self showAd];
-}
-
-- (void)closeDelegate {
-    if (_isClose) {
-        return;
-    }
-    _isClose = YES;
-
+- (void)csjAdDidClose {
     if ([self.delegate respondsToSelector:@selector(splashDidCloseForSpotId:extra:)]) {
         [self.delegate splashDidCloseForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
-    [self deallocAdapter];
-
+    [self.csj_ad removeSplashView];
+    [self.imgV removeFromSuperview];
+    self.imgV = nil;
 }
 
 - (void)dealloc {
     ADV_LEVEL_INFO_LOG(@"%s", __func__);
-    [self deallocAdapter];
-
 }
 
 @end

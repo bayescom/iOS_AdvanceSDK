@@ -22,9 +22,14 @@
 - (void)advPolicyServiceLoadSupplier:(nullable AdvSupplier *)supplier
                                error:(nullable NSError *)error;
 
+
+/// 加载某一个渠道对象
+/// @param supplier 被加载的渠道
+- (void)advPolicyServiceLoadAnySupplier:(nullable AdvSupplier *)supplier;
+
 /// 开始Bidding
 /// @param suppliers 参加Bidding的渠道
-- (void)advPolicyServiceStartBiddingWithSuppliers:(NSMutableArray <AdvSupplier *> *_Nullable)suppliers;
+- (void)advPolicyServiceStartBiddingWithSuppliers:(NSArray <AdvSupplier *> *_Nullable)suppliers;
 
 /// 结束Bidding
 /// @param supplier 竞胜渠道

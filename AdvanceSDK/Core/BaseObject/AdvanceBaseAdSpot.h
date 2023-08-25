@@ -7,18 +7,22 @@
 
 #import <Foundation/Foundation.h>
 #import "AdvPolicyModel.h"
+#import "AdvPolicyService.h"
 
 NS_ASSUME_NONNULL_BEGIN
 /**
  该类当中的方法与属性 切勿在外部进行操作
  */
-@interface AdvanceBaseAdSpot : NSObject
+@interface AdvanceBaseAdSpot : NSObject <AdvPolicyServiceDelegate>
 
 /// 是否上传各渠道版本号 默认为NO
 @property (nonatomic, assign) BOOL isUploadSDKVersion;
 
 /// 并行渠道容器
 @property (nonatomic, strong) NSMutableArray *arrParallelSupplier;
+
+/// 并行渠道adpater存储器
+@property (nonatomic, strong) NSMutableDictionary *adapterMap;
 
 /// 各渠道错误的详细原因
 @property (nonatomic, strong) NSMutableDictionary *errorDescriptions;
@@ -34,6 +38,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// 广告加载容器视图
 @property (nonatomic, weak) UIViewController *viewController;
+
+/// 被命中展示的Adapter
+@property (nonatomic, strong) id targetAdapter;
+
+/// 策略管理对象
+@property (nonatomic, strong) AdvPolicyService *manager;
 
 /// 初始化渠道
 /// @param mediaId mediaId

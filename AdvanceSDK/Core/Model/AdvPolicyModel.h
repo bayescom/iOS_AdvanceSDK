@@ -49,6 +49,19 @@ typedef NS_ENUM(NSUInteger, AdvanceSdkSupplierState) {
 
 };
 
+typedef NS_ENUM(NSUInteger, AdvanceSupplierLoadAdState) {
+    
+    /// 准备就绪
+    AdvanceSupplierLoadAdReady = 0,
+    /// 渠道请求广告素材成功
+    AdvanceSupplierLoadAdSuccess,
+    /// 渠道请求广告素材失败
+    AdvanceSupplierLoadAdFailed,
+    /// 渠道请求广告素材超时
+    AdvanceSupplierLoadAdTimeout,
+
+};
+
 typedef NS_ENUM(NSUInteger, AdvanceSdkSupplierBiddingType) {
     /// 瀑布流式
     AdvanceSdkSupplierTypeWaterfall,
@@ -115,6 +128,9 @@ NSString * ADVStringFromNAdvanceSdkSupplierRepoType(AdvanceSdkSupplierRepoType t
 @property (nonatomic, assign) BOOL isParallel;// 是否并行
 @property (nonatomic, assign) AdvanceSdkSupplierState state;// 渠道状态
 @property (nonatomic, assign) AdvanceSdkSupplierBiddingType positionType;
+
+@property (nonatomic, assign) AdvanceSupplierLoadAdState loadAdState; // 广告加载状态
+@property (nonatomic, assign) BOOL hited; // 是否已经命中过
 
 @end
 

@@ -12,7 +12,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface CsjSplashAdapter : AdvanceBaseAdapter
+@interface CsjSplashAdapter : NSObject
 @property (nonatomic, weak) id<AdvanceSplashDelegate> delegate;
 
 @end

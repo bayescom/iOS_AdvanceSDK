@@ -54,7 +54,7 @@
 }
 
 // 开始bidding
-- (void)advPolicyServiceStartBiddingWithSuppliers:(NSMutableArray <AdvSupplier *> *_Nullable)suppliers {
+- (void)advPolicyServiceStartBiddingWithSuppliers:(NSArray <AdvSupplier *> *_Nullable)suppliers {
     if ([_delegate respondsToSelector:@selector(didStartBiddingADWithSpotId:)]) {
         [_delegate didStartBiddingADWithSpotId:self.adspotid];
     }

@@ -57,6 +57,12 @@ NSString * ADVStringFromNAdvanceSdkSupplierRepoType(AdvanceSdkSupplierRepoType t
     }
 }
 
+-(NSInteger)timeout {
+    if (!_timeout) {
+        return 3000;
+    }
+    return _timeout;
+}
 
 @end
 
@@ -69,6 +75,14 @@ NSString * ADVStringFromNAdvanceSdkSupplierRepoType(AdvanceSdkSupplierRepoType t
         @"headBiddingGroup": @"head_bidding_group",
     };
 }
+
+- (NSInteger)parallel_timeout {
+    if (!_parallel_timeout) {
+        return 5000;
+    }
+    return _parallel_timeout;
+}
+
 @end
 
 
