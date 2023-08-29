@@ -120,7 +120,7 @@
  * splash ad material load, ready to display
  */
 - (void)ksad_splashAdContentDidLoad:(KSSplashAdView *)splashAdView {
-    _supplier.supplierPrice = splashAdView.ecpm;
+    [self.adspot.manager setECPMIfNeeded:splashAdView.ecpm supplier:_supplier];
     [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
     [self.adspot.manager checkTargetWithResultfulSupplier:_supplier loadAdState:AdvanceSupplierLoadAdSuccess];
 

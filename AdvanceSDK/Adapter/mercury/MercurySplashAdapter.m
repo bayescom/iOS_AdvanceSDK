@@ -110,7 +110,7 @@
 }
 
 - (void)mercury_materialDidLoad:(MercurySplashAd *)splashAd isFromCache:(BOOL)isFromCache {
-    _supplier.supplierPrice = [splashAd getPrice];
+    [self.adspot.manager setECPMIfNeeded:[splashAd getPrice] supplier:_supplier];
     [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
     [self.adspot.manager checkTargetWithResultfulSupplier:_supplier loadAdState:AdvanceSupplierLoadAdSuccess];
 }

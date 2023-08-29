@@ -1,8 +1,8 @@
 //
-//  AdvSupplierManager.h
-//  Demo
+//  AdvPolicyService.h
+//  AdvanceSDK
 //
-//  Created by CherryKing on 2020/11/18.
+//  Created by guangyao on 2023/8/28.
 //
 
 #import <Foundation/Foundation.h>
@@ -66,6 +66,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 #pragma mark: - Refactor
+
+/// 设置渠道返回的竞价
+/// @param eCPM 竞价金额
+/// @param supplier 当前渠道
+- (void)setECPMIfNeeded:(NSInteger)eCPM supplier:(AdvSupplier *)supplier;
 
 /// 检测是否命中用于展示的渠道
 /// - Parameters:

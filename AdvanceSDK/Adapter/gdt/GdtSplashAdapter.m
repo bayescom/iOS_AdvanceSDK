@@ -102,7 +102,7 @@
 // MARK: ======================= GDTSplashAdDelegate =======================
 
 - (void)splashAdDidLoad:(GDTSplashAd *)splashAd {
-    _supplier.supplierPrice = splashAd.eCPM;
+    [self.adspot.manager setECPMIfNeeded:splashAd.eCPM supplier:_supplier];
     [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
     [self.adspot.manager checkTargetWithResultfulSupplier:_supplier loadAdState:AdvanceSupplierLoadAdSuccess];
 }

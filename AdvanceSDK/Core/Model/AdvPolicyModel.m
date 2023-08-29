@@ -52,7 +52,7 @@ NSString * ADVStringFromNAdvanceSdkSupplierRepoType(AdvanceSdkSupplierRepoType t
 
 - (void)setSupplierPrice:(NSInteger)supplierPrice {
     _supplierPrice = supplierPrice;
-    if (supplierPrice == 0 || supplierPrice == -1) {
+    if (supplierPrice <= 0) {
         _supplierPrice = self.sdk_price;
     }
 }

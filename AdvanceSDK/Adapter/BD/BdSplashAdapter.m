@@ -106,8 +106,7 @@
 }
 
 - (void)splashAdLoadSuccess:(BaiduMobAdSplash *)splash {
-
-    _supplier.supplierPrice = [[splash getECPMLevel] integerValue];
+    [self.adspot.manager setECPMIfNeeded:[[splash getECPMLevel] integerValue] supplier:_supplier];
     [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
     [self.adspot.manager checkTargetWithResultfulSupplier:_supplier loadAdState:AdvanceSupplierLoadAdSuccess];
 }
