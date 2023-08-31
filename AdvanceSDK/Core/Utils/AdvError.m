@@ -45,15 +45,7 @@
         @(AdvErrorCode_103) : @"策略请求数据解析错误",
         @(AdvErrorCode_104) : @"策略请求网络状态码错误",
         @(AdvErrorCode_105) : @"所有平台都未返回广告, 请输出错误回调中的description查看详细原因",
-        
-        @(AdvErrorCode_110) : @"未设置打底渠道",
-        @(AdvErrorCode_111) : @"CPT但本地无策略",
-        @(AdvErrorCode_112) : @"本地有策略但未命中CPT目标渠道",
-        @(AdvErrorCode_113) : @"非CPT本地无策略",
-        @(AdvErrorCode_114) : @"所有平台都未返回广告, 请输出错误回调中的description查看详细原因",
-        @(AdvErrorCode_115) : @"设置的超时时间内未返回广告,请检查 timeout 设置是否过短",
-        @(AdvErrorCode_116) : @"策略中未配置渠道,请联系相关运营人员配置",
-        @(AdvErrorCode_117) : @"所有bidding渠道均未返回广告",
+        @(AdvErrorCode_106) : @"策略中未配置渠道,请联系相关运营人员配置",
     };
     return [codeMap objectForKey:@(code)];
 }
