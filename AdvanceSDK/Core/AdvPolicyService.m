@@ -43,12 +43,12 @@
 
 @property (nonatomic, strong) NSMutableArray *arrayWaterfall;
 @property (nonatomic, strong) NSMutableArray *arrayHeadBidding;
-
-
 /// 计时器检测bidding时间
 @property (nonatomic, strong) CADisplayLink *timeoutCheckTimer;
 /// bidding截止时间戳
 @property (nonatomic, assign) NSInteger timeout_stamp;
+
+
 
 /// 已根据优先级排序的第一组parallel渠道
 @property (nonatomic, strong) NSMutableArray <AdvSupplier *> *parallelSuppliers;
@@ -56,12 +56,6 @@
 @property (nonatomic, strong) NSMutableArray <AdvSupplier *> *biddingSuppliers;
 /// 混合策略组渠道
 @property (nonatomic, strong) NSMutableArray <AdvSupplier *> *mixedSuppliers;
-/// 混合策略模式下group组渠道返回的callback次数，以此判断该组是否全部执行完成
-@property (nonatomic, assign) NSInteger parallelCallbackCountInMixedPolicy;
-@property (nonatomic, assign) NSInteger currentParallelCallbackCountInMixedPolicy;
-/// 混合策略模式下bidding组渠道返回的callback次数，以此判断该组是否全部执行完成
-@property (nonatomic, assign) NSInteger biddingCallbackCountInMixedPolicy;
-@property (nonatomic, assign) NSInteger currentBiddingCallbackCountInMixedPolicy;
 /// bidding组中最高价渠道
 @property (nonatomic, strong) AdvSupplier *bidTargetSupplier;
 
@@ -93,13 +87,14 @@
     if (_model.setting.bidding_type == 1) { // gro_more竞价
         // 根据渠道标识 获取bidding的supplier去执行
         [self GMBiddingAction];
-    } else { // 混合竞价（传统瀑布流 + 头部竞价）
-        [self loadMixedBiddingSuppliers];
+    } else { // 传统瀑布流 + 头部竞价
+        [self loadSuppliersConcurrently];
     }
 }
 
-/// 执行混合竞价模式（传统瀑布流 + 头部竞价）
-- (void)loadMixedBiddingSuppliers {
+/// 并发加载各个渠道SDK
+- (void)loadSuppliersConcurrently {
+    
     if (self.model.setting.headBiddingGroup.count == 0 && !_bidTargetSupplier) { /// 瀑布流模式，无headbidding渠道
         
         /// 策略组无数据说明后台配置错误 或者 所有的组加载广告全部没有成功
@@ -109,81 +104,46 @@
             }
             return;
         }
-        
-        /// 取parallelGroup当前第一层策略组
-        NSArray *firstGroupPriorities = self.model.setting.parallelGroup.firstObject;
-        /// 将优先级数组转换成supplier数组
-        NSArray *firstGroupSuppliers = [firstGroupPriorities map:^id(NSNumber *priority) {
-            return [self.model.suppliers filter:^BOOL(AdvSupplier *supplier) {
-                return supplier.priority == priority.integerValue;
-            }].firstObject;
-        }];
-        
-        _parallelSuppliers = [firstGroupSuppliers mutableCopy];
-        /// 开始执行竞价策略的回调
-        if ([_delegate respondsToSelector:@selector(advPolicyServiceStartBiddingWithSuppliers:)]) {
-            [_delegate advPolicyServiceStartBiddingWithSuppliers:firstGroupSuppliers];
-        }
-        /// 并发执行该组广告的请求
-        [firstGroupSuppliers enumerateObjectsUsingBlock:^(AdvSupplier * _Nonnull supplier, NSUInteger idx, BOOL * _Nonnull stop) {
-            if ([_delegate respondsToSelector:@selector(advPolicyServiceLoadAnySupplier:)]) {
-                [_delegate advPolicyServiceLoadAnySupplier:supplier];
-            }
-            [self reportEventWithType:AdvanceSdkSupplierRepoLoaded supplier:supplier error:nil];
-        }];
-        
-        /// 执行完后移除该组渠道，确保再次调用此函数时能获取到下一组渠道
-        if (self.model.setting.parallelGroup.count > 0) {
-            [self.model.setting.parallelGroup removeObjectAtIndex:0];
-        }
-        /// 该组渠道加载广告超时监测
-        [self performSelector:@selector(observeLoadAdTimeout) withObject:nil afterDelay:self.model.setting.parallel_timeout * 1.0 / 1000];
-        
-    } else { /// 混合竞价模式（传统瀑布流 + 头部竞价）
-        _currentBiddingCallbackCountInMixedPolicy = 0;
-        _currentParallelCallbackCountInMixedPolicy = 0;
-        /// 将headbidding数组转换成supplier数组
-        NSArray *biddingSuppliers = [self.model.setting.headBiddingGroup map:^id(NSNumber *priority) {
-            return [self.model.suppliers filter:^BOOL(AdvSupplier *supplier) {
-                return supplier.priority == priority.integerValue;
-            }].firstObject;
-        }];
-        _biddingCallbackCountInMixedPolicy = biddingSuppliers.count;
-        _biddingSuppliers = [biddingSuppliers mutableCopy];
-        /// 取parallelGroup当前第一层策略组
-        NSArray *firstGroupPriorities = self.model.setting.parallelGroup.firstObject;
-        /// 将优先级数组转换成supplier数组
-        NSArray *firstGroupSuppliers = [firstGroupPriorities map:^id(NSNumber *priority) {
-            return [self.model.suppliers filter:^BOOL(AdvSupplier *supplier) {
-                return supplier.priority == priority.integerValue;
-            }].firstObject;
-        }];
-        _parallelCallbackCountInMixedPolicy = firstGroupSuppliers.count;
-        _parallelSuppliers = [firstGroupSuppliers mutableCopy];
-        /// 开始执行竞价策略的回调
-        NSMutableArray *templeSuppliers = [NSMutableArray arrayWithArray:biddingSuppliers];
-        [templeSuppliers addObjectsFromArray:firstGroupSuppliers];
-        if ([_delegate respondsToSelector:@selector(advPolicyServiceStartBiddingWithSuppliers:)]) {
-            [_delegate advPolicyServiceStartBiddingWithSuppliers:templeSuppliers];
-        }
-        /// 并发执行混合策略下队列中的广告请求
-        [templeSuppliers enumerateObjectsUsingBlock:^(AdvSupplier * _Nonnull supplier, NSUInteger idx, BOOL * _Nonnull stop) {
-            if ([_delegate respondsToSelector:@selector(advPolicyServiceLoadAnySupplier:)]) {
-                [_delegate advPolicyServiceLoadAnySupplier:supplier];
-            }
-            [self reportEventWithType:AdvanceSdkSupplierRepoLoaded supplier:supplier error:nil];
-        }];
-        
-        /// 执行完后移除该组渠道，确保再次调用此函数时能获取到下一组渠道
-        if (self.model.setting.parallelGroup.count > 0) {
-            [self.model.setting.parallelGroup removeObjectAtIndex:0];
-        }
-        if (self.model.setting.headBiddingGroup.count > 0) {
-            [self.model.setting.headBiddingGroup removeAllObjects];
-        }
-        /// 该组渠道加载广告超时监测
-        //        [self performSelector:@selector(observeLoadAdTimeout) withObject:nil afterDelay:self.model.setting.parallel_timeout * 1.0 / 1000];
     }
+    /// 取BiddingGroup组
+    NSArray *biddingSuppliers = [self.model.setting.headBiddingGroup map:^id(NSNumber *priority) {
+        return [self.model.suppliers filter:^BOOL(AdvSupplier *supplier) {
+            return supplier.priority == priority.integerValue;
+        }].firstObject;
+    }];
+    _biddingSuppliers = [biddingSuppliers mutableCopy];
+    
+    /// 取parallelGroup当前第一层策略组
+    NSArray *firstGroupSuppliers = [self.model.setting.parallelGroup.firstObject map:^id(NSNumber *priority) {
+        return [self.model.suppliers filter:^BOOL(AdvSupplier *supplier) {
+            return supplier.priority == priority.integerValue;
+        }].firstObject;
+    }];
+    _parallelSuppliers = [firstGroupSuppliers mutableCopy];
+    
+    /// 合并2个组，开始执行竞价策略的回调
+    NSMutableArray *templeSuppliers = [NSMutableArray arrayWithArray:biddingSuppliers];
+    [templeSuppliers addObjectsFromArray:firstGroupSuppliers];
+    if ([_delegate respondsToSelector:@selector(advPolicyServiceStartBiddingWithSuppliers:)]) {
+        [_delegate advPolicyServiceStartBiddingWithSuppliers:templeSuppliers];
+    }
+    /// 并发执行混合策略下队列中的广告请求
+    [templeSuppliers enumerateObjectsUsingBlock:^(AdvSupplier * _Nonnull supplier, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([_delegate respondsToSelector:@selector(advPolicyServiceLoadAnySupplier:)]) {
+            [_delegate advPolicyServiceLoadAnySupplier:supplier];
+        }
+        [self reportEventWithType:AdvanceSdkSupplierRepoLoaded supplier:supplier error:nil];
+    }];
+    
+    /// 执行完后移除该组渠道，确保再次调用此函数时能获取到下一组渠道
+    if (self.model.setting.parallelGroup.count > 0) {
+        [self.model.setting.parallelGroup removeObjectAtIndex:0];
+    }
+    if (self.model.setting.headBiddingGroup.count > 0) {
+        [self.model.setting.headBiddingGroup removeAllObjects];
+    }
+    /// 该组渠道加载广告超时监测
+    [self performSelector:@selector(observeLoadAdTimeout) withObject:nil afterDelay:self.model.setting.parallel_timeout * 1.0 / 1000];
 }
 
 /// 超时监测
@@ -203,153 +163,114 @@
     }];
 }
 
-/// [Public func]设置渠道返回的竞价
-- (void)setECPMIfNeeded:(NSInteger)eCPM supplier:(AdvSupplier *)supplier {
-    if (supplier.is_head_bidding && eCPM > 0) {
-        supplier.sdk_price = eCPM;
-    }
-}
-
 /// [Public func]检测是否命中用于展示的渠道
+/// 由每个渠道SDK Callback返回结果时调用 或者 超时后调用
 /// - Parameters:
 ///   - supplier: loadAd后返回结果的某个渠道
 ///   - state: loadAd后返回结果状态
 - (void)checkTargetWithResultfulSupplier:(AdvSupplier *)supplier loadAdState:(AdvanceSupplierLoadAdState)state {
     
+    /// 监测超时的方法中已经执行了本方法，所以超时后渠道返回的数据直接丢弃
+    if (supplier.loadAdState == AdvanceSupplierLoadAdTimeout) {
+        return;
+    }
+    
+    supplier.loadAdState = state;
+    switch (state) {
+        case AdvanceSupplierLoadAdFailed:
+        case AdvanceSupplierLoadAdTimeout:
+            /// 移除失败和超时的渠道
+            if (!supplier.is_head_bidding) {
+                [_parallelSuppliers removeObject:supplier];
+            } else {
+                [_biddingSuppliers removeObject:supplier];
+            }
+            break;
+        default:
+            break;
+    }
+    
     if (_biddingSuppliers.count == 0 && !_bidTargetSupplier) { /// 瀑布流模式，无headbidding渠道
         
-        /// 监测超时的方法中已经执行了本方法，所以超时后渠道返回的数据直接丢弃
-        if (supplier.loadAdState == AdvanceSupplierLoadAdTimeout) {
-            return;
-        }
+        /// 进入瀑布流竞价执行、选中流程
+        [self enterWaterfallFlow];
         
-        supplier.loadAdState = state;
-        switch (state) {
-            case AdvanceSupplierLoadAdFailed:
-            case AdvanceSupplierLoadAdTimeout:
-                /// 移除失败和超时的渠道
-                [_parallelSuppliers removeObject:supplier];
-                break;
-            default:
-                break;
-        }
-        
-        /// 命中用于展示的渠道并回调
-        [self hitTheTargetWithSuppliers:_parallelSuppliers];
-        
-        // 该组渠道广告均返回失败，执行下一组渠道并发
-        if (_parallelSuppliers.count == 0) {
-            [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(observeLoadAdTimeout) object:nil];
-            [self loadMixedBiddingSuppliers];
-        }
-        
-    } else { /// 混合竞价模式（传统瀑布流 + 头部竞价）
-        
-        /// 监测超时的方法中已经执行了本方法，所以超时后渠道返回的数据直接丢弃
-        if (supplier.loadAdState == AdvanceSupplierLoadAdTimeout) {
-            return;
-        }
-        
-        if (!supplier.is_head_bidding) {
-            _currentParallelCallbackCountInMixedPolicy += 1;
-        } else {
-            _currentBiddingCallbackCountInMixedPolicy += 1;
-        }
-        supplier.loadAdState = state;
-        switch (state) {
-            case AdvanceSupplierLoadAdFailed:
-            case AdvanceSupplierLoadAdTimeout:
-                /// 移除失败和超时的渠道
-                if (!supplier.is_head_bidding) {
-                    [_parallelSuppliers removeObject:supplier];
-                } else {
-                    [_biddingSuppliers removeObject:supplier];
-                }
-                break;
-            default:
-                break;
-        }
-        
-        if (_currentBiddingCallbackCountInMixedPolicy != _biddingCallbackCountInMixedPolicy) {
+    } else { /// 混合竞价模式（瀑布流 + 头部竞价）
+
+        /// 检测bidding组是否全部返回了结果
+        if ([_biddingSuppliers filter:^BOOL(AdvSupplier *supplier) {
+            return supplier.loadAdState == AdvanceSupplierLoadAdReady;
+        }].count > 0) {
             return;
         }
         
         /// bidding组都返回了结果，此时biddingSuppliers只存储了竞价成功的渠道
         if (supplier.is_head_bidding) {
             if (_biddingSuppliers.count == 0) {/// 如果bidding组都失败了，则执行瀑布流策略
-                /// 如果groupedSuppliers组没有全部返回结果，等下一个渠道回调时程序默认走到本方法的瀑布流代码
-                /// 如果groupedSuppliers组全部返回结果了，并且有success的渠道，则直接命中target
-                if (_currentParallelCallbackCountInMixedPolicy == _parallelCallbackCountInMixedPolicy) {
-                    /// 命中用于展示的渠道并回调
-                    [self hitTheTargetWithSuppliers:_parallelSuppliers];
-                    
-                    // 该组渠道广告均返回失败，执行下一组渠道并发
-                    if (_parallelSuppliers.count == 0) {
-                        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(observeLoadAdTimeout) object:nil];
-                        [self loadMixedBiddingSuppliers];
-                    }
+                /// !!重要!!：如果groupedSuppliers组没有全部返回结果，等下一个渠道回调时程序默认走到本方法的瀑布流代码
+                /// 如果groupedSuppliers组全部返回结果：
+                if ([_parallelSuppliers filter:^BOOL(AdvSupplier *supplier) {
+                    return supplier.loadAdState == AdvanceSupplierLoadAdReady;
+                }].count == 0) {
+                    /// 进入瀑布流竞价执行、选中流程
+                    [self enterWaterfallFlow];
                 }
             } else { /// 如果bidding组有成功竞价的渠道
-                ///对_biddingSuppliers进行排序
+                /// 对biddingSuppliers进行排序
                 [self sortedForPriceWithSuppliers:_biddingSuppliers];
-                ///取出最高价渠道
+                /// 取出最高价渠道
                 _bidTargetSupplier = _biddingSuppliers.firstObject;
-                
-                /// 如果当前的parallelSuppliers都返回失败，并且bidTarget 比下一组的最高价低 则需要开启下一组parallelGroup
-                if (_parallelSuppliers.count == 0) {
-                    NSArray *nextGroupPriorities = self.model.setting.parallelGroup.firstObject;
-                    NSMutableArray <AdvSupplier *> *nextGroupSuppliers = [nextGroupPriorities map:^id(NSNumber *priority) {
-                        return [self.model.suppliers filter:^BOOL(AdvSupplier *supplier) {
-                            return supplier.priority == priority.integerValue;
-                        }].firstObject;
-                    }].mutableCopy;
-                    
-                    [self sortedForPriceWithSuppliers:nextGroupSuppliers];
-                    if (nextGroupSuppliers.count > 0 && _bidTargetSupplier.sdk_price < nextGroupSuppliers.firstObject.sdk_price) {
-                        // todo:取消超时执行
-                        [self loadMixedBiddingSuppliers];
-                        return;
-                    }
-                }
-                
-                /// 产生最新的执行队列
-                _mixedSuppliers = [NSMutableArray arrayWithObject:_bidTargetSupplier];
-                [_mixedSuppliers addObjectsFromArray:_parallelSuppliers];
-                ///对最新产生的执行队列按价格进行排序
-                [self sortedForPriceWithSuppliers:_mixedSuppliers];
-                /// 命中用于展示的渠道并回调
-                [self hitTheTargetWithSuppliers:_mixedSuppliers];
+                /// 进入混合竞价（瀑布流 + 头部竞价）执行、选中流程
+                [self enterWaterfallMixedHeadbiddingFlow];
             }
             
-        } else { /// bidding组有成功竞价的渠道，后续又返回了parallel组某个渠道
-            
-            /// 如果当前的parallelSuppliers都返回失败，并且bidTarget 比下一组的最高价低 则需要开启下一组parallelGroup
-            if (_parallelSuppliers.count == 0) {
-                NSArray *nextGroupPriorities = self.model.setting.parallelGroup.firstObject;
-                NSMutableArray <AdvSupplier *> *nextGroupSuppliers = [nextGroupPriorities map:^id(NSNumber *priority) {
-                    return [self.model.suppliers filter:^BOOL(AdvSupplier *supplier) {
-                        return supplier.priority == priority.integerValue;
-                    }].firstObject;
-                }].mutableCopy;
-                
-                [self sortedForPriceWithSuppliers:nextGroupSuppliers];
-                if (nextGroupSuppliers.count > 0 && _bidTargetSupplier.sdk_price < nextGroupSuppliers.firstObject.sdk_price) {
-                    // todo:取消超时执行
-                    [self loadMixedBiddingSuppliers];
-                    return;
-                }
-            }
-            
-            /// 产生最新的执行队列
-            _mixedSuppliers = [NSMutableArray arrayWithObject:_bidTargetSupplier];
-            [_mixedSuppliers addObjectsFromArray:_parallelSuppliers];
-            ///对最新产生的执行队列按价格进行排序
-            [self sortedForPriceWithSuppliers:_mixedSuppliers];
-            /// 命中用于展示的渠道并回调
-            [self hitTheTargetWithSuppliers:_mixedSuppliers];
+        } else { /// bidding组已经有成功竞价的渠道 并且 后续又返回了parallel组某个渠道
+            /// 进入混合竞价（瀑布流 + 头部竞价）执行、选中流程
+            [self enterWaterfallMixedHeadbiddingFlow];
         }
-        
     }
+}
+
+/// 进入瀑布流竞价执行、选中流程
+- (void)enterWaterfallFlow {
+    
+    // 该组渠道广告均返回失败，执行下一组渠道并发
+    if (_parallelSuppliers.count == 0) {
+        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(observeLoadAdTimeout) object:nil];
+        [self loadSuppliersConcurrently];
+        return;
+    }
+    /// 命中用于展示的渠道并回调
+    [self hitTheTargetWithSuppliers:_parallelSuppliers];
+}
+
+/// 进入混合竞价（瀑布流 + 头部竞价）执行、选中流程
+- (void)enterWaterfallMixedHeadbiddingFlow {
+    
+    /// 如果当前的parallelSuppliers都返回失败，并且bidTarget 比下一组的最高价低 则需要开启下一组parallelGroup
+    if (_parallelSuppliers.count == 0) {
+        NSArray *nextGroupPriorities = self.model.setting.parallelGroup.firstObject;
+        NSMutableArray <AdvSupplier *> *nextGroupSuppliers = [nextGroupPriorities map:^id(NSNumber *priority) {
+            return [self.model.suppliers filter:^BOOL(AdvSupplier *supplier) {
+                return supplier.priority == priority.integerValue;
+            }].firstObject;
+        }].mutableCopy;
+        
+        [self sortedForPriceWithSuppliers:nextGroupSuppliers];
+        if (nextGroupSuppliers.count > 0 && _bidTargetSupplier.sdk_price < nextGroupSuppliers.firstObject.sdk_price) {
+            [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(observeLoadAdTimeout) object:nil];
+            [self loadSuppliersConcurrently];
+            return;
+        }
+    }
+    
+    /// 无需开启下一组parallelGroup时，直接产生最新的执行队列
+    _mixedSuppliers = [NSMutableArray arrayWithObject:_bidTargetSupplier];
+    [_mixedSuppliers addObjectsFromArray:_parallelSuppliers];
+    /// 对最新产生的执行队列按价格进行排序
+    [self sortedForPriceWithSuppliers:_mixedSuppliers];
+    /// 命中用于展示的渠道并回调
+    [self hitTheTargetWithSuppliers:_mixedSuppliers];
 }
 
 /// 命中用于展示的渠道并回调
@@ -365,7 +286,6 @@
     }
 }
 
-
 /// 混合策略排序规则：1. 按价格排序 2. 价格一样按优先级排序
 - (void)sortedForPriceWithSuppliers:(NSMutableArray <AdvSupplier *> *)suppliers {
     [suppliers sortUsingComparator:^NSComparisonResult(AdvSupplier *  _Nonnull obj1, AdvSupplier *  _Nonnull obj2) {
@@ -374,6 +294,13 @@
         }
         return [@(obj2.sdk_price) compare:@(obj1.sdk_price)];
     }];
+}
+
+/// [Public func]设置渠道返回的竞价
+- (void)setECPMIfNeeded:(NSInteger)eCPM supplier:(AdvSupplier *)supplier {
+    if (supplier.is_head_bidding && eCPM > 0) {
+        supplier.sdk_price = eCPM;
+    }
 }
 
 - (void)loadDataWithSupplierModel:(AdvPolicyModel *)model {

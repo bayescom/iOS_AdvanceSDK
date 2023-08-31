@@ -73,6 +73,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)setECPMIfNeeded:(NSInteger)eCPM supplier:(AdvSupplier *)supplier;
 
 /// 检测是否命中用于展示的渠道
+/// 由每个渠道SDK Callback返回结果时调用 或者 超时后调用
 /// - Parameters:
 ///   - supplier: loadAd后返回结果的某个渠道
 ///   - state: loadAd后返回结果状态
