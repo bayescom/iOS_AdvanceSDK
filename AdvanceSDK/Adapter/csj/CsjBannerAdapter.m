@@ -98,6 +98,8 @@
  *  当接收服务器返回的广告数据成功后调用该函数
  */
 - (void)nativeExpressBannerAdViewDidLoad:(BUNativeExpressBannerView *)bannerAdView {
+    NSDictionary *ext = bannerAdView.mediaExt;
+    _supplier.supplierPrice = [ext[@"price"] integerValue];
     _supplier.state = AdvanceSdkSupplierStateSuccess;
     if (!_isBided) {// 只让bidding触发一次即可
         [self.adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];

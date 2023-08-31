@@ -95,6 +95,8 @@
 //            [_delegate advanceNativeExpressOnAdFailedWithSdkId:_supplier.identifier error:[NSError errorWithDomain:@"" code:100000 userInfo:@{@"msg":@"无广告返回"}]];
 //        }
     } else {
+        NSDictionary *ext = views.firstObject.mediaExt;
+        _supplier.supplierPrice = [ext[@"price"] integerValue];
         [_adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
         [_adspot reportWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
         

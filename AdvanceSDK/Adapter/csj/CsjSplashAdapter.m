@@ -137,6 +137,8 @@
 
 - (void)splashAdLoadSuccess:(nonnull BUSplashAd *)splashAd {
 //    NSLog(@"11111111111");
+    NSDictionary *ext = splashAd.mediaExt;
+    _supplier.supplierPrice = [ext[@"price"] integerValue];
     _supplier.state = AdvanceSdkSupplierStateSuccess;
     [self.adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
     [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
