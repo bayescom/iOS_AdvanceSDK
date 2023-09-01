@@ -17,8 +17,8 @@
 
 /// 广告策略或者渠道广告加载失败（包括策略服务或者渠道SDK广告加载失败）
 /// @param spotId 广告位id
-/// @param error 聚合SDK的错误信息
-/// @param description 每个渠道的错误描述，部分情况下为nil； key的命名规则: 渠道名-优先级
+/// @param error 聚合SDK的策略错误信息
+/// @param description 每个渠道的错误描述，部分情况下为nil； key的命名规则: 渠道名-id
 - (void)didFailLoadingADSourceWithSpotId:(NSString *)spotId
                                    error:(NSError *)error
                              description:(NSDictionary *)description;

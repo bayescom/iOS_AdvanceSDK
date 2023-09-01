@@ -39,28 +39,38 @@
 }
 
 // MARK: ======================= AdvPolicyServiceDelegate =======================
-/// 加载策略Model成功
+/// 广告策略加载成功
 - (void)advPolicyServiceLoadSuccessWithModel:(nonnull AdvPolicyModel *)model {
     if ([_delegate respondsToSelector:@selector(didFinishLoadingADPolicyWithSpotId:)]) {
         [_delegate didFinishLoadingADPolicyWithSpotId:self.adspotid];
     }
 }
 
-/// 加载策略Model失败
+/// 广告策略加载失败
 - (void)advPolicyServiceLoadFailedWithError:(nullable NSError *)error {
     if ([_delegate respondsToSelector:@selector(didFailLoadingADSourceWithSpotId:error:description:)]) {
-        [_delegate didFailLoadingADSourceWithSpotId:self.adspotid error:error description:[self.errorDescriptions copy]];
+        [_delegate didFailLoadingADSourceWithSpotId:self.adspotid error:error description:nil];
     }
 }
 
-// 开始bidding
+// 开始Bidding
 - (void)advPolicyServiceStartBiddingWithSuppliers:(NSArray <AdvSupplier *> *_Nullable)suppliers {
     if ([_delegate respondsToSelector:@selector(didStartBiddingADWithSpotId:)]) {
         [_delegate didStartBiddingADWithSpotId:self.adspotid];
     }
 }
 
-// bidding结束
+// Bidding失败（渠道广告全部加载失败）
+- (void)advPolicyServiceFailedBiddingWithError:(NSError *)error description:(NSDictionary *)description {
+    if ([_delegate respondsToSelector:@selector(didFailLoadingADSourceWithSpotId:error:description:)]) {
+        [_delegate didFailLoadingADSourceWithSpotId:self.adspotid error:error description:description];
+    }
+    if ([_delegate respondsToSelector:@selector(didFailBiddingADWithSpotId:error:)]) {
+        [_delegate didFailBiddingADWithSpotId:self.adspotid error:error];
+    }
+}
+
+// 结束Bidding
 - (void)advPolicyServiceFinishBiddingWithWinSupplier:(AdvSupplier *_Nonnull)supplier {
     /// 获取竞胜的adpater
     self.targetAdapter = [self.adapterMap objectForKey:supplier.identifier];
@@ -68,9 +78,8 @@
 #pragma clang diagnostic ignored "-Wundeclared-selector"
     ((void (*)(id, SEL))objc_msgSend)((id)self.targetAdapter, @selector(winnerAdapterToShowAd));
     
-    if (self.delegate && [self.delegate respondsToSelector:@selector(didFinishBiddingADWithSpotId:price:)]) {
-        NSInteger price = (supplier.supplierPrice == 0) ? supplier.sdk_price : supplier.supplierPrice;
-        [self.delegate didFinishBiddingADWithSpotId:self.adspotid price:price];
+    if ([_delegate respondsToSelector:@selector(didFinishBiddingADWithSpotId:price:)]) {
+        [_delegate didFinishBiddingADWithSpotId:self.adspotid price:supplier.sdk_price];
     }
 }
 
@@ -78,6 +87,11 @@
 - (void)advPolicyServiceLoadAnySupplier:(nullable AdvSupplier *)supplier {
     // 加载渠道SDK进行初始化调用
     [[AdvSupplierLoader defaultInstance] loadSupplier:supplier extra:self.ext];
+    
+    // 通知外部该渠道开始加载广告
+    if ([self.delegate respondsToSelector:@selector(didStartLoadingADSourceWithSpotId:sourceId:)]) {
+        [self.delegate didStartLoadingADSourceWithSpotId:self.adspotid sourceId:supplier.identifier];
+    }
     
     // 根据渠道id初始化对应Adapter
     NSString *clsName = [self mappingClassNameWithSupplierId:supplier.identifier];

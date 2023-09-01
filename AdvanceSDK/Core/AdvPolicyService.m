@@ -58,6 +58,8 @@
 @property (nonatomic, strong) NSMutableArray <AdvSupplier *> *mixedSuppliers;
 /// bidding组中最高价渠道
 @property (nonatomic, strong) AdvSupplier *bidTargetSupplier;
+/// 各渠道的错误回调信息
+@property (nonatomic, strong) NSMutableDictionary *errorInfo;
 
 @end
 
@@ -75,6 +77,7 @@
     _mediaId = mediaId;
     _adspotId = adspotId;
     _ext = [ext mutableCopy];
+    _errorInfo = [NSMutableDictionary dictionary];
     _arrayHeadBidding = [NSMutableArray array];
     _arrayWaterfall = [NSMutableArray array];
     
@@ -97,10 +100,10 @@
     
     if (self.model.setting.headBiddingGroup.count == 0 && !_bidTargetSupplier) { /// 瀑布流模式，无headbidding渠道
         
-        /// 策略组无数据说明后台配置错误 或者 所有的组加载广告全部没有成功
+        /// 策略组无数据说明所有的组加载广告全部没有成功（因为第一层执行完总会被remove掉）
         if (self.model.setting.parallelGroup.count == 0) {
-            if ([_delegate respondsToSelector:@selector(advPolicyServiceLoadFailedWithError:)]) {
-                [_delegate advPolicyServiceLoadFailedWithError:[AdvError errorWithCode:AdvErrorCode_105].toNSError];
+            if ([_delegate respondsToSelector:@selector(advPolicyServiceFailedBiddingWithError:description:)]) {
+                [_delegate advPolicyServiceFailedBiddingWithError:[AdvError errorWithCode:AdvErrorCode_106].toNSError description:_errorInfo];
             }
             return;
         }
@@ -144,14 +147,15 @@
     }
     /// 该组渠道加载广告超时监测
     [self performSelector:@selector(observeLoadAdTimeout) withObject:nil afterDelay:self.model.setting.parallel_timeout * 1.0 / 1000];
+    ADV_LEVEL_INFO_LOG(@"开始加载各渠道");
 }
 
 /// 超时监测
 - (void)observeLoadAdTimeout {
-    /// check方法中对parallelSuppliers进行了移除操作，所以创建超时数组避免边遍历边移除带来问题
     NSArray *timeoutParallelSuppliers = [_parallelSuppliers filter:^BOOL(AdvSupplier *supplier) {
         return supplier.loadAdState == AdvanceSupplierLoadAdReady;
     }];
+    /// check方法中对_parallelSuppliers进行了移除操作，所以创建超时数组避免边遍历边移除带来问题
     [timeoutParallelSuppliers enumerateObjectsUsingBlock:^(AdvSupplier *  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         [self checkTargetWithResultfulSupplier:obj loadAdState:AdvanceSupplierLoadAdTimeout];
     }];
@@ -472,7 +476,7 @@
     if (supplier == nil || _supplierM.count <= 0) {
         // 抛异常
         if ([_delegate respondsToSelector:@selector(advPolicyServiceLoadSupplier:error:)]) {
-            [_delegate advPolicyServiceLoadSupplier:nil error:[AdvError errorWithCode:AdvErrorCode_105].toNSError];
+            [_delegate advPolicyServiceLoadSupplier:nil error:[AdvError errorWithCode:AdvErrorCode_101].toNSError];
         }
         return;
     }
@@ -709,7 +713,7 @@
     if (_model.suppliers.count <= 0) {
         
         if ([_delegate respondsToSelector:@selector(advPolicyServiceLoadFailedWithError:)]) {
-            [_delegate advPolicyServiceLoadFailedWithError:[AdvError errorWithCode:AdvErrorCode_106].toNSError];
+            [_delegate advPolicyServiceLoadFailedWithError:[AdvError errorWithCode:AdvErrorCode_105].toNSError];
         }
         
         return;
@@ -759,11 +763,10 @@
         [deviceInfo setValue:self.ext forKey:@"ext"];
     }
     
-    ADV_LEVEL_INFO_LOG(@"%@", [self jsonStringCompactFormatForDictionary:deviceInfo]);
     NSError *parseError = nil;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:deviceInfo options:NSJSONWritingPrettyPrinted error:&parseError];
     NSURL *url = [NSURL URLWithString:AdvanceSdkRequestUrl];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:self.fetchTime];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:5];
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     request.HTTPBody = jsonData;
     request.HTTPMethod = @"POST";
@@ -825,7 +828,7 @@
     // no suppliers
     if (a_model.suppliers.count == 0) {
         if ([_delegate respondsToSelector:@selector(advPolicyServiceLoadFailedWithError:)]) {
-            [_delegate advPolicyServiceLoadFailedWithError:[AdvError errorWithCode:AdvErrorCode_106].toNSError];
+            [_delegate advPolicyServiceLoadFailedWithError:[AdvError errorWithCode:AdvErrorCode_105].toNSError];
         }
         return;
     }
@@ -859,21 +862,6 @@
     //    }
 }
 
-- (NSString *)jsonStringCompactFormatForDictionary:(NSDictionary *)dicJson {
-    
-    if (![dicJson isKindOfClass:[NSDictionary class]] || ![NSJSONSerialization isValidJSONObject:dicJson]) {
-        
-        return nil;
-        
-    }
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dicJson options:0 error:nil];
-    
-    NSString *strJson = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-    
-    return strJson;
-    
-}
-
 - (void)cancelDataTask {
     if (_dataTask) {
         [_dataTask cancel];
@@ -882,6 +870,11 @@
 
 // MARK: ======================= 上报 =======================
 - (void)reportEventWithType:(AdvanceSdkSupplierRepoType)repoType supplier:(AdvSupplier *)supplier error:(nullable NSError *)error{
+    /// 收集渠道错误信息
+    if (error) {
+        [self collectSupplierErrorInfomation:supplier error:error];
+    }
+    
     NSArray<NSString *> *uploadArr = nil;
     /// 按照类型判断上报地址
     if (repoType == AdvanceSdkSupplierRepoLoaded) {
@@ -905,6 +898,12 @@
     // 执行上报请求
     [self.tkUploadTool reportWithUploadArr:uploadArr error:error];
     ADV_LEVEL_INFO_LOG(@"%@ = 上报(impid: %@)", ADVStringFromNAdvanceSdkSupplierRepoType(repoType), supplier.name);
+}
+
+- (void)collectSupplierErrorInfomation:(AdvSupplier *)supplier error:(NSError *)error; {
+    // key: 渠道名-渠道id
+    NSString *key = [NSString stringWithFormat:@"%@-%@",supplier.name, supplier.identifier];
+    [_errorInfo setObject:error forKey:key];
 }
 
 - (AdvUploadTKUtil *)tkUploadTool {
@@ -949,12 +948,6 @@
 
 
 // MARK: ======================= get =======================
-- (NSTimeInterval)fetchTime {
-    if (_fetchTime <= 0) {
-        _fetchTime = 5;
-    }
-    return _fetchTime;
-}
 
 - (void)setModel:(AdvPolicyModel *)model {
     if (_model != model) {

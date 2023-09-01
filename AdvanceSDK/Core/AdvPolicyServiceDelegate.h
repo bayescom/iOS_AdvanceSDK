@@ -16,9 +16,11 @@
 /// 策略服务加载失败
 - (void)advPolicyServiceLoadFailedWithError:(nullable NSError *)error;
 
+/**
 /// 加载下一个渠道对象
 /// @param supplier 被加载的渠道
 /// @param error 异常信息
+ **/
 - (void)advPolicyServiceLoadSupplier:(nullable AdvSupplier *)supplier
                                error:(nullable NSError *)error;
 
@@ -35,7 +37,9 @@
 /// @param supplier 竞胜渠道
 - (void)advPolicyServiceFinishBiddingWithWinSupplier:(AdvSupplier *_Nonnull)supplier;
 
-/// Bidding失败 (即规定时间内,所有bidding渠道 都没有返回广告)
-- (void)advPolicyServiceFailedBiddingWithError:(nullable NSError *)error;
+/// Bidding失败 (超时时间内，所有Bidding渠道返回广告都失败)
+/// @param error 聚合SDK的策略错误信息
+/// @param description 每个渠道的错误描述，部分情况下为nil； key的命名规则: 渠道名-id
+- (void)advPolicyServiceFailedBiddingWithError:(NSError *_Nullable)error description:(NSDictionary *_Nullable)description;
 
 @end

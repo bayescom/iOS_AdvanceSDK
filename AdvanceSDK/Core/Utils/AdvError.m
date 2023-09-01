@@ -44,8 +44,8 @@
         @(AdvErrorCode_102) : @"策略请求数据为空",
         @(AdvErrorCode_103) : @"策略请求数据解析错误",
         @(AdvErrorCode_104) : @"策略请求网络状态码错误",
-        @(AdvErrorCode_105) : @"所有平台都未返回广告, 请输出错误回调中的description查看详细原因",
-        @(AdvErrorCode_106) : @"策略中未配置渠道,请联系相关运营人员配置",
+        @(AdvErrorCode_105) : @"策略中未配置渠道，请联系相关运营人员配置",
+        @(AdvErrorCode_106) : @"所有平台都未返回广告，请输出description查看详情",
     };
     return [codeMap objectForKey:@(code)];
 }

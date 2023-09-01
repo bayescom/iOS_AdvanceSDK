@@ -71,6 +71,8 @@ NS_ASSUME_NONNULL_BEGIN
 /// 查找一下 容器里有没有并行的渠道
 - (id)adapterInParallelsWithSupplier:(AdvSupplier *)supplier;
 
+
+
 /**
  该类当中的方法与属性 切勿在外部进行操作
  */

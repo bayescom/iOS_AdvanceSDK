@@ -94,13 +94,13 @@
 //    }
 }
 
-- (void)collectErrorWithSupplier:(AdvSupplier *)supplier error:(NSError *)error {
-    // key: 渠道名-优先级
-    if (error) {
-        NSString *key = [NSString stringWithFormat:@"%@-%ld",supplier.name, supplier.priority];
-        [self.errorDescriptions setObject:error forKey:key];
-    }
-}
+//- (void)collectErrorWithSupplier:(AdvSupplier *)supplier error:(NSError *)error {
+//    // key: 渠道名-优先级
+//    if (error) {
+//        NSString *key = [NSString stringWithFormat:@"%@-%ld",supplier.name, supplier.priority];
+//        [self.errorDescriptions setObject:error forKey:key];
+//    }
+//}
 
 - (void)deallocAdapter {
     // 该方法为AdvanceSDK 内部调用 开发者不要在外部手动调用 想要释放 直接将广告对象置为nil即可

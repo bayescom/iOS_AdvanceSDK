@@ -19,11 +19,11 @@ typedef NS_ENUM(NSUInteger, AdvanceSdkSupplierRepoType) {
     AdvanceSdkSupplierRepoLoaded,
     /// 点击上报
     AdvanceSdkSupplierRepoClicked,
-    /// 数据加载成功上报v
+    /// 数据加载成功上报
     AdvanceSdkSupplierRepoSucceed,
     /// 曝光上报
     AdvanceSdkSupplierRepoImped,
-    /// 失败上报
+    /// 广告加载/渲染失败上报
     AdvanceSdkSupplierRepoFailed,
     /// bidding结果上报
     AdvanceSdkSupplierRepoBidding,

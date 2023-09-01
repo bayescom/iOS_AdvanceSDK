@@ -16,9 +16,6 @@ NS_ASSUME_NONNULL_BEGIN
 //MARK: 策略服务类（非单例）
 @interface AdvPolicyService : NSObject
 
-/// 网络请求超时时间（默认: 5秒）
-@property (nonatomic, assign) NSTimeInterval fetchTime;
-
 @property (nonatomic, weak) id<AdvPolicyServiceDelegate> delegate;
 
 /// 数据管理对象
