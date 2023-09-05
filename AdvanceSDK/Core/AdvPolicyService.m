@@ -138,10 +138,11 @@
         [self reportEventWithType:AdvanceSdkSupplierRepoLoaded supplier:supplier error:nil];
     }];
     
-    /// 执行完后移除该组渠道，确保再次调用此函数时能获取到下一组渠道
+    /// 执行完后移除parallel组渠道，确保再次调用此函数时能获取到下一组渠道
     if (self.model.setting.parallelGroup.count > 0) {
         [self.model.setting.parallelGroup removeObjectAtIndex:0];
     }
+    /// 执行完后移除bidding组渠道，确保再次调用此函数时该组不再参与竞价
     if (self.model.setting.headBiddingGroup.count > 0) {
         [self.model.setting.headBiddingGroup removeAllObjects];
     }
@@ -194,13 +195,16 @@
             break;
     }
     
-    if (_biddingSuppliers.count == 0 && !_bidTargetSupplier) { /// 瀑布流模式，无headbidding渠道
+    /// biddingSuppliers元素为空 有2种可能
+    /// 1：本身无headbidding渠道，即瀑布流策略
+    /// 2：本身有headbidding渠道，但是组内渠道都执行失败了，此时也走瀑布流策略
+    if (_biddingSuppliers.count == 0 && !_bidTargetSupplier) {
         
         /// 进入瀑布流竞价执行、选中流程
         [self enterWaterfallFlow];
         
     } else { /// 混合竞价模式（瀑布流 + 头部竞价）
-
+        
         /// 检测bidding组是否全部返回了结果
         if ([_biddingSuppliers filter:^BOOL(AdvSupplier *supplier) {
             return supplier.loadAdState == AdvanceSupplierLoadAdReady;
@@ -208,37 +212,23 @@
             return;
         }
         
-        /// bidding组都返回了结果，此时biddingSuppliers只存储了竞价成功的渠道
+        /// 此时bidding组全部返回了结果，并且一定存在竞价成功的渠道
         if (supplier.is_head_bidding) {
-            if (_biddingSuppliers.count == 0) {/// 如果bidding组都失败了，则执行瀑布流策略
-                /// !!重要!!：如果groupedSuppliers组没有全部返回结果，等下一个渠道回调时程序默认走到本方法的瀑布流代码
-                /// 如果groupedSuppliers组全部返回结果：
-                if ([_parallelSuppliers filter:^BOOL(AdvSupplier *supplier) {
-                    return supplier.loadAdState == AdvanceSupplierLoadAdReady;
-                }].count == 0) {
-                    /// 进入瀑布流竞价执行、选中流程
-                    [self enterWaterfallFlow];
-                }
-            } else { /// 如果bidding组有成功竞价的渠道
-                /// 对biddingSuppliers进行排序
-                [self sortedForPriceWithSuppliers:_biddingSuppliers];
-                /// 取出最高价渠道
-                _bidTargetSupplier = _biddingSuppliers.firstObject;
-                /// 进入混合竞价（瀑布流 + 头部竞价）执行、选中流程
-                [self enterWaterfallMixedHeadbiddingFlow];
-            }
-            
-        } else { /// bidding组已经有成功竞价的渠道 并且 后续又返回了parallel组某个渠道
-            /// 进入混合竞价（瀑布流 + 头部竞价）执行、选中流程
-            [self enterWaterfallMixedHeadbiddingFlow];
+            /// 对biddingSuppliers进行排序
+            [self sortedForPriceWithSuppliers:_biddingSuppliers];
+            /// 取出最高价渠道
+            _bidTargetSupplier = _biddingSuppliers.firstObject;
         }
+        
+        /// 进入混合竞价（瀑布流 + 头部竞价）执行、选中流程
+        [self enterWaterfallMixedHeadbiddingFlow];
     }
 }
 
 /// 进入瀑布流竞价执行、选中流程
 - (void)enterWaterfallFlow {
     
-    // 该组渠道广告均返回失败，执行下一组渠道并发
+    // 该parallel组渠道广告均返回失败，执行下一组渠道并发
     if (_parallelSuppliers.count == 0) {
         [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(observeLoadAdTimeout) object:nil];
         [self loadSuppliersConcurrently];
