@@ -103,6 +103,8 @@
 }
 
 - (void)nativeExpressFullscreenVideoAdDidDownLoadVideo:(BUNativeExpressFullscreenVideoAd *)fullscreenVideoAd {
+    NSDictionary *ext = fullscreenVideoAd.mediaExt;
+    _supplier.supplierPrice = [ext[@"price"] integerValue];
 //回调后再去展示广告，可保证播放和展示效果
     [self.adspot reportEventWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
     [self.adspot reportEventWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];

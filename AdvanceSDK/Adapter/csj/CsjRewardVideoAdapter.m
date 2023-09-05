@@ -100,8 +100,12 @@
 // MARK: ======================= BUNativeExpressRewardedVideoAdDelegate =======================
 /// 广告数据加载成功回调
 - (void)nativeExpressRewardedVideoAdDidLoad:(BUNativeExpressRewardedVideoAd *)rewardedVideoAd {
-    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
-    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
+
+    NSDictionary *ext = rewardedVideoAd.mediaExt;
+    _supplier.supplierPrice = [ext[@"price"] integerValue];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
+    [self.adspot reportWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
+
 //    NSLog(@"穿山甲激励视频拉取成功");
     _supplier.state = AdvanceSdkSupplierStateSuccess;
     NSLog(@"--1> %@ %d", _supplier, _supplier.isParallel);
