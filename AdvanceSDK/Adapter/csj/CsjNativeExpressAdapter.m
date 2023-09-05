@@ -98,8 +98,8 @@
 
         NSDictionary *ext = views.firstObject.mediaExt;
         _supplier.supplierPrice = [ext[@"price"] integerValue];
-        [_adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
-        [_adspot reportWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
+        [_adspot reportEventWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
+        [_adspot reportEventWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
         
         self.nativeAds = [NSMutableArray array];
 
