@@ -23,13 +23,13 @@
     [self initSubviews];
     
     _dataArr = @[
-//        @{@"title":@"自定义管理SDK", @"targetVCName": @"CustomListViewController"},
         @{@"title":@"开屏", @"targetVCName": @"DemoSplashViewController"},
         @{@"title":@"Banner", @"targetVCName": @"DemoBannerViewController"},
         @{@"title":@"插屏", @"targetVCName": @"DemoInterstitialViewController"},
         @{@"title":@"激励视频", @"targetVCName": @"DemoRewardVideoViewController"},
-        @{@"title":@"信息流", @"targetVCName": @"DemoFeedExpressViewController"},
         @{@"title":@"全屏视频", @"targetVCName": @"DemoFullScreenVideoController"},
+        @{@"title":@"模版渲染信息流", @"targetVCName": @"DemoFeedExpressViewController"},
+        @{@"title":@"自渲染信息流", @"targetVCName": @"DemoRenderFeedViewController"},
     ];
     
     [_tableView reloadData];

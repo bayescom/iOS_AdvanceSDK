@@ -15,7 +15,7 @@
 @implementation AdvSdkConfig
 
 NSString *const AdvanceSdkAPIVersion = @"3.0";
-NSString *const AdvanceSdkVersion = @"4.0.3.7";
+NSString *const AdvanceSdkVersion = @"4.0.3.8";
 NSString *const AdvanceSdkRequestUrl = @"http://cruiser.bayescom.cn/eleven";
 NSString *const AdvanceReportDataUrl = @"http://cruiser.bayescom.cn/native";
 NSString *const AdvanceSdkRequestMockUrl = @"https://mock.yonyoucloud.com/mock/2650/api/v3/eleven";
@@ -73,6 +73,7 @@ NSString * const AdvSdkTypeAdNameBanner = @"BANNER_AD";
 NSString * const AdvSdkTypeAdNameInterstitial = @"INTERSTAITIAL_AD";
 NSString * const AdvSdkTypeAdNameFullScreenVideo = @"FULLSCREENVIDEO_AD";
 NSString * const AdvSdkTypeAdNameNativeExpress = @"NATIVEEXPRESS_AD";
+NSString * const AdvSdkTypeAdNameRenderFeed = @"RENDERFEED_AD";
 NSString * const AdvSdkTypeAdNameRewardedVideo = @"REWARDEDVIDEO_AD";
 
 // MARK: ======================= NSUserDefaultsKeys =======================

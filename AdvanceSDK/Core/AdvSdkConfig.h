@@ -46,6 +46,7 @@ extern NSString *const AdvSdkTypeAdNameBanner;
 extern NSString *const AdvSdkTypeAdNameInterstitial;
 extern NSString *const AdvSdkTypeAdNameFullScreenVideo;
 extern NSString *const AdvSdkTypeAdNameNativeExpress;
+extern NSString *const AdvSdkTypeAdNameRenderFeed;
 extern NSString *const AdvSdkTypeAdNameRewardedVideo;
 
 extern NSString *const AdvanceSDKModelKey;

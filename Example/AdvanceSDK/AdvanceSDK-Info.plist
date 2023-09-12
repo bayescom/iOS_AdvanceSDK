@@ -30,7 +30,7 @@
 		<true/>
 	</dict>
 	<key>NSUserTrackingUsageDescription</key>
-	<string>dfafdsafdsafdsafasd</string>
+	<string>此标识符将用于向您推荐个性化广告</string>
 	<key>SKAdNetworkItems</key>
 	<array>
 		<dict>
