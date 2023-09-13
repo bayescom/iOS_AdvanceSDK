@@ -54,7 +54,6 @@ extern NSString *const AdvanceSDKIdfaKey;
 extern NSString *const AdvanceSDKIdfvKey;
 extern NSString *const AdvanceSDKCarrierKey;
 extern NSString *const AdvanceSDKNetworkKey;
-extern NSString *const AdvanceSDKUaKey;
 
 extern NSString *const AdvanceSDKTimeOutForeverKey;
 extern NSString *const AdvanceSDKOneMonthKey;

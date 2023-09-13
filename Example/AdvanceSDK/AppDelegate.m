@@ -22,7 +22,8 @@
 #import <AdvanceSplash.h>
 #import <AdvanceSDK/AdvanceSplash.h>
 #import <AdvSdkConfig.h>
-
+#import <AdvBayesSDKConfig.h>
+#import <MercurySDK/MercuryConfigManager.h>
 
 #define kPublicKey  @"用文本编辑打开pub_for_sdk.cer即可获取"
 
@@ -54,6 +55,9 @@
     
     
     [AdvSdkConfig shareInstance].appId = @"102768";
+    
+    [AdvBayesSDKConfig setUserAgent:@"ua"];
+    [AdvBayesSDKConfig setAAIDWithMediaId:@"media001" mediaSecret:@"243835763"];
     
     return YES;
 }

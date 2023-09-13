@@ -15,7 +15,7 @@
 @implementation AdvSdkConfig
 
 NSString *const AdvanceSdkAPIVersion = @"3.0";
-NSString *const AdvanceSdkVersion = @"4.0.3.8";
+NSString *const AdvanceSdkVersion = @"4.0.3.9";
 NSString *const AdvanceSdkRequestUrl = @"http://cruiser.bayescom.cn/eleven";
 NSString *const AdvanceReportDataUrl = @"http://cruiser.bayescom.cn/native";
 NSString *const AdvanceSdkRequestMockUrl = @"https://mock.yonyoucloud.com/mock/2650/api/v3/eleven";
@@ -81,7 +81,6 @@ NSString * const AdvSdkTypeAdNameRewardedVideo = @"REWARDEDVIDEO_AD";
 NSString * const AdvanceSDKModelKey = @"AdvanceSDKModelKey";
 NSString * const AdvanceSDKIdfaKey = @"AdvanceSDKIdfaKey";
 NSString * const AdvanceSDKIdfvKey = @"AdvanceSDKIdfvKey";
-NSString * const AdvanceSDKUaKey = @"AdvanceSDKUaKey";
 NSString * const AdvanceSDKCarrierKey = @"AdvanceSDKCarrierKey";
 NSString * const AdvanceSDKNetworkKey = @"AdvanceSDKNetworkKey";
 //timeKeys
