@@ -86,7 +86,7 @@
 /// 加载某一个渠道对象
 - (void)advPolicyServiceLoadAnySupplier:(nullable AdvSupplier *)supplier {
     // 加载渠道SDK进行初始化调用
-    [[AdvSupplierLoader defaultInstance] loadSupplier:supplier extra:self.ext];
+    [AdvSupplierLoader loadSupplier:supplier];
     
     // 通知外部该渠道开始加载广告
     if ([self.delegate respondsToSelector:@selector(didStartLoadingADSourceWithSpotId:sourceId:)]) {

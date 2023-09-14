@@ -11,9 +11,7 @@
 //MARK: 渠道SDK初始化器
 @interface AdvSupplierLoader : NSObject
 
-+ (instancetype)defaultInstance;
-
-- (void)loadSupplier:(AdvSupplier *)supplier extra:(NSDictionary *)extra;
++ (void)loadSupplier:(AdvSupplier *)supplier;
 
 @end
 

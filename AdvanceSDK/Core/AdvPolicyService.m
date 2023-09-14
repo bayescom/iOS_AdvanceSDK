@@ -780,7 +780,7 @@
 }
 
 /// 处理返回的数据
-- (void)handleResultData:(NSData * )data error:(NSError *)error {
+- (void)handleResultData:(NSData *)data error:(NSError *)error {
     // Error
     if (error) {
         if ([_delegate respondsToSelector:@selector(advPolicyServiceLoadFailedWithError:)]) {

@@ -14,18 +14,8 @@
 
 @implementation AdvSupplierLoader
 
-static AdvSupplierLoader *instance = nil;
-
-+(instancetype)defaultInstance {
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        instance = [[self alloc] init];
-    });
-    return instance;
-}
-
 // 加载渠道SDK进行初始化调用
-- (void)loadSupplier:(AdvSupplier *)supplier extra:(NSDictionary *)extra {
++ (void)loadSupplier:(AdvSupplier *)supplier {
 
     NSString *clsName = @"";
     if ([supplier.identifier isEqualToString:SDK_ID_GDT]) {
@@ -129,30 +119,13 @@ static AdvSupplierLoader *instance = nil;
         }
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
-            BOOL isEmpty = [self isEmptyString:supplier.mediaid];
-            if (isEmpty == NO) {
+            if (supplier.mediaid.length > 0) {
                 [cls performSelector:@selector(setupSDKWithAppId:config:) withObject:supplier.mediaid withObject:nil];
             }
 
         });
 
     }
-}
-
-- (BOOL)isEmptyString:(NSString *)string{
-       if(string == nil) {
-            return YES;
-        }
-        if (string == NULL) {
-            return YES;
-        }
-        if ([string isKindOfClass:[NSNull class]]) {
-            return YES;
-        }
-        if ([[string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] length]==0) {
-            return YES;
-        }
-    return NO;
 }
 
 @end
