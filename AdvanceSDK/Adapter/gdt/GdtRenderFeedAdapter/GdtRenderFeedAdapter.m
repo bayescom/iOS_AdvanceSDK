@@ -84,7 +84,7 @@
 - (void)gdt_unifiedNativeAdLoaded:(NSArray<GDTUnifiedNativeAdDataObject *> *)unifiedNativeAdDataObjects error:(NSError *)error {
     
     if (error) {
-        [self.adspot reportWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
+        [self.adspot reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
         _supplier.state = AdvanceSdkSupplierStateFailed;
         if (_supplier.isParallel == YES) {
             return;
@@ -92,8 +92,8 @@
     } else {
         GDTUnifiedNativeAdDataObject *dataObject = unifiedNativeAdDataObjects.firstObject;
         _supplier.supplierPrice = dataObject.eCPM;
-        [_adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
-        [_adspot reportWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
+        [_adspot reportEventWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
+        [_adspot reportEventWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
         
         AdvRenderFeedAdElement *element = [self generateFeedAdElementWithDataObject:dataObject];
         GdtRenderFeedAdView *gdtFeedAdView = [[GdtRenderFeedAdView alloc] initWithDataObject:dataObject delegate:self.delegate adSpot:self.adspot supplier:self.supplier];

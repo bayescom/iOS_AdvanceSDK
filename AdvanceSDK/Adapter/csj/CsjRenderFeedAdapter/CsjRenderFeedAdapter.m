@@ -90,8 +90,8 @@
     BUNativeAd *nativeAd = nativeAdDataArray.firstObject;
     NSDictionary *ext = nativeAd.data.mediaExt;
     _supplier.supplierPrice = [ext[@"price"] integerValue];
-    [_adspot reportWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
-    [_adspot reportWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
+    [_adspot reportEventWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
+    [_adspot reportEventWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
     
     
     AdvRenderFeedAdElement *element = [self generateFeedAdElementWithNativeAd:nativeAd];
@@ -111,7 +111,7 @@
 }
 
 - (void)nativeAdsManager:(BUNativeAdsManager *)adsManager didFailWithError:(NSError *)error {
-    [self.adspot reportWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
+    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
     _supplier.state = AdvanceSdkSupplierStateFailed;
     if (_supplier.isParallel == YES) { // 并行不释放 只上报
         return;

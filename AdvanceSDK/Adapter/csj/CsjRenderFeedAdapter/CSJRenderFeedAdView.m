@@ -90,7 +90,7 @@
 }
 
 - (void)nativeAdDidBecomeVisible:(BUNativeAd *)nativeAd {
-    [_adSpot reportWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
+    [_adSpot reportEventWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(renderFeedAdDidShowForSpotId:extra:)]) {
         [self.delegate renderFeedAdDidShowForSpotId:self.adSpot.adspotid extra:self.adSpot.ext];
     }
@@ -103,7 +103,7 @@
 }
 
 - (void)nativeAdDidClick:(BUNativeAd *)nativeAd withView:(UIView *_Nullable)view {
-    [_adSpot reportWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
+    [_adSpot reportEventWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(renderFeedAdDidClickForSpotId:extra:)]) {
         [self.delegate renderFeedAdDidClickForSpotId:self.adSpot.adspotid extra:self.adSpot.ext];
     }
@@ -129,14 +129,14 @@
 }
 
 - (void)videoAdViewDidClick:(BUVideoAdView *)videoAdView {
-    [_adSpot reportWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
+    [_adSpot reportEventWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(renderFeedAdDidClickForSpotId:extra:)]) {
         [self.delegate renderFeedAdDidClickForSpotId:self.adSpot.adspotid extra:self.adSpot.ext];
     }
 }
 
 - (void)videoAdViewFinishViewDidClick:(BUVideoAdView *)videoAdView {
-    [_adSpot reportWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
+    [_adSpot reportEventWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(renderFeedAdDidClickForSpotId:extra:)]) {
         [self.delegate renderFeedAdDidClickForSpotId:self.adSpot.adspotid extra:self.adSpot.ext];
     }
