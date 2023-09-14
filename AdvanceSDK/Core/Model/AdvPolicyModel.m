@@ -64,6 +64,13 @@ NSString * ADVStringFromNAdvanceSdkSupplierRepoType(AdvanceSdkSupplierRepoType t
     return _timeout;
 }
 
+- (NSString *)supplierKey {
+    if (!_supplierKey) {
+        _supplierKey = [NSString stringWithFormat:@"%@-%ld",_identifier,_priority];
+    }
+    return _supplierKey;
+}
+
 @end
 
 @implementation AdvSetting

@@ -73,7 +73,7 @@
 // 结束Bidding
 - (void)advPolicyServiceFinishBiddingWithWinSupplier:(AdvSupplier *_Nonnull)supplier {
     /// 获取竞胜的adpater
-    self.targetAdapter = [self.adapterMap objectForKey:supplier.identifier];
+    self.targetAdapter = [self.adapterMap objectForKey:supplier.supplierKey];
     /// 通知adpater竞胜，该给予外部回调了
 #pragma clang diagnostic ignored "-Wundeclared-selector"
     ((void (*)(id, SEL))objc_msgSend)((id)self.targetAdapter, @selector(winnerAdapterToShowAd));
@@ -100,7 +100,7 @@
     ((void (*)(id, SEL, id))objc_msgSend)((id)adapter, @selector(setDelegate:), _delegate);
     ((void (*)(id, SEL))objc_msgSend)((id)adapter, @selector(loadAd));
     if (adapter) {
-        [self.adapterMap setObject:adapter forKey:supplier.identifier];
+        [self.adapterMap setObject:adapter forKey:supplier.supplierKey];
     }
 }
 

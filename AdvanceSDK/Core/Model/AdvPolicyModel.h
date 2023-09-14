@@ -131,6 +131,8 @@ NSString * ADVStringFromNAdvanceSdkSupplierRepoType(AdvanceSdkSupplierRepoType t
 
 @property (nonatomic, assign) AdvanceSupplierLoadAdState loadAdState; // 广告加载状态
 @property (nonatomic, assign) BOOL hited; // 是否已经命中过
+/// 用于存储对应的Adapter，key必须唯一，会有同渠道配置多个的情况
+@property (nonatomic, copy) NSString *supplierKey;
 
 @end
 
