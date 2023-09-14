@@ -10,8 +10,6 @@
 
 #import "AdvanceAdLoadingDelegate.h"
 
-NS_ASSUME_NONNULL_BEGIN
-
 @class AdvanceNativeExpressAd;
 
 @protocol AdvanceNativeExpressDelegate <AdvanceAdLoadingDelegate>
@@ -19,7 +17,8 @@ NS_ASSUME_NONNULL_BEGIN
 @optional
 
 /// Native ad loaded successfully
-- (void)didFinishLoadingNativeExpressAds:(NSArray <AdvanceNativeExpressAd *>*)nativeAds spotId:(NSString *)spotId;
+- (void)didFinishLoadingNativeExpressAds:(NSArray <AdvanceNativeExpressAd *>*)nativeAds
+                                  spotId:(NSString *)spotId;
 
 /// Native adview rendered successfully
 - (void)nativeExpressAdViewRenderSuccess:(AdvanceNativeExpressAd *)nativeAd
@@ -48,8 +47,6 @@ NS_ASSUME_NONNULL_BEGIN
                           extra:(NSDictionary *)extra;
 
 @end
-
-NS_ASSUME_NONNULL_END
 
 #endif
 

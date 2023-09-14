@@ -10,6 +10,7 @@
 #import <objc/runtime.h>
 #import <objc/message.h>
 #import "AdvanceAESCipher.h"
+#import "AdvBayesSDKConfig.h"
 
 @implementation AdvSupplierLoader
 
@@ -26,7 +27,6 @@ static AdvSupplierLoader *instance = nil;
 // 加载渠道SDK进行初始化调用
 - (void)loadSupplier:(AdvSupplier *)supplier extra:(NSDictionary *)extra {
 
-    // 初始化渠道SDK
     NSString *clsName = @"";
     if ([supplier.identifier isEqualToString:SDK_ID_GDT]) {
         clsName = @"GDTSDKConfig";
@@ -44,56 +44,82 @@ static AdvSupplierLoader *instance = nil;
         clsName = @"ABUAdSDKManager";
     }
     
+    Class cls = NSClassFromString(clsName);
 
-    if ([supplier.identifier isEqualToString:SDK_ID_GDT]) {
-        // 广点通SDK
-        static dispatch_once_t onceToken;
-        dispatch_once(&onceToken, ^{
-            
-            [NSClassFromString(clsName) performSelector:@selector(registerAppId:) withObject:supplier.mediaid];
-        });
+    if ([supplier.identifier isEqualToString:SDK_ID_GDT]) {// 广点通SDK
         
-    } else if ([supplier.identifier isEqualToString:SDK_ID_CSJ]) {
-        // 穿山甲SDK
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
-            [NSClassFromString(clsName) performSelector:@selector(setAppID:) withObject:supplier.mediaid];
-        });
-    } else if ([supplier.identifier isEqualToString:SDK_ID_MERCURY]) {
-        // MercurySDK
-        static dispatch_once_t onceToken;
-        dispatch_once(&onceToken, ^{
-            Class cls = NSClassFromString(clsName);
-            [cls performSelector:@selector(setAppID:mediaKey:) withObject:supplier.mediaid withObject:supplier.mediakey];
-            
-            NSString *ua = [extra objectForKey:AdvanceSDKUaKey];
-            if (ua) {
-                NSString *uaEncrypt = advanceAesEncryptString(ua, AdvanceSDKSecretKey);
-
-                [cls performSelector:@selector(setDefaultUserAgent:) withObject:uaEncrypt];
+            SEL selector = NSSelectorFromString(@"registerAppId:");
+            if ([cls.class respondsToSelector:selector]) {
+                ((void (*)(id, SEL, NSString *))objc_msgSend)(cls.class, selector, supplier.mediaid);
             }
         });
-    } else if ([supplier.identifier isEqualToString:SDK_ID_KS]) {
-        // 快手
+        
+    } else if ([supplier.identifier isEqualToString:SDK_ID_CSJ]) {// 穿山甲SDK
+        
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
-            [NSClassFromString(clsName) performSelector:@selector(setAppId:) withObject:supplier.mediaid];
+            SEL selector = NSSelectorFromString(@"setAppID:");
+            if ([cls.class respondsToSelector:selector]) {
+                ((void (*)(id, SEL, NSString *))objc_msgSend)(cls.class, selector, supplier.mediaid);
+            }
+        });
+        
+    } else if ([supplier.identifier isEqualToString:SDK_ID_MERCURY]) {// 倍业SDK
+        
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+            // 初始化
+            SEL selector = NSSelectorFromString(@"setAppID:appKey:");
+            if ([cls.class respondsToSelector:selector]) {
+                ((void (*)(id, SEL, NSString *, NSString *))objc_msgSend)(cls.class, selector, supplier.mediaid, supplier.mediakey);
+            }
+            // 设置AAID
+            NSString *aliMediaId = [AdvBayesSDKConfig sharedInstance].aliMediaId;
+            NSString *aliMediaSecret = [AdvBayesSDKConfig sharedInstance].aliMediaSecret;
+            if (aliMediaId.length > 0 && aliMediaSecret.length > 0) {
+                SEL selector = NSSelectorFromString(@"setAAIDWithMediaId:mediaSecret:");
+                if ([cls.class respondsToSelector:selector]) {
+                    ((void (*)(id, SEL, NSString *, NSString *))objc_msgSend)(cls.class, selector, aliMediaId, aliMediaSecret);
+                }
+            }
+            // 设置UA
+            NSString *userAgent = [AdvBayesSDKConfig sharedInstance].userAgent;
+            if (userAgent.length > 0) {
+                NSString *uaEncrypt = advanceAesEncryptString(userAgent, AdvanceSDKSecretKey);
+                SEL selector = NSSelectorFromString(@"setDefaultUserAgent:");
+                if ([cls.class respondsToSelector:selector]) {
+                    ((void (*)(id, SEL, NSString *))objc_msgSend)(cls.class, selector, uaEncrypt);
+                }
+            }
+        });
+        
+    } else if ([supplier.identifier isEqualToString:SDK_ID_KS]) {// 快手SDK
+        
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+            SEL selector = NSSelectorFromString(@"setAppId:");
+            if ([cls.class respondsToSelector:selector]) {
+                ((void (*)(id, SEL, NSString *))objc_msgSend)(cls.class, selector, supplier.mediaid);
+            }
         });
 
-    } else if ([supplier.identifier isEqualToString:SDK_ID_BAIDU]) {
-        // 百度
+    } else if ([supplier.identifier isEqualToString:SDK_ID_BAIDU]) {// 百度SDK
+        
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
-            id bdSetting = ((id(*)(id,SEL))objc_msgSend)(NSClassFromString(clsName), @selector(sharedInstance));
-            [bdSetting performSelector:@selector(setSupportHttps:) withObject:@NO];
+            id bdInstance = ((id (*)(id, SEL))objc_msgSend)(cls, NSSelectorFromString(@"sharedInstance"));
+            SEL selector = NSSelectorFromString(@"setSupportHttps:");
+            ((void (*)(id, SEL, BOOL))objc_msgSend)(bdInstance, selector, NO);
 
         });
-    } else if ([supplier.identifier isEqualToString:SDK_ID_TANX]) {
-        // Tanx
+    } else if ([supplier.identifier isEqualToString:SDK_ID_TANX]) {// Tanx
+        
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
 
-            [NSClassFromString(clsName) performSelector:@selector(setupSDKWithAppID:andAppKey:) withObject:supplier.mediaid withObject:supplier.mediakey];
+            [cls performSelector:@selector(setupSDKWithAppID:andAppKey:) withObject:supplier.mediaid withObject:supplier.mediakey];
 
         });
     } else if ([supplier.identifier isEqualToString:SDK_ID_BIDDING]){
@@ -105,7 +131,7 @@ static AdvSupplierLoader *instance = nil;
         dispatch_once(&onceToken, ^{
             BOOL isEmpty = [self isEmptyString:supplier.mediaid];
             if (isEmpty == NO) {
-                [NSClassFromString(clsName) performSelector:@selector(setupSDKWithAppId:config:) withObject:supplier.mediaid withObject:nil];
+                [cls performSelector:@selector(setupSDKWithAppId:config:) withObject:supplier.mediaid withObject:nil];
             }
 
         });

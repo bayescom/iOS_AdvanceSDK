@@ -22,7 +22,7 @@
 #import <AdvanceSplash.h>
 #import <AdvanceSDK/AdvanceSplash.h>
 #import <AdvSdkConfig.h>
-
+#import <AdvBayesSDKConfig.h>
 
 #define kPublicKey  @"用文本编辑打开pub_for_sdk.cer即可获取"
 
@@ -52,6 +52,16 @@
 #pragma 开始集成前 请务必阅读文档中的注意事项及Checklist https://github.com/bayescom/AdvanceSDK
 #pragma Demo 中有许多内容为开发调试的内容, 仅作为开发者调试自己的账号使用, 不一定会出广告
     
+    
+    [AdvSdkConfig shareInstance].appId = @"102768";
+    
+    [AdvBayesSDKConfig setUserAgent:@"ua"];
+    [AdvBayesSDKConfig setAAIDWithMediaId:@"media001" mediaSecret:@"243835763"];
+    
+    return YES;
+}
+
+- (void)applicationDidBecomeActive:(UIApplication *)application {
     // 请现在 plist 文件中配置 NSUserTrackingUsageDescription
     /*
      <key>NSUserTrackingUsageDescription</key>
@@ -87,10 +97,6 @@
 
     }
     
-//    [AdvSdkConfig shareInstance].appId = @"102768";
-//    [AdvSdkConfig shareInstance].appId = @"100255";
-    
-    return YES;
 }
 
 

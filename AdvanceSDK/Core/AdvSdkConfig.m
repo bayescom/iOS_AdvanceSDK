@@ -15,7 +15,7 @@
 @implementation AdvSdkConfig
 
 NSString *const AdvanceSdkAPIVersion = @"3.0";
-NSString *const AdvanceSdkVersion = @"4.0.3.7";
+NSString *const AdvanceSdkVersion = @"4.0.3.9";
 NSString *const AdvanceSdkRequestUrl = @"http://cruiser.bayescom.cn/eleven";
 NSString *const AdvanceReportDataUrl = @"http://cruiser.bayescom.cn/native";
 NSString *const AdvanceSdkEventUrl = @"https://cruiser.bayescom.cn/sdkevent";
@@ -72,6 +72,7 @@ NSString * const AdvSdkTypeAdNameBanner = @"BANNER_AD";
 NSString * const AdvSdkTypeAdNameInterstitial = @"INTERSTAITIAL_AD";
 NSString * const AdvSdkTypeAdNameFullScreenVideo = @"FULLSCREENVIDEO_AD";
 NSString * const AdvSdkTypeAdNameNativeExpress = @"NATIVEEXPRESS_AD";
+NSString * const AdvSdkTypeAdNameRenderFeed = @"RENDERFEED_AD";
 NSString * const AdvSdkTypeAdNameRewardedVideo = @"REWARDEDVIDEO_AD";
 
 // MARK: ======================= NSUserDefaultsKeys =======================
@@ -79,7 +80,6 @@ NSString * const AdvSdkTypeAdNameRewardedVideo = @"REWARDEDVIDEO_AD";
 NSString * const AdvanceSDKModelKey = @"AdvanceSDKModelKey";
 NSString * const AdvanceSDKIdfaKey = @"AdvanceSDKIdfaKey";
 NSString * const AdvanceSDKIdfvKey = @"AdvanceSDKIdfvKey";
-NSString * const AdvanceSDKUaKey = @"AdvanceSDKUaKey";
 NSString * const AdvanceSDKCarrierKey = @"AdvanceSDKCarrierKey";
 NSString * const AdvanceSDKNetworkKey = @"AdvanceSDKNetworkKey";
 //timeKeys

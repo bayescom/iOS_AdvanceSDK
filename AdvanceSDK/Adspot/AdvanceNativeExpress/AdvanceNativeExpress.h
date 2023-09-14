@@ -9,12 +9,11 @@
 #import "AdvanceBaseAdSpot.h"
 
 #import <UIKit/UIKit.h>
-
-#import "AdvSdkConfig.h"
 #import "AdvanceNativeExpressDelegate.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
+/// 模板渲染信息流广告
 @interface AdvanceNativeExpress : AdvanceBaseAdSpot
 
 /// 广告方法回调代理

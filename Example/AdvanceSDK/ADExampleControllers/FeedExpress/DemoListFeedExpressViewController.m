@@ -11,6 +11,7 @@
 #import "BYExamCellModel.h"
 
 #import "DemoUtils.h"
+#import <AdvanceSDK/AdvSdkConfig.h>
 #import <AdvanceSDK/AdvanceNativeExpress.h>
 #import <AdvanceSDK/AdvanceNativeExpressAd.h>
 @interface DemoListFeedExpressViewController () <UITableViewDelegate, UITableViewDataSource, AdvanceNativeExpressDelegate>
