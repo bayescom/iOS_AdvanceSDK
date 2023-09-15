@@ -34,15 +34,15 @@
         clsName = @"ABUAdSDKManager";
     }
     
-    Class cls = NSClassFromString(clsName);
+    Class clazz = NSClassFromString(clsName);
 
     if ([supplier.identifier isEqualToString:SDK_ID_GDT]) {// 广点通SDK
         
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
             SEL selector = NSSelectorFromString(@"registerAppId:");
-            if ([cls.class respondsToSelector:selector]) {
-                ((void (*)(id, SEL, NSString *))objc_msgSend)(cls.class, selector, supplier.mediaid);
+            if ([clazz.class respondsToSelector:selector]) {
+                ((void (*)(id, SEL, NSString *))objc_msgSend)(clazz.class, selector, supplier.mediaid);
             }
         });
         
@@ -51,8 +51,8 @@
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
             SEL selector = NSSelectorFromString(@"setAppID:");
-            if ([cls.class respondsToSelector:selector]) {
-                ((void (*)(id, SEL, NSString *))objc_msgSend)(cls.class, selector, supplier.mediaid);
+            if ([clazz.class respondsToSelector:selector]) {
+                ((void (*)(id, SEL, NSString *))objc_msgSend)(clazz.class, selector, supplier.mediaid);
             }
         });
         
@@ -62,16 +62,16 @@
         dispatch_once(&onceToken, ^{
             // 初始化
             SEL selector = NSSelectorFromString(@"setAppID:appKey:");
-            if ([cls.class respondsToSelector:selector]) {
-                ((void (*)(id, SEL, NSString *, NSString *))objc_msgSend)(cls.class, selector, supplier.mediaid, supplier.mediakey);
+            if ([clazz.class respondsToSelector:selector]) {
+                ((void (*)(id, SEL, NSString *, NSString *))objc_msgSend)(clazz.class, selector, supplier.mediaid, supplier.mediakey);
             }
             // 设置AAID
             NSString *aliMediaId = [AdvBayesSDKConfig sharedInstance].aliMediaId;
             NSString *aliMediaSecret = [AdvBayesSDKConfig sharedInstance].aliMediaSecret;
             if (aliMediaId.length > 0 && aliMediaSecret.length > 0) {
                 SEL selector = NSSelectorFromString(@"setAAIDWithMediaId:mediaSecret:");
-                if ([cls.class respondsToSelector:selector]) {
-                    ((void (*)(id, SEL, NSString *, NSString *))objc_msgSend)(cls.class, selector, aliMediaId, aliMediaSecret);
+                if ([clazz.class respondsToSelector:selector]) {
+                    ((void (*)(id, SEL, NSString *, NSString *))objc_msgSend)(clazz.class, selector, aliMediaId, aliMediaSecret);
                 }
             }
             // 设置UA
@@ -79,8 +79,8 @@
             if (userAgent.length > 0) {
                 NSString *uaEncrypt = advanceAesEncryptString(userAgent, AdvanceSDKSecretKey);
                 SEL selector = NSSelectorFromString(@"setDefaultUserAgent:");
-                if ([cls.class respondsToSelector:selector]) {
-                    ((void (*)(id, SEL, NSString *))objc_msgSend)(cls.class, selector, uaEncrypt);
+                if ([clazz.class respondsToSelector:selector]) {
+                    ((void (*)(id, SEL, NSString *))objc_msgSend)(clazz.class, selector, uaEncrypt);
                 }
             }
         });
@@ -90,8 +90,8 @@
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
             SEL selector = NSSelectorFromString(@"setAppId:");
-            if ([cls.class respondsToSelector:selector]) {
-                ((void (*)(id, SEL, NSString *))objc_msgSend)(cls.class, selector, supplier.mediaid);
+            if ([clazz.class respondsToSelector:selector]) {
+                ((void (*)(id, SEL, NSString *))objc_msgSend)(clazz.class, selector, supplier.mediaid);
             }
         });
 
@@ -99,7 +99,7 @@
         
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
-            id bdInstance = ((id (*)(id, SEL))objc_msgSend)(cls, NSSelectorFromString(@"sharedInstance"));
+            id bdInstance = ((id (*)(id, SEL))objc_msgSend)(clazz, NSSelectorFromString(@"sharedInstance"));
             SEL selector = NSSelectorFromString(@"setSupportHttps:");
             ((void (*)(id, SEL, BOOL))objc_msgSend)(bdInstance, selector, NO);
 
@@ -109,7 +109,7 @@
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
 
-            [cls performSelector:@selector(setupSDKWithAppID:andAppKey:) withObject:supplier.mediaid withObject:supplier.mediakey];
+            [clazz performSelector:@selector(setupSDKWithAppID:andAppKey:) withObject:supplier.mediaid withObject:supplier.mediakey];
 
         });
     } else if ([supplier.identifier isEqualToString:SDK_ID_BIDDING]){
@@ -120,7 +120,7 @@
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
             if (supplier.mediaid.length > 0) {
-                [cls performSelector:@selector(setupSDKWithAppId:config:) withObject:supplier.mediaid withObject:nil];
+                [clazz performSelector:@selector(setupSDKWithAppId:config:) withObject:supplier.mediaid withObject:nil];
             }
 
         });

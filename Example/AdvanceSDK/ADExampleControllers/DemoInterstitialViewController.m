@@ -13,23 +13,21 @@
 
 @interface DemoInterstitialViewController () <AdvanceInterstitialDelegate>
 @property (nonatomic, strong) AdvanceInterstitial *advanceInterstitial;
-@property (nonatomic) bool isAdLoaded;
 @end
 
 @implementation DemoInterstitialViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
     self.initDefSubviewsFlag = YES;
     self.adspotIdsArr = @[
-        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10000559"},
-        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10006501"},
-//        @{@"addesc": @"插屏-倍业", @"adspotId": @"102768-10007791"},
-//        @{@"addesc": @"插屏-穿山甲", @"adspotId": @"102768-10007801"},
-//        @{@"addesc": @"插屏-优量汇", @"adspotId": @"102768-10007810"},
-//        @{@"addesc": @"插屏-快手", @"adspotId": @"102768-10007818"},
-//        @{@"addesc": @"插屏-百度", @"adspotId": @"102768-10007836"},
+//        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10000559"},
+//        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10006501"},
+        @{@"addesc": @"插屏-倍业", @"adspotId": @"102768-10007791"},
+        @{@"addesc": @"插屏-穿山甲", @"adspotId": @"102768-10007801"},
+        @{@"addesc": @"插屏-优量汇", @"adspotId": @"102768-10007810"},
+        @{@"addesc": @"插屏-快手", @"adspotId": @"102768-10007818"},
+        @{@"addesc": @"插屏-百度", @"adspotId": @"102768-10007836"},
     ];
     self.btn1Title = @"加载广告";
     self.btn2Title = @"显示广告";
@@ -44,13 +42,10 @@
                                                               viewController:self
                                                                       adSize:CGSizeMake(414, 300)];
     self.advanceInterstitial.delegate = self;
-    _isAdLoaded=false;
     [self.advanceInterstitial loadAd];
 }
 
 - (void)loadAdBtn2Action {
-    
-    
     [self.advanceInterstitial showAd];
 }
 
@@ -75,7 +70,6 @@
 /// 插屏广告数据拉取成功
 - (void)didFinishLoadingInterstitialADWithSpotId:(NSString *)spotId {
     NSLog(@"广告数据拉取成功 %s", __func__);
-    _isAdLoaded=true;
     [JDStatusBarNotification showWithStatus:@"广告加载成功" dismissAfter:1.5];
     [self loadAdBtn2Action];
 }

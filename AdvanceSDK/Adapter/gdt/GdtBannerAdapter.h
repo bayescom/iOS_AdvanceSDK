@@ -7,16 +7,11 @@
 //
 
 #import "AdvanceBaseAdapter.h"
-#import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
 #import "AdvanceBannerDelegate.h"
-
-@class AdvSupplier;
-@class AdvanceBanner;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface GdtBannerAdapter : AdvanceBaseAdapter
+@interface GdtBannerAdapter : NSObject
 
 @property (nonatomic, weak) id<AdvanceBannerDelegate> delegate;
 

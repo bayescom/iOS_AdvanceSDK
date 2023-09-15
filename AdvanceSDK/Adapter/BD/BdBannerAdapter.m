@@ -13,151 +13,83 @@
 #endif
 #import "AdvanceBanner.h"
 #import "AdvLog.h"
+#import "AdvanceAdapter.h"
 
-@interface BdBannerAdapter ()<BaiduMobAdViewDelegate>
+@interface BdBannerAdapter ()<BaiduMobAdViewDelegate, AdvanceAdapter>
 @property (nonatomic, strong) BaiduMobAdView *bd_ad;
 @property (nonatomic, weak) AdvanceBanner *adspot;
 @property (nonatomic, strong) AdvSupplier *supplier;
 
-
-@property (nonatomic, assign) BOOL isBided;
-@property (nonatomic, assign) BOOL isDidload;
-@property (nonatomic, assign) BOOL isClose;
-
 @end
+
 @implementation BdBannerAdapter
 
 - (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(id)adspot {
-    if (self = [super initWithSupplier:supplier adspot:adspot]) {
+    if (self = [super init]) {
         _adspot = adspot;
         _supplier = supplier;
         CGRect rect = CGRectMake(0, 0, _adspot.adContainer.frame.size.width, _adspot.adContainer.frame.size.height);
-        _bd_ad = [[BaiduMobAdView alloc] init];
+        _bd_ad = [[BaiduMobAdView alloc] initWithFrame:rect];
         _bd_ad.AdType = BaiduMobAdViewTypeBanner;
         _bd_ad.delegate = self;
         _bd_ad.AdUnitTag = _supplier.adspotid;
-        _bd_ad.frame = rect;
     }
     return self;
 }
 
-
-- (void)supplierStateLoad {
-    ADV_LEVEL_INFO_LOG(@"加载百度 supplier: %@", _supplier);
-        
-    _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
+- (void)loadAd {
     [_bd_ad start];
 }
 
-- (void)supplierStateInPull {
-    ADV_LEVEL_INFO_LOG(@"百度加载中...");
-}
-
-- (void)supplierStateSuccess {
-    ADV_LEVEL_INFO_LOG(@"百度 成功");
-    if (_isDidload) {
-        return;
-    }
-    [self unifiedDelegate];
-    
-}
-
-- (void)supplierStateFailed {
-    ADV_LEVEL_INFO_LOG(@"百度 失败");
-    [_adspot loadNextSupplierIfHas];
-    [self deallocAdapter];
-}
-
-
-- (void)loadAd {
-    [super loadAd];
-}
-
 - (void)showAd {
-    if (_bd_ad) {
-        [_adspot.adContainer addSubview:_bd_ad];
-    } else {
-        [self deallocAdapter];
+    [_adspot.adContainer addSubview:_bd_ad];
+}
+
+- (void)winnerAdapterToShowAd {
+    if ([self.delegate respondsToSelector:@selector(didFinishLoadingBannerADWithSpotId:)]) {
+        [self.delegate didFinishLoadingBannerADWithSpotId:self.adspot.adspotid];
     }
 }
+
+// MARK: -BaiduMobAdViewDelegate
 
 - (NSString *)publisherId {
-    return  _supplier.mediaid; //@"your_own_app_id";
+    return  _supplier.mediaid;
 }
 
 - (void)willDisplayAd:(BaiduMobAdView *)adview {
-    _supplier.state = AdvanceSdkSupplierStateSuccess;
-    if (!_isBided) {// 只让bidding触发一次即可
-        [self.adspot reportEventWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
-        _isBided = YES;
-    }
-    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
-    if (_supplier.isParallel == YES) {
-        return;
-    }
-    [self unifiedDelegate];
-    _isDidload = YES;
+    [self.adspot.manager setECPMIfNeeded:0 supplier:_supplier];
+    [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
+    [self.adspot.manager checkTargetWithResultfulSupplier:_supplier loadAdState:AdvanceSupplierLoadAdSuccess];
 }
 
 - (void)failedDisplayAd:(BaiduMobFailReason)reason {
-    NSError *error = [[NSError alloc]initWithDomain:@"BDAdErrorDomain" code:1000020 + reason userInfo:@{@"desc":@"百度广告展现错误"}];
-    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoFailed  supplier:_supplier error:error];
-    _supplier.state = AdvanceSdkSupplierStateFailed;
-//    NSLog(@"========>>>>>>>> %ld %@", (long)_supplier.priority, error);
-    if (_supplier.isParallel == YES) { // 并行不释放 只上报
-        
-        return;
-    } else { //
-        [self deallocAdapter];
-    }
+    NSError *error = [[NSError alloc]initWithDomain:@"BDAdErrorDomain" code:1000020 + reason userInfo:@{@"desc":@"百度横幅广告加载失败"}];
+    [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
+    [self.adspot.manager checkTargetWithResultfulSupplier:_supplier loadAdState:AdvanceSupplierLoadAdFailed];
 }
 
 - (void)didAdImpressed {
-    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
+    [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(bannerView:didShowAdWithSpotId:extra:)]) {
         [self.delegate bannerView:self.adspot.adContainer didShowAdWithSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
 }
 
 - (void)didAdClicked {
-    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
+    [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(bannerView:didClickAdWithSpotId:extra:)]) {
         [self.delegate bannerView:self.adspot.adContainer didClickAdWithSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
 }
 
-//点击关闭的时候移除广告
 - (void)didAdClose {
-//    [sharedAdView removeFromSuperview];
-    
-    [self closeDelegate];
-}
-
-
-
-- (void)unifiedDelegate {
-    if ([self.delegate respondsToSelector:@selector(didFinishLoadingBannerADWithSpotId:)]) {
-        [self.delegate didFinishLoadingBannerADWithSpotId:self.adspot.adspotid];
-    }
-    //    [self showAd];
-}
-
-- (void)closeDelegate {
-    if (_isClose) {
-        return;
-    }
-    _isClose = YES;
-    
+    [_bd_ad removeFromSuperview];
+    _bd_ad = nil;
     if ([self.delegate respondsToSelector:@selector(bannerView:didCloseAdWithSpotId:extra:)]) {
         [self.delegate bannerView:self.adspot.adContainer didCloseAdWithSpotId:self.adspot.adspotid extra:self.adspot.ext];
         
     }
-    [self deallocAdapter];
-    
 }
 
-
-- (void)didDismissLandingPage {
-    
-}
 @end

@@ -14,8 +14,6 @@
 
 @interface AdvanceBanner ()
 
-@property (nonatomic, strong) id adapter;
-
 @end
 
 @implementation AdvanceBanner
@@ -44,7 +42,7 @@
 }
 
 
-// MARK: ======================= AdvanceSupplierDelegate =======================
+// MARK: ======================= AdvPolicyServiceDelegate =======================
 /// 加载策略Model成功
 - (void)advPolicyServiceLoadSuccessWithModel:(nonnull AdvPolicyModel *)model {
     if ([_delegate respondsToSelector:@selector(didFinishLoadingADPolicyWithSpotId:)]) {
@@ -59,73 +57,69 @@
     }
 }
 
-/// 返回下一个渠道的参数
-- (void)advPolicyServiceLoadSupplier:(nullable AdvSupplier *)supplier error:(nullable NSError *)error {
+// 开始Bidding
+- (void)advPolicyServiceStartBiddingWithSuppliers:(NSArray <AdvSupplier *> *_Nullable)suppliers {
+    if ([_delegate respondsToSelector:@selector(didStartBiddingADWithSpotId:)]) {
+        [_delegate didStartBiddingADWithSpotId:self.adspotid];
+    }
+}
+
+// Bidding失败（渠道广告全部加载失败）
+- (void)advPolicyServiceFailedBiddingWithError:(NSError *)error description:(NSDictionary *)description {
+    if ([_delegate respondsToSelector:@selector(didFailLoadingADSourceWithSpotId:error:description:)]) {
+        [_delegate didFailLoadingADSourceWithSpotId:self.adspotid error:error description:description];
+    }
+    if ([_delegate respondsToSelector:@selector(didFailBiddingADWithSpotId:error:)]) {
+        [_delegate didFailBiddingADWithSpotId:self.adspotid error:error];
+    }
+}
+
+// 结束Bidding
+- (void)advPolicyServiceFinishBiddingWithWinSupplier:(AdvSupplier *_Nonnull)supplier {
+    /// 获取竞胜的adpater
+    self.targetAdapter = [self.adapterMap objectForKey:supplier.supplierKey];
+    /// 通知adpater竞胜，该给予外部回调了
+#pragma clang diagnostic ignored "-Wundeclared-selector"
+    ((void (*)(id, SEL))objc_msgSend)((id)self.targetAdapter, @selector(winnerAdapterToShowAd));
     
+    if ([_delegate respondsToSelector:@selector(didFinishBiddingADWithSpotId:price:)]) {
+        [_delegate didFinishBiddingADWithSpotId:self.adspotid price:supplier.sdk_price];
+    }
+}
+
+/// 加载某一个渠道对象
+- (void)advPolicyServiceLoadAnySupplier:(nullable AdvSupplier *)supplier {
     // 加载渠道SDK进行初始化调用
     [AdvSupplierLoader loadSupplier:supplier];
     
-    // 返回渠道有问题 则不用再执行下面的渠道了
-    if (error) {
-        // 错误回调只调用一次
-        if ([_delegate respondsToSelector:@selector(didFailLoadingADSourceWithSpotId:error:description:)]) {
-            [_delegate didFailLoadingADSourceWithSpotId:self.adspotid error:error description:[self.errorDescriptions copy]];
-        }
-        return;
-    }
-    
-    // 开始加载渠道前通知调用者
+    // 通知外部该渠道开始加载广告
     if ([self.delegate respondsToSelector:@selector(didStartLoadingADSourceWithSpotId:sourceId:)]) {
         [self.delegate didStartLoadingADSourceWithSpotId:self.adspotid sourceId:supplier.identifier];
     }
+    
+    // 根据渠道id初始化对应Adapter
+    NSString *clsName = [self mappingClassNameWithSupplierId:supplier.identifier];
+#pragma clang diagnostic ignored "-Wundeclared-selector"
+    id adapter = ((id (*)(id, SEL, id, id))objc_msgSend)((id)[NSClassFromString(clsName) alloc], @selector(initWithSupplier:adspot:), supplier, self);
+    ((void (*)(id, SEL, id))objc_msgSend)((id)adapter, @selector(setDelegate:), _delegate);
+    ((void (*)(id, SEL))objc_msgSend)((id)adapter, @selector(loadAd));
+    if (adapter) {
+        [self.adapterMap setObject:adapter forKey:supplier.supplierKey];
+    }
+}
 
-    // 根据渠道id自定义初始化
+- (NSString *)mappingClassNameWithSupplierId:(NSString *)supplierId {
     NSString *clsName = @"";
-    if ([supplier.identifier isEqualToString:SDK_ID_GDT]) {
+    if ([supplierId isEqualToString:SDK_ID_GDT]) {
         clsName = @"GdtBannerAdapter";
-    } else if ([supplier.identifier isEqualToString:SDK_ID_CSJ]) {
+    } else if ([supplierId isEqualToString:SDK_ID_CSJ]) {
         clsName = @"CsjBannerAdapter";
-    } else if ([supplier.identifier isEqualToString:SDK_ID_MERCURY]) {
+    } else if ([supplierId isEqualToString:SDK_ID_MERCURY]) {
         clsName = @"MercuryBannerAdapter";
-    } else if ([supplier.identifier isEqualToString:SDK_ID_BAIDU]) {
+    } else if ([supplierId isEqualToString:SDK_ID_BAIDU]) {
         clsName = @"BdBannerAdapter";
     }
-    
-    
-    ADVLog(@"%@ | %@", supplier.name, clsName);
-    
-    if (NSClassFromString(clsName)) {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wundeclared-selector"
-        
-        if (supplier.isParallel) {
-            id adapter = ((id (*)(id, SEL, id, id))objc_msgSend)((id)[NSClassFromString(clsName) alloc], @selector(initWithSupplier:adspot:), supplier, self);
-            // 标记当前的adapter 为了让当串行执行到的时候 获取这个adapter
-            // 没有设置代理
-    //            ADVLog(@"并行: %@", adapter);
-            ((void (*)(id, SEL, NSInteger))objc_msgSend)((id)adapter, @selector(setTag:), supplier.priority);
-            ((void (*)(id, SEL))objc_msgSend)((id)adapter, @selector(loadAd));
-            if (adapter) {
-                // 存储并行的adapter
-                [self.arrParallelSupplier addObject:adapter];
-            }
-
-        } else {
-            _adapter = [self adapterInParallelsWithSupplier:supplier];
-            if (!_adapter) {
-                _adapter = ((id (*)(id, SEL, id, id))objc_msgSend)((id)[NSClassFromString(clsName) alloc], @selector(initWithSupplier:adspot:), supplier, self);
-            }
-    //            ADVLog(@"串行 %@ %ld %ld", _adapter, (long)[_adapter tag], supplier.priority);
-            // 设置代理
-            ((void (*)(id, SEL, id))objc_msgSend)((id)_adapter, @selector(setDelegate:), _delegate);
-            ((void (*)(id, SEL))objc_msgSend)((id)_adapter, @selector(loadAd));
-        }
-#pragma clang diagnostic pop
-    } else {
-        NSString *msg = [NSString stringWithFormat:@"%@ 不存在", clsName];
-        //        ADVLog(@"%@", msg);
-        [self loadNextSupplierIfHas];
-    }
+    return clsName;
 }
 
 - (void)loadAd {
@@ -136,13 +130,13 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wundeclared-selector"
     dispatch_async(dispatch_get_main_queue(), ^{
-       // UI更新代码
-        ((void (*)(id, SEL))objc_msgSend)((id)_adapter, @selector(showAd));
+        ((void (*)(id, SEL))objc_msgSend)((id)self.targetAdapter, @selector(showAd));
     });
 #pragma clang diagnostic pop
 }
 
 - (void)dealloc {
-    NSLog(@"%s", __func__);
+    ADV_LEVEL_INFO_LOG(@"%s", __func__);
 }
+
 @end

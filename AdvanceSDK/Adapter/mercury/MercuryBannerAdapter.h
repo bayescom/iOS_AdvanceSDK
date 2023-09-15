@@ -7,16 +7,12 @@
 //
 
 #import "AdvanceBaseAdapter.h"
-#import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
 #import "AdvanceBannerDelegate.h"
-
-@class AdvSupplier;
-@class AdvanceBanner;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface MercuryBannerAdapter : AdvanceBaseAdapter
+@interface MercuryBannerAdapter : NSObject
+
 @property (nonatomic, weak) id<AdvanceBannerDelegate> delegate;
 
 @end

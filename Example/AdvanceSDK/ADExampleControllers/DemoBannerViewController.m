@@ -22,33 +22,27 @@
     [super viewDidLoad];
     
     self.initDefSubviewsFlag = YES;
+    self.adShowView.hidden = NO;
     self.adspotIdsArr = @[
-        @{@"addesc": @"Banner", @"adspotId": @"100255-10000558"},
-//        @{@"addesc": @"横幅-倍业", @"adspotId": @"102768-10007790"},
-//        @{@"addesc": @"横幅-穿山甲", @"adspotId": @"102768-10007800"},
-//        @{@"addesc": @"横幅-优量汇", @"adspotId": @"102768-10007809"},
-//        @{@"addesc": @"横幅-百度", @"adspotId": @"102768-10007835"},
+//        @{@"addesc": @"Banner", @"adspotId": @"100255-10000558"},
+        @{@"addesc": @"横幅-倍业", @"adspotId": @"102768-10007790"},
+        @{@"addesc": @"横幅-穿山甲", @"adspotId": @"102768-10007800"},
+        @{@"addesc": @"横幅-优量汇", @"adspotId": @"102768-10007809"},
+        @{@"addesc": @"横幅-百度", @"adspotId": @"102768-10007835"},
     ];
     self.btn1Title = @"加载并显示广告";
 }
 
 - (void)loadAdBtn1Action {
     if (![self checkAdspotId]) { return; }
-    if (!_contentV) {
-        _contentV = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.width*5/32.0)];
-        _contentV.backgroundColor = [UIColor greenColor];
-    }
-//    [self.adShowView addSubview:self.contentV];
-//    self.adShowView.hidden = NO;
 
-//    self.advanceBanner = [[AdvanceBanner alloc] initWithAdspotId:@"11111113" adContainer:self.contentV viewController:self];
-//    self.advanceBanner = [[AdvanceBanner alloc] initWithAdspotId:self.adspotId adContainer:self.contentV viewController:self];
+    [_contentV removeFromSuperview];
+    _contentV = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.width*5/32.0)];
+
     self.advanceBanner = [[AdvanceBanner alloc] initWithAdspotId:self.adspotId adContainer:self.contentV customExt:self.ext viewController:self];
     self.advanceBanner.delegate = self;
     self.advanceBanner.refreshInterval = 30;
 
-    
-    
     [self.advanceBanner loadAd];
     
 }
@@ -75,7 +69,6 @@
     NSLog(@"广告数据拉取成功 %s", __func__);
     [self.advanceBanner showAd];
     [self.adShowView addSubview:self.contentV];
-    self.adShowView.hidden = NO;
 }
 
 /// 广告曝光
@@ -91,6 +84,7 @@
 /// 广告关闭
 - (void)bannerView:(UIView *)bannerView didCloseAdWithSpotId:(NSString *)spotId extra:(NSDictionary *)extra {
     NSLog(@"广告关闭了 %s", __func__);
+    [bannerView removeFromSuperview];
 }
 
 - (void)dealloc {

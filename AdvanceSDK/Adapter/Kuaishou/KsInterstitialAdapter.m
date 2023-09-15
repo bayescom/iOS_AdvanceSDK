@@ -9,83 +9,49 @@
 #if __has_include(<KSAdSDK/KSAdSDK.h>)
 #import <KSAdSDK/KSAdSDK.h>
 #else
-//#import "KSAdSDK.h"
+#import "KSAdSDK.h"
 #endif
 
 #import "AdvanceInterstitial.h"
 #import "AdvLog.h"
+#import "AdvanceAdapter.h"
 
-@interface KsInterstitialAdapter ()<KSInterstitialAdDelegate>
+@interface KsInterstitialAdapter ()<KSInterstitialAdDelegate, AdvanceAdapter>
 @property (nonatomic, strong) KSInterstitialAd *ks_ad;
 @property (nonatomic, weak) AdvanceInterstitial *adspot;
 @property (nonatomic, strong) AdvSupplier *supplier;
-@property (nonatomic, assign) BOOL isDidLoad;
-@property (nonatomic, assign) BOOL isCanch;
-
 @end
  
 @implementation KsInterstitialAdapter
 
 - (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(id)adspot {
-    if (self = [super initWithSupplier:supplier adspot:adspot]) {
+    if (self = [super init]) {
         _adspot = adspot;
         _supplier = supplier;
-        _isDidLoad = NO;
         _ks_ad = [[KSInterstitialAd alloc] initWithPosId:_supplier.adspotid];
         _ks_ad.videoSoundEnabled = !_adspot.muted;
+        _ks_ad.delegate = self;
     }
     return self;
 }
 
-
-- (void)supplierStateLoad {
-    ADV_LEVEL_INFO_LOG(@"加载快手 supplier: %@", _supplier);
-    _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
-    _ks_ad.delegate = self;
+- (void)loadAd {
     [_ks_ad loadAdData];
 }
 
-- (void)supplierStateInPull {
-    ADV_LEVEL_INFO_LOG(@"快手加载中...");
-}
-
-- (void)supplierStateSuccess {
-    ADV_LEVEL_INFO_LOG(@"快手 成功");
-    
-    [self unifiedDelegate];
-}
-
-- (void)supplierStateFailed {
-    ADV_LEVEL_INFO_LOG(@"快手 失败");
-    [self.adspot loadNextSupplierIfHas];
-}
-
-- (void)deallocAdapter {
-    ADV_LEVEL_INFO_LOG(@"%s", __func__);
-    if (_ks_ad) {
-        _ks_ad.delegate = nil;
-        _ks_ad = nil;
-    }
-}
-
-- (void)dealloc
-{
-    ADV_LEVEL_INFO_LOG(@"%s", __func__);
-    [self deallocAdapter];
-}
-
-
-- (void)loadAd {
-    [super loadAd];
-}
-
 - (void)showAd {
-    if (!_ks_ad) {
-        return;
-    }
     [_ks_ad showFromViewController:_adspot.viewController];
 }
 
+- (void)dealloc{
+    ADV_LEVEL_INFO_LOG(@"%s", __func__);
+}
+
+- (void)winnerAdapterToShowAd {
+    if ([self.delegate respondsToSelector:@selector(didFinishLoadingInterstitialADWithSpotId:)]) {
+        [self.delegate didFinishLoadingInterstitialADWithSpotId:self.adspot.adspotid];
+    }
+}
 
 /**
  * interstitial ad data loaded
@@ -97,32 +63,16 @@
  * interstitial ad render success
  */
 - (void)ksad_interstitialAdRenderSuccess:(KSInterstitialAd *)interstitialAd {
-    _supplier.supplierPrice = interstitialAd.ecpm;
-    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
-    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
-    _isDidLoad = YES;
-//    ADVLog(@"快手插屏视频拉取成功");
-    _supplier.state = AdvanceSdkSupplierStateSuccess;
-    if (_supplier.isParallel == YES) {
-        return;
-    }
-    [self unifiedDelegate];
-
+    [self.adspot.manager setECPMIfNeeded:interstitialAd.ecpm supplier:_supplier];
+    [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
+    [self.adspot.manager checkTargetWithResultfulSupplier:_supplier loadAdState:AdvanceSupplierLoadAdSuccess];
 }
 /**
  * interstitial ad load or render failed
  */
 - (void)ksad_interstitialAdRenderFail:(KSInterstitialAd *)interstitialAd error:(NSError * _Nullable)error {
-    if (_isDidLoad) {// 如果已经load 报错 为renderFail
-        [self.adspot reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
-
-    } else {// 如果没有load 报错 则为 loadfail
-        [self.adspot reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
-        _supplier.state = AdvanceSdkSupplierStateFailed;
-        if (_supplier.isParallel == YES) { // 并行不释放 只上报
-            return;
-        }
-    }
+    [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
+    [self.adspot.manager checkTargetWithResultfulSupplier:_supplier loadAdState:AdvanceSupplierLoadAdFailed];
 }
 /**
  * interstitial ad will visible
@@ -134,7 +84,7 @@
  * interstitial ad did visible
  */
 - (void)ksad_interstitialAdDidVisible:(KSInterstitialAd *)interstitialAd {
-    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
+    [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(interstitialDidShowForSpotId:extra:)]) {
         [self.delegate interstitialDidShowForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
@@ -150,7 +100,7 @@
  * interstitial ad did click
  */
 - (void)ksad_interstitialAdDidClick:(KSInterstitialAd *)interstitialAd {
-    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
+    [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(interstitialDidClickForSpotId:extra:)]) {
         [self.delegate interstitialDidClickForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
@@ -174,16 +124,6 @@
  */
 - (void)ksad_interstitialAdDidCloseOtherController:(KSInterstitialAd *)interstitialAd interactionType:(KSAdInteractionType)interactionType {
     
-}
-
-- (void)unifiedDelegate {
-    if (_isCanch) {
-        return;
-    }
-    _isCanch = YES;
-    if ([self.delegate respondsToSelector:@selector(didFinishLoadingInterstitialADWithSpotId:)]) {
-        [self.delegate didFinishLoadingInterstitialADWithSpotId:self.adspot.adspotid];
-    }
 }
 
 

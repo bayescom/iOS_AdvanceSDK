@@ -15,22 +15,19 @@
 #endif
 #import "AdvLog.h"
 #import "AdvanceBanner.h"
+#import "AdvanceAdapter.h"
 
-@interface CsjBannerAdapter () <BUNativeExpressBannerViewDelegate>
+@interface CsjBannerAdapter () <BUNativeExpressBannerViewDelegate, AdvanceAdapter>
 @property (nonatomic, strong) BUNativeExpressBannerView *csj_ad;
 @property (nonatomic, weak) AdvanceBanner *adspot;
 @property (nonatomic, strong) AdvSupplier *supplier;
-
-@property (nonatomic, assign) BOOL isBided;
-@property (nonatomic, assign) BOOL isDidload;
-@property (nonatomic, assign) BOOL isClose;
 
 @end
 
 @implementation CsjBannerAdapter
 
 - (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(id)adspot {
-    if (self = [super initWithSupplier:supplier adspot:adspot]) {
+    if (self = [super init]) {
         _adspot = adspot;
         _supplier = supplier;
         _csj_ad = [[BUNativeExpressBannerView alloc] initWithSlotID:_supplier.adspotid rootViewController:_adspot.viewController adSize:_adspot.adContainer.bounds.size interval:_adspot.refreshInterval];
@@ -40,57 +37,20 @@
     return self;
 }
 
-- (void)supplierStateLoad {
-    ADV_LEVEL_INFO_LOG(@"加载穿山甲 supplier: %@", _supplier);
-        
-    _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
+- (void)loadAd {
     [_csj_ad loadAdData];
 }
 
-- (void)supplierStateInPull {
-    ADV_LEVEL_INFO_LOG(@"穿山甲加载中...");
-}
-
-- (void)supplierStateSuccess {
-    ADV_LEVEL_INFO_LOG(@"穿山甲 成功");
-    if (_isDidload) {
-        return;
-    }
-    [self unifiedDelegate];
-    
-}
-
-- (void)supplierStateFailed {
-    ADV_LEVEL_INFO_LOG(@"穿山甲 失败");
-    [_adspot loadNextSupplierIfHas];
-    [self deallocAdapter];
-}
-
-
-- (void)loadAd {
-    [super loadAd];
-}
-
-- (void)deallocAdapter {
-    ADV_LEVEL_INFO_LOG(@"%s %@", __func__, self.csj_ad);
-    
-    if (_csj_ad) {
-        //        NSLog(@"穿山甲 释放了");
-        [_csj_ad removeFromSuperview];
-        _csj_ad.delegate = nil;
-        _csj_ad = nil;
-        [_adspot.adContainer removeFromSuperview];
-    }
-}
-    
 - (void)showAd {
-    if (_csj_ad) {
-        [_adspot.adContainer addSubview:_csj_ad];
-    } else {
-        [self deallocAdapter];
-    }
-
+    [_adspot.adContainer addSubview:_csj_ad];
 }
+
+- (void)winnerAdapterToShowAd {
+    if ([self.delegate respondsToSelector:@selector(didFinishLoadingBannerADWithSpotId:)]) {
+        [self.delegate didFinishLoadingBannerADWithSpotId:self.adspot.adspotid];
+    }
+}
+
 
 // MARK: ======================= BUNativeExpressBannerViewDelegate =======================
 /**
@@ -99,24 +59,9 @@
  */
 - (void)nativeExpressBannerAdViewDidLoad:(BUNativeExpressBannerView *)bannerAdView {
     NSDictionary *ext = bannerAdView.mediaExt;
-    _supplier.supplierPrice = [ext[@"price"] integerValue];
-    _supplier.state = AdvanceSdkSupplierStateSuccess;
-    if (!_isBided) {// 只让bidding触发一次即可
-        [self.adspot reportEventWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
-        _isBided = YES;
-    }
-    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
-    if (_supplier.isParallel == YES) {
-        return;
-    }
-    [self unifiedDelegate];
-    _isDidload = YES;
-}
-
-- (void)nativeExpressBannerAdViewRenderSuccess:(BUNativeExpressBannerView *)bannerAdView {
-    if ([self.delegate respondsToSelector:@selector(didFinishLoadingBannerADWithSpotId:)]) {
-        [self.delegate didFinishLoadingBannerADWithSpotId:self.adspot.adspotid];
-    }
+    [self.adspot.manager setECPMIfNeeded:[ext[@"price"] integerValue] supplier:_supplier];
+    [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
+    [self.adspot.manager checkTargetWithResultfulSupplier:_supplier loadAdState:AdvanceSupplierLoadAdSuccess];
 }
 
 /**
@@ -124,22 +69,15 @@
  *  当接收服务器返回的广告数据失败后调用该函数
  */
 - (void)nativeExpressBannerAdView:(BUNativeExpressBannerView *)bannerAdView didLoadFailWithError:(NSError *)error {
-    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoFailed  supplier:_supplier error:error];
-    _supplier.state = AdvanceSdkSupplierStateFailed;
-//    NSLog(@"========>>>>>>>> %ld %@", (long)_supplier.priority, error);
-    if (_supplier.isParallel == YES) { // 并行不释放 只上报
-        
-        return;
-    } else { //
-        [self deallocAdapter];
-    }
+    [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
+    [self.adspot.manager checkTargetWithResultfulSupplier:_supplier loadAdState:AdvanceSupplierLoadAdFailed];
 }
 
 /**
  *  banner2.0曝光回调
  */
 - (void)nativeExpressBannerAdViewWillBecomVisible:(BUNativeExpressBannerView *)bannerAdView {
-    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
+    [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(bannerView:didShowAdWithSpotId:extra:)]) {
         [self.delegate bannerView:self.adspot.adContainer didShowAdWithSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
@@ -149,7 +87,7 @@
  *  banner2.0点击回调
  */
 - (void)nativeExpressBannerAdViewDidClick:(BUNativeExpressBannerView *)bannerAdView {
-    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
+    [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(bannerView:didClickAdWithSpotId:extra:)]) {
         [self.delegate bannerView:self.adspot.adContainer didClickAdWithSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
@@ -159,31 +97,11 @@
  *  banner2.0被用户关闭时调用
  */
 - (void)nativeExpressBannerAdView:(BUNativeExpressBannerView *)bannerAdView dislikeWithReason:(NSArray<BUDislikeWords *> *_Nullable)filterwords {
-    
-    [self closeDelegate];
-}
-
-    
-    
-- (void)unifiedDelegate {
-//    if ([self.delegate respondsToSelector:@selector(advanceUnifiedViewDidLoad)]) {
-//        [self.delegate advanceUnifiedViewDidLoad];
-//    }
-    //    [self showAd];
-}
-
-- (void)closeDelegate {
-    if (_isClose) {
-        return;
-    }
-    _isClose = YES;
-    
+    [self.csj_ad removeFromSuperview];
+    self.csj_ad = nil;
     if ([self.delegate respondsToSelector:@selector(bannerView:didCloseAdWithSpotId:extra:)]) {
         [self.delegate bannerView:self.adspot.adContainer didCloseAdWithSpotId:self.adspot.adspotid extra:self.adspot.ext];
-        
     }
-    [self deallocAdapter];
-    
 }
 
 - (void)dealloc {

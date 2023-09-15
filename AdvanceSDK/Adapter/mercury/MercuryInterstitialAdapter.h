@@ -11,12 +11,9 @@
 #import <UIKit/UIKit.h>
 #import "AdvanceInterstitialDelegate.h"
 
-@class AdvSupplier;
-@class AdvanceInterstitial;
-
 NS_ASSUME_NONNULL_BEGIN
 
-@interface MercuryInterstitialAdapter : AdvanceBaseAdapter
+@interface MercuryInterstitialAdapter : NSObject
 @property (nonatomic, weak) id<AdvanceInterstitialDelegate> delegate;
 
 @end
