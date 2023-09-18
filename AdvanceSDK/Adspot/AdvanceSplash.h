@@ -26,16 +26,13 @@ NS_ASSUME_NONNULL_BEGIN
 /// 设定是否静音播放视频，默认为YES
 @property(nonatomic, assign) BOOL muted;
 
-/// 构造函数
-/// @param adspotid adspotid
+/// 初始化广告位
+/// @param adspotid 广告位id
 /// @param ext 自定义拓展参数
-/// @param viewController viewController
+/// @param viewController 广告加载容器 （建议传入当前控制器，广告需要提前加载可传nil）
 - (instancetype)initWithAdspotId:(NSString *)adspotid
                        customExt:(nullable NSDictionary *)ext
-                  viewController:(UIViewController *)viewController;
-
-- (instancetype)initWithAdspotId:(NSString *)adspotid
-                  viewController:(UIViewController *)viewController;
+                  viewController:(nullable UIViewController *)viewController;
 
 /// 加载广告
 - (void)loadAd;

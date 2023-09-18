@@ -82,6 +82,9 @@
     }
 }
 
+- (BOOL)isAdValid {
+    return _gdt_ad.isAdValid;
+}
 
 - (void)dealloc {
     ADV_LEVEL_INFO_LOG(@"%s", __func__);

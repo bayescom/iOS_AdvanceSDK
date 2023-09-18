@@ -22,11 +22,9 @@
 
 @implementation AdvanceSplash
 
-- (instancetype)initWithAdspotId:(NSString *)adspotid viewController:(nonnull UIViewController *)viewController {
-    return [self initWithAdspotId:adspotid customExt:nil viewController:viewController];
-}
-
-- (instancetype)initWithAdspotId:(NSString *)adspotid customExt:(NSDictionary *)ext viewController:(UIViewController *)viewController {
+- (instancetype)initWithAdspotId:(NSString *)adspotid
+                       customExt:(nullable NSDictionary *)ext
+                  viewController:(nullable UIViewController *)viewController {
     ADV_LEVEL_INFO_LOG(@"==================== 初始化开屏广告, id: %@====================", adspotid);
     NSMutableDictionary *extra = [NSMutableDictionary dictionaryWithDictionary:ext];
     [extra setValue:AdvSdkTypeAdNameSplash forKey: AdvSdkTypeAdName];
@@ -133,7 +131,10 @@
     if (!window) {
         window = [UIApplication sharedApplication].adv_getCurrentWindow;
     }
-    ((void (*)(id, SEL, id))objc_msgSend)((id)self.targetAdapter, @selector(showInWindow:), window);
+    if (!self.viewController) {
+        self.viewController = window.rootViewController;
+    }
+    ((void (*)(id, SEL, id))objc_msgSend)((id)self.targetAdapter, NSSelectorFromString(@"showInWindow:"), window);
 }
 
 

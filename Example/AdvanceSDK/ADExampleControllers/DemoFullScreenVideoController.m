@@ -36,16 +36,8 @@
 
 - (void)loadAdBtn1Action {
     if (![self checkAdspotId]) { return; }
-    
-//    self.advanceFullScreenVideo = [[AdvanceFullScreenVideo alloc] initWithAdspotId:@"11111112"
-//                                                                    viewController:self];
 
-    self.advanceFullScreenVideo = [[AdvanceFullScreenVideo alloc] initWithAdspotId:self.adspotId
-                                                                    viewController:self];
-    
-//    self.advanceFullScreenVideo = [[AdvanceFullScreenVideo alloc] initWithAdspotId:self.adspotId
-//                                                                         customExt:self.ext
-//                                                                    viewController:self];
+    self.advanceFullScreenVideo = [[AdvanceFullScreenVideo alloc] initWithAdspotId:self.adspotId customExt:nil viewController:self];
     self.advanceFullScreenVideo.delegate = self;
     _isAdLoaded=false;
     [self.advanceFullScreenVideo loadAd];
@@ -56,7 +48,9 @@
         [JDStatusBarNotification showWithStatus:@"请先加载广告" dismissAfter:1.5];
 
     }
-    [self.advanceFullScreenVideo showAd];
+    if (self.advanceFullScreenVideo.isAdValid) {
+        [self.advanceFullScreenVideo showAd];
+    }
 }
 
 // MARK: ======================= AdvanceFullScreenVideoDelegate =======================
@@ -79,14 +73,15 @@
 
 /// 全屏视频广告数据拉取成功
 - (void)didFinishLoadingFullscreenVideoADWithSpotId:(NSString *)spotId {
-    NSLog(@"请求广告数据成功后调用 %s", __func__);
+    NSLog(@"广告数据拉取成功, 正在缓存... %s", __func__);
+    [JDStatusBarNotification showWithStatus:@"广告加载成功" dismissAfter:1.5];
 }
 
-/// 全屏视频存成功
+/// 全屏视频缓存成功
 - (void)fullscreenVideoDidDownLoadForSpotId:(NSString *)spotId extra:(NSDictionary *)extra {
     NSLog(@"广告缓存成功 %s", __func__);
     _isAdLoaded=true;
-    [JDStatusBarNotification showWithStatus:@"广告加载成功" dismissAfter:1.5];
+    [JDStatusBarNotification showWithStatus:@"视频缓存成功" dismissAfter:1.5];
     [self loadAdBtn2Action];
 
 }

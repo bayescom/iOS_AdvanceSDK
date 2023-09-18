@@ -100,6 +100,7 @@
     [self.bd_ad showInContainerView:window];
 }
 
+#pragma mark: -BaiduMobAdSplashDelegate
 
 - (NSString *)publisherId {
     return _supplier.mediaid;

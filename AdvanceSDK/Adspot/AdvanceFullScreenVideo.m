@@ -20,11 +20,9 @@
 
 @implementation AdvanceFullScreenVideo
 
-- (instancetype)initWithAdspotId:(NSString *)adspotid viewController:(UIViewController *)viewController {
-    return [self initWithAdspotId:adspotid customExt:nil viewController:viewController];
-}
-
-- (instancetype)initWithAdspotId:(NSString *)adspotid customExt:(nullable NSDictionary *)ext viewController:(UIViewController *)viewController {
+- (instancetype)initWithAdspotId:(NSString *)adspotid
+                       customExt:(nullable NSDictionary *)ext
+                  viewController:(nullable UIViewController *)viewController {
     
     NSMutableDictionary *extra = [NSMutableDictionary dictionaryWithDictionary:ext];
     [extra setValue:AdvSdkTypeAdNameFullScreenVideo forKey: AdvSdkTypeAdName];
@@ -155,6 +153,17 @@
 #pragma clang diagnostic ignored "-Wundeclared-selector"
     ((void (*)(id, SEL))objc_msgSend)((id)_adapter, @selector(showAd));
 #pragma clang diagnostic pop
+}
+
+- (void)showAdFromViewController:(UIViewController *)viewController {
+    self.viewController = viewController;
+    [self showAd];
+}
+
+- (BOOL)isAdValid {
+    SEL selector = NSSelectorFromString(@"isAdValid");
+    BOOL valid = ((BOOL (*)(id, SEL))objc_msgSend)((id)_adapter, selector);
+    return valid;
 }
 
 @end

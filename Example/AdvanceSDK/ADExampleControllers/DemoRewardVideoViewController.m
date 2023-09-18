@@ -14,7 +14,7 @@
 @interface DemoRewardVideoViewController () <AdvanceRewardedVideoDelegate>
 @property (nonatomic, strong) AdvanceRewardVideo *advanceRewardVideo;
 @property (nonatomic) bool isAdLoaded; // 激励视频播放器 采用的是边下边播的方式, 理论上拉取数据成功 即可展示, 但如果网速慢导致缓冲速度慢, 则激励视频会出现卡顿
-                                       // 广点通推荐在 rewardedVideoDidDownLoadForSpotId 视频缓冲完成后 在掉用showad
+                                       
 @end
 
 @implementation DemoRewardVideoViewController
@@ -41,10 +41,8 @@
     if (![self checkAdspotId]) { return; }
 
     self.advanceRewardVideo = [[AdvanceRewardVideo alloc] initWithAdspotId:self.adspotId
-                                                           viewController:self];
-//    self.advanceRewardVideo = [[AdvanceRewardVideo alloc] initWithAdspotId:self.adspotId
-//                                                                 customExt:self.ext
-//                                                            viewController:self];
+                                                                 customExt:self.ext
+                                                            viewController:self];
     self.advanceRewardVideo.delegate=self;
     _isAdLoaded=false;
     [self.advanceRewardVideo loadAd];
@@ -55,7 +53,9 @@
        [JDStatusBarNotification showWithStatus:@"广告物料还没加载好" dismissAfter:1.5];
         return;;
     }
-    [self.advanceRewardVideo showAd];
+    if (self.advanceRewardVideo.isAdValid) {
+        [self.advanceRewardVideo showAd];
+    }
 }
 
 // MARK: ======================= AdvanceRewardVideoDelegate =======================

@@ -21,13 +21,8 @@
 @implementation AdvanceRewardVideo
 
 - (instancetype)initWithAdspotId:(NSString *)adspotid
-                  viewController:(UIViewController *)viewController {
-    return [self initWithAdspotId:adspotid customExt:nil viewController:viewController];
-}
-
-- (instancetype)initWithAdspotId:(NSString *)adspotid
                        customExt:(nullable NSDictionary *)ext
-                  viewController:(UIViewController *)viewController {
+                  viewController:(nullable UIViewController *)viewController {
     
     NSMutableDictionary *extra = [NSMutableDictionary dictionaryWithDictionary:ext];
     [extra setValue:AdvSdkTypeAdNameRewardedVideo forKey: AdvSdkTypeAdName];
@@ -177,4 +172,16 @@
 #pragma clang diagnostic pop
 }
 
+- (void)showAdFromViewController:(UIViewController *)viewController {
+    self.viewController = viewController;
+    [self showAd];
+}
+
+- (BOOL)isAdValid {
+    SEL selector = NSSelectorFromString(@"isAdValid");
+    BOOL valid = ((BOOL (*)(id, SEL))objc_msgSend)((id)_adapter, selector);
+    return valid;
+}
+
 @end
+

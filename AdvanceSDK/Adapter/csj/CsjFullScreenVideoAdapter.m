@@ -20,6 +20,7 @@
 @property (nonatomic, weak) AdvanceFullScreenVideo *adspot;
 @property (nonatomic, strong) AdvSupplier *supplier;
 @property (nonatomic, assign) BOOL isCached;
+@property (nonatomic, assign) BOOL isVideoCached;
 
 @end
 
@@ -73,6 +74,12 @@
     [_csj_ad showAdFromRootViewController:_adspot.viewController];
 }
 
+- (BOOL)isAdValid {
+    NSTimeInterval expireTimestamp = [_csj_ad getExpireTimestamp];
+    NSTimeInterval now = (long)[[NSDate date] timeIntervalSince1970] * 1000;
+    return self.isVideoCached && (expireTimestamp >= now);
+}
+
 - (void)dealloc {
     ADV_LEVEL_INFO_LOG(@"%s", __func__);
 }
@@ -98,6 +105,7 @@
 
 /// 广告视频缓存成功
 - (void)nativeExpressFullscreenVideoAdDidDownLoadVideo:(BUNativeExpressFullscreenVideoAd *)fullscreenVideoAd {
+    self.isVideoCached = YES;
     if (_supplier.isParallel == YES) { // 并行不释放 只上报
         _isCached = YES;
         return;

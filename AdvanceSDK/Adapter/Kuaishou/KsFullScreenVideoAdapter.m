@@ -82,6 +82,10 @@
 //    [_gdt_ad presentFullScreenAdFromRootViewController:_adspot.viewController];
 }
 
+- (BOOL)isAdValid {
+    return _ks_ad.isValid;
+}
+
 - (void)dealloc {
     ADVLog(@"%s", __func__);
 }
