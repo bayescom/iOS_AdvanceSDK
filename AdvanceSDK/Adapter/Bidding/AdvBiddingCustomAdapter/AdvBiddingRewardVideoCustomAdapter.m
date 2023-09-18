@@ -45,6 +45,7 @@
 
 //    NSLog(@"--> %@  ", [UIApplication sharedApplication].adv_getCurrentWindow.rootViewController);
     self.advanceRewardVideo = [[AdvanceRewardVideo alloc] initWithAdspotId:slotID
+                                                                 customExt:nil
                                                             viewController:[UIApplication sharedApplication].adv_getCurrentWindow.rootViewController];
 
     self.advanceRewardVideo.delegate = self.scapegoat;

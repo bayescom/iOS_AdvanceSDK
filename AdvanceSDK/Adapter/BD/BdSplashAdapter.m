@@ -171,7 +171,7 @@
 
 - (UIView *)customSplashView {
     if (!_customSplashView) {
-        _customSplashView = [[UIView alloc]initWithFrame:_adspot.viewController.view.window.frame];
+        _customSplashView = [[UIView alloc] init];
         _customSplashView.hidden = YES;
     }
     return _customSplashView;
