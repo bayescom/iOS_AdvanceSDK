@@ -81,6 +81,10 @@
     
 }
 
+- (BOOL)isAdValid {
+    return _bd_ad.isReady;
+}
+
 - (void)dealloc {
     ADVLog(@"%s", __func__);
 }
