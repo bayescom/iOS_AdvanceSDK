@@ -177,5 +177,11 @@
     [self showAd];
 }
 
+- (BOOL)isAdValid {
+    SEL selector = NSSelectorFromString(@"isAdValid");
+    BOOL valid = ((BOOL (*)(id, SEL))objc_msgSend)((id)_adapter, selector);
+    return valid;
+}
+
 @end
 

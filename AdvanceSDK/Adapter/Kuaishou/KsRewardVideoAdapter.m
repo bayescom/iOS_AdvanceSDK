@@ -97,6 +97,10 @@
     [self deallocAdapter];
 }
 
+- (BOOL)isAdValid {
+    return _ks_ad.isValid;
+}
+
 /**
  This method is called when video ad material loaded successfully.
  */

@@ -21,7 +21,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, weak) id<AdvanceRewardedVideoDelegate> delegate;
 
 /// 设定是否静音播放视频，默认为YES
-@property(nonatomic, assign) BOOL muted;
+@property (nonatomic, assign) BOOL muted;
+
+/// 广告是否有效，建议在展示广告之前判断，否则会影响计费或展示失败
+@property (nonatomic, readonly) BOOL isAdValid;
 
 /// 初始化广告位
 /// @param adspotid 广告位id
@@ -31,6 +34,7 @@ NS_ASSUME_NONNULL_BEGIN
                        customExt:(nullable NSDictionary *)ext
                   viewController:(nullable UIViewController *)viewController;
 
+
 /// 加载广告
 - (void)loadAd;
 
@@ -39,6 +43,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// 初始化未传入viewController，展示广告必须使用此方法
 - (void)showAdFromViewController:(UIViewController *)viewController;
+
 
 @end
 

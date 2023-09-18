@@ -53,7 +53,9 @@
        [JDStatusBarNotification showWithStatus:@"广告物料还没加载好" dismissAfter:1.5];
         return;;
     }
-    [self.advanceRewardVideo showAd];
+    if (self.advanceRewardVideo.isAdValid) {
+        [self.advanceRewardVideo showAd];
+    }
 }
 
 // MARK: ======================= AdvanceRewardVideoDelegate =======================

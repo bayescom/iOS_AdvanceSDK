@@ -79,6 +79,10 @@
     }
 }
 
+- (BOOL)isAdValid {
+    return _bd_ad.isReady;
+}
+
 
 - (void)dealloc {
     ADV_LEVEL_INFO_LOG(@"%s", __func__);

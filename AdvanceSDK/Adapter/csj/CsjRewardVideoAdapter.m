@@ -27,6 +27,7 @@
 @property (nonatomic, weak) AdvanceRewardVideo *adspot;
 @property (nonatomic, strong) AdvSupplier *supplier;
 @property (nonatomic, assign) BOOL isCached;
+@property (nonatomic, assign) BOOL isVideoCached;
 
 @end
 
@@ -83,6 +84,12 @@
 //    }
 }
 
+- (BOOL)isAdValid {
+    NSTimeInterval expireTimestamp = [_csj_ad getExpireTimestamp];
+    NSTimeInterval now = (long)[[NSDate date] timeIntervalSince1970] * 1000;
+    return self.isVideoCached && (expireTimestamp >= now);
+}
+
 - (void)deallocAdapter {
     ADV_LEVEL_INFO_LOG(@"%s", __func__);
     if (_csj_ad) {
@@ -128,6 +135,7 @@
 
 //视频缓存成功回调
 - (void)nativeExpressRewardedVideoAdDidDownLoadVideo:(BUNativeExpressRewardedVideoAd *)rewardedVideoAd {
+    self.isVideoCached = YES;
     if (_supplier.isParallel == YES) {
         _isCached = YES;
         return;
