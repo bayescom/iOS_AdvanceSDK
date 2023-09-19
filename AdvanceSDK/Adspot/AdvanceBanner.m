@@ -90,22 +90,30 @@
 /// 加载某一个渠道对象
 - (void)advPolicyServiceLoadAnySupplier:(nullable AdvSupplier *)supplier {
     // 加载渠道SDK进行初始化调用
-    [AdvSupplierLoader loadSupplier:supplier];
-    
-    // 通知外部该渠道开始加载广告
-    if ([self.delegate respondsToSelector:@selector(didStartLoadingADSourceWithSpotId:sourceId:)]) {
-        [self.delegate didStartLoadingADSourceWithSpotId:self.adspotid sourceId:supplier.identifier];
-    }
-    
-    // 根据渠道id初始化对应Adapter
-    NSString *clsName = [self mappingClassNameWithSupplierId:supplier.identifier];
-#pragma clang diagnostic ignored "-Wundeclared-selector"
-    id adapter = ((id (*)(id, SEL, id, id))objc_msgSend)((id)[NSClassFromString(clsName) alloc], @selector(initWithSupplier:adspot:), supplier, self);
-    ((void (*)(id, SEL, id))objc_msgSend)((id)adapter, @selector(setDelegate:), _delegate);
-    ((void (*)(id, SEL))objc_msgSend)((id)adapter, @selector(loadAd));
-    if (adapter) {
-        [self.adapterMap setObject:adapter forKey:supplier.supplierKey];
-    }
+    [AdvSupplierLoader loadSupplier:supplier completion:^{
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            ((void (*)(id, SEL))objc_msgSend)((id)self.targetAdapter, @selector(showAd));
+            // 通知外部该渠道开始加载广告
+            if ([self.delegate respondsToSelector:@selector(didStartLoadingADSourceWithSpotId:sourceId:)]) {
+                [self.delegate didStartLoadingADSourceWithSpotId:self.adspotid sourceId:supplier.identifier];
+            }
+            
+            // 根据渠道id初始化对应Adapter
+            NSString *clsName = [self mappingClassNameWithSupplierId:supplier.identifier];
+        #pragma clang diagnostic ignored "-Wundeclared-selector"
+            id adapter = ((id (*)(id, SEL, id, id))objc_msgSend)((id)[NSClassFromString(clsName) alloc], @selector(initWithSupplier:adspot:), supplier, self);
+            ((void (*)(id, SEL, id))objc_msgSend)((id)adapter, @selector(setDelegate:), self.delegate);
+            ((void (*)(id, SEL))objc_msgSend)((id)adapter, @selector(loadAd));
+            if (adapter) {
+                [self.adapterMap setObject:adapter forKey:supplier.supplierKey];
+            }
+            
+        });
+        
+    }];
+
 }
 
 - (NSString *)mappingClassNameWithSupplierId:(NSString *)supplierId {

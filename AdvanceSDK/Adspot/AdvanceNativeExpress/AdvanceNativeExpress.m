@@ -75,7 +75,9 @@
 - (void)advPolicyServiceLoadSupplier:(nullable AdvSupplier *)supplier error:(nullable NSError *)error {
     
     // 加载渠道SDK进行初始化调用
-    [AdvSupplierLoader loadSupplier:supplier];
+    [AdvSupplierLoader loadSupplier:supplier completion:^{
+        
+    }];
     
     // 返回渠道有问题 则不用再执行下面的渠道了
     if (error) {
