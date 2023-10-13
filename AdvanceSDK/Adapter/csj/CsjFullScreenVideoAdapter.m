@@ -14,12 +14,12 @@
 #endif
 #import "AdvanceFullScreenVideo.h"
 #import "AdvLog.h"
+#import "AdvanceAdapter.h"
 
 @interface CsjFullScreenVideoAdapter () <BUNativeExpressFullscreenVideoAdDelegate>
 @property (nonatomic, strong) BUNativeExpressFullscreenVideoAd *csj_ad;
 @property (nonatomic, weak) AdvanceFullScreenVideo *adspot;
 @property (nonatomic, strong) AdvSupplier *supplier;
-@property (nonatomic, assign) BOOL isCached;
 @property (nonatomic, assign) BOOL isVideoCached;
 
 @end
@@ -27,51 +27,27 @@
 @implementation CsjFullScreenVideoAdapter
 
 - (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(id)adspot {
-    if (self = [super initWithSupplier:supplier adspot:adspot]) {
+    if (self = [super init]) {
         _adspot = adspot;
         _supplier = supplier;
-        
         _csj_ad = [[BUNativeExpressFullscreenVideoAd alloc] initWithSlotID:_supplier.adspotid];
+        _csj_ad.delegate = self;
     }
     return self;
 }
 
-- (void)supplierStateLoad {
-    ADV_LEVEL_INFO_LOG(@"加载穿山甲 supplier: %@", _supplier);
-    _csj_ad.delegate = self;
-    _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
-    [self.csj_ad loadAdData];
-}
-
-- (void)supplierStateInPull {
-    ADV_LEVEL_INFO_LOG(@"穿山甲加载中...");
-}
-
-- (void)supplierStateSuccess {
-    ADV_LEVEL_INFO_LOG(@"穿山甲 成功");
-    if ([self.delegate respondsToSelector:@selector(didFinishLoadingFullscreenVideoADWithSpotId:)]) {
-        [self.delegate didFinishLoadingFullscreenVideoADWithSpotId:self.adspot.adspotid];
-    }
-    
-    if (_isCached) {
-        if ([self.delegate respondsToSelector:@selector(fullscreenVideoDidDownLoadForSpotId:extra:)]) {
-            [self.delegate fullscreenVideoDidDownLoadForSpotId:self.adspot.adspotid extra:self.adspot.ext];
-        }
-    }
-}
-
-- (void)supplierStateFailed {
-    ADV_LEVEL_INFO_LOG(@"穿山甲 失败");
-    [self.adspot loadNextSupplierIfHas];
-}
-
-
 - (void)loadAd {
-    [super loadAd];
+    [_csj_ad loadAdData];
 }
 
 - (void)showAd {
     [_csj_ad showAdFromRootViewController:_adspot.viewController];
+}
+
+- (void)winnerAdapterToShowAd {
+    if ([self.delegate respondsToSelector:@selector(didFinishLoadingFullscreenVideoADWithSpotId:)]) {
+        [self.delegate didFinishLoadingFullscreenVideoADWithSpotId:self.adspot.adspotid];
+    }
 }
 
 - (BOOL)isAdValid {
@@ -89,57 +65,33 @@
 /// 广告预加载成功回调
 - (void)nativeExpressFullscreenVideoAdDidLoad:(BUNativeExpressFullscreenVideoAd *)fullscreenVideoAd {
     NSDictionary *ext = fullscreenVideoAd.mediaExt;
-    _supplier.supplierPrice = [ext[@"price"] integerValue];
-    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
-    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoSucceed  supplier:_supplier error:nil];
-//    NSLog(@"穿山甲全屏视频拉取成功");
-    _supplier.state = AdvanceSdkSupplierStateSuccess;
-    if (_supplier.isParallel == YES) {
-        return;
-    }
+    [self.adspot.manager setECPMIfNeeded:[ext[@"price"] integerValue] supplier:_supplier];
+    [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
+    [self.adspot.manager checkTargetWithResultfulSupplier:_supplier loadAdState:AdvanceSupplierLoadAdSuccess];
+}
 
-    if ([self.delegate respondsToSelector:@selector(didFinishLoadingFullscreenVideoADWithSpotId:)]) {
-        [self.delegate didFinishLoadingFullscreenVideoADWithSpotId:self.adspot.adspotid];
-    }
+/// 广告预加载失败回调
+- (void)nativeExpressFullscreenVideoAd:(BUNativeExpressFullscreenVideoAd *)fullscreenVideoAd didFailWithError:(NSError *_Nullable)error {
+    [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
+    [self.adspot.manager checkTargetWithResultfulSupplier:_supplier loadAdState:AdvanceSupplierLoadAdFailed];
 }
 
 /// 广告视频缓存成功
 - (void)nativeExpressFullscreenVideoAdDidDownLoadVideo:(BUNativeExpressFullscreenVideoAd *)fullscreenVideoAd {
     self.isVideoCached = YES;
-    if (_supplier.isParallel == YES) { // 并行不释放 只上报
-        _isCached = YES;
-        return;
-    }
     if ([self.delegate respondsToSelector:@selector(fullscreenVideoDidDownLoadForSpotId:extra:)]) {
         [self.delegate fullscreenVideoDidDownLoadForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
 }
 
-/// 广告预加载失败回调
-- (void)nativeExpressFullscreenVideoAd:(BUNativeExpressFullscreenVideoAd *)fullscreenVideoAd didFailWithError:(NSError *_Nullable)error {
-    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
-    _supplier.state = AdvanceSdkSupplierStateFailed;
-    if (_supplier.isParallel == YES) { // 并行不释放 只上报
-        return;
-    }
-    _csj_ad = nil;
-//    if ([self.delegate respondsToSelector:@selector(advanceFullScreenVideoOnAdFailedWithSdkId:error:)]) {
-//        [self.delegate advanceFullScreenVideoOnAdFailedWithSdkId:_supplier.identifier error:error];
-//    }
-}
-
 /// 渲染失败
 - (void)nativeExpressFullscreenVideoAdViewRenderFail:(BUNativeExpressFullscreenVideoAd *)rewardedVideoAd error:(NSError *_Nullable)error {
-    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
-    _csj_ad = nil;
-//    if ([self.delegate respondsToSelector:@selector(advanceFullScreenVideoOnAdFailedWithSdkId:error:)]) {
-//        [self.delegate advanceFullScreenVideoOnAdFailedWithSdkId:_supplier.identifier error:error];
-//    }
+    [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
 }
 
 /// 广告曝光回调
 - (void)nativeExpressFullscreenVideoAdDidVisible:(BUNativeExpressFullscreenVideoAd *)fullscreenVideoAd {
-    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
+    [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(fullscreenVideoDidStartPlayingForSpotId:extra:)]) {
         [self.delegate fullscreenVideoDidStartPlayingForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
@@ -147,7 +99,7 @@
 
 /// 广告点击回调
 - (void)nativeExpressFullscreenVideoAdDidClick:(BUNativeExpressFullscreenVideoAd *)fullscreenVideoAd {
-    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
+    [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(fullscreenVideoDidClickForSpotId:extra:)]) {
         [self.delegate fullscreenVideoDidClickForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
@@ -174,12 +126,6 @@
     if ([self.delegate respondsToSelector:@selector(fullscreenVideoDidClickSkipForSpotId:extra:)]) {
         [self.delegate fullscreenVideoDidClickSkipForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
-}
-
-
-
-- (void)nativeExpressFullscreenVideoAdViewRenderSuccess:(BUNativeExpressFullscreenVideoAd *)rewardedVideoAd {
-    
 }
 
 

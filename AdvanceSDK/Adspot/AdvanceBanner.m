@@ -20,12 +20,6 @@
 
 - (instancetype)initWithAdspotId:(NSString *)adspotid
                      adContainer:(UIView *)adContainer
-                  viewController:(UIViewController *)viewController {
-    return [self initWithAdspotId:adspotid adContainer:adContainer customExt:nil viewController:viewController];
-}
-
-- (instancetype)initWithAdspotId:(NSString *)adspotid
-                     adContainer:(UIView *)adContainer
                        customExt:(nullable NSDictionary *)ext
                   viewController:(UIViewController *)viewController {
     
@@ -40,7 +34,6 @@
     }
     return self;
 }
-
 
 // MARK: ======================= AdvPolicyServiceDelegate =======================
 /// 加载策略Model成功
@@ -76,15 +69,13 @@
 
 // 结束Bidding
 - (void)advPolicyServiceFinishBiddingWithWinSupplier:(AdvSupplier *_Nonnull)supplier {
-    /// 获取竞胜的adpater
-    self.targetAdapter = [self.adapterMap objectForKey:supplier.supplierKey];
-    /// 通知adpater竞胜，该给予外部回调了
-#pragma clang diagnostic ignored "-Wundeclared-selector"
-    ((void (*)(id, SEL))objc_msgSend)((id)self.targetAdapter, @selector(winnerAdapterToShowAd));
-    
     if ([_delegate respondsToSelector:@selector(didFinishBiddingADWithSpotId:price:)]) {
         [_delegate didFinishBiddingADWithSpotId:self.adspotid price:supplier.sdk_price];
     }
+    /// 获取竞胜的adpater
+    self.targetAdapter = [self.adapterMap objectForKey:supplier.supplierKey];
+    /// 通知adpater竞胜，该给予外部回调了
+    ((void (*)(id, SEL))objc_msgSend)((id)self.targetAdapter, NSSelectorFromString(@"winnerAdapterToShowAd"));
 }
 
 /// 加载某一个渠道对象
@@ -92,25 +83,19 @@
     // 加载渠道SDK进行初始化调用
     [AdvSupplierLoader loadSupplier:supplier completion:^{
         
-        dispatch_async(dispatch_get_main_queue(), ^{
-            
-            ((void (*)(id, SEL))objc_msgSend)((id)self.targetAdapter, @selector(showAd));
-            // 通知外部该渠道开始加载广告
-            if ([self.delegate respondsToSelector:@selector(didStartLoadingADSourceWithSpotId:sourceId:)]) {
-                [self.delegate didStartLoadingADSourceWithSpotId:self.adspotid sourceId:supplier.identifier];
-            }
-            
-            // 根据渠道id初始化对应Adapter
-            NSString *clsName = [self mappingClassNameWithSupplierId:supplier.identifier];
-        #pragma clang diagnostic ignored "-Wundeclared-selector"
-            id adapter = ((id (*)(id, SEL, id, id))objc_msgSend)((id)[NSClassFromString(clsName) alloc], @selector(initWithSupplier:adspot:), supplier, self);
-            ((void (*)(id, SEL, id))objc_msgSend)((id)adapter, @selector(setDelegate:), self.delegate);
-            ((void (*)(id, SEL))objc_msgSend)((id)adapter, @selector(loadAd));
-            if (adapter) {
-                [self.adapterMap setObject:adapter forKey:supplier.supplierKey];
-            }
-            
-        });
+        // 通知外部该渠道开始加载广告
+        if ([self.delegate respondsToSelector:@selector(didStartLoadingADSourceWithSpotId:sourceId:)]) {
+            [self.delegate didStartLoadingADSourceWithSpotId:self.adspotid sourceId:supplier.identifier];
+        }
+        
+        // 根据渠道id初始化对应Adapter
+        NSString *clsName = [self mappingClassNameWithSupplierId:supplier.identifier];
+        id adapter = ((id (*)(id, SEL, id, id))objc_msgSend)((id)[NSClassFromString(clsName) alloc], NSSelectorFromString(@"initWithSupplier:adspot:"), supplier, self);
+        ((void (*)(id, SEL, id))objc_msgSend)((id)adapter, NSSelectorFromString(@"setDelegate:"), self.delegate);
+        ((void (*)(id, SEL))objc_msgSend)((id)adapter, NSSelectorFromString(@"loadAd"));
+        if (adapter) {
+            [self.adapterMap setObject:adapter forKey:supplier.supplierKey];
+        }
         
     }];
 
@@ -135,12 +120,7 @@
 }
 
 - (void)showAd {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wundeclared-selector"
-    dispatch_async(dispatch_get_main_queue(), ^{
-        ((void (*)(id, SEL))objc_msgSend)((id)self.targetAdapter, @selector(showAd));
-    });
-#pragma clang diagnostic pop
+    ((void (*)(id, SEL))objc_msgSend)((id)self.targetAdapter, NSSelectorFromString(@"showAd"));
 }
 
 - (void)dealloc {

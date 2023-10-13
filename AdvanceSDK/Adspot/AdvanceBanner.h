@@ -21,7 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// banner广告视图容器
 @property(nonatomic, strong) UIView *adContainer;
 
-/// 渠道要求设置在 30 - 120s
+/// 渠道要求设置在 30s - 120s
 @property(nonatomic, assign) int refreshInterval;
 
 ///设定是否静音播放视频，默认为YES
@@ -35,10 +35,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initWithAdspotId:(NSString *)adspotid
                      adContainer:(UIView *)adContainer
                        customExt:(nullable NSDictionary *)ext
-                  viewController:(UIViewController *)viewController;
-
-- (instancetype)initWithAdspotId:(NSString *)adspotid
-                     adContainer:(UIView *)adContainer
                   viewController:(UIViewController *)viewController;
 
 - (void)loadAd;

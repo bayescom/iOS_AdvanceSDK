@@ -12,20 +12,21 @@
 #else
 #import "BaiduMobAdSDK/BaiduMobAdExpressFullScreenVideo.h"
 #endif
-
 #import "AdvanceFullScreenVideo.h"
 #import "AdvLog.h"
-@interface BdFullScreenVideoAdapter ()<BaiduMobAdExpressFullScreenVideoDelegate>
+#import "AdvanceAdapter.h"
+
+@interface BdFullScreenVideoAdapter ()<BaiduMobAdExpressFullScreenVideoDelegate, AdvanceAdapter>
 @property (nonatomic, strong) BaiduMobAdExpressFullScreenVideo *bd_ad;
 @property (nonatomic, weak) AdvanceFullScreenVideo *adspot;
 @property (nonatomic, strong) AdvSupplier *supplier;
-@property (nonatomic, assign) BOOL isCached;
+
 @end
 
 @implementation BdFullScreenVideoAdapter
 
 - (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(id)adspot {
-    if (self = [super initWithSupplier:supplier adspot:adspot]) {
+    if (self = [super init]) {
         _adspot = adspot;
         _supplier = supplier;
         _bd_ad = [[BaiduMobAdExpressFullScreenVideo alloc] init];
@@ -37,48 +38,18 @@
     return self;
 }
 
-- (void)supplierStateLoad {
-    ADV_LEVEL_INFO_LOG(@"加载百度 supplier: %@", _supplier);
-    _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
-    [_bd_ad load];
-}
-
-- (void)supplierStateInPull {
-    ADV_LEVEL_INFO_LOG(@"百度加载中...");
-}
-
-- (void)supplierStateSuccess {
-    ADV_LEVEL_INFO_LOG(@"百度 成功");
-    if ([self.delegate respondsToSelector:@selector(didFinishLoadingFullscreenVideoADWithSpotId:)]) {
-        [self.delegate didFinishLoadingFullscreenVideoADWithSpotId:self.adspot.adspotid];
-    }
-    
-    if (_isCached) {
-        if ([self.delegate respondsToSelector:@selector(fullscreenVideoDidDownLoadForSpotId:extra:)]) {
-            [self.delegate fullscreenVideoDidDownLoadForSpotId:self.adspot.adspotid extra:self.adspot.ext];
-        }
-    }
-
-}
-
-- (void)supplierStateFailed {
-    ADV_LEVEL_INFO_LOG(@"百度 失败");
-    [self.adspot loadNextSupplierIfHas];
-}
-
-
-- (void)deallocAdapter {
-    
-}
-
-
 - (void)loadAd {
-    [super loadAd];
+    [_bd_ad load];
 }
 
 - (void)showAd {
     [_bd_ad showFromViewController:_adspot.viewController];
-    
+}
+
+- (void)winnerAdapterToShowAd {
+    if ([self.delegate respondsToSelector:@selector(didFinishLoadingFullscreenVideoADWithSpotId:)]) {
+        [self.delegate didFinishLoadingFullscreenVideoADWithSpotId:self.adspot.adspotid];
+    }
 }
 
 - (BOOL)isAdValid {
@@ -92,58 +63,35 @@
 #pragma mark - expressFullVideoDelegate
 
 - (void)fullScreenVideoAdLoadSuccess:(BaiduMobAdExpressFullScreenVideo *)video {
-    //    ADVLog(@"百度全屏视频拉取成功");
-    _supplier.supplierPrice = [[video getECPMLevel] integerValue];
-    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
-    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
-    if (_supplier.isParallel == YES) {
-        ADVLog(@"修改状态: %@", _supplier);
-        _supplier.state = AdvanceSdkSupplierStateSuccess;
-        return;
-    }
-    if ([self.delegate respondsToSelector:@selector(didFinishLoadingFullscreenVideoADWithSpotId:)]) {
-        [self.delegate didFinishLoadingFullscreenVideoADWithSpotId:self.adspot.adspotid];
-    }
-
-
+    [self.adspot.manager setECPMIfNeeded:[[video getECPMLevel] integerValue] supplier:_supplier];
+    [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
+    [self.adspot.manager checkTargetWithResultfulSupplier:_supplier loadAdState:AdvanceSupplierLoadAdSuccess];
 }
 
 - (void)fullScreenVideoAdLoadFailCode:(NSString *)errCode message:(NSString *)message fullScreenAd:(BaiduMobAdExpressFullScreenVideo *)video {
-    ADVLog(@"全屏视频加载失败，errCode:%@, message:%@", errCode, message);
+    NSError *error = [[NSError alloc]initWithDomain:@"BDAdErrorDomain" code:errCode.intValue userInfo:@{@"msg":message}];
+    [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
+    [self.adspot.manager checkTargetWithResultfulSupplier:_supplier loadAdState:AdvanceSupplierLoadAdFailed];
 }
 
 - (void)fullScreenVideoAdLoaded:(BaiduMobAdExpressFullScreenVideo *)video {
-//    ADVLog(@"百度全屏视频缓存成功");
-    if (_supplier.isParallel == YES) {
-        _isCached = YES;
-        return;
-    }
     if ([self.delegate respondsToSelector:@selector(fullscreenVideoDidDownLoadForSpotId:extra:)]) {
         [self.delegate fullscreenVideoDidDownLoadForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
 }
 
 - (void)fullScreenVideoAdLoadFailed:(BaiduMobAdExpressFullScreenVideo *)video withError:(BaiduMobFailReason)reason {
-//    ADVLog(@"全屏视频缓存失败，failReason：%d", reason);
-    NSError *error = [[NSError alloc]initWithDomain:@"BDAdErrorDomain" code:1000030 + reason userInfo:@{@"desc":@"百度广告拉取失败"}];
-    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoFailed  supplier:_supplier error:error];
-    _supplier.state = AdvanceSdkSupplierStateFailed;
-    if (_supplier.isParallel == YES) {
-        return;
-    }
-    _bd_ad = nil;
-
+    NSError *error = [[NSError alloc]initWithDomain:@"BDAdErrorDomain" code:reason userInfo:@{@"desc":@"百度全屏视频广告缓存错误"}];
+    [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
 }
 
 - (void)fullScreenVideoAdShowFailed:(BaiduMobAdExpressFullScreenVideo *)video withError:(BaiduMobFailReason)reason {
-//    NSLog(@"全屏视频展现失败，failReason：%d", reason);
-    NSError *error = [[NSError alloc]initWithDomain:@"BDAdErrorDomain" code:1000040 + reason userInfo:@{@"desc":@"百度广告渲染失败"}];
-    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoFailed  supplier:_supplier error:error];
+    NSError *error = [[NSError alloc]initWithDomain:@"BDAdErrorDomain" code:reason userInfo:@{@"desc":@"百度广告展现错误"}];
+    [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
 }
 
 - (void)fullScreenVideoAdDidStarted:(BaiduMobAdExpressFullScreenVideo *)video {
-//    NSLog(@"全屏视频开始播放");
-    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
+    [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(fullscreenVideoDidStartPlayingForSpotId:extra:)]) {
         [self.delegate fullscreenVideoDidStartPlayingForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
@@ -159,7 +107,7 @@
 
 - (void)fullScreenVideoAdDidClick:(BaiduMobAdExpressFullScreenVideo *)video withPlayingProgress:(CGFloat)progress {
 //    NSLog(@"全屏视频被点击，progress:%f", progress);
-    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
+    [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(fullscreenVideoDidClickForSpotId:extra:)]) {
         [self.delegate fullscreenVideoDidClickForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }

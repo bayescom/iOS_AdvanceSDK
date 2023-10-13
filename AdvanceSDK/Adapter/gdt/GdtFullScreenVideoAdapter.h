@@ -6,17 +6,11 @@
 //  Copyright © 2020 bayescom. All rights reserved.
 //
 
-#import "AdvanceBaseAdapter.h"
-#import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
 #import "AdvanceFullScreenVideoDelegate.h"
-
-@class AdvSupplier;
-@class AdvanceFullScreenVideo;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface GdtFullScreenVideoAdapter : AdvanceBaseAdapter
+@interface GdtFullScreenVideoAdapter : NSObject
 @property (nonatomic, weak) id<AdvanceFullScreenVideoDelegate> delegate;
 
 @end

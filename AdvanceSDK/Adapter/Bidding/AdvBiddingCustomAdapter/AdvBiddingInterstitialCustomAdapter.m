@@ -56,9 +56,9 @@
 - (void)_setupWithWithSlotID:(NSString *)slotID adSize:(CGSize)adSize andParameter:(NSDictionary *)parameter {
     // 非模板或者较新版本不区分模板类，统一使用一个类
     self.interstitialAd = [[AdvanceInterstitial alloc] initWithAdspotId:slotID
-                                                         viewController:[UIApplication sharedApplication].adv_getCurrentWindow.rootViewController
-                                                                 adSize:adSize];
-    
+                                                              customExt:nil
+                                                         viewController:[UIApplication sharedApplication].adv_getCurrentWindow.rootViewController];
+    self.interstitialAd.adSize = adSize;
     // ↓↓↓ 尽量不要使用adapter作为接收adn广告的delegate对象，可传入包装类用于接收adn的广告回调 ↓↓↓
     [self.interstitialAd setDelegate:self.scapegoat];
     self.interstitialAd.muted = [parameter[ABUAdLoadingParamISIsMute] boolValue];

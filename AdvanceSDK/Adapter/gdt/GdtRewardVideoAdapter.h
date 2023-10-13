@@ -6,17 +6,11 @@
 //  Copyright © 2020 bayescom. All rights reserved.
 //
 
-#import "AdvanceBaseAdapter.h"
-#import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
 #import "AdvanceRewardedVideoDelegate.h"
-
-@class AdvSupplier;
-@class AdvanceRewardVideo;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface GdtRewardVideoAdapter : AdvanceBaseAdapter
+@interface GdtRewardVideoAdapter : NSObject
 @property (nonatomic, weak) id<AdvanceRewardedVideoDelegate> delegate;
 @end
 

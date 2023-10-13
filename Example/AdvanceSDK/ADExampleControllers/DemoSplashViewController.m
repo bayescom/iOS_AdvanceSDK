@@ -60,7 +60,6 @@
     if (![self checkAdspotId]) { return; }
     
     [self.view.window addSubview:self.bgImgV];
-    self.bgImgV.image = [UIImage imageNamed:@"LaunchImage_img"];
     
     if (self.advanceSplash) {
         self.advanceSplash.delegate = nil;
@@ -141,10 +140,7 @@
 /// 广告策略或者渠道广告加载失败
 - (void)didFailLoadingADSourceWithSpotId:(NSString *)spotId error:(NSError *)error description:(NSDictionary *)description {
     NSLog(@"广告展示失败 %s  error: %@ 详情:%@", __func__, error, description);
-//    self.advanceSplash = nil;
-    [self.bgImgV removeFromSuperview];
-    self.bgImgV.image = nil;
-    self.bgImgV = nil;
+    [self removeBgImgView];
 }
 
 /// 广告位中某一个广告源开始加载广告
@@ -161,9 +157,7 @@
 /// 广告曝光成功
 - (void)splashDidShowForSpotId:(NSString *)spotId extra:(NSDictionary *)extra {
     NSLog(@"广告曝光成功 %s", __func__);
-    [self.bgImgV removeFromSuperview];
-    self.bgImgV.image = nil;
-    self.bgImgV = nil;
+    [self removeBgImgView];
 }
 
 /// 广告点击
@@ -175,15 +169,21 @@
 - (void)splashDidCloseForSpotId:(NSString *)spotId extra:(NSDictionary *)extra {
     NSLog(@"广告关闭了 %s", __func__);
     self.advanceSplash = nil;
+    [self removeBgImgView];
+}
+
+- (void)removeBgImgView {
+    [self.bgImgV removeFromSuperview];
+    self.bgImgV = nil;
 }
 
 
 - (UIImageView *)bgImgV {
     if (!_bgImgV) {
         _bgImgV = [[UIImageView alloc] init];
+        _bgImgV.frame = [UIScreen mainScreen].bounds;
+        _bgImgV.image = [UIImage imageNamed:@"LaunchImage_img"];
     }
-    _bgImgV.frame = [UIScreen mainScreen].bounds;
-//    _bgImgV.userInteractionEnabled = YES;
     return _bgImgV;
 }
 

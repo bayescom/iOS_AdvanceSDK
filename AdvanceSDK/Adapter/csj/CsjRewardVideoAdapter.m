@@ -21,12 +21,12 @@
 
 #import "AdvanceRewardVideo.h"
 #import "AdvLog.h"
+#import "AdvanceAdapter.h"
 
-@interface CsjRewardVideoAdapter () <BUNativeExpressRewardedVideoAdDelegate>
+@interface CsjRewardVideoAdapter () <BUNativeExpressRewardedVideoAdDelegate, AdvanceAdapter>
 @property (nonatomic, strong) BUNativeExpressRewardedVideoAd *csj_ad;
 @property (nonatomic, weak) AdvanceRewardVideo *adspot;
 @property (nonatomic, strong) AdvSupplier *supplier;
-@property (nonatomic, assign) BOOL isCached;
 @property (nonatomic, assign) BOOL isVideoCached;
 
 @end
@@ -34,7 +34,7 @@
 @implementation CsjRewardVideoAdapter
 
 - (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(id)adspot {
-    if (self = [super initWithSupplier:supplier adspot:adspot]) {
+    if (self = [super init]) {
         _adspot = adspot;
         _supplier = supplier;
         BURewardedVideoModel *model = [[BURewardedVideoModel alloc] init];
@@ -45,43 +45,18 @@
     return self;
 }
 
-- (void)supplierStateLoad {
-    ADV_LEVEL_INFO_LOG(@"加载穿山甲 supplier: %@", _supplier);
-    _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
-    [self.csj_ad loadAdData];
-}
-
-- (void)supplierStateInPull {
-    ADV_LEVEL_INFO_LOG(@"穿山甲加载中...");
-}
-
-- (void)supplierStateSuccess {
-    ADV_LEVEL_INFO_LOG(@"穿山甲 成功");
-    if ([self.delegate respondsToSelector:@selector(didFinishLoadingRewardedVideoADWithSpotId:)]) {
-        [self.delegate didFinishLoadingRewardedVideoADWithSpotId:self.adspot.adspotid];
-    }
-    
-    if (_isCached) {
-        if ([self.delegate respondsToSelector:@selector(rewardedVideoDidDownLoadForSpotId:extra:)]) {
-            [self.delegate rewardedVideoDidDownLoadForSpotId:self.adspot.adspotid extra:self.adspot.ext];
-        }
-    }
-}
-
-- (void)supplierStateFailed {
-    ADV_LEVEL_INFO_LOG(@"穿山甲 失败");
-    [self.adspot loadNextSupplierIfHas];
-}
-
-
 - (void)loadAd {
-    [super loadAd];
+    [_csj_ad loadAdData];
 }
 
 - (void)showAd {
-//    if (_csj_ad.isAdValid) {
-        [_csj_ad showAdFromRootViewController:_adspot.viewController];
-//    }
+    [_csj_ad showAdFromRootViewController:_adspot.viewController];
+}
+
+- (void)winnerAdapterToShowAd {
+    if ([self.delegate respondsToSelector:@selector(didFinishLoadingRewardedVideoADWithSpotId:)]) {
+        [self.delegate didFinishLoadingRewardedVideoADWithSpotId:self.adspot.adspotid];
+    }
 }
 
 - (BOOL)isAdValid {
@@ -90,66 +65,42 @@
     return self.isVideoCached && (expireTimestamp >= now);
 }
 
-- (void)deallocAdapter {
-    ADV_LEVEL_INFO_LOG(@"%s", __func__);
-    if (_csj_ad) {
-        _csj_ad.delegate = nil;
-        _csj_ad = nil;
-    }
-}
-
-
 - (void)dealloc {
     ADV_LEVEL_INFO_LOG(@"%s", __func__);
-    [self deallocAdapter];
 }
 
 // MARK: ======================= BUNativeExpressRewardedVideoAdDelegate =======================
 /// 广告数据加载成功回调
 - (void)nativeExpressRewardedVideoAdDidLoad:(BUNativeExpressRewardedVideoAd *)rewardedVideoAd {
-
     NSDictionary *ext = rewardedVideoAd.mediaExt;
-    _supplier.supplierPrice = [ext[@"price"] integerValue];
-    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
-    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
-
-//    NSLog(@"穿山甲激励视频拉取成功");
-    _supplier.state = AdvanceSdkSupplierStateSuccess;
-    NSLog(@"--1> %@ %d", _supplier, _supplier.isParallel);
-    if (_supplier.isParallel == YES) {
-        return;
-    }
-
-    if ([self.delegate respondsToSelector:@selector(didFinishLoadingRewardedVideoADWithSpotId:)]) {
-        [self.delegate didFinishLoadingRewardedVideoADWithSpotId:self.adspot.adspotid];
-    }
+    [self.adspot.manager setECPMIfNeeded:[ext[@"price"] integerValue] supplier:_supplier];
+    [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
+    [self.adspot.manager checkTargetWithResultfulSupplier:_supplier loadAdState:AdvanceSupplierLoadAdSuccess];
 }
 
-/// 广告加载失败回调
-- (void)nativeExpressRewardedVideoAdViewRenderFail:(BUNativeExpressRewardedVideoAd *)rewardedVideoAd error:(NSError *)error {
-    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
-//    NSLog(@"穿山甲激励视频拉取失败 %@", error);
-    _csj_ad = nil;
-//    if ([self.delegate respondsToSelector:@selector(advanceRewardVideoOnAdFailedWithSdkId:error:)]) {
-//        [self.delegate advanceRewardVideoOnAdFailedWithSdkId:_supplier.identifier error:error];
-//    }
+// 广告加载失败回调
+- (void)nativeExpressRewardedVideoAd:(BUNativeExpressRewardedVideoAd *)rewardedVideoAd didFailWithError:(NSError *_Nullable)error {
+    [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
+    [self.adspot.manager checkTargetWithResultfulSupplier:_supplier loadAdState:AdvanceSupplierLoadAdFailed];
 }
+
 
 //视频缓存成功回调
 - (void)nativeExpressRewardedVideoAdDidDownLoadVideo:(BUNativeExpressRewardedVideoAd *)rewardedVideoAd {
     self.isVideoCached = YES;
-    if (_supplier.isParallel == YES) {
-        _isCached = YES;
-        return;
-    }
     if ([self.delegate respondsToSelector:@selector(rewardedVideoDidDownLoadForSpotId:extra:)]) {
         [self.delegate rewardedVideoDidDownLoadForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
 }
 
+/// 广告渲染失败回调
+- (void)nativeExpressRewardedVideoAdViewRenderFail:(BUNativeExpressRewardedVideoAd *)rewardedVideoAd error:(NSError *)error {
+    [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
+}
+
 /// 视频广告曝光回调
 - (void)nativeExpressRewardedVideoAdDidVisible:(BUNativeExpressRewardedVideoAd *)rewardedVideoAd {
-    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
+    [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(rewardedVideoDidStartPlayingForSpotId:extra:)]) {
         [self.delegate rewardedVideoDidStartPlayingForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
@@ -164,7 +115,7 @@
 
 /// 视频广告信息点击回调
 - (void)nativeExpressRewardedVideoAdDidClick:(BUNativeExpressRewardedVideoAd *)rewardedVideoAd {
-    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
+    [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(rewardedVideoDidClickForSpotId:extra:)]) {
         [self.delegate rewardedVideoDidClickForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
@@ -187,34 +138,8 @@
 - (void)nativeExpressRewardedVideoAdServerRewardDidFail:(BUNativeExpressRewardedVideoAd *)rewardedVideoAd error:(NSError *)error
 {
     [self.adspot reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
-    _csj_ad = nil;
-//    if ([self.delegate respondsToSelector:@selector(advanceRewardVideoOnAdFailedWithSdkId:error:)]) {
-//        [self.delegate advanceRewardVideoOnAdFailedWithSdkId:_supplier.identifier error:error];
-//    }
 
 }
 
-// 加载错误
-- (void)nativeExpressRewardedVideoAd:(BUNativeExpressRewardedVideoAd *)rewardedVideoAd didFailWithError:(NSError *_Nullable)error
-{
-    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
-    _supplier.state = AdvanceSdkSupplierStateFailed;
-    if (_supplier.isParallel == YES) { // 并行不释放 只上报
-        return;
-    }
 
-    _csj_ad = nil;
-//    if ([self.delegate respondsToSelector:@selector(advanceRewardVideoOnAdFailedWithSdkId:error:)]) {
-//        [self.delegate advanceRewardVideoOnAdFailedWithSdkId:_supplier.identifier error:error];
-//    }
-
-}
-
-- (void)nativeExpressRewardedVideoAdCallback:(BUNativeExpressRewardedVideoAd *)rewardedVideoAd withType:(BUNativeExpressRewardedVideoAdType)nativeExpressVideoType {
-    // 据说能解决神奇的bug
-}
-
-- (void)nativeExpressRewardedVideoAdDidClickSkip:(BUNativeExpressRewardedVideoAd *)rewardedVideoAd {
-    // 跳过回调 穿山甲有 广点通没有
-}
 @end

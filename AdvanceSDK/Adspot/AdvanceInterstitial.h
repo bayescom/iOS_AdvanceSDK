@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// 广告方法回调代理
 @property (nonatomic, weak) id<AdvanceInterstitialDelegate> delegate;
 
-/// 素材尺寸
+/// 广告素材期望尺寸
 @property (nonatomic, assign) CGSize adSize;
 
 /// 设定是否静音播放视频，默认为YES
@@ -26,15 +26,9 @@ NS_ASSUME_NONNULL_BEGIN
 /// @param adspotid adspotid
 /// @param ext 自定义拓展参数
 /// @param viewController viewController
-/// @param adSize 广告素材的期望尺寸, 仅部分支持, 渠道也只是会返回近似尺寸的素材,不会严格按照传入的尺寸展示
 - (instancetype)initWithAdspotId:(NSString *)adspotid
                        customExt:(nullable NSDictionary *)ext
-                  viewController:(UIViewController *)viewController
-                          adSize:(CGSize)adSize;
-
-- (instancetype)initWithAdspotId:(NSString *)adspotid
-                  viewController:(UIViewController *)viewController
-                          adSize:(CGSize)adSize;
+                  viewController:(UIViewController *)viewController;
 
 - (void)loadAd;
 

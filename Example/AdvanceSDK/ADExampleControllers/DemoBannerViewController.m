@@ -24,7 +24,9 @@
     self.initDefSubviewsFlag = YES;
     self.adShowView.hidden = NO;
     self.adspotIdsArr = @[
-//        @{@"addesc": @"Banner", @"adspotId": @"100255-10000558"},
+        //@{@"addesc": @"Banner", @"adspotId": @"100255-10000558"},
+        
+        @{@"addesc": @"横幅-Bidding", @"adspotId": @"102768-10008517"},
         @{@"addesc": @"横幅-倍业", @"adspotId": @"102768-10007790"},
         @{@"addesc": @"横幅-穿山甲", @"adspotId": @"102768-10007800"},
         @{@"addesc": @"横幅-优量汇", @"adspotId": @"102768-10007809"},

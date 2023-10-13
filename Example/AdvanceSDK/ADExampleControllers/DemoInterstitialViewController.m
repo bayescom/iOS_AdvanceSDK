@@ -23,6 +23,8 @@
     self.adspotIdsArr = @[
 //        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10000559"},
 //        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10006501"},
+        
+        @{@"addesc": @"插屏-Bidding", @"adspotId": @"102768-10008520"},
         @{@"addesc": @"插屏-倍业", @"adspotId": @"102768-10007791"},
         @{@"addesc": @"插屏-穿山甲", @"adspotId": @"102768-10007801"},
         @{@"addesc": @"插屏-优量汇", @"adspotId": @"102768-10007810"},
@@ -39,8 +41,8 @@
     
 
     self.advanceInterstitial = [[AdvanceInterstitial alloc] initWithAdspotId:self.adspotId
-                                                              viewController:self
-                                                                      adSize:CGSizeMake(414, 300)];
+                                                                   customExt:nil
+                                                              viewController:self];
     self.advanceInterstitial.delegate = self;
     [self.advanceInterstitial loadAd];
 }

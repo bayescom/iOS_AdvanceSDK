@@ -14,71 +14,39 @@
 #endif
 #import "AdvanceRewardVideo.h"
 #import "AdvLog.h"
+#import "AdvanceAdapter.h"
 
-@interface GdtRewardVideoAdapter () <GDTRewardedVideoAdDelegate>
+@interface GdtRewardVideoAdapter () <GDTRewardedVideoAdDelegate, AdvanceAdapter>
 @property (nonatomic, strong) GDTRewardVideoAd *gdt_ad;
 @property (nonatomic, weak) AdvanceRewardVideo *adspot;
 @property (nonatomic, strong) AdvSupplier *supplier;
-@property (nonatomic, assign) BOOL isCached;
 
 @end
 
 @implementation GdtRewardVideoAdapter
 
 - (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(id)adspot {
-    if (self = [super initWithSupplier:supplier adspot:adspot]) {
+    if (self = [super init]) {
         _adspot = adspot;
         _supplier = supplier;
         _gdt_ad = [[GDTRewardVideoAd alloc] initWithPlacementId:_supplier.adspotid];
         _gdt_ad.videoMuted = _adspot.muted;
+        _gdt_ad.delegate = self;
     }
     return self;
 }
 
-- (void)supplierStateLoad {
-    ADV_LEVEL_INFO_LOG(@"加载广点通 supplier: %@", _supplier);
-    _gdt_ad.delegate = self;
-    _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
-    [_gdt_ad loadAd];
-}
-
-- (void)supplierStateInPull {
-    ADV_LEVEL_INFO_LOG(@"广点通加载中...");
-}
-
-- (void)supplierStateSuccess {
-    ADV_LEVEL_INFO_LOG(@"广点通 成功");
-    if ([self.delegate respondsToSelector:@selector(didFinishLoadingRewardedVideoADWithSpotId:)]) {
-        [self.delegate didFinishLoadingRewardedVideoADWithSpotId:self.adspot.adspotid];
-    }
-    
-    if (_isCached) {
-        if ([self.delegate respondsToSelector:@selector(rewardedVideoDidDownLoadForSpotId:extra:)]) {
-            [self.delegate rewardedVideoDidDownLoadForSpotId:self.adspot.adspotid extra:self.adspot.ext];
-        }
-    }
-
-}
-
-- (void)supplierStateFailed {
-    ADV_LEVEL_INFO_LOG(@"广点通 失败");
-    [self.adspot loadNextSupplierIfHas];
-}
-
-
 - (void)loadAd {
-    [super loadAd];
+    [_gdt_ad loadAd];
 }
 
 - (void)showAd {
     [_gdt_ad showAdFromRootViewController:_adspot.viewController];
 }
 
-- (void)deallocAdapter {
-    ADV_LEVEL_INFO_LOG(@"%s", __func__);
-    if (_gdt_ad) {
-        _gdt_ad.delegate = nil;
-        _gdt_ad = nil;
+- (void)winnerAdapterToShowAd {
+    if ([self.delegate respondsToSelector:@selector(didFinishLoadingRewardedVideoADWithSpotId:)]) {
+        [self.delegate didFinishLoadingRewardedVideoADWithSpotId:self.adspot.adspotid];
     }
 }
 
@@ -88,46 +56,25 @@
 
 - (void)dealloc {
     ADV_LEVEL_INFO_LOG(@"%s", __func__);
-    [self deallocAdapter];
 }
+
 
 // MARK: ======================= GdtRewardVideoAdDelegate =======================
 /// 广告数据加载成功回调
 - (void)gdt_rewardVideoAdDidLoad:(GDTRewardVideoAd *)rewardedVideoAd {
-    _supplier.supplierPrice = rewardedVideoAd.eCPM;
-    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
-    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
-    _supplier.state = AdvanceSdkSupplierStateSuccess;
-//    NSLog(@"广点通激励视频拉取成功 %@",self.gdt_ad);
-    if (_supplier.isParallel == YES) {
-//        NSLog(@"修改状态: %@", _supplier);
-        return;
-    }
-
-    if ([self.delegate respondsToSelector:@selector(didFinishLoadingRewardedVideoADWithSpotId:)]) {
-        [self.delegate didFinishLoadingRewardedVideoADWithSpotId:self.adspot.adspotid];
-    }
+    [self.adspot.manager setECPMIfNeeded:rewardedVideoAd.eCPM supplier:_supplier];
+    [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
+    [self.adspot.manager checkTargetWithResultfulSupplier:_supplier loadAdState:AdvanceSupplierLoadAdSuccess];
 }
 
 /// 广告加载失败回调
 - (void)gdt_rewardVideoAd:(GDTRewardVideoAd *)rewardedVideoAd didFailWithError:(NSError *)error {
-    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
-    _supplier.state = AdvanceSdkSupplierStateFailed;
-    if (_supplier.isParallel == YES) {
-        return;
-    }
-
-//    if ([self.delegate respondsToSelector:@selector(advanceRewardVideoOnAdFailedWithSdkId:error:)]) {
-//        [self.delegate advanceRewardVideoOnAdFailedWithSdkId:_supplier.identifier error:error];
-//    }
+    [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
+    [self.adspot.manager checkTargetWithResultfulSupplier:_supplier loadAdState:AdvanceSupplierLoadAdFailed];
 }
 
 //视频缓存成功回调
 - (void)gdt_rewardVideoAdVideoDidLoad:(GDTRewardVideoAd *)rewardedVideoAd {
-    if (_supplier.isParallel == YES) {
-        _isCached = YES;
-        return;
-    }
     if ([self.delegate respondsToSelector:@selector(rewardedVideoDidDownLoadForSpotId:extra:)]) {
         [self.delegate rewardedVideoDidDownLoadForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
@@ -135,7 +82,7 @@
 
 /// 视频广告曝光回调
 - (void)gdt_rewardVideoAdDidExposed:(GDTRewardVideoAd *)rewardedVideoAd {
-    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
+    [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(rewardedVideoDidStartPlayingForSpotId:extra:)]) {
         [self.delegate rewardedVideoDidStartPlayingForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
@@ -150,7 +97,7 @@
 
 /// 视频广告信息点击回调
 - (void)gdt_rewardVideoAdDidClicked:(GDTRewardVideoAd *)rewardedVideoAd {
-    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
+    [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(rewardedVideoDidClickForSpotId:extra:)]) {
         [self.delegate rewardedVideoDidClickForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }

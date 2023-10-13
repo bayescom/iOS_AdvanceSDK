@@ -14,40 +14,34 @@
 
 @interface AdvSupplierLoader ()
 
-@property (nonatomic, strong) NSMutableDictionary *initializedDict;
+@property (nonatomic, strong, class) NSMutableDictionary *initializedDict;
 
 @end
 
+static NSMutableDictionary *_initializedDict = nil;
+
 @implementation AdvSupplierLoader
 
-static AdvSupplierLoader *instance = nil;
-
-+(instancetype)defaultInstance {
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        instance = [[self alloc] init];
-    });
-    return instance;
-}
-
--(instancetype)init {
-    if (self = [super init]) {
++ (NSMutableDictionary *)initializedDict {
+    if (!_initializedDict) {
         _initializedDict = [NSMutableDictionary dictionary];
     }
-    return self;
+    return _initializedDict;
 }
 
++ (void)setInitializedDict:(NSMutableDictionary *)initializedDict {
+    _initializedDict = initializedDict;
+}
 
 // 加载渠道SDK进行初始化调用
 + (void)loadSupplier:(AdvSupplier *)supplier completion:(void (^)(void))completion {
     
-    if ([[[AdvSupplierLoader defaultInstance].initializedDict objectForKey:supplier.identifier] boolValue]) {
-        completion();
-        return;
+    if ([[AdvSupplierLoader.initializedDict objectForKey:supplier.identifier] boolValue]) {
+        return completion();
     }
     
     /// 渠道初始化标记
-    [[AdvSupplierLoader defaultInstance].initializedDict setObject:@YES forKey:supplier.identifier];
+    [AdvSupplierLoader.initializedDict setObject:@YES forKey:supplier.identifier];
     
     NSString *clsName = @"";
     if ([supplier.identifier isEqualToString:SDK_ID_GDT]) {
@@ -74,6 +68,12 @@ static AdvSupplierLoader *instance = nil;
         if ([clazz.class respondsToSelector:selector]) {
             ((void (*)(id, SEL, NSString *))objc_msgSend)(clazz.class, selector, supplier.mediaid);
             completion();
+//            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{ // 解决 This method should not be called on the main thread as it may lead ... 警告
+//                ((void (*)(id, SEL, NSString *))objc_msgSend)(clazz.class, selector, supplier.mediaid);
+//                dispatch_async(dispatch_get_main_queue(), ^{
+//                    completion();
+//                });
+//            });
         }
         
     } else if ([supplier.identifier isEqualToString:SDK_ID_CSJ]) {// 穿山甲SDK
@@ -82,9 +82,12 @@ static AdvSupplierLoader *instance = nil;
         ((void (*)(id, SEL, NSString *))objc_msgSend)(config, NSSelectorFromString(@"setAppID:"), supplier.mediaid);
         // 定义block
         void (^completionHandler)(BOOL success, NSError *error) = ^void (BOOL success, NSError *error) {
-            if (success && completion) {
-                completion();
-            }
+            /// 穿山甲初始化默认在子线程回调，要切换到主线程
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (success && completion) {
+                    completion();
+                }
+            });
         };
         SEL selector = NSSelectorFromString(@"startWithAsyncCompletionHandler:");
         if ([clazz.class respondsToSelector:selector]) {

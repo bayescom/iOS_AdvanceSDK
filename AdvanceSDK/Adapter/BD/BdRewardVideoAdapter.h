@@ -7,14 +7,10 @@
 
 #import <Foundation/Foundation.h>
 #import "AdvanceRewardedVideoDelegate.h"
-#import "AdvanceBaseAdapter.h"
-
-@class AdvSupplier;
-@class AdvanceRewardVideo;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface BdRewardVideoAdapter : AdvanceBaseAdapter
+@interface BdRewardVideoAdapter : NSObject
 @property (nonatomic, weak) id<AdvanceRewardedVideoDelegate> delegate;
 
 @end

@@ -4,16 +4,12 @@
 //
 //  Created by MS on 2021/6/1.
 //
-#import "AdvanceBaseAdapter.h"
-#import <Foundation/Foundation.h>
-#import "AdvanceFullScreenVideoDelegate.h"
 
-@class AdvSupplier;
-@class AdvanceFullScreenVideo;
+#import "AdvanceFullScreenVideoDelegate.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface BdFullScreenVideoAdapter : AdvanceBaseAdapter
+@interface BdFullScreenVideoAdapter : NSObject
 @property (nonatomic, weak) id<AdvanceFullScreenVideoDelegate> delegate;
 
 

@@ -24,11 +24,13 @@
     
     self.initDefSubviewsFlag = YES;
     self.adspotIdsArr = @[
-        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10004765"},
-//        @{@"addesc": @"全屏视频-穿山甲", @"adspotId": @"102768-10007829"},
-//        @{@"addesc": @"全屏视频-优量汇", @"adspotId": @"102768-10007832"},
-//        @{@"addesc": @"全屏视频-快手", @"adspotId": @"102768-10007830"},
-//        @{@"addesc": @"全屏视频-百度", @"adspotId": @"102768-10007838"},
+//        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10004765"},
+        
+        @{@"addesc": @"全屏视频-Bidding", @"adspotId": @"102768-10008529"},
+        @{@"addesc": @"全屏视频-穿山甲", @"adspotId": @"102768-10007829"},
+        @{@"addesc": @"全屏视频-优量汇", @"adspotId": @"102768-10007832"},
+        @{@"addesc": @"全屏视频-快手", @"adspotId": @"102768-10007830"},
+        @{@"addesc": @"全屏视频-百度", @"adspotId": @"102768-10007838"},
     ];
     self.btn1Title = @"加载广告";
     self.btn2Title = @"显示广告";
