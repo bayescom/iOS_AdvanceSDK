@@ -27,8 +27,6 @@
 /// 自定义拓展字段
 @property (nonatomic, strong) NSDictionary *ext;
 
-@property (nonatomic, strong) NSURLSessionDataTask *dataTask;
-
 @property (nonatomic, strong) AdvUploadTKUtil *tkUploadTool;
 
 /// 已根据优先级排序的第一组parallel渠道

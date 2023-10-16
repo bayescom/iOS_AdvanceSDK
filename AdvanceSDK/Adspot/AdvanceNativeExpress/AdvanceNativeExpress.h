@@ -7,7 +7,6 @@
 //
 
 #import "AdvanceBaseAdSpot.h"
-#import <UIKit/UIKit.h>
 #import "AdvanceNativeExpressDelegate.h"
 
 NS_ASSUME_NONNULL_BEGIN

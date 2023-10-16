@@ -113,8 +113,6 @@
         clsName = @"BdRewardVideoAdapter";
     } else if ([supplierId isEqualToString:SDK_ID_TANX]) {
         clsName = @"TanxRewardVideoAdapter";
-    } else if ([supplierId isEqualToString:SDK_ID_BIDDING]) {
-        clsName = @"AdvBiddingRewardVideoAdapter";
     }
     return clsName;
 }

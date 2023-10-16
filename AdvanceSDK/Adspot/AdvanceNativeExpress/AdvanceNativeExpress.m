@@ -114,8 +114,6 @@
         clsName = @"BdNativeExpressAdapter";
     } else if ([supplierId isEqualToString:SDK_ID_TANX]) {
         clsName = @"TanxNativeExpressAdapter";
-    } else if ([supplierId isEqualToString:SDK_ID_BIDDING]) {
-        clsName = @"AdvBiddingNativeExpressAdapter";
     }
     return clsName;
 }

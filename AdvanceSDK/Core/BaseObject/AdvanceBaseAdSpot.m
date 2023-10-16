@@ -12,6 +12,14 @@
 
 @implementation AdvanceBaseAdSpot
 
+@synthesize mediaId = _mediaId;
+@synthesize adspotid = _adspotid;
+@synthesize ext = _ext;
+@synthesize viewController = _viewController;
+@synthesize adapterMap = _adapterMap;
+@synthesize targetAdapter = _targetAdapter;
+@synthesize manager = _manager;
+
 - (instancetype)initWithMediaId:(NSString *)mediaId
                        adspotId:(NSString *)adspotid
                       customExt:(NSDictionary *)ext {

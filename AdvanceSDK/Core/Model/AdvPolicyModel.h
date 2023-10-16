@@ -84,11 +84,6 @@ NSString * ADVStringFromNAdvanceSdkSupplierRepoType(AdvanceSdkSupplierRepoType t
 @property (nonatomic, assign) NSInteger code;
 @property (nonatomic, copy) NSString *reqid;
 
-
-//@property (nonatomic, copy)   NSString *advMediaId;
-//@property (nonatomic, copy)   NSString *advAdspotId;
-
-
 @end
 
 // 上游/渠道SDK对象

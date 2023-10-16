@@ -5,7 +5,6 @@
 //  Created by guangyao on 2023/9/8.
 //
 
-#import <UIKit/UIKit.h>
 #import "AdvRenderFeedAdElement.h"
 
 NS_ASSUME_NONNULL_BEGIN

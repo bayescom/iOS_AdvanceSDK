@@ -114,8 +114,6 @@
         clsName = @"BdSplashAdapter";
     } else if ([supplierId isEqualToString:SDK_ID_TANX]) {
         clsName = @"TanxSplashAdapter";
-    } else if ([supplierId isEqualToString:SDK_ID_BIDDING]) {
-        clsName = @"AdvBiddingSplashAdapter";
     }
     return clsName;
 }

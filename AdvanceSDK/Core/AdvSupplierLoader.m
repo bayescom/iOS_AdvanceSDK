@@ -56,8 +56,6 @@ static NSMutableDictionary *_initializedDict = nil;
         clsName = @"BaiduMobAdSetting";
     } else if ([supplier.identifier isEqualToString:SDK_ID_TANX]){
         clsName = @"TXAdSDKInitializtion";
-    } else if ([supplier.identifier isEqualToString:SDK_ID_BIDDING]){
-        clsName = @"ABUAdSDKManager";
     }
     
     Class clazz = NSClassFromString(clsName);
@@ -138,18 +136,11 @@ static NSMutableDictionary *_initializedDict = nil;
             completion();
         }
         
-    } else if ([supplier.identifier isEqualToString:SDK_ID_TANX]) {// Tanx
+    } else if ([supplier.identifier isEqualToString:SDK_ID_TANX]) {// Tanx SDK
         
-        [clazz performSelector:@selector(setupSDKWithAppID:andAppKey:) withObject:supplier.mediaid withObject:supplier.mediakey];
-        completion();
-        
-    } else if ([supplier.identifier isEqualToString:SDK_ID_BIDDING]){
-        // bidding 此之前已经对 biddingConfig进行了初始化 并赋值了
-        if (!supplier.mediaid) {
-            return;
-        }
-        if (supplier.mediaid.length > 0) {
-            [clazz performSelector:@selector(setupSDKWithAppId:config:) withObject:supplier.mediaid withObject:nil];
+        SEL selector = NSSelectorFromString(@"setupSDKWithAppID:andAppKey:");
+        if ([clazz.class respondsToSelector:selector]) {
+            ((void (*)(id, SEL, NSString *, NSString *))objc_msgSend)(clazz.class, selector, supplier.mediaid, supplier.mediakey);
             completion();
         }
     }

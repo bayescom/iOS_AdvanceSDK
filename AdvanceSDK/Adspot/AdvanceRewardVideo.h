@@ -7,10 +7,6 @@
 //
 
 #import "AdvanceBaseAdSpot.h"
-
-#import <UIKit/UIKit.h>
-
-#import "AdvSdkConfig.h"
 #import "AdvanceRewardedVideoDelegate.h"
 
 NS_ASSUME_NONNULL_BEGIN

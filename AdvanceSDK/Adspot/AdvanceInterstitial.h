@@ -16,9 +16,6 @@ NS_ASSUME_NONNULL_BEGIN
 /// 广告方法回调代理
 @property (nonatomic, weak) id<AdvanceInterstitialDelegate> delegate;
 
-/// 广告素材期望尺寸
-@property (nonatomic, assign) CGSize adSize;
-
 /// 设定是否静音播放视频，默认为YES
 @property(nonatomic, assign) BOOL muted;
 

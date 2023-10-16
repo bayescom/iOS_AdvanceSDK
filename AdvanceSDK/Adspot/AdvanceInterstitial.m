@@ -109,8 +109,6 @@
         clsName = @"KsInterstitialAdapter";
     } else if ([supplierId isEqualToString:SDK_ID_BAIDU]) {
         clsName = @"BdInterstitialAdapter";
-    } else if ([supplierId isEqualToString:SDK_ID_BIDDING]) {
-        clsName = @"AdvBiddingInterstitialAdapter";
     }
     return clsName;
 }
