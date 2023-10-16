@@ -6,9 +6,6 @@
 //  Copyright © 2020 Gdt. All rights reserved.
 //
 
-#import "AdvanceBaseAdapter.h"
-#import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
 #import "AdvanceSplashDelegate.h"
 
 NS_ASSUME_NONNULL_BEGIN

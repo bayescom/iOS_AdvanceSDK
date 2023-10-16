@@ -7,7 +7,6 @@
 
 #import <Foundation/Foundation.h>
 #import "AdvanceInterstitialDelegate.h"
-#import "AdvanceBaseAdapter.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

@@ -44,7 +44,7 @@
 /// 加载策略Model失败
 - (void)advPolicyServiceLoadFailedWithError:(nullable NSError *)error {
     if ([_delegate respondsToSelector:@selector(didFailLoadingADSourceWithSpotId:error:description:)]) {
-        [_delegate didFailLoadingADSourceWithSpotId:self.adspotid error:error description:[self.errorDescriptions copy]];
+        [_delegate didFailLoadingADSourceWithSpotId:self.adspotid error:error description:[self.manager.errorInfo copy]];
     }
 }
 
@@ -120,7 +120,7 @@
 }
 
 - (void)loadAd {
-    [super loadAd];
+    [super loadAdPolicy];
 }
 
 - (void)showAd {

@@ -5,18 +5,11 @@
 //  Created by MS on 2022/7/15.
 //
 
-#import "AdvanceBaseAdapter.h"
-#import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
 #import "AdvanceRewardedVideoDelegate.h"
-
-@class AdvSupplier;
-@class AdvanceRewardVideo;
-
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface TanxRewardVideoAdapter : AdvanceBaseAdapter
+@interface TanxRewardVideoAdapter : NSObject
 @property (nonatomic, weak) id<AdvanceRewardedVideoDelegate> delegate;
 
 @end

@@ -70,7 +70,6 @@
     self.advanceSplash = [[AdvanceSplash alloc] initWithAdspotId:self.adspotId
                                                        customExt:@{@"testExt": @1} viewController:self];
 
-    self.advanceSplash.isUploadSDKVersion = YES;
     self.advanceSplash.delegate = self;
     
     

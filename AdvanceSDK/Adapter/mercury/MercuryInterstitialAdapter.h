@@ -6,9 +6,6 @@
 //  Copyright © 2020 bayescom. All rights reserved.
 //
 
-#import "AdvanceBaseAdapter.h"
-#import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
 #import "AdvanceInterstitialDelegate.h"
 
 NS_ASSUME_NONNULL_BEGIN

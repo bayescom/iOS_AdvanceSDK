@@ -4,10 +4,9 @@
 //
 //  Created by MS on 2021/4/20.
 //
-#import "AdvanceBaseAdapter.h"
-#import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
+
 #import "AdvanceSplashDelegate.h"
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface KsSplashAdapter : NSObject

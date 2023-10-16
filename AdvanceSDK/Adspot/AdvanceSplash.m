@@ -122,7 +122,7 @@
 
 
 - (void)loadAd {
-    [super loadAd];
+    [super loadAdPolicy];
 }
 
 - (void)showInWindow:(UIWindow *)window {

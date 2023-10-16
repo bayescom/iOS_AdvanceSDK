@@ -39,11 +39,6 @@
     return self;
 }
 
-- (void)supplierStateFailed {
-    ADV_LEVEL_INFO_LOG(@"广点通 失败");
-    [self.adspot loadNextSupplierIfHas];
-}
-
 - (void)loadAd {
     [_gdt_ad loadFullScreenAd];
 }

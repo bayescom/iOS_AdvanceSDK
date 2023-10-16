@@ -16,53 +16,21 @@ NS_ASSUME_NONNULL_BEGIN
 //MARK: 策略服务类（非单例）
 @interface AdvPolicyService : NSObject
 
+/// 策略服务代理对象
 @property (nonatomic, weak) id<AdvPolicyServiceDelegate> delegate;
+/// 各渠道的错误回调信息
+@property (nonatomic, strong) NSMutableDictionary *errorInfo;
 
 /// 数据管理对象
 + (instancetype)manager;
 
-/**
- * 获取策略数据
- * 如果本地存在有效数据，直接加载本地数据
- * 数据不存在则网络获取数据
- * @param mediaId 媒体id
- * @param adspotId 广告位id
- * @param ext 自定义拓展字段
- */
+/// 实时加载策略数据
+/// @param mediaId 媒体id
+/// @param adspotId 广告位id
+/// @param ext 自定义拓展字段
 - (void)loadDataWithMediaId:(NSString *)mediaId
                    adspotId:(NSString *)adspotId
                   customExt:(NSDictionary *_Nonnull)ext;
-
-/// 加载策略
-- (void)loadDataWithSupplierModel:(AdvPolicyModel *)model;
-
-/**
- * 加载下个渠道
- * 回调 advSupplierLoadSuppluer: error:
- */
-- (void)loadNextSupplierIfHas;
-
-/**
- * 加载下一层bidding
- * 回调 advSupplierLoadSuppluer: error:
- */
-- (void)loadNextWaterfallSupplierIfHas;
-
-
-/// 取消正在进行的策略请求
-- (void)cancelDataTask;
-
-/// 进入bidding队列
-- (void)inWaterfallQueueWithSupplier:(AdvSupplier *)supplier;
-
-// 进入HeadBidding队列
-- (void)inHeadBiddingQueueWithSupplier:(AdvSupplier *)supplier;
-
-// 接收失败的并发渠道
-- (void)inParallelWithErrorSupplier:(AdvSupplier *)errorSupplier;
-
-
-#pragma mark: - Refactor
 
 /// 设置渠道返回的竞价
 /// @param eCPM 竞价金额

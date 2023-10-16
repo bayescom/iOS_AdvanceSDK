@@ -6,7 +6,6 @@
 //  Copyright © 2020 bayescom. All rights reserved.
 //
 
-#import "AdvanceBaseAdapter.h"
 #import "AdvanceBannerDelegate.h"
 
 NS_ASSUME_NONNULL_BEGIN

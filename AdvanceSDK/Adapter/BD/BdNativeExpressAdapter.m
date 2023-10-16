@@ -59,6 +59,7 @@
         [_delegate didFinishLoadingNativeExpressAds:self.nativeAds spotId:self.adspot.adspotid];
     }
     
+    /// 渲染广告
     /// 展现前检查是否过期，通常广告过期时间为30分钟。如果过期，请放弃展示并重新请求
     if (![self.feedAdObj isExpired]) {
         if ([self.delegate respondsToSelector:@selector(nativeExpressAdViewRenderSuccess:spotId:extra:)]) {

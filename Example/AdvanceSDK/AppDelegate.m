@@ -10,13 +10,9 @@
 # if __has_include(<ABUAdSDK/ABUAdSDK.h>)
 #import <ABUAdSDK/ABUAdSDK.h>
 #else
-#import <Ads-Mediation-CN/ABUAdSDK.h>
+//#import <Ads-Mediation-CN/ABUAdSDK.h>
 #endif
 
-// DEBUG
-//#import <STDebugConsole.h>
-//#import <STDebugConsoleViewController.h>
-//#import <JPFPSStatus.h>
 
 #import "ViewController.h"
 #import <AdvanceSplash.h>
