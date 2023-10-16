@@ -10,7 +10,9 @@
 #import <objc/message.h>
 
 @interface AdvanceNativeExpressAd ()
+
 @property (nonatomic, weak) UIViewController *controller;
+
 @end
 
 @implementation AdvanceNativeExpressAd
@@ -22,14 +24,6 @@
     return self;
 }
 
-- (void)setIdentifier:(NSString *)identifier {
-    _identifier = identifier;
-}
-
-- (void)setExpressView:(UIView *)expressView {
-    _expressView = expressView;
-}
-
 - (void)setIsStopMotion:(BOOL)isStopMotion {
     _isStopMotion = isStopMotion;
     if ([self.expressView isKindOfClass:NSClassFromString(@"MercuryNativeExpressAdView")]) {
@@ -37,8 +31,4 @@
     }
 }
 
-- (void)dealloc
-{
-//    NSLog(@"%s", __func__);
-}
 @end

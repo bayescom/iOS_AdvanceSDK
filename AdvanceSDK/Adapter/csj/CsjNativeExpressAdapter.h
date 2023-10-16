@@ -6,17 +6,11 @@
 //  Copyright © 2020 bayescom. All rights reserved.
 //
 
-#import "AdvanceBaseAdapter.h"
-#import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
 #import "AdvanceNativeExpressDelegate.h"
-
-@class AdvSupplier;
-@class AdvanceNativeExpress;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface CsjNativeExpressAdapter : AdvanceBaseAdapter
+@interface CsjNativeExpressAdapter : NSObject
 @property (nonatomic, weak) id<AdvanceNativeExpressDelegate> delegate;
 
 @end

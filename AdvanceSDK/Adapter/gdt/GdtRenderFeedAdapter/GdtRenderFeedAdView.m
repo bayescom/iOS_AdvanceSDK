@@ -78,7 +78,7 @@
 #pragma mark - GDTUnifiedNativeAdViewDelegate
 - (void)gdt_unifiedNativeAdViewDidClick:(GDTUnifiedNativeAdView *)unifiedNativeAdView
 {
-    [_adSpot reportEventWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
+    [self.adSpot.manager reportEventWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
     if ([self.adDelegate respondsToSelector:@selector(renderFeedAdDidClickForSpotId:extra:)]) {
         [self.adDelegate renderFeedAdDidClickForSpotId:self.adSpot.adspotid extra:self.adSpot.ext];
     }
@@ -86,7 +86,7 @@
 
 - (void)gdt_unifiedNativeAdViewWillExpose:(GDTUnifiedNativeAdView *)unifiedNativeAdView
 {
-    [_adSpot reportEventWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
+    [self.adSpot.manager reportEventWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
     if ([self.adDelegate respondsToSelector:@selector(renderFeedAdDidShowForSpotId:extra:)]) {
         [self.adDelegate renderFeedAdDidShowForSpotId:self.adSpot.adspotid extra:self.adSpot.ext];
     }

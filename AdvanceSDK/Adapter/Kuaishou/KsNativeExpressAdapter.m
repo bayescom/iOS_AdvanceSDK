@@ -9,147 +9,101 @@
 #if __has_include(<KSAdSDK/KSAdSDK.h>)
 #import <KSAdSDK/KSAdSDK.h>
 #else
-//#import "KSAdSDK.h"
+#import "KSAdSDK.h"
 #endif
-
 
 #import "AdvanceNativeExpress.h"
 #import "AdvLog.h"
 #import "AdvanceNativeExpressAd.h"
-@interface KsNativeExpressAdapter ()<KSFeedAdsManagerDelegate, KSFeedAdDelegate>
+#import "AdvanceAdapter.h"
+
+@interface KsNativeExpressAdapter ()<KSFeedAdsManagerDelegate, KSFeedAdDelegate, AdvanceAdapter>
 @property (nonatomic, strong) KSFeedAdsManager *ks_ad;
 @property (nonatomic, weak) AdvanceNativeExpress *adspot;
 @property (nonatomic, strong) AdvSupplier *supplier;
-@property (nonatomic, strong) NSMutableArray<AdvanceNativeExpressAd *> * nativeAds;
+@property (nonatomic, strong) NSArray<KSFeedAd *> *feedAdArray;
+@property (nonatomic, strong) NSMutableArray<AdvanceNativeExpressAd *> *nativeAds;
 
 @end
 
 @implementation KsNativeExpressAdapter
 
 - (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(id)adspot {
-    if (self = [super initWithSupplier:supplier adspot:adspot]) {
+    if (self = [super init]) {
         _adspot = adspot;
         _supplier = supplier;
-        
         _ks_ad = [[KSFeedAdsManager alloc] initWithPosId:_supplier.adspotid size:_adspot.adSize];
+        _ks_ad.delegate = self;
     }
     return self;
 }
 
-- (void)supplierStateLoad {
-    ADV_LEVEL_INFO_LOG(@"加载快手 supplier: %@", _supplier);
-    _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
-    _ks_ad.delegate = self;
+- (void)loadAd {
     [_ks_ad loadAdDataWithCount:1];
 }
 
-- (void)supplierStateInPull {
-    ADV_LEVEL_INFO_LOG(@"快手加载中...");
-}
-
-- (void)supplierStateSuccess {
-    ADV_LEVEL_INFO_LOG(@"快手 成功");
+- (void)winnerAdapterToShowAd {
+    
+    /// 广告加载成功回调
     if ([_delegate respondsToSelector:@selector(didFinishLoadingNativeExpressAds:spotId:)]) {
         [_delegate didFinishLoadingNativeExpressAds:self.nativeAds spotId:self.adspot.adspotid];
     }
-}
-
-- (void)supplierStateFailed {
-    ADV_LEVEL_INFO_LOG(@"快手 失败");
-    [self.adspot loadNextSupplierIfHas];
-}
-
-
-- (void)loadAd {
-    [super loadAd];
     
+    /// 渲染广告
+    [self.feedAdArray enumerateObjectsUsingBlock:^(KSFeedAd * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        obj.delegate = self;
+        obj.videoSoundEnable = !self.adspot.muted;
+        AdvanceNativeExpressAd *nativeAd = [self returnExpressViewWithAdView:obj.feedView];
+        if ([self.delegate respondsToSelector:@selector(nativeExpressAdViewRenderSuccess:spotId:extra:)]) {
+            [self.delegate nativeExpressAdViewRenderSuccess:nativeAd spotId:self.adspot.adspotid extra:self.adspot.ext];
+        }
+    }];
 }
 
 - (void)dealloc {
     ADV_LEVEL_INFO_LOG(@"%s", __func__);
-    [self deallocAdapter];
-}
-
-- (void)deallocAdapter {
-    ADV_LEVEL_INFO_LOG(@"%s", __func__);
-
-    if (self.ks_ad) {
-        self.ks_ad.delegate = nil;
-        self.ks_ad = nil;
-    }
 }
 
 
 - (void)feedAdsManagerSuccessToLoad:(KSFeedAdsManager *)adsManager nativeAds:(NSArray<KSFeedAd *> *_Nullable)feedAdDataArray {
-//    self.title = @"数据加载成功";
-    if (feedAdDataArray == nil || feedAdDataArray.count == 0) {
-        [self.adspot reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:[NSError errorWithDomain:@"" code:100000 userInfo:@{@"msg":@"无广告返回"}]];
-        _supplier.state = AdvanceSdkSupplierStateFailed;
-        if (_supplier.isParallel == YES) { // 并行不释放 只上报
-            return;
-        }
-
-//        if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdFailedWithSdkId:error:)]) {
-//            [_delegate advanceNativeExpressOnAdFailedWithSdkId:_supplier.identifier error:[NSError errorWithDomain:@"" code:100000 userInfo:@{@"msg":@"无广告返回"}]];
-//        }
-    } else {
-        _supplier.supplierPrice = feedAdDataArray.firstObject.ecpm;
-        [_adspot reportEventWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
-        [_adspot reportEventWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
-        
-        self.nativeAds = [NSMutableArray array];
-        for (KSFeedAd *ad in feedAdDataArray) {
-            ad.delegate = self;
-            ad.videoSoundEnable = !_adspot.muted;
-            AdvanceNativeExpressAd *TT = [[AdvanceNativeExpressAd alloc] initWithViewController:_adspot.viewController];
-            TT.expressView = ad.feedView;
-            TT.identifier = _supplier.identifier;
-            TT.price = (ad.ecpm == 0) ?  _supplier.supplierPrice : ad.ecpm;
-            [self.nativeAds addObject:TT];
-            
-            if (!_supplier.isParallel && [_delegate respondsToSelector:@selector(nativeExpressAdViewRenderSuccess:spotId:extra:)]) {
-                [_delegate nativeExpressAdViewRenderSuccess:TT spotId:self.adspot.adspotid extra:self.adspot.ext];
-            }
-
-        }
-        
-        if (_supplier.isParallel == YES) {
-            _supplier.state = AdvanceSdkSupplierStateSuccess;
-            return;
-        }
-
-        if ([_delegate respondsToSelector:@selector(didFinishLoadingNativeExpressAds:spotId:)]) {
-            [_delegate didFinishLoadingNativeExpressAds:self.nativeAds spotId:self.adspot.adspotid];
-        }
+    self.feedAdArray = feedAdDataArray;
+    if (!feedAdDataArray.count) {
+        [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:[NSError errorWithDomain:@"KSFeed.com" code:1 userInfo:@{@"msg":@"无广告返回"}]];
+        [self.adspot.manager checkTargetWithResultfulSupplier:_supplier loadAdState:AdvanceSupplierLoadAdFailed];
+        return;
     }
-
-//    [self refreshWithData:adsManager];
+    
+    self.nativeAds = [NSMutableArray array];
+    for (KSFeedAd *ad in feedAdDataArray) {
+        AdvanceNativeExpressAd *TT = [[AdvanceNativeExpressAd alloc] init];
+        TT.expressView = ad.feedView;
+        TT.identifier = _supplier.identifier;
+        [self.nativeAds addObject:TT];
+    }
+    
+    [self.adspot.manager setECPMIfNeeded:feedAdDataArray.firstObject.ecpm supplier:_supplier];
+    [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
+    [self.adspot.manager checkTargetWithResultfulSupplier:_supplier loadAdState:AdvanceSupplierLoadAdSuccess];
 }
 
 - (void)feedAdsManager:(KSFeedAdsManager *)adsManager didFailWithError:(NSError *)error {
-    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
-    _supplier.state = AdvanceSdkSupplierStateFailed;
-    if (_supplier.isParallel == YES) { // 并行不释放 只上报
-        return;
-    }
+    [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
+    [self.adspot.manager checkTargetWithResultfulSupplier:_supplier loadAdState:AdvanceSupplierLoadAdFailed];
 }
 
 - (void)feedAdViewWillShow:(KSFeedAd *)feedAd {
-    [_adspot reportEventWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
+    [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
     AdvanceNativeExpressAd *nativeAd = [self returnExpressViewWithAdView:(UIView *)feedAd.feedView];
     if (nativeAd) {
         if ([_delegate respondsToSelector:@selector(didShowNativeExpressAd:spotId:extra:)]) {
             [_delegate didShowNativeExpressAd:nativeAd spotId:self.adspot.adspotid extra:self.adspot.ext];
         }
     }
-
-
 }
 
 - (void)feedAdDidClick:(KSFeedAd *)feedAd {
-    [_adspot reportEventWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
+    [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
     AdvanceNativeExpressAd *nativeAd = [self returnExpressViewWithAdView:(UIView *)feedAd.feedView];
-
     if (nativeAd) {
         if ([_delegate respondsToSelector:@selector(didClickNativeExpressAd:spotId:extra:)]) {
             [_delegate didClickNativeExpressAd:nativeAd spotId:self.adspot.adspotid extra:self.adspot.ext];
@@ -183,7 +137,6 @@
     }
     return nil;
 }
-
 
 
 @end

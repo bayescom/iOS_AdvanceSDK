@@ -8,8 +8,6 @@
 #import <objc/runtime.h>
 #import <objc/message.h>
 #import "AdvanceSplash.h"
-#import "AdvPolicyServiceDelegate.h"
-#import "AdvPolicyModel.h"
 #import "UIApplication+Adv.h"
 #import "AdvLog.h"
 #import "AdvSupplierLoader.h"

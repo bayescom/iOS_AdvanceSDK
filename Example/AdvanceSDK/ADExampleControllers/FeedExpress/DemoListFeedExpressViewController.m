@@ -10,13 +10,12 @@
 #import "CellBuilder.h"
 #import "BYExamCellModel.h"
 
-#import "DemoUtils.h"
 #import <AdvanceSDK/AdvSdkConfig.h>
 #import <AdvanceSDK/AdvanceNativeExpress.h>
 #import <AdvanceSDK/AdvanceNativeExpressAd.h>
+
 @interface DemoListFeedExpressViewController () <UITableViewDelegate, UITableViewDataSource, AdvanceNativeExpressDelegate>
 @property (strong, nonatomic) UITableView *tableView;
-
 @property(strong,nonatomic) AdvanceNativeExpress *advanceFeed;
 @property (nonatomic, strong) NSMutableArray *arrayData;
 
@@ -42,14 +41,11 @@
 
 - (void)loadBtnAction:(id)sender {
     _arrayData = [NSMutableArray arrayWithArray:[CellBuilder dataFromJsonFile:@"cell01"]];
-//    _advanceFeed = [[AdvanceNativeExpress alloc] initWithAdspotId:@"11111112" viewController:self adSize:CGSizeMake(self.view.bounds.size.width, 300)];
-//    _advanceFeed = [[AdvanceNativeExpress alloc] initWithAdspotId:self.adspotId viewController:self adSize:CGSizeMake(self.view.bounds.size.width, 300)];
     if (self.advanceFeed) {
         self.advanceFeed = nil;
     }
-    // adSize 高度设置0
+    // adSize 高度设置0自适应
     _advanceFeed = [[AdvanceNativeExpress alloc] initWithAdspotId:self.adspotId customExt:self.ext viewController:self adSize:CGSizeMake(self.view.bounds.size.width, 0)];
-
     _advanceFeed.delegate = self;
     [_advanceFeed loadAd];
 }

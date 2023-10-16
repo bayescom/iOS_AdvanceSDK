@@ -15,8 +15,9 @@
 #import "AdvLog.h"
 #import "CSJRenderFeedAdView.h"
 #import "AdvRenderFeedAd.h"
+#import "AdvanceAdapter.h"
 
-@interface CsjRenderFeedAdapter () <BUNativeAdsManagerDelegate>
+@interface CsjRenderFeedAdapter () <BUNativeAdsManagerDelegate, AdvanceAdapter>
 
 @property (nonatomic, strong) BUNativeAdsManager *csj_ad;
 @property (nonatomic, weak) AdvanceRenderFeed *adspot;
@@ -28,7 +29,7 @@
 @implementation CsjRenderFeedAdapter
 
 - (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(id)adspot {
-    if (self = [super initWithSupplier:supplier adspot:adspot]) {
+    if (self = [super init]) {
         _adspot = adspot;
         _supplier = supplier;
         
@@ -39,85 +40,48 @@
         slot.imgSize = [BUSize sizeBy:BUProposalSize_Feed690_388];
         _csj_ad = [[BUNativeAdsManager alloc] initWithSlot:slot];
         _csj_ad.delegate = self;
-
+        
     }
     return self;
 }
 
-- (void)supplierStateLoad {
-    ADV_LEVEL_INFO_LOG(@"加载穿山甲 supplier: %@", _supplier);
-    _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
+- (void)loadAd {
     [_csj_ad loadAdDataWithCount:1];
 }
 
-- (void)supplierStateInPull {
-    ADV_LEVEL_INFO_LOG(@"穿山甲加载中...");
-}
-
-- (void)supplierStateSuccess {
-    ADV_LEVEL_INFO_LOG(@"穿山甲 成功");
+- (void)winnerAdapterToShowAd {
     if ([self.delegate respondsToSelector:@selector(didFinishLoadingRenderFeedAd:spotId:)]) {
         [self.delegate didFinishLoadingRenderFeedAd:self.feedAd spotId:self.adspot.adspotid];
-    }
-}
-
-- (void)supplierStateFailed {
-    ADV_LEVEL_INFO_LOG(@"穿山甲 失败");
-    [self.adspot loadNextSupplierIfHas];
-}
-
-
-- (void)loadAd {
-    [super loadAd];
-}
-
-- (void)deallocAdapter {
-    ADV_LEVEL_INFO_LOG(@"%s", __func__);
-    if (self.csj_ad) {
-        self.csj_ad.delegate = nil;
-        self.csj_ad = nil;
     }
 }
 
 - (void)dealloc {
     ADV_LEVEL_INFO_LOG(@"%s", __func__);
-    [self deallocAdapter];
 }
 
 #pragma mark - BUNativeAdsManagerDelegate
 - (void)nativeAdsManagerSuccessToLoad:(BUNativeAdsManager *)adsManager nativeAds:(NSArray<BUNativeAd *> *_Nullable)nativeAdDataArray {
     
-    BUNativeAd *nativeAd = nativeAdDataArray.firstObject;
-    NSDictionary *ext = nativeAd.data.mediaExt;
-    _supplier.supplierPrice = [ext[@"price"] integerValue];
-    [_adspot reportEventWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
-    [_adspot reportEventWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
-    
-    
-    AdvRenderFeedAdElement *element = [self generateFeedAdElementWithNativeAd:nativeAd];
-    CSJRenderFeedAdView *csjFeedAdView = [[CSJRenderFeedAdView alloc] initWithNativeAd:nativeAd delegate:self.delegate adSpot:self.adspot supplier:self.supplier];
-    
-    self.feedAd = [[AdvRenderFeedAd alloc] initWithFeedAdView:csjFeedAdView feedAdElement:element];
-    
-    if (_supplier.isParallel == YES) {
-        _supplier.state = AdvanceSdkSupplierStateSuccess;
+    if (!nativeAdDataArray.count) {
+        [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:[NSError errorWithDomain:@"BUNative.com" code:1 userInfo:@{@"msg":@"无广告返回"}]];
+        [self.adspot.manager checkTargetWithResultfulSupplier:_supplier loadAdState:AdvanceSupplierLoadAdFailed];
         return;
     }
     
-    if ([self.delegate respondsToSelector:@selector(didFinishLoadingRenderFeedAd:spotId:)]) {
-        [self.delegate didFinishLoadingRenderFeedAd:self.feedAd spotId:self.adspot.adspotid];
-    }
+    BUNativeAd *nativeAd = nativeAdDataArray.firstObject;
+    NSDictionary *ext = nativeAd.data.mediaExt;
+    AdvRenderFeedAdElement *element = [self generateFeedAdElementWithNativeAd:nativeAd];
+    CSJRenderFeedAdView *csjFeedAdView = [[CSJRenderFeedAdView alloc] initWithNativeAd:nativeAd delegate:self.delegate adSpot:self.adspot supplier:self.supplier];
+    self.feedAd = [[AdvRenderFeedAd alloc] initWithFeedAdView:csjFeedAdView feedAdElement:element];
     
+    [self.adspot.manager setECPMIfNeeded:[ext[@"price"] integerValue] supplier:_supplier];
+    [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
+    [self.adspot.manager checkTargetWithResultfulSupplier:_supplier loadAdState:AdvanceSupplierLoadAdSuccess];
 }
 
 - (void)nativeAdsManager:(BUNativeAdsManager *)adsManager didFailWithError:(NSError *)error {
-    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
-    _supplier.state = AdvanceSdkSupplierStateFailed;
-    if (_supplier.isParallel == YES) { // 并行不释放 只上报
-        return;
-    }
-
-    _csj_ad = nil;
+    [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
+    [self.adspot.manager checkTargetWithResultfulSupplier:_supplier loadAdState:AdvanceSupplierLoadAdFailed];
 }
 
 - (AdvRenderFeedAdElement *)generateFeedAdElementWithNativeAd:(BUNativeAd *)nativeAd {

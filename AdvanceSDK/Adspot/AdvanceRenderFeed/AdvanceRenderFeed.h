@@ -23,9 +23,6 @@ NS_ASSUME_NONNULL_BEGIN
                        customExt:(nullable NSDictionary *)ext
                   viewController:(UIViewController *)viewController;
 
-- (instancetype)initWithAdspotId:(NSString *)adspotid
-                  viewController:(UIViewController *)viewController;
-
 -(void)loadAd;
 
 @end

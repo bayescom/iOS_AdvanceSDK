@@ -22,72 +22,52 @@
 #import "AdvanceNativeExpress.h"
 #import "AdvLog.h"
 #import "AdvanceNativeExpressAd.h"
+#import "AdvanceAdapter.h"
 
-@interface GdtNativeExpressAdapter () <GDTNativeExpressAdDelegete>
+@interface GdtNativeExpressAdapter () <GDTNativeExpressAdDelegete, AdvanceAdapter>
 @property (nonatomic, strong) GDTNativeExpressAd *gdt_ad;
 @property (nonatomic, weak) AdvanceNativeExpress *adspot;
 @property (nonatomic, strong) AdvSupplier *supplier;
 @property (nonatomic, strong) NSMutableArray<__kindof AdvanceNativeExpressAd *> *nativeAds;
+
 @end
 
 @implementation GdtNativeExpressAdapter
 
-
 - (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(id)adspot {
-    if (self = [super initWithSupplier:supplier adspot:adspot]) {
+    if (self = [super init]) {
         _adspot = adspot;
         _supplier = supplier;
         _gdt_ad = [[GDTNativeExpressAd alloc] initWithPlacementId:_supplier.adspotid
                                                            adSize:_adspot.adSize];
         _gdt_ad.videoMuted = _adspot.muted;
         _gdt_ad.detailPageVideoMuted = _adspot.muted;
+        _gdt_ad.delegate = self;
     }
     return self;
 }
 
-- (void)supplierStateLoad {
-    ADV_LEVEL_INFO_LOG(@"加载广点通 supplier: %@", _supplier);
-    _gdt_ad.delegate = self;
-    _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
+- (void)loadAd {
     [_gdt_ad loadAd:1];
 }
 
-- (void)supplierStateInPull {
-    ADV_LEVEL_INFO_LOG(@"广点通加载中...");
-}
-
-- (void)supplierStateSuccess {
-    ADV_LEVEL_INFO_LOG(@"广点通 成功");
+- (void)winnerAdapterToShowAd {
+    /// 广告加载成功回调
     if ([_delegate respondsToSelector:@selector(didFinishLoadingNativeExpressAds:spotId:)]) {
         [_delegate didFinishLoadingNativeExpressAds:self.nativeAds spotId:self.adspot.adspotid];
     }
-}
-
-- (void)supplierStateFailed {
-    ADV_LEVEL_INFO_LOG(@"广点通 失败");
-    [self.adspot loadNextSupplierIfHas];
-}
-
-
-- (void)loadAd {
-    [super loadAd];
-}
-
-- (void)deallocAdapter {
-    ADV_LEVEL_INFO_LOG(@"%s", __func__);
-    if (self.gdt_ad) {
-        self.gdt_ad.delegate = nil;
-        self.gdt_ad = nil;
-    }
+    
+    /// 渲染广告
+    [self.nativeAds enumerateObjectsUsingBlock:^(__kindof AdvanceNativeExpressAd * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        GDTNativeExpressAdView *expressView = (GDTNativeExpressAdView *)obj.expressView;
+        expressView.controller = self.adspot.viewController;
+        [expressView render];
+    }];
 }
 
 - (void)dealloc {
     ADV_LEVEL_INFO_LOG(@"%s", __func__);
-
-    [self deallocAdapter];
-//    ADVLog(@"%s", __func__);
 }
-
 
 
 // MARK: ======================= GDTNativeExpressAdDelegete =======================
@@ -95,96 +75,55 @@
  * 拉取广告成功的回调
  */
 - (void)nativeExpressAdSuccessToLoad:(GDTNativeExpressAd *)nativeExpressAd views:(NSArray<__kindof GDTNativeExpressAdView *> *)views {
-    if (views == nil || views.count == 0) {
-        [self.adspot reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:nil];
-        _supplier.state = AdvanceSdkSupplierStateFailed;
-        if (_supplier.isParallel == YES) {
-            return;
-        }
-
-//        if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdFailedWithSdkId:error:)]) {
-//            [_delegate advanceNativeExpressOnAdFailedWithSdkId:_supplier.identifier error:[NSError errorWithDomain:@"" code:100000 userInfo:@{@"msg":@"无广告返回"}]];
-//        }
-    } else {
-        _supplier.supplierPrice = views.firstObject.eCPM;
-        [_adspot reportEventWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
-        [_adspot reportEventWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
-        
-        self.nativeAds = [NSMutableArray array];
-        for (GDTNativeExpressAdView *view in views) {
-            
-            AdvanceNativeExpressAd *TT = [[AdvanceNativeExpressAd alloc] initWithViewController:_adspot.viewController];
-            TT.expressView = view;
-            TT.identifier = _supplier.identifier;
-            TT.price = (view.eCPM == 0) ?  _supplier.supplierPrice : view.eCPM;
-            [self.nativeAds addObject:TT];
-            
-            view.controller = _adspot.viewController;
-            [view render];
-
-        }
-        
-        if (_supplier.isParallel == YES) {
-            _supplier.state = AdvanceSdkSupplierStateSuccess;
-//            NSLog(@"修改状态: %@", _supplier);
-            return;
-        }
-
-        
-        if ([_delegate respondsToSelector:@selector(didFinishLoadingNativeExpressAds:spotId:)]) {
-            [_delegate didFinishLoadingNativeExpressAds:self.nativeAds spotId:self.adspot.adspotid];
-        }
-        
+    if (!views.count) {
+        [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:[NSError errorWithDomain:@"GDTNative.com" code:1 userInfo:@{@"msg":@"无广告返回"}]];
+        [self.adspot.manager checkTargetWithResultfulSupplier:_supplier loadAdState:AdvanceSupplierLoadAdFailed];
+        return;
     }
+
+    self.nativeAds = [NSMutableArray array];
+    for (GDTNativeExpressAdView *view in views) {
+        AdvanceNativeExpressAd *TT = [[AdvanceNativeExpressAd alloc] init];
+        TT.expressView = view;
+        TT.identifier = _supplier.identifier;
+        [self.nativeAds addObject:TT];
+    }
+    
+    [self.adspot.manager setECPMIfNeeded:views.firstObject.eCPM supplier:_supplier];
+    [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
+    [self.adspot.manager checkTargetWithResultfulSupplier:_supplier loadAdState:AdvanceSupplierLoadAdSuccess];
 }
 
 /**
  * 拉取广告失败的回调
  */
 - (void)nativeExpressAdFailToLoad:(GDTNativeExpressAd *)nativeExpressAd error:(NSError *)error {
-    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
-//    if ([_delegate respondsToSelector:@selector(advanceNativeExpressOnAdFailedWithSdkId:error:)]) {
-//        [_delegate advanceNativeExpressOnAdFailedWithSdkId:_supplier.identifier error:error];
-//    }
-    _supplier.state = AdvanceSdkSupplierStateFailed;
-    if (_supplier.isParallel == YES) {
-        return;
-    }
-
-    _gdt_ad = nil;
+    [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
+    [self.adspot.manager checkTargetWithResultfulSupplier:_supplier loadAdState:AdvanceSupplierLoadAdFailed];
 }
 
-/**
- * 渲染原生模板广告失败
- */
+- (void)nativeExpressAdViewRenderSuccess:(GDTNativeExpressAdView *)nativeExpressAdView {
+    AdvanceNativeExpressAd *nativeAd = [self returnExpressViewWithAdView:(UIView *)nativeExpressAdView];
+    if (nativeAd) {
+        if ([_delegate respondsToSelector:@selector(nativeExpressAdViewRenderSuccess:spotId:extra:)]) {
+            [_delegate nativeExpressAdViewRenderSuccess:nativeAd spotId:self.adspot.adspotid extra:self.adspot.ext];
+        }
+    }
+}
+
 - (void)nativeExpressAdViewRenderFail:(GDTNativeExpressAdView *)nativeExpressAdView {
-    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:nil];
-    
+    [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:nil];
     AdvanceNativeExpressAd *nativeAd = [self returnExpressViewWithAdView:(UIView *)nativeExpressAdView];
     if (nativeAd) {
         if ([_delegate respondsToSelector:@selector(nativeExpressAdViewRenderFail:spotId:extra:)]) {
             [_delegate nativeExpressAdViewRenderFail:nativeAd spotId:self.adspot.adspotid extra:self.adspot.ext];
         }
     }
-    _gdt_ad = nil;
-}
-
-- (void)nativeExpressAdViewRenderSuccess:(GDTNativeExpressAdView *)nativeExpressAdView {
-    
-    AdvanceNativeExpressAd *nativeAd = [self returnExpressViewWithAdView:(UIView *)nativeExpressAdView];
-
-    if (nativeAd) {
-        if ([_delegate respondsToSelector:@selector(nativeExpressAdViewRenderSuccess:spotId:extra:)]) {
-            [_delegate nativeExpressAdViewRenderSuccess:nativeAd spotId:self.adspot.adspotid extra:self.adspot.ext];
-        }
-    }
-    
 }
 
 - (void)nativeExpressAdViewClicked:(GDTNativeExpressAdView *)nativeExpressAdView {
-    [_adspot reportEventWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
+    [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
     AdvanceNativeExpressAd *nativeAd = [self returnExpressViewWithAdView:(UIView *)nativeExpressAdView];
-    
     if (nativeAd) {
         if ([_delegate respondsToSelector:@selector(didClickNativeExpressAd:spotId:extra:)]) {
             [_delegate didClickNativeExpressAd:nativeAd spotId:self.adspot.adspotid extra:self.adspot.ext];
@@ -202,9 +141,8 @@
 }
 
 - (void)nativeExpressAdViewExposure:(GDTNativeExpressAdView *)nativeExpressAdView {
-    [_adspot reportEventWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
+    [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
     AdvanceNativeExpressAd *nativeAd = [self returnExpressViewWithAdView:(UIView *)nativeExpressAdView];
-
     if (nativeAd) {
         if ([_delegate respondsToSelector:@selector(didShowNativeExpressAd:spotId:extra:)]) {
             [_delegate didShowNativeExpressAd:nativeAd spotId:self.adspot.adspotid extra:self.adspot.ext];
@@ -239,4 +177,5 @@
     }
     return nil;
 }
+
 @end

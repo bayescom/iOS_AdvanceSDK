@@ -7,7 +7,6 @@
 //
 
 #import "AdvanceBaseAdSpot.h"
-
 #import <UIKit/UIKit.h>
 #import "AdvanceNativeExpressDelegate.h"
 
@@ -32,10 +31,6 @@ NS_ASSUME_NONNULL_BEGIN
 /// @param size 尺寸
 - (instancetype)initWithAdspotId:(NSString *)adspotid
                        customExt:(nullable NSDictionary *)ext
-                  viewController:(UIViewController *)viewController
-                          adSize:(CGSize)size;
-
-- (instancetype)initWithAdspotId:(NSString *)adspotid
                   viewController:(UIViewController *)viewController
                           adSize:(CGSize)size;
 

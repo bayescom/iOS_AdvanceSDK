@@ -5,17 +5,12 @@
 //  Created by CherryKing on 2020/4/9.
 //  Copyright © 2020 bayescom. All rights reserved.
 //
-#import "AdvanceBaseAdapter.h"
-#import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
-#import "AdvanceNativeExpressDelegate.h"
 
-@class AdvSupplier;
-@class AdvanceNativeExpress;
+#import "AdvanceNativeExpressDelegate.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface GdtNativeExpressAdapter : AdvanceBaseAdapter
+@interface GdtNativeExpressAdapter : NSObject
 @property (nonatomic, weak) id<AdvanceNativeExpressDelegate> delegate;
 
 @end

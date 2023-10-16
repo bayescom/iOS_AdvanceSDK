@@ -16,8 +16,9 @@
 #import "AdvLog.h"
 #import "GdtRenderFeedAdView.h"
 #import "AdvRenderFeedAd.h"
+#import "AdvanceAdapter.h"
 
-@interface GdtRenderFeedAdapter () <GDTUnifiedNativeAdDelegate>
+@interface GdtRenderFeedAdapter () <GDTUnifiedNativeAdDelegate, AdvanceAdapter>
 
 @property (nonatomic, strong) GDTUnifiedNativeAd *gdt_ad;
 @property (nonatomic, weak) AdvanceRenderFeed *adspot;
@@ -29,7 +30,7 @@
 @implementation GdtRenderFeedAdapter
 
 - (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(id)adspot {
-    if (self = [super initWithSupplier:supplier adspot:adspot]) {
+    if (self = [super init]) {
         _adspot = adspot;
         _supplier = supplier;
         _gdt_ad = [[GDTUnifiedNativeAd alloc] initWithPlacementId:_supplier.adspotid];
@@ -38,77 +39,39 @@
     return self;
 }
 
-- (void)supplierStateLoad {
-    ADV_LEVEL_INFO_LOG(@"加载广点通 supplier: %@", _supplier);
-    _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
+- (void)loadAd {
     [_gdt_ad loadAd];
 }
 
-- (void)supplierStateInPull {
-    ADV_LEVEL_INFO_LOG(@"广点通加载中...");
-}
-
-- (void)supplierStateSuccess {
-    ADV_LEVEL_INFO_LOG(@"广点通 成功");
+- (void)winnerAdapterToShowAd {
     if ([self.delegate respondsToSelector:@selector(didFinishLoadingRenderFeedAd:spotId:)]) {
         [self.delegate didFinishLoadingRenderFeedAd:self.feedAd spotId:self.adspot.adspotid];
     }
 }
 
-- (void)supplierStateFailed {
-    ADV_LEVEL_INFO_LOG(@"广点通 失败");
-    [self.adspot loadNextSupplierIfHas];
-}
-
-
-- (void)loadAd {
-    [super loadAd];
-}
-
-- (void)deallocAdapter {
-    ADV_LEVEL_INFO_LOG(@"%s", __func__);
-    if (self.gdt_ad) {
-        self.gdt_ad.delegate = nil;
-        self.gdt_ad = nil;
-    }
-}
-
 - (void)dealloc {
     ADV_LEVEL_INFO_LOG(@"%s", __func__);
-
-    [self deallocAdapter];
-//    ADVLog(@"%s", __func__);
 }
+
 
 #pragma mark - GDTUnifiedNativeAdDelegate
 - (void)gdt_unifiedNativeAdLoaded:(NSArray<GDTUnifiedNativeAdDataObject *> *)unifiedNativeAdDataObjects error:(NSError *)error {
     
     if (error) {
-        [self.adspot reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
-        _supplier.state = AdvanceSdkSupplierStateFailed;
-        if (_supplier.isParallel == YES) {
-            return;
-        }
-    } else {
-        GDTUnifiedNativeAdDataObject *dataObject = unifiedNativeAdDataObjects.firstObject;
-        _supplier.supplierPrice = dataObject.eCPM;
-        [_adspot reportEventWithType:AdvanceSdkSupplierRepoBidding supplier:_supplier error:nil];
-        [_adspot reportEventWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
-        
-        AdvRenderFeedAdElement *element = [self generateFeedAdElementWithDataObject:dataObject];
-        GdtRenderFeedAdView *gdtFeedAdView = [[GdtRenderFeedAdView alloc] initWithDataObject:dataObject delegate:self.delegate adSpot:self.adspot supplier:self.supplier];
-        
-        self.feedAd = [[AdvRenderFeedAd alloc] initWithFeedAdView:gdtFeedAdView feedAdElement:element];
-        
-        if (_supplier.isParallel == YES) {
-            _supplier.state = AdvanceSdkSupplierStateSuccess;
-            return;
-        }
-        
-        if ([self.delegate respondsToSelector:@selector(didFinishLoadingRenderFeedAd:spotId:)]) {
-            [self.delegate didFinishLoadingRenderFeedAd:self.feedAd spotId:self.adspot.adspotid];
-        }
+        [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
+        [self.adspot.manager checkTargetWithResultfulSupplier:_supplier loadAdState:AdvanceSupplierLoadAdFailed];
+        return;
     }
+     
+    GDTUnifiedNativeAdDataObject *dataObject = unifiedNativeAdDataObjects.firstObject;
+    AdvRenderFeedAdElement *element = [self generateFeedAdElementWithDataObject:dataObject];
+    GdtRenderFeedAdView *gdtFeedAdView = [[GdtRenderFeedAdView alloc] initWithDataObject:dataObject delegate:self.delegate adSpot:self.adspot supplier:self.supplier];
+    self.feedAd = [[AdvRenderFeedAd alloc] initWithFeedAdView:gdtFeedAdView feedAdElement:element];
+    
+    [self.adspot.manager setECPMIfNeeded:dataObject.eCPM supplier:_supplier];
+    [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
+    [self.adspot.manager checkTargetWithResultfulSupplier:_supplier loadAdState:AdvanceSupplierLoadAdSuccess];
+        
 }
 
 - (AdvRenderFeedAdElement *)generateFeedAdElementWithDataObject:(GDTUnifiedNativeAdDataObject *)dataObject {
