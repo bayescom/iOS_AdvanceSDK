@@ -78,7 +78,7 @@
 
 - (void)nativeAdObjectsSuccessLoad:(NSArray*)nativeAds nativeAd:(BaiduMobAdNative *)nativeAd {
     if (!nativeAds.count) {
-        [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:[NSError errorWithDomain:@"BaiduMob.com" code:1 userInfo:@{@"msg":@"无广告返回"}]];
+        [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:[NSError errorWithDomain:@"BDAdErrorDomain" code:1 userInfo:@{@"msg":@"无广告返回"}]];
         [self.adspot.manager checkTargetWithResultfulSupplier:_supplier loadAdState:AdvanceSupplierLoadAdFailed];
         return;
     }

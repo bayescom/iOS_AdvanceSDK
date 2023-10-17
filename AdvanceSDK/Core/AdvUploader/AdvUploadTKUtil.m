@@ -19,30 +19,13 @@
 
 @implementation AdvUploadTKUtil
 
-- (void)setServerTime:(NSTimeInterval)serverTime {
-    _serverTime = serverTime;
-}
-
-- (void)setReqid:(NSString *)reqid {
-    _reqid = reqid;
-}
-
-- (void)reportWithUploadArr:(NSArray<NSString *> *)uploadArr error:(NSError *)error {
+- (void)reportWithUploadUrls:(NSArray<NSString *> *)uploadUrls {
     NSMutableArray *temp = [NSMutableArray array];
-    for (id obj in uploadArr) {
-        @try {
-            NSString *urlString = obj;
-//            urlString = [self paramValueOfUrl:obj withParam:@"&reqid"];
-            NSTimeInterval timeStamp = [[NSDate dateWithTimeIntervalSinceNow:0] timeIntervalSince1970] * 1000;
-            urlString = [urlString stringByReplacingOccurrencesOfString:@"__TIME__" withString:[NSString stringWithFormat:@"%0.0f", timeStamp]];
-            
-            
-            
-            [temp addObject:urlString];
-            
-        } @catch (NSException *exception) {
-        } @finally {
-        }
+    for (id obj in uploadUrls) {
+        NSString *urlString = obj;
+        NSTimeInterval timeStamp = [[NSDate dateWithTimeIntervalSinceNow:0] timeIntervalSince1970] * 1000;
+        urlString = [urlString stringByReplacingOccurrencesOfString:@"__TIME__" withString:[NSString stringWithFormat:@"%0.0f", timeStamp]];
+        [temp addObject:urlString];
     }
     
     [AdvUploadTKManager defaultManager].maxConcurrentOperationCount = MAXOPERATIONCOUNT;
@@ -50,30 +33,17 @@
     [[AdvUploadTKManager defaultManager] uploadTKWithUrls:[temp copy]];
 }
 
-- (NSString *)paramValueOfUrl:(NSString *)url withParam:(NSString *)param {
-    @try {
-        if ([url containsString:param]) {
-            NSRange range =  [url rangeOfString:param];
-            
-            // 定义要删除按的reqid
-            NSString *reqidValue = [NSString stringWithFormat:@"reqid=%@", self.reqid];
-            
-            // 找到原url当中 reqid=balabalabala
-            NSRange rangeReq = NSMakeRange(range.location + 1, 38);
-            NSString * parametersString = [url substringWithRange:rangeReq];
-    //        [url  substringFromIndex:range.location];
-            if ([parametersString containsString:@"&"]) { // reqid=balabalabala 包含了& 说明截取不准确返回的url有问题 则不进行替换工作
-                return url;
-            }
-            url = [url stringByReplacingOccurrencesOfString:parametersString withString:reqidValue];
-        }
-    } @catch (NSException *exception) {
-        return url;
+#pragma mark: - loadedtk 参数拼接
+- (NSMutableArray *)loadedtkUrlWithArr:(NSArray<NSString *> *)uploadArr {
+    NSMutableArray *temp = [NSMutableArray arrayWithCapacity:uploadArr.count];
+    for (id obj in uploadArr) {
+        NSString *loadedtk = [self joinTimeUrlWithObj:obj type:AdvanceSdkSupplierRepoLoaded];
+        [temp addObject:loadedtk];
     }
-    return url;
+    return temp;
 }
 
-#pragma succeedtk 的参数拼接
+#pragma mark: - succeedtk 参数拼接
 - (NSMutableArray *)succeedtkUrlWithArr:(NSArray<NSString *> *)uploadArr price:(NSInteger)price {
     NSMutableArray *temp = [NSMutableArray arrayWithCapacity:uploadArr.count];
     for (id obj in uploadArr.mutableCopy) {
@@ -83,58 +53,68 @@
     return temp;
 }
 
-
-#pragma loadedtk 的参数拼接
-- (NSMutableArray *)loadedtkUrlWithArr:(NSArray<NSString *> *)uploadArr {
-    NSMutableArray *temp = [NSMutableArray arrayWithCapacity:uploadArr.count];
-    for (id obj in uploadArr.mutableCopy) {
-        NSString *loadedtk = [self joinTimeUrlWithObj:obj type:AdvanceSdkSupplierRepoLoaded];
-        [temp addObject:loadedtk];
-    }
-    return temp;
-}
-
-#pragma imptk 的参数拼接
-- (NSMutableArray *)imptkUrlWithArr:(NSArray<NSString *> *)uploadArr price:(NSInteger)price {
-    NSMutableArray *temp = [NSMutableArray arrayWithCapacity:uploadArr.count];
-    for (id obj in uploadArr.mutableCopy) {
-        NSString *loadedtk = [self joinTimeUrlWithObj:obj type:AdvanceSdkSupplierRepoImped];
-        loadedtk = [self joinPriceUrlWithObj:loadedtk price:price];
-        [temp addObject:loadedtk];
-    }
-    return temp;
-}
-
-#pragma failedtk 的参数拼接
+#pragma mark: failedtk 参数拼接
 - (NSMutableArray *)failedtkUrlWithArr:(NSArray<NSString *> *)uploadArr error:(NSError *)error {
     NSMutableArray *temp = [NSMutableArray arrayWithCapacity:uploadArr.count];
     for (id obj in uploadArr.mutableCopy) {
-        NSString *failed = [self joinFailedUrlWithObj:obj error:error];
-        [temp addObject:failed];
+        NSString *failedtk = [self joinFailedUrlWithObj:obj error:error];
+        [temp addObject:failedtk];
+    }
+    return temp;
+}
+
+#pragma mark: - imptk 参数拼接
+- (NSMutableArray *)imptkUrlWithArr:(NSArray<NSString *> *)uploadArr price:(NSInteger)price {
+    NSMutableArray *temp = [NSMutableArray arrayWithCapacity:uploadArr.count];
+    for (id obj in uploadArr.mutableCopy) {
+        NSString *imptk = [self joinTimeUrlWithObj:obj type:AdvanceSdkSupplierRepoImped];
+        imptk = [self joinPriceUrlWithObj:imptk price:price];
+        [temp addObject:imptk];
     }
     return temp;
 }
  
-#pragma 错误码参数拼接
+/// 拼接时间戳
+/// @param urlString url
+/// @param repoType AdvanceSdkSupplierRepoType
+- (NSString *)joinTimeUrlWithObj:(NSString *)urlString type:(AdvanceSdkSupplierRepoType)repoType {
+    NSTimeInterval serverTime = [[NSDate date] timeIntervalSince1970] * 1000 - _requestTime;
+    if (serverTime > 0) {
+        if (repoType == AdvanceSdkSupplierRepoLoaded) {
+            return [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=l_%.0f&track_time",serverTime]];
+        } else if (repoType == AdvanceSdkSupplierRepoImped) {
+            return [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=tt_%.0f&track_time",serverTime]];
+        }
+    }
+    return urlString;
+}
+
+/// 拼接价格
+- (NSString *)joinPriceUrlWithObj:(NSString *)urlString price:(NSInteger)price {
+    if (price > 0) {
+        return  [NSString stringWithFormat:@"%@&bidResult=%ld", urlString, (long)price];
+    } else {
+        return urlString;
+    }
+}
+
+/// 拼接错误码
 - (NSString *)joinFailedUrlWithObj:(NSString *)urlString error:(NSError *)error {
     ADV_LEVEL_INFO_LOG(@"上报错误: %@  %@", error.domain, error);
     if (error) {
-        
-        if ([error.domain isEqualToString:@"KSADErrorDomain"]) { // 快手SDK
+        if ([error.domain.lowercaseString containsString:@"ks"]) { // 快手SDK
             return [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=err_ks_%ld&track_time",(long)error.code]];
-        } else if ([error.domain isEqualToString:@"BDAdErrorDomain"]) {
+        } else if ([error.domain.lowercaseString containsString:@"bd"]) { // 百度SDK
             return [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=err_bd_%ld&track_time",(long)error.code]];
-
-        } else if ([error.domain isEqualToString:@"com.pangle.buadsdk"] || [error.domain isEqualToString:@"com.buadsdk"]) { // 新版穿山甲sdk报错
+        } else if ([error.domain.lowercaseString containsString:@"bu"]) { // 穿山甲SDK
             return [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=err_csj_%ld&track_time",(long)error.code]];
         } else if ([error.domain isEqualToString:@"com.bytedance.GroMore"]) { // GM
             return [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=err_gm_%ld&track_time",(long)error.code]];
-        } else if ([error.domain isEqualToString:@"com.bytedance.buadsdk"]) {// 穿山甲sdk报错
-            return [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=err_csj_%ld&track_time",(long)error.code]];
-        } else if ([error.domain isEqualToString:@"GDTAdErrorDomain"]) {// 广点通
+        } else if ([error.domain.lowercaseString containsString:@"mercury"])  {// 倍业SDK
+            return [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=err_mer_%ld&track_time",(long)error.code]];
+        } else if ([error.domain.lowercaseString containsString:@"gdt"]) {// 广点通
             NSString *url = nil;
             if (error.code == 6000 && error.localizedDescription != nil) {
-                
                 @try {
                     //过滤字符串前后的空格
                     NSString *errorDescription = [error.localizedDescription stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
@@ -152,61 +132,9 @@
                 url = [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=err_gdt_%ld&track_time",(long)error.code]];
             }
             return url;
-        } else {// 倍业
-            return [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=err_mer_%ld&track_time",(long)error.code]];
         }
     }
     return urlString;
 }
 
-
-/// 拼接时间戳
-/// @param urlString url
-/// @param repoType AdvanceSdkSupplierRepoType
-- (NSString *)joinTimeUrlWithObj:(NSString *)urlString type:(AdvanceSdkSupplierRepoType)repoType {
-    NSTimeInterval serverTime = [[NSDate date] timeIntervalSince1970]*1000 - _serverTime;
-    if (serverTime > 0) {
-        if (repoType == AdvanceSdkSupplierRepoLoaded) {
-            return [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=l_%.0f&track_time",serverTime]];
-        } else if (repoType == AdvanceSdkSupplierRepoImped) {
-            return [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=tt_%.0f&track_time",serverTime]];
-        }
-    }
-    return urlString;
-}
-
-// 拼接价格
-- (NSString *)joinPriceUrlWithObj:(NSString *)urlString price:(NSInteger)price {
-    if (price > 0) {
-        return  [NSString stringWithFormat:@"%@&bidResult=%ld", urlString, (long)price];
-    } else {
-        return urlString;
-    }
-}
-
-
-
-- (void)reportEventWithParams:(NSDictionary *)params {
-    NSURL *url = [NSURL URLWithString:AdvanceSdkEventUrl];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:20];
-    
-    NSError *parseError = nil;
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:[params copy] options:NSJSONWritingPrettyPrinted error:&parseError];
-    
-    request.HTTPMethod = @"POST";
-    request.HTTPBody = jsonData;
-    //use share session
-    NSURLSession *sharedSession = [NSURLSession sharedSession];
-    
-    NSURLSessionDataTask *dataTask = [sharedSession dataTaskWithRequest:request
-                                                      completionHandler:^(NSData *_Nullable data, NSURLResponse *_Nullable response, NSError *_Nullable error) {
-        // NSURLSession multi thread
-        if (error == nil) {
-            ADV_LEVEL_INFO_LOG(@"上报开屏超时错误");
-
-        }
-    }];
-    [dataTask resume];
-
-}
 @end

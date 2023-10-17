@@ -250,7 +250,8 @@
         if ([_delegate respondsToSelector:@selector(advPolicyServiceFinishBiddingWithWinSupplier:)]) {
             [_delegate advPolicyServiceFinishBiddingWithWinSupplier:target];
         }
-        [self reportEventWithType:AdvanceSdkSupplierRepoBidding supplier:target error:nil];
+        /// 竞胜上报
+        [self reportEventWithType:AdvanceSdkSupplierRepoBidWin supplier:target error:nil];
     }
 }
 
@@ -296,7 +297,7 @@
     NSURLSession *sharedSession = [NSURLSession sharedSession];
     
     
-    self.tkUploadTool.serverTime = [[NSDate date] timeIntervalSince1970]*1000;
+    self.tkUploadTool.requestTime = [[NSDate date] timeIntervalSince1970] * 1000;
     
     
     ADV_LEVEL_INFO_LOG(@"开始请求时间戳: %f", [[NSDate date] timeIntervalSince1970]);
@@ -367,8 +368,6 @@
     [self executeSDKPolicy];
 }
 
-
-
 // MARK: ======================= 数据上报 =======================
 - (void)reportEventWithType:(AdvanceSdkSupplierRepoType)repoType supplier:(AdvSupplier *)supplier error:(nullable NSError *)error{
     /// 收集渠道错误信息
@@ -376,28 +375,27 @@
         [self collectSupplierErrorInfomation:supplier error:error];
     }
     
-    NSArray<NSString *> *uploadArr = nil;
+    NSArray<NSString *> *uploadUrls = nil;
     /// 按照类型判断上报地址
     if (repoType == AdvanceSdkSupplierRepoLoaded) {
-        uploadArr = [self.tkUploadTool loadedtkUrlWithArr:supplier.loadedtk];
+        uploadUrls = [self.tkUploadTool loadedtkUrlWithArr:supplier.loadedtk];
     } else if (repoType == AdvanceSdkSupplierRepoClicked) {
-        uploadArr =  supplier.clicktk;
+        uploadUrls = supplier.clicktk;
     } else if (repoType == AdvanceSdkSupplierRepoSucceed) {
-        uploadArr =  [self.tkUploadTool succeedtkUrlWithArr:supplier.succeedtk price:(supplier.supplierPrice == 0) ? supplier.sdk_price : supplier.supplierPrice];
+        uploadUrls =  [self.tkUploadTool succeedtkUrlWithArr:supplier.succeedtk price:supplier.sdk_price];
     } else if (repoType == AdvanceSdkSupplierRepoImped) {
-        uploadArr =  [self.tkUploadTool imptkUrlWithArr:supplier.imptk price:(supplier.supplierPrice == 0) ? supplier.sdk_price : supplier.supplierPrice];
+        uploadUrls =  [self.tkUploadTool imptkUrlWithArr:supplier.imptk price:supplier.sdk_price];
     } else if (repoType == AdvanceSdkSupplierRepoFailed) {
-        uploadArr =  [self.tkUploadTool failedtkUrlWithArr:supplier.failedtk error:error];
-    } else if (repoType == AdvanceSdkSupplierRepoGMBidding) {
-        uploadArr =  [self.tkUploadTool imptkUrlWithArr:supplier.biddingtk price:(supplier.supplierPrice == 0) ? supplier.sdk_price : supplier.supplierPrice];
+        uploadUrls =  [self.tkUploadTool failedtkUrlWithArr:supplier.failedtk error:error];
+    } else if (repoType == AdvanceSdkSupplierRepoBidWin) {
+        uploadUrls =  [self.tkUploadTool imptkUrlWithArr:supplier.wintk price:supplier.sdk_price];
     }
     
-    if (!uploadArr || uploadArr.count <= 0) {
-        // TODO: 上报地址不存在
+    if (!uploadUrls.count) {
         return;
     }
     // 执行上报请求
-    [self.tkUploadTool reportWithUploadArr:uploadArr error:error];
+    [self.tkUploadTool reportWithUploadUrls:uploadUrls];
     ADV_LEVEL_INFO_LOG(@"%@ = 上报(impid: %@)", ADVStringFromNAdvanceSdkSupplierRepoType(repoType), supplier.name);
 }
 

@@ -68,7 +68,7 @@
 - (void)feedAdsManagerSuccessToLoad:(KSFeedAdsManager *)adsManager nativeAds:(NSArray<KSFeedAd *> *_Nullable)feedAdDataArray {
     self.feedAdArray = feedAdDataArray;
     if (!feedAdDataArray.count) {
-        [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:[NSError errorWithDomain:@"KSFeed.com" code:1 userInfo:@{@"msg":@"无广告返回"}]];
+        [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:[NSError errorWithDomain:@"KSADErrorDomain" code:1 userInfo:@{@"msg":@"无广告返回"}]];
         [self.adspot.manager checkTargetWithResultfulSupplier:_supplier loadAdState:AdvanceSupplierLoadAdFailed];
         return;
     }

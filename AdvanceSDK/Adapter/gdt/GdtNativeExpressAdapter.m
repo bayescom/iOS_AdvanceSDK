@@ -76,7 +76,7 @@
  */
 - (void)nativeExpressAdSuccessToLoad:(GDTNativeExpressAd *)nativeExpressAd views:(NSArray<__kindof GDTNativeExpressAdView *> *)views {
     if (!views.count) {
-        [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:[NSError errorWithDomain:@"GDTNative.com" code:1 userInfo:@{@"msg":@"无广告返回"}]];
+        [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:[NSError errorWithDomain:@"GDTAdErrorDomain" code:1 userInfo:@{@"msg":@"无广告返回"}]];
         [self.adspot.manager checkTargetWithResultfulSupplier:_supplier loadAdState:AdvanceSupplierLoadAdFailed];
         return;
     }

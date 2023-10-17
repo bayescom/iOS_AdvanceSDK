@@ -13,15 +13,17 @@ NS_ASSUME_NONNULL_BEGIN
 NSString * ADVStringFromNAdvanceSdkSupplierRepoType(AdvanceSdkSupplierRepoType type) {
     switch (type) {
         case AdvanceSdkSupplierRepoLoaded:
-            return @"AdvanceSdkSupplierRepoLoaded(发起加载请求上报)";
+            return @"AdvanceSdkSupplierRepoLoaded(广告加载上报)";
         case AdvanceSdkSupplierRepoClicked:
-            return @"AdvanceSdkSupplierRepoClicked(点击上报)";
+            return @"AdvanceSdkSupplierRepoClicked(广告点击上报)";
         case AdvanceSdkSupplierRepoSucceed:
-            return @"AdvanceSdkSupplierRepoSucceeded(数据加载成功上报)";
+            return @"AdvanceSdkSupplierRepoSucceeded(广告获取成功上报)";
         case AdvanceSdkSupplierRepoImped:
-            return @"AdvanceSdkSupplierRepoImped(曝光上报)";
+            return @"AdvanceSdkSupplierRepoImped(广告曝光上报)";
         case AdvanceSdkSupplierRepoFailed:
-            return @"AdvanceSdkSupplierRepoFaileded(失败上报)";
+            return @"AdvanceSdkSupplierRepoFaileded(广告获取/渲染失败上报)";
+        case AdvanceSdkSupplierRepoBidWin:
+            return @"AdvanceSdkSupplierRepoBidWin(广告竞胜上报)";
         default:
             return @"MercuryBaseAdRepoTKEventTypeUnknow(未知类型上报)";
     }
@@ -47,14 +49,6 @@ NSString * ADVStringFromNAdvanceSdkSupplierRepoType(AdvanceSdkSupplierRepoType t
         @"identifier": @"id",
         @"bidRatio": @"bid_ratio",
     };
-}
-
-
-- (void)setSupplierPrice:(NSInteger)supplierPrice {
-    _supplierPrice = supplierPrice;
-    if (supplierPrice <= 0) {
-        _supplierPrice = self.sdk_price;
-    }
 }
 
 -(NSInteger)timeout {

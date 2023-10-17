@@ -61,7 +61,6 @@
 // MARK: ======================= GDTUnifiedInterstitialAdDelegate =======================
 /// 插屏广告预加载成功回调，当接收服务器返回的广告数据成功且预加载后调用该函数
 - (void)unifiedInterstitialSuccessToLoadAd:(GDTUnifiedInterstitialAd *)unifiedInterstitial {
-    _supplier.supplierPrice = unifiedInterstitial.eCPM;
     [self.adspot.manager setECPMIfNeeded:unifiedInterstitial.eCPM supplier:_supplier];
     [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
     [self.adspot.manager checkTargetWithResultfulSupplier:_supplier loadAdState:AdvanceSupplierLoadAdSuccess];

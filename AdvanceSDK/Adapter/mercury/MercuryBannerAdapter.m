@@ -42,13 +42,6 @@
     return self;
 }
 
-- (void)supplierStateLoad {
-    ADV_LEVEL_INFO_LOG(@"加载Mercury supplier: %@", _supplier);
-        
-    _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
-    [_mercury_ad loadAdAndShow];
-}
-
 - (void)loadAd {
     [_mercury_ad loadAdAndShow];
 }

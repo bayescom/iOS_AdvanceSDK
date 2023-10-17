@@ -17,52 +17,12 @@
 NSString *const AdvanceSdkAPIVersion = @"3.0";
 NSString *const AdvanceSdkVersion = @"4.0.4";
 NSString *const AdvanceSdkRequestUrl = @"http://cruiser.bayescom.cn/eleven";
-NSString *const AdvanceReportDataUrl = @"http://cruiser.bayescom.cn/native";
-NSString *const AdvanceSdkEventUrl = @"https://cruiser.bayescom.cn/sdkevent";
 NSString *const SDK_ID_MERCURY = @"1";
 NSString *const SDK_ID_GDT = @"2";
 NSString *const SDK_ID_CSJ = @"3";
 NSString *const SDK_ID_BAIDU = @"4";
 NSString *const SDK_ID_KS = @"5";
 NSString *const SDK_ID_TANX = @"7";
-
-//NSString * const AdvSdkConfigCAID = @"kMercuryConfigCAIDKey";
-//NSString * const AdvSdkConfigCAIDPublicKey = @"kMercuryConfigCAIDPublicKey-Key";
-//NSString * const AdvSdkConfigCAIDPublicForApiKey = @"kMercuryConfigCAIDPublicForApiKey-Key";
-//NSString * const AdvSdkConfigCAIDDevId = @"kMercuryConfigCAIDDevIdKey";
-
-
-int const ADVANCE_RECEIVED = 0;
-int const ADVANCE_ERROR = 1;
-
-//// MARK: ======================= 穿山甲配置 Key =======================
-//NSString * const AdvSdkConfigBUAppID = @"AdvSdkConfigBUAppID";
-//
-//NSString * const AdvSdkConfigBULogLevel = @"AdvSdkConfigBULogLevel";
-//
-//NSInteger const AdvSdkConfigBULogLevelNone  = 0;  //BUAdSDKLogLevelNone;
-//NSInteger const AdvSdkConfigBULogLevelError = 1;  //BUAdSDKLogLevelError;
-//NSInteger const AdvSdkConfigBULogLevelDebug = 2;  //BUAdSDKLogLevelDebug;
-//
-//NSString * const AdvSdkConfigBUIsPaidApp = @"AdvSdkConfigBUIsPaidApp";
-//NSString * const AdvSdkConfigBUCoppa = @"AdvSdkConfigBUCoppa";
-//NSString * const AdvSdkConfigBUUserKeywords = @"AdvSdkConfigBUUserKeywords";
-//NSString * const AdvSdkConfigBUUserExtData = @"AdvSdkConfigBUUserExtData";
-//
-//NSString * const AdvSdkConfigBUOfflineType = @"AdvSdkConfigBUOfflineType";
-//NSInteger const AdvSdkConfigBUOfflineTypeNone       = 0; //BUOfflineTypeNone;
-//NSInteger const AdvSdkConfigBUOfflineTypeProtocol   = 1; //BUOfflineTypeProtocol;
-//NSInteger const AdvSdkConfigBUOfflineTypeWebview    = 2; //BUOfflineTypeWebview;
-//// MARK: ======================= Mercury配置 Key =======================
-//NSString * const AdvSdkConfigMercuryAppID = @"AdvSdkConfigMercuryAppID";
-//NSString * const AdvSdkConfigMercuryMediaKey = @"AdvSdkConfigMercuryMediaKey";
-//NSString * const AdvSdkConfigMercuryOpenDebug = @"AdvSdkConfigMercuryOpenDebug";
-//NSString * const AdvSdkConfigMercuryOpenRreload = @"AdvSdkConfigMercuryOpenRreload";
-//// MARK: ======================= 广点通配置 Key =======================
-//NSString * const AdvSdkConfigGDTEnableGPS = @"AdvSdkConfigGDTEnableGPS";
-//NSString * const AdvSdkConfigGDTChannel = @"AdvSdkConfigGDTChannel";
-//NSString * const AdvSdkConfigGDTSdkSrc = @"AdvSdkConfigGDTSdkSrc";
-//NSString * const AdvSdkConfigGDTSdkType = @"AdvSdkConfigGDTSdkType";
 
 // MARK: ======================= 广告位类型名称 =======================
 NSString * const AdvSdkTypeAdName = @"ADNAME";
@@ -75,18 +35,17 @@ NSString * const AdvSdkTypeAdNameRenderFeed = @"RENDERFEED_AD";
 NSString * const AdvSdkTypeAdNameRewardedVideo = @"REWARDEDVIDEO_AD";
 
 // MARK: ======================= NSUserDefaultsKeys =======================
-
 NSString * const AdvanceSDKModelKey = @"AdvanceSDKModelKey";
 NSString * const AdvanceSDKIdfaKey = @"AdvanceSDKIdfaKey";
 NSString * const AdvanceSDKIdfvKey = @"AdvanceSDKIdfvKey";
 NSString * const AdvanceSDKCarrierKey = @"AdvanceSDKCarrierKey";
 NSString * const AdvanceSDKNetworkKey = @"AdvanceSDKNetworkKey";
-//timeKeys
+
+// MARK: ======================= TimeKeys =======================
 NSString * const AdvanceSDKTimeOutForeverKey = @"AdvanceSDKTimeOutForeverKey";
 NSString * const AdvanceSDKOneMonthKey = @"AdvanceSDKOneMonthKey";
 NSString * const AdvanceSDKHourKey = @"AdvanceSDKHourKey";
 NSString * const AdvanceSDKSecretKey = @"bayescom1000000w";
-
 NSString * const MercuryLogoShowTypeKey = @"MercuryLogoShowTypeKey";
 NSString * const MercuryLogoShowBlankGapKey = @"MercuryLogoShowBlankGapKey";
 

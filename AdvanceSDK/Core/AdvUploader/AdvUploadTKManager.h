@@ -14,8 +14,6 @@
 
 #import <Foundation/Foundation.h>
 
-NS_ASSUME_NONNULL_BEGIN
-
 typedef NS_ENUM (NSUInteger, AdvUploadTkCompleteCode) {
     AdvUploadTkCompleteCode_Succees = 100,// 全部成功没有失败
     AdvUploadTkCompleteCode_Completed,// 没有全部成功, 仅完成了上传流程
@@ -62,5 +60,3 @@ typedef void(^AdvUploadTkFail)(NSString *url, NSInteger code);
                 complete:(AdvUploadTkComplete)completeBlock
                     fail:(AdvUploadTkFail)failBlock;
 @end
-
-NS_ASSUME_NONNULL_END

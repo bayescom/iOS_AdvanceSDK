@@ -15,42 +15,23 @@
 @class Gromore_params;
 
 typedef NS_ENUM(NSUInteger, AdvanceSdkSupplierRepoType) {
-    /// 发起加载请求上报
+    /// 广告加载上报
     AdvanceSdkSupplierRepoLoaded,
-    /// 点击上报
-    AdvanceSdkSupplierRepoClicked,
-    /// 数据加载成功上报
+    /// 广告获取成功上报
     AdvanceSdkSupplierRepoSucceed,
-    /// 曝光上报
-    AdvanceSdkSupplierRepoImped,
-    /// 广告加载/渲染失败上报
+    /// 广告获取/渲染失败上报
     AdvanceSdkSupplierRepoFailed,
-    /// bidding结果上报
-    AdvanceSdkSupplierRepoBidding,
-    /// bidding广告位生命周期上报
-    AdvanceSdkSupplierRepoGMBidding
+    /// 广告曝光上报
+    AdvanceSdkSupplierRepoImped,
+    /// 广告点击上报
+    AdvanceSdkSupplierRepoClicked,
+    /// 广告竞胜上报
+    AdvanceSdkSupplierRepoBidWin,
 
 };
 
-typedef NS_ENUM(NSUInteger, AdvanceSdkSupplierState) {
-    /// 未知
-    AdvanceSdkSupplierStateUnknown,
-    /// 准备就绪
-    AdvanceSdkSupplierStateReady,
-    /// 渠道请求成功(只是请求成功 不是曝光成功)
-    AdvanceSdkSupplierStateSuccess,
-    /// 渠道请求失败
-    AdvanceSdkSupplierStateFailed,
-    /// 渠道进行中(广告发起请求前)
-    AdvanceSdkSupplierStateInHand,
-    
-    /// 广告请求进行中(广告发起请求后到结果确定前)
-    AdvanceSdkSupplierStateInPull,
-
-};
 
 typedef NS_ENUM(NSUInteger, AdvanceSupplierLoadAdState) {
-    
     /// 准备就绪
     AdvanceSupplierLoadAdReady = 0,
     /// 渠道请求广告素材成功
@@ -59,14 +40,6 @@ typedef NS_ENUM(NSUInteger, AdvanceSupplierLoadAdState) {
     AdvanceSupplierLoadAdFailed,
     /// 渠道请求广告素材超时
     AdvanceSupplierLoadAdTimeout,
-
-};
-
-typedef NS_ENUM(NSUInteger, AdvanceSdkSupplierBiddingType) {
-    /// 瀑布流式
-    AdvanceSdkSupplierTypeWaterfall,
-    /// headBidding头部竞价
-    AdvanceSdkSupplierTypeHeadBidding,
 };
 
 
@@ -111,18 +84,8 @@ NSString * ADVStringFromNAdvanceSdkSupplierRepoType(AdvanceSdkSupplierRepoType t
 @property (nonatomic, strong) NSArray<NSString *> *imptk;
 @property (nonatomic, strong) NSArray<NSString *> *succeedtk;
 @property (nonatomic, strong) NSArray<NSString *> *failedtk;
-@property (nonatomic, strong) NSArray<NSString *> *biddingtk;/// gro_more使用
+@property (nonatomic, strong) NSArray<NSString *> *wintk; // 上游sdk竞胜上报（仅在开启竞价情况下返回）
 
-/// 上游sdk竞胜上报（仅在开启竞价情况下返回）。SDK调用时机为，发起广告展现方法时
-@property (nonatomic, strong) NSArray<NSString *> *wintk;
-
-
-/// 该字段由各渠道SDK 返回并填充 用来做比价
-/// GDT 单位:分   成功返回一个大于等于0的值，-1表示无权限或后台出现异常
-@property (nonatomic, assign) NSInteger supplierPrice;
-@property (nonatomic, assign) BOOL isParallel;// 是否并行
-@property (nonatomic, assign) AdvanceSdkSupplierState state;// 渠道状态
-@property (nonatomic, assign) AdvanceSdkSupplierBiddingType positionType;
 
 @property (nonatomic, assign) AdvanceSupplierLoadAdState loadAdState; // 广告加载状态
 @property (nonatomic, assign) BOOL hited; // 是否已经命中过

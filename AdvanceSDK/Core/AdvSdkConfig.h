@@ -19,13 +19,9 @@ typedef NS_ENUM(NSInteger,AdvLogLevel) {
     AdvLogLevel_Debug,
 };
 
-
-// MARK: ======================= SDK =======================
 extern NSString *const AdvanceSdkAPIVersion;
 extern NSString *const AdvanceSdkVersion;
 extern NSString *const AdvanceSdkRequestUrl;
-extern NSString *const AdvanceReportDataUrl;
-extern NSString *const AdvanceSdkEventUrl;
 extern NSString *const SDK_ID_MERCURY;
 extern NSString *const SDK_ID_GDT;
 extern NSString *const SDK_ID_CSJ;
@@ -48,15 +44,11 @@ extern NSString *const AdvanceSDKIdfvKey;
 extern NSString *const AdvanceSDKCarrierKey;
 extern NSString *const AdvanceSDKNetworkKey;
 
-extern NSString *const AdvanceSDKTimeOutForeverKey;
 extern NSString *const AdvanceSDKOneMonthKey;
 extern NSString *const AdvanceSDKHourKey;
 extern NSString *const AdvanceSDKSecretKey;
 extern NSString *const MercuryLogoShowTypeKey;
 extern NSString *const MercuryLogoShowBlankGapKey;
-
-extern int const ADVANCE_RECEIVED;
-extern int const ADVANCE_ERROR;
 
 
 @interface AdvSdkConfig : NSObject

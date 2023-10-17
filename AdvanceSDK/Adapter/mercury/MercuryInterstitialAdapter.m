@@ -70,7 +70,7 @@
 
 /// 插屏广告视图曝光失败回调，插屏广告曝光失败回调该函数
 - (void)mercury_interstitialFailToPresent:(MercuryInterstitialAd *)interstitialAd {
-    [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:[NSError errorWithDomain:@"倍业插屏广告" code:301 userInfo:@{@"msg": @"广告素材渲染失败"}]];
+    [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:[NSError errorWithDomain:@"com.MercuryError.Mercury" code:301 userInfo:@{@"msg": @"广告素材渲染失败"}]];
     
 }
 

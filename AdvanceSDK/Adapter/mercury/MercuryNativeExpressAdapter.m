@@ -67,7 +67,7 @@
 /// 拉取原生模板广告成功 | (注意: nativeExpressAdView在此方法执行结束不被强引用，nativeExpressAd中的对象会被自动释放)
 - (void)mercury_nativeExpressAdSuccessToLoad:(id)nativeExpressAd views:(NSArray<MercuryNativeExpressAdView *> *)views {
     if (!views.count) {
-        [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:[NSError errorWithDomain:@"MercuryNative.com" code:1 userInfo:@{@"msg":@"无广告返回"}]];
+        [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:[NSError errorWithDomain:@"com.MercuryError.Mercury" code:1 userInfo:@{@"msg":@"无广告返回"}]];
         [self.adspot.manager checkTargetWithResultfulSupplier:_supplier loadAdState:AdvanceSupplierLoadAdFailed];
         return;
     }
@@ -103,7 +103,7 @@
 
 /// 原生模板广告渲染失败
 - (void)mercury_nativeExpressAdViewRenderFail:(MercuryNativeExpressAdView *)nativeExpressAdView {
-    [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:[NSError errorWithDomain:@"广告素材渲染失败" code:301 userInfo:@{@"msg": @"广告素材渲染失败"}]];
+    [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:[NSError errorWithDomain:@"com.MercuryError.Mercury" code:301 userInfo:@{@"msg": @"广告素材渲染失败"}]];
     AdvanceNativeExpressAd *nativeAd = [self returnExpressViewWithAdView:(UIView *)nativeExpressAdView];
     if (nativeAd) {
         if ([_delegate respondsToSelector:@selector(nativeExpressAdViewRenderFail:spotId:extra:)]) {

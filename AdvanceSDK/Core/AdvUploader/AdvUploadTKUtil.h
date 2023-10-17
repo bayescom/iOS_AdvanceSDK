@@ -10,20 +10,20 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface AdvUploadTKUtil : NSObject
-@property (nonatomic, assign) NSTimeInterval serverTime;
-@property (nonatomic, copy) NSString *reqid;
+
+@property (nonatomic, assign) NSTimeInterval requestTime;
 
 - (NSMutableArray *)loadedtkUrlWithArr:(NSArray<NSString *> *)uploadArr;
 
 - (NSMutableArray *)succeedtkUrlWithArr:(NSArray<NSString *> *)uploadArr price:(NSInteger)price;
 
-- (NSMutableArray *)imptkUrlWithArr:(NSArray<NSString *> *)uploadArr price:(NSInteger)price;
-
 - (NSMutableArray *)failedtkUrlWithArr:(NSArray<NSString *> *)uploadArr error:(NSError *)error;
 
-- (void)reportWithUploadArr:(NSArray<NSString *> *)uploadArr error:(NSError *)error;
+- (NSMutableArray *)imptkUrlWithArr:(NSArray<NSString *> *)uploadArr price:(NSInteger)price;
 
-- (void)reportEventWithParams:(NSDictionary *)params;
+/// 数据上报
+- (void)reportWithUploadUrls:(NSArray<NSString *> *)uploadUrls;
+
 @end
 
 NS_ASSUME_NONNULL_END
