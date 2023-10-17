@@ -122,7 +122,7 @@
     }
     /// 该组渠道加载广告超时监测
     [self performSelector:@selector(observeLoadAdTimeout) withObject:nil afterDelay:self.model.setting.parallel_timeout * 1.0 / 1000];
-    ADV_LEVEL_INFO_LOG(@"开始加载各渠道");
+    ADVLog(@"开始加载各渠道");
 }
 
 /// 超时监测
@@ -300,12 +300,12 @@
     self.tkUploadTool.requestTime = [[NSDate date] timeIntervalSince1970] * 1000;
     
     
-    ADV_LEVEL_INFO_LOG(@"开始请求时间戳: %f", [[NSDate date] timeIntervalSince1970]);
+    ADVLog(@"开始请求时间戳: %f", [[NSDate date] timeIntervalSince1970]);
     
     NSURLSessionDataTask *dataTask = [sharedSession dataTaskWithRequest:request
                                                       completionHandler:^(NSData *_Nullable data, NSURLResponse *_Nullable response, NSError *_Nullable error) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            ADV_LEVEL_INFO_LOG(@"请求完成时间戳: %f", [[NSDate date] timeIntervalSince1970]);
+            ADVLog(@"请求完成时间戳: %f", [[NSDate date] timeIntervalSince1970]);
             [self handleResultData:data error:error];
         });
         
@@ -332,7 +332,7 @@
     }
     
     AdvPolicyModel *a_model = [AdvPolicyModel adv_modelWithJSON:data];
-    ADV_LEVEL_INFO_LOG(@"[JSON]%@", [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil]);
+    ADVLog(@"[JSON]%@", [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil]);
     // Parse Error
     if (!a_model) {
         if ([_delegate respondsToSelector:@selector(advPolicyServiceLoadFailedWithError:)]) {
@@ -396,7 +396,7 @@
     }
     // 执行上报请求
     [self.tkUploadTool reportWithUploadUrls:uploadUrls];
-    ADV_LEVEL_INFO_LOG(@"%@ = 上报(impid: %@)", ADVStringFromNAdvanceSdkSupplierRepoType(repoType), supplier.name);
+    ADVLog(@"%@ = 上报(impid: %@)", ADVStringFromNAdvanceSdkSupplierRepoType(repoType), supplier.name);
 }
 
 - (void)collectSupplierErrorInfomation:(AdvSupplier *)supplier error:(NSError *)error; {
@@ -413,7 +413,7 @@
 }
 
 - (void)dealloc {
-    ADV_LEVEL_INFO_LOG(@"%s %@", __func__, self);
+    ADVLog(@"%s %@", __func__, self);
 }
 
 @end

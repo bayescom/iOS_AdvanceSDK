@@ -50,7 +50,6 @@
     
     
     [AdvSdkConfig shareInstance].appId = @"102768";
-    
     [AdvBayesSDKConfig setUserAgent:@"ua"];
     [AdvBayesSDKConfig setAAIDWithMediaId:@"media001" mediaSecret:@"243835763"];
     
@@ -83,7 +82,6 @@
             }
             dispatch_async(dispatch_get_main_queue(), ^{
                 // do something
-                [AdvSdkConfig shareInstance].level = AdvLogLevel_Debug;
             });
         }];
     }else{

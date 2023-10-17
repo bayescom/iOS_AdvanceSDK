@@ -38,17 +38,17 @@
 //}
 //
 //- (void)supplierStateLoad {
-//    ADV_LEVEL_INFO_LOG(@"加载Tanx supplier: %@", _supplier);
+//    ADVLog(@"加载Tanx supplier: %@", _supplier);
 //    _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
 //    [self.manager loadAd];
 //}
 //
 //- (void)supplierStateInPull {
-//    ADV_LEVEL_INFO_LOG(@"Tanx加载中...");
+//    ADVLog(@"Tanx加载中...");
 //}
 //
 //- (void)supplierStateSuccess {
-//    ADV_LEVEL_INFO_LOG(@"Tanx 成功");
+//    ADVLog(@"Tanx 成功");
 //    if ([self.delegate respondsToSelector:@selector(didFinishLoadingRewardedVideoADWithSpotId:)]) {
 //        [self.delegate didFinishLoadingRewardedVideoADWithSpotId:self.adspot.adspotid];
 //    }
@@ -61,7 +61,7 @@
 //}
 //
 //- (void)supplierStateFailed {
-//    ADV_LEVEL_INFO_LOG(@"Tanx 失败");
+//    ADVLog(@"Tanx 失败");
 //    [self.adspot loadNextSupplierIfHas];
 //}
 //
@@ -71,7 +71,7 @@
 //}
 //
 //- (void)showAd {
-//    ADV_LEVEL_INFO_LOG(@"Tanx 展现");
+//    ADVLog(@"Tanx 展现");
 //    [self.manager uploadBiddingResult:YES];
 //    [self.manager showAdFromRootViewController:self.adspot.viewController configuration:[TXAdShowRewardVideoConfiguration new]];
 //}

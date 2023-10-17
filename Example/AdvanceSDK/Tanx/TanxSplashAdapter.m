@@ -68,7 +68,7 @@
 //}
 //
 //- (void)supplierStateLoad {
-//    ADV_LEVEL_INFO_LOG(@"加载Tanx supplier: %@", _supplier);
+//    ADVLog(@"加载Tanx supplier: %@", _supplier);
 //    ADVTXAdBlockWeakObject(self, blockObj);
 //    [self.splashManager getSplashAdsWithBlock:^(NSArray<TXAdSplashModel *> * _Nullable splashModels, NSError * _Nullable error) {
 //        if (error) {
@@ -87,11 +87,11 @@
 //}
 //
 //- (void)supplierStateInPull {
-//    ADV_LEVEL_INFO_LOG(@"Tanx加载中...");
+//    ADVLog(@"Tanx加载中...");
 //}
 //
 //- (void)supplierStateSuccess {
-//    ADV_LEVEL_INFO_LOG(@"Tanx 成功");
+//    ADVLog(@"Tanx 成功");
 //    if ([self.delegate respondsToSelector:@selector(didFinishLoadingSplashADWithSpotId:)]) {
 //        [self.delegate didFinishLoadingSplashADWithSpotId:self.adspot.adspotid];
 //    }
@@ -100,7 +100,7 @@
 //}
 //
 //- (void)supplierStateFailed {
-//    ADV_LEVEL_INFO_LOG(@"Tanx 失败");
+//    ADVLog(@"Tanx 失败");
 //    [self.adspot loadNextSupplierIfHas];
 //    [self deallocAdapter];
 //}
@@ -165,7 +165,7 @@
 //
 //            self.templateView = [self.splashManager renderSplashTemplateWithModel:splashModel config:config];
 //            self.templateView.frame = CGRectMake(0, 0, self.window.bounds.size.width, self.window.bounds.size.height - self.imgV.frame.size.height);
-//            //            ADV_LEVEL_INFO_LOG(@"Tanx失败  %@---> %@  %d", self, self.templateView, splashModel.isValid);
+//            //            ADVLog(@"Tanx失败  %@---> %@  %d", self, self.templateView, splashModel.isValid);
 //            if (self.templateView == nil || splashModel.isValid == NO) {
 //                NSError *temp = [NSError errorWithDomain:@"广告物料加载失败" code:10002 userInfo:nil];
 //                [self tanxSplashAdFailToPresentWithError:temp];
@@ -192,7 +192,7 @@
 //    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
 //
 //    if (_supplier.isParallel == YES) {
-//        //        ADV_LEVEL_INFO_LOG(@"修改状态: %@", _supplier);
+//        //        ADVLog(@"修改状态: %@", _supplier);
 //        _supplier.state = AdvanceSdkSupplierStateSuccess;
 //        return;
 //    }
@@ -205,7 +205,7 @@
 //}
 //
 //- (void)onSplashClickWithWebUrl:(NSString *)webUrl {
-//    ADV_LEVEL_INFO_LOG(@"%s  %@",__func__, webUrl);
+//    ADVLog(@"%s  %@",__func__, webUrl);
 //
 //    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
 //    if ([self.delegate respondsToSelector:@selector(splashDidClickForSpotId:extra:)]) {
@@ -228,7 +228,7 @@
 //
 ///// 开屏开始展示
 //- (void)onSplashShow {
-//    ADV_LEVEL_INFO_LOG(@"%s",__func__);
+//    ADVLog(@"%s",__func__);
 //    [self.adspot reportEventWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
 //    if ([self.delegate respondsToSelector:@selector(splashDidShowForSpotId:extra:)]) {
 //        [self.delegate splashDidShowForSpotId:self.adspot.adspotid extra:self.adspot.ext];
@@ -243,10 +243,10 @@
 //
 ///// 开屏关闭
 //- (void)onSplashClose {
-//    ADV_LEVEL_INFO_LOG(@"%s",__func__);
+//    ADVLog(@"%s",__func__);
 //
 //    if ([[NSDate date] timeIntervalSince1970]*1000 < _timeout_stamp && _isClick == NO) {// 关闭时的时间小于过期时间 且 没有被点击广告区域  则点击了跳过
-//        //        ADV_LEVEL_INFO_LOG(@"%f, %ld",[[NSDate date] timeIntervalSince1970]*1000,  _timeout_stamp);
+//        //        ADVLog(@"%f, %ld",[[NSDate date] timeIntervalSince1970]*1000,  _timeout_stamp);
 //        if (self.delegate && [self.delegate respondsToSelector:@selector(advanceSplashOnAdSkipClicked)]) {
 //            [self.delegate advanceSplashOnAdSkipClicked];
 //        }
@@ -297,6 +297,6 @@
 //
 //- (void)dealloc
 //{
-//    ADV_LEVEL_INFO_LOG(@"%s", __func__);
+//    ADVLog(@"%s", __func__);
 //}
 //@end

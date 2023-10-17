@@ -53,25 +53,25 @@
 //}
 //
 //- (void)supplierStateLoad {
-//    ADV_LEVEL_INFO_LOG(@"加载Tanx supplier: %@", _supplier);
+//    ADVLog(@"加载Tanx supplier: %@", _supplier);
 //
 //    _supplier.state = AdvanceSdkSupplierStateInPull; // 从请求广告到结果确定前
 //    [self loadTanxNativeExpress];
 //}
 //
 //- (void)supplierStateInPull {
-//    ADV_LEVEL_INFO_LOG(@"Tanx加载中...");
+//    ADVLog(@"Tanx加载中...");
 //}
 //
 //- (void)supplierStateSuccess {
-//    ADV_LEVEL_INFO_LOG(@"Tanx 成功");
+//    ADVLog(@"Tanx 成功");
 //    if ([_delegate respondsToSelector:@selector(didFinishLoadingNativeExpressAds:spotId:)]) {
 //        [_delegate didFinishLoadingNativeExpressAds:self.nativeAds spotId:self.adspot.adspotid];
 //    }
 //}
 //
 //- (void)supplierStateFailed {
-//    ADV_LEVEL_INFO_LOG(@"Tanx 失败");
+//    ADVLog(@"Tanx 失败");
 ////    [self.adspot loadnexsuuupl]
 //    [self.adspot loadNextSupplierIfHas];
 //}

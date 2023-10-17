@@ -66,7 +66,7 @@
 }
 
 - (void)dealloc {
-    ADV_LEVEL_INFO_LOG(@"%s", __func__);
+    ADVLog(@"%s", __func__);
 }
 
 // MARK: ======================= BUNativeExpressRewardedVideoAdDelegate =======================

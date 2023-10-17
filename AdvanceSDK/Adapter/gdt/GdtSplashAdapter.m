@@ -145,6 +145,6 @@
 
 
 - (void)dealloc {
-    ADV_LEVEL_INFO_LOG(@"%s %@", __func__, self);
+    ADVLog(@"%s %@", __func__, self);
 }
 @end

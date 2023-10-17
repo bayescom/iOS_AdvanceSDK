@@ -164,10 +164,10 @@ static AdvDeviceInfoUtil *_instance = nil;
     [deviceInfo removeObjectForKey:@"devicetype"];
 
     NSString *json = [self jsonStringCompactFormatForDictionary:encryptDic];
-    ADV_LEVEL_INFO_LOG(@"设备信息 加密前: %@", json);
+    ADVLog(@"设备信息 加密前: %@", json);
     NSString *jsonEncrypt = advanceAesEncryptString(json, AdvanceSDKSecretKey);
     jsonEncrypt = [self base64UrlEncoder:jsonEncrypt];
-    ADV_LEVEL_INFO_LOG(@"设备信息 加密后: %@", jsonEncrypt);
+    ADVLog(@"设备信息 加密后: %@", jsonEncrypt);
 
     if ([self isEmptyString:jsonEncrypt]) {
         return deviceInfo;

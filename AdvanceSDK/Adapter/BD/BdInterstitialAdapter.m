@@ -53,7 +53,7 @@
 }
 
 - (void)dealloc {
-    ADV_LEVEL_INFO_LOG(@"%s", __func__);
+    ADVLog(@"%s", __func__);
 }
 
 
@@ -72,12 +72,12 @@
 }
 
 - (void)interstitialAdDownloadSucceeded:(BaiduMobAdExpressInterstitial *)interstitial {
-    ADV_LEVEL_INFO_LOG(@"ExpressInterstitial downloadSucceeded 缓存成功");
+    ADVLog(@"ExpressInterstitial downloadSucceeded 缓存成功");
 }
 
 
 - (void)interstitialAdExposure:(BaiduMobAdExpressInterstitial *)interstitial {
-    ADV_LEVEL_INFO_LOG(@"ExpressInterstitial exposure 曝光成功");
+    ADVLog(@"ExpressInterstitial exposure 曝光成功");
     [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(interstitialDidShowForSpotId:extra:)]) {
         [self.delegate interstitialDidShowForSpotId:self.adspot.adspotid extra:self.adspot.ext];
@@ -86,7 +86,7 @@
 
 
 - (void)interstitialAdDidClick:(BaiduMobAdExpressInterstitial *)interstitial {
-    ADV_LEVEL_INFO_LOG(@"ExpressInterstitial click 发生点击");
+    ADVLog(@"ExpressInterstitial click 发生点击");
     [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(interstitialDidClickForSpotId:extra:)]) {
         [self.delegate interstitialDidClickForSpotId:self.adspot.adspotid extra:self.adspot.ext];
@@ -94,11 +94,11 @@
 }
 
 - (void)interstitialAdDidLPClose:(BaiduMobAdExpressInterstitial *)interstitial {
-    ADV_LEVEL_INFO_LOG(@"ExpressInterstitial lpClose 落地页关闭");
+    ADVLog(@"ExpressInterstitial lpClose 落地页关闭");
 }
 
 - (void)interstitialAdDidClose:(BaiduMobAdExpressInterstitial *)interstitial {
-    ADV_LEVEL_INFO_LOG(@"ExpressInterstitial close 点击关闭");
+    ADVLog(@"ExpressInterstitial close 点击关闭");
     if ([self.delegate respondsToSelector:@selector(interstitialDidCloseForSpotId:extra:)]) {
         [self.delegate interstitialDidCloseForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }

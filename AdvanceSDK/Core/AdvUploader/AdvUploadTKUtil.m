@@ -100,7 +100,7 @@
 
 /// 拼接错误码
 - (NSString *)joinFailedUrlWithObj:(NSString *)urlString error:(NSError *)error {
-    ADV_LEVEL_INFO_LOG(@"上报错误: %@  %@", error.domain, error);
+    ADVLog(@"上报错误: %@  %@", error.domain, error);
     if (error) {
         if ([error.domain.lowercaseString containsString:@"ks"]) { // 快手SDK
             return [urlString stringByReplacingOccurrencesOfString:@"&track_time" withString:[NSString stringWithFormat:@"&t_msg=err_ks_%ld&track_time",(long)error.code]];

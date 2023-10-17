@@ -58,12 +58,17 @@ static AdvSdkConfig *instance = nil;
     dispatch_once(&onceToken, ^{
         instance = [[super allocWithZone:NULL] init];
         instance.isAdTrack = YES;
+        instance.enableLog = YES;
     });
     return instance;
 }
 
 + (NSString *)sdkVersion {
     return AdvanceSdkVersion;
+}
+
++ (void)setLogEnable:(BOOL)enable {
+    [AdvSdkConfig shareInstance].enableLog = enable;
 }
 
 - (NSString *)appId {

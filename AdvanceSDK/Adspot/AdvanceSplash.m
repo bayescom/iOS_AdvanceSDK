@@ -23,7 +23,7 @@
 - (instancetype)initWithAdspotId:(NSString *)adspotid
                        customExt:(nullable NSDictionary *)ext
                   viewController:(nullable UIViewController *)viewController {
-    ADV_LEVEL_INFO_LOG(@"==================== 初始化开屏广告, id: %@====================", adspotid);
+    ADVLog(@"==================== 初始化开屏广告, id: %@====================", adspotid);
     NSMutableDictionary *extra = [NSMutableDictionary dictionaryWithDictionary:ext];
     [extra setValue:AdvSdkTypeAdNameSplash forKey: AdvSdkTypeAdName];
     
@@ -145,7 +145,7 @@
 }
 
 - (void)dealloc {
-    ADV_LEVEL_INFO_LOG(@"%s", __func__);
+    ADVLog(@"%s", __func__);
 }
 
 @end

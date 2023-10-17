@@ -10,15 +10,6 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef NS_ENUM(NSInteger,AdvLogLevel) {
-    AdvLogLevel_None  = 0, // 不打印
-    AdvLogLevel_Fatal,
-    AdvLogLevel_Error,
-    AdvLogLevel_Warning,
-    AdvLogLevel_Info,
-    AdvLogLevel_Debug,
-};
-
 extern NSString *const AdvanceSdkAPIVersion;
 extern NSString *const AdvanceSdkVersion;
 extern NSString *const AdvanceSdkRequestUrl;
@@ -52,26 +43,20 @@ extern NSString *const MercuryLogoShowBlankGapKey;
 
 
 @interface AdvSdkConfig : NSObject
-/// SDK版本
-+ (NSString *)sdkVersion;
 
 + (instancetype)shareInstance;
+
+/// SDK版本
++ (NSString *)sdkVersion;
 
 /// appid 从平台获取
 @property (nonatomic, copy) NSString *appId;
 
-/// 是否允许个性化广告推送 默认为允许
+/// 是否允许个性化广告推送  默认为YES
 @property (nonatomic, assign) BOOL isAdTrack;
 
-
-/// 控制台log级别
-/// 0 不打印
-/// 1 打印fatal
-/// 2 fatal + error
-/// 3 fatal + error + warning
-/// 4 fatal + error + warning + info
-/// 5 全部打印
-@property (nonatomic, assign) AdvLogLevel level;
+/// 是否允许打印日志，默认为YES
+@property (nonatomic, assign) BOOL enableLog;
 
 @end
 
