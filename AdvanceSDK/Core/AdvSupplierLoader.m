@@ -80,7 +80,7 @@ static NSMutableDictionary *_initializedDict = nil;
         ((void (*)(id, SEL, NSString *))objc_msgSend)(config, NSSelectorFromString(@"setAppID:"), supplier.mediaid);
         // 定义block
         void (^completionHandler)(BOOL success, NSError *error) = ^void (BOOL success, NSError *error) {
-            /// 穿山甲初始化默认在子线程回调，要切换到主线程
+            /// 穿山甲是异步初始化，回调需要切换到主线程
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (success && completion) {
                     completion();

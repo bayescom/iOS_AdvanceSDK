@@ -16,15 +16,6 @@
 /// 策略服务加载失败
 - (void)advPolicyServiceLoadFailedWithError:(nullable NSError *)error;
 
-/**
-/// 加载下一个渠道对象
-/// @param supplier 被加载的渠道
-/// @param error 异常信息
- **/
-- (void)advPolicyServiceLoadSupplier:(nullable AdvSupplier *)supplier
-                               error:(nullable NSError *)error;
-
-
 /// 加载某一个渠道对象
 /// @param supplier 被加载的渠道
 - (void)advPolicyServiceLoadAnySupplier:(nullable AdvSupplier *)supplier;
