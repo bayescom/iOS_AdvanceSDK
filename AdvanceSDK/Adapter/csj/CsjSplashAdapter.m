@@ -52,7 +52,6 @@
     return self;
 }
 
-
 - (void)loadAd {
     [self.csj_ad loadAdData];
 }
@@ -61,27 +60,6 @@
     if ([self.delegate respondsToSelector:@selector(didFinishLoadingSplashADWithSpotId:)]) {
         [self.delegate didFinishLoadingSplashADWithSpotId:self.adspot.adspotid];
     }
-}
-
-- (void)gmShowAd {
-    [self showAdAction];
-}
-
-- (void)showAd {
-    NSNumber *isGMBidding = ((NSNumber * (*)(id, SEL))objc_msgSend)((id)self.adspot, @selector(isGMBidding));
-
-    if (isGMBidding.integerValue == 1) {
-        return;
-    }
-    [self showAdAction];
-}
-- (void)showAdAction {
-    
-    //        [[UIApplication sharedApplication].keyWindow addSubview:_csj_ad];
-//    [[UIApplication sharedApplication].keyWindow bringSubviewToFront:[_adspot performSelector:@selector(bgImgV)]];
-    
-    [_csj_ad showSplashViewInRootViewController:_adspot.viewController.view.window.rootViewController];
-    
 }
 
 - (void)showInWindow:(UIWindow *)window {
@@ -164,6 +142,7 @@
         [self.delegate splashDidCloseForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
     [self.csj_ad removeSplashView];
+    self.csj_ad = nil;
     [self.imgV removeFromSuperview];
     self.imgV = nil;
 }

@@ -26,24 +26,15 @@ target 'AdvanceSDK_Example' do
   pod 'AdvanceSDK/BD', :path => '../'
   pod 'BaiduMobAdSDK', '5.101'
 
-  # 集成advBidding 所需
-#  pod 'AdvanceSDK/Bidding', :path => '../'
-#  pod 'AdvBiddingSDK', '1.1.8'
-#  pod 'AdvBiddingSuppliers', '0.0.8'
-
-  
-  
-  
-  
+  # 集成GroMoreBidding 所需
+  pod 'AdvanceSDK/GMBidding', :path => '../'
   
   
   pod 'JSONModel', '1.8.0'
   pod 'Reachability', '3.2'
   pod 'SDWebImage', '5.12.1'
-
   pod 'Masonry'
 #  pod 'Ads-CN', '4.4.0.0'
-
 #  pod "STDebugConsole"
 #  pod 'JPFPSStatus'
 

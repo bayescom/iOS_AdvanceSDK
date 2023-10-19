@@ -56,7 +56,7 @@ extern NSString *const MercuryLogoShowBlankGapKey;
 @property (nonatomic, assign) BOOL isAdTrack;
 
 /// 是否允许打印日志，默认为YES
-@property (nonatomic, assign) BOOL enableLog;
+@property (nonatomic, assign) BOOL logEnable;
 
 @end
 

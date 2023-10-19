@@ -62,29 +62,6 @@
     }
 }
 
-- (void)gmShowAd {
-    [self showAdAction];
-}
-
-- (void)showAd {
-    NSNumber *isGMBidding = ((NSNumber * (*)(id, SEL))objc_msgSend)((id)self.adspot, @selector(isGMBidding));
-
-    if (isGMBidding.integerValue == 1) {
-        return;
-    }
-    [self showAdAction];
-}
-
-- (void)showAdAction {
-    // 设置logo
-    UIWindow *window = _adspot.viewController.view.window;
-    if (self.imgV) {
-        [window addSubview:self.imgV];
-    }
-    
-    [self.bd_ad showInContainerView:window];
-}
-
 - (void)showInWindow:(UIWindow *)window {
     // 设置logo
     if (_adspot.logoImage && _adspot.showLogoRequire) {

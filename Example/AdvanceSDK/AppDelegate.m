@@ -49,7 +49,8 @@
 #pragma Demo 中有许多内容为开发调试的内容, 仅作为开发者调试自己的账号使用, 不一定会出广告
     
     
-    [AdvSdkConfig shareInstance].appId = @"102768";
+    //[AdvSdkConfig shareInstance].appId = @"100255";
+//    [AdvSdkConfig shareInstance].appId = @"102768";
     [AdvBayesSDKConfig setUserAgent:@"ua"];
     [AdvBayesSDKConfig setAAIDWithMediaId:@"media001" mediaSecret:@"243835763"];
     

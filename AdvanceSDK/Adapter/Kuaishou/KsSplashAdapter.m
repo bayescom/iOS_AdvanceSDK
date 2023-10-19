@@ -55,42 +55,6 @@
     }
 }
 
-- (void)gmShowAd {
-    [self showAdAction];
-}
-
-- (void)showAd {
-    NSNumber *isGMBidding = ((NSNumber * (*)(id, SEL))objc_msgSend)((id)self.adspot, @selector(isGMBidding));
-
-    if (isGMBidding.integerValue == 1) {
-        return;
-    }
-    [self showAdAction];
-}
-
-- (void)showAdAction {
-    if (!_ks_ad) {
-        return;
-    }
-    // 设置logo
-    CGRect adFrame = [UIScreen mainScreen].bounds;
-    if (_adspot.logoImage && _adspot.showLogoRequire) {
-        
-        NSAssert(_adspot.logoImage != nil, @"showLogoRequire = YES时, 必须设置logoImage");
-        CGFloat real_w = [UIScreen mainScreen].bounds.size.width;
-        CGFloat real_h = _adspot.logoImage.size.height*(real_w/_adspot.logoImage.size.width);
-        adFrame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height-real_h);
-        
-        self.imgV = [[UIImageView alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height-real_h, real_w, real_h)];
-        self.imgV.userInteractionEnabled = YES;
-        self.imgV.image = _adspot.logoImage;
-        [[UIApplication sharedApplication].adv_getCurrentWindow addSubview:self.imgV];
-    }
-    _ks_ad.frame = adFrame;
-    [_ks_ad showInView:_adspot.viewController.view.window];
-
-}
-
 - (void)showInWindow:(UIWindow *)window {
     // 设置logo
     CGRect adFrame = [UIScreen mainScreen].bounds;
@@ -180,6 +144,7 @@
 - (void)ksAdDidCloseWithCallback:(BOOL)callback {
    
     [_ks_ad removeFromSuperview];
+    _ks_ad = nil;
     [self.imgV removeFromSuperview];
     self.imgV = nil;
     

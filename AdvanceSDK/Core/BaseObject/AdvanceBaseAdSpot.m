@@ -39,6 +39,10 @@
     [_manager loadDataWithMediaId:_mediaId adspotId:_adspotid customExt:_ext];
 }
 
+- (void)catchBidTargetWhenGroMoreBiddingWithPolicyModel:(AdvPolicyModel *)model {
+    [_manager catchBidTargetWhenGroMoreBiddingWithPolicyModel:model];
+}
+
 - (void)setSDKVersion {
     [self setGdtSDKVersion];
     [self setCsjSDKVersion];

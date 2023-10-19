@@ -1,18 +1,17 @@
 //
-//  AdvBiddingSplashAdapter.h
+//  AdvBiddingSplash.h
 //  AdvanceSDK
 //
-//  Created by MS on 2022/7/27.
+//  Created by guangyao on 2023/10/18.
 //
 
 #import <Foundation/Foundation.h>
 #import "AdvanceSplashDelegate.h"
-#import "AdvanceBaseAdapter.h"
-
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface AdvBiddingSplashAdapter : AdvanceBaseAdapter
+@interface AdvBiddingSplash : NSObject
+
 @property (nonatomic, weak) id<AdvanceSplashDelegate> delegate;
 
 @end

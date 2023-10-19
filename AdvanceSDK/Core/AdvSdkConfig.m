@@ -58,7 +58,7 @@ static AdvSdkConfig *instance = nil;
     dispatch_once(&onceToken, ^{
         instance = [[super allocWithZone:NULL] init];
         instance.isAdTrack = YES;
-        instance.enableLog = YES;
+        instance.logEnable = YES;
     });
     return instance;
 }
@@ -68,7 +68,7 @@ static AdvSdkConfig *instance = nil;
 }
 
 + (void)setLogEnable:(BOOL)enable {
-    [AdvSdkConfig shareInstance].enableLog = enable;
+    [AdvSdkConfig shareInstance].logEnable = enable;
 }
 
 - (NSString *)appId {

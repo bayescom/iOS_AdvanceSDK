@@ -36,8 +36,8 @@
     // 需要id调试的媒体请联系运营同学开通
     self.initDefSubviewsFlag = YES;
     self.adspotIdsArr = @[
-//        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10002619"},
-//        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10006483"},
+        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10002619"},
+        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10006483"},
         
         @{@"addesc": @"开屏-Bidding", @"adspotId": @"102768-10008229"},
         @{@"addesc": @"开屏-倍业", @"adspotId": @"102768-10007788"},

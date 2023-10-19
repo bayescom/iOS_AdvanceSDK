@@ -26,8 +26,6 @@
 @property (nonatomic, weak) AdvanceSplash *adspot;
 @property (nonatomic, strong) AdvSupplier *supplier;
 
-@property (nonatomic, assign) NSInteger isGMBidding;
-
 @end
 
 @implementation GdtSplashAdapter
@@ -51,35 +49,6 @@
 - (void)winnerAdapterToShowAd {
     if ([self.delegate respondsToSelector:@selector(didFinishLoadingSplashADWithSpotId:)]) {
         [self.delegate didFinishLoadingSplashADWithSpotId:self.adspot.adspotid];
-    }
-}
-
-- (void)gmShowAd {
-    [self showAdAction];
-}
-
-- (void)showAd {
-    NSNumber *isGMBidding = ((NSNumber * (*)(id, SEL))objc_msgSend)((id)self.adspot, @selector(isGMBidding));
-
-    self.isGMBidding = isGMBidding.integerValue;
-    if (isGMBidding.integerValue == 1) {
-        return;
-    }
-    [self showAdAction];
-}
-- (void)showAdAction {
-    // 设置logo
-    UIImageView *imgV;
-    if (_adspot.logoImage) {
-        CGFloat real_w = [UIScreen mainScreen].bounds.size.width;
-        CGFloat real_h = _adspot.logoImage.size.height*(real_w/_adspot.logoImage.size.width);
-        imgV = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, real_w, real_h)];
-        imgV.userInteractionEnabled = YES;
-        imgV.image = _adspot.logoImage;
-    }
-    
-    if ([self.gdt_ad isAdValid]) {
-        [_gdt_ad showAdInWindow:_adspot.viewController.view.window withBottomView:_adspot.showLogoRequire?imgV:nil skipView:nil];
     }
 }
 
@@ -132,19 +101,8 @@
     }
 }
 
-- (void)splashAdLifeTime:(NSUInteger)time {
-    
-    // 当GMBidding的时候 会有一个splashAdClosed 不执行的bug 所以需要用这个逻辑来触发 splashDidCloseForSpotId
-    if (self.isGMBidding == 0) {
-        return;
-    }
-    if (time <= 0 && [self.delegate respondsToSelector:@selector(splashDidCloseForSpotId:extra:)]) {
-        [self.delegate splashDidCloseForSpotId:self.adspot.adspotid extra:self.adspot.ext];
-    }
-}
-
-
 - (void)dealloc {
     ADVLog(@"%s %@", __func__, self);
 }
+
 @end

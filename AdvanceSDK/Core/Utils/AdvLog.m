@@ -18,7 +18,7 @@
         formatString = [formatString stringByReplacingOccurrencesOfString:@"\t" withString:@""];
     }
     
-    if ([AdvSdkConfig shareInstance].enableLog) {
+    if ([AdvSdkConfig shareInstance].logEnable) {
 #if DEBUG
     NSLog(@"\n%s[line:%d][%@]", function, lineNumber, formatString);
 #endif

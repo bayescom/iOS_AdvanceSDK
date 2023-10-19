@@ -25,7 +25,6 @@
 @property (nonatomic, strong) MercurySplashAd *mercury_ad;
 @property (nonatomic, strong) AdvSupplier *supplier;
 @property (nonatomic, weak) AdvanceSplash *adspot;
-@property (nonatomic, assign) NSInteger isGMBidding;
 
 @end
 
@@ -65,39 +64,6 @@
     }
 }
 
-- (void)gmShowAd {
-    [self showAdAction];
-}
-
-- (void)showAd {
-    NSNumber *isGMBidding = ((NSNumber * (*)(id, SEL))objc_msgSend)((id)self.adspot, @selector(isGMBidding));
-    self.isGMBidding = isGMBidding.integerValue;
-
-    if (isGMBidding.integerValue == 1) {
-        return;
-    }
-    [self showAdAction];
-}
-
-- (void)showAdAction {
-//    [[UIApplication sharedApplication].keyWindow addSubview:_csj_ad];
-//    [[UIApplication sharedApplication].keyWindow bringSubviewToFront:[_adspot performSelector:@selector(bgImgV)]];
-        UIImageView *imgV;
-        if (_adspot.showLogoRequire) {
-            // 添加Logo
-            NSAssert(_adspot.logoImage != nil, @"showLogoRequire = YES时, 必须设置logoImage");
-            CGFloat real_w = [UIScreen mainScreen].bounds.size.width;
-            CGFloat real_h = _adspot.logoImage.size.height*(real_w/_adspot.logoImage.size.width);
-            UIImageView *imgV = [[UIImageView alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height-real_h, real_w, real_h)];
-            imgV.userInteractionEnabled = YES;
-            imgV.image = _adspot.logoImage;
-        }
-    
-        [self.mercury_ad showAdInWindow:_adspot.viewController.view.window];
-
-}
-
-
 - (void)showInWindow:(UIWindow *)window {
 
     [self.mercury_ad showAdInWindow:window];
@@ -132,16 +98,6 @@
     [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(splashDidClickForSpotId:extra:)]) {
         [self.delegate splashDidClickForSpotId:self.adspot.adspotid extra:self.adspot.ext];
-    }
-}
-
-- (void)mercury_splashAdLifeTime:(NSUInteger)time {
-    
-    if (self.isGMBidding == 0) {
-        return;
-    }
-    if (time <= 0 && [self.delegate respondsToSelector:@selector(splashDidCloseForSpotId:extra:)]) {
-        [self.delegate splashDidCloseForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
 }
 

@@ -86,7 +86,7 @@ NSString * ADVStringFromNAdvanceSdkSupplierRepoType(AdvanceSdkSupplierRepoType t
 @property (nonatomic, strong) NSArray<NSString *> *failedtk;
 @property (nonatomic, strong) NSArray<NSString *> *wintk; // 上游sdk竞胜上报（仅在开启竞价情况下返回）
 
-
+/// 以下为自定义字段
 @property (nonatomic, assign) AdvanceSupplierLoadAdState loadAdState; // 广告加载状态
 @property (nonatomic, assign) BOOL hited; // 是否已经命中过
 /// 用于存储对应的Adapter，key必须唯一，会有同渠道配置多个的情况
@@ -135,6 +135,9 @@ NSString * ADVStringFromNAdvanceSdkSupplierRepoType(AdvanceSdkSupplierRepoType t
 @property (nonatomic, copy) NSString     * appid;
 @property (nonatomic, copy) NSString     * adspotid;
 @property (nonatomic, assign) NSInteger    timeout;
+
+/// 【自定义字段】竞胜价格，用于数据上报
+@property (nonatomic, assign) NSInteger bidPrice;
 
 @end
 

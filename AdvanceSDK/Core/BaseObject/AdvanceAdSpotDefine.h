@@ -44,6 +44,9 @@ NS_ASSUME_NONNULL_BEGIN
 /// 加载广告策略
 - (void)loadAdPolicy;
 
+/// gromore bidding时 获取Advance广告位的竞胜渠道
+- (void)catchBidTargetWhenGroMoreBiddingWithPolicyModel:(nullable AdvPolicyModel *)model;
+
 @end
 
 NS_ASSUME_NONNULL_END

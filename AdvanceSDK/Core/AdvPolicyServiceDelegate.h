@@ -33,4 +33,7 @@
 /// @param description 每个渠道的错误描述，部分情况下为nil； key的命名规则: 渠道名-id
 - (void)advPolicyServiceFailedBiddingWithError:(NSError *_Nullable)error description:(NSDictionary *_Nullable)description;
 
+/// 加载GroMoreSDK
+- (void)advPolicyServiceLoadGroMoreSDKWithModel:(nullable AdvPolicyModel *)model;
+
 @end

@@ -61,12 +61,26 @@
 
 /// 执行SDK策略
 - (void)executeSDKPolicy {
-    if (_model.setting.bidding_type == 1) { // gro_more竞价
-        // 根据渠道标识 获取bidding的supplier去执行
-        
+    if (_model.setting.bidding_type == 1) { // GroMore竞价
+        [self startGroMoreBidding];
     } else { // 传统瀑布流 + 头部竞价
         [self loadSuppliersConcurrently];
     }
+}
+
+/// for gromore bidding
+- (void)startGroMoreBidding {
+    if ([_delegate respondsToSelector:@selector(advPolicyServiceLoadGroMoreSDKWithModel:)]) {
+        [_delegate advPolicyServiceLoadGroMoreSDKWithModel:self.model];
+    }
+    [self reportGroMoreEventWithType:AdvanceSdkSupplierRepoLoaded groMore:self.model.gro_more error:nil];
+}
+
+/// for gromore bidding
+- (void)catchBidTargetWhenGroMoreBiddingWithPolicyModel:(nullable AdvPolicyModel *)model {
+    self.model = model;
+    _errorInfo = [NSMutableDictionary dictionary];
+    [self loadSuppliersConcurrently];
 }
 
 /// 并发加载各个渠道SDK
@@ -395,6 +409,31 @@
     // 执行上报请求
     [self.tkUploadTool reportWithUploadUrls:uploadUrls];
     ADVLog(@"%@ = 上报(impid: %@)", ADVStringFromNAdvanceSdkSupplierRepoType(repoType), supplier.name);
+}
+
+- (void)reportGroMoreEventWithType:(AdvanceSdkSupplierRepoType)repoType groMore:(Gro_more *)groMore error:(nullable NSError *)error {
+    
+    NSArray<NSString *> *uploadUrls = nil;
+    /// 按照类型判断上报地址
+    if (repoType == AdvanceSdkSupplierRepoLoaded) {
+        uploadUrls = [self.tkUploadTool loadedtkUrlWithArr:groMore.gmtk.loadedtk];
+    } else if (repoType == AdvanceSdkSupplierRepoClicked) {
+        uploadUrls = groMore.gmtk.clicktk;
+    } else if (repoType == AdvanceSdkSupplierRepoSucceed) {
+        uploadUrls =  [self.tkUploadTool succeedtkUrlWithArr:groMore.gmtk.succeedtk price:groMore.gromore_params.bidPrice];
+    } else if (repoType == AdvanceSdkSupplierRepoImped) {
+        uploadUrls =  [self.tkUploadTool imptkUrlWithArr:groMore.gmtk.imptk price:groMore.gromore_params.bidPrice];
+    } else if (repoType == AdvanceSdkSupplierRepoFailed) {
+        uploadUrls =  [self.tkUploadTool failedtkUrlWithArr:groMore.gmtk.failedtk error:error];
+    } else if (repoType == AdvanceSdkSupplierRepoBidWin) {
+        uploadUrls =  [self.tkUploadTool imptkUrlWithArr:groMore.gmtk.biddingtk price:groMore.gromore_params.bidPrice];
+    }
+    
+    if (!uploadUrls.count) {
+        return;
+    }
+    // 执行上报请求
+    [self.tkUploadTool reportWithUploadUrls:uploadUrls];
 }
 
 - (void)collectSupplierErrorInfomation:(AdvSupplier *)supplier error:(NSError *)error; {

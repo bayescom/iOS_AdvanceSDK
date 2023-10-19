@@ -48,6 +48,12 @@ NS_ASSUME_NONNULL_BEGIN
 /// @param repoType 上报的类型
 - (void)reportEventWithType:(AdvanceSdkSupplierRepoType)repoType supplier:(AdvSupplier *)supplier error:(nullable NSError *)error;
 
+/// gromore bidding时获取Advance广告位的竞胜渠道
+- (void)catchBidTargetWhenGroMoreBiddingWithPolicyModel:(nullable AdvPolicyModel *)model;
+
+/// gromore数据上报
+- (void)reportGroMoreEventWithType:(AdvanceSdkSupplierRepoType)repoType groMore:(Gro_more *)groMore error:(nullable NSError *)error;
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -95,11 +95,11 @@ Pod::Spec.new do |s|
         valid_archs = ['armv7', 'armv7s', 'x86_64', 'arm64']
     end
     
-    s.subspec 'Bidding' do |bidding|
+    s.subspec 'GMBidding' do |bidding|
         bidding.dependency 'AdvanceSDK/Core'
         bidding.dependency 'AdvanceSDK/AdSpot'
-        bidding.dependency 'AdvBiddingSuppliers','0.0.8'
-        bidding.source_files = 'AdvanceSDK/Adapter/Bidding/**/*.{h,m}'
+        bidding.dependency 'AdvBiddingSuppliers', '0.0.8'
+        bidding.source_files = 'AdvanceSDK/GMBidding/**/*.{h,m}'
     end
 
     

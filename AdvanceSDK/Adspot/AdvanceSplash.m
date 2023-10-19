@@ -14,8 +14,6 @@
 
 @interface AdvanceSplash ()
 
-@property (nonatomic, strong) NSNumber *isGMBidding;
-
 @end
 
 @implementation AdvanceSplash
@@ -45,7 +43,7 @@
 /// 广告策略加载失败
 - (void)advPolicyServiceLoadFailedWithError:(nullable NSError *)error {
     if ([_delegate respondsToSelector:@selector(didFailLoadingADSourceWithSpotId:error:description:)]) {
-        [_delegate didFailLoadingADSourceWithSpotId:self.adspotid error:error description:nil];
+        [_delegate didFailLoadingADSourceWithSpotId:self.adspotid error:error description:[self.manager.errorInfo copy]];
     }
 }
 
@@ -77,6 +75,25 @@
     ((void (*)(id, SEL))objc_msgSend)((id)self.targetAdapter, NSSelectorFromString(@"winnerAdapterToShowAd"));
 }
 
+/// 加载GroMore
+- (void)advPolicyServiceLoadGroMoreSDKWithModel:(nullable AdvPolicyModel *)model {
+    /// 初始化gromore sdk
+    Class clazz = NSClassFromString(@"AdvBiddingManger");
+    if (!clazz && [_delegate respondsToSelector:@selector(didFailLoadingADSourceWithSpotId:error:description:)]) {
+        [_delegate didFailLoadingADSourceWithSpotId:self.adspotid error:nil description:@{@"error": @"please pod install 'GMBidding'"}];
+        return;
+    }
+    SEL selector = NSSelectorFromString(@"loadGroMoreSDKWithDataObject:");
+    if ([clazz.class respondsToSelector:selector]) {
+        ((void (*)(id, SEL, id))objc_msgSend)(clazz.class, selector, model);
+    }
+    
+    /// 加载gromore广告位
+    id gmSplash = ((id (*)(id, SEL, id, id))objc_msgSend)((id)[NSClassFromString(@"AdvBiddingSplash") alloc], NSSelectorFromString(@"initWithGroMore:adspot:"), model.gro_more, self);
+    ((void (*)(id, SEL, id))objc_msgSend)((id)gmSplash, NSSelectorFromString(@"setDelegate:"), self.delegate);
+    ((void (*)(id, SEL))objc_msgSend)((id)gmSplash, NSSelectorFromString(@"loadAd"));
+    self.targetAdapter = gmSplash;
+}
 
 /// 加载某一个渠道对象
 - (void)advPolicyServiceLoadAnySupplier:(nullable AdvSupplier *)supplier {
@@ -131,17 +148,6 @@
         self.viewController = window.rootViewController;
     }
     ((void (*)(id, SEL, id))objc_msgSend)((id)self.targetAdapter, NSSelectorFromString(@"showInWindow:"), window);
-}
-
-
-- (void)gmShowAd {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wundeclared-selector"
-    ((void (*)(id, SEL))objc_msgSend)((id)self.targetAdapter, @selector(gmShowAd));
-    
-    
-#pragma clang diagnostic pop
-    
 }
 
 - (void)dealloc {
