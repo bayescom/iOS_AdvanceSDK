@@ -24,9 +24,6 @@ Pod::Spec.new do |s|
     
     s.user_target_xcconfig = {'OTHER_LDFLAGS' => ['-ObjC']}
     valid_archs = ['i386', 'armv7', 'x86_64', 'arm64']
-    # bitcode
-    #    s.pod_target_xcconfig = { 'ENABLE_BITCODE' => 'NO', 'VALID_ARCHS' => valid_archs.join(' '), 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
-    #    s.user_target_xcconfig = { 'ENABLE_BITCODE' => 'NO', 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
     s.pod_target_xcconfig = { 'ENABLE_BITCODE' => 'NO'}
     s.user_target_xcconfig = { 'ENABLE_BITCODE' => 'NO'}
     
@@ -98,32 +95,12 @@ Pod::Spec.new do |s|
     s.subspec 'GMBidding' do |bidding|
         bidding.dependency 'AdvanceSDK/Core'
         bidding.dependency 'AdvanceSDK/AdSpot'
-        bidding.dependency 'AdvBiddingSuppliers', '0.0.8'
+        bidding.dependency 'GroMoreBiddingSDK', '1.0.0'
         bidding.source_files = 'AdvanceSDK/GMBidding/**/*.{h,m}'
     end
 
-    
-    #        s.subspec 'TANX' do |tanx|
-    #            tanx.dependency 'AdvanceSDK/Core'
-    #            tanx.dependency 'AdvanceSDK/AdSpot'
-    #            tanx.dependency 'JSONModel', '1.8.0'
-    #            tanx.dependency 'Reachability', '3.2'
-    #            tanx.dependency 'SDWebImage', '5.12.1'
-    #            tanx.source_files =  'AdvanceSDK/Adapter/Tanx/*{h,m}'
-    #            tanx.ios.vendored_frameworks = 'AdvanceSDK/Adapter/Tanx/TanxSDKFolder/TanxSDK.framework'
-    #    #        tanx.vendored_frameworks = 'TanxSDK.framework'
-    #
-    #
-    #            valid_archs = ['armv7', 'armv7s', 'x86_64', 'arm64']
-    #
-    #
-    #        end
-
-    
     s.xcconfig = {
         'VALID_ARCHS' =>  valid_archs.join(' '),
     }
-    
-
 
 end

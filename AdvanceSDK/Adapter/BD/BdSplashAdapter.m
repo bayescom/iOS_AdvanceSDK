@@ -95,14 +95,6 @@
     NSError *error = [[NSError alloc]initWithDomain:@"BDAdErrorDomain" code:[errCode integerValue] userInfo:@{@"desc":message}];
     [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
     [self.adspot.manager checkTargetWithResultfulSupplier:_supplier loadAdState:AdvanceSupplierLoadAdFailed];
-
-}
-
-- (void)splashDidDismissScreen:(BaiduMobAdSplash *)splash {
-    [self removeAdViews];
-    if ([self.delegate respondsToSelector:@selector(splashDidCloseForSpotId:extra:)]) {
-        [self.delegate splashDidCloseForSpotId:self.adspot.adspotid extra:self.adspot.ext];
-    }
 }
 
 - (void)splashSuccessPresentScreen:(BaiduMobAdSplash *)splash {
@@ -110,7 +102,6 @@
 }
 
 - (void)splashDidExposure:(BaiduMobAdSplash *)splash {
-//    NSLog(@"开屏广告曝光成功");
     [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(splashDidShowForSpotId:extra:)] && self.bd_ad) {
         [self.delegate splashDidShowForSpotId:self.adspot.adspotid extra:self.adspot.ext];
@@ -118,11 +109,16 @@
 }
 
 - (void)splashDidClicked:(BaiduMobAdSplash *)splash {
-//    NSLog(@"开屏广告被点击");
-    [self removeAdViews];
     [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(splashDidClickForSpotId:extra:)]) {
         [self.delegate splashDidClickForSpotId:self.adspot.adspotid extra:self.adspot.ext];
+    }
+}
+
+- (void)splashDidDismissScreen:(BaiduMobAdSplash *)splash {
+    [self removeAdViews];
+    if ([self.delegate respondsToSelector:@selector(splashDidCloseForSpotId:extra:)]) {
+        [self.delegate splashDidCloseForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
 }
 

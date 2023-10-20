@@ -21,7 +21,6 @@
 		31FE7BCD24482CEE00CB2062 /* ExamTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 31FE7BBD24482CEE00CB2062 /* ExamTableViewCell.m */; };
 		31FE7BCE24482CEE00CB2062 /* DemoUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 31FE7BC024482CEE00CB2062 /* DemoUtils.m */; };
 		31FE7BCF24482CEE00CB2062 /* BaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31FE7BC324482CEE00CB2062 /* BaseViewController.m */; };
-		31FE7BD724482D0500CB2062 /* NSTimeUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 31FE7BD024482CF800CB2062 /* NSTimeUtils.m */; };
 		31FE7BD924482D0500CB2062 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31FE7BD624482D0500CB2062 /* ViewController.m */; };
 		31FE7C2224482D2300CB2062 /* DemoSplashViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31FE7BE324482D2200CB2062 /* DemoSplashViewController.m */; };
 		31FE7C2324482D2300CB2062 /* DemoRewardVideoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 31FE7BE724482D2200CB2062 /* DemoRewardVideoViewController.m */; };
@@ -34,11 +33,6 @@
 		4EFB344228A0ADD00047E75A /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EFB344128A0ADD00047E75A /* CoreTelephony.framework */; };
 		4EFB344428A0ADDA0047E75A /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EFB344328A0ADDA0047E75A /* SystemConfiguration.framework */; };
 		4EFB344628A0ADE40047E75A /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EFB344528A0ADE40047E75A /* WebKit.framework */; };
-		4EFB346228A0B2A20047E75A /* TanxRewardVideoAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EFB345B28A0B2A10047E75A /* TanxRewardVideoAdapter.m */; };
-		4EFB346428A0B2A20047E75A /* TanxNativeExpressAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EFB345F28A0B2A20047E75A /* TanxNativeExpressAdapter.m */; };
-		4EFB346528A0B2A20047E75A /* TanxSplashAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EFB346128A0B2A20047E75A /* TanxSplashAdapter.m */; };
-		4EFB346628A0B2A50047E75A /* TanxSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EFB345E28A0B2A20047E75A /* TanxSDK.framework */; };
-		4EFB346728A0B2A50047E75A /* TanxSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4EFB345E28A0B2A20047E75A /* TanxSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6003F58E195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58F195388D20070C39A /* CoreGraphics.framework */; };
 		6003F592195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
@@ -72,7 +66,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				4EFB346728A0B2A50047E75A /* TanxSDK.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -111,9 +104,7 @@
 		31FE7BC124482CEE00CB2062 /* DemoUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DemoUtils.h; sourceTree = "<group>"; };
 		31FE7BC324482CEE00CB2062 /* BaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseViewController.m; sourceTree = "<group>"; };
 		31FE7BC424482CEE00CB2062 /* BaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseViewController.h; sourceTree = "<group>"; };
-		31FE7BD024482CF800CB2062 /* NSTimeUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSTimeUtils.m; sourceTree = "<group>"; };
 		31FE7BD324482CFE00CB2062 /* PrefixHeader.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
-		31FE7BD424482D0000CB2062 /* NSTimeUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSTimeUtils.h; sourceTree = "<group>"; };
 		31FE7BD524482D0300CB2062 /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		31FE7BD624482D0500CB2062 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		31FE7BE324482D2200CB2062 /* DemoSplashViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DemoSplashViewController.m; sourceTree = "<group>"; };
@@ -139,13 +130,6 @@
 		4EFB344728A0ADF40047E75A /* libresolv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.tbd; path = usr/lib/libresolv.tbd; sourceTree = SDKROOT; };
 		4EFB344828A0AE130047E75A /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
 		4EFB344928A0AE230047E75A /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
-		4EFB345A28A0B2A10047E75A /* TanxSplashAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TanxSplashAdapter.h; sourceTree = "<group>"; };
-		4EFB345B28A0B2A10047E75A /* TanxRewardVideoAdapter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TanxRewardVideoAdapter.m; sourceTree = "<group>"; };
-		4EFB345C28A0B2A20047E75A /* TanxNativeExpressAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TanxNativeExpressAdapter.h; sourceTree = "<group>"; };
-		4EFB345E28A0B2A20047E75A /* TanxSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TanxSDK.framework; sourceTree = "<group>"; };
-		4EFB345F28A0B2A20047E75A /* TanxNativeExpressAdapter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TanxNativeExpressAdapter.m; sourceTree = "<group>"; };
-		4EFB346028A0B2A20047E75A /* TanxRewardVideoAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TanxRewardVideoAdapter.h; sourceTree = "<group>"; };
-		4EFB346128A0B2A20047E75A /* TanxSplashAdapter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TanxSplashAdapter.m; sourceTree = "<group>"; };
 		5AD1647B6E4DD4231AFEFF67 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		6003F58A195388D20070C39A /* AdvanceSDK_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AdvanceSDK_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F58D195388D20070C39A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -178,7 +162,6 @@
 				6003F592195388D20070C39A /* UIKit.framework in Frameworks */,
 				6003F58E195388D20070C39A /* Foundation.framework in Frameworks */,
 				4EFB344228A0ADD00047E75A /* CoreTelephony.framework in Frameworks */,
-				4EFB346628A0B2A50047E75A /* TanxSDK.framework in Frameworks */,
 				E349CF53E54D6BF0E9D2E04D /* Pods_AdvanceSDK_Example.framework in Frameworks */,
 				4EFB343E28A0ADAF0047E75A /* AdSupport.framework in Frameworks */,
 				4EFB344028A0ADC30047E75A /* CoreMotion.framework in Frameworks */,
@@ -308,28 +291,6 @@
 			path = FeedExpress;
 			sourceTree = "<group>";
 		};
-		4EFB345928A0B2A10047E75A /* Tanx */ = {
-			isa = PBXGroup;
-			children = (
-				4EFB345D28A0B2A20047E75A /* TanxSDKFolder */,
-				4EFB345A28A0B2A10047E75A /* TanxSplashAdapter.h */,
-				4EFB346128A0B2A20047E75A /* TanxSplashAdapter.m */,
-				4EFB346028A0B2A20047E75A /* TanxRewardVideoAdapter.h */,
-				4EFB345B28A0B2A10047E75A /* TanxRewardVideoAdapter.m */,
-				4EFB345C28A0B2A20047E75A /* TanxNativeExpressAdapter.h */,
-				4EFB345F28A0B2A20047E75A /* TanxNativeExpressAdapter.m */,
-			);
-			path = Tanx;
-			sourceTree = "<group>";
-		};
-		4EFB345D28A0B2A20047E75A /* TanxSDKFolder */ = {
-			isa = PBXGroup;
-			children = (
-				4EFB345E28A0B2A20047E75A /* TanxSDK.framework */,
-			);
-			path = TanxSDKFolder;
-			sourceTree = "<group>";
-		};
 		6003F581195388D10070C39A = {
 			isa = PBXGroup;
 			children = (
@@ -377,20 +338,17 @@
 		6003F593195388D20070C39A /* Example for AdvanceSDK */ = {
 			isa = PBXGroup;
 			children = (
-				31FE7BAA24482CEE00CB2062 /* AppViewBuilder */,
-				4EFB345928A0B2A10047E75A /* Tanx */,
-				31FE7BD424482D0000CB2062 /* NSTimeUtils.h */,
-				31FE7BD024482CF800CB2062 /* NSTimeUtils.m */,
 				6003F59C195388D20070C39A /* AppDelegate.h */,
 				6003F59D195388D20070C39A /* AppDelegate.m */,
 				31FE7BD524482D0300CB2062 /* ViewController.h */,
 				31FE7BD624482D0500CB2062 /* ViewController.m */,
 				31FE7BE124482D2200CB2062 /* ADExampleControllers */,
+				31FE7BAA24482CEE00CB2062 /* AppViewBuilder */,
+				6003F594195388D20070C39A /* Supporting Files */,
 				873B8AEA1B1F5CCA007FD442 /* Main.storyboard */,
 				31FE7BD324482CFE00CB2062 /* PrefixHeader.pch */,
 				71719F9D1E33DC2100824A3D /* LaunchScreen.storyboard */,
 				6003F5A8195388D20070C39A /* Images.xcassets */,
-				6003F594195388D20070C39A /* Supporting Files */,
 			);
 			name = "Example for AdvanceSDK";
 			path = AdvanceSDK;
@@ -605,17 +563,13 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-AdvanceSDK_Example/Pods-AdvanceSDK_Example-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/JSONModel/JSONModel.framework",
 				"${BUILT_PRODUCTS_DIR}/Masonry/Masonry.framework",
-				"${BUILT_PRODUCTS_DIR}/Reachability/Reachability.framework",
 				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
 				"${PODS_XCFRAMEWORKS_BUILD_DIR}/KSAdSDK/KSAdSDK.framework/KSAdSDK",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JSONModel.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Masonry.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Reachability.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KSAdSDK.framework",
 			);
@@ -635,13 +589,11 @@
 				31FE7C2824482D2300CB2062 /* DemoBannerViewController.m in Sources */,
 				31FE7C2624482D2300CB2062 /* DemoFullScreenVideoController.m in Sources */,
 				6003F59E195388D20070C39A /* AppDelegate.m in Sources */,
-				4EFB346228A0B2A20047E75A /* TanxRewardVideoAdapter.m in Sources */,
 				31FE7C2424482D2300CB2062 /* DemoRenderFeedViewController.m in Sources */,
 				31FE7BCF24482CEE00CB2062 /* BaseViewController.m in Sources */,
 				31FE7C2324482D2300CB2062 /* DemoRewardVideoViewController.m in Sources */,
 				31FE7BCA24482CEE00CB2062 /* BYExamCellModel.m in Sources */,
 				31FE7C2224482D2300CB2062 /* DemoSplashViewController.m in Sources */,
-				4EFB346528A0B2A20047E75A /* TanxSplashAdapter.m in Sources */,
 				31FE7BCE24482CEE00CB2062 /* DemoUtils.m in Sources */,
 				31FE7BC624482CEE00CB2062 /* JDStatusBarNotification.m in Sources */,
 				31FE7BC724482CEE00CB2062 /* JDStatusBarView.m in Sources */,
@@ -649,10 +601,8 @@
 				22635F2E2AAEF10400D9C674 /* DemoFeedAdDisplayController.m in Sources */,
 				31FE7BC924482CEE00CB2062 /* JDStatusBarStyle.m in Sources */,
 				6003F59A195388D20070C39A /* main.m in Sources */,
-				31FE7BD724482D0500CB2062 /* NSTimeUtils.m in Sources */,
 				31FE7C2724482D2300CB2062 /* DemoInterstitialViewController.m in Sources */,
 				31FE7BC524482CEE00CB2062 /* ViewBuilder.m in Sources */,
-				4EFB346428A0B2A20047E75A /* TanxNativeExpressAdapter.m in Sources */,
 				31FE7BCB24482CEE00CB2062 /* CellBuilder.m in Sources */,
 				22635F202AAAED0D00D9C674 /* DemoListFeedExpressViewController.m in Sources */,
 				31FE7BCD24482CEE00CB2062 /* ExamTableViewCell.m in Sources */,
@@ -882,8 +832,6 @@
 					"-framework",
 					"\"ImageIO\"",
 					"-framework",
-					"\"JSONModel\"",
-					"-framework",
 					"\"JavaScriptCore\"",
 					"-framework",
 					"\"KSAdSDK\"",
@@ -903,8 +851,6 @@
 					"\"QuartzCore\"",
 					"-framework",
 					"\"QuickLook\"",
-					"-framework",
-					"\"Reachability\"",
 					"-framework",
 					"\"SDWebImage\"",
 					"-framework",
@@ -1015,8 +961,6 @@
 					"-framework",
 					"\"ImageIO\"",
 					"-framework",
-					"\"JSONModel\"",
-					"-framework",
 					"\"JavaScriptCore\"",
 					"-framework",
 					"\"KSAdSDK\"",
@@ -1036,8 +980,6 @@
 					"\"QuartzCore\"",
 					"-framework",
 					"\"QuickLook\"",
-					"-framework",
-					"\"Reachability\"",
 					"-framework",
 					"\"SDWebImage\"",
 					"-framework",

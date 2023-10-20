@@ -114,7 +114,7 @@
     if ([self.delegate respondsToSelector:@selector(splashDidClickForSpotId:extra:)]) {
         [self.delegate splashDidClickForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
-    [self ksAdDidCloseWithCallback:NO];
+    [self ksAdDidClose];
 }
 
 /**
@@ -123,14 +123,14 @@
  */
 - (void)ksad_splashAd:(KSSplashAdView *)splashAdView didSkip:(NSTimeInterval)showDuration {
     
-    [self ksAdDidCloseWithCallback:YES];
+    [self ksAdDidClose];
 }
 /**
  * splash ad close conversion viewcontroller (no subsequent callbacks, remove & release KSSplashAdView here)
  */
 - (void)ksad_splashAdDidCloseConversionVC:(KSSplashAdView *)splashAdView interactionType:(KSAdInteractionType)interactType {
     
-    [self ksAdDidCloseWithCallback:YES];
+    [self ksAdDidClose];
 }
 
 /**
@@ -138,20 +138,18 @@
  */
 - (void)ksad_splashAdDidAutoDismiss:(KSSplashAdView *)splashAdView {
 
-    [self ksAdDidCloseWithCallback:YES];
+    [self ksAdDidClose];
 }
 
-- (void)ksAdDidCloseWithCallback:(BOOL)callback {
+- (void)ksAdDidClose {
    
     [_ks_ad removeFromSuperview];
     _ks_ad = nil;
     [self.imgV removeFromSuperview];
     self.imgV = nil;
     
-    if (callback) {
-        if ([self.delegate respondsToSelector:@selector(splashDidCloseForSpotId:extra:)]) {
-            [self.delegate splashDidCloseForSpotId:self.adspot.adspotid extra:self.adspot.ext];
-        }
+    if ([self.delegate respondsToSelector:@selector(splashDidCloseForSpotId:extra:)]) {
+        [self.delegate splashDidCloseForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
 }
 

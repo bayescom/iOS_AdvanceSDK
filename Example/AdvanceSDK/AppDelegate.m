@@ -50,7 +50,7 @@
     
     
     //[AdvSdkConfig shareInstance].appId = @"100255";
-//    [AdvSdkConfig shareInstance].appId = @"102768";
+    [AdvSdkConfig shareInstance].appId = @"102768";
     [AdvBayesSDKConfig setUserAgent:@"ua"];
     [AdvBayesSDKConfig setAAIDWithMediaId:@"media001" mediaSecret:@"243835763"];
     

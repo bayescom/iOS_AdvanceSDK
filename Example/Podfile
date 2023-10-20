@@ -28,15 +28,11 @@ target 'AdvanceSDK_Example' do
 
   # 集成GroMoreBidding 所需
   pod 'AdvanceSDK/GMBidding', :path => '../'
+
   
   
-  pod 'JSONModel', '1.8.0'
-  pod 'Reachability', '3.2'
   pod 'SDWebImage', '5.12.1'
   pod 'Masonry'
-#  pod 'Ads-CN', '4.4.0.0'
-#  pod "STDebugConsole"
-#  pod 'JPFPSStatus'
 
   target 'AdvanceSDK_Tests' do
     inherit! :search_paths

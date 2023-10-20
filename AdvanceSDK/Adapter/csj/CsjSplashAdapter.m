@@ -125,14 +125,6 @@
     [self csjAdDidClose];
 }
 
-- (void)splashAdViewControllerDidClose:(BUSplashAd *)splashAd {
-    [self csjAdDidClose];
-}
-
-- (void)splashDidCloseOtherController:(nonnull BUSplashAd *)splashAd interactionType:(BUInteractionType)interactionType {
-    [self csjAdDidClose];
-}
-
 - (void)splashVideoAdDidPlayFinish:(nonnull BUSplashAd *)splashAd didFailWithError:(nonnull NSError *)error {
     
 }
