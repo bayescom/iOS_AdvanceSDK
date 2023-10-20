@@ -9,7 +9,7 @@
 #import <ABUAdSDK/ABUAdSDK.h>
 #import "AdvanceSplash.h"
 #import "AdvLog.h"
-#import "AdvBiddingManger.h"
+#import "AdvBiddingManager.h"
 
 @interface AdvBiddingSplash () <ABUSplashAdDelegate>
 /// gromore 广告位对象
@@ -80,7 +80,7 @@
 - (void)splashAdWillVisible:(ABUSplashAd *_Nonnull)splashAd {
     /// 广告曝光才能获取到竞价
     ABURitInfo *info = [splashAd getShowEcpmInfo];
-    AdvBiddingManger.policyModel.gro_more.gromore_params.bidPrice = info.ecpm.integerValue;
+    AdvBiddingManager.policyModel.gro_more.gromore_params.bidPrice = info.ecpm.integerValue;
     
     [self.adspot.manager reportGroMoreEventWithType:AdvanceSdkSupplierRepoImped groMore:_groMore error:nil];
     if ([self.delegate respondsToSelector:@selector(splashDidShowForSpotId:extra:)]) {

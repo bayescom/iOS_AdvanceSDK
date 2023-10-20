@@ -78,7 +78,7 @@
 /// 加载GroMore
 - (void)advPolicyServiceLoadGroMoreSDKWithModel:(nullable AdvPolicyModel *)model {
     /// 初始化gromore sdk
-    Class clazz = NSClassFromString(@"AdvBiddingManger");
+    Class clazz = NSClassFromString(@"AdvBiddingManager");
     if (!clazz && [_delegate respondsToSelector:@selector(didFailLoadingADSourceWithSpotId:error:description:)]) {
         [_delegate didFailLoadingADSourceWithSpotId:self.adspotid error:nil description:@{@"error": @"please pod install 'GMBidding'"}];
         return;

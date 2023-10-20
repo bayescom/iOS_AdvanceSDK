@@ -1,14 +1,14 @@
 //
-//  AdvBiddingManger.m
+//  AdvBiddingManager.m
 //  AdvanceSDK
 //
 //  Created by guangyao on 2023/10/18.
 //
 
-#import "AdvBiddingManger.h"
+#import "AdvBiddingManager.h"
 #import <ABUAdSDK/ABUAdSDK.h>
 
-@interface AdvBiddingManger ()
+@interface AdvBiddingManager ()
 
 @property (nonatomic, assign, class) BOOL sdkInitialized;
 
@@ -17,7 +17,7 @@
 static AdvPolicyModel *_policyModel = nil;
 static BOOL _sdkInitialized = NO;
 
-@implementation AdvBiddingManger
+@implementation AdvBiddingManager
 
 + (AdvPolicyModel *)policyModel {
     return _policyModel;
@@ -36,9 +36,9 @@ static BOOL _sdkInitialized = NO;
 }
 
 + (void)loadGroMoreSDKWithDataObject:(AdvPolicyModel *)dataObject {
-    AdvBiddingManger.policyModel = dataObject;
-    if (!AdvBiddingManger.sdkInitialized) {
-        AdvBiddingManger.sdkInitialized = YES;
+    AdvBiddingManager.policyModel = dataObject;
+    if (!AdvBiddingManager.sdkInitialized) {
+        AdvBiddingManager.sdkInitialized = YES;
         [ABUAdSDKManager setupSDKWithAppId:dataObject.gro_more.gromore_params.appid config:nil];
     }
 }
