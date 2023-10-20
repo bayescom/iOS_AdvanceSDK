@@ -30,7 +30,6 @@
         _manager = [AdvPolicyService manager];
         _manager.delegate = self;
         _adapterMap = [NSMutableDictionary dictionary];
-        [self setSDKVersion];
     }
     return self;
 }
@@ -41,65 +40,6 @@
 
 - (void)catchBidTargetWhenGroMoreBiddingWithPolicyModel:(AdvPolicyModel *)model {
     [_manager catchBidTargetWhenGroMoreBiddingWithPolicyModel:model];
-}
-
-- (void)setSDKVersion {
-    [self setGdtSDKVersion];
-    [self setCsjSDKVersion];
-    [self setMerSDKVersion];
-    [self setKsSDKVersion];
-    [self setTanxSDKVersion];
-}
-
-- (void)setGdtSDKVersion {
-    Class clazz = NSClassFromString(@"GDTSDKConfig");
-    SEL selector = NSSelectorFromString(@"sdkVersion");
-    if (clazz && [clazz.class respondsToSelector:selector]) {
-        NSString *gdtVersion = ((NSString* (*)(id, SEL))objc_msgSend)(clazz.class, selector);
-        [self setSDKVersionForKey:@"gdt_v" version:gdtVersion];
-    }
-}
-
-- (void)setCsjSDKVersion {
-    Class clazz = NSClassFromString(@"BUAdSDKManager");
-    SEL selector = NSSelectorFromString(@"SDKVersion");
-    if (clazz && [clazz.class respondsToSelector:selector]) {
-        NSString *gdtVersion = ((NSString* (*)(id, SEL))objc_msgSend)(clazz.class, selector);
-        [self setSDKVersionForKey:@"csj_v" version:gdtVersion];
-    }
-}
-
-- (void)setMerSDKVersion {
-    Class clazz = NSClassFromString(@"MercuryConfigManager");
-    SEL selector = NSSelectorFromString(@"sdkVersion");
-    if (clazz && [clazz.class respondsToSelector:selector]) {
-        NSString *merVersion = ((NSString* (*)(id, SEL))objc_msgSend)(clazz.class, selector);
-        [self setSDKVersionForKey:@"mry_v" version:merVersion];
-    }
-}
-
-- (void)setKsSDKVersion {
-    Class clazz = NSClassFromString(@"KSAdSDKManager");
-    SEL selector = NSSelectorFromString(@"SDKVersion");
-    if (clazz && [clazz.class respondsToSelector:selector]) {
-        NSString *ksVersion = ((NSString* (*)(id, SEL))objc_msgSend)(clazz.class, selector);
-        [self setSDKVersionForKey:@"ks_v" version:ksVersion];
-    }
-}
-
-- (void)setTanxSDKVersion {
-    Class clazz = NSClassFromString(@"TXAdSDKConfiguration");
-    SEL selector = NSSelectorFromString(@"sdkVersion");
-    if (clazz && [clazz.class respondsToSelector:selector]) {
-        NSString *tanxVersion = ((NSString* (*)(id, SEL))objc_msgSend)(clazz.class, selector);
-        [self setSDKVersionForKey:@"tanx_v" version:tanxVersion];
-    }
-}
-
-- (void)setSDKVersionForKey:(NSString *)key version:(NSString *)version {
-    if (version) {
-        [_ext setValue:version forKey:key];
-    }
 }
 
 - (void)dealloc {
