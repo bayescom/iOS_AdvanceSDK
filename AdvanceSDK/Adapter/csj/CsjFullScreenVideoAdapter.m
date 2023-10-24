@@ -16,15 +16,17 @@
 #import "AdvLog.h"
 #import "AdvanceAdapter.h"
 
-@interface CsjFullScreenVideoAdapter () <BUNativeExpressFullscreenVideoAdDelegate>
+@interface CsjFullScreenVideoAdapter () <BUNativeExpressFullscreenVideoAdDelegate, AdvanceAdapter>
 @property (nonatomic, strong) BUNativeExpressFullscreenVideoAd *csj_ad;
 @property (nonatomic, weak) AdvanceFullScreenVideo *adspot;
 @property (nonatomic, strong) AdvSupplier *supplier;
-@property (nonatomic, assign) BOOL isVideoCached;
 
 @end
 
 @implementation CsjFullScreenVideoAdapter
+
+@synthesize isWinnerAdapter = _isWinnerAdapter;
+@synthesize isVideoCached = _isVideoCached;
 
 - (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(id)adspot {
     if (self = [super init]) {
@@ -45,8 +47,12 @@
 }
 
 - (void)winnerAdapterToShowAd {
+    _isWinnerAdapter = YES;
     if ([self.delegate respondsToSelector:@selector(didFinishLoadingFullscreenVideoADWithSpotId:)]) {
         [self.delegate didFinishLoadingFullscreenVideoADWithSpotId:self.adspot.adspotid];
+    }
+    if (_isVideoCached && [self.delegate respondsToSelector:@selector(fullscreenVideoDidDownLoadForSpotId:extra:)]) {
+        [self.delegate fullscreenVideoDidDownLoadForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
 }
 
@@ -78,8 +84,9 @@
 
 /// 广告视频缓存成功
 - (void)nativeExpressFullscreenVideoAdDidDownLoadVideo:(BUNativeExpressFullscreenVideoAd *)fullscreenVideoAd {
-    self.isVideoCached = YES;
-    if ([self.delegate respondsToSelector:@selector(fullscreenVideoDidDownLoadForSpotId:extra:)]) {
+    _isVideoCached = YES;
+    /// 竞胜方才进行缓存成功回调
+    if (_isWinnerAdapter && [self.delegate respondsToSelector:@selector(fullscreenVideoDidDownLoadForSpotId:extra:)]) {
         [self.delegate fullscreenVideoDidDownLoadForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
 }

@@ -22,10 +22,6 @@
 
 #pragma mark: - ABUCustomSplashAdapter
 
-- (BOOL)enablePreloadWhenCurrentIsDisplay {
-    return YES;
-}
-
 - (ABUMediatedAdStatus)mediatedAdStatus {
     return ABUMediatedAdStatusNormal;
 }

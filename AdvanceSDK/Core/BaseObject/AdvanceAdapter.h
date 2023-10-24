@@ -9,6 +9,10 @@
 
 @protocol AdvanceAdapter <NSObject>
 
+@optional
+@property (nonatomic, assign) BOOL isWinnerAdapter;
+@property (nonatomic, assign) BOOL isVideoCached;
+
 @required
 /// 命中该adapter后，执行回调逻辑
 - (void)winnerAdapterToShowAd;

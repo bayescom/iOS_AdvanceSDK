@@ -26,7 +26,7 @@
     if (self = [super init]) {
         _mediaId = mediaId;
         _adspotid = adspotid;
-        _ext = [ext mutableCopy];
+        _ext = ext;
         _manager = [AdvPolicyService manager];
         _manager.delegate = self;
         _adapterMap = [NSMutableDictionary dictionary];

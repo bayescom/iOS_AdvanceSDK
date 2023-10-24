@@ -47,7 +47,6 @@
 }
 
 - (void)loadAd {
-    
     if([ABUAdSDKManager configDidLoad]) {
         [self.gmSplashAd loadAdData];
     } else {

@@ -27,6 +27,9 @@
 
 @implementation GdtFullScreenVideoAdapter
 
+@synthesize isWinnerAdapter = _isWinnerAdapter;
+@synthesize isVideoCached = _isVideoCached;
+
 - (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(id)adspot {
     if (self = [super init]) {
         _adspot = adspot;
@@ -48,8 +51,12 @@
 }
 
 - (void)winnerAdapterToShowAd {
+    _isWinnerAdapter = YES;
     if ([self.delegate respondsToSelector:@selector(didFinishLoadingFullscreenVideoADWithSpotId:)]) {
         [self.delegate didFinishLoadingFullscreenVideoADWithSpotId:self.adspot.adspotid];
+    }
+    if (_isVideoCached && [self.delegate respondsToSelector:@selector(fullscreenVideoDidDownLoadForSpotId:extra:)]) {
+        [self.delegate fullscreenVideoDidDownLoadForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
 }
 
@@ -74,7 +81,9 @@
 
 /// 插屏2.0广告视频缓存完成
 - (void)unifiedInterstitialDidDownloadVideo:(GDTUnifiedInterstitialAd *)unifiedInterstitial {
-    if ([self.delegate respondsToSelector:@selector(fullscreenVideoDidDownLoadForSpotId:extra:)]) {
+    _isVideoCached = YES;
+    /// 竞胜方才进行缓存成功回调
+    if (_isWinnerAdapter && [self.delegate respondsToSelector:@selector(fullscreenVideoDidDownLoadForSpotId:extra:)]) {
         [self.delegate fullscreenVideoDidDownLoadForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
 }
