@@ -18,7 +18,9 @@
 
 @implementation AdvanceInterstitial
 
-- (instancetype)initWithAdspotId:(NSString *)adspotid customExt:(nullable NSDictionary *)ext viewController:(UIViewController *)viewController {
+- (instancetype)initWithAdspotId:(NSString *)adspotid
+                       customExt:(nullable NSDictionary *)ext
+                  viewController:(nullable UIViewController *)viewController {
     
     NSMutableDictionary *extra = [NSMutableDictionary dictionaryWithDictionary:ext];
     [extra setValue:AdvSdkTypeAdNameInterstitial forKey: AdvSdkTypeAdName];
@@ -74,6 +76,25 @@
     ((void (*)(id, SEL))objc_msgSend)((id)self.targetAdapter, NSSelectorFromString(@"winnerAdapterToShowAd"));
 }
 
+/// 加载GroMore
+- (void)advPolicyServiceLoadGroMoreSDKWithModel:(nullable AdvPolicyModel *)model {
+    /// 初始化gromore sdk
+    Class clazz = NSClassFromString(@"AdvBiddingManager");
+    if (!clazz && [_delegate respondsToSelector:@selector(didFailLoadingADSourceWithSpotId:error:description:)]) {
+        [_delegate didFailLoadingADSourceWithSpotId:self.adspotid error:nil description:@{@"error": @"please pod install 'GMBidding'"}];
+        return;
+    }
+    SEL selector = NSSelectorFromString(@"loadGroMoreSDKWithDataObject:");
+    if ([clazz.class respondsToSelector:selector]) {
+        ((void (*)(id, SEL, id))objc_msgSend)(clazz.class, selector, model);
+    }
+    
+    /// 加载gromore广告位
+    id gmSplash = ((id (*)(id, SEL, id, id))objc_msgSend)((id)[NSClassFromString(@"AdvBiddingInterstitial") alloc], NSSelectorFromString(@"initWithGroMore:adspot:"), model.gro_more, self);
+    ((void (*)(id, SEL, id))objc_msgSend)((id)gmSplash, NSSelectorFromString(@"setDelegate:"), self.delegate);
+    ((void (*)(id, SEL))objc_msgSend)((id)gmSplash, NSSelectorFromString(@"loadAd"));
+    self.targetAdapter = gmSplash;
+}
 
 /// 加载某一个渠道对象
 - (void)advPolicyServiceLoadAnySupplier:(nullable AdvSupplier *)supplier {
@@ -119,6 +140,11 @@
 
 - (void)showAd {
     ((void (*)(id, SEL))objc_msgSend)((id)self.targetAdapter, NSSelectorFromString(@"showAd"));
+}
+
+- (void)showAdFromViewController:(UIViewController *)viewController {
+    self.viewController = viewController;
+    [self showAd];
 }
 
 - (void)dealloc {
