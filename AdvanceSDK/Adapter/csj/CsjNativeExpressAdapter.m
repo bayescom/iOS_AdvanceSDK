@@ -96,7 +96,7 @@
 }
 
 - (void)nativeExpressAdViewRenderSuccess:(BUNativeExpressAdView *)nativeExpressAdView {
-    AdvanceNativeExpressAd *nativeAd = [self returnExpressViewWithAdView:(UIView *)nativeExpressAdView];
+    AdvanceNativeExpressAd *nativeAd = [self getNativeExpressAdWithAdView:(UIView *)nativeExpressAdView];
     if (nativeAd) {
         if ([_delegate respondsToSelector:@selector(nativeExpressAdViewRenderSuccess:spotId:extra:)]) {
             [_delegate nativeExpressAdViewRenderSuccess:nativeAd spotId:self.adspot.adspotid extra:self.adspot.ext];
@@ -106,7 +106,7 @@
 
 - (void)nativeExpressAdViewRenderFail:(BUNativeExpressAdView *)nativeExpressAdView error:(NSError *)error {
     [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
-    AdvanceNativeExpressAd *nativeAd = [self returnExpressViewWithAdView:(UIView *)nativeExpressAdView];
+    AdvanceNativeExpressAd *nativeAd = [self getNativeExpressAdWithAdView:(UIView *)nativeExpressAdView];
     if (nativeAd) {
         if ([_delegate respondsToSelector:@selector(nativeExpressAdViewRenderFail:spotId:extra:)]) {
             [_delegate nativeExpressAdViewRenderFail:nativeAd spotId:self.adspot.adspotid extra:self.adspot.ext];
@@ -116,7 +116,7 @@
 
 - (void)nativeExpressAdViewWillShow:(BUNativeExpressAdView *)nativeExpressAdView {
     [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
-    AdvanceNativeExpressAd *nativeAd = [self returnExpressViewWithAdView:(UIView *)nativeExpressAdView];
+    AdvanceNativeExpressAd *nativeAd = [self getNativeExpressAdWithAdView:(UIView *)nativeExpressAdView];
     if (nativeAd) {
         if ([_delegate respondsToSelector:@selector(didShowNativeExpressAd:spotId:extra:)]) {
             [_delegate didShowNativeExpressAd:nativeAd spotId:self.adspot.adspotid extra:self.adspot.ext];
@@ -126,7 +126,7 @@
 
 - (void)nativeExpressAdViewDidClick:(BUNativeExpressAdView *)nativeExpressAdView {
     [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
-    AdvanceNativeExpressAd *nativeAd = [self returnExpressViewWithAdView:(UIView *)nativeExpressAdView];
+    AdvanceNativeExpressAd *nativeAd = [self getNativeExpressAdWithAdView:(UIView *)nativeExpressAdView];
     if (nativeAd) {
         if ([_delegate respondsToSelector:@selector(didClickNativeExpressAd:spotId:extra:)]) {
             [_delegate didClickNativeExpressAd:nativeAd spotId:self.adspot.adspotid extra:self.adspot.ext];
@@ -135,7 +135,7 @@
 }
 
 - (void)nativeExpressAdView:(BUNativeExpressAdView *)nativeExpressAdView dislikeWithReason:(NSArray<BUDislikeWords *> *)filterWords {
-    AdvanceNativeExpressAd *nativeAd = [self returnExpressViewWithAdView:(UIView *)nativeExpressAdView];
+    AdvanceNativeExpressAd *nativeAd = [self getNativeExpressAdWithAdView:(UIView *)nativeExpressAdView];
     if (nativeAd) {
         if ([_delegate respondsToSelector:@selector(didCloseNativeExpressAd:spotId:extra:)]) {
             [_delegate didCloseNativeExpressAd:nativeAd spotId:self.adspot.adspotid extra:self.adspot.ext];
@@ -148,7 +148,7 @@
 }
 
 
-- (AdvanceNativeExpressAd *)returnExpressViewWithAdView:(UIView *)adView {
+- (AdvanceNativeExpressAd *)getNativeExpressAdWithAdView:(UIView *)adView {
     for (NSInteger i = 0; i < self.nativeAds.count; i++) {
         AdvanceNativeExpressAd *temp = self.nativeAds[i];
         if (temp.expressView == adView) {

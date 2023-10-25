@@ -116,7 +116,7 @@
 
 // 负反馈点击选项回调
 - (void)nativeAdDislikeClick:(UIView *)adView reason:(BaiduMobAdDislikeReasonType)reason; {
-    AdvanceNativeExpressAd *nativeAd = [self returnExpressViewWithAdView:adView];
+    AdvanceNativeExpressAd *nativeAd = [self getNativeExpressAdWithAdView:adView];
     if ([_delegate respondsToSelector:@selector(didCloseNativeExpressAd:spotId:extra:)]) {
         [_delegate didCloseNativeExpressAd:nativeAd spotId:self.adspot.adspotid extra:self.adspot.ext];
     }
@@ -125,7 +125,7 @@
 //广告被点击，打开后续详情页面，如果为视频广告，可选择暂停视频
 - (void)nativeAdClicked:(UIView *)nativeAdView nativeAdDataObject:(BaiduMobAdNativeAdObject *)object {
     [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
-    AdvanceNativeExpressAd *nativeAd = [self returnExpressViewWithAdView:nativeAdView];
+    AdvanceNativeExpressAd *nativeAd = [self getNativeExpressAdWithAdView:nativeAdView];
     if (nativeAd) {
         if ([_delegate respondsToSelector:@selector(didClickNativeExpressAd:spotId:extra:)]) {
             [_delegate didClickNativeExpressAd:nativeAd spotId:self.adspot.adspotid extra:self.adspot.ext];
@@ -141,7 +141,7 @@
 //广告曝光成功
 - (void)nativeAdExposure:(UIView *)nativeAdView nativeAdDataObject:(BaiduMobAdNativeAdObject *)object {
     [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
-    AdvanceNativeExpressAd *nativeAd = [self returnExpressViewWithAdView:nativeAdView];
+    AdvanceNativeExpressAd *nativeAd = [self getNativeExpressAdWithAdView:nativeAdView];
     if (nativeAd) {
         if ([_delegate respondsToSelector:@selector(didShowNativeExpressAd:spotId:extra:)]) {
             [_delegate didShowNativeExpressAd:nativeAd spotId:self.adspot.adspotid extra:self.adspot.ext];
@@ -151,7 +151,7 @@
 
 //广告曝光失败
 - (void)nativeAdExposureFail:(UIView *)nativeAdView nativeAdDataObject:(BaiduMobAdNativeAdObject *)object failReason:(int)reason {
-    AdvanceNativeExpressAd *nativeAd = [self returnExpressViewWithAdView:nativeAdView];
+    AdvanceNativeExpressAd *nativeAd = [self getNativeExpressAdWithAdView:nativeAdView];
     if (nativeAd) {
         if ([_delegate respondsToSelector:@selector(nativeExpressAdViewRenderFail:spotId:extra:)]) {
             [_delegate nativeExpressAdViewRenderFail:nativeAd spotId:self.adspot.adspotid extra:self.adspot.ext];
@@ -167,7 +167,7 @@
 }
 
 
-- (AdvanceNativeExpressAd *)returnExpressViewWithAdView:(UIView *)adView {
+- (AdvanceNativeExpressAd *)getNativeExpressAdWithAdView:(UIView *)adView {
     for (NSInteger i = 0; i < self.nativeAds.count; i++) {
         AdvanceNativeExpressAd *temp = self.nativeAds[i];
         if (temp.expressView == adView) {

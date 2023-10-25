@@ -39,7 +39,6 @@
         _ks_ad = [[KSSplashAdView alloc] initWithPosId:_supplier.adspotid];
         _ks_ad.delegate = self;
         _ks_ad.timeoutInterval = _supplier.timeout * 1.0 / 1000.0;
-        _ks_ad.rootViewController = _adspot.viewController;
     }
     return self;
 }
@@ -56,6 +55,7 @@
 }
 
 - (void)showInWindow:(UIWindow *)window {
+    _ks_ad.rootViewController = _adspot.viewController;
     // 设置logo
     CGRect adFrame = [UIScreen mainScreen].bounds;
     if (_adspot.logoImage && _adspot.showLogoRequire) {

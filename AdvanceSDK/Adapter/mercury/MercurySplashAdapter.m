@@ -48,7 +48,6 @@
 
         _mercury_ad.blankGap = blankGap.integerValue;
         _mercury_ad.delegate = self;
-        _mercury_ad.controller = _adspot.viewController;
         _mercury_ad.fetchDelay = _supplier.timeout * 1.0 / 1000.0;
     }
     return self;
@@ -65,7 +64,7 @@
 }
 
 - (void)showInWindow:(UIWindow *)window {
-
+    _mercury_ad.controller = _adspot.viewController;
     [self.mercury_ad showAdInWindow:window];
 
 }
