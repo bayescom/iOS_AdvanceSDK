@@ -1,17 +1,17 @@
 //
-//  AdvBiddingSplash.m
+//  GroMoreSplashTrigger.m
 //  AdvanceSDK
 //
 //  Created by guangyao on 2023/10/18.
 //
 
-#import "AdvBiddingSplash.h"
+#import "GroMoreSplashTrigger.h"
 #import <ABUAdSDK/ABUAdSDK.h>
 #import "AdvanceSplash.h"
 #import "AdvLog.h"
-#import "AdvBiddingManager.h"
+#import "GroMoreBiddingManager.h"
 
-@interface AdvBiddingSplash () <ABUSplashAdDelegate>
+@interface GroMoreSplashTrigger () <ABUSplashAdDelegate>
 /// gromore 广告位对象
 @property (nonatomic, strong) ABUSplashAd *gmSplashAd;
 /// advance 广告位对象 从最外层传递进来 负责 load and show
@@ -20,7 +20,7 @@
 
 @end
 
-@implementation AdvBiddingSplash
+@implementation GroMoreSplashTrigger
 
 - (instancetype)initWithGroMore:(Gro_more *)groMore adspot:(id)adspot {
     if (self = [super init]) {
@@ -79,7 +79,7 @@
 - (void)splashAdWillVisible:(ABUSplashAd *_Nonnull)splashAd {
     /// 广告曝光才能获取到竞价
     ABURitInfo *info = [splashAd getShowEcpmInfo];
-    AdvBiddingManager.policyModel.gro_more.gromore_params.bidPrice = info.ecpm.integerValue;
+    GroMoreBiddingManager.policyModel.gro_more.gromore_params.bidPrice = info.ecpm.integerValue;
     
     [self.adspot.manager reportGroMoreEventWithType:AdvanceSdkSupplierRepoImped groMore:_groMore error:nil];
     if ([self.delegate respondsToSelector:@selector(splashDidShowForSpotId:extra:)]) {

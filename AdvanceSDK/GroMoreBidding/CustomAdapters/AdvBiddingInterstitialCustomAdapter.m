@@ -8,7 +8,7 @@
 #import "AdvBiddingInterstitialCustomAdapter.h"
 #import <ABUAdSDK/ABUAdSDK.h>
 #import <AdvanceSDK/AdvanceInterstitial.h>
-#import "AdvBiddingManager.h"
+#import "GroMoreBiddingManager.h"
 
 @interface AdvBiddingInterstitialCustomAdapter () <ABUCustomInterstitialAdapter, AdvanceInterstitialDelegate>
 
@@ -39,7 +39,7 @@
     _advanceInterstitial.delegate = self;
     _advanceInterstitial.muted = [parameter[ABUAdLoadingParamISIsMute] boolValue];
     /// 并发加载各个渠道SDK
-    [_advanceInterstitial catchBidTargetWhenGroMoreBiddingWithPolicyModel:AdvBiddingManager.policyModel];
+    [_advanceInterstitial catchBidTargetWhenGroMoreBiddingWithPolicyModel:GroMoreBiddingManager.policyModel];
     
 }
 

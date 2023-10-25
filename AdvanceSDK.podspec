@@ -96,7 +96,7 @@ Pod::Spec.new do |s|
         bidding.dependency 'AdvanceSDK/Core'
         bidding.dependency 'AdvanceSDK/AdSpot'
         bidding.dependency 'GroMoreBiddingSDK', '1.0.0'
-        bidding.source_files = 'AdvanceSDK/GMBidding/**/*.{h,m}'
+        bidding.source_files = 'AdvanceSDK/GroMoreBidding/**/*.{h,m}'
     end
 
     s.xcconfig = {

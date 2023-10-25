@@ -1,5 +1,5 @@
 //
-//  AdvBiddingRewardedVideo.h
+//  GroMoreRewardedVideoTrigger.h
 //  AdvanceSDK
 //
 //  Created by guangyao on 2023/10/24.
@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface AdvBiddingRewardedVideo : NSObject
+@interface GroMoreRewardedVideoTrigger : NSObject
 
 @property (nonatomic, weak) id<AdvanceRewardedVideoDelegate> delegate;
 

@@ -8,7 +8,7 @@
 #import "AdvBiddingRewardVideoCustomAdapter.h"
 #import <ABUAdSDK/ABUAdSDK.h>
 #import <AdvanceSDK/AdvanceRewardVideo.h>
-#import "AdvBiddingManager.h"
+#import "GroMoreBiddingManager.h"
 
 @interface AdvBiddingRewardVideoCustomAdapter () <ABUCustomRewardedVideoAdapter, AdvanceRewardedVideoDelegate>
 
@@ -39,7 +39,7 @@
     _advanceRewardVideo.delegate = self;
     _advanceRewardVideo.muted = [parameter[ABUAdLoadingParamRVIsMute] boolValue];
     /// 并发加载各个渠道SDK
-    [_advanceRewardVideo catchBidTargetWhenGroMoreBiddingWithPolicyModel:AdvBiddingManager.policyModel];
+    [_advanceRewardVideo catchBidTargetWhenGroMoreBiddingWithPolicyModel:GroMoreBiddingManager.policyModel];
 
 }
 

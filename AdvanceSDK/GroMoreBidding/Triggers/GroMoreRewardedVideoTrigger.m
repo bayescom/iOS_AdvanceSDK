@@ -1,17 +1,17 @@
 //
-//  AdvBiddingRewardedVideo.m
+//  GroMoreRewardedVideoTrigger.m
 //  AdvanceSDK
 //
 //  Created by guangyao on 2023/10/24.
 //
 
-#import "AdvBiddingRewardedVideo.h"
+#import "GroMoreRewardedVideoTrigger.h"
 #import <ABUAdSDK/ABUAdSDK.h>
 #import "AdvanceRewardVideo.h"
 #import "AdvLog.h"
-#import "AdvBiddingManager.h"
+#import "GroMoreBiddingManager.h"
 
-@interface AdvBiddingRewardedVideo () <ABURewardedVideoAdDelegate>
+@interface GroMoreRewardedVideoTrigger () <ABURewardedVideoAdDelegate>
 /// gromore 广告位对象
 @property (nonatomic, strong) ABURewardedVideoAd *gmRewardedVideoAd;
 /// advance 广告位对象 从最外层传递进来 负责 load and show
@@ -20,7 +20,7 @@
 
 @end
 
-@implementation AdvBiddingRewardedVideo
+@implementation GroMoreRewardedVideoTrigger
 
 - (instancetype)initWithGroMore:(Gro_more *)groMore adspot:(id)adspot {
     if (self = [super init]) {
@@ -92,7 +92,7 @@
     ABURitInfo *info = [rewardedVideoAd getShowEcpmInfo];
     [self.adspot.manager reportGroMoreEventWithType:AdvanceSdkSupplierRepoImped groMore:_groMore error:nil];
     
-    AdvBiddingManager.policyModel.gro_more.gromore_params.bidPrice = info.ecpm.integerValue;
+    GroMoreBiddingManager.policyModel.gro_more.gromore_params.bidPrice = info.ecpm.integerValue;
     if ([self.delegate respondsToSelector:@selector(rewardedVideoDidStartPlayingForSpotId:extra:)]) {
         [self.delegate rewardedVideoDidStartPlayingForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }

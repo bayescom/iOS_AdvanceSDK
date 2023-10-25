@@ -8,7 +8,7 @@
 #import "AdvBiddingSplashCustomAdapter.h"
 #import <ABUAdSDK/ABUAdSDK.h>
 #import <AdvanceSDK/AdvanceSplash.h>
-#import "AdvBiddingManager.h"
+#import "GroMoreBiddingManager.h"
 
 @interface AdvBiddingSplashCustomAdapter () <ABUCustomSplashAdapter, AdvanceSplashDelegate>
 
@@ -50,7 +50,7 @@
         _advanceSplash.showLogoRequire = YES;
     }
     /// 并发加载各个渠道SDK
-    [_advanceSplash catchBidTargetWhenGroMoreBiddingWithPolicyModel:AdvBiddingManager.policyModel];
+    [_advanceSplash catchBidTargetWhenGroMoreBiddingWithPolicyModel:GroMoreBiddingManager.policyModel];
 
 }
 

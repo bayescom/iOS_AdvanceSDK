@@ -1,5 +1,5 @@
 //
-//  AdvBiddingManager.h
+//  GroMoreBiddingManager.h
 //  AdvanceSDK
 //
 //  Created by guangyao on 2023/10/18.
@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface AdvBiddingManager : NSObject
+@interface GroMoreBiddingManager : NSObject
 
 @property (nonatomic, strong, class) AdvPolicyModel *policyModel;
 

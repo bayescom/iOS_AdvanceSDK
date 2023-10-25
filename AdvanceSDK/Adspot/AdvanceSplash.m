@@ -78,7 +78,7 @@
 /// 加载GroMore
 - (void)advPolicyServiceLoadGroMoreSDKWithModel:(nullable AdvPolicyModel *)model {
     /// 初始化gromore sdk
-    Class clazz = NSClassFromString(@"AdvBiddingManager");
+    Class clazz = NSClassFromString(@"GroMoreBiddingManager");
     if (!clazz && [_delegate respondsToSelector:@selector(didFailLoadingADSourceWithSpotId:error:description:)]) {
         [_delegate didFailLoadingADSourceWithSpotId:self.adspotid error:nil description:@{@"error": @"please pod install 'GMBidding'"}];
         return;
@@ -89,7 +89,7 @@
     }
     
     /// 加载gromore广告位
-    id gmSplash = ((id (*)(id, SEL, id, id))objc_msgSend)((id)[NSClassFromString(@"AdvBiddingSplash") alloc], NSSelectorFromString(@"initWithGroMore:adspot:"), model.gro_more, self);
+    id gmSplash = ((id (*)(id, SEL, id, id))objc_msgSend)((id)[NSClassFromString(@"GroMoreSplashTrigger") alloc], NSSelectorFromString(@"initWithGroMore:adspot:"), model.gro_more, self);
     ((void (*)(id, SEL, id))objc_msgSend)((id)gmSplash, NSSelectorFromString(@"setDelegate:"), self.delegate);
     ((void (*)(id, SEL))objc_msgSend)((id)gmSplash, NSSelectorFromString(@"loadAd"));
     self.targetAdapter = gmSplash;

@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface AdvBiddingInterstitial : NSObject
+@interface GroMoreInterstitialTrigger : NSObject
 @property (nonatomic, weak) id<AdvanceInterstitialDelegate> delegate;
 
 @end

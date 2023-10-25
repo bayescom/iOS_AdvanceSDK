@@ -1,5 +1,5 @@
 //
-//  AdvBiddingSplash.h
+//  GroMoreSplashTrigger.h
 //  AdvanceSDK
 //
 //  Created by guangyao on 2023/10/18.
@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface AdvBiddingSplash : NSObject
+@interface GroMoreSplashTrigger : NSObject
 
 @property (nonatomic, weak) id<AdvanceSplashDelegate> delegate;
 

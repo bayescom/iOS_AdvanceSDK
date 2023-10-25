@@ -1,17 +1,17 @@
 //
-//  AdvBiddingInterstitial.m
+//  GroMoreInterstitialTrigger.m
 //  AdvanceSDK
 //
 //  Created by guangyao on 2023/10/24.
 //
 
-#import "AdvBiddingInterstitial.h"
+#import "GroMoreInterstitialTrigger.h"
 #import <ABUAdSDK/ABUAdSDK.h>
 #import "AdvanceInterstitial.h"
 #import "AdvLog.h"
-#import "AdvBiddingManager.h"
+#import "GroMoreBiddingManager.h"
 
-@interface AdvBiddingInterstitial () <ABUInterstitialProAdDelegate>
+@interface GroMoreInterstitialTrigger () <ABUInterstitialProAdDelegate>
 /// gromore 广告位对象
 @property (nonatomic, strong) ABUInterstitialProAd *gmInterstitialAd;
 /// advance 广告位对象 从最外层传递进来 负责 load and show
@@ -20,7 +20,7 @@
 
 @end
 
-@implementation AdvBiddingInterstitial
+@implementation GroMoreInterstitialTrigger
 
 - (instancetype)initWithGroMore:(Gro_more *)groMore adspot:(id)adspot {
     if (self = [super init]) {
@@ -74,7 +74,7 @@
     ABURitInfo *info = [interstitialProAd getShowEcpmInfo];
     [self.adspot.manager reportGroMoreEventWithType:AdvanceSdkSupplierRepoImped groMore:_groMore error:nil];
     
-    AdvBiddingManager.policyModel.gro_more.gromore_params.bidPrice = info.ecpm.integerValue;
+    GroMoreBiddingManager.policyModel.gro_more.gromore_params.bidPrice = info.ecpm.integerValue;
     if ([self.delegate respondsToSelector:@selector(interstitialDidShowForSpotId:extra:)]) {
         [self.delegate interstitialDidShowForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }

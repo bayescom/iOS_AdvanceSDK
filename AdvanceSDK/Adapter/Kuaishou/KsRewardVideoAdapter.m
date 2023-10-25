@@ -42,7 +42,7 @@
 }
 
 - (void)showAd {
-    [_ks_ad showAdFromRootViewController:self.adspot.viewController.navigationController];
+    [_ks_ad showAdFromRootViewController:self.adspot.viewController];
 }
 
 - (void)winnerAdapterToShowAd {
