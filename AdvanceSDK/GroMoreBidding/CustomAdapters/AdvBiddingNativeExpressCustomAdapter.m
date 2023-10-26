@@ -10,6 +10,8 @@
 #import <AdvanceSDK/AdvanceNativeExpress.h>
 #import <AdvanceSDK/AdvanceNativeExpressAd.h>
 #import "GroMoreBiddingManager.h"
+#import <objc/runtime.h>
+#import <objc/message.h>
 
 @interface AdvBiddingNativeExpressCustomAdapter () <ABUCustomNativeAdapter, AdvanceNativeExpressDelegate>
 
@@ -37,14 +39,21 @@
     
     _advanceFeed.delegate = self;
     _advanceFeed.muted = [parameter[ABUAdLoadingParamNAIsMute] boolValue];
+    _advanceFeed.isGroMoreADN = YES;
     /// 并发加载各个渠道SDK
     [_advanceFeed catchBidTargetWhenGroMoreBiddingWithPolicyModel:GroMoreBiddingManager.policyModel];
 }
 
-/// Advance内部已经进行了render操作，这里无需实现
-- (void)renderForExpressAdView:(nonnull UIView *)expressAdView {}
+- (void)renderForExpressAdView:(nonnull UIView *)expressAdView {
+    SEL selector = NSSelectorFromString(@"renderNativeAdView");
+    if ([self.advanceFeed.targetAdapter respondsToSelector:selector]) {
+        ((void (*)(id, SEL))objc_msgSend)(self.advanceFeed.targetAdapter, selector);
+    }
+}
 
-- (void)setRootViewController:(nonnull UIViewController *)viewController forExpressAdView:(nonnull UIView *)expressAdView {}
+- (void)setRootViewController:(nonnull UIViewController *)viewController forExpressAdView:(nonnull UIView *)expressAdView {
+    
+}
 
 - (void)registerContainerView:(nonnull __kindof UIView *)containerView andClickableViews:(nonnull NSArray<__kindof UIView *> *)views forNativeAd:(nonnull id)nativeAd {}
 

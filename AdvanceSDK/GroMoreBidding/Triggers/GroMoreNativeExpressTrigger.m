@@ -67,9 +67,8 @@
         [self.nativeAds addObject:TT];
         view.delegate = self;
         view.videoDelegate = self;
-        /// Advance内部已经进行了render操作
 //        view.rootViewController = _adspot.viewController;
-//        [view render];
+        [view render];
     }
     
     [self.adspot.manager reportGroMoreEventWithType:AdvanceSdkSupplierRepoSucceed groMore:_groMore error:nil];

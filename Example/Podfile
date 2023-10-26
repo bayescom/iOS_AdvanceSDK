@@ -27,7 +27,7 @@ target 'AdvanceSDK_Example' do
   pod 'BaiduMobAdSDK', '5.101'
 
   # 集成GroMoreBidding 所需
-  pod 'AdvanceSDK/GMBidding', :path => '../'
+  pod 'AdvanceSDK/GroMoreBidding', :path => '../'
 
   
   

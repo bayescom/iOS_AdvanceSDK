@@ -33,6 +33,9 @@ NS_ASSUME_NONNULL_BEGIN
 /// 策略管理对象
 @property (nonatomic, strong) AdvPolicyService *manager;
 
+/// 是否为GroMore聚合ADN
+@property (nonatomic, assign) BOOL isGroMoreADN;
+
 /// 初始化媒体信息
 /// @param mediaId mediaId
 /// @param adspotid adspotid

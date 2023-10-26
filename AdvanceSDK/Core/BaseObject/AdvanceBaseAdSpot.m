@@ -19,6 +19,7 @@
 @synthesize adapterMap = _adapterMap;
 @synthesize targetAdapter = _targetAdapter;
 @synthesize manager = _manager;
+@synthesize isGroMoreADN = _isGroMoreADN;
 
 - (instancetype)initWithMediaId:(NSString *)mediaId
                        adspotId:(NSString *)adspotid

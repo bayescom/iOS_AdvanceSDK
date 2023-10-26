@@ -50,6 +50,13 @@
     }
     
     /// 渲染广告
+    if (!_adspot.isGroMoreADN) {
+        [self renderNativeAdView];
+    }
+}
+
+/// 渲染广告
+- (void)renderNativeAdView {
     [self.feedAdArray enumerateObjectsUsingBlock:^(KSFeedAd * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         obj.delegate = self;
         obj.videoSoundEnable = !self.adspot.muted;
@@ -137,6 +144,5 @@
     }
     return nil;
 }
-
 
 @end

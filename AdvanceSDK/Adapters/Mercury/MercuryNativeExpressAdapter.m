@@ -1,51 +1,47 @@
 //
-//  CsjNativeExpressAdapter.m
+//  MercuryNativeExpressAdapter.m
 //  AdvanceSDKDev
 //
 //  Created by CherryKing on 2020/4/9.
 //  Copyright © 2020 bayescom. All rights reserved.
 //
 
-#import "CsjNativeExpressAdapter.h"
-#if __has_include(<BUAdSDK/BUAdSDK.h>)
-#import <BUAdSDK/BUAdSDK.h>
+#import "MercuryNativeExpressAdapter.h"
+#if __has_include(<MercurySDK/MercuryNativeExpressAd.h>)
+#import <MercurySDK/MercuryNativeExpressAd.h>
 #else
-#import "BUAdSDK.h"
+#import "MercuryNativeExpressAd.h"
 #endif
 #import "AdvanceNativeExpress.h"
 #import "AdvLog.h"
 #import "AdvanceNativeExpressAd.h"
 #import "AdvanceAdapter.h"
 
-@interface CsjNativeExpressAdapter () <BUNativeExpressAdViewDelegate, AdvanceAdapter>
-@property (nonatomic, strong) BUNativeExpressAdManager *csj_ad;
+@interface MercuryNativeExpressAdapter () <MercuryNativeExpressAdDelegete, AdvanceAdapter>
+@property (nonatomic, strong) MercuryNativeExpressAd *mercury_ad;
 @property (nonatomic, weak) AdvanceNativeExpress *adspot;
 @property (nonatomic, strong) AdvSupplier *supplier;
-@property (nonatomic, strong) NSMutableArray <__kindof AdvanceNativeExpressAd *> * nativeAds;
+@property (nonatomic, strong) NSMutableArray<AdvanceNativeExpressAd *> *nativeAds;
 
 @end
 
-@implementation CsjNativeExpressAdapter
+@implementation MercuryNativeExpressAdapter
 
-- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(id)adspot {
+- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(AdvanceNativeExpress *)adspot; {
     if (self = [super init]) {
         _adspot = adspot;
         _supplier = supplier;
-        
-        BUAdSlot *slot = [[BUAdSlot alloc] init];
-        slot.ID = _supplier.adspotid;
-        slot.AdType = BUAdSlotAdTypeFeed;
-        slot.position = BUAdSlotPositionFeed;
-        slot.imgSize = [BUSize sizeBy:BUProposalSize_Feed228_150];
-        _csj_ad = [[BUNativeExpressAdManager alloc] initWithSlot:slot adSize:_adspot.adSize];
-        _csj_ad.delegate = self;
-        
+        _mercury_ad = [[MercuryNativeExpressAd alloc] initAdWithAdspotId:_supplier.adspotid];
+        _mercury_ad.videoMuted = _adspot.muted;
+        _mercury_ad.videoPlayPolicy = MercuryVideoAutoPlayPolicyWIFI;
+        _mercury_ad.renderSize = _adspot.adSize;
+        _mercury_ad.delegate = self;
     }
     return self;
 }
 
 - (void)loadAd {
-    [_csj_ad loadAdDataWithCount:1];
+    [_mercury_ad loadAdWithCount:1];
 }
 
 - (void)winnerAdapterToShowAd {
@@ -55,9 +51,16 @@
     }
     
     /// 渲染广告
+    if (!_adspot.isGroMoreADN) {
+        [self renderNativeAdView];
+    }
+}
+
+/// 渲染广告
+- (void)renderNativeAdView {
     [self.nativeAds enumerateObjectsUsingBlock:^(__kindof AdvanceNativeExpressAd * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        BUNativeExpressAdView *expressView = (BUNativeExpressAdView *)obj.expressView;
-        expressView.rootViewController = self.adspot.viewController;
+        MercuryNativeExpressAdView *expressView = (MercuryNativeExpressAdView *)obj.expressView;
+        expressView.controller = self.adspot.viewController;
         [expressView render];
     }];
 }
@@ -67,35 +70,36 @@
 }
 
 
-// MARK: ======================= BUNativeExpressAdViewDelegate =======================
-- (void)nativeExpressAdSuccessToLoad:(id)nativeExpressAd views:(nonnull NSArray<__kindof BUNativeExpressAdView *> *)views {
+// MARK: ======================= MercuryNativeExpressAdDelegete =======================
+/// 拉取原生模板广告成功 | (注意: nativeExpressAdView在此方法执行结束不被强引用，nativeExpressAd中的对象会被自动释放)
+- (void)mercury_nativeExpressAdSuccessToLoad:(id)nativeExpressAd views:(NSArray<MercuryNativeExpressAdView *> *)views {
     if (!views.count) {
-        [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:[NSError errorWithDomain:@"BUNative.com" code:1 userInfo:@{@"msg":@"无广告返回"}]];
+        [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:[NSError errorWithDomain:@"com.MercuryError.Mercury" code:1 userInfo:@{@"msg":@"无广告返回"}]];
         [self.adspot.manager checkTargetWithResultfulSupplier:_supplier loadAdState:AdvanceSupplierLoadAdFailed];
         return;
     }
-    
+        
     self.nativeAds = [NSMutableArray array];
-    for (BUNativeExpressAdView *view in views) {
+    for (MercuryNativeExpressAdView *view in views) {
         AdvanceNativeExpressAd *TT = [[AdvanceNativeExpressAd alloc] init];
         TT.expressView = view;
         TT.identifier = _supplier.identifier;
         [self.nativeAds addObject:TT];
     }
-    
-    NSDictionary *ext = views.firstObject.mediaExt;
-    [self.adspot.manager setECPMIfNeeded:[ext[@"price"] integerValue] supplier:_supplier];
+            
+    [self.adspot.manager setECPMIfNeeded:views.firstObject.price supplier:_supplier];
     [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
     [self.adspot.manager checkTargetWithResultfulSupplier:_supplier loadAdState:AdvanceSupplierLoadAdSuccess];
-    
 }
 
-- (void)nativeExpressAdFailToLoad:(BUNativeExpressAdManager *)nativeExpressAd error:(NSError *)error {
+/// 拉取原生模板广告失败
+- (void)mercury_nativeExpressAdFailToLoadWithError:(NSError *)error {
     [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
     [self.adspot.manager checkTargetWithResultfulSupplier:_supplier loadAdState:AdvanceSupplierLoadAdFailed];
 }
 
-- (void)nativeExpressAdViewRenderSuccess:(BUNativeExpressAdView *)nativeExpressAdView {
+/// 原生模板广告渲染成功, 此时的 nativeExpressAdView.size.height 根据 size.width 完成了动态更新。
+- (void)mercury_nativeExpressAdViewRenderSuccess:(MercuryNativeExpressAdView *)nativeExpressAdView {
     AdvanceNativeExpressAd *nativeAd = [self getNativeExpressAdWithAdView:(UIView *)nativeExpressAdView];
     if (nativeAd) {
         if ([_delegate respondsToSelector:@selector(nativeExpressAdViewRenderSuccess:spotId:extra:)]) {
@@ -104,8 +108,9 @@
     }
 }
 
-- (void)nativeExpressAdViewRenderFail:(BUNativeExpressAdView *)nativeExpressAdView error:(NSError *)error {
-    [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
+/// 原生模板广告渲染失败
+- (void)mercury_nativeExpressAdViewRenderFail:(MercuryNativeExpressAdView *)nativeExpressAdView {
+    [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:[NSError errorWithDomain:@"com.MercuryError.Mercury" code:301 userInfo:@{@"msg": @"广告素材渲染失败"}]];
     AdvanceNativeExpressAd *nativeAd = [self getNativeExpressAdWithAdView:(UIView *)nativeExpressAdView];
     if (nativeAd) {
         if ([_delegate respondsToSelector:@selector(nativeExpressAdViewRenderFail:spotId:extra:)]) {
@@ -114,7 +119,8 @@
     }
 }
 
-- (void)nativeExpressAdViewWillShow:(BUNativeExpressAdView *)nativeExpressAdView {
+/// 原生模板广告曝光回调
+- (void)mercury_nativeExpressAdViewExposure:(MercuryNativeExpressAdView *)nativeExpressAdView {
     [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
     AdvanceNativeExpressAd *nativeAd = [self getNativeExpressAdWithAdView:(UIView *)nativeExpressAdView];
     if (nativeAd) {
@@ -124,7 +130,8 @@
     }
 }
 
-- (void)nativeExpressAdViewDidClick:(BUNativeExpressAdView *)nativeExpressAdView {
+/// 原生模板广告点击回调
+- (void)mercury_nativeExpressAdViewClicked:(MercuryNativeExpressAdView *)nativeExpressAdView {
     [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
     AdvanceNativeExpressAd *nativeAd = [self getNativeExpressAdWithAdView:(UIView *)nativeExpressAdView];
     if (nativeAd) {
@@ -134,7 +141,8 @@
     }
 }
 
-- (void)nativeExpressAdView:(BUNativeExpressAdView *)nativeExpressAdView dislikeWithReason:(NSArray<BUDislikeWords *> *)filterWords {
+/// 原生模板广告被关闭
+- (void)mercury_nativeExpressAdViewClosed:(MercuryNativeExpressAdView *)nativeExpressAdView {
     AdvanceNativeExpressAd *nativeAd = [self getNativeExpressAdWithAdView:(UIView *)nativeExpressAdView];
     if (nativeAd) {
         if ([_delegate respondsToSelector:@selector(didCloseNativeExpressAd:spotId:extra:)]) {
@@ -142,11 +150,6 @@
         }
     }
 }
-
-- (void)nativeExpressAdViewWillPresentScreen:(BUNativeExpressAdView *)nativeExpressAdView {
-    
-}
-
 
 - (AdvanceNativeExpressAd *)getNativeExpressAdWithAdView:(UIView *)adView {
     for (NSInteger i = 0; i < self.nativeAds.count; i++) {

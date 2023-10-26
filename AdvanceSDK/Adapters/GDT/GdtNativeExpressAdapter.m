@@ -58,6 +58,13 @@
     }
     
     /// 渲染广告
+    if (!_adspot.isGroMoreADN) {
+        [self renderNativeAdView];
+    }
+}
+
+/// 渲染广告
+- (void)renderNativeAdView {
     [self.nativeAds enumerateObjectsUsingBlock:^(__kindof AdvanceNativeExpressAd * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         GDTNativeExpressAdView *expressView = (GDTNativeExpressAdView *)obj.expressView;
         expressView.controller = self.adspot.viewController;

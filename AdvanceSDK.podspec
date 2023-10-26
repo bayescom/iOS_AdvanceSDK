@@ -49,7 +49,7 @@ Pod::Spec.new do |s|
         mer.dependency 'AdvanceSDK/Core'
         mer.dependency 'AdvanceSDK/AdSpot'
         mer.dependency 'MercurySDK'
-        mer.source_files = 'AdvanceSDK/Adapter/mercury/**/*.{h,m}'
+        mer.source_files = 'AdvanceSDK/Adapters/Mercury/**/*.{h,m}'
         mer.frameworks = 'StoreKit', 'AVFoundation', 'CoreMotion'
     end
     
@@ -57,7 +57,7 @@ Pod::Spec.new do |s|
         csj.dependency 'AdvanceSDK/Core'
         csj.dependency 'AdvanceSDK/AdSpot'
         csj.dependency 'Ads-CN'
-        csj.source_files = 'AdvanceSDK/Adapter/csj/**/*.{h,m}'
+        csj.source_files = 'AdvanceSDK/Adapters/CSJ/**/*.{h,m}'
         csj.frameworks = 'UIKit', 'MapKit', 'WebKit', 'MediaPlayer', 'CoreLocation', 'AdSupport', 'CoreMedia', 'AVFoundation', 'CoreTelephony', 'StoreKit', 'SystemConfiguration', 'MobileCoreServices', 'CoreMotion', 'Accelerate','AudioToolbox','JavaScriptCore','Security','CoreImage','AudioToolbox','ImageIO','QuartzCore','CoreGraphics','CoreText'
         csj.libraries = 'c++', 'resolv', 'z', 'sqlite3', 'bz2', 'xml2', 'iconv', 'c++abi'
         csj.weak_frameworks = 'AppTrackingTransparency', 'DeviceCheck'
@@ -67,7 +67,7 @@ Pod::Spec.new do |s|
         gdt.dependency 'AdvanceSDK/Core'
         gdt.dependency 'AdvanceSDK/AdSpot'
         gdt.dependency 'GDTMobSDK'
-        gdt.source_files =  'AdvanceSDK/Adapter/gdt/**/*.{h,m}'
+        gdt.source_files =  'AdvanceSDK/Adapters/GDT/**/*.{h,m}'
         gdt.frameworks = 'AdSupport', 'CoreLocation', 'QuartzCore', 'SystemConfiguration', 'CoreTelephony', 'Security', 'StoreKit', 'AVFoundation', 'WebKit'
         gdt.libraries     = 'xml2', 'z'
     end
@@ -76,7 +76,7 @@ Pod::Spec.new do |s|
         ks.dependency 'AdvanceSDK/Core'
         ks.dependency 'AdvanceSDK/AdSpot'
         ks.dependency 'KSAdSDK'
-        ks.source_files = 'AdvanceSDK/Adapter/Kuaishou/**/*.{h,m}'
+        ks.source_files = 'AdvanceSDK/Adapters/KS/**/*.{h,m}'
         ks.frameworks = ["Foundation", "UIKit", "MobileCoreServices", "CoreGraphics", "Security", "SystemConfiguration", "CoreTelephony", "AdSupport", "CoreData", "StoreKit", "AVFoundation", "MediaPlayer", "CoreMedia", "WebKit", "Accelerate", "CoreLocation", "AVKit", "MessageUI", "QuickLook", "AudioToolBox", "AddressBook"]
         ks.libraries =  ["z", "resolv.9", "sqlite3", "c++", "c++abi"]
     end
@@ -85,17 +85,17 @@ Pod::Spec.new do |s|
         bd.dependency 'AdvanceSDK/Core'
         bd.dependency 'AdvanceSDK/AdSpot'
         bd.dependency 'BaiduMobAdSDK'
-        bd.source_files =  'AdvanceSDK/Adapter/bd/**/*.{h,m}'
+        bd.source_files =  'AdvanceSDK/Adapters/BD/**/*.{h,m}'
         bd.frameworks = 'CoreLocation', 'SystemConfiguration', 'CoreGraphics', 'CoreMotion', 'CoreTelephony', 'AdSupport', 'SystemConfiguration', 'QuartzCore', 'WebKit', 'MessageUI','SafariServices','AVFoundation','EventKit','QuartzCore','CoreMedia','StoreKit'
         bd.libraries     = 'c++'
         bd.weak_frameworks = "WebKit"
         valid_archs = ['armv7', 'armv7s', 'x86_64', 'arm64']
     end
     
-    s.subspec 'GMBidding' do |bidding|
+    s.subspec 'GroMoreBidding' do |bidding|
         bidding.dependency 'AdvanceSDK/Core'
         bidding.dependency 'AdvanceSDK/AdSpot'
-        bidding.dependency 'GroMoreBiddingSDK', '1.0.0'
+        bidding.dependency 'GroMoreBiddingSDK', '1.1.0'
         bidding.source_files = 'AdvanceSDK/GroMoreBidding/**/*.{h,m}'
     end
 
