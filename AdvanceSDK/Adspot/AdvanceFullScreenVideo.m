@@ -12,10 +12,6 @@
 #import "AdvLog.h"
 #import "AdvSupplierLoader.h"
 
-@interface AdvanceFullScreenVideo ()
-
-@end
-
 @implementation AdvanceFullScreenVideo
 
 - (instancetype)initWithAdspotId:(NSString *)adspotid

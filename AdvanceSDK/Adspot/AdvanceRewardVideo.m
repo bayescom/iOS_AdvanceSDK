@@ -12,10 +12,6 @@
 #import "AdvLog.h"
 #import "AdvSupplierLoader.h"
 
-@interface AdvanceRewardVideo ()
-
-@end
-
 @implementation AdvanceRewardVideo
 
 - (instancetype)initWithAdspotId:(NSString *)adspotid
@@ -81,7 +77,7 @@
     /// 初始化gromore sdk
     Class clazz = NSClassFromString(@"GroMoreBiddingManager");
     if (!clazz && [_delegate respondsToSelector:@selector(didFailLoadingADSourceWithSpotId:error:description:)]) {
-        [_delegate didFailLoadingADSourceWithSpotId:self.adspotid error:nil description:@{@"error": @"please pod install 'GMBidding'"}];
+        [_delegate didFailLoadingADSourceWithSpotId:self.adspotid error:nil description:@{@"error": @"please pod install 'GroMoreBidding'"}];
         return;
     }
     SEL selector = NSSelectorFromString(@"loadGroMoreSDKWithDataObject:");

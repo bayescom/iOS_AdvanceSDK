@@ -6,27 +6,27 @@ target 'AdvanceSDK_Example' do
   #必须集成
   pod 'AdvanceSDK', :path => '../'
   
-  #集成倍业所需
+  #集成倍业Adapter
   pod 'AdvanceSDK/Mercury', :path => '../'
-  pod 'MercurySDK', '3.1.8.9'
+  pod 'MercurySDK', '3.2.0'
 
-  #集成穿山甲所需
+  #集成穿山甲Adapter
   pod 'AdvanceSDK/CSJ', :path => '../'
   pod 'Ads-CN', '4.9.0.6'
   
-  #集成广点通所需
+  #集成广点通Adapter
   pod 'AdvanceSDK/GDT', :path => '../'
   pod 'GDTMobSDK', '4.14.10'
 
-  #集成快手所需
+  #集成快手Adapter
   pod 'AdvanceSDK/KS', :path => '../'
   pod 'KSAdSDK', '3.3.40'
 
-  # 集成百度 所需
+  # 集成百度Adapter
   pod 'AdvanceSDK/BD', :path => '../'
   pod 'BaiduMobAdSDK', '5.101'
 
-  # 集成GroMoreBidding 所需
+  # 集成GroMoreBidding模块
   pod 'AdvanceSDK/GroMoreBidding', :path => '../'
 
   
@@ -43,7 +43,7 @@ target 'AdvanceSDK_Example' do
     installer.generated_projects.each do |project|
       project.targets.each do |target|
         target.build_configurations.each do |config|
-          config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '11.0'
+          config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = "arm64"
         end
       end
     end

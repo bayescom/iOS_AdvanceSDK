@@ -12,10 +12,6 @@
 #import "AdvLog.h"
 #import "AdvSupplierLoader.h"
 
-@interface AdvanceBanner ()
-
-@end
-
 @implementation AdvanceBanner
 
 - (instancetype)initWithAdspotId:(NSString *)adspotid

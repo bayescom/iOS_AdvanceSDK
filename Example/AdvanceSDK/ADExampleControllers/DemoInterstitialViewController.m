@@ -7,8 +7,6 @@
 //
 
 #import "DemoInterstitialViewController.h"
-#import "DemoUtils.h"
-
 #import <AdvanceSDK/AdvanceInterstitial.h>
 
 @interface DemoInterstitialViewController () <AdvanceInterstitialDelegate>

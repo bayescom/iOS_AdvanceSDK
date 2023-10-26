@@ -7,13 +7,11 @@
 //
 
 #import "DemoSplashViewController.h"
-
-#import "DemoUtils.h"
-
 #import <AdvanceSDK/AdvanceSplash.h>
 #import <objc/runtime.h>
 #import <objc/message.h>
 #import "UIApplication+Adv.h"
+
 @interface DemoSplashViewController () <AdvanceSplashDelegate>
 @property(strong,nonatomic) AdvanceSplash *advanceSplash;
 @property (nonatomic, strong) UIImageView *bgImgV;

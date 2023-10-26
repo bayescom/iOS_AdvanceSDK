@@ -11,10 +11,6 @@
 #import "AdvLog.h"
 #import "AdvSupplierLoader.h"
 
-@interface AdvanceRenderFeed ()
-
-@end
-
 @implementation AdvanceRenderFeed
 
 - (instancetype)initWithAdspotId:(NSString *)adspotid

@@ -7,8 +7,6 @@
 //
 
 #import "DemoRewardVideoViewController.h"
-#import "DemoUtils.h"
-
 #import <AdvanceSDK/AdvanceRewardVideo.h>
 
 @interface DemoRewardVideoViewController () <AdvanceRewardedVideoDelegate>

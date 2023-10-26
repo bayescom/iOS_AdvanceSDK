@@ -7,8 +7,6 @@
 //
 
 #import "DemoFullScreenVideoController.h"
-#import "DemoUtils.h"
-
 #import <AdvanceSDK/AdvanceFullScreenVideo.h>
 
 @interface DemoFullScreenVideoController () <AdvanceFullScreenVideoDelegate>
