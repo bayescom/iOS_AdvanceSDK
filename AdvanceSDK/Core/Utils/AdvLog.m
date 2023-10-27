@@ -19,7 +19,7 @@
     }
     
     if ([AdvSdkConfig shareInstance].logEnable) {
-#if DEBUG
+#ifdef DEBUG
     NSLog(@"\n%s[line:%d][%@]", function, lineNumber, formatString);
 #endif
     }
