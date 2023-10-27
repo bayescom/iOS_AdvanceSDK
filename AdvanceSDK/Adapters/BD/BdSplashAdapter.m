@@ -111,6 +111,10 @@
 }
 
 - (void)splashDidClicked:(BaiduMobAdSplash *)splash {
+    // !!!百度开屏的曝光回调非常慢，往往会出现点击、关闭时还没曝光。
+    if (!self.isAdExposed) {
+        [self splashDidExposure:splash];
+    }
     [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(splashDidClickForSpotId:extra:)]) {
         [self.delegate splashDidClickForSpotId:self.adspot.adspotid extra:self.adspot.ext];
@@ -119,7 +123,7 @@
 
 - (void)splashDidDismissScreen:(BaiduMobAdSplash *)splash {
     [self removeAdViews];
-    // !!!百度开屏的曝光回调非常慢，往往会出现点击关闭时还没曝光。
+    // !!!百度开屏的曝光回调非常慢，往往会出现点击、关闭时还没曝光。
     if (!self.isAdExposed) {
         [self splashDidExposure:splash];
     }
