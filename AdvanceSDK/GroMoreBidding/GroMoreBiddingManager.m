@@ -39,13 +39,14 @@ static BOOL _sdkInitialized = NO;
     GroMoreBiddingManager.policyModel = dataObject;
     if (!GroMoreBiddingManager.sdkInitialized) {
         GroMoreBiddingManager.sdkInitialized = YES;
-        [ABUAdSDKManager setupSDKWithAppId:dataObject.gro_more.gromore_params.appid config:^ABUUserConfig * _Nonnull(ABUUserConfig * _Nonnull config) {
+        [ABUAdSDKManager initSDKWithAppId:dataObject.gro_more.gromore_params.appid config:^ABUUserConfig * _Nonnull(ABUUserConfig * _Nonnull config) {
 #ifdef DEBUG
             // 打开日志开关，线上环境关闭
             config.logEnable = YES;
 #endif
             return config;
         }];
+        [ABUAdSDKManager setup];
     }
 }
 

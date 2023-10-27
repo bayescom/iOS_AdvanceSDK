@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
     
     s.name             = 'AdvanceSDK'
-    s.version          = '4.0.4'
+    s.version          = '5.0.0'
     s.license          = { :type => 'MIT', :file => 'LICENSE' }
     s.summary          = 'bayescom iOS AdvabceSDK'
     s.description      = <<-DESC
@@ -45,7 +45,7 @@ Pod::Spec.new do |s|
         adSpot.source_files = 'AdvanceSDK/AdSpot/**/*.{h,m}'
     end
     
-    s.subspec 'Mercury' do |mer|
+    s.subspec 'MercuryAdapter' do |mer|
         mer.dependency 'AdvanceSDK/Core'
         mer.dependency 'AdvanceSDK/AdSpot'
         mer.dependency 'MercurySDK'
@@ -53,7 +53,7 @@ Pod::Spec.new do |s|
         mer.frameworks = 'StoreKit', 'AVFoundation', 'CoreMotion'
     end
     
-    s.subspec 'CSJ' do |csj|
+    s.subspec 'CSJAdapter' do |csj|
         csj.dependency 'AdvanceSDK/Core'
         csj.dependency 'AdvanceSDK/AdSpot'
         csj.dependency 'Ads-CN'
@@ -63,7 +63,7 @@ Pod::Spec.new do |s|
         csj.weak_frameworks = 'AppTrackingTransparency', 'DeviceCheck'
     end
     
-    s.subspec 'GDT' do |gdt|
+    s.subspec 'GDTAdapter' do |gdt|
         gdt.dependency 'AdvanceSDK/Core'
         gdt.dependency 'AdvanceSDK/AdSpot'
         gdt.dependency 'GDTMobSDK'
@@ -72,7 +72,7 @@ Pod::Spec.new do |s|
         gdt.libraries     = 'xml2', 'z'
     end
      
-    s.subspec 'KS' do |ks|
+    s.subspec 'KSAdapter' do |ks|
         ks.dependency 'AdvanceSDK/Core'
         ks.dependency 'AdvanceSDK/AdSpot'
         ks.dependency 'KSAdSDK'
@@ -81,7 +81,7 @@ Pod::Spec.new do |s|
         ks.libraries =  ["z", "resolv.9", "sqlite3", "c++", "c++abi"]
     end
     
-    s.subspec 'BD' do |bd|
+    s.subspec 'BDAdapter' do |bd|
         bd.dependency 'AdvanceSDK/Core'
         bd.dependency 'AdvanceSDK/AdSpot'
         bd.dependency 'BaiduMobAdSDK'
@@ -95,7 +95,7 @@ Pod::Spec.new do |s|
     s.subspec 'GroMoreBidding' do |bidding|
         bidding.dependency 'AdvanceSDK/Core'
         bidding.dependency 'AdvanceSDK/AdSpot'
-        bidding.dependency 'GroMoreBiddingSDK', '1.1.0'
+        bidding.dependency 'GroMoreBiddingSDK', '1.2.0'
         bidding.source_files = 'AdvanceSDK/GroMoreBidding/**/*.{h,m}'
     end
 
