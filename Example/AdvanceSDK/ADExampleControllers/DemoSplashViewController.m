@@ -154,6 +154,7 @@
 /// 广告曝光成功
 - (void)splashDidShowForSpotId:(NSString *)spotId extra:(NSDictionary *)extra {
     NSLog(@"广告曝光成功 %s", __func__);
+    // 移除背景图
     [self removeBgImgView];
 }
 
@@ -166,7 +167,6 @@
 - (void)splashDidCloseForSpotId:(NSString *)spotId extra:(NSDictionary *)extra {
     NSLog(@"广告关闭了 %s", __func__);
     self.advanceSplash = nil;
-    [self removeBgImgView];
 }
 
 - (void)removeBgImgView {

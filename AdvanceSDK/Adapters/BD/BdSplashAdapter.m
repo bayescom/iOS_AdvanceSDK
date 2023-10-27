@@ -26,6 +26,7 @@
 @property (nonatomic, weak) AdvanceSplash *adspot;
 @property (nonatomic, strong) AdvSupplier *supplier;
 @property (nonatomic, strong) UIImageView *imgV;
+@property (nonatomic, assign) BOOL isAdExposed;
 
 @end
 
@@ -102,6 +103,7 @@
 }
 
 - (void)splashDidExposure:(BaiduMobAdSplash *)splash {
+    self.isAdExposed = YES;
     [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(splashDidShowForSpotId:extra:)] && self.bd_ad) {
         [self.delegate splashDidShowForSpotId:self.adspot.adspotid extra:self.adspot.ext];
@@ -117,6 +119,10 @@
 
 - (void)splashDidDismissScreen:(BaiduMobAdSplash *)splash {
     [self removeAdViews];
+    // !!!百度开屏的曝光回调非常慢，往往会出现点击关闭时还没曝光。
+    if (!self.isAdExposed) {
+        [self splashDidExposure:splash];
+    }
     if ([self.delegate respondsToSelector:@selector(splashDidCloseForSpotId:extra:)]) {
         [self.delegate splashDidCloseForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
