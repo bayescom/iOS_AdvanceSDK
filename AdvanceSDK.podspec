@@ -48,8 +48,7 @@ Pod::Spec.new do |s|
     s.subspec 'MercuryAdapter' do |mer|
         mer.dependency 'AdvanceSDK/Core'
         mer.dependency 'AdvanceSDK/AdSpot'
-        mer.dependency 'MercurySDK'
-        #, '3.2.0'
+        mer.dependency 'MercurySDK', '3.2.0'
         mer.source_files = 'AdvanceSDK/Adapters/Mercury/**/*.{h,m}'
         mer.frameworks = 'StoreKit', 'AVFoundation', 'CoreMotion'
     end
@@ -67,8 +66,7 @@ Pod::Spec.new do |s|
     s.subspec 'GDTAdapter' do |gdt|
         gdt.dependency 'AdvanceSDK/Core'
         gdt.dependency 'AdvanceSDK/AdSpot'
-        gdt.dependency 'GDTMobSDK'
-        #, '4.14.45'
+        gdt.dependency 'GDTMobSDK', '4.14.10'
         gdt.source_files =  'AdvanceSDK/Adapters/GDT/**/*.{h,m}'
         gdt.frameworks = 'AdSupport', 'CoreLocation', 'QuartzCore', 'SystemConfiguration', 'CoreTelephony', 'Security', 'StoreKit', 'AVFoundation', 'WebKit'
         gdt.libraries     = 'xml2', 'z'
@@ -77,8 +75,7 @@ Pod::Spec.new do |s|
     s.subspec 'KSAdapter' do |ks|
         ks.dependency 'AdvanceSDK/Core'
         ks.dependency 'AdvanceSDK/AdSpot'
-        ks.dependency 'KSAdSDK'
-        #, '3.3.53'
+        ks.dependency 'KSAdSDK', '3.3.40'
         ks.source_files = 'AdvanceSDK/Adapters/KS/**/*.{h,m}'
         ks.frameworks = ["Foundation", "UIKit", "MobileCoreServices", "CoreGraphics", "Security", "SystemConfiguration", "CoreTelephony", "AdSupport", "CoreData", "StoreKit", "AVFoundation", "MediaPlayer", "CoreMedia", "WebKit", "Accelerate", "CoreLocation", "AVKit", "MessageUI", "QuickLook", "AudioToolBox", "AddressBook"]
         ks.libraries =  ["z", "resolv.9", "sqlite3", "c++", "c++abi"]
@@ -87,8 +84,7 @@ Pod::Spec.new do |s|
     s.subspec 'BDAdapter' do |bd|
         bd.dependency 'AdvanceSDK/Core'
         bd.dependency 'AdvanceSDK/AdSpot'
-        bd.dependency 'BaiduMobAdSDK'
-        #, '5.324'
+        bd.dependency 'BaiduMobAdSDK', '5.101'
         bd.source_files =  'AdvanceSDK/Adapters/BD/**/*.{h,m}'
         bd.frameworks = 'CoreLocation', 'SystemConfiguration', 'CoreGraphics', 'CoreMotion', 'CoreTelephony', 'AdSupport', 'SystemConfiguration', 'QuartzCore', 'WebKit', 'MessageUI','SafariServices','AVFoundation','EventKit','QuartzCore','CoreMedia','StoreKit'
         bd.libraries     = 'c++'
