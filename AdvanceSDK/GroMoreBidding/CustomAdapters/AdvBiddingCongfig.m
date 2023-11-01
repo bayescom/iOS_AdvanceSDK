@@ -5,15 +5,15 @@
 //  Created by guangyao on 2023/10/18.
 //
 
-#import "AdvBiddingConfig.h"
+#import "AdvBiddingCongfig.h"
 #import <ABUAdSDK/ABUAdSDK.h>
 #import <AdvanceSDK/AdvSdkConfig.h>
 
-@interface AdvBiddingConfig () <ABUCustomConfigAdapter>
+@interface AdvBiddingCongfig () <ABUCustomConfigAdapter>
 
 @end
 
-@implementation AdvBiddingConfig
+@implementation AdvBiddingCongfig
 
 #pragma mark - ABUCustomConfigAdapter
 

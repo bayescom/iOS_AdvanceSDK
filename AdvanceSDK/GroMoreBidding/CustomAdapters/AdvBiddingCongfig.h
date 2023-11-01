@@ -1,5 +1,5 @@
 //
-//  AdvBiddingConfig.h
+//  AdvBiddingCongfig.h
 //  AdvanceSDK
 //
 //  Created by guangyao on 2023/10/18.
@@ -9,7 +9,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface AdvBiddingConfig : NSObject
+/// 因为历史原因，保留Congfig单词的拼写错误
+@interface AdvBiddingCongfig : NSObject
 
 @end
 
