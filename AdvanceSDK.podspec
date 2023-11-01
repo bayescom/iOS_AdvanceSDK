@@ -11,7 +11,7 @@ Pod::Spec.new do |s|
     s.name             = 'AdvanceSDK'
     s.version          = '5.0.1'
     s.license          = { :type => 'MIT', :file => 'LICENSE' }
-    s.summary          = 'bayescom iOS AdvabceSDK'
+    s.summary          = 'bayescom iOS AdvanceSDK'
     s.description      = <<-DESC
     Blink倍联——免费透明的流量变现神器 
     600+ 移动媒体选择的广告商业化管理工具，定制私有的移动媒体商业化解决方案。优质上游资源一网打尽，接入方式快速透明稳定。支持流量分发、渠道策略、精准投放、数据报表、排期管理、广告审核等全流程业务场景。
