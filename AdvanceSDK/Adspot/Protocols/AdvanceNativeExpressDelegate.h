@@ -41,7 +41,6 @@
                           extra:(NSDictionary *)extra;
 
 /// Native ad closed
-/// note: not support Baidu Ad, you should realize it yourself
 - (void)didCloseNativeExpressAd:(AdvanceNativeExpressAd *)nativeAd
                          spotId:(NSString *)spotId
                           extra:(NSDictionary *)extra;

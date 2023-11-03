@@ -42,8 +42,15 @@
 
 @implementation AdvPolicyService
 
+- (instancetype)init {
+    if (self = [super init]) {
+        _errorInfo = [NSMutableDictionary dictionary];
+    }
+    return self;
+}
+
 + (instancetype)manager {
-    AdvPolicyService *mgr = [AdvPolicyService new];
+    AdvPolicyService *mgr = [[AdvPolicyService alloc] init];
     return mgr;
 }
 
@@ -53,8 +60,7 @@
                   customExt:(NSDictionary * _Nonnull)ext {
     _mediaId = mediaId;
     _adspotId = adspotId;
-    _ext = [ext mutableCopy];
-    _errorInfo = [NSMutableDictionary dictionary];
+    _ext = ext;
     /// 获取实时策略信息
     [self fetchPolicyData];
 }
@@ -79,7 +85,6 @@
 /// for gromore bidding
 - (void)catchBidTargetWhenGroMoreBiddingWithPolicyModel:(nullable AdvPolicyModel *)model {
     self.model = model;
-    _errorInfo = [NSMutableDictionary dictionary];
     [self loadSuppliersConcurrently];
 }
 
@@ -291,12 +296,8 @@
 - (void)fetchPolicyData {
     NSMutableDictionary *deviceInfo = [[AdvDeviceInfoUtil sharedInstance] getDeviceInfoWithMediaId:_mediaId adspotId:_adspotId];
     
-    if (self.ext) {
-        
-        // 如果是缓存渠道 请求的时候要标记一下
-        // [self.ext setValue:@"1" forKey:@"cache_effect"];
-        
-        [deviceInfo setValue:self.ext forKey:@"ext"];
+    if (_ext) {
+        [deviceInfo setValue:_ext forKey:@"ext"];
     }
     
     NSError *parseError = nil;
@@ -411,7 +412,18 @@
     ADVLog(@"%@ = 上报(impid: %@)", ADVStringFromNAdvanceSdkSupplierRepoType(repoType), supplier.name);
 }
 
+- (void)collectSupplierErrorInfomation:(AdvSupplier *)supplier error:(NSError *)error; {
+    // key: 渠道名-渠道id
+    NSString *key = [NSString stringWithFormat:@"sdkname:%@-id:%@",supplier.name, supplier.identifier];
+    [_errorInfo setObject:error forKey:key];
+}
+
+#pragma mark: - for GroMore
 - (void)reportGroMoreEventWithType:(AdvanceSdkSupplierRepoType)repoType groMore:(Gro_more *)groMore error:(nullable NSError *)error {
+    /// 收集GroMore错误信息
+    if (error) {
+        [self collectGroMoreErrorInfomation:error];
+    }
     
     NSArray<NSString *> *uploadUrls = nil;
     /// 按照类型判断上报地址
@@ -436,10 +448,8 @@
     [self.tkUploadTool reportWithUploadUrls:uploadUrls];
 }
 
-- (void)collectSupplierErrorInfomation:(AdvSupplier *)supplier error:(NSError *)error; {
-    // key: 渠道名-渠道id
-    NSString *key = [NSString stringWithFormat:@"sdkname:%@-id:%@",supplier.name, supplier.identifier];
-    [_errorInfo setObject:error forKey:key];
+- (void)collectGroMoreErrorInfomation:(NSError *)error; {
+    [_errorInfo setObject:error forKey:@"gromoresdk"];
 }
 
 - (AdvUploadTKUtil *)tkUploadTool {

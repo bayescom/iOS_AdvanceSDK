@@ -15,8 +15,5 @@ NSData * advanceAesEncryptData(NSData *data, NSData *key);
 NSData * advanceAesDecryptData(NSData *data, NSData *key);
 
 @interface AdvanceAESCipher : NSObject
-//将string转成带密码的data
-+ (NSString*)encryptAESData:(NSString*)string Withkey:(NSString * )key ivkey:(NSString * )ivkey;
-//将带密码的data转成string
-+(NSString*)decryptAESData:(NSString*)data Withkey:(NSString *)key ivkey:(NSString * )ivkey;
+
 @end
