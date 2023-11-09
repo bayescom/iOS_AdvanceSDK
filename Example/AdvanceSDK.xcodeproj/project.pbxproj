@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1552284F426CA56505B9AF0D /* Pods_AdvanceSDK_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FBE159C2E57D3A4719147EB /* Pods_AdvanceSDK_Tests.framework */; };
 		22635F1F2AAAED0D00D9C674 /* DemoFeedExpressViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 22635F1D2AAAED0D00D9C674 /* DemoFeedExpressViewController.m */; };
 		22635F202AAAED0D00D9C674 /* DemoListFeedExpressViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 22635F1E2AAAED0D00D9C674 /* DemoListFeedExpressViewController.m */; };
 		22635F2E2AAEF10400D9C674 /* DemoFeedAdDisplayController.m in Sources */ = {isa = PBXBuildFile; fileRef = 22635F2D2AAEF10400D9C674 /* DemoFeedAdDisplayController.m */; };
@@ -40,22 +39,10 @@
 		6003F59A195388D20070C39A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F599195388D20070C39A /* main.m */; };
 		6003F59E195388D20070C39A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F59D195388D20070C39A /* AppDelegate.m */; };
 		6003F5A9195388D20070C39A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5A8195388D20070C39A /* Images.xcassets */; };
-		6003F5B1195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
-		6003F5B2195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
 		71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 71719F9D1E33DC2100824A3D /* LaunchScreen.storyboard */; };
 		873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 873B8AEA1B1F5CCA007FD442 /* Main.storyboard */; };
 		E349CF53E54D6BF0E9D2E04D /* Pods_AdvanceSDK_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2181D0EB3A4AD12D3CEEEF5 /* Pods_AdvanceSDK_Example.framework */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		6003F5B3195388D20070C39A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 6003F582195388D10070C39A /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 6003F589195388D20070C39A;
-			remoteInfo = AdvanceSDK;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		4EA928F3289BA45B00512BF2 /* Embed Frameworks */ = {
@@ -114,7 +101,6 @@
 		31FE7BEF24482D2300CB2062 /* DemoSplashViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DemoSplashViewController.h; sourceTree = "<group>"; };
 		31FE7BF024482D2300CB2062 /* DemoRewardVideoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DemoRewardVideoViewController.h; sourceTree = "<group>"; };
 		31FE7BF124482D2300CB2062 /* DemoBannerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DemoBannerViewController.m; sourceTree = "<group>"; };
-		3FBE159C2E57D3A4719147EB /* Pods_AdvanceSDK_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AdvanceSDK_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4EFB343D28A0ADAF0047E75A /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		4EFB343F28A0ADC30047E75A /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		4EFB344128A0ADD00047E75A /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
@@ -134,12 +120,9 @@
 		6003F59C195388D20070C39A /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		6003F59D195388D20070C39A /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		6003F5A8195388D20070C39A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		6003F5AE195388D20070C39A /* AdvanceSDK_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AdvanceSDK_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		71719F9E1E33DC2100824A3D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		873B8AEA1B1F5CCA007FD442 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		B2181D0EB3A4AD12D3CEEEF5 /* Pods_AdvanceSDK_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AdvanceSDK_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		C0659F3B8009DD3C080E2003 /* Pods-AdvanceSDK_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AdvanceSDK_Tests.release.xcconfig"; path = "Target Support Files/Pods-AdvanceSDK_Tests/Pods-AdvanceSDK_Tests.release.xcconfig"; sourceTree = "<group>"; };
-		CE4684C5481FB52F323A4426 /* Pods-AdvanceSDK_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AdvanceSDK_Tests.debug.xcconfig"; path = "Target Support Files/Pods-AdvanceSDK_Tests/Pods-AdvanceSDK_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		E5B804D9A1812796B3A043CC /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -157,16 +140,6 @@
 				E349CF53E54D6BF0E9D2E04D /* Pods_AdvanceSDK_Example.framework in Frameworks */,
 				4EFB343E28A0ADAF0047E75A /* AdSupport.framework in Frameworks */,
 				4EFB344028A0ADC30047E75A /* CoreMotion.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		6003F5AB195388D20070C39A /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				6003F5B2195388D20070C39A /* UIKit.framework in Frameworks */,
-				6003F5B1195388D20070C39A /* Foundation.framework in Frameworks */,
-				1552284F426CA56505B9AF0D /* Pods_AdvanceSDK_Tests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -295,7 +268,6 @@
 			isa = PBXGroup;
 			children = (
 				6003F58A195388D20070C39A /* AdvanceSDK_Example.app */,
-				6003F5AE195388D20070C39A /* AdvanceSDK_Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -315,7 +287,6 @@
 				6003F58F195388D20070C39A /* CoreGraphics.framework */,
 				6003F591195388D20070C39A /* UIKit.framework */,
 				B2181D0EB3A4AD12D3CEEEF5 /* Pods_AdvanceSDK_Example.framework */,
-				3FBE159C2E57D3A4719147EB /* Pods_AdvanceSDK_Tests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -364,8 +335,6 @@
 			children = (
 				0FB18A5DAA171A55502E9407 /* Pods-AdvanceSDK_Example.debug.xcconfig */,
 				19B4DCB70CF5FFF496339425 /* Pods-AdvanceSDK_Example.release.xcconfig */,
-				CE4684C5481FB52F323A4426 /* Pods-AdvanceSDK_Tests.debug.xcconfig */,
-				C0659F3B8009DD3C080E2003 /* Pods-AdvanceSDK_Tests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -382,8 +351,8 @@
 				6003F587195388D20070C39A /* Frameworks */,
 				6003F588195388D20070C39A /* Resources */,
 				DD802C9B010FB5F799395DE7 /* [CP] Embed Pods Frameworks */,
-				303CFC7B25657435F364EEEB /* [CP] Copy Pods Resources */,
 				4EA928F3289BA45B00512BF2 /* Embed Frameworks */,
+				A6CD03A86D00971C951AB87A /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -393,25 +362,6 @@
 			productName = AdvanceSDK;
 			productReference = 6003F58A195388D20070C39A /* AdvanceSDK_Example.app */;
 			productType = "com.apple.product-type.application";
-		};
-		6003F5AD195388D20070C39A /* AdvanceSDK_Tests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 6003F5C2195388D20070C39A /* Build configuration list for PBXNativeTarget "AdvanceSDK_Tests" */;
-			buildPhases = (
-				20135FF5845D8AC5FA918294 /* [CP] Check Pods Manifest.lock */,
-				6003F5AA195388D20070C39A /* Sources */,
-				6003F5AB195388D20070C39A /* Frameworks */,
-				6003F5AC195388D20070C39A /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				6003F5B4195388D20070C39A /* PBXTargetDependency */,
-			);
-			name = AdvanceSDK_Tests;
-			productName = AdvanceSDKTests;
-			productReference = 6003F5AE195388D20070C39A /* AdvanceSDK_Tests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -426,9 +376,6 @@
 				TargetAttributes = {
 					6003F589195388D20070C39A = {
 						ProvisioningStyle = Automatic;
-					};
-					6003F5AD195388D20070C39A = {
-						TestTargetID = 6003F589195388D20070C39A;
 					};
 				};
 			};
@@ -447,7 +394,6 @@
 			projectRoot = "";
 			targets = (
 				6003F589195388D20070C39A /* AdvanceSDK_Example */,
-				6003F5AD195388D20070C39A /* AdvanceSDK_Tests */,
 			);
 		};
 /* End PBXProject section */
@@ -465,60 +411,9 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		6003F5AC195388D20070C39A /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		20135FF5845D8AC5FA918294 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-AdvanceSDK_Tests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		303CFC7B25657435F364EEEB /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-AdvanceSDK_Example/Pods-AdvanceSDK_Example-resources.sh",
-				"${PODS_ROOT}/Ads-CN/SDK/LICENSE",
-				"${PODS_ROOT}/Ads-CN/SDK/CSJAdSDK.bundle",
-				"${PODS_ROOT}/BaiduMobAdSDK/baidumobadsdk.bundle",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/LICENSE",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/CSJAdSDK.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/baidumobadsdk.bundle",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-AdvanceSDK_Example/Pods-AdvanceSDK_Example-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		4929D1A60817B5925A4F204A /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -539,6 +434,26 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A6CD03A86D00971C951AB87A /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-AdvanceSDK_Example/Pods-AdvanceSDK_Example-resources.sh",
+				"${PODS_ROOT}/Ads-CN/SDK/CSJAdSDK.bundle",
+				"${PODS_ROOT}/BaiduMobAdSDK/baidumobadsdk.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/CSJAdSDK.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/baidumobadsdk.bundle",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-AdvanceSDK_Example/Pods-AdvanceSDK_Example-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		DD802C9B010FB5F799395DE7 /* [CP] Embed Pods Frameworks */ = {
@@ -594,22 +509,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		6003F5AA195388D20070C39A /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		6003F5B4195388D20070C39A /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 6003F589195388D20070C39A /* AdvanceSDK_Example */;
-			targetProxy = 6003F5B3195388D20070C39A /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		6003F596195388D20070C39A /* InfoPlist.strings */ = {
@@ -739,6 +639,7 @@
 			baseConfigurationReference = 0FB18A5DAA171A55502E9407 /* Pods-AdvanceSDK_Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9ST9FLC84N;
@@ -763,7 +664,6 @@
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
-					"-l\"GDTMobSDK\"",
 					"-l\"bz2\"",
 					"-l\"c++\"",
 					"-l\"c++abi\"",
@@ -787,8 +687,6 @@
 					"\"AudioToolBox\"",
 					"-framework",
 					"\"AudioToolbox\"",
-					"-framework",
-					"\"BaiduMobAdSDK\"",
 					"-framework",
 					"\"CoreData\"",
 					"-framework",
@@ -818,15 +716,11 @@
 					"-framework",
 					"\"JavaScriptCore\"",
 					"-framework",
-					"\"KSAdSDK\"",
-					"-framework",
 					"\"MapKit\"",
 					"-framework",
 					"\"Masonry\"",
 					"-framework",
 					"\"MediaPlayer\"",
-					"-framework",
-					"\"MercurySDK\"",
 					"-framework",
 					"\"MessageUI\"",
 					"-framework",
@@ -869,6 +763,7 @@
 			baseConfigurationReference = 19B4DCB70CF5FFF496339425 /* Pods-AdvanceSDK_Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9ST9FLC84N;
@@ -892,7 +787,6 @@
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
-					"-l\"GDTMobSDK\"",
 					"-l\"bz2\"",
 					"-l\"c++\"",
 					"-l\"c++abi\"",
@@ -916,8 +810,6 @@
 					"\"AudioToolBox\"",
 					"-framework",
 					"\"AudioToolbox\"",
-					"-framework",
-					"\"BaiduMobAdSDK\"",
 					"-framework",
 					"\"CoreData\"",
 					"-framework",
@@ -947,15 +839,11 @@
 					"-framework",
 					"\"JavaScriptCore\"",
 					"-framework",
-					"\"KSAdSDK\"",
-					"-framework",
 					"\"MapKit\"",
 					"-framework",
 					"\"Masonry\"",
 					"-framework",
 					"\"MediaPlayer\"",
-					"-framework",
-					"\"MercurySDK\"",
 					"-framework",
 					"\"MessageUI\"",
 					"-framework",
@@ -993,54 +881,6 @@
 			};
 			name = Release;
 		};
-		6003F5C3195388D20070C39A /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = CE4684C5481FB52F323A4426 /* Pods-AdvanceSDK_Tests.debug.xcconfig */;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				DEVELOPMENT_TEAM = 9ST9FLC84N;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
-					"$(inherited)",
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Tests/Tests-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = "Tests/Tests-Info.plist";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.${PRODUCT_NAME:rfc1034identifier}";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AdvanceSDK_Example.app/AdvanceSDK_Example";
-				WRAPPER_EXTENSION = xctest;
-			};
-			name = Debug;
-		};
-		6003F5C4195388D20070C39A /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = C0659F3B8009DD3C080E2003 /* Pods-AdvanceSDK_Tests.release.xcconfig */;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				DEVELOPMENT_TEAM = 9ST9FLC84N;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
-					"$(inherited)",
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Tests/Tests-Prefix.pch";
-				INFOPLIST_FILE = "Tests/Tests-Info.plist";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.${PRODUCT_NAME:rfc1034identifier}";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AdvanceSDK_Example.app/AdvanceSDK_Example";
-				WRAPPER_EXTENSION = xctest;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1058,15 +898,6 @@
 			buildConfigurations = (
 				6003F5C0195388D20070C39A /* Debug */,
 				6003F5C1195388D20070C39A /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		6003F5C2195388D20070C39A /* Build configuration list for PBXNativeTarget "AdvanceSDK_Tests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				6003F5C3195388D20070C39A /* Debug */,
-				6003F5C4195388D20070C39A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

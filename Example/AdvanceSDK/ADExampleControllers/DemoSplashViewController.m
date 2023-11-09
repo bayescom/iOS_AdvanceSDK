@@ -37,7 +37,7 @@
 //        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10002619"},
 //        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10006483"},
         
-        @{@"addesc": @"开屏-GroMore", @"adspotId": @"102768-10008570"},
+        //@{@"addesc": @"开屏-GroMore", @"adspotId": @"102768-10008570"},
         @{@"addesc": @"开屏-Bidding", @"adspotId": @"102768-10008229"},
         @{@"addesc": @"开屏-倍业", @"adspotId": @"102768-10007788"},
         @{@"addesc": @"开屏-穿山甲", @"adspotId": @"102768-10007798"},

@@ -6,17 +6,21 @@ target 'AdvanceSDK_Example' do
   #必须集成
   pod 'AdvanceSDK', :path => '../'
   
-  #集成倍业Adapter
+#  #集成倍业Adapter
   pod 'AdvanceSDK/MercuryAdapter', :path => '../'
   pod 'MercurySDK', '3.2.0'
 
-  #集成穿山甲Adapter
+  #集成穿山甲Adapter（基于单独SDK）
   pod 'AdvanceSDK/CSJAdapter', :path => '../'
-  pod 'Ads-CN', '4.9.0.6'
+  pod 'Ads-CN', '5.7.0.7'
   
+  #集成穿山甲Adapter（基于融合SDK）
+#  pod 'AdvanceSDK/CSJAdapter-Fusion', :path => '../'
+#  pod 'Ads-Fusion-CN-Beta','5.7.0.8', :subspecs => ['BUAdSDK', 'CSJMediation']
+
   #集成广点通Adapter
   pod 'AdvanceSDK/GDTAdapter', :path => '../'
-  pod 'GDTMobSDK', '4.14.10'
+  pod 'GDTMobSDK', '4.14.45'
 
   #集成快手Adapter
   pod 'AdvanceSDK/KSAdapter', :path => '../'
@@ -26,18 +30,13 @@ target 'AdvanceSDK_Example' do
   pod 'AdvanceSDK/BDAdapter', :path => '../'
   pod 'BaiduMobAdSDK', '5.101'
 
-  # 集成GroMoreBidding模块
-  pod 'AdvanceSDK/GroMoreBidding', :path => '../'
+#  # 集成GroMoreBidding模块
+#  pod 'AdvanceSDK/GroMoreBidding', :path => '../'
   
 
   # Third
   pod 'SDWebImage', '5.12.1'
   pod 'Masonry'
-
-  target 'AdvanceSDK_Tests' do
-    inherit! :search_paths
-    
-  end
   
   post_install do |installer|
     installer.generated_projects.each do |project|

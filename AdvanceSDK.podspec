@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
     
     s.name             = 'AdvanceSDK'
-    s.version          = '5.0.1'
+    s.version          = '5.0.2'
     s.license          = { :type => 'MIT', :file => 'LICENSE' }
     s.summary          = 'bayescom iOS AdvanceSDK'
     s.description      = <<-DESC
@@ -18,16 +18,10 @@ Pod::Spec.new do |s|
     DESC
     
     s.homepage         = 'http://www.bayescom.com/'
-    
     s.author           = { 'bayescom' => 'http://www.bayescom.com/' }
     s.source           = { :git => 'https://github.com/bayescom/AdvanceSDK.git', :tag => s.version.to_s }
     
-    s.user_target_xcconfig = {'OTHER_LDFLAGS' => ['-ObjC']}
-    valid_archs = ['i386', 'armv7', 'x86_64', 'arm64']
-    s.pod_target_xcconfig = { 'ENABLE_BITCODE' => 'NO'}
-    s.user_target_xcconfig = { 'ENABLE_BITCODE' => 'NO'}
-    
-    s.ios.deployment_target = '10.0'
+    s.pod_target_xcconfig = { 'VALID_ARCHS' => 'x86_64 armv7 arm64' }
     s.platform     = :ios, "10.0"
     s.requires_arc = true
     s.static_framework = true
@@ -50,13 +44,24 @@ Pod::Spec.new do |s|
         mer.dependency 'AdvanceSDK/AdSpot'
         mer.dependency 'MercurySDK'
         mer.source_files = 'AdvanceSDK/Adapters/Mercury/**/*.{h,m}'
-        mer.frameworks = 'StoreKit', 'AVFoundation', 'CoreMotion'
     end
     
+    # 基于穿山甲单独SDK
     s.subspec 'CSJAdapter' do |csj|
         csj.dependency 'AdvanceSDK/Core'
         csj.dependency 'AdvanceSDK/AdSpot'
         csj.dependency 'Ads-CN'
+        csj.source_files = 'AdvanceSDK/Adapters/CSJ/**/*.{h,m}'
+        csj.frameworks = 'UIKit', 'MapKit', 'WebKit', 'MediaPlayer', 'CoreLocation', 'AdSupport', 'CoreMedia', 'AVFoundation', 'CoreTelephony', 'StoreKit', 'SystemConfiguration', 'MobileCoreServices', 'CoreMotion', 'Accelerate','AudioToolbox','JavaScriptCore','Security','CoreImage','AudioToolbox','ImageIO','QuartzCore','CoreGraphics','CoreText'
+        csj.libraries = 'c++', 'resolv', 'z', 'sqlite3', 'bz2', 'xml2', 'iconv', 'c++abi'
+        csj.weak_frameworks = 'AppTrackingTransparency', 'DeviceCheck'
+    end
+    
+    # 基于穿山甲融合SDK
+    s.subspec 'CSJAdapter-Fusion' do |csj|
+        csj.dependency 'AdvanceSDK/Core'
+        csj.dependency 'AdvanceSDK/AdSpot'
+        csj.dependency 'Ads-Fusion-CN-Beta/BUAdSDK'
         csj.source_files = 'AdvanceSDK/Adapters/CSJ/**/*.{h,m}'
         csj.frameworks = 'UIKit', 'MapKit', 'WebKit', 'MediaPlayer', 'CoreLocation', 'AdSupport', 'CoreMedia', 'AVFoundation', 'CoreTelephony', 'StoreKit', 'SystemConfiguration', 'MobileCoreServices', 'CoreMotion', 'Accelerate','AudioToolbox','JavaScriptCore','Security','CoreImage','AudioToolbox','ImageIO','QuartzCore','CoreGraphics','CoreText'
         csj.libraries = 'c++', 'resolv', 'z', 'sqlite3', 'bz2', 'xml2', 'iconv', 'c++abi'
@@ -68,8 +73,9 @@ Pod::Spec.new do |s|
         gdt.dependency 'AdvanceSDK/AdSpot'
         gdt.dependency 'GDTMobSDK'
         gdt.source_files =  'AdvanceSDK/Adapters/GDT/**/*.{h,m}'
-        gdt.frameworks = 'AdSupport', 'CoreLocation', 'QuartzCore', 'SystemConfiguration', 'CoreTelephony', 'Security', 'StoreKit', 'AVFoundation', 'WebKit'
+        gdt.frameworks = 'AdSupport', 'CoreLocation', 'QuartzCore', 'SystemConfiguration', 'CoreTelephony', 'Security', 'StoreKit', 'AVFoundation'
         gdt.libraries     = 'xml2', 'z'
+        gdt.weak_frameworks = 'WebKit'
     end
      
     s.subspec 'KSAdapter' do |ks|
@@ -88,8 +94,6 @@ Pod::Spec.new do |s|
         bd.source_files =  'AdvanceSDK/Adapters/BD/**/*.{h,m}'
         bd.frameworks = 'CoreLocation', 'SystemConfiguration', 'CoreGraphics', 'CoreMotion', 'CoreTelephony', 'AdSupport', 'SystemConfiguration', 'QuartzCore', 'WebKit', 'MessageUI','SafariServices','AVFoundation','EventKit','QuartzCore','CoreMedia','StoreKit'
         bd.libraries     = 'c++'
-        bd.weak_frameworks = "WebKit"
-        valid_archs = ['armv7', 'armv7s', 'x86_64', 'arm64']
     end
     
     s.subspec 'GroMoreBidding' do |bidding|
@@ -98,9 +102,5 @@ Pod::Spec.new do |s|
         bidding.dependency 'GroMoreBiddingSDK', '1.2.0'
         bidding.source_files = 'AdvanceSDK/GroMoreBidding/**/*.{h,m}'
     end
-
-    s.xcconfig = {
-        'VALID_ARCHS' =>  valid_archs.join(' '),
-    }
 
 end
