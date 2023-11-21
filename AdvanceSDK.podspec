@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
     
     s.name             = 'AdvanceSDK'
-    s.version          = '5.0.2'
+    s.version          = '5.0.3'
     s.license          = { :type => 'MIT', :file => 'LICENSE' }
     s.summary          = 'bayescom iOS AdvanceSDK'
     s.description      = <<-DESC

@@ -118,8 +118,13 @@
     _parallelSuppliers = [firstGroupSuppliers mutableCopy];
     
     /// 合并2个组，开始执行竞价策略的回调
-    NSMutableArray *templeSuppliers = [NSMutableArray arrayWithArray:biddingSuppliers];
-    [templeSuppliers addObjectsFromArray:firstGroupSuppliers];
+    NSMutableArray *templeSuppliers = [NSMutableArray array];
+    if (biddingSuppliers.count) {
+        [templeSuppliers addObjectsFromArray:biddingSuppliers];
+    }
+    if (firstGroupSuppliers.count) {
+        [templeSuppliers addObjectsFromArray:firstGroupSuppliers];
+    }
     if ([_delegate respondsToSelector:@selector(advPolicyServiceStartBiddingWithSuppliers:)]) {
         [_delegate advPolicyServiceStartBiddingWithSuppliers:templeSuppliers];
     }
@@ -132,11 +137,11 @@
     }];
     
     /// 执行完后移除parallel组渠道，确保再次调用此函数时能获取到下一组渠道
-    if (self.model.setting.parallelGroup.count > 0) {
+    if (self.model.setting.parallelGroup.count) {
         [self.model.setting.parallelGroup removeObjectAtIndex:0];
     }
     /// 执行完后移除bidding组渠道，确保再次调用此函数时该组不再参与竞价
-    if (self.model.setting.headBiddingGroup.count > 0) {
+    if (self.model.setting.headBiddingGroup.count) {
         [self.model.setting.headBiddingGroup removeAllObjects];
     }
     /// 该组渠道加载广告超时监测
@@ -198,15 +203,15 @@
         
     } else { /// 混合竞价模式（瀑布流 + 头部竞价）
         
-        /// 检测bidding组是否全部返回了结果
+        /// 检测bidding组是否全部返回了结果，失败或超时渠道此前已被删除
         if ([_biddingSuppliers filter:^BOOL(AdvSupplier *supplier) {
             return supplier.loadAdState == AdvanceSupplierLoadAdReady;
-        }].count > 0) {
+        }].count) {
             return;
         }
         
-        /// 此时bidding组全部返回了结果，并且一定存在竞价成功的渠道
-        if (supplier.is_head_bidding) {
+        /// 此时bidding组全部返回了结果，且组内都是竞价成功的渠道
+        if (!_bidTargetSupplier && _biddingSuppliers.count) {
             /// 对biddingSuppliers进行排序
             [self sortedForPriceWithSuppliers:_biddingSuppliers];
             /// 取出最高价渠道
@@ -252,8 +257,12 @@
     }
     
     /// 无需开启下一组parallelGroup时，直接产生最新的执行队列
-    _mixedSuppliers = [NSMutableArray arrayWithObject:_bidTargetSupplier];
-    [_mixedSuppliers addObjectsFromArray:_parallelSuppliers];
+    if (_bidTargetSupplier) {
+        _mixedSuppliers = [NSMutableArray arrayWithObject:_bidTargetSupplier];
+    }
+    if (_parallelSuppliers.count) {
+        [_mixedSuppliers addObjectsFromArray:_parallelSuppliers];
+    }
     /// 对最新产生的执行队列按价格进行排序
     [self sortedForPriceWithSuppliers:_mixedSuppliers];
     /// 命中用于展示的渠道并回调

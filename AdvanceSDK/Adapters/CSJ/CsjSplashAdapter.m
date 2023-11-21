@@ -67,6 +67,17 @@
     if (window && window.rootViewController) {
         [_csj_ad showSplashViewInRootViewController:window.rootViewController];
     }
+
+    if (_adspot.showLogoRequire) {
+        // 添加Logo
+        NSAssert(_adspot.logoImage != nil, @"showLogoRequire = YES时, 必须设置logoImage");
+        CGFloat real_w = [UIScreen mainScreen].bounds.size.width;
+        CGFloat real_h = _adspot.logoImage.size.height*(real_w/_adspot.logoImage.size.width);
+        _imgV = [[UIImageView alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height-real_h, real_w, real_h)];
+        _imgV.userInteractionEnabled = YES;
+        _imgV.image = _adspot.logoImage;
+        [_csj_ad.splashRootViewController.view addSubview:_imgV];
+    }
 }
 
 // MARK: ======================= BUSplashAdDelegate =======================
@@ -83,20 +94,8 @@
     [self.adspot.manager checkTargetWithResultfulSupplier:_supplier loadAdState:AdvanceSupplierLoadAdFailed];
 }
 
-- (void)splashAdRenderSuccess:(nonnull BUSplashAd *)splashAd {
-
-    if (_adspot.showLogoRequire) {
-        // 添加Logo
-        NSAssert(_adspot.logoImage != nil, @"showLogoRequire = YES时, 必须设置logoImage");
-        CGFloat real_w = [UIScreen mainScreen].bounds.size.width;
-        CGFloat real_h = _adspot.logoImage.size.height*(real_w/_adspot.logoImage.size.width);
-        _imgV = [[UIImageView alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height-real_h, real_w, real_h)];
-        _imgV.userInteractionEnabled = YES;
-        _imgV.image = _adspot.logoImage;
-        if (_imgV) {
-            [_csj_ad.splashRootViewController.view addSubview:_imgV];
-        }
-    }
+- (void)splashAdRenderSuccess:(BUSplashAd *)splashAd {
+    
 }
 
 - (void)splashAdRenderFail:(nonnull BUSplashAd *)splashAd error:(BUAdError * _Nullable)error {
@@ -128,6 +127,16 @@
 - (void)splashVideoAdDidPlayFinish:(nonnull BUSplashAd *)splashAd didFailWithError:(NSError *)error {
     
 }
+
+- (void)splashAdViewControllerDidClose:(nonnull BUSplashAd *)splashAd {
+    
+}
+
+
+- (void)splashDidCloseOtherController:(nonnull BUSplashAd *)splashAd interactionType:(BUInteractionType)interactionType {
+    
+}
+
 
 - (void)csjAdDidClose {
     if ([self.delegate respondsToSelector:@selector(splashDidCloseForSpotId:extra:)]) {
