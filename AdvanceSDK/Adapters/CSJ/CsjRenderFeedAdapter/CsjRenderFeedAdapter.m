@@ -103,7 +103,6 @@
         element.mediaWidth = data.videoResolutionWidth;
         element.mediaHeight = data.videoResolutionHeight;
     }
-    element.videoUrl = data.videoUrl;
     element.videoDuration = data.videoDuration;
     element.appRating = data.score;
     

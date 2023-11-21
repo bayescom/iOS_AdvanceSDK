@@ -33,9 +33,6 @@
 // 是否为视频广告
 @property (nonatomic, assign) BOOL isVideoAd;
 
-// 视频广告Url
-@property (nonatomic, copy) NSString *videoUrl;
-
 // 视频广告时长（单位：ms）
 @property (nonatomic, assign) NSInteger videoDuration;
 

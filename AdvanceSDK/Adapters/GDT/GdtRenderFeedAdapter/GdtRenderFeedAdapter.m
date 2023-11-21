@@ -88,7 +88,6 @@
     element.mediaHeight = dataObject.imageHeight;
     element.buttonText = dataObject.buttonText;
     element.isVideoAd = [self isVideoAd:dataObject];
-    element.videoUrl = dataObject.videoUrl;
     element.videoDuration = dataObject.duration;
     element.appRating = dataObject.appRating;
     return element;
