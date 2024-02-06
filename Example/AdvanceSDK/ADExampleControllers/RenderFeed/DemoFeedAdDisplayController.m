@@ -47,7 +47,7 @@
     CGFloat height = [[UIScreen mainScreen] bounds].size.height;
     /// 自渲染视图容器
     /// important：其他子视图添加至该容器中
-    self.feedAdView.frame = CGRectMake(0, 100, width, height - 120);
+    self.feedAdView.frame = CGRectMake(0, 0, width, height - 100);
     [self.view addSubview:self.feedAdView];
     self.feedAdView.backgroundColor = UIColor.lightGrayColor;
     

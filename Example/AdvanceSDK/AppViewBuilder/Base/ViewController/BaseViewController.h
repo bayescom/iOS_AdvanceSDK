@@ -34,8 +34,6 @@ NS_ASSUME_NONNULL_BEGIN
 /// 确认写了 广告位Id
 - (BOOL)checkAdspotId;
 
-
-- (void)resignFirstResponder;
 @end
 
 NS_ASSUME_NONNULL_END

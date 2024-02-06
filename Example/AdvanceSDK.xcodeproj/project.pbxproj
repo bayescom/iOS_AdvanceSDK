@@ -40,7 +40,6 @@
 		6003F59E195388D20070C39A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F59D195388D20070C39A /* AppDelegate.m */; };
 		6003F5A9195388D20070C39A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5A8195388D20070C39A /* Images.xcassets */; };
 		71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 71719F9D1E33DC2100824A3D /* LaunchScreen.storyboard */; };
-		873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 873B8AEA1B1F5CCA007FD442 /* Main.storyboard */; };
 		E349CF53E54D6BF0E9D2E04D /* Pods_AdvanceSDK_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2181D0EB3A4AD12D3CEEEF5 /* Pods_AdvanceSDK_Example.framework */; };
 /* End PBXBuildFile section */
 
@@ -121,7 +120,6 @@
 		6003F59D195388D20070C39A /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		6003F5A8195388D20070C39A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		71719F9E1E33DC2100824A3D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		873B8AEA1B1F5CCA007FD442 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		B2181D0EB3A4AD12D3CEEEF5 /* Pods_AdvanceSDK_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AdvanceSDK_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E5B804D9A1812796B3A043CC /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -217,8 +215,8 @@
 		31FE7BC224482CEE00CB2062 /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
-				31FE7BC324482CEE00CB2062 /* BaseViewController.m */,
 				31FE7BC424482CEE00CB2062 /* BaseViewController.h */,
+				31FE7BC324482CEE00CB2062 /* BaseViewController.m */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -294,15 +292,13 @@
 		6003F593195388D20070C39A /* Example for AdvanceSDK */ = {
 			isa = PBXGroup;
 			children = (
+				31FE7BAA24482CEE00CB2062 /* AppViewBuilder */,
 				6003F59C195388D20070C39A /* AppDelegate.h */,
 				6003F59D195388D20070C39A /* AppDelegate.m */,
 				31FE7BD524482D0300CB2062 /* ViewController.h */,
 				31FE7BD624482D0500CB2062 /* ViewController.m */,
 				31FE7BE124482D2200CB2062 /* ADExampleControllers */,
-				31FE7BAA24482CEE00CB2062 /* AppViewBuilder */,
 				6003F594195388D20070C39A /* Supporting Files */,
-				873B8AEA1B1F5CCA007FD442 /* Main.storyboard */,
-				71719F9D1E33DC2100824A3D /* LaunchScreen.storyboard */,
 			);
 			name = "Example for AdvanceSDK";
 			path = AdvanceSDK;
@@ -311,6 +307,7 @@
 		6003F594195388D20070C39A /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				71719F9D1E33DC2100824A3D /* LaunchScreen.storyboard */,
 				6003F5A8195388D20070C39A /* Images.xcassets */,
 				31FE7BD324482CFE00CB2062 /* PrefixHeader.pch */,
 				6003F595195388D20070C39A /* AdvanceSDK-Info.plist */,
@@ -403,7 +400,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */,
 				71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */,
 				6003F5A9195388D20070C39A /* Images.xcassets in Resources */,
 				6003F598195388D20070C39A /* InfoPlist.strings in Resources */,

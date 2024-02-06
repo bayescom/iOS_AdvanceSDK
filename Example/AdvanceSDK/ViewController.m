@@ -19,6 +19,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.title = @"聚合广告位";
     
     [self initSubviews];
     
@@ -36,31 +37,13 @@
 }
 
 - (void)initSubviews {
-//    UIBarButtonItem *settingItem = [[UIBarButtonItem alloc] initWithTitle:@"SDK设置" style:UIBarButtonItemStylePlain target:self action:@selector(toSettingsViewController)];
-//    self.navigationItem.rightBarButtonItem = settingItem;
-    
     _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
     _tableView.dataSource = self;
     _tableView.delegate = self;
-    _tableView.tableFooterView = [UIView new];
     [self.view addSubview:_tableView];
-    _tableView.backgroundView = [UIView new];
-    
-    UILabel *vLbl = [[UILabel alloc] initWithFrame:CGRectZero];
-    vLbl.textAlignment = NSTextAlignmentCenter;
-    
-    if (@available(iOS 15.0, *)) {
-        self.tableView.sectionHeaderTopPadding = 0;
-    }
-
-    
     [_tableView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.mas_equalTo(0);
+        make.edges.mas_equalTo(self.view);
     }];
-}
-
-- (void)toSettingsViewController {
-    [self.navigationController pushViewController:[[NSClassFromString(@"SettingsViewController") alloc] init] animated:YES];
 }
 
 // MARK: UITableViewDataSource, UITableViewDelegate

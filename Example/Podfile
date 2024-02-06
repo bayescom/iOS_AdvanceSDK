@@ -8,7 +8,7 @@ target 'AdvanceSDK_Example' do
   
 #  #集成倍业Adapter
   pod 'AdvanceSDK/MercuryAdapter', :path => '../'
-  pod 'MercurySDK', '3.2.2'
+  pod 'MercurySDK', '3.3.6'
 
   #集成穿山甲Adapter（基于单独SDK）
   pod 'AdvanceSDK/CSJAdapter', :path => '../'
