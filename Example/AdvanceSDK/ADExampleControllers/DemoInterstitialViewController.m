@@ -29,6 +29,7 @@
         @{@"addesc": @"插屏-优量汇", @"adspotId": @"102768-10007810"},
         @{@"addesc": @"插屏-快手", @"adspotId": @"102768-10007818"},
         @{@"addesc": @"插屏-百度", @"adspotId": @"102768-10007836"},
+        @{@"addesc": @"插屏-Tanx", @"adspotId": @"102768-10009460"}
     ];
     self.btn1Title = @"加载广告";
     self.btn2Title = @"显示广告";

@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
     
     s.name             = 'AdvanceSDK'
-    s.version          = '5.0.3'
+    s.version          = '5.0.5'
     s.license          = { :type => 'MIT', :file => 'LICENSE' }
     s.summary          = 'bayescom iOS AdvanceSDK'
     s.description      = <<-DESC
@@ -52,9 +52,6 @@ Pod::Spec.new do |s|
         csj.dependency 'AdvanceSDK/AdSpot'
         csj.dependency 'Ads-CN'
         csj.source_files = 'AdvanceSDK/Adapters/CSJ/**/*.{h,m}'
-        csj.frameworks = 'UIKit', 'MapKit', 'WebKit', 'MediaPlayer', 'CoreLocation', 'AdSupport', 'CoreMedia', 'AVFoundation', 'CoreTelephony', 'StoreKit', 'SystemConfiguration', 'MobileCoreServices', 'CoreMotion', 'Accelerate','AudioToolbox','JavaScriptCore','Security','CoreImage','AudioToolbox','ImageIO','QuartzCore','CoreGraphics','CoreText'
-        csj.libraries = 'c++', 'resolv', 'z', 'sqlite3', 'bz2', 'xml2', 'iconv', 'c++abi'
-        csj.weak_frameworks = 'AppTrackingTransparency', 'DeviceCheck'
     end
     
     # 基于穿山甲融合SDK
@@ -63,9 +60,6 @@ Pod::Spec.new do |s|
         csj.dependency 'AdvanceSDK/AdSpot'
         csj.dependency 'Ads-Fusion-CN-Beta/BUAdSDK'
         csj.source_files = 'AdvanceSDK/Adapters/CSJ/**/*.{h,m}'
-        csj.frameworks = 'UIKit', 'MapKit', 'WebKit', 'MediaPlayer', 'CoreLocation', 'AdSupport', 'CoreMedia', 'AVFoundation', 'CoreTelephony', 'StoreKit', 'SystemConfiguration', 'MobileCoreServices', 'CoreMotion', 'Accelerate','AudioToolbox','JavaScriptCore','Security','CoreImage','AudioToolbox','ImageIO','QuartzCore','CoreGraphics','CoreText'
-        csj.libraries = 'c++', 'resolv', 'z', 'sqlite3', 'bz2', 'xml2', 'iconv', 'c++abi'
-        csj.weak_frameworks = 'AppTrackingTransparency', 'DeviceCheck'
     end
     
     s.subspec 'GDTAdapter' do |gdt|
@@ -73,9 +67,6 @@ Pod::Spec.new do |s|
         gdt.dependency 'AdvanceSDK/AdSpot'
         gdt.dependency 'GDTMobSDK'
         gdt.source_files =  'AdvanceSDK/Adapters/GDT/**/*.{h,m}'
-        gdt.frameworks = 'AdSupport', 'CoreLocation', 'QuartzCore', 'SystemConfiguration', 'CoreTelephony', 'Security', 'StoreKit', 'AVFoundation'
-        gdt.libraries     = 'xml2', 'z'
-        gdt.weak_frameworks = 'WebKit'
     end
      
     s.subspec 'KSAdapter' do |ks|
@@ -83,8 +74,6 @@ Pod::Spec.new do |s|
         ks.dependency 'AdvanceSDK/AdSpot'
         ks.dependency 'KSAdSDK'
         ks.source_files = 'AdvanceSDK/Adapters/KS/**/*.{h,m}'
-        ks.frameworks = ["Foundation", "UIKit", "MobileCoreServices", "CoreGraphics", "Security", "SystemConfiguration", "CoreTelephony", "AdSupport", "CoreData", "StoreKit", "AVFoundation", "MediaPlayer", "CoreMedia", "WebKit", "Accelerate", "CoreLocation", "AVKit", "MessageUI", "QuickLook", "AudioToolBox", "AddressBook"]
-        ks.libraries =  ["z", "resolv.9", "sqlite3", "c++", "c++abi"]
     end
     
     s.subspec 'BDAdapter' do |bd|
@@ -92,8 +81,13 @@ Pod::Spec.new do |s|
         bd.dependency 'AdvanceSDK/AdSpot'
         bd.dependency 'BaiduMobAdSDK'
         bd.source_files =  'AdvanceSDK/Adapters/BD/**/*.{h,m}'
-        bd.frameworks = 'CoreLocation', 'SystemConfiguration', 'CoreGraphics', 'CoreMotion', 'CoreTelephony', 'AdSupport', 'SystemConfiguration', 'QuartzCore', 'WebKit', 'MessageUI','SafariServices','AVFoundation','EventKit','QuartzCore','CoreMedia','StoreKit'
-        bd.libraries     = 'c++'
+    end
+    
+    s.subspec 'TanxAdapter' do |tanx|
+        tanx.dependency 'AdvanceSDK/Core'
+        tanx.dependency 'AdvanceSDK/AdSpot'
+        tanx.dependency 'AdvTanxSDK'
+        tanx.source_files =  'AdvanceSDK/Adapters/TANX/**/*.{h,m}'
     end
     
     s.subspec 'GroMoreBidding' do |bidding|

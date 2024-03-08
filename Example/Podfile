@@ -6,9 +6,9 @@ target 'AdvanceSDK_Example' do
   #必须集成
   pod 'AdvanceSDK', :path => '../'
   
-#  #集成倍业Adapter
+  #集成倍业Adapter
   pod 'AdvanceSDK/MercuryAdapter', :path => '../'
-  pod 'MercurySDK', '3.3.6'
+  pod 'MercurySDK', '3.3.8'
 
   #集成穿山甲Adapter（基于单独SDK）
   pod 'AdvanceSDK/CSJAdapter', :path => '../'
@@ -26,15 +26,19 @@ target 'AdvanceSDK_Example' do
   pod 'AdvanceSDK/KSAdapter', :path => '../'
   pod 'KSAdSDK', '3.3.55'
 
-  # 集成百度Adapter
+  #集成百度Adapter
   pod 'AdvanceSDK/BDAdapter', :path => '../'
   pod 'BaiduMobAdSDK', '5.325'
+  
+  #集成TanxAdapter
+  pod 'AdvanceSDK/TanxAdapter', :path => '../'
+  pod 'AdvTanxSDK', '3.3.1'
 
-#  # 集成GroMoreBidding模块
+  #集成GroMoreBidding模块
 #  pod 'AdvanceSDK/GroMoreBidding', :path => '../'
   
 
-  # Third
+  #Third
   pod 'SDWebImage'
   pod 'Masonry'
   

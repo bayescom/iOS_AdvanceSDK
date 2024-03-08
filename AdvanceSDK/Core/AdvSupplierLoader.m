@@ -11,6 +11,7 @@
 #import <objc/message.h>
 #import "AdvanceAESCipher.h"
 #import "AdvBayesSDKConfig.h"
+#import "AdvLog.h"
 
 @interface AdvSupplierLoader ()
 
@@ -136,11 +137,12 @@ static NSMutableDictionary *_initializedDict = nil;
             completion();
         }
         
-    } else if ([supplier.identifier isEqualToString:SDK_ID_TANX]) {// Tanx SDK
+    } else if ([supplier.identifier isEqualToString:SDK_ID_TANX]) {// TanxSDK
         
         SEL selector = NSSelectorFromString(@"setupSDKWithAppID:andAppKey:");
         if ([clazz.class respondsToSelector:selector]) {
-            ((void (*)(id, SEL, NSString *, NSString *))objc_msgSend)(clazz.class, selector, supplier.mediaid, supplier.mediakey);
+            BOOL res = ((BOOL (*)(id, SEL, NSString *, NSString *))objc_msgSend)(clazz.class, selector, supplier.mediaid, supplier.mediakey);
+            ADVLog(@"init TanxSDK %@", res ? @"success" : @"fail");
             completion();
         }
     }
