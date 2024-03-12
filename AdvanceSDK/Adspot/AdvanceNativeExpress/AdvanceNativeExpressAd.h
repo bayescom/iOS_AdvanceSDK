@@ -15,6 +15,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) UIView *expressView;
 // 渠道标识
 @property (nonatomic, copy) NSString *identifier;
+// tanx Ad Model
+@property (nonatomic, strong) id tanxAdModel;
 
 
 @end

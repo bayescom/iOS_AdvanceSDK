@@ -5,11 +5,12 @@
 //  Created by guangyao on 2024/3/7.
 //
 
-#import <Foundation/Foundation.h>
+#import "AdvanceNativeExpressDelegate.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface TanxNativeExpressAdapter : NSObject
+@property (nonatomic, weak) id<AdvanceNativeExpressDelegate> delegate;
 
 @end
 

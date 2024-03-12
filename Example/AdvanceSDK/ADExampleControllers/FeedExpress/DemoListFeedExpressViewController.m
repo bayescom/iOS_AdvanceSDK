@@ -126,15 +126,9 @@
         return ((BYExamCellModelElement *)_arrayData[indexPath.row]).cellh;
         
     } else {
-        
         AdvanceNativeExpressAd *nativeAd = _arrayData[indexPath.row];
         UIView *view = [nativeAd expressView];
-        CGFloat height = view.frame.size.height;
-        if ([nativeAd.identifier isEqualToString:SDK_ID_TANX]) {
-            return height + 10;
-        } else {
-            return height;
-        }
+        return view.frame.size.height;
     }
 }
 
@@ -157,17 +151,11 @@
         UIView *view = [nativeAd expressView];
         view.tag = 1000;
         [cell.contentView addSubview:view];
+        CGRect frame = view.frame;
+        frame.origin.x = (cell.contentView.bounds.size.width - frame.size.width) / 2;
+        view.frame = frame;
         cell.accessibilityIdentifier = @"nativeTemp_ad";
         
-        // 展示广告的cell高度 -tableView:heightForRowAtIndexPath:
-        if ([nativeAd.identifier isEqualToString:SDK_ID_TANX]) { // tanx 的广告不带padding 需要自己调节
-            [view mas_remakeConstraints:^(MASConstraintMaker *make) {
-                make.top.equalTo(cell.contentView);
-                make.left.equalTo(@(10));
-                make.right.equalTo(@(-10));
-                make.bottom.equalTo(@(10));
-            }];
-        }
         return cell;
     }
 }

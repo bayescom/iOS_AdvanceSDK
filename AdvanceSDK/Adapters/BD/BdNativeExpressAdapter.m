@@ -25,7 +25,6 @@
 @property (nonatomic, strong) BaiduMobAdNative *bd_ad;
 @property (nonatomic, weak) AdvanceNativeExpress *adspot;
 @property (nonatomic, strong) AdvSupplier *supplier;
-@property (nonatomic, strong) BaiduMobAdNativeAdObject *feedAdObj;
 @property (nonatomic, strong) NSMutableArray<__kindof AdvanceNativeExpressAd *> *nativeAds;
 
 @end

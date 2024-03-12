@@ -99,6 +99,8 @@
         clsName = @"GdtRenderFeedAdapter";
     } else if ([supplierId isEqualToString:SDK_ID_CSJ]) {
         clsName = @"CsjRenderFeedAdapter";
+    } else if ([supplierId isEqualToString:SDK_ID_MERCURY]) {
+        clsName = @"MercuryRenderFeedAdapter";
     }
     return clsName;
 }

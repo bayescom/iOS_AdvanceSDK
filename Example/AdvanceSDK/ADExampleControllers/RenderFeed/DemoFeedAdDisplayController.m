@@ -109,7 +109,7 @@
     
     /// 广告平台logo
     CGSize logoSize = self.feedAd.logoSize;
-    self.feedAd.logoImageView.frame = CGRectMake(CGRectGetMaxX(self.feedAdView.frame) - logoSize.width, 0, logoSize.width, logoSize.height);
+    self.feedAd.logoImageView.frame = CGRectMake(CGRectGetMaxX(self.feedAdView.frame) - logoSize.width - 4, 4, logoSize.width, logoSize.height);
     
     self.adDescriptionLabel.text = element.desc;
     self.adDescriptionLabel.frame = CGRectMake(30, mediaMaxY + 10, 200, 20);
