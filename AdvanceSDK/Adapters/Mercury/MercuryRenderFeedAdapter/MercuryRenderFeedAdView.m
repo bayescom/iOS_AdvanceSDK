@@ -42,8 +42,7 @@
 }
 
 - (CGSize)logoSize {
-    NSString *logoUrl = [self.dataObject valueForKeyPath:@"imp.source_logo"];
-    if (!logoUrl.length) {
+    if (!self.dataObject.logoUrl.length) {
         return CGSizeMake(25, 15);
     }
     return CGSizeMake(40, 15);
