@@ -121,11 +121,24 @@ static NSMutableDictionary *_initializedDict = nil;
         completion();
         
     } else if ([supplier.identifier isEqualToString:SDK_ID_KS]) {// 快手SDK
-        
+        /// 3.3.61（不含）版本之前初始化方式
         SEL selector = NSSelectorFromString(@"setAppId:");
         if ([clazz.class respondsToSelector:selector]) {
             ((void (*)(id, SEL, NSString *))objc_msgSend)(clazz.class, selector, supplier.mediaid);
-            completion();
+            return completion();
+        }
+        /// 3.3.61（包含）版本之后初始化方式
+        id config = ((id (*)(id, SEL))objc_msgSend)(NSClassFromString(@"KSAdSDKConfiguration").class, NSSelectorFromString(@"configuration"));
+        ((void (*)(id, SEL, NSString *))objc_msgSend)(config, NSSelectorFromString(@"setAppId:"), supplier.mediaid);
+        // 定义block
+        void (^completionHandler)(BOOL success, NSError *error) = ^void (BOOL success, NSError *error) {
+            if (success && completion) {
+                completion();
+            }
+        };
+        SEL newSelector = NSSelectorFromString(@"startWithCompletionHandler:");
+        if ([clazz.class respondsToSelector:newSelector]) {
+            ((void (*)(id, SEL, id))objc_msgSend)(clazz.class, newSelector, completionHandler);
         }
         
     } else if ([supplier.identifier isEqualToString:SDK_ID_BAIDU]) {// 百度SDK
