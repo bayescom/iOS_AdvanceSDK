@@ -62,17 +62,26 @@ static NSMutableDictionary *_initializedDict = nil;
     Class clazz = NSClassFromString(clsName);
     
     if ([supplier.identifier isEqualToString:SDK_ID_GDT]) {// 广点通SDK
-        
+        /// 4.14.60（不含）版本之前初始化方式
         SEL selector = NSSelectorFromString(@"registerAppId:");
         if ([clazz.class respondsToSelector:selector]) {
             ((void (*)(id, SEL, NSString *))objc_msgSend)(clazz.class, selector, supplier.mediaid);
-            completion();
-//            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{ // 解决 This method should not be called on the main thread as it may lead ... 警告
-//                ((void (*)(id, SEL, NSString *))objc_msgSend)(clazz.class, selector, supplier.mediaid);
-//                dispatch_async(dispatch_get_main_queue(), ^{
-//                    completion();
-//                });
-//            });
+            return completion();
+        }
+        /// 4.14.60（包含）版本之后初始化方式
+        SEL initSelector = NSSelectorFromString(@"initWithAppId:");
+        if ([clazz.class respondsToSelector:initSelector]) {
+            ((void (*)(id, SEL, NSString *))objc_msgSend)(clazz.class, initSelector, supplier.mediaid);
+        }
+        // 定义block
+        void (^completionHandler)(BOOL success, NSError *error) = ^void (BOOL success, NSError *error) {
+            if (success && completion) {
+                completion();
+            }
+        };
+        SEL newSelector = NSSelectorFromString(@"startWithCompletionHandler:");
+        if ([clazz.class respondsToSelector:newSelector]) {
+            ((void (*)(id, SEL, id))objc_msgSend)(clazz.class, newSelector, completionHandler);
         }
         
     } else if ([supplier.identifier isEqualToString:SDK_ID_CSJ]) {// 穿山甲SDK

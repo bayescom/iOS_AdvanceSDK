@@ -15,7 +15,7 @@
 @implementation AdvSdkConfig
 
 NSString *const AdvanceSdkAPIVersion = @"3.0";
-NSString *const AdvanceSdkVersion = @"5.0.6";
+NSString *const AdvanceSdkVersion = @"5.1.0";
 NSString *const AdvanceSdkRequestUrl = @"http://cruiser.bayescom.cn/eleven";
 NSString *const SDK_ID_MERCURY = @"1";
 NSString *const SDK_ID_GDT = @"2";
@@ -46,8 +46,6 @@ NSString * const AdvanceSDKTimeOutForeverKey = @"AdvanceSDKTimeOutForeverKey";
 NSString * const AdvanceSDKOneMonthKey = @"AdvanceSDKOneMonthKey";
 NSString * const AdvanceSDKHourKey = @"AdvanceSDKHourKey";
 NSString * const AdvanceSDKSecretKey = @"bayescom1000000w";
-NSString * const MercuryLogoShowTypeKey = @"MercuryLogoShowTypeKey";
-NSString * const MercuryLogoShowBlankGapKey = @"MercuryLogoShowBlankGapKey";
 
 
 static AdvSdkConfig *instance = nil;

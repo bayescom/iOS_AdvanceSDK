@@ -33,7 +33,6 @@
         _supplier = supplier;
         _mercury_ad = [[MercuryNativeExpressAd alloc] initAdWithAdspotId:_supplier.adspotid];
         _mercury_ad.videoMuted = _adspot.muted;
-        _mercury_ad.videoPlayPolicy = MercuryVideoAutoPlayPolicyWIFI;
         _mercury_ad.renderSize = _adspot.adSize;
         _mercury_ad.delegate = self;
     }
@@ -93,7 +92,7 @@
 }
 
 /// 拉取原生模板广告失败
-- (void)mercury_nativeExpressAdFailToLoadWithError:(NSError *)error {
+- (void)mercury_nativeExpressAdFailToLoad:(MercuryNativeExpressAd *)nativeExpressAd error:(NSError *)error {
     [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
     [self.adspot.manager checkTargetWithResultfulSupplier:_supplier loadAdState:AdvanceSupplierLoadAdFailed];
 }

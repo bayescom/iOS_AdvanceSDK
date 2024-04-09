@@ -33,17 +33,16 @@
         _adspot = adspot;
         _supplier = supplier;
         _mercury_ad = [[MercuryRewardVideoAd alloc] initAdWithAdspotId:_supplier.adspotid delegate:self];
-        _mercury_ad.timeoutTime = 5;
     }
     return self;
 }
 
 - (void)loadAd {
-    [_mercury_ad loadRewardVideoAd];
+    [_mercury_ad loadAd];
 }
 
 - (void)showAd {
-    [_mercury_ad showAdFromVC:_adspot.viewController];
+    [_mercury_ad showAdFromRootViewController:_adspot.viewController];
 }
 
 - (void)winnerAdapterToShowAd {
@@ -73,7 +72,7 @@
 }
 
 /// 广告加载失败回调
-- (void)mercury_rewardAdFailError:(nullable NSError *)error {
+- (void)mercury_rewardVideoAd:(MercuryRewardVideoAd *_Nonnull)rewardVideoAd didFailWithError:(NSError *_Nullable)error {
     [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
     [self.adspot.manager checkTargetWithResultfulSupplier:_supplier loadAdState:AdvanceSupplierLoadAdFailed];
 }

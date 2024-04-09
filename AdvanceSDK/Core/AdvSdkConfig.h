@@ -38,8 +38,6 @@ extern NSString *const AdvanceSDKNetworkKey;
 extern NSString *const AdvanceSDKOneMonthKey;
 extern NSString *const AdvanceSDKHourKey;
 extern NSString *const AdvanceSDKSecretKey;
-extern NSString *const MercuryLogoShowTypeKey;
-extern NSString *const MercuryLogoShowBlankGapKey;
 
 
 @interface AdvSdkConfig : NSObject

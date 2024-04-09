@@ -56,14 +56,14 @@
 
 // MARK: ======================= MercuryInterstitialAdDelegate =======================
 /// 插屏广告预加载成功回调，当接收服务器返回的广告数据成功且预加载后调用该函数
-- (void)mercury_interstitialSuccess:(MercuryInterstitialAd *)interstitialAd  {
+- (void)mercury_interstitialSuccessToLoadAd:(MercuryInterstitialAd *)interstitialAd  {
     [self.adspot.manager setECPMIfNeeded:interstitialAd.price supplier:_supplier];
     [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
     [self.adspot.manager checkTargetWithResultfulSupplier:_supplier loadAdState:AdvanceSupplierLoadAdSuccess];
 }
 
 /// 插屏广告预加载失败回调，当接收服务器返回的广告数据失败后调用该函数
-- (void)mercury_interstitialFailError:(NSError *)error {
+- (void)mercury_interstitialFailToLoadAd:(MercuryInterstitialAd *)interstitialAd error:(NSError *)error {
     [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
     [self.adspot.manager checkTargetWithResultfulSupplier:_supplier loadAdState:AdvanceSupplierLoadAdFailed];
 }
@@ -75,7 +75,7 @@
 }
 
 /// 插屏广告曝光回调
-- (void)mercury_interstitialWillExposure:(MercuryInterstitialAd *)interstitialAd {
+- (void)mercury_interstitialDidPresentScreen:(MercuryInterstitialAd *)interstitialAd {
     [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(interstitialDidShowForSpotId:extra:)]) {
         [self.delegate interstitialDidShowForSpotId:self.adspot.adspotid extra:self.adspot.ext];

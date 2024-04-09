@@ -34,20 +34,8 @@
     if (self = [super init]) {
         _adspot = adspot;
         _supplier = supplier;
-        [MercuryConfigManager openDebug:YES];
         _mercury_ad = [[MercurySplashAd alloc] initAdWithAdspotId:_supplier.adspotid delegate:self];
         _mercury_ad.logoImage = _adspot.logoImage;
-        NSNumber *showLogoType = _adspot.ext[MercuryLogoShowTypeKey];
-        NSNumber *blankGap = _adspot.ext[MercuryLogoShowBlankGapKey];
-        
-        if (showLogoType) {
-            _mercury_ad.showType = (showLogoType.integerValue);
-        } else {
-            _mercury_ad.showType = MercurySplashAdAutoAdaptScreenWithLogoFirst;
-        }
-
-        _mercury_ad.blankGap = blankGap.integerValue;
-        _mercury_ad.delegate = self;
         _mercury_ad.fetchDelay = _supplier.timeout * 1.0 / 1000.0;
     }
     return self;
@@ -71,16 +59,12 @@
 
 // MARK: ======================= MercurySplashAdDelegate =======================
 - (void)mercury_splashAdDidLoad:(MercurySplashAd *)splashAd {
-    
-}
-
-- (void)mercury_materialDidLoad:(MercurySplashAd *)splashAd isFromCache:(BOOL)isFromCache {
-    [self.adspot.manager setECPMIfNeeded:[splashAd getPrice] supplier:_supplier];
+    [self.adspot.manager setECPMIfNeeded:splashAd.price supplier:_supplier];
     [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
     [self.adspot.manager checkTargetWithResultfulSupplier:_supplier loadAdState:AdvanceSupplierLoadAdSuccess];
 }
 
-- (void)mercury_splashAdFailError:(nullable NSError *)error {
+- (void)mercury_splashAdFailToLoad:(MercurySplashAd * _Nullable)splashAd error:(NSError * _Nullable)error {
     [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
     [self.adspot.manager checkTargetWithResultfulSupplier:_supplier loadAdState:AdvanceSupplierLoadAdFailed];
 }
