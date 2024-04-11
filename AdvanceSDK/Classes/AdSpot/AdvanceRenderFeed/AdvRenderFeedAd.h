@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// 自渲染信息流展示容器
 @property (nonatomic, strong) UIView *feedAdView;
 
-/// 广告平台logo
+/// 广告平台logo视图
 @property (nonatomic, strong, readonly) UIView *logoImageView;
 
 /// logo大小

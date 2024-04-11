@@ -1,32 +1,31 @@
 //
-//  AdvanceFullScreenVideo.m
-//  AdvanceSDKDev
+//  AdvanceRenderFeed.m
+//  AdvanceSDK
 //
-//  Created by CherryKing on 2020/4/13.
-//  Copyright © 2020 bayescom. All rights reserved.
+//  Created by guangyao on 2023/9/8.
 //
 
-#import "AdvanceFullScreenVideo.h"
+#import "AdvanceRenderFeed.h"
 #import <objc/runtime.h>
 #import <objc/message.h>
 #import "AdvLog.h"
 #import "AdvSupplierLoader.h"
 
-@implementation AdvanceFullScreenVideo
+@implementation AdvanceRenderFeed
 
 - (instancetype)initWithAdspotId:(NSString *)adspotid
                        customExt:(nullable NSDictionary *)ext
-                  viewController:(nullable UIViewController *)viewController {
+                  viewController:(UIViewController *)viewController {
     
     NSMutableDictionary *extra = [NSMutableDictionary dictionaryWithDictionary:ext];
-    [extra setValue:AdvSdkTypeAdNameFullScreenVideo forKey: AdvSdkTypeAdName];
-    
+    [extra setValue:AdvSdkTypeAdNameNativeExpress forKey: AdvSdkTypeAdName];
+
     if (self = [super initWithMediaId:[AdvSdkConfig shareInstance].appId adspotId:adspotid customExt:extra]) {
         self.viewController = viewController;
-        self.muted = YES;
     }
     return self;
 }
+
 
 // MARK: ======================= AdvPolicyServiceDelegate =======================
 /// 加载策略Model成功
@@ -71,8 +70,6 @@
     ((void (*)(id, SEL))objc_msgSend)((id)self.targetAdapter, NSSelectorFromString(@"winnerAdapterToShowAd"));
 }
 
-
-
 /// 加载某一个渠道对象
 - (void)advPolicyServiceLoadAnySupplier:(nullable AdvSupplier *)supplier {
     // 加载渠道SDK进行初始化调用
@@ -93,39 +90,25 @@
         }
         
     }];
+
 }
 
 - (NSString *)mappingClassNameWithSupplierId:(NSString *)supplierId {
     NSString *clsName = @"";
     if ([supplierId isEqualToString:SDK_ID_GDT]) {
-        clsName = @"GdtFullScreenVideoAdapter";
+        clsName = @"GdtRenderFeedAdapter";
     } else if ([supplierId isEqualToString:SDK_ID_CSJ]) {
-        clsName = @"CsjFullScreenVideoAdapter";
+        clsName = @"CsjRenderFeedAdapter";
+    } else if ([supplierId isEqualToString:SDK_ID_MERCURY]) {
+        clsName = @"MercuryRenderFeedAdapter";
     } else if ([supplierId isEqualToString:SDK_ID_KS]) {
-        clsName = @"KsFullScreenVideoAdapter";
-    } else if ([supplierId isEqualToString:SDK_ID_BAIDU]) {
-        clsName = @"BdFullScreenVideoAdapter";
+        clsName = @"KsRenderFeedAdapter";
     }
     return clsName;
 }
 
 - (void)loadAd {
     [super loadAdPolicy];
-}
-
-- (void)showAd {
-    ((void (*)(id, SEL))objc_msgSend)((id)self.targetAdapter, NSSelectorFromString(@"showAd"));
-}
-
-- (void)showAdFromViewController:(UIViewController *)viewController {
-    self.viewController = viewController;
-    [self showAd];
-}
-
-- (BOOL)isAdValid {
-    SEL selector = NSSelectorFromString(@"isAdValid");
-    BOOL valid = ((BOOL (*)(id, SEL))objc_msgSend)((id)self.targetAdapter, selector);
-    return valid;
 }
 
 - (void)dealloc {

@@ -24,7 +24,7 @@ target 'AdvanceSDK_Example' do
 
   #集成快手Adapter
   pod 'AdvanceSDK/KSAdapter', :path => '../'
-  pod 'KSAdSDK', '3.3.63'
+  pod 'KSAdSDK', '3.3.61'
 
   #集成百度Adapter
   pod 'AdvanceSDK/BDAdapter', :path => '../'

@@ -1,31 +1,32 @@
 //
-//  AdvanceRenderFeed.m
-//  AdvanceSDK
+//  AdvanceFullScreenVideo.m
+//  AdvanceSDKDev
 //
-//  Created by guangyao on 2023/9/8.
+//  Created by CherryKing on 2020/4/13.
+//  Copyright © 2020 bayescom. All rights reserved.
 //
 
-#import "AdvanceRenderFeed.h"
+#import "AdvanceFullScreenVideo.h"
 #import <objc/runtime.h>
 #import <objc/message.h>
 #import "AdvLog.h"
 #import "AdvSupplierLoader.h"
 
-@implementation AdvanceRenderFeed
+@implementation AdvanceFullScreenVideo
 
 - (instancetype)initWithAdspotId:(NSString *)adspotid
                        customExt:(nullable NSDictionary *)ext
-                  viewController:(UIViewController *)viewController {
+                  viewController:(nullable UIViewController *)viewController {
     
     NSMutableDictionary *extra = [NSMutableDictionary dictionaryWithDictionary:ext];
-    [extra setValue:AdvSdkTypeAdNameNativeExpress forKey: AdvSdkTypeAdName];
-
+    [extra setValue:AdvSdkTypeAdNameFullScreenVideo forKey: AdvSdkTypeAdName];
+    
     if (self = [super initWithMediaId:[AdvSdkConfig shareInstance].appId adspotId:adspotid customExt:extra]) {
         self.viewController = viewController;
+        self.muted = YES;
     }
     return self;
 }
-
 
 // MARK: ======================= AdvPolicyServiceDelegate =======================
 /// 加载策略Model成功
@@ -90,23 +91,39 @@
         }
         
     }];
-
 }
 
 - (NSString *)mappingClassNameWithSupplierId:(NSString *)supplierId {
     NSString *clsName = @"";
     if ([supplierId isEqualToString:SDK_ID_GDT]) {
-        clsName = @"GdtRenderFeedAdapter";
+        clsName = @"GdtFullScreenVideoAdapter";
     } else if ([supplierId isEqualToString:SDK_ID_CSJ]) {
-        clsName = @"CsjRenderFeedAdapter";
-    } else if ([supplierId isEqualToString:SDK_ID_MERCURY]) {
-        clsName = @"MercuryRenderFeedAdapter";
+        clsName = @"CsjFullScreenVideoAdapter";
+    } else if ([supplierId isEqualToString:SDK_ID_KS]) {
+        clsName = @"KsFullScreenVideoAdapter";
+    } else if ([supplierId isEqualToString:SDK_ID_BAIDU]) {
+        clsName = @"BdFullScreenVideoAdapter";
     }
     return clsName;
 }
 
 - (void)loadAd {
     [super loadAdPolicy];
+}
+
+- (void)showAd {
+    ((void (*)(id, SEL))objc_msgSend)((id)self.targetAdapter, NSSelectorFromString(@"showAd"));
+}
+
+- (void)showAdFromViewController:(UIViewController *)viewController {
+    self.viewController = viewController;
+    [self showAd];
+}
+
+- (BOOL)isAdValid {
+    SEL selector = NSSelectorFromString(@"isAdValid");
+    BOOL valid = ((BOOL (*)(id, SEL))objc_msgSend)((id)self.targetAdapter, selector);
+    return valid;
 }
 
 - (void)dealloc {

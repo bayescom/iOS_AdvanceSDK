@@ -57,14 +57,14 @@
 }
 
 - (CGSize)logoSize {
-    return CGSizeMake(15, 15);
+    return CGSizeMake(45, 16);
 }
 
 -(UIView *)logoImageView {
-    if (!self.nativeAdRelatedView.logoImageView.superview) {
-        [self addSubview:self.nativeAdRelatedView.logoImageView];
+    if (!self.nativeAdRelatedView.logoADImageView.superview) {
+        [self addSubview:self.nativeAdRelatedView.logoADImageView];
     }
-    return self.nativeAdRelatedView.logoImageView;
+    return self.nativeAdRelatedView.logoADImageView;
 }
 
 -(UIView *)videoAdView {

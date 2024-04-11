@@ -26,75 +26,71 @@ Pod::Spec.new do |s|
     s.requires_arc = true
     s.static_framework = true
     
+    s.resource_bundles = {
+         'AdvanceSDK' => ['AdvanceSDK/Assets/**.*']
+       }
+    
     # 默认的使用模块
     s.default_subspec = 'Core'
     
     s.subspec 'Core' do |core|
-        core.source_files = 'AdvanceSDK/Core/**/*.{h,m}'
+        core.source_files = 'AdvanceSDK/Classes/Core/**/*.{h,m}'
         core.frameworks = 'UIKit', 'Foundation', 'AdSupport'
     end
     
     s.subspec 'AdSpot' do |adSpot|
         adSpot.dependency 'AdvanceSDK/Core'
-        adSpot.source_files = 'AdvanceSDK/AdSpot/**/*.{h,m}'
+        adSpot.source_files = 'AdvanceSDK/Classes/AdSpot/**/*.{h,m}'
     end
     
     s.subspec 'MercuryAdapter' do |mer|
-        mer.dependency 'AdvanceSDK/Core'
         mer.dependency 'AdvanceSDK/AdSpot'
         mer.dependency 'MercurySDK'
-        mer.source_files = 'AdvanceSDK/Adapters/Mercury/**/*.{h,m}'
+        mer.source_files = 'AdvanceSDK/Classes/Adapters/Mercury/**/*.{h,m}'
     end
     
     # 基于穿山甲单独SDK
     s.subspec 'CSJAdapter' do |csj|
-        csj.dependency 'AdvanceSDK/Core'
         csj.dependency 'AdvanceSDK/AdSpot'
         csj.dependency 'Ads-CN'
-        csj.source_files = 'AdvanceSDK/Adapters/CSJ/**/*.{h,m}'
+        csj.source_files = 'AdvanceSDK/Classes/Adapters/CSJ/**/*.{h,m}'
     end
     
     # 基于穿山甲融合SDK
     s.subspec 'CSJAdapter-Fusion' do |csj|
-        csj.dependency 'AdvanceSDK/Core'
         csj.dependency 'AdvanceSDK/AdSpot'
         csj.dependency 'Ads-Fusion-CN-Beta/BUAdSDK'
-        csj.source_files = 'AdvanceSDK/Adapters/CSJ/**/*.{h,m}'
+        csj.source_files = 'AdvanceSDK/Classes/Adapters/CSJ/**/*.{h,m}'
     end
     
     s.subspec 'GDTAdapter' do |gdt|
-        gdt.dependency 'AdvanceSDK/Core'
         gdt.dependency 'AdvanceSDK/AdSpot'
         gdt.dependency 'GDTMobSDK'
-        gdt.source_files =  'AdvanceSDK/Adapters/GDT/**/*.{h,m}'
+        gdt.source_files =  'AdvanceSDK/Classes/Adapters/GDT/**/*.{h,m}'
     end
      
     s.subspec 'KSAdapter' do |ks|
-        ks.dependency 'AdvanceSDK/Core'
         ks.dependency 'AdvanceSDK/AdSpot'
         ks.dependency 'KSAdSDK'
-        ks.source_files = 'AdvanceSDK/Adapters/KS/**/*.{h,m}'
+        ks.source_files = 'AdvanceSDK/Classes/Adapters/KS/**/*.{h,m}'
     end
     
     s.subspec 'BDAdapter' do |bd|
-        bd.dependency 'AdvanceSDK/Core'
         bd.dependency 'AdvanceSDK/AdSpot'
         bd.dependency 'BaiduMobAdSDK'
-        bd.source_files =  'AdvanceSDK/Adapters/BD/**/*.{h,m}'
+        bd.source_files =  'AdvanceSDK/Classes/Adapters/BD/**/*.{h,m}'
     end
     
     s.subspec 'TanxAdapter' do |tanx|
-        tanx.dependency 'AdvanceSDK/Core'
         tanx.dependency 'AdvanceSDK/AdSpot'
         tanx.dependency 'AdvTanxSDK'
-        tanx.source_files =  'AdvanceSDK/Adapters/TANX/**/*.{h,m}'
+        tanx.source_files =  'AdvanceSDK/Classes/Adapters/TANX/**/*.{h,m}'
     end
     
     s.subspec 'GroMoreBidding' do |bidding|
-        bidding.dependency 'AdvanceSDK/Core'
         bidding.dependency 'AdvanceSDK/AdSpot'
         bidding.dependency 'GroMoreBiddingSDK', '1.2.0'
-        bidding.source_files = 'AdvanceSDK/GroMoreBidding/**/*.{h,m}'
+        bidding.source_files = 'AdvanceSDK/Classes/GroMoreBidding/**/*.{h,m}'
     end
 
 end
