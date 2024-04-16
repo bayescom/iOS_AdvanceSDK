@@ -103,6 +103,8 @@
         clsName = @"MercuryRenderFeedAdapter";
     } else if ([supplierId isEqualToString:SDK_ID_KS]) {
         clsName = @"KsRenderFeedAdapter";
+    } else if ([supplierId isEqualToString:SDK_ID_BAIDU]) {
+        clsName = @"BdRenderFeedAdapter";
     }
     return clsName;
 }

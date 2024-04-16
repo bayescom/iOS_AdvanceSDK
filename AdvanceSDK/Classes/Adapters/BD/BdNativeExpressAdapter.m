@@ -39,6 +39,8 @@
         _bd_ad.adDelegate = self;
         _bd_ad.publisherId = _supplier.mediaid;
         _bd_ad.adUnitTag = _supplier.adspotid;
+        _bd_ad.baiduMobAdsWidth = @(_adspot.adSize.width);
+        _bd_ad.baiduMobAdsHeight = @(_adspot.adSize.height);
         _bd_ad.presentAdViewController = _adspot.viewController;
         _bd_ad.isExpressNativeAds = YES;
     }
@@ -105,11 +107,15 @@
 
 }
 
-//广告返回失败
-- (void)nativeAdsFailLoad:(BaiduMobFailReason)reason {
+// 广告返回失败
+- (void)nativeAdsFailLoadCode:(NSString *)errCode
+                      message:(NSString *)message
+                     nativeAd:(BaiduMobAdNative *)nativeAd {
+    
     NSError *error = [[NSError alloc]initWithDomain:@"BDAdErrorDomain" code:-1 userInfo:@{@"desc":@"百度广告拉取失败"}];
     [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
     [self.adspot.manager checkTargetWithResultfulSupplier:_supplier loadAdState:AdvanceSupplierLoadAdFailed];
+    
 }
 
 // 广告组件渲染成功

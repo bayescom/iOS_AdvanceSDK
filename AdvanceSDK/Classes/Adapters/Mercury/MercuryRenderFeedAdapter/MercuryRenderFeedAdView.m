@@ -84,6 +84,13 @@
     }
 }
 
+/// 广告详情页关闭回调
+- (void)mercury_unifiedNativeAdDetailViewClosed:(MercuryUnifiedNativeAdView *)unifiedNativeAdView {
+    if ([self.adDelegate respondsToSelector:@selector(renderFeedAdDidCloseDetailPageForSpotId:extra:)]) {
+        [self.adDelegate renderFeedAdDidCloseDetailPageForSpotId:self.adSpot.adspotid extra:self.adSpot.ext];
+    }
+}
+
 #pragma mark - MercuryMediaViewDelegate
 
 - (void)mercury_mediaViewDidPlayFinish:(MercuryMediaView *)mediaView {

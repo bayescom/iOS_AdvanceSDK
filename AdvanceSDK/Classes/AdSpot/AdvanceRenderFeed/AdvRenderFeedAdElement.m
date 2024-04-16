@@ -9,4 +9,11 @@
 
 @implementation AdvRenderFeedAdElement
 
+- (NSString *)buttonText {
+    if (!_buttonText) {
+        return @"查看详情";
+    }
+    return _buttonText;
+}
+
 @end
