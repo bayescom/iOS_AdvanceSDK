@@ -105,6 +105,8 @@
         clsName = @"KsRenderFeedAdapter";
     } else if ([supplierId isEqualToString:SDK_ID_BAIDU]) {
         clsName = @"BdRenderFeedAdapter";
+    } else if ([supplierId isEqualToString:SDK_ID_TANX]) {
+        clsName = @"TanxRenderFeedAdapter";
     }
     return clsName;
 }

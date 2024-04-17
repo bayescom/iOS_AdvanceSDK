@@ -32,7 +32,7 @@ target 'AdvanceSDK_Example' do
   
   #集成TanxAdapter
   pod 'AdvanceSDK/TanxAdapter', :path => '../'
-  pod 'AdvTanxSDK', '3.3.1'
+  pod 'AdvTanxSDK', '3.4.1'
 
   #集成GroMoreBidding模块
 #  pod 'AdvanceSDK/GroMoreBidding', :path => '../'

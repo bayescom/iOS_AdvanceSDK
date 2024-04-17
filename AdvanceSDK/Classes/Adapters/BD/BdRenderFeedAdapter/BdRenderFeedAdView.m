@@ -154,6 +154,7 @@
     }
 }
 
+#pragma mark - BaiduMobAdNativeVideoViewDelegate
 /**
  视频播放完成
  */
@@ -161,6 +162,10 @@
     if ([self.adDelegate respondsToSelector:@selector(renderFeedVideoDidEndPlayingForSpotId:extra:)]) {
         [self.adDelegate renderFeedVideoDidEndPlayingForSpotId:self.adSpot.adspotid extra:self.adSpot.ext];
     }
+}
+
+- (void)dealloc {
+   
 }
 
 @end

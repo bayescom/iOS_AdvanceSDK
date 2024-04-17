@@ -28,7 +28,10 @@
     if (self = [super init]) {
         _adspot = adspot;
         _supplier = supplier;
-        _tanx_ad = [[TXAdFeedManager alloc] initWithPid:_supplier.adspotid];
+        TXAdFeedSlotModel *slotModel = [[TXAdFeedSlotModel alloc] init];
+        slotModel.pid = _supplier.adspotid;
+        slotModel.showAdFeedBackView = NO;
+        _tanx_ad = [[TXAdFeedManager alloc] initWithSlotModel:slotModel];
         _tanx_ad.delegate = self;
     }
     return self;
@@ -80,6 +83,7 @@
 - (void)renderNativeAdView {
     
     TXAdFeedTemplateConfig *config = [[TXAdFeedTemplateConfig alloc] init];
+    config.templateWidth = _adspot.adSize.width - 2 * 15.0;
     NSArray<TXAdFeedModule *> *feedModules = [self.tanx_ad renderFeedTemplateWithModel:self.adModels config:config];
     
     AdvanceNativeExpressAd *nativeAd = [self getNativeExpressAdWithAdModel:self.adModels.firstObject];
@@ -121,16 +125,16 @@
 }
 
 - (void)onAdClose:(TXAdModel *)model {
-    
-}
-
-- (void)onAdClickDislikeOptions:(TXAdModel *)model index:(NSInteger)index {
     AdvanceNativeExpressAd *nativeAd = [self getNativeExpressAdWithAdModel:model];
     if (nativeAd) {
         if ([_delegate respondsToSelector:@selector(didCloseNativeExpressAd:spotId:extra:)]) {
             [_delegate didCloseNativeExpressAd:nativeAd spotId:self.adspot.adspotid extra:self.adspot.ext];
         }
     }
+}
+
+- (void)onAdClickDislikeOptions:(TXAdModel *)model index:(NSInteger)index {
+    
 }
 
 /// 广告点击
