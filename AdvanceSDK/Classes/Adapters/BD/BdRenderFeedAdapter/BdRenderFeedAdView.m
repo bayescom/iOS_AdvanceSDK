@@ -46,7 +46,11 @@
     BaiduMobAdNativeAdView *nativeAdView = [[BaiduMobAdNativeAdView alloc] initWithFrame:self.bounds];
     [self insertSubview:nativeAdView atIndex:0];
     [self.adDataObject trackImpression:nativeAdView];
- 
+    
+    if (_bdVideoView) {
+        [_bdVideoView reSize];
+        [_bdVideoView play];
+    }
     if (clickableViews) {
         [self setupClickView:clickableViews];
     }
