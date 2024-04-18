@@ -19,6 +19,7 @@
 @property (nonatomic, weak) AdvanceRenderFeed *adspot;
 @property (nonatomic, strong) AdvSupplier *supplier;
 @property (nonatomic, strong) AdvRenderFeedAd *feedAd;
+@property (nonatomic, strong) TXAdFeedBinder *binder;
 
 @end
 
@@ -46,6 +47,7 @@
         }
         
         TXAdFeedBinder *binder = [weakSelf.tanx_ad customRenderingBinderWithModels:viewModelArray].firstObject;
+        weakSelf.binder = binder;
         NSInteger ecpm = binder.adModel.bid.bidPrice.integerValue;
         if (ecpm > 0) {
             [weakSelf.tanx_ad uploadBidding:binder.adModel result:YES];
@@ -69,6 +71,7 @@
 
 - (void)dealloc {
     ADVLog(@"%s", __func__);
+    [self.binder destoryBinder];
 }
 
 - (AdvRenderFeedAdElement *)generateFeedAdElementWithAdModel:(TXAdModel *)adModel {
