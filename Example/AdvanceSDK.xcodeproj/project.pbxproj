@@ -147,16 +147,16 @@
 		220A7EA82BD11F1E0043492A /* AdControllers */ = {
 			isa = PBXGroup;
 			children = (
-				220A7EA92BD11F1E0043492A /* DemoSplashViewController.m */,
-				220A7EAA2BD11F1E0043492A /* DemoInterstitialViewController.h */,
-				220A7EB02BD11F1E0043492A /* DemoFullScreenVideoController.h */,
 				220A7EB12BD11F1E0043492A /* DemoBannerViewController.h */,
-				220A7EB22BD11F1E0043492A /* DemoRewardVideoViewController.m */,
-				220A7EB32BD11F1E0043492A /* DemoFullScreenVideoController.m */,
-				220A7EB42BD11F1E0043492A /* DemoInterstitialViewController.m */,
-				220A7EB52BD11F1E0043492A /* DemoSplashViewController.h */,
-				220A7EB62BD11F1E0043492A /* DemoRewardVideoViewController.h */,
 				220A7EB72BD11F1E0043492A /* DemoBannerViewController.m */,
+				220A7EB02BD11F1E0043492A /* DemoFullScreenVideoController.h */,
+				220A7EB32BD11F1E0043492A /* DemoFullScreenVideoController.m */,
+				220A7EAA2BD11F1E0043492A /* DemoInterstitialViewController.h */,
+				220A7EB42BD11F1E0043492A /* DemoInterstitialViewController.m */,
+				220A7EB62BD11F1E0043492A /* DemoRewardVideoViewController.h */,
+				220A7EB22BD11F1E0043492A /* DemoRewardVideoViewController.m */,
+				220A7EB52BD11F1E0043492A /* DemoSplashViewController.h */,
+				220A7EA92BD11F1E0043492A /* DemoSplashViewController.m */,
 				220A7EB82BD11F1E0043492A /* FeedExpress */,
 				220A7EAB2BD11F1E0043492A /* RenderFeed */,
 			);
@@ -167,8 +167,8 @@
 			isa = PBXGroup;
 			children = (
 				220A7EAC2BD11F1E0043492A /* DemoFeedAdDisplayController.h */,
-				220A7EAD2BD11F1E0043492A /* DemoRenderFeedViewController.h */,
 				220A7EAE2BD11F1E0043492A /* DemoFeedAdDisplayController.m */,
+				220A7EAD2BD11F1E0043492A /* DemoRenderFeedViewController.h */,
 				220A7EAF2BD11F1E0043492A /* DemoRenderFeedViewController.m */,
 			);
 			path = RenderFeed;
@@ -178,8 +178,8 @@
 			isa = PBXGroup;
 			children = (
 				220A7EB92BD11F1E0043492A /* DemoFeedExpressViewController.h */,
-				220A7EBA2BD11F1E0043492A /* DemoListFeedExpressViewController.h */,
 				220A7EBB2BD11F1E0043492A /* DemoFeedExpressViewController.m */,
+				220A7EBA2BD11F1E0043492A /* DemoListFeedExpressViewController.h */,
 				220A7EBC2BD11F1E0043492A /* DemoListFeedExpressViewController.m */,
 			);
 			path = FeedExpress;
