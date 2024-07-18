@@ -56,7 +56,7 @@
 }
 
 - (BOOL)isAdValid {
-    return YES;
+    return _mercury_ad.isAdValid;
 }
 
 - (void)dealloc {
