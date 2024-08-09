@@ -6,14 +6,8 @@
 //
 
 #import "BdNativeExpressAdapter.h"
-#if __has_include(<BaiduMobAdSDK/BaiduMobAdNative.h>)
 #import <BaiduMobAdSDK/BaiduMobAdNative.h>
 #import <BaiduMobAdSDK/BaiduMobAdExpressNativeView.h>
-#else
-#import "BaiduMobAdSDK/BaiduMobAdNative.h"
-#import "BaiduMobAdSDK/BaiduMobAdExpressNativeView.h"
-#endif
-
 #import "AdvanceNativeExpress.h"
 #import "AdvLog.h"
 #import "AdvanceNativeExpressAd.h"
@@ -110,7 +104,8 @@
 // 广告返回失败
 - (void)nativeAdsFailLoadCode:(NSString *)errCode
                       message:(NSString *)message
-                     nativeAd:(BaiduMobAdNative *)nativeAd {
+                     nativeAd:(BaiduMobAdNative *)nativeAd
+                     adObject:(BaiduMobAdNativeAdObject *)adObject {
     
     NSError *error = [[NSError alloc]initWithDomain:@"BDAdErrorDomain" code:-1 userInfo:@{@"desc":@"百度广告拉取失败"}];
     [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];

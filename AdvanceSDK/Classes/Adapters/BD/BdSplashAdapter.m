@@ -6,13 +6,7 @@
 //
 
 #import "BdSplashAdapter.h"
-
-#if __has_include(<BaiduMobAdSDK/BaiduMobAdSplash.h>)
 #import <BaiduMobAdSDK/BaiduMobAdSplash.h>
-#else
-#import "BaiduMobAdSDK/BaiduMobAdSplash.h"
-#endif
-
 #import "AdvanceSplash.h"
 #import "UIApplication+Adv.h"
 #import "AdvLog.h"

@@ -31,7 +31,7 @@
         @{@"addesc": @"全屏视频-百度", @"adspotId": @"102768-10007838"},
     ];
     self.btn1Title = @"加载广告";
-    self.btn2Title = @"显示广告";
+    self.btn2Title = @"展示广告";
 }
 
 - (void)loadAdBtn1Action {
@@ -39,15 +39,10 @@
 
     self.advanceFullScreenVideo = [[AdvanceFullScreenVideo alloc] initWithAdspotId:self.adspotId customExt:nil viewController:self];
     self.advanceFullScreenVideo.delegate = self;
-    _isAdLoaded=false;
     [self.advanceFullScreenVideo loadAd];
 }
 
 - (void)loadAdBtn2Action {
-    if (!_isAdLoaded) {
-        [JDStatusBarNotification showWithStatus:@"请先加载广告" dismissAfter:1.5];
-
-    }
     if (self.advanceFullScreenVideo.isAdValid) {
         [self.advanceFullScreenVideo showAd];
     }
@@ -80,10 +75,7 @@
 /// 全屏视频缓存成功
 - (void)fullscreenVideoDidDownLoadForSpotId:(NSString *)spotId extra:(NSDictionary *)extra {
     NSLog(@"广告缓存成功 %s", __func__);
-    _isAdLoaded=true;
     [JDStatusBarNotification showWithStatus:@"视频缓存成功" dismissAfter:1.5];
-    [self loadAdBtn2Action];
-
 }
 
 /// 全屏视频开始播放
@@ -110,7 +102,5 @@
 - (void)fullscreenVideoDidCloseForSpotId:(NSString *)spotId extra:(NSDictionary *)extra {
     NSLog(@"广告关闭了 %s", __func__);
 }
-
-
 
 @end

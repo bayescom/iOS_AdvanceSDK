@@ -31,8 +31,8 @@
         @{@"addesc": @"插屏-百度", @"adspotId": @"102768-10007836"},
         @{@"addesc": @"插屏-Tanx", @"adspotId": @"102768-10009460"}
     ];
-    self.btn1Title = @"加载广告";
-    self.btn2Title = @"显示广告";
+    self.btn1Title = @"加载并展示广告";
+//    self.btn2Title = @"展示广告";
 }
 
 - (void)loadAdBtn1Action {

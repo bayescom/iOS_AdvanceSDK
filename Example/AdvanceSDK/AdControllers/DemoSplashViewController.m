@@ -46,8 +46,8 @@
         @{@"addesc": @"开屏-百度", @"adspotId": @"102768-10007833"},
         @{@"addesc": @"开屏-Tanx", @"adspotId": @"102768-10009456"}
     ];
-    self.btn1Title = @"加载广告";
-    self.btn2Title = @"展示广告";
+    self.btn1Title = @"加载并展示广告";
+//    self.btn2Title = @"展示广告";
 
 }
 

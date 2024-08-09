@@ -74,7 +74,8 @@
 
 - (void)nativeAdsFailLoadCode:(NSString *)errCode
                       message:(NSString *)message
-                     nativeAd:(BaiduMobAdNative *)nativeAd {
+                     nativeAd:(BaiduMobAdNative *)nativeAd
+                     adObject:(BaiduMobAdNativeAdObject *)adObject {
     NSError *error = [[NSError alloc]initWithDomain:@"BDAdErrorDomain" code:errCode.intValue userInfo:@{@"msg": (message ?: @"")}];
     [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
     [self.adspot.manager checkTargetWithResultfulSupplier:_supplier loadAdState:AdvanceSupplierLoadAdFailed];

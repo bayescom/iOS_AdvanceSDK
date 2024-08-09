@@ -6,11 +6,7 @@
 //
 
 #import "BdRewardVideoAdapter.h"
-#if __has_include(<BaiduMobAdSDK/BaiduMobAdRewardVideo.h>)
 #import <BaiduMobAdSDK/BaiduMobAdRewardVideo.h>
-#else
-#import "BaiduMobAdSDK/BaiduMobAdRewardVideo.h"
-#endif
 #import "AdvanceRewardVideo.h"
 #import "AdvLog.h"
 #import "AdvanceAdapter.h"

@@ -6,13 +6,7 @@
 //
 
 #import "BdInterstitialAdapter.h"
-
-#if __has_include(<BaiduMobAdSDK/BaiduMobAdExpressInterstitial.h>)
 #import <BaiduMobAdSDK/BaiduMobAdExpressInterstitial.h>
-#else
-#import "BaiduMobAdSDK/BaiduMobAdExpressInterstitial.h"
-#endif
-
 #import "AdvanceInterstitial.h"
 #import "AdvLog.h"
 #import "AdvanceAdapter.h"

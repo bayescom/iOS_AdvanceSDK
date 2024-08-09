@@ -31,9 +31,8 @@
         @{@"addesc": @"横幅-倍业", @"adspotId": @"102768-10007790"},
         @{@"addesc": @"横幅-穿山甲", @"adspotId": @"102768-10007800"},
         @{@"addesc": @"横幅-优量汇", @"adspotId": @"102768-10007809"},
-        @{@"addesc": @"横幅-百度", @"adspotId": @"102768-10007835"},
     ];
-    self.btn1Title = @"加载并显示广告";
+    self.btn1Title = @"加载并展示广告";
 }
 
 - (void)loadAdBtn1Action {

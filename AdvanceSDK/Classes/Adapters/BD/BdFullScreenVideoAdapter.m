@@ -6,12 +6,7 @@
 //
 
 #import "BdFullScreenVideoAdapter.h"
-
-#if __has_include(<BaiduMobAdSDK/BaiduMobAdExpressFullScreenVideo.h>)
 #import <BaiduMobAdSDK/BaiduMobAdExpressFullScreenVideo.h>
-#else
-#import "BaiduMobAdSDK/BaiduMobAdExpressFullScreenVideo.h"
-#endif
 #import "AdvanceFullScreenVideo.h"
 #import "AdvLog.h"
 #import "AdvanceAdapter.h"

@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
     
     s.name             = 'AdvanceSDK'
-    s.version          = '5.1.1'
+    s.version          = '5.1.2'
     s.license          = { :type => 'MIT', :file => 'LICENSE' }
     s.summary          = 'bayescom iOS AdvanceSDK'
     s.description      = <<-DESC
@@ -49,17 +49,9 @@ Pod::Spec.new do |s|
         mer.source_files = 'AdvanceSDK/Classes/Adapters/Mercury/**/*.{h,m}'
     end
     
-    # 基于穿山甲单独SDK
     s.subspec 'CSJAdapter' do |csj|
         csj.dependency 'AdvanceSDK/AdSpot'
-        csj.dependency 'Ads-CN'
-        csj.source_files = 'AdvanceSDK/Classes/Adapters/CSJ/**/*.{h,m}'
-    end
-    
-    # 基于穿山甲融合SDK
-    s.subspec 'CSJAdapter-Fusion' do |csj|
-        csj.dependency 'AdvanceSDK/AdSpot'
-        csj.dependency 'Ads-Fusion-CN-Beta/BUAdSDK'
+        csj.dependency 'Ads-CN-Beta/BUAdSDK'
         csj.source_files = 'AdvanceSDK/Classes/Adapters/CSJ/**/*.{h,m}'
     end
     
@@ -83,14 +75,14 @@ Pod::Spec.new do |s|
     
     s.subspec 'TanxAdapter' do |tanx|
         tanx.dependency 'AdvanceSDK/AdSpot'
-        tanx.dependency 'AdvTanxSDK'
+        tanx.dependency 'TanxSDK'
         tanx.source_files =  'AdvanceSDK/Classes/Adapters/TANX/**/*.{h,m}'
     end
     
-    s.subspec 'GroMoreBidding' do |bidding|
-        bidding.dependency 'AdvanceSDK/AdSpot'
-        bidding.dependency 'GroMoreBiddingSDK', '1.2.0'
-        bidding.source_files = 'AdvanceSDK/Classes/GroMoreBidding/**/*.{h,m}'
-    end
+#    s.subspec 'GroMoreBidding' do |bidding|
+#        bidding.dependency 'AdvanceSDK/AdSpot'
+#        bidding.dependency 'GroMoreBiddingSDK', '1.2.0'
+#        bidding.source_files = 'AdvanceSDK/Classes/GroMoreBidding/**/*.{h,m}'
+#    end
 
 end

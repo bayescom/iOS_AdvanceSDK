@@ -8,34 +8,27 @@ target 'AdvanceSDK_Example' do
   
   #集成倍业Adapter
   pod 'AdvanceSDK/MercuryAdapter', :path => '../'
-  pod 'MercurySDK', '4.2.8'
+  pod 'MercurySDK', '4.3.0'
 
-  #集成穿山甲Adapter（基于单独SDK）
-  pod 'AdvanceSDK/CSJAdapter', :path => '../'
-  pod 'Ads-CN', '6.1.1.0'
-  
-  #集成穿山甲Adapter（基于融合SDK）
-#  pod 'AdvanceSDK/CSJAdapter-Fusion', :path => '../'
-#  pod 'Ads-Fusion-CN-Beta','6.1.1.0', :subspecs => ['BUAdSDK', 'CSJMediation']
+  #集成穿山甲Adapter
+  pod 'AdvanceSDK/CSJAdapter',  :path => '../'
+  pod 'Ads-CN-Beta', '6.3.0.5', :subspecs => ['BUAdSDK', 'CSJMediation']
 
   #集成广点通Adapter
   pod 'AdvanceSDK/GDTAdapter', :path => '../'
-  pod 'GDTMobSDK', '4.14.76'
+  pod 'GDTMobSDK', '4.14.90'
 
   #集成快手Adapter
   pod 'AdvanceSDK/KSAdapter', :path => '../'
-  pod 'KSAdSDK', '3.3.64.5'
+  pod 'KSAdSDK', '3.3.66.3'
 
   #集成百度Adapter
   pod 'AdvanceSDK/BDAdapter', :path => '../'
-  pod 'BaiduMobAdSDK', '5.351'
+  pod 'BaiduMobAdSDK', '5.360'
   
   #集成TanxAdapter
   pod 'AdvanceSDK/TanxAdapter', :path => '../'
-  pod 'AdvTanxSDK', '3.4.5'
-
-  #集成GroMoreBidding模块
-#  pod 'AdvanceSDK/GroMoreBidding', :path => '../'
+  pod 'TanxSDK', '3.5.3'
   
 
   #Third

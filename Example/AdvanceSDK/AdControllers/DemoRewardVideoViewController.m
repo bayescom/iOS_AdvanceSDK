@@ -35,7 +35,7 @@
     ];
     
     self.btn1Title = @"加载广告";
-    self.btn2Title = @"显示广告";
+    self.btn2Title = @"展示广告";
 }
 
 - (void)loadAdBtn1Action {

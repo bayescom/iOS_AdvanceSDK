@@ -105,8 +105,6 @@
         clsName = @"CsjBannerAdapter";
     } else if ([supplierId isEqualToString:SDK_ID_MERCURY]) {
         clsName = @"MercuryBannerAdapter";
-    } else if ([supplierId isEqualToString:SDK_ID_BAIDU]) {
-        clsName = @"BdBannerAdapter";
     }
     return clsName;
 }
