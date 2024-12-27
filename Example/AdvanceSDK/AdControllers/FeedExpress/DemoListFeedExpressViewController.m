@@ -12,7 +12,6 @@
 #import <AdvanceSDK/AdvSdkConfig.h>
 #import <AdvanceSDK/AdvanceNativeExpress.h>
 #import <AdvanceSDK/AdvanceNativeExpressAd.h>
-#import "Masonry.h"
 
 @interface DemoListFeedExpressViewController () <UITableViewDelegate, UITableViewDataSource, AdvanceNativeExpressDelegate>
 @property (strong, nonatomic) UITableView *tableView;
@@ -27,15 +26,12 @@
     [super viewDidLoad];
     self.navigationItem.title = @"模板渲染信息流";
     
-    _tableView = [[UITableView alloc] init];
+    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kkScreenWidth, kkScreenHeight - kkNavigationBarHeight) style:UITableViewStylePlain];
     [self.view addSubview:_tableView];
     [_tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"nativeexpresscell"];
     [_tableView registerClass:[ExamTableViewCell class] forCellReuseIdentifier:@"ExamTableViewCell"];
     _tableView.delegate = self;
     _tableView.dataSource = self;
-    [_tableView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.equalTo(self.view);
-    }];
     
     [self loadBtnAction:nil];
 }

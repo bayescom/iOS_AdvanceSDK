@@ -36,7 +36,6 @@
         _supplier = supplier;
         _gdt_ad = [[GDTUnifiedInterstitialAd alloc] initWithPlacementId:_supplier.adspotid];
         _gdt_ad.videoMuted = _adspot.muted;
-        _gdt_ad.detailPageVideoMuted = _adspot.muted;
         _gdt_ad.delegate = self;
     }
     return self;

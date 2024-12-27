@@ -1,6 +1,6 @@
 source 'https://github.com/CocoaPods/Specs.git'
 use_frameworks!
-platform :ios, '10.0'
+platform :ios, '12.0'
 target 'AdvanceSDK_Example' do
 
   #必须集成
@@ -8,32 +8,31 @@ target 'AdvanceSDK_Example' do
   
   #集成倍业Adapter
   pod 'AdvanceSDK/MercuryAdapter', :path => '../'
-  pod 'MercurySDK', '4.3.0'
+  pod 'MercurySDK', '4.4.6'
 
   #集成穿山甲Adapter
   pod 'AdvanceSDK/CSJAdapter',  :path => '../'
-  pod 'Ads-CN-Beta', '6.3.0.5', :subspecs => ['BUAdSDK', 'CSJMediation']
+  pod 'Ads-CN-Beta', '6.6.0.7', :subspecs => ['BUAdSDK', 'CSJMediation']
 
   #集成广点通Adapter
   pod 'AdvanceSDK/GDTAdapter', :path => '../'
-  pod 'GDTMobSDK', '4.14.90'
+  pod 'GDTMobSDK', '4.15.10'
 
   #集成快手Adapter
   pod 'AdvanceSDK/KSAdapter', :path => '../'
-  pod 'KSAdSDK', '3.3.66.3'
+  pod 'KSAdSDK', '3.3.72'
 
   #集成百度Adapter
   pod 'AdvanceSDK/BDAdapter', :path => '../'
-  pod 'BaiduMobAdSDK', '5.360'
+  pod 'BaiduMobAdSDK', '5.371'
   
   #集成TanxAdapter
   pod 'AdvanceSDK/TanxAdapter', :path => '../'
-  pod 'TanxSDK', '3.5.3'
+  pod 'TanxSDK', '3.6.6'
   
 
   #Third
   pod 'SDWebImage'
-  pod 'Masonry'
   
   post_install do |installer|
     installer.generated_projects.each do |project|

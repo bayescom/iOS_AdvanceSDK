@@ -41,7 +41,6 @@
         _gdt_ad = [[GDTNativeExpressAd alloc] initWithPlacementId:_supplier.adspotid
                                                            adSize:_adspot.adSize];
         _gdt_ad.videoMuted = _adspot.muted;
-        _gdt_ad.detailPageVideoMuted = _adspot.muted;
         _gdt_ad.delegate = self;
     }
     return self;
@@ -155,23 +154,6 @@
             [_delegate didShowNativeExpressAd:nativeAd spotId:self.adspot.adspotid extra:self.adspot.ext];
         }
     }
-}
-
-
-- (void)nativeExpressAdViewWillPresentVideoVC:(GDTNativeExpressAdView *)nativeExpressAdView {
-    
-}
-
-- (void)nativeExpressAdViewDidPresentVideoVC:(GDTNativeExpressAdView *)nativeExpressAdView {
-
-}
-
-- (void)nativeExpressAdViewWillDismissVideoVC:(GDTNativeExpressAdView *)nativeExpressAdView {
-
-}
-
-- (void)nativeExpressAdViewDidDismissVideoVC:(GDTNativeExpressAdView *)nativeExpressAdView {
-    
 }
 
 

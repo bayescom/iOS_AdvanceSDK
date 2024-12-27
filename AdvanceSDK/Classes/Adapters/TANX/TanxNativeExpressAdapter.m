@@ -39,7 +39,7 @@
 
 - (void)loadAd {
     __weak typeof(self) weakSelf = self;
-    [self.tanx_ad getFeedAdsWithAdCount:1 renderMode:TXAdFeedRenderModeTemplate adsBlock:^(NSArray<TXAdModel *> * _Nullable viewModelArray, NSError * _Nullable error) {
+    [self.tanx_ad getFeedAdsWithAdCount:1 renderMode:TXAdRenderModeTemplate adsBlock:^(NSArray<TXAdModel *> * _Nullable viewModelArray, NSError * _Nullable error) {
         if (error) { // 获取广告失败
             [weakSelf.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:weakSelf.supplier error:error];
             [weakSelf.adspot.manager checkTargetWithResultfulSupplier:weakSelf.supplier loadAdState:AdvanceSupplierLoadAdFailed];

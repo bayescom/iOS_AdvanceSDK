@@ -10,9 +10,15 @@
 #define PrefixHeader_pch
 #import <UIKit/UIKit.h>
 
-static inline BOOL IsIPhoneXSeries() {
+/// 是否是刘海屏
+static inline BOOL demo_IsIPhoneXSeries(void) {
     if (@available(iOS 11.0, *)) {
-        UIWindow *mainWindow = [[[UIApplication sharedApplication] delegate] window];
+        UIWindow *mainWindow;
+        if (@available(iOS 13, *)) {
+            mainWindow = UIApplication.sharedApplication.windows.firstObject;
+        } else {
+            mainWindow = UIApplication.sharedApplication.keyWindow;
+        }
         if (mainWindow.safeAreaInsets.bottom > 0.0) {
             return YES;
         }
@@ -20,10 +26,29 @@ static inline BOOL IsIPhoneXSeries() {
     return NO;
 }
 
+/// 状态栏高度
+static inline float demo_statusBarHeight(void) {
+    float statusBarHeight = 0;
+    if (@available(iOS 13.0, *)) {
+        UIWindowScene *windowScene = (UIWindowScene *)[UIApplication.sharedApplication.connectedScenes anyObject];
+        if (windowScene) {
+            statusBarHeight = windowScene.statusBarManager.statusBarFrame.size.height ?: 20.f;
+        }
+    } else {
+        statusBarHeight = [UIApplication sharedApplication].statusBarFrame.size.height ?: 20.f;
+    }
+    
+    return statusBarHeight;
+}
 
-#define kAppTopH    (IsIPhoneXSeries()?88:64)
-#define kAppBottomH (IsIPhoneXSeries()?34:0)
+#define kkScreenWidth [UIScreen mainScreen].bounds.size.width
+#define kkScreenHeight [UIScreen mainScreen].bounds.size.height
 
-#import <Masonry.h>
+// Size
+#define kkNavigationBarHeight (demo_statusBarHeight() + 44)
+#define kkStatusBarHeight  demo_statusBarHeight()
+#define kkHomeIndicatorHeight (demo_IsIPhoneXSeries()? 34 : 0)
+
+//#import <Masonry.h>
 
 #endif /* PrefixHeader_pch */
