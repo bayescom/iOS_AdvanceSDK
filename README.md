@@ -4,8 +4,15 @@
 [![License](https://img.shields.io/cocoapods/l/AdvanceSDK.svg?style=flat)](https://cocoapods.org/pods/AdvanceSDK)
 [![Platform](https://img.shields.io/cocoapods/p/AdvanceSDK.svg?style=flat)](https://cocoapods.org/pods/AdvanceSDK)
 
-# AdvanceSDK对接文档-IOS
+## 私有化部署改动内容
 
+将 Advance SDK转自用，可能需要进行替换更新内容如下：
+
+1.请求策略地址：修改全局字符串变量 AdvanceSdkRequestUrl  为自己的请求地址链接地址为自己的请求地址即可，也就是**Stella**项目的请求地址：http://yourdomain.com/stella
+
+2.请求加密key：全局字符串变量**AdvanceSDKSecretKey**为自己的key，<font color=red>key需要是16位字符串</font>
+
+# AdvanceSDK对接文档-IOS
 
 本文档为AdvanceSDK接入配置参考文档。用户可以参考Example工程中的配置以及广告位接入代码进行开发。
 
