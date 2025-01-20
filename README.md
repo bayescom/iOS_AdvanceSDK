@@ -10,7 +10,7 @@
 
 1.请求策略地址：修改全局字符串变量 AdvanceSdkRequestUrl  为自己的请求地址链接地址为自己的请求地址即可，也就是**Stella**项目的请求地址：http://yourdomain.com/stella
 
-2.请求加密key：全局字符串变量**AdvanceSDKSecretKey**为自己的key，<font color=red>key需要是16位字符串</font>
+2.请求加密key：全局字符串变量**AdvanceSDKSecretKey**为自己的key，key需要是16位字符串
 
 # AdvanceSDK对接文档-IOS
 
