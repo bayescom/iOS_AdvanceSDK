@@ -8,7 +8,7 @@
 
 将 Advance SDK转自用，可能需要进行替换更新内容如下：
 
-1.请求策略地址：修改全局字符串变量 AdvanceSdkRequestUrl  为自己的请求地址链接地址为自己的请求地址即可，也就是**Stella**项目的请求地址：http://yourdomain.com/stella
+1.请求策略地址：修改全局字符串变量 AdvanceSdkRequestUrl  为自己的请求地址链接地址为自己的请求地址即可，也就是[**Stella**](https://github.com/bayescom/EasyAds-Pro_Stella)项目搭建的私有化服务的请求地址：http://yourdomain.com/stella
 
 2.请求加密key：全局字符串变量**AdvanceSDKSecretKey**为自己的key，key需要是16位字符串
 
