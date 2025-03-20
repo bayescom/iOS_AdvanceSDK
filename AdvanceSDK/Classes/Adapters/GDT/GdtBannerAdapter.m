@@ -7,13 +7,7 @@
 //
 
 #import "GdtBannerAdapter.h"
-
-#if __has_include(<GDTUnifiedBannerView.h>)
-#import <GDTUnifiedBannerView.h>
-#else
-#import "GDTUnifiedBannerView.h"
-#endif
-
+#import <GDTMobSDK/GDTMobSDK.h>
 #import "AdvanceBanner.h"
 #import "AdvLog.h"
 #import "AdvanceAdapter.h"

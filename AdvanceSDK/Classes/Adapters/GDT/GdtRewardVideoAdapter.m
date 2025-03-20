@@ -7,11 +7,7 @@
 //
 
 #import "GdtRewardVideoAdapter.h"
-#if __has_include(<GDTRewardVideoAd.h>)
-#import <GDTRewardVideoAd.h>
-#else
-#import "GDTRewardVideoAd.h"
-#endif
+#import <GDTMobSDK/GDTMobSDK.h>
 #import "AdvanceRewardVideo.h"
 #import "AdvLog.h"
 #import "AdvanceAdapter.h"

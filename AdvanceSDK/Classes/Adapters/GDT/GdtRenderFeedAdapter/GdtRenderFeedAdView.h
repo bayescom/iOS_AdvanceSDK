@@ -6,8 +6,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
-#import "GDTUnifiedNativeAdView.h"
+#import <GDTMobSDK/GDTMobSDK.h>
 #import "AdvanceRenderFeedDelegate.h"
 #import "AdvanceRenderFeed.h"
 

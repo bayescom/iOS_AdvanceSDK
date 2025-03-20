@@ -7,13 +7,7 @@
 //
 
 #import "GdtFullScreenVideoAdapter.h"
-
-#if __has_include(<GDTUnifiedInterstitialAd.h>)
-#import <GDTUnifiedInterstitialAd.h>
-#else
-#import "GDTUnifiedInterstitialAd.h"
-#endif
-
+#import <GDTMobSDK/GDTMobSDK.h>
 #import "AdvanceFullScreenVideo.h"
 #import "AdvLog.h"
 #import "AdvanceAdapter.h"

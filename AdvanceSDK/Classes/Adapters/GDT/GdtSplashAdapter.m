@@ -7,13 +7,7 @@
 //
 
 #import "GdtSplashAdapter.h"
-
-#if __has_include(<GDTSplashAd.h>)
-#import <GDTSplashAd.h>
-#else
-#import "GDTSplashAd.h"
-#endif
-
+#import <GDTMobSDK/GDTMobSDK.h>
 #import "AdvanceSplash.h"
 #import "AdvLog.h"
 #import "AdvanceAdapter.h"

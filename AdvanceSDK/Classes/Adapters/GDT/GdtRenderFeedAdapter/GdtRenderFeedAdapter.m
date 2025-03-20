@@ -6,12 +6,7 @@
 //
 
 #import "GdtRenderFeedAdapter.h"
-#if __has_include(<GDTUnifiedNativeAd.h>)
-#import <GDTUnifiedNativeAd.h>
-#else
-#import "GDTUnifiedNativeAd.h"
-#endif
-
+#import <GDTMobSDK/GDTMobSDK.h>
 #import "AdvanceRenderFeed.h"
 #import "AdvLog.h"
 #import "GdtRenderFeedAdView.h"

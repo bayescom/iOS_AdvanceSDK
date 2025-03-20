@@ -7,18 +7,7 @@
 //
 
 #import "GdtNativeExpressAdapter.h"
-
-#if __has_include(<GDTNativeExpressAd.h>)
-#import <GDTNativeExpressAd.h>
-#else
-#import "GDTNativeExpressAd.h"
-#endif
-#if __has_include(<GDTNativeExpressAdView.h>)
-#import <GDTNativeExpressAdView.h>
-#else
-#import "GDTNativeExpressAdView.h"
-#endif
-
+#import <GDTMobSDK/GDTMobSDK.h>
 #import "AdvanceNativeExpress.h"
 #import "AdvLog.h"
 #import "AdvanceNativeExpressAd.h"

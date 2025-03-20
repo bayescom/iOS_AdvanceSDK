@@ -68,13 +68,13 @@
 }
 
 -(UIView *)videoAdView {
-    if (!self.nativeAdRelatedView.videoAdView.delegate) {
-        self.nativeAdRelatedView.videoAdView.delegate = self;
+    if (!self.nativeAdRelatedView.mediaAdView.delegate) {
+        self.nativeAdRelatedView.mediaAdView.delegate = self;
     }
-    if (!self.nativeAdRelatedView.videoAdView.superview) {
-        [self addSubview:self.nativeAdRelatedView.videoAdView];
+    if (!self.nativeAdRelatedView.mediaAdView.superview) {
+        [self addSubview:self.nativeAdRelatedView.mediaAdView];
     }
-    return self.nativeAdRelatedView.videoAdView;
+    return self.nativeAdRelatedView.mediaAdView;
 }
 
 #pragma mark - BUNativeAdDelegate
@@ -114,39 +114,39 @@
 }
 
 #pragma mark - BUVideoAdViewDelegate
-- (void)videoAdView:(BUVideoAdView *)videoAdView stateDidChanged:(BUPlayerPlayState)playerState {
+- (void)videoAdView:(BUMediaAdView *)adView stateDidChanged:(BUPlayerPlayState)playerState {
     
 }
 
-- (void)videoAdView:(BUVideoAdView *)videoAdView didLoadFailWithError:(NSError *)error {
+- (void)videoAdView:(BUMediaAdView *)adView didLoadFailWithError:(NSError *_Nullable)error {
     
 }
 
-- (void)playerDidPlayFinish:(BUVideoAdView *)videoAdView {
+- (void)playerDidPlayFinish:(BUMediaAdView *)adView {
     if ([self.delegate respondsToSelector:@selector(renderFeedVideoDidEndPlayingForSpotId:extra:)]) {
         [self.delegate renderFeedVideoDidEndPlayingForSpotId:self.adSpot.adspotid extra:self.adSpot.ext];
     }
 }
 
-- (void)videoAdViewDidClick:(BUVideoAdView *)videoAdView {
+- (void)videoAdViewDidClick:(BUMediaAdView *)adView {
     [self.adSpot.manager reportEventWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(renderFeedAdDidClickForSpotId:extra:)]) {
         [self.delegate renderFeedAdDidClickForSpotId:self.adSpot.adspotid extra:self.adSpot.ext];
     }
 }
 
-- (void)videoAdViewFinishViewDidClick:(BUVideoAdView *)videoAdView {
+- (void)videoAdViewFinishViewDidClick:(BUMediaAdView *)adView {
     [self.adSpot.manager reportEventWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(renderFeedAdDidClickForSpotId:extra:)]) {
         [self.delegate renderFeedAdDidClickForSpotId:self.adSpot.adspotid extra:self.adSpot.ext];
     }
 }
 
-- (void)videoAdViewDidCloseOtherController:(BUVideoAdView *)videoAdView interactionType:(BUInteractionType)interactionType {
+- (void)videoAdViewDidCloseOtherController:(BUMediaAdView *)adView interactionType:(BUInteractionType)interactionType {
     
 }
 
-- (void)videoAdView:(BUVideoAdView *)videoAdView
+- (void)videoAdView:(BUMediaAdView *)adView
  rewardDidCountDown:(NSInteger)countDown {
     
 }

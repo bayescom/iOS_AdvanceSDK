@@ -439,7 +439,9 @@
 				"${PODS_ROOT}/TanxSDK/TanxSDK/TanxSDK.library/TanxSDK.framework/TanxID.bundle/feed_close@3x.png",
 				"${PODS_ROOT}/TanxSDK/TanxSDK/TanxSDK.library/TanxSDK.framework/TanxID.bundle/feed_web_loading.gif",
 				"${PODS_ROOT}/TanxSDK/TanxSDK/TanxSDK.library/TanxSDK.framework/TanxID.bundle/loding@2x.png",
+				"${PODS_ROOT}/TanxSDK/TanxSDK/TanxSDK.library/TanxSDK.framework/TanxID.bundle/mute_icon.png",
 				"${PODS_ROOT}/TanxSDK/TanxSDK/TanxSDK.library/TanxSDK.framework/TanxID.bundle/pause@2x.png",
+				"${PODS_ROOT}/TanxSDK/TanxSDK/TanxSDK.library/TanxSDK.framework/TanxID.bundle/play_icon.png",
 				"${PODS_ROOT}/TanxSDK/TanxSDK/TanxSDK.library/TanxSDK.framework/TanxID.bundle/poor_content_night@3x.png",
 				"${PODS_ROOT}/TanxSDK/TanxSDK/TanxSDK.library/TanxSDK.framework/TanxID.bundle/poor_content_write@3x.png",
 				"${PODS_ROOT}/TanxSDK/TanxSDK/TanxSDK.library/TanxSDK.framework/TanxID.bundle/reward_gudie.gif",
@@ -449,6 +451,8 @@
 				"${PODS_ROOT}/TanxSDK/TanxSDK/TanxSDK.library/TanxSDK.framework/TanxID.bundle/TXAdConfigure.txt",
 				"${PODS_ROOT}/TanxSDK/TanxSDK/TanxSDK.library/TanxSDK.framework/TanxID.bundle/uninterested_night@3x.png",
 				"${PODS_ROOT}/TanxSDK/TanxSDK/TanxSDK.library/TanxSDK.framework/TanxID.bundle/uninterested_write@3x.png",
+				"${PODS_ROOT}/TanxSDK/TanxSDK/TanxSDK.library/TanxSDK.framework/TanxID.bundle/unmute_icon.png",
+				"${PODS_ROOT}/TanxSDK/TanxSDK/TanxSDK.library/TanxSDK.framework/TanxID.bundle/white_close_icon.png",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
@@ -460,7 +464,9 @@
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/feed_close@3x.png",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/feed_web_loading.gif",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/loding@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/mute_icon.png",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/pause@2x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/play_icon.png",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/poor_content_night@3x.png",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/poor_content_write@3x.png",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/reward_gudie.gif",
@@ -470,6 +476,8 @@
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/TXAdConfigure.txt",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/uninterested_night@3x.png",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/uninterested_write@3x.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/unmute_icon.png",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/white_close_icon.png",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -484,11 +492,15 @@
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-AdvanceSDK_Example/Pods-AdvanceSDK_Example-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/GDTMobSDK/GDTMobSDK.framework/GDTMobSDK",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/GDTMobSDK/Tquic.framework/Tquic",
 				"${PODS_XCFRAMEWORKS_BUILD_DIR}/KSAdSDK/KSAdSDK.framework/KSAdSDK",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GDTMobSDK.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Tquic.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KSAdSDK.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
