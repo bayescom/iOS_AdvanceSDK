@@ -1,47 +1,40 @@
 //
-//  KsSplashAdapter.m
+//  SigmobSplashAdapter.m
 //  AdvanceSDK
 //
-//  Created by MS on 2021/4/20.
+//  Created by guangyao on 2025/3/18.
 //
 
-#import "KsSplashAdapter.h"
-
-#if __has_include(<KSAdSDK/KSAdSDK.h>)
-#import <KSAdSDK/KSAdSDK.h>
-#else
-#import "KSAdSDK.h"
-#endif
-
+#import "SigmobSplashAdapter.h"
+#import <WindSDK/WindSDK.h>
 #import "AdvanceSplash.h"
 #import "AdvLog.h"
 #import "AdvanceAdapter.h"
 
-@interface KsSplashAdapter ()<KSSplashAdViewDelegate, AdvanceAdapter>
-
-@property (nonatomic, strong) KSSplashAdView *ks_ad;
+@interface SigmobSplashAdapter () <WindSplashAdViewDelegate, AdvanceAdapter>
+@property (nonatomic, strong) WindSplashAdView *sigmob_ad;
 @property (nonatomic, weak) AdvanceSplash *adspot;
 @property (nonatomic, strong) AdvSupplier *supplier;
 @property (nonatomic, strong) UIImageView *imgV;
 
 @end
 
-@implementation KsSplashAdapter
+@implementation SigmobSplashAdapter
 
 - (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(id)adspot {
     if (self = [super init]) {
         _adspot = adspot;
         _supplier = supplier;
-        _ks_ad = [[KSSplashAdView alloc] initWithPosId:_supplier.adspotid];
-        _ks_ad.delegate = self;
-        _ks_ad.timeoutInterval = _supplier.timeout * 1.0 / 1000.0;
+        WindAdRequest *request = [WindAdRequest request];
+        request.placementId = supplier.adspotid;
+        _sigmob_ad = [[WindSplashAdView alloc] initWithRequest:request];
+        _sigmob_ad.delegate = self;
     }
     return self;
 }
 
-
 - (void)loadAd {
-    [_ks_ad loadAdData];
+    [_sigmob_ad loadAdData];
 }
 
 - (void)winnerAdapterToShowAd {
@@ -51,7 +44,6 @@
 }
 
 - (void)showInWindow:(UIWindow *)window {
-    _ks_ad.rootViewController = _adspot.viewController;
     // 设置logo
     CGRect adFrame = [UIScreen mainScreen].bounds;
     if (_adspot.logoImage && _adspot.showLogoRequire) {
@@ -66,97 +58,47 @@
         self.imgV.image = _adspot.logoImage;
         [window addSubview:self.imgV];
     }
-    _ks_ad.frame = adFrame;
-    [_ks_ad showInView:window];
+    
+    self.sigmob_ad.rootViewController = self.adspot.viewController;
+    self.sigmob_ad.frame = adFrame;
+    [window addSubview:self.sigmob_ad];
 }
 
-/**
- * splash ad request done
- */
-- (void)ksad_splashAdDidLoad:(KSSplashAdView *)splashAdView {
 
-}
-/**
- * splash ad material load, ready to display
- */
-- (void)ksad_splashAdContentDidLoad:(KSSplashAdView *)splashAdView {
-    [self.adspot.manager setECPMIfNeeded:splashAdView.ecpm supplier:_supplier];
+#pragma mark - WindMillSplashAdDelegate
+- (void)onSplashAdDidLoad:(WindSplashAdView *)splashAdView {
+    [self.adspot.manager setECPMIfNeeded:splashAdView.getEcpm.integerValue supplier:_supplier];
     [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoSucceed supplier:_supplier error:nil];
     [self.adspot.manager checkTargetWithResultfulSupplier:_supplier loadAdState:AdvanceSupplierLoadAdSuccess];
-
 }
-/**
- * splash ad (material) failed to load
- */
-- (void)ksad_splashAd:(KSSplashAdView *)splashAdView didFailWithError:(NSError *)error {
+
+- (void)onSplashAdLoadFail:(WindSplashAdView *)splashAdView error:(NSError *)error {
     [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoFailed supplier:_supplier error:error];
     [self.adspot.manager checkTargetWithResultfulSupplier:_supplier loadAdState:AdvanceSupplierLoadAdFailed];
 }
-/**
- * splash ad did visible
- */
-- (void)ksad_splashAdDidVisible:(KSSplashAdView *)splashAdView {
+
+- (void)onSplashAdSuccessPresentScreen:(WindSplashAdView *)splashAdView {
     [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoImped supplier:_supplier error:nil];
-    if ([self.delegate respondsToSelector:@selector(splashDidShowForSpotId:extra:)]) {
+    if ([self.delegate respondsToSelector:@selector(splashDidShowForSpotId:extra:)] && self.sigmob_ad) {
         [self.delegate splashDidShowForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
 }
 
-/**
- * splash ad clicked
- */
-- (void)ksad_splashAdDidClick:(KSSplashAdView *)splashAdView {
+- (void)onSplashAdClicked:(WindSplashAdView *)splashAdView {
     [self.adspot.manager reportEventWithType:AdvanceSdkSupplierRepoClicked supplier:_supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(splashDidClickForSpotId:extra:)]) {
         [self.delegate splashDidClickForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
-    [self ksAdDidClose];
 }
 
-/**
- * splash ad skipped
- * @param showDuration  splash show duration (no subsequent callbacks, remove & release KSSplashAdView here)
- */
-- (void)ksad_splashAd:(KSSplashAdView *)splashAdView didSkip:(NSTimeInterval)showDuration {
-    
-    [self ksAdDidClose];
-}
-/**
- * splash ad close conversion viewcontroller (no subsequent callbacks, remove & release KSSplashAdView here)
- */
-- (void)ksad_splashAdDidCloseConversionVC:(KSSplashAdView *)splashAdView interactionType:(KSAdInteractionType)interactType {
-    
-    [self ksAdDidClose];
-}
-
-/**
- * splash ad play finished & auto dismiss (no subsequent callbacks, remove & release KSSplashAdView here)
- */
-- (void)ksad_splashAdDidAutoDismiss:(KSSplashAdView *)splashAdView {
-
-    [self ksAdDidClose];
-}
-
-- (void)ksAdDidClose {
-   
-    [_ks_ad removeFromSuperview];
-    _ks_ad = nil;
-    [self.imgV removeFromSuperview];
-    self.imgV = nil;
-    
+- (void)onSplashAdClosed:(WindSplashAdView *)splashAdView {
     if ([self.delegate respondsToSelector:@selector(splashDidCloseForSpotId:extra:)]) {
         [self.delegate splashDidCloseForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
+    [_imgV removeFromSuperview];
+    _imgV = nil;
+    [_sigmob_ad removeFromSuperview];
+    _sigmob_ad = nil;
 }
 
-- (UIImageView *)imgV {
-    if (!_imgV) {
-        _imgV = [[UIImageView alloc] init];
-    }
-    return _imgV;
-}
-
-- (void)dealloc {
-    ADVLog(@"%s", __func__);
-}
 @end

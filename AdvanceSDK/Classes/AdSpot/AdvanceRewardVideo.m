@@ -128,6 +128,8 @@
         clsName = @"BdRewardVideoAdapter";
     } else if ([supplierId isEqualToString:SDK_ID_TANX]) {
         clsName = @"TanxRewardVideoAdapter";
+    } else if ([supplierId isEqualToString:SDK_ID_Sigmob]) {
+        clsName = @"SigmobRewardVideoAdapter";
     }
     return clsName;
 }

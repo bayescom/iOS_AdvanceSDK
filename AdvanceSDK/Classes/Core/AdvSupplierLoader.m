@@ -57,6 +57,8 @@ static NSMutableDictionary *_initializedDict = nil;
         clsName = @"BaiduMobAdSetting";
     } else if ([supplier.identifier isEqualToString:SDK_ID_TANX]){
         clsName = @"TXAdSDKInitializtion";
+    } else if ([supplier.identifier isEqualToString:SDK_ID_Sigmob]){
+        clsName = @"WindAds";
     }
     
     Class clazz = NSClassFromString(clsName);
@@ -166,6 +168,19 @@ static NSMutableDictionary *_initializedDict = nil;
             BOOL res = ((BOOL (*)(id, SEL, NSString *, NSString *))objc_msgSend)(clazz.class, selector, supplier.mediaid, supplier.mediakey);
             ADVLog(@"init TanxSDK %@", res ? @"success" : @"fail");
             completion();
+        }
+        
+    } else if ([supplier.identifier isEqualToString:SDK_ID_Sigmob]) {// SigmobSDK
+        
+        id option = ((id (*)(id, SEL))objc_msgSend)(NSClassFromString(@"WindAdOptions"), NSSelectorFromString(@"alloc"));
+        SEL selector = NSSelectorFromString(@"initWithAppId:appKey:");
+        if ([option respondsToSelector:selector]) {
+            id optionInstance =  ((id (*)(id, SEL, NSString *, NSString *))objc_msgSend)(option, selector, supplier.mediaid, supplier.mediakey);
+            SEL startSelector = NSSelectorFromString(@"startWithOptions:");
+            if ([clazz.class respondsToSelector:startSelector]) {
+                ((void (*)(id, SEL, id))objc_msgSend)(clazz.class, startSelector, optionInstance);
+                completion();
+            }
         }
     }
     

@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
     
     s.name             = 'AdvanceSDK'
-    s.version          = '5.1.3'
+    s.version          = '5.1.4'
     s.license          = { :type => 'MIT', :file => 'LICENSE' }
     s.summary          = 'bayescom iOS AdvanceSDK'
     s.description      = <<-DESC
@@ -77,6 +77,12 @@ Pod::Spec.new do |s|
         tanx.dependency 'AdvanceSDK/AdSpot'
         tanx.dependency 'TanxSDK'
         tanx.source_files =  'AdvanceSDK/Classes/Adapters/TANX/**/*.{h,m}'
+    end
+    
+    s.subspec 'SigmobAdapter' do |sigmob|
+        sigmob.dependency 'AdvanceSDK/AdSpot'
+        sigmob.dependency 'SigmobAd-iOS'
+        sigmob.source_files =  'AdvanceSDK/Classes/Adapters/Sigmob/**/*.{h,m}'
     end
     
 #    s.subspec 'GroMoreBidding' do |bidding|

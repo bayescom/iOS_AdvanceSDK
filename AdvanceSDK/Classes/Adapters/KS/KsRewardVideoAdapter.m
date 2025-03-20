@@ -8,7 +8,6 @@
 #import "KsRewardVideoAdapter.h"
 #import <KSAdSDK/KSAdSDK.h>
 #import "AdvanceRewardVideo.h"
-#import "UIApplication+Adv.h"
 #import "AdvLog.h"
 #import "AdvanceAdapter.h"
 

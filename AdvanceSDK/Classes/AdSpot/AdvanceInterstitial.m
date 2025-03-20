@@ -128,6 +128,8 @@
         clsName = @"BdInterstitialAdapter";
     } else if ([supplierId isEqualToString:SDK_ID_TANX]) {
         clsName = @"TanxInterstitialAdapter";
+    } else if ([supplierId isEqualToString:SDK_ID_Sigmob]) {
+        clsName = @"SigmobInterstitialAdapter";
     }
     return clsName;
 }

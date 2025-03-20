@@ -8,10 +8,7 @@
 #import "BdSplashAdapter.h"
 #import <BaiduMobAdSDK/BaiduMobAdSplash.h>
 #import "AdvanceSplash.h"
-#import "UIApplication+Adv.h"
 #import "AdvLog.h"
-#import <objc/runtime.h>
-#import <objc/message.h>
 #import "AdvanceAdapter.h"
 
 @interface BdSplashAdapter ()<BaiduMobAdSplashDelegate, AdvanceAdapter>

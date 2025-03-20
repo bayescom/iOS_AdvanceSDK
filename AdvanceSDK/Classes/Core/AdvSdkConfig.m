@@ -15,7 +15,7 @@
 @implementation AdvSdkConfig
 
 NSString *const AdvanceSdkAPIVersion = @"3.0";
-NSString *const AdvanceSdkVersion = @"5.1.3";
+NSString *const AdvanceSdkVersion = @"5.1.4";
 NSString *const AdvanceSdkRequestUrl = @"http://cruiser.bayescom.cn/eleven";
 NSString *const SDK_ID_MERCURY = @"1";
 NSString *const SDK_ID_GDT = @"2";
@@ -23,6 +23,7 @@ NSString *const SDK_ID_CSJ = @"3";
 NSString *const SDK_ID_BAIDU = @"4";
 NSString *const SDK_ID_KS = @"5";
 NSString *const SDK_ID_TANX = @"7";
+NSString *const SDK_ID_Sigmob = @"11";
 
 // MARK: ======================= 广告位类型名称 =======================
 NSString * const AdvSdkTypeAdName = @"ADNAME";

@@ -30,6 +30,10 @@ target 'AdvanceSDK_Example' do
   pod 'AdvanceSDK/TanxAdapter', :path => '../'
   pod 'TanxSDK', '3.6.6'
   
+  #集成SigMobAdapter
+  pod 'AdvanceSDK/SigmobAdapter', :path => '../'
+  pod 'SigmobAd-iOS', '4.17.0'
+  
 
   #Third
   pod 'SDWebImage'

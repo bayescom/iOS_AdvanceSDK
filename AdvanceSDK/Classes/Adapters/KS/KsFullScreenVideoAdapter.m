@@ -13,7 +13,6 @@
 #endif
 
 #import "AdvanceFullScreenVideo.h"
-#import "UIApplication+Adv.h"
 #import "AdvLog.h"
 #import "AdvanceAdapter.h"
 

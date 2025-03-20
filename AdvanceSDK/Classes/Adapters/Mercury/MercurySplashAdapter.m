@@ -16,8 +16,6 @@
 
 #import "AdvanceSplash.h"
 #import "AdvLog.h"
-#import <objc/runtime.h>
-#import <objc/message.h>
 #import <MercurySDK/MercurySDK.h>
 #import "AdvanceAdapter.h"
 
