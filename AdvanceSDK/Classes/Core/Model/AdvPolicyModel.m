@@ -86,6 +86,10 @@ NSString * ADVStringFromNAdvanceSdkSupplierRepoType(AdvanceSdkSupplierRepoType t
 
 @end
 
+@implementation ServerReward
+
+@end
+
 
 @implementation Gmtk
 

@@ -27,6 +27,7 @@
 @property (nonatomic, strong) BUNativeExpressRewardedVideoAd *csj_ad;
 @property (nonatomic, weak) AdvanceRewardVideo *adspot;
 @property (nonatomic, strong) AdvSupplier *supplier;
+@property (nonatomic, strong) ServerReward *serverReward;
 
 @end
 
@@ -35,12 +36,18 @@
 @synthesize isWinnerAdapter = _isWinnerAdapter;
 @synthesize isVideoCached = _isVideoCached;
 
-- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(id)adspot {
+- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(AdvanceRewardVideo *)adspot serverReward:(ServerReward *)serverReward {
     if (self = [super init]) {
         _adspot = adspot;
         _supplier = supplier;
+        _serverReward = serverReward;
         BURewardedVideoModel *model = [[BURewardedVideoModel alloc] init];
-        [model setUserId:@"playable"];
+        if (adspot.rewardedVideoModel || serverReward) {
+            model.userId = adspot.rewardedVideoModel.userId;
+            model.extra = adspot.rewardedVideoModel.extra;
+            model.rewardAmount = adspot.rewardedVideoModel.rewardAmount ?: serverReward.count;
+            model.rewardName = adspot.rewardedVideoModel.rewardName ?: serverReward.name;
+        }
         _csj_ad = [[BUNativeExpressRewardedVideoAd alloc] initWithSlotID:_supplier.adspotid rewardedVideoModel:model];
         _csj_ad.delegate = self;
     }
@@ -128,18 +135,16 @@
     }
 }
 
+/// 视频广告视频播放完成
 - (void)nativeExpressRewardedVideoAdDidPlayFinish:(BUNativeExpressRewardedVideoAd *)rewardedVideoAd didFailWithError:(NSError *)error {
-    /// 视频广告视频播放完成
     if ([self.delegate respondsToSelector:@selector(rewardedVideoDidEndPlayingForSpotId:extra:)]) {
         [self.delegate rewardedVideoDidEndPlayingForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
 }
 
+/// 视频广告播放达到激励条件回调
 - (void)nativeExpressRewardedVideoAdServerRewardDidSucceed:(BUNativeExpressRewardedVideoAd *)rewardedVideoAd verify:(BOOL)verify {
-    /// 视频广告播放达到激励条件回调
-    if ([self.delegate respondsToSelector:@selector(rewardedVideoDidRewardSuccessForSpotId:extra:rewarded:)]) {
-        [self.delegate rewardedVideoDidRewardSuccessForSpotId:self.adspot.adspotid extra:self.adspot.ext rewarded:verify];
-    }
+    [self.adspot.manager verifyRewardVideo:self.adspot.rewardedVideoModel supplier:self.supplier placementId:self.adspot.adspotid extra:self.adspot.ext delegate:self.delegate];
 }
 
 @end

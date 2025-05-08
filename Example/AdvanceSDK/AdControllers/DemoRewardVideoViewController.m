@@ -8,6 +8,7 @@
 
 #import "DemoRewardVideoViewController.h"
 #import <AdvanceSDK/AdvanceRewardVideo.h>
+#import <AdvanceSDK/AdvRewardedVideoModel.h>
 
 @interface DemoRewardVideoViewController () <AdvanceRewardedVideoDelegate>
 @property (nonatomic, strong) AdvanceRewardVideo *advanceRewardVideo;
@@ -42,10 +43,21 @@
 - (void)loadAdBtn1Action {
     if (![self checkAdspotId]) { return; }
 
+    // 初始化
     self.advanceRewardVideo = [[AdvanceRewardVideo alloc] initWithAdspotId:self.adspotId
                                                                  customExt:self.ext
                                                             viewController:self];
-    self.advanceRewardVideo.delegate=self;
+    self.advanceRewardVideo.delegate = self;
+    
+    // 奖励设置（可选）
+    AdvRewardedVideoModel *model = [[AdvRewardedVideoModel alloc] init];
+    model.userId = @"123456";
+    model.rewardAmount = 100;
+    model.rewardName = @"福利";
+//    model.extra = @{@"key1" : @"value1"}.modelToJSONString; // 透传参数
+    self.advanceRewardVideo.rewardedVideoModel = model;
+
+    // 加载广告
     [self.advanceRewardVideo loadAd];
 }
 
@@ -92,8 +104,13 @@
 }
 
 /// 激励视频到达激励时间
-- (void)rewardedVideoDidRewardSuccessForSpotId:(NSString *)spotId extra:(NSDictionary *)extra rewarded:(BOOL)rewarded {
-    NSLog(@"到达激励时间 %s %d", __func__, rewarded);
+- (void)rewardedVideoDidRewardSuccessForSpotId:(NSString *)spotId extra:(NSDictionary *)extra rewardInfo:(AdvRewardCallbackInfo *)rewardInfo {
+    NSLog(@"到达激励时间 %s %@", __func__, rewardInfo);
+}
+
+/// 服务端验证激励失败
+- (void)rewardedVideoServerRewardDidFailForSpotId:(NSString *)spotId extra:(NSDictionary *)extra error:(NSError *)error {
+    NSLog(@"服务端验证激励失败 %s %@", __func__, error);
 }
 
 /// 激励视频播放完成

@@ -9,32 +9,27 @@
 
 @interface AdvError ()
 @property (nonatomic, assign) AdvErrorCode code;
-@property (nonatomic, copy) NSString *desc;
-@property (nonatomic, strong) id obj;
+@property (nonatomic, copy) NSString *message;
 
 @end
 
 @implementation AdvError
 
 + (instancetype)errorWithCode:(AdvErrorCode)code {
-    return [self errorWithCode:code obj:@""];
+    return [self errorWithCode:code message:[AdvError errorCodeDescMap:code]];
 }
 
-+ (instancetype)errorWithCode:(AdvErrorCode)code obj:(id)obj {
++ (instancetype)errorWithCode:(NSInteger)code message:(NSString *)message {
     AdvError *advErr = [[AdvError alloc] init];
     advErr.code = code;
-    advErr.desc = [AdvError errorCodeDescMap:code];
-    advErr.obj = obj;
+    advErr.message = message;
     return advErr;
 }
 
 - (NSError *)toNSError {
-    if (self.obj == nil) { self.obj = @""; }
-    if (self.desc == nil) { self.desc = @""; }
-    NSError *error = [NSError errorWithDomain:@"com.Advance.Error" code:self.code userInfo:@{
-        @"desc": self.desc,
-        @"obj": self.obj,
-    }];
+    NSError *error = [NSError errorWithDomain:@"com.Advance.Error"
+                                         code:self.code
+                                     userInfo:@{NSLocalizedDescriptionKey:self.message ?: @""}];
     return error;
 }
 

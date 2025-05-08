@@ -12,6 +12,11 @@
 #import "AdvLog.h"
 #import "AdvSupplierLoader.h"
 
+@interface AdvanceRewardVideo ()
+@property (nonatomic, strong)ServerReward *serverReward;
+
+@end
+
 @implementation AdvanceRewardVideo
 
 - (instancetype)initWithAdspotId:(NSString *)adspotid
@@ -32,6 +37,7 @@
 // MARK: ======================= AdvPolicyServiceDelegate =======================
 /// 加载策略Model成功
 - (void)advPolicyServiceLoadSuccessWithModel:(nonnull AdvPolicyModel *)model {
+    self.serverReward = model.server_reward;
     if ([_delegate respondsToSelector:@selector(didFinishLoadingADPolicyWithSpotId:)]) {
         [_delegate didFinishLoadingADPolicyWithSpotId:self.adspotid];
     }
@@ -104,7 +110,7 @@
         
         // 根据渠道id初始化对应Adapter
         NSString *clsName = [self mappingClassNameWithSupplierId:supplier.identifier];
-        id adapter = ((id (*)(id, SEL, id, id))objc_msgSend)((id)[NSClassFromString(clsName) alloc], NSSelectorFromString(@"initWithSupplier:adspot:"), supplier, self);
+        id adapter = ((id (*)(id, SEL, id, id, id))objc_msgSend)((id)[NSClassFromString(clsName) alloc], NSSelectorFromString(@"initWithSupplier:adspot:serverReward:"), supplier, self, self.serverReward);
         ((void (*)(id, SEL, id))objc_msgSend)((id)adapter, NSSelectorFromString(@"setDelegate:"), self.delegate);
         ((void (*)(id, SEL))objc_msgSend)((id)adapter, NSSelectorFromString(@"loadAd"));
         if (adapter) {

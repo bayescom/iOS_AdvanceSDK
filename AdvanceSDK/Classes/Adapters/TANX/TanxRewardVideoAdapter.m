@@ -16,6 +16,7 @@
 @property (nonatomic, weak) AdvanceRewardVideo *adspot;
 @property (nonatomic, strong) AdvSupplier *supplier;
 @property (nonatomic, strong) TXAdModel *adModel;
+@property (nonatomic, strong) ServerReward *serverReward;
 
 @end
 
@@ -24,13 +25,17 @@
 @synthesize isWinnerAdapter = _isWinnerAdapter;
 @synthesize isVideoCached = _isVideoCached;
 
-- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(id)adspot {
+- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(AdvanceRewardVideo *)adspot serverReward:(ServerReward *)serverReward {
     if (self = [super init]) {
         _adspot = adspot;
         _supplier = supplier;
+        _serverReward = serverReward;
         TXAdRewardVideoSlotModel *slotModel = [[TXAdRewardVideoSlotModel alloc] init];
         slotModel.defaultAudioState = (_adspot.muted ? TXAdRewardVideoAdDefaultAudioStateMuted : TXAdRewardVideoAdDefaultAudioStateVocal);
         slotModel.pid = _supplier.adspotid;
+        if (adspot.rewardedVideoModel || serverReward) {
+            slotModel.mediaUid = adspot.rewardedVideoModel.userId;
+        }
         _tanx_ad = [[TXAdRewardManager alloc] initWithSlotModel:slotModel];
         _tanx_ad.delegate = self;
     }
@@ -114,13 +119,11 @@
 }
 
 - (void)onAdDidReceiveRewardInfo:(TXAdRewardVideoRewardInfo *)rewardInfo withModel:(TXAdModel *)model {
-    if (rewardInfo.isValid && [self.delegate respondsToSelector:@selector(rewardedVideoDidRewardSuccessForSpotId:extra:rewarded:)]) {
-        [self.delegate rewardedVideoDidRewardSuccessForSpotId:self.adspot.adspotid extra:self.adspot.ext rewarded:YES];
-    }
+    [self.adspot.manager verifyRewardVideo:self.adspot.rewardedVideoModel supplier:self.supplier placementId:self.adspot.adspotid extra:self.adspot.ext delegate:self.delegate];
 }
 
-- (void)onAdDidFinishPlayingError:(NSError *)error withModel:(TXAdModel *)model {
-    if (!error && [self.delegate respondsToSelector:@selector(rewardedVideoDidEndPlayingForSpotId:extra:)]) {
+- (void)onAdDidPlayFinish:(TXAdModel *)model {
+    if ([self.delegate respondsToSelector:@selector(rewardedVideoDidEndPlayingForSpotId:extra:)]) {
         [self.delegate rewardedVideoDidEndPlayingForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
 }

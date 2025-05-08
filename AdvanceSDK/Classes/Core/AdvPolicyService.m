@@ -15,6 +15,7 @@
 #import <objc/runtime.h>
 #import <objc/message.h>
 #import "NSArray+Adv.h"
+#import "NSString+Adv.h"
 
 @interface AdvPolicyService ()
 
@@ -340,7 +341,7 @@
     // Error
     if (error) {
         if ([_delegate respondsToSelector:@selector(advPolicyServiceLoadFailedWithError:)]) {
-            [_delegate advPolicyServiceLoadFailedWithError:[AdvError errorWithCode:AdvErrorCode_101 obj:error].toNSError];
+            [_delegate advPolicyServiceLoadFailedWithError:error];
         }
         return;
     }
@@ -348,7 +349,7 @@
     // No Result
     if (!data) {
         if ([_delegate respondsToSelector:@selector(advPolicyServiceLoadFailedWithError:)]) {
-            [_delegate advPolicyServiceLoadFailedWithError:[AdvError errorWithCode:AdvErrorCode_102 obj:error].toNSError];
+            [_delegate advPolicyServiceLoadFailedWithError:[AdvError errorWithCode:AdvErrorCode_102].toNSError];
         }
         return;
     }
@@ -366,7 +367,7 @@
     // Code not 200
     if (a_model.code != 200) {
         if ([_delegate respondsToSelector:@selector(advPolicyServiceLoadFailedWithError:)]) {
-            [_delegate advPolicyServiceLoadFailedWithError:[AdvError errorWithCode:AdvErrorCode_104 obj:error].toNSError];
+            [_delegate advPolicyServiceLoadFailedWithError:[AdvError errorWithCode:AdvErrorCode_104].toNSError];
         }
         return;
     }
@@ -426,6 +427,75 @@
     NSString *key = [NSString stringWithFormat:@"sdkname:%@-id:%@",supplier.name, supplier.identifier];
     [_errorInfo setObject:error forKey:key];
 }
+
+#pragma mark: - server rewarded
+- (void)verifyServerSideReward:(NSDictionary *)parameters completion:(void(^)(NSError *error))completion {
+    NSError *error = nil;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:parameters options:NSJSONWritingPrettyPrinted error:&error];
+    NSURL *url = [NSURL URLWithString: self.model.server_reward.url];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:3.f];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    request.HTTPBody = jsonData;
+    request.HTTPMethod = @"POST";
+    
+    NSURLSession *sharedSession = [NSURLSession sharedSession];
+    NSURLSessionDataTask *dataTask = [sharedSession dataTaskWithRequest:request
+                                                      completionHandler:^(NSData *_Nullable data, NSURLResponse *_Nullable response, NSError *_Nullable error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (error) {
+                return completion(error);
+            }
+            NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+            if ([dict[@"code"] intValue] == 1) { // 成功
+                completion(nil);
+            } else { // 失败
+                completion([AdvError errorWithCode:[dict[@"code"] intValue] message:dict[@"msg"]].toNSError);
+            }
+        });
+        
+    }];
+    [dataTask resume];
+}
+
+- (void)verifyRewardVideo:(AdvRewardedVideoModel *)rewardedVideoModel
+                 supplier:(AdvSupplier *)supplier
+              placementId:(NSString *)placementId
+                    extra:(NSDictionary *)extra
+                 delegate:(id<AdvanceRewardedVideoDelegate>)delegate {
+    NSInteger rewardAmount = rewardedVideoModel.rewardAmount ?: self.model.server_reward.count;
+    NSString *rewardName = rewardedVideoModel.rewardName ?: self.model.server_reward.name;
+    AdvRewardCallbackInfo *rewardInfo = [[AdvRewardCallbackInfo alloc] initWithSourceId:supplier.identifier rewardName:rewardName rewardAmount:rewardAmount];
+    
+    if (self.model.server_reward.count) { // 服务端回调验证
+        NSDictionary *param = @{
+            @"timestamp": @((long)[[NSDate date] timeIntervalSince1970] * 1000),
+            @"user_id": [NSString adv_validString:rewardedVideoModel.userId],
+            @"extra": [NSString adv_validString:rewardedVideoModel.extra],
+            @"reward_amount": @(rewardAmount),
+            @"reward_name": [NSString adv_validString:rewardName],
+            @"trans_id": self.model.reqid,
+            @"placement_id": [NSString adv_validString:placementId],
+            @"adn_channel_id": [NSString adv_validString:supplier.identifier],
+            @"adn_adspot_id": [NSString adv_validString:supplier.adspotid],
+        };
+        [self verifyServerSideReward:param completion:^(NSError * _Nonnull error) {
+            if (!error) {
+                if ([delegate respondsToSelector:@selector(rewardedVideoDidRewardSuccessForSpotId:extra:rewardInfo:)]) {
+                    [delegate rewardedVideoDidRewardSuccessForSpotId:placementId extra:extra rewardInfo:rewardInfo];
+                }
+            } else {
+                if ([delegate respondsToSelector:@selector(rewardedVideoServerRewardDidFailForSpotId:extra:error:)]) {
+                    [delegate rewardedVideoServerRewardDidFailForSpotId:placementId extra:extra error:error];
+                }
+            }
+        }];
+    } else { // 客户端回调
+        if ([delegate respondsToSelector:@selector(rewardedVideoDidRewardSuccessForSpotId:extra:rewardInfo:)]) {
+            [delegate rewardedVideoDidRewardSuccessForSpotId:placementId extra:extra rewardInfo:rewardInfo];
+        }
+    }
+}
+
 
 #pragma mark: - for GroMore
 - (void)reportGroMoreEventWithType:(AdvanceSdkSupplierRepoType)repoType groMore:(Gro_more *)groMore error:(nullable NSError *)error {

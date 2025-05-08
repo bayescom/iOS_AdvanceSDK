@@ -10,22 +10,29 @@
 #import "AdvanceRewardVideo.h"
 #import "AdvLog.h"
 #import "AdvanceAdapter.h"
+#import "NSString+Adv.h"
 
 @interface SigmobRewardVideoAdapter () <WindRewardVideoAdDelegate, AdvanceAdapter>
 @property (nonatomic, strong) WindRewardVideoAd *sigmob_ad;
 @property (nonatomic, weak) AdvanceRewardVideo *adspot;
 @property (nonatomic, strong) AdvSupplier *supplier;
+@property (nonatomic, strong) ServerReward *serverReward;
 
 @end
 
 @implementation SigmobRewardVideoAdapter
 
-- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(id)adspot {
+- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(AdvanceRewardVideo *)adspot serverReward:(ServerReward *)serverReward {
     if (self = [super init]) {
         _adspot = adspot;
         _supplier = supplier;
+        _serverReward = serverReward;
         WindAdRequest *request = [WindAdRequest request];
         request.placementId = _supplier.adspotid;
+        if (adspot.rewardedVideoModel || serverReward) {
+            request.userId = adspot.rewardedVideoModel.userId;
+            request.options = [NSString adv_dictionaryWithJsonString:adspot.rewardedVideoModel.extra];
+        }
         _sigmob_ad = [[WindRewardVideoAd alloc] initWithRequest:request];
         _sigmob_ad.delegate = self;
     }
@@ -94,9 +101,7 @@
 
 /// 广告获得激励时回调
 - (void)rewardVideoAd:(WindRewardVideoAd *)rewardVideoAd reward:(WindRewardInfo *)reward {
-    if ([self.delegate respondsToSelector:@selector(rewardedVideoDidRewardSuccessForSpotId:extra:rewarded:)]) {
-        [self.delegate rewardedVideoDidRewardSuccessForSpotId:self.adspot.adspotid extra:self.adspot.ext rewarded:YES];
-    }
+    [self.adspot.manager verifyRewardVideo:self.adspot.rewardedVideoModel supplier:self.supplier placementId:self.adspot.adspotid extra:self.adspot.ext delegate:self.delegate];
 }
 
 /// 广告视频播放完成或者视频播放出错

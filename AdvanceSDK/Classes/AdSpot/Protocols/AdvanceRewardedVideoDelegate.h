@@ -9,6 +9,7 @@
 #define AdvanceRewardedVideoDelegate_h
 
 #import "AdvanceAdLoadingDelegate.h"
+#import "AdvRewardCallbackInfo.h"
 
 @protocol AdvanceRewardedVideoDelegate <AdvanceAdLoadingDelegate>
 
@@ -40,7 +41,13 @@
 /// Rewarded video ad reward distribution
 - (void)rewardedVideoDidRewardSuccessForSpotId:(NSString *)spotId
                                          extra:(NSDictionary *)extra
-                                      rewarded:(BOOL)rewarded;
+                                    rewardInfo:(AdvRewardCallbackInfo *)rewardInfo;
+
+/// Rewarded video ad server reward failed
+- (void)rewardedVideoServerRewardDidFailForSpotId:(NSString *)spotId
+                                           extra:(NSDictionary *)extra
+                                           error:(NSError *)error;
+
 
 @end
 

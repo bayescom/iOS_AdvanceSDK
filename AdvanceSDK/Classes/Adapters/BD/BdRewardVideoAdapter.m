@@ -15,6 +15,7 @@
 @property (nonatomic, strong) BaiduMobAdRewardVideo *bd_ad;
 @property (nonatomic, weak) AdvanceRewardVideo *adspot;
 @property (nonatomic, strong) AdvSupplier *supplier;
+@property (nonatomic, strong) ServerReward *serverReward;
 
 @end
 
@@ -23,14 +24,19 @@
 @synthesize isWinnerAdapter = _isWinnerAdapter;
 @synthesize isVideoCached = _isVideoCached;
 
-- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(id)adspot {
+- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(AdvanceRewardVideo *)adspot serverReward:(ServerReward *)serverReward {
     if (self = [super init]) {
         _adspot = adspot;
         _supplier = supplier;
+        _serverReward = serverReward;
         _bd_ad = [[BaiduMobAdRewardVideo alloc] init];
         _bd_ad.delegate = self;
-        _bd_ad.AdUnitTag = _supplier.adspotid;
+        _bd_ad.adUnitTag = _supplier.adspotid;
         _bd_ad.publisherId = _supplier.mediaid;
+        if (adspot.rewardedVideoModel || serverReward) {
+            _bd_ad.userID = adspot.rewardedVideoModel.userId;
+            _bd_ad.extraInfo = adspot.rewardedVideoModel.extra;
+        }
     }
     return self;
 }
@@ -121,14 +127,10 @@
 }
 
 - (void)rewardedVideoAdDidSkip:(BaiduMobAdRewardVideo *)video withPlayingProgress:(CGFloat)progress {
-//    NSLog(@"激励视频点击跳过, progress:%f", progress);
 }
 
 - (void)rewardedVideoAdRewardDidSuccess:(BaiduMobAdRewardVideo *)video verify:(BOOL)verify {
-    //    NSLog(@"激励成功回调, progress:%f", progress);
-    if ([self.delegate respondsToSelector:@selector(rewardedVideoDidRewardSuccessForSpotId:extra:rewarded:)]) {
-        [self.delegate rewardedVideoDidRewardSuccessForSpotId:self.adspot.adspotid extra:self.adspot.ext rewarded:verify];
-    }
+    [self.adspot.manager verifyRewardVideo:self.adspot.rewardedVideoModel supplier:self.supplier placementId:self.adspot.adspotid extra:self.adspot.ext delegate:self.delegate];
 }
 
 

@@ -13,6 +13,7 @@
 @class Gro_more;
 @class Gmtk;
 @class Gromore_params;
+@class ServerReward;
 
 typedef NS_ENUM(NSUInteger, AdvanceSdkSupplierRepoType) {
     /// 广告加载上报
@@ -51,6 +52,7 @@ NSString * ADVStringFromNAdvanceSdkSupplierRepoType(AdvanceSdkSupplierRepoType t
 
 @interface AdvPolicyModel : NSObject
 @property (nonatomic, strong) Gro_more  *gro_more;
+@property (nonatomic, strong) ServerReward *server_reward;
 @property (nonatomic, strong) AdvSetting *setting;
 @property (nonatomic, strong) NSMutableArray<AdvSupplier *> *suppliers;
 @property (nonatomic, copy) NSString *msg;
@@ -108,6 +110,17 @@ NSString * ADVStringFromNAdvanceSdkSupplierRepoType(AdvanceSdkSupplierRepoType t
 @property (nonatomic, strong) NSMutableArray<NSMutableArray<NSNumber *> *> *parallelGroup;
 /// 需要进行headbidding的渠道SDK （存放is_head_bidding = 1 的 suppliers）
 @property (nonatomic, strong) NSMutableArray<NSNumber *> *headBiddingGroup;
+
+@end
+
+// 服务端激励验证对象
+@interface ServerReward : NSObject
+/// 当达成激励时，聚合SDK调用此链接询问服务端验证结果
+@property (nonatomic, copy) NSString *url;
+/// 奖励发放的内容名称，用来透传
+@property (nonatomic, copy) NSString *name;
+/// 奖励发放的数量，用来透传
+@property (nonatomic, assign) NSInteger count;
 
 @end
 

@@ -23,7 +23,10 @@ typedef NS_ENUM(NSUInteger, AdvErrorCode) {
 
 + (instancetype)errorWithCode:(AdvErrorCode)code;
 
-+ (instancetype)errorWithCode:(AdvErrorCode)code obj:(id)obj;
+/// @param code 错误码
+/// @param message 当 code 不在本地错误表中，则自定义错误信息
++ (instancetype)errorWithCode:(NSInteger)code
+                      message:(NSString *)message;
 
 - (NSError *)toNSError;
 

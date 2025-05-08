@@ -154,12 +154,12 @@ static NSMutableDictionary *_initializedDict = nil;
         
     } else if ([supplier.identifier isEqualToString:SDK_ID_BAIDU]) {// 百度SDK
         
-        id bdInstance = ((id (*)(id, SEL))objc_msgSend)(clazz, NSSelectorFromString(@"sharedInstance"));
+        id bdInstance = ((id (*)(id, SEL))objc_msgSend)(clazz.class, NSSelectorFromString(@"sharedInstance"));
         SEL selector = NSSelectorFromString(@"setSupportHttps:");
         if ([bdInstance respondsToSelector:selector]) {
             ((void (*)(id, SEL, BOOL))objc_msgSend)(bdInstance, selector, NO);
-            completion();
         }
+        completion();
         
     } else if ([supplier.identifier isEqualToString:SDK_ID_TANX]) {// TanxSDK
         

@@ -20,6 +20,7 @@
 @property (nonatomic, strong) MercuryRewardVideoAd *mercury_ad;
 @property (nonatomic, weak) AdvanceRewardVideo *adspot;
 @property (nonatomic, strong) AdvSupplier *supplier;
+@property (nonatomic, strong) ServerReward *serverReward;
 
 @end
 
@@ -28,11 +29,20 @@
 @synthesize isWinnerAdapter = _isWinnerAdapter;
 @synthesize isVideoCached = _isVideoCached;
 
-- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(id)adspot {
+- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(AdvanceRewardVideo *)adspot serverReward:(ServerReward *)serverReward {
     if (self = [super init]) {
         _adspot = adspot;
         _supplier = supplier;
+        _serverReward = serverReward;
         _mercury_ad = [[MercuryRewardVideoAd alloc] initAdWithAdspotId:_supplier.adspotid delegate:self];
+        if (adspot.rewardedVideoModel || serverReward) {
+            MercuryRewardedVideoModel *model = [[MercuryRewardedVideoModel alloc] init];
+            model.userId = adspot.rewardedVideoModel.userId;
+            model.extra = adspot.rewardedVideoModel.extra;
+            model.rewardAmount = adspot.rewardedVideoModel.rewardAmount ?: serverReward.count;
+            model.rewardName = adspot.rewardedVideoModel.rewardName ?: serverReward.name;
+            _mercury_ad.rewardedVideoModel = model;
+        }
     }
     return self;
 }
@@ -111,9 +121,7 @@
 
 /// 视频广告播放达到激励条件回调
 - (void)mercury_rewardVideoAdDidRewardEffective:(MercuryRewardVideoAd *)rewardVideoAd {
-    if ([self.delegate respondsToSelector:@selector(rewardedVideoDidRewardSuccessForSpotId:extra:rewarded:)]) {
-        [self.delegate rewardedVideoDidRewardSuccessForSpotId:self.adspot.adspotid extra:self.adspot.ext rewarded:YES];
-    }
+    [self.adspot.manager verifyRewardVideo:self.adspot.rewardedVideoModel supplier:self.supplier placementId:self.adspot.adspotid extra:self.adspot.ext delegate:self.delegate];
 }
 
 /// 视频广告视频播放完成

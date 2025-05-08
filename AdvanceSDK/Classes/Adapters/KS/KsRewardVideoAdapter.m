@@ -15,6 +15,7 @@
 @property (nonatomic, strong) KSRewardedVideoAd *ks_ad;
 @property (nonatomic, weak) AdvanceRewardVideo *adspot;
 @property (nonatomic, strong) AdvSupplier *supplier;
+@property (nonatomic, strong) ServerReward *serverReward;
 
 @end
 
@@ -23,15 +24,24 @@
 @synthesize isWinnerAdapter = _isWinnerAdapter;
 @synthesize isVideoCached = _isVideoCached;
 
-- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(id)adspot {
+- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(AdvanceRewardVideo *)adspot serverReward:(ServerReward *)serverReward {
     if (self = [super init]) {
         _adspot = adspot;
         _supplier = supplier;
+        _serverReward = serverReward;
         KSRewardedVideoModel *model = [KSRewardedVideoModel new];
         _ks_ad = [[KSRewardedVideoAd alloc] initWithPosId:supplier.adspotid rewardedVideoModel:model];
         _ks_ad.showDirection = KSAdShowDirection_Vertical;
         _ks_ad.shouldMuted = _adspot.muted;
         _ks_ad.delegate = self;
+        if (adspot.rewardedVideoModel || serverReward) {
+            KSRewardedVideoModel *model = [[KSRewardedVideoModel alloc] init];
+            model.userId = adspot.rewardedVideoModel.userId;
+            model.extra = adspot.rewardedVideoModel.extra;
+            model.amount = adspot.rewardedVideoModel.rewardAmount ?: serverReward.count;
+            model.name = adspot.rewardedVideoModel.rewardName ?: serverReward.name;
+            _ks_ad.rewardedVideoModel = model;
+        }
     }
     return self;
 }
@@ -152,9 +162,7 @@
  This method is called when the user is rewarded.
  */
 - (void)rewardedVideoAd:(KSRewardedVideoAd *)rewardedVideoAd hasReward:(BOOL)hasReward {
-    if ([self.delegate respondsToSelector:@selector(rewardedVideoDidRewardSuccessForSpotId:extra:rewarded:)]) {
-        [self.delegate rewardedVideoDidRewardSuccessForSpotId:self.adspot.adspotid extra:self.adspot.ext rewarded:hasReward];
-    }
+    [self.adspot.manager verifyRewardVideo:self.adspot.rewardedVideoModel supplier:self.supplier placementId:self.adspot.adspotid extra:self.adspot.ext delegate:self.delegate];
 }
 
 

@@ -15,7 +15,7 @@
 @implementation AdvSdkConfig
 
 NSString *const AdvanceSdkAPIVersion = @"3.0";
-NSString *const AdvanceSdkVersion = @"5.1.4";
+NSString *const AdvanceSdkVersion = @"5.1.5";
 NSString *const AdvanceSdkRequestUrl = @"http://cruiser.bayescom.cn/eleven";
 NSString *const SDK_ID_MERCURY = @"1";
 NSString *const SDK_ID_GDT = @"2";

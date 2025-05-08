@@ -8,6 +8,8 @@
 #import <Foundation/Foundation.h>
 #import "AdvPolicyModel.h"
 #import "AdvPolicyServiceDelegate.h"
+#import "AdvRewardedVideoModel.h"
+#import "AdvanceRewardedVideoDelegate.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -47,6 +49,15 @@ NS_ASSUME_NONNULL_BEGIN
 /// 数据上报
 /// @param repoType 上报的类型
 - (void)reportEventWithType:(AdvanceSdkSupplierRepoType)repoType supplier:(AdvSupplier *)supplier error:(nullable NSError *)error;
+
+/// 验证激励视频奖励
+- (void)verifyRewardVideo:(AdvRewardedVideoModel *)rewardedVideoModel
+                 supplier:(AdvSupplier *)supplier
+              placementId:(NSString *)placementId
+                    extra:(NSDictionary *)extra
+                 delegate:(id<AdvanceRewardedVideoDelegate>)delegate;
+
+
 
 /// gromore bidding时获取Advance广告位的竞胜渠道
 - (void)catchBidTargetWhenGroMoreBiddingWithPolicyModel:(nullable AdvPolicyModel *)model;

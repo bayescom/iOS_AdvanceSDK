@@ -16,6 +16,7 @@
 @property (nonatomic, strong) GDTRewardVideoAd *gdt_ad;
 @property (nonatomic, weak) AdvanceRewardVideo *adspot;
 @property (nonatomic, strong) AdvSupplier *supplier;
+@property (nonatomic, strong) ServerReward *serverReward;
 
 @end
 
@@ -24,11 +25,18 @@
 @synthesize isWinnerAdapter = _isWinnerAdapter;
 @synthesize isVideoCached = _isVideoCached;
 
-- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(id)adspot {
+- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(AdvanceRewardVideo *)adspot serverReward:(ServerReward *)serverReward {
     if (self = [super init]) {
         _adspot = adspot;
         _supplier = supplier;
+        _serverReward = serverReward;
         _gdt_ad = [[GDTRewardVideoAd alloc] initWithPlacementId:_supplier.adspotid];
+        if (adspot.rewardedVideoModel || serverReward) {
+            GDTServerSideVerificationOptions *model = [[GDTServerSideVerificationOptions alloc] init];
+            model.userIdentifier = adspot.rewardedVideoModel.userId;
+            model.customRewardString = adspot.rewardedVideoModel.extra;
+            _gdt_ad.serverSideVerificationOptions = model;
+        }
         _gdt_ad.videoMuted = _adspot.muted;
         _gdt_ad.delegate = self;
     }
@@ -110,9 +118,7 @@
 
 /// 视频广告播放达到激励条件回调
 - (void)gdt_rewardVideoAdDidRewardEffective:(GDTRewardVideoAd *)rewardedVideoAd info:(NSDictionary *)info {
-    if ([self.delegate respondsToSelector:@selector(rewardedVideoDidRewardSuccessForSpotId:extra:rewarded:)]) {
-        [self.delegate rewardedVideoDidRewardSuccessForSpotId:self.adspot.adspotid extra:self.adspot.ext rewarded:YES];
-    }
+    [self.adspot.manager verifyRewardVideo:self.adspot.rewardedVideoModel supplier:self.supplier placementId:self.adspot.adspotid extra:self.adspot.ext delegate:self.delegate];
 
 }
 
