@@ -63,7 +63,7 @@
 }
 
 - (void)showAd {
-    [self.tanx_ad showAdFromRootViewController:self.adspot.viewController withModel:self.adModel];
+    [self.tanx_ad showAdFromRootViewController:self.adspot.viewController withModel:self.adModel openType:TXAdViewOpenTypePresent];
 }
 
 - (void)winnerAdapterToShowAd {
