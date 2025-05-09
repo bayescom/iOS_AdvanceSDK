@@ -9,7 +9,8 @@
 #import "AdvPolicyModel.h"
 #import "AdvPolicyServiceDelegate.h"
 #import "AdvRewardedVideoModel.h"
-#import "AdvanceRewardedVideoDelegate.h"
+#import "AdvRewardCallbackInfo.h"
+
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -55,7 +56,7 @@ NS_ASSUME_NONNULL_BEGIN
                  supplier:(AdvSupplier *)supplier
               placementId:(NSString *)placementId
                     extra:(NSDictionary *)extra
-                 delegate:(id<AdvanceRewardedVideoDelegate>)delegate;
+                 delegate:(id)delegate;
 
 
 

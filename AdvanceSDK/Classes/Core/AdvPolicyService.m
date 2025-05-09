@@ -461,7 +461,7 @@
                  supplier:(AdvSupplier *)supplier
               placementId:(NSString *)placementId
                     extra:(NSDictionary *)extra
-                 delegate:(id<AdvanceRewardedVideoDelegate>)delegate {
+                 delegate:(id)delegate {
     NSInteger rewardAmount = rewardedVideoModel.rewardAmount ?: self.model.server_reward.count;
     NSString *rewardName = rewardedVideoModel.rewardName ?: self.model.server_reward.name;
     AdvRewardCallbackInfo *rewardInfo = [[AdvRewardCallbackInfo alloc] initWithSourceId:supplier.identifier rewardName:rewardName rewardAmount:rewardAmount];
@@ -480,18 +480,21 @@
         };
         [self verifyServerSideReward:param completion:^(NSError * _Nonnull error) {
             if (!error) {
-                if ([delegate respondsToSelector:@selector(rewardedVideoDidRewardSuccessForSpotId:extra:rewardInfo:)]) {
-                    [delegate rewardedVideoDidRewardSuccessForSpotId:placementId extra:extra rewardInfo:rewardInfo];
+                SEL selector = NSSelectorFromString(@"rewardedVideoDidRewardSuccessForSpotId:extra:rewardInfo:");
+                if ([delegate respondsToSelector:selector]) {
+                    ((void (*)(id, SEL, id, id, id))objc_msgSend)(delegate, selector, placementId, extra, rewardInfo);
                 }
             } else {
-                if ([delegate respondsToSelector:@selector(rewardedVideoServerRewardDidFailForSpotId:extra:error:)]) {
-                    [delegate rewardedVideoServerRewardDidFailForSpotId:placementId extra:extra error:error];
+                SEL selector = NSSelectorFromString(@"rewardedVideoServerRewardDidFailForSpotId:extra:error:");
+                if ([delegate respondsToSelector:selector]) {
+                    ((void (*)(id, SEL, id, id, id))objc_msgSend)(delegate, selector, placementId, extra, error);
                 }
             }
         }];
     } else { // 客户端回调
-        if ([delegate respondsToSelector:@selector(rewardedVideoDidRewardSuccessForSpotId:extra:rewardInfo:)]) {
-            [delegate rewardedVideoDidRewardSuccessForSpotId:placementId extra:extra rewardInfo:rewardInfo];
+        SEL selector = NSSelectorFromString(@"rewardedVideoDidRewardSuccessForSpotId:extra:rewardInfo:");
+        if ([delegate respondsToSelector:selector]) {
+            ((void (*)(id, SEL, id, id, id))objc_msgSend)(delegate, selector, placementId, extra, rewardInfo);
         }
     }
 }
