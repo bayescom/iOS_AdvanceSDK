@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
     
     s.name             = 'AdvanceSDK'
-    s.version          = '5.1.5'
+    s.version          = '5.1.4'
     s.license          = { :type => 'MIT', :file => 'LICENSE' }
     s.summary          = 'bayescom iOS AdvanceSDK'
     s.description      = <<-DESC
@@ -45,44 +45,43 @@ Pod::Spec.new do |s|
     
     s.subspec 'MercuryAdapter' do |mer|
         mer.dependency 'AdvanceSDK/AdSpot'
-        mer.dependency 'MercurySDK', '4.4.8'
+        mer.dependency 'MercurySDK'
         mer.source_files = 'AdvanceSDK/Classes/Adapters/Mercury/**/*.{h,m}'
     end
     
     s.subspec 'CSJAdapter' do |csj|
         csj.dependency 'AdvanceSDK/AdSpot'
-        csj.dependency 'Ads-CN-Beta/BUAdSDK', '6.9.0.3'
-        csj.dependency 'Ads-CN-Beta/CSJMediation', '6.9.0.3'
+        csj.dependency 'Ads-CN-Beta/BUAdSDK'
         csj.source_files = 'AdvanceSDK/Classes/Adapters/CSJ/**/*.{h,m}'
     end
     
     s.subspec 'GDTAdapter' do |gdt|
         gdt.dependency 'AdvanceSDK/AdSpot'
-        gdt.dependency 'GDTMobSDK', '4.15.40'
+        gdt.dependency 'GDTMobSDK'
         gdt.source_files =  'AdvanceSDK/Classes/Adapters/GDT/**/*.{h,m}'
     end
      
     s.subspec 'KSAdapter' do |ks|
         ks.dependency 'AdvanceSDK/AdSpot'
-        ks.dependency 'KSAdSDK', '3.3.76.5'
+        ks.dependency 'KSAdSDK'
         ks.source_files = 'AdvanceSDK/Classes/Adapters/KS/**/*.{h,m}'
     end
     
     s.subspec 'BDAdapter' do |bd|
         bd.dependency 'AdvanceSDK/AdSpot'
-        bd.dependency 'BaiduMobAdSDK', '5.391'
+        bd.dependency 'BaiduMobAdSDK'
         bd.source_files =  'AdvanceSDK/Classes/Adapters/BD/**/*.{h,m}'
     end
     
     s.subspec 'TanxAdapter' do |tanx|
         tanx.dependency 'AdvanceSDK/AdSpot'
-        tanx.dependency 'TanxSDK', '3.7.4'
+        tanx.dependency 'TanxSDK'
         tanx.source_files =  'AdvanceSDK/Classes/Adapters/TANX/**/*.{h,m}'
     end
     
     s.subspec 'SigmobAdapter' do |sigmob|
         sigmob.dependency 'AdvanceSDK/AdSpot'
-        sigmob.dependency 'SigmobAd-iOS', '4.18.2'
+        sigmob.dependency 'SigmobAd-iOS'
         sigmob.source_files =  'AdvanceSDK/Classes/Adapters/Sigmob/**/*.{h,m}'
     end
     
