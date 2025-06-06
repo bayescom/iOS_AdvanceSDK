@@ -30,7 +30,7 @@
         _supplier = supplier;
         _bd_ad = [[BaiduMobAdExpressFullScreenVideo alloc] init];
         _bd_ad.delegate = self;
-        _bd_ad.AdUnitTag = _supplier.adspotid;
+        _bd_ad.adUnitTag = _supplier.adspotid;
         _bd_ad.publisherId = _supplier.mediaid;
         _bd_ad.adType = BaiduMobAdTypeFullScreenVideo;
     }
@@ -56,7 +56,8 @@
 }
 
 - (BOOL)isAdValid {
-    return _bd_ad.isReady;
+    //return _bd_ad.isReady; 缓存时间太久了影响体验
+    return YES;
 }
 
 - (void)dealloc {

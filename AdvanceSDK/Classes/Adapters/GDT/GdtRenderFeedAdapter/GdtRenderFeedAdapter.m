@@ -85,6 +85,7 @@
     element.isVideoAd = [self isVideoAd:dataObject];
     element.videoDuration = dataObject.duration;
     element.appRating = dataObject.appRating;
+    element.isAdValid = dataObject.isAdValid;
     return element;
 }
 

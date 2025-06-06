@@ -62,6 +62,10 @@
     }
 }
 
+- (BOOL)isAdValid {
+    return YES;
+}
+
 - (void)showInWindow:(UIWindow *)window {
     // 设置logo
     CGRect adFrame = [UIScreen mainScreen].bounds;

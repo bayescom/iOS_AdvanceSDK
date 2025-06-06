@@ -73,9 +73,7 @@
 }
 
 - (BOOL)isAdValid {
-    NSTimeInterval expireTimestamp = [_csj_ad getExpireTimestamp];
-    NSTimeInterval now = (long)[[NSDate date] timeIntervalSince1970] * 1000;
-    return self.isVideoCached && (expireTimestamp >= now);
+    return YES;
 }
 
 - (void)dealloc {

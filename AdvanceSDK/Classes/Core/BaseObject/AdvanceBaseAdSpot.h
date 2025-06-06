@@ -8,6 +8,7 @@
 #import <Foundation/Foundation.h>
 #import "AdvanceAdSpotDefine.h"
 #import "AdvPolicyService.h"
+#import "AdvError.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

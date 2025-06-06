@@ -43,14 +43,18 @@
     [_ks_ad showFromViewController:_adspot.viewController];
 }
 
-- (void)dealloc{
-    ADVLog(@"%s", __func__);
+- (BOOL)isAdValid {
+    return _ks_ad.isValid;
 }
 
 - (void)winnerAdapterToShowAd {
     if ([self.delegate respondsToSelector:@selector(didFinishLoadingInterstitialADWithSpotId:)]) {
         [self.delegate didFinishLoadingInterstitialADWithSpotId:self.adspot.adspotid];
     }
+}
+
+- (void)dealloc{
+    ADVLog(@"%s", __func__);
 }
 
 /**

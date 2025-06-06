@@ -139,12 +139,24 @@
 }
 
 - (void)showAd {
+    if (![self isAdValid]) {
+        return;
+    }
     ((void (*)(id, SEL))objc_msgSend)((id)self.targetAdapter, NSSelectorFromString(@"showAd"));
 }
 
 - (void)showAdFromViewController:(UIViewController *)viewController {
     self.viewController = viewController;
     [self showAd];
+}
+
+- (BOOL)isAdValid {
+    SEL selector = NSSelectorFromString(@"isAdValid");
+    BOOL valid = ((BOOL (*)(id, SEL))objc_msgSend)((id)self.targetAdapter, selector);
+    if (!valid) {
+        ADVLog(@"[show]广告展示前广告已失效过期");
+    }
+    return valid;
 }
 
 - (void)dealloc {

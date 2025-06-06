@@ -80,6 +80,7 @@
     element.mediaHeight = dataObject.mediaHeight;
     element.buttonText = dataObject.buttonText;
     element.isVideoAd = dataObject.isVideoAd;
+    element.isAdValid = dataObject.isAdValid;
     return element;
 }
 

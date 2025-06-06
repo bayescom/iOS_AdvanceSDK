@@ -55,6 +55,10 @@
     [self.tanx_ad showAdOnRootViewController:self.adspot.viewController withModel:self.adModel];
 }
 
+- (BOOL)isAdValid {
+    return YES;
+}
+
 - (void)winnerAdapterToShowAd {
     if ([self.delegate respondsToSelector:@selector(didFinishLoadingInterstitialADWithSpotId:)]) {
         [self.delegate didFinishLoadingInterstitialADWithSpotId:self.adspot.adspotid];

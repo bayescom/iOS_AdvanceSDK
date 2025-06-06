@@ -139,6 +139,9 @@
 }
 
 - (void)showInWindow:(UIWindow *)window {
+    if (![self isAdValid]) {
+        return;
+    }
     if (!window) {
         window = [UIApplication sharedApplication].adv_getCurrentWindow;
     }
@@ -146,6 +149,15 @@
         self.viewController = window.rootViewController;
     }
     ((void (*)(id, SEL, id))objc_msgSend)((id)self.targetAdapter, NSSelectorFromString(@"showInWindow:"), window);
+}
+
+- (BOOL)isAdValid {
+    SEL selector = NSSelectorFromString(@"isAdValid");
+    BOOL valid = ((BOOL (*)(id, SEL))objc_msgSend)((id)self.targetAdapter, selector);
+    if (!valid) {
+        ADVLog(@"[show]广告展示前广告已失效过期");
+    }
+    return valid;
 }
 
 - (void)dealloc {

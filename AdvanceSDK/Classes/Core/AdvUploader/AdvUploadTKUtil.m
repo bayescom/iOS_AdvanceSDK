@@ -114,6 +114,8 @@
             return [NSString stringWithFormat:@"%@&t_msg=err_mer_%ld", urlString, (long)error.code];
         } else if ([error.domain.lowercaseString containsString:@"gdt"]) {// 广点通SDK
             return [NSString stringWithFormat:@"%@&t_msg=err_gdt_%ld", urlString, (long)error.code];
+        } else if ([error.domain.lowercaseString containsString:@"wind"]) {// Sigmob SDK
+            return [NSString stringWithFormat:@"%@&t_msg=err_sigmob_%ld", urlString, (long)error.code];
         }
     }
     return urlString;

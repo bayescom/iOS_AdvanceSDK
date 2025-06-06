@@ -40,6 +40,10 @@
     [_gdt_ad presentAdFromRootViewController:_adspot.viewController];
 }
 
+- (BOOL)isAdValid {
+    return _gdt_ad.isAdValid;
+}
+
 - (void)winnerAdapterToShowAd {
     if ([self.delegate respondsToSelector:@selector(didFinishLoadingInterstitialADWithSpotId:)]) {
         [self.delegate didFinishLoadingInterstitialADWithSpotId:self.adspot.adspotid];

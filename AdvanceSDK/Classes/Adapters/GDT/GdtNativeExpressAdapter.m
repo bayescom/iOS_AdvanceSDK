@@ -56,7 +56,12 @@
     [self.nativeAds enumerateObjectsUsingBlock:^(__kindof AdvanceNativeExpressAd * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         GDTNativeExpressAdView *expressView = (GDTNativeExpressAdView *)obj.expressView;
         expressView.controller = self.adspot.viewController;
-        [expressView render];
+        if (expressView.isAdValid) { // 有效性判断
+            [expressView render];
+        } else {
+            ADVLog(@"[show]广告展示前广告已失效过期");
+            [self nativeExpressAdViewRenderFail:expressView];
+        }
     }];
 }
 

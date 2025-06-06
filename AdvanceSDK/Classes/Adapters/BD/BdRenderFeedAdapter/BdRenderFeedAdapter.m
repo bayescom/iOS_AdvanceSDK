@@ -39,7 +39,7 @@
 }
 
 - (void)loadAd {
-    [_bd_ad requestNativeAds];
+    [_bd_ad load];
 }
 
 - (void)winnerAdapterToShowAd {
@@ -96,6 +96,7 @@
     element.buttonText = dataObject.actButtonString;
     element.isVideoAd = (dataObject.materialType == VIDEO);
     element.videoDuration = dataObject.videoDuration.integerValue;
+    element.isAdValid = !dataObject.isExpired;
     
     return element;
 }

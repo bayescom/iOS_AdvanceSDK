@@ -84,6 +84,7 @@
     element.mediaWidth = [dict[@"width"] integerValue];
     element.mediaHeight = [dict[@"height"] integerValue];
     element.isVideoAd = adModel.adType == TanXAdTypeFeedVideo;
+    element.isAdValid = YES;
     return element;
 }
 

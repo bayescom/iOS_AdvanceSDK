@@ -49,6 +49,10 @@
     }
 }
 
+- (BOOL)isAdValid {
+    return _mercury_ad.isAdValid;
+}
+
 - (void)showInWindow:(UIWindow *)window {
     _mercury_ad.controller = _adspot.viewController;
     [self.mercury_ad showAdInWindow:window];

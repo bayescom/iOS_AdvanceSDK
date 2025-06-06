@@ -43,6 +43,10 @@
     }
 }
 
+- (BOOL)isAdValid {
+    return _gdt_ad.isAdValid;
+}
+
 - (void)showInWindow:(UIWindow *)window {
     // 设置logo
     UIImageView *imgV;

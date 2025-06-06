@@ -45,6 +45,10 @@
     [_adspot.adContainer addSubview:_csj_ad];
 }
 
+- (BOOL)isAdValid {
+    return YES;
+}
+
 - (void)winnerAdapterToShowAd {
     if ([self.delegate respondsToSelector:@selector(didFinishLoadingBannerADWithSpotId:)]) {
         [self.delegate didFinishLoadingBannerADWithSpotId:self.adspot.adspotid];

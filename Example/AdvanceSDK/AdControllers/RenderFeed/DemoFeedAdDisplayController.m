@@ -141,9 +141,11 @@
     self.feedAd = feedAd;
     self.feedAdView = feedAd.feedAdView;
     
-    [self buildupFeedAdView];
-    [self refreshFeedAdUIWithData:self.feedAd.feedAdElement];
-    [self.feedAd registerClickableViews:@[self.customLinkBtn, self.iconImageView] andCloseableView:self.closeBtn];
+    if (self.feedAd.feedAdElement.isAdValid) {
+        [self buildupFeedAdView];
+        [self refreshFeedAdUIWithData:self.feedAd.feedAdElement];
+        [self.feedAd registerClickableViews:@[self.customLinkBtn, self.iconImageView] andCloseableView:self.closeBtn];
+    }
 }
 
 /// 自渲染信息流广告曝光

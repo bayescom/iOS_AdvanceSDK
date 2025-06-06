@@ -60,9 +60,17 @@
     [self.feedAdArray enumerateObjectsUsingBlock:^(KSFeedAd * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         obj.delegate = self;
         obj.videoSoundEnable = !self.adspot.muted;
+        
         AdvanceNativeExpressAd *nativeAd = [self getNativeExpressAdWithAdView:obj.feedView];
-        if ([self.delegate respondsToSelector:@selector(nativeExpressAdViewRenderSuccess:spotId:extra:)]) {
-            [self.delegate nativeExpressAdViewRenderSuccess:nativeAd spotId:self.adspot.adspotid extra:self.adspot.ext];
+        if (obj.materialReady) { // 有效性判断
+            if ([self.delegate respondsToSelector:@selector(nativeExpressAdViewRenderSuccess:spotId:extra:)]) {
+                [self.delegate nativeExpressAdViewRenderSuccess:nativeAd spotId:self.adspot.adspotid extra:self.adspot.ext];
+            }
+        } else {
+            ADVLog(@"[show]广告展示前广告已失效过期");
+            if ([self.delegate respondsToSelector:@selector(nativeExpressAdViewRenderFail:spotId:extra:)]) {
+                [self.delegate nativeExpressAdViewRenderFail:nativeAd spotId:self.adspot.adspotid extra:self.adspot.ext];
+            }
         }
     }];
 }

@@ -25,6 +25,9 @@ NS_ASSUME_NONNULL_BEGIN
 ///设定是否静音播放视频，默认为YES
 @property(nonatomic, assign) BOOL muted;
 
+/// 广告是否有效，建议在展示广告之前判断，否则会影响计费或展示失败
+@property (nonatomic, readonly) BOOL isAdValid;
+
 /// 构造函数
 /// @param adspotid adspotid
 /// @param adContainer adContainer

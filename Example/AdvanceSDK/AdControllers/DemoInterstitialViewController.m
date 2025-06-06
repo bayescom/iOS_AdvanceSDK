@@ -49,7 +49,9 @@
 }
 
 - (void)loadAdBtn2Action {
-    [self.advanceInterstitial showAd];
+    if (self.advanceInterstitial.isAdValid) {
+        [self.advanceInterstitial showAd];
+    }
 }
 
 // MARK: ======================= AdvanceInterstitialDelegate =======================

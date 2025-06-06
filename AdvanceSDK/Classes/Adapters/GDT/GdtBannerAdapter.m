@@ -43,6 +43,11 @@
     [_adspot.adContainer addSubview:_gdt_ad];
 }
 
+- (BOOL)isAdValid {
+    return _gdt_ad.isAdValid;
+}
+
+
 - (void)winnerAdapterToShowAd {
     if ([self.delegate respondsToSelector:@selector(didFinishLoadingBannerADWithSpotId:)]) {
         [self.delegate didFinishLoadingBannerADWithSpotId:self.adspot.adspotid];

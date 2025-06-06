@@ -6,6 +6,7 @@
 //
 
 #import "AdvRenderFeedAdElement.h"
+#import "AdvLog.h"
 
 @implementation AdvRenderFeedAdElement
 
@@ -14,6 +15,13 @@
         return @"查看详情";
     }
     return _buttonText;
+}
+
+- (BOOL)isAdValid {
+    if (!_isAdValid) {
+        ADVLog(@"[show]广告展示前广告已失效过期");
+    }
+    return _isAdValid;
 }
 
 @end

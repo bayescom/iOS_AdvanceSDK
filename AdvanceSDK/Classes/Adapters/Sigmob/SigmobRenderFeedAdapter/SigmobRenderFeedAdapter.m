@@ -91,6 +91,7 @@
         element.mediaHeight = nativeAd.videoHeight;
     }
     element.appRating = nativeAd.rating;
+    element.isAdValid = YES;
     return element;
 }
 

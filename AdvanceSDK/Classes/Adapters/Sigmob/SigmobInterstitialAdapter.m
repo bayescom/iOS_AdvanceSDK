@@ -40,6 +40,10 @@
     [_sigmob_ad showAdFromRootViewController:_adspot.viewController options:nil];
 }
 
+- (BOOL)isAdValid {
+    return _sigmob_ad.ready;
+}
+
 - (void)winnerAdapterToShowAd {
     if ([self.delegate respondsToSelector:@selector(didFinishLoadingInterstitialADWithSpotId:)]) {
         [self.delegate didFinishLoadingInterstitialADWithSpotId:self.adspot.adspotid];

@@ -59,6 +59,10 @@
     }
 }
 
+- (BOOL)isAdValid {
+    return YES;
+}
+
 - (void)showInWindow:(UIWindow *)window {
     
     if (window && window.rootViewController) {

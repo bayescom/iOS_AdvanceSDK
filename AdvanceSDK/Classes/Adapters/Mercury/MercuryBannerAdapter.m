@@ -48,6 +48,10 @@
     [_adspot.adContainer addSubview:_mercury_ad];
 }
 
+- (BOOL)isAdValid {
+    return [_mercury_ad performSelector:@selector(isAdValid)];
+}
+
 - (void)winnerAdapterToShowAd {
     if ([self.delegate respondsToSelector:@selector(didFinishLoadingBannerADWithSpotId:)]) {
         [self.delegate didFinishLoadingBannerADWithSpotId:self.adspot.adspotid];

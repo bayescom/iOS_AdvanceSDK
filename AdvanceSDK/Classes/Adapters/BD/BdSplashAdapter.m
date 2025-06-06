@@ -28,7 +28,8 @@
         _adspot = adspot;
         _supplier = supplier;
         _bd_ad = [[BaiduMobAdSplash alloc] init];
-        _bd_ad.AdUnitTag = supplier.adspotid;
+        _bd_ad.adUnitTag = supplier.adspotid;
+        _bd_ad.publisherId = supplier.mediaid;
         _bd_ad.delegate = self;
         _bd_ad.timeout = supplier.timeout * 1.0 / 1000.0;
         
@@ -54,6 +55,11 @@
     }
 }
 
+- (BOOL)isAdValid {
+    //return _bd_ad.isReady; 缓存时间太久了影响体验
+    return YES;
+}
+
 - (void)showInWindow:(UIWindow *)window {
     // 设置logo
     if (_adspot.logoImage && _adspot.showLogoRequire) {
@@ -70,10 +76,6 @@
 }
 
 #pragma mark: -BaiduMobAdSplashDelegate
-
-- (NSString *)publisherId {
-    return _supplier.mediaid;
-}
 
 - (void)splashAdLoadSuccess:(BaiduMobAdSplash *)splash {
     [self.adspot.manager setECPMIfNeeded:[[splash getECPMLevel] integerValue] supplier:_supplier];

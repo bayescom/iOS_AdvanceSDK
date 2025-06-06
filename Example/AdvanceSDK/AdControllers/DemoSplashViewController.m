@@ -126,7 +126,9 @@
 }
 
 - (void)showAd {
-    [self.advanceSplash showInWindow:self.view.window];
+    if (self.advanceSplash.isAdValid) {
+        [self.advanceSplash showInWindow:self.view.window];
+    }
 }
 
 // MARK: ======================= AdvanceSplashDelegate =======================

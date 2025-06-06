@@ -93,7 +93,7 @@
     }
     element.videoDuration = data.videoDuration;
     element.appRating = data.appScore;
-    
+    element.isAdValid = YES;
     return element;
 }
 

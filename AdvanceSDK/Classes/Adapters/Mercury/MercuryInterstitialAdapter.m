@@ -49,6 +49,10 @@
     }
 }
 
+- (BOOL)isAdValid {
+    return _mercury_ad.isAdValid;
+}
+
 - (void)dealloc {
     ADVLog(@"%s", __func__);
 }

@@ -44,6 +44,10 @@
     [_csj_ad showAdFromRootViewController:_adspot.viewController];
 }
 
+- (BOOL)isAdValid {
+    return YES;
+}
+
 - (void)winnerAdapterToShowAd {
     if ([self.delegate respondsToSelector:@selector(didFinishLoadingInterstitialADWithSpotId:)]) {
         [self.delegate didFinishLoadingInterstitialADWithSpotId:self.adspot.adspotid];

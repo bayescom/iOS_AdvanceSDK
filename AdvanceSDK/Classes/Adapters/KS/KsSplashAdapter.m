@@ -50,6 +50,10 @@
     }
 }
 
+- (BOOL)isAdValid {
+    return YES;
+}
+
 - (void)showInWindow:(UIWindow *)window {
     _ks_ad.rootViewController = _adspot.viewController;
     // 设置logo

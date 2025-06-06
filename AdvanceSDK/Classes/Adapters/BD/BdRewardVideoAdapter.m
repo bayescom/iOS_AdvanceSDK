@@ -60,7 +60,8 @@
 }
 
 - (BOOL)isAdValid {
-    return _bd_ad.isReady;
+    //return _bd_ad.isReady; 缓存时间太久了影响体验
+    return YES;
 }
 
 - (void)dealloc {

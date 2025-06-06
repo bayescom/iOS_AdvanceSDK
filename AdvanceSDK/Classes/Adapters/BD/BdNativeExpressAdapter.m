@@ -42,7 +42,7 @@
 }
 
 - (void)loadAd {
-    [_bd_ad requestNativeAds];
+    [_bd_ad load];
 }
 
 - (void)winnerAdapterToShowAd {
@@ -68,9 +68,12 @@
         if (expressView.style_type == FeedType_PORTRAIT_VIDEO) {
             expressView.width = self.adspot.adSize.width * 0.8;
         }
-        // 展现前检查是否过期，30分钟广告将过期
+        // 展示前检查是否过期，2h后广告将过期
         if (![expressView isExpired]) {
             [expressView render];
+        } else {
+            ADVLog(@"[show]广告展示前广告已失效过期");
+            [self nativeAdExposureFail:expressView nativeAdDataObject:nil failReason:0];
         }
     }];
 }

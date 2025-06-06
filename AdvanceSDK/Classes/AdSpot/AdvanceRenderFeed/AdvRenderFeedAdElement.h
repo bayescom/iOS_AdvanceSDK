@@ -39,6 +39,8 @@
 // 广告的星级（5星制度）
 @property (nonatomic, assign) NSInteger appRating;
 
+// 广告是否有效，建议在展示广告之前判断，否则会影响计费或展示失败
+@property (nonatomic, assign) BOOL isAdValid;
 
 @end
 

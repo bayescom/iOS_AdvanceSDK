@@ -362,11 +362,6 @@
 				CLASSPREFIX = ADVANCE;
 				LastUpgradeCheck = 1430;
 				ORGANIZATIONNAME = Cheng455153666;
-				TargetAttributes = {
-					6003F589195388D20070C39A = {
-						ProvisioningStyle = Automatic;
-					};
-				};
 			};
 			buildConfigurationList = 6003F585195388D10070C39A /* Build configuration list for PBXProject "AdvanceSDK" */;
 			compatibilityVersion = "Xcode 3.2";

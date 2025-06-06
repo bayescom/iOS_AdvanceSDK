@@ -7,7 +7,7 @@
 
 #import "CSJRenderFeedAdView.h"
 
-@interface CSJRenderFeedAdView () <BUNativeAdDelegate, BUVideoAdViewDelegate>
+@interface CSJRenderFeedAdView () <BUNativeAdDelegate, BUCustomEventProtocol, BUVideoAdViewDelegate>
 
 @property (nonatomic, weak) id<AdvanceRenderFeedDelegate> delegate;
 @property (nonatomic, strong) BUNativeAd *nativeAd;

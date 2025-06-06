@@ -69,7 +69,9 @@
 /// Banner广告数据拉取成功
 - (void)didFinishLoadingBannerADWithSpotId:(NSString *)spotId {
     NSLog(@"广告数据拉取成功 %s", __func__);
-    [self.advanceBanner showAd];
+    if (self.advanceBanner.isAdValid) {
+        [self.advanceBanner showAd];
+    }
     [self.adShowView addSubview:self.contentV];
 }
 
