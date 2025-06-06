@@ -11,7 +11,6 @@
 
 @interface DemoFullScreenVideoController () <AdvanceFullScreenVideoDelegate>
 @property (nonatomic, strong) AdvanceFullScreenVideo *advanceFullScreenVideo;
-@property (nonatomic) bool isAdLoaded;
 
 @end
 

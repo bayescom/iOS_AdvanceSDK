@@ -37,10 +37,8 @@
 }
 
 - (void)loadAdBtn1Action {
-    NSLog(@"%s", __func__);
     if (![self checkAdspotId]) { return; }
     
-
     self.advanceInterstitial = [[AdvanceInterstitial alloc] initWithAdspotId:self.adspotId
                                                                    customExt:nil
                                                               viewController:self];

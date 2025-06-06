@@ -52,10 +52,6 @@
 
 }
 
-- (void)loadAdBtn2Action {
-    [self.advanceSplash showInWindow:self.view.window];
-}
-
 - (void)loadAdBtn1Action {
     if (![self checkAdspotId]) { return; }
     
@@ -83,26 +79,21 @@
     // 如果想要对logo有特定的布局 则参照 -createLogoImageFromView 方法
     // 建议设置logo 避免某些素材长图不足时屏幕下方留白
     self.advanceSplash.logoImage = [self createLogoImageFromView];
-    
     // 设置logo时 该属性要设置为YES
     self.advanceSplash.showLogoRequire = YES;
-
-    
-    
-    // 如果该时间内没有广告返回 即:未触发-advanceUnifiedViewDidLoad 回调, 则会结束本次广告加载,并触发错误回调
-    //self.advanceSplash.timeout = 5;//<---- 确保timeout 时长内不对advanceSplash进行移除的操作
+    // 加载广告
     [self.advanceSplash loadAd];
-    //NSLog(@"是否有广告返回 : %d", self.advanceSplash.isLoadAdSucceed);
 
 }
 
+- (void)loadAdBtn2Action {
+    if (self.advanceSplash.isAdValid) {
+        [self.advanceSplash showInWindow:self.view.window];
+    }
+}
 
-- (UIImage*)createLogoImageFromView
-
-{
+- (UIImage*)createLogoImageFromView {
     // 在这个方法里你可以随意 定制化logo
-   // 300 170
-    
     CGFloat width = self.view.frame.size.width;
     
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, width, 120)];
@@ -112,7 +103,6 @@
     imageV.frame = CGRectMake(0, 0, 100 * (300/170.f), 100);
     imageV.center = view.center;
     
-//obtain scale
     CGFloat scale = [UIScreen mainScreen].scale;
 
     UIGraphicsBeginImageContextWithOptions(CGSizeMake(view.frame.size.width,
@@ -123,12 +113,6 @@
     UIImage* image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     return image;
-}
-
-- (void)showAd {
-    if (self.advanceSplash.isAdValid) {
-        [self.advanceSplash showInWindow:self.view.window];
-    }
 }
 
 // MARK: ======================= AdvanceSplashDelegate =======================
@@ -152,7 +136,7 @@
 /// 开屏广告数据拉取成功
 - (void)didFinishLoadingSplashADWithSpotId:(NSString *)spotId {
     NSLog(@"广告数据拉取成功 %s", __func__);
-    [self showAd];
+    [self loadAdBtn2Action];
 }
 
 /// 广告曝光成功
