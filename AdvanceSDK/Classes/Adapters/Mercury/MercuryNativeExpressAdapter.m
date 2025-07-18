@@ -32,7 +32,6 @@
         _adspot = adspot;
         _supplier = supplier;
         _mercury_ad = [[MercuryNativeExpressAd alloc] initAdWithAdspotId:_supplier.adspotid];
-        _mercury_ad.videoMuted = _adspot.muted;
         _mercury_ad.renderSize = _adspot.adSize;
         _mercury_ad.delegate = self;
     }
