@@ -466,7 +466,7 @@
     NSString *rewardName = rewardedVideoModel.rewardName ?: self.model.server_reward.name;
     AdvRewardCallbackInfo *rewardInfo = [[AdvRewardCallbackInfo alloc] initWithSourceId:supplier.identifier rewardName:rewardName rewardAmount:rewardAmount];
     
-    if (self.model.server_reward.count) { // 服务端回调验证
+    if (self.model.server_reward.url) { // 服务端回调验证
         NSDictionary *param = @{
             @"timestamp": @((long)[[NSDate date] timeIntervalSince1970] * 1000),
             @"user_id": [NSString adv_validString:rewardedVideoModel.userId],

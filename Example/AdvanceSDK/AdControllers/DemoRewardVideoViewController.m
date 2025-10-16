@@ -22,10 +22,8 @@
     
     self.initDefSubviewsFlag = YES;
     self.adspotIdsArr = @[
-//        @{@"addesc": @"激励视频", @"adspotId": @"100255-10002595"},
-//        @{@"addesc": @"激励视频", @"adspotId": @"100255-10006516"},
-        // 10012265: 服务端验证
         //@{@"addesc": @"激励视频-GroMore", @"adspotId": @"102768-10008583"},
+        // 10012265: 服务端激励验证
         @{@"addesc": @"激励视频-Bidding", @"adspotId": @"102768-10008526"},
         @{@"addesc": @"激励视频-倍业", @"adspotId": @"102768-10007792"},
         @{@"addesc": @"激励视频-穿山甲", @"adspotId": @"102768-10007802"},
@@ -45,8 +43,7 @@
 
     // 初始化
     self.advanceRewardVideo = [[AdvanceRewardVideo alloc] initWithAdspotId:self.adspotId
-                                                                 customExt:self.ext
-                                                            viewController:self];
+                                                                 customExt:self.ext];
     self.advanceRewardVideo.delegate = self;
     
     // 奖励设置（可选）
@@ -63,7 +60,7 @@
 
 - (void)loadAdBtn2Action {
     if (self.advanceRewardVideo.isAdValid) {
-        [self.advanceRewardVideo showAd];
+        [self.advanceRewardVideo showAdFromViewController:self];
     }
 }
 

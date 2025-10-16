@@ -15,7 +15,6 @@
 @property (nonatomic, strong) WindSplashAdView *sigmob_ad;
 @property (nonatomic, weak) AdvanceSplash *adspot;
 @property (nonatomic, strong) AdvSupplier *supplier;
-@property (nonatomic, strong) UIImageView *imgV;
 
 @end
 
@@ -29,6 +28,7 @@
         request.placementId = supplier.adspotid;
         _sigmob_ad = [[WindSplashAdView alloc] initWithRequest:request];
         _sigmob_ad.delegate = self;
+        _sigmob_ad.rootViewController = _adspot.viewController;
     }
     return self;
 }
@@ -48,22 +48,13 @@
 }
 
 - (void)showInWindow:(UIWindow *)window {
+    CGRect adFrame = [UIApplication sharedApplication].keyWindow.bounds;
     // 设置logo
-    CGRect adFrame = [UIScreen mainScreen].bounds;
-    if (_adspot.logoImage && _adspot.showLogoRequire) {
-        
-        NSAssert(_adspot.logoImage != nil, @"showLogoRequire = YES时, 必须设置logoImage");
-        CGFloat real_w = [UIScreen mainScreen].bounds.size.width;
-        CGFloat real_h = _adspot.logoImage.size.height*(real_w/_adspot.logoImage.size.width);
-        adFrame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height-real_h);
-        
-        self.imgV = [[UIImageView alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height-real_h, real_w, real_h)];
-        self.imgV.userInteractionEnabled = YES;
-        self.imgV.image = _adspot.logoImage;
-        [window addSubview:self.imgV];
+    if (_adspot.bottomLogoView) {
+        adFrame.size.height -= _adspot.bottomLogoView.bounds.size.height;
+        _adspot.bottomLogoView.frame = CGRectMake(0, UIScreen.mainScreen.bounds.size.height - _adspot.bottomLogoView.bounds.size.height, UIScreen.mainScreen.bounds.size.width, _adspot.bottomLogoView.bounds.size.height);
+        [window addSubview:_adspot.bottomLogoView];
     }
-    
-    self.sigmob_ad.rootViewController = self.adspot.viewController;
     self.sigmob_ad.frame = adFrame;
     [window addSubview:self.sigmob_ad];
 }
@@ -96,13 +87,13 @@
 }
 
 - (void)onSplashAdClosed:(WindSplashAdView *)splashAdView {
+    [_adspot.bottomLogoView removeFromSuperview];
+    [_sigmob_ad removeFromSuperview];
+    _sigmob_ad = nil;
+    
     if ([self.delegate respondsToSelector:@selector(splashDidCloseForSpotId:extra:)]) {
         [self.delegate splashDidCloseForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
-    [_imgV removeFromSuperview];
-    _imgV = nil;
-    [_sigmob_ad removeFromSuperview];
-    _sigmob_ad = nil;
 }
 
 @end

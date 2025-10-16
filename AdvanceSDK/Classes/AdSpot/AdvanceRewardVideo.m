@@ -20,14 +20,12 @@
 @implementation AdvanceRewardVideo
 
 - (instancetype)initWithAdspotId:(NSString *)adspotid
-                       customExt:(nullable NSDictionary *)ext
-                  viewController:(nullable UIViewController *)viewController {
+                       customExt:(nullable NSDictionary *)ext {
     
     NSMutableDictionary *extra = [NSMutableDictionary dictionaryWithDictionary:ext];
     [extra setValue:AdvSdkTypeAdNameRewardedVideo forKey: AdvSdkTypeAdName];
 
     if (self = [super initWithMediaId:[AdvSdkConfig shareInstance].appId adspotId:adspotid customExt:extra]) {
-        self.viewController = viewController;
         self.muted = YES;
     }
     return self;

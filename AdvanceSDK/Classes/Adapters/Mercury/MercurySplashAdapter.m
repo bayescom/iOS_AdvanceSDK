@@ -33,8 +33,8 @@
         _adspot = adspot;
         _supplier = supplier;
         _mercury_ad = [[MercurySplashAd alloc] initAdWithAdspotId:_supplier.adspotid delegate:self];
-        _mercury_ad.logoImage = _adspot.logoImage;
-        _mercury_ad.fetchDelay = _supplier.timeout * 1.0 / 1000.0;
+        _mercury_ad.controller = _adspot.viewController;
+        _mercury_ad.bottomLogoView = _adspot.bottomLogoView;
     }
     return self;
 }
@@ -54,7 +54,6 @@
 }
 
 - (void)showInWindow:(UIWindow *)window {
-    _mercury_ad.controller = _adspot.viewController;
     [self.mercury_ad showAdInWindow:window];
 
 }

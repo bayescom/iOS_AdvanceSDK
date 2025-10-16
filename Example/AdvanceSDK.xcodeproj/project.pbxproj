@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0CB37BCDE076482B71A97BF5 /* Pods_AdvanceSDK_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 62CE9EA1BB71EBDC54112EC4 /* Pods_AdvanceSDK_Example.framework */; };
 		220A7EBD2BD11F1E0043492A /* DemoSplashViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 220A7EA92BD11F1E0043492A /* DemoSplashViewController.m */; };
 		220A7EBE2BD11F1E0043492A /* DemoFeedAdDisplayController.m in Sources */ = {isa = PBXBuildFile; fileRef = 220A7EAE2BD11F1E0043492A /* DemoFeedAdDisplayController.m */; };
 		220A7EBF2BD11F1E0043492A /* DemoRenderFeedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 220A7EAF2BD11F1E0043492A /* DemoRenderFeedViewController.m */; };
@@ -40,7 +41,6 @@
 		6003F59E195388D20070C39A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F59D195388D20070C39A /* AppDelegate.m */; };
 		6003F5A9195388D20070C39A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5A8195388D20070C39A /* Images.xcassets */; };
 		71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 71719F9D1E33DC2100824A3D /* LaunchScreen.storyboard */; };
-		D6BD9A687524DF95FBEA9309 /* Pods_AdvanceSDK_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 72FFE2B097C59C62F06E8EED /* Pods_AdvanceSDK_Example.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -119,8 +119,8 @@
 		6003F59C195388D20070C39A /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		6003F59D195388D20070C39A /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		6003F5A8195388D20070C39A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		62CE9EA1BB71EBDC54112EC4 /* Pods_AdvanceSDK_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AdvanceSDK_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		71719F9E1E33DC2100824A3D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		72FFE2B097C59C62F06E8EED /* Pods_AdvanceSDK_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AdvanceSDK_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E5B804D9A1812796B3A043CC /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -137,7 +137,7 @@
 				4EFB344228A0ADD00047E75A /* CoreTelephony.framework in Frameworks */,
 				4EFB343E28A0ADAF0047E75A /* AdSupport.framework in Frameworks */,
 				4EFB344028A0ADC30047E75A /* CoreMotion.framework in Frameworks */,
-				D6BD9A687524DF95FBEA9309 /* Pods_AdvanceSDK_Example.framework in Frameworks */,
+				0CB37BCDE076482B71A97BF5 /* Pods_AdvanceSDK_Example.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -276,7 +276,7 @@
 				6003F58D195388D20070C39A /* Foundation.framework */,
 				6003F58F195388D20070C39A /* CoreGraphics.framework */,
 				6003F591195388D20070C39A /* UIKit.framework */,
-				72FFE2B097C59C62F06E8EED /* Pods_AdvanceSDK_Example.framework */,
+				62CE9EA1BB71EBDC54112EC4 /* Pods_AdvanceSDK_Example.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";

@@ -19,9 +19,6 @@
     [super viewDidLoad];
     self.initDefSubviewsFlag = YES;
     self.adspotIdsArr = @[
-//        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10000559"},
-//        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10006501"},
-        
         //@{@"addesc": @"插屏-GroMore", @"adspotId": @"102768-10008588"},
         @{@"addesc": @"插屏-Bidding", @"adspotId": @"102768-10008520"},
         @{@"addesc": @"插屏-倍业", @"adspotId": @"102768-10007791"},
@@ -40,15 +37,14 @@
     if (![self checkAdspotId]) { return; }
     
     self.advanceInterstitial = [[AdvanceInterstitial alloc] initWithAdspotId:self.adspotId
-                                                                   customExt:nil
-                                                              viewController:self];
+                                                                   customExt:nil];
     self.advanceInterstitial.delegate = self;
     [self.advanceInterstitial loadAd];
 }
 
 - (void)loadAdBtn2Action {
     if (self.advanceInterstitial.isAdValid) {
-        [self.advanceInterstitial showAd];
+        [self.advanceInterstitial showAdFromViewController:self];
     }
 }
 

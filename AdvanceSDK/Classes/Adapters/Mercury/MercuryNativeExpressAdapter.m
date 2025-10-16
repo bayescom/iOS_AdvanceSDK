@@ -27,7 +27,7 @@
 
 @implementation MercuryNativeExpressAdapter
 
-- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(AdvanceNativeExpress *)adspot; {
+- (instancetype)initWithSupplier:(AdvSupplier *)supplier adspot:(AdvanceNativeExpress *)adspot {
     if (self = [super init]) {
         _adspot = adspot;
         _supplier = supplier;

@@ -8,31 +8,31 @@ target 'AdvanceSDK_Example' do
   
   #集成倍业Adapter
   pod 'AdvanceSDK/MercuryAdapter', :path => '../'
-  pod 'MercurySDK', '4.5.5'
+  pod 'MercurySDK', '4.5.8'
 
   #集成穿山甲Adapter
   pod 'AdvanceSDK/CSJAdapter',  :path => '../'
-  pod 'Ads-CN-Beta', '7.0.0.4', :subspecs => ['BUAdSDK', 'CSJMediation']
+  pod 'Ads-CN-Beta', '7.2.0.3', :subspecs => ['BUAdSDK']
 
   #集成广点通Adapter
   pod 'AdvanceSDK/GDTAdapter', :path => '../'
-  pod 'GDTMobSDK', '4.15.41'
+  pod 'GDTMobSDK', '4.15.60'
 
   #集成快手Adapter
   pod 'AdvanceSDK/KSAdapter', :path => '../'
-  pod 'KSAdSDK', '4.6.30.1'
+  pod 'KSAdSDK', '4.9.20.3'
 
   #集成百度Adapter
   pod 'AdvanceSDK/BDAdapter', :path => '../'
-  pod 'BaiduMobAdSDK', '5.394'
+  pod 'BaiduMobAdSDK', '10.02'
   
   #集成TanxAdapter
   pod 'AdvanceSDK/TanxAdapter', :path => '../'
-  pod 'TanxSDK', '3.7.11'
+  pod 'TanxSDK', '3.7.15'
   
   #集成SigMobAdapter
   pod 'AdvanceSDK/SigmobAdapter', :path => '../'
-  pod 'SigmobAd-iOS', '4.20.0'
+  pod 'SigmobAd-iOS', '4.20.3'
   
 
   #Third

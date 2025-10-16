@@ -21,8 +21,6 @@
     
     self.initDefSubviewsFlag = YES;
     self.adspotIdsArr = @[
-//        @{@"addesc": @"mediaId-adspotId", @"adspotId": @"100255-10004765"},
-        
         @{@"addesc": @"全屏视频-Bidding", @"adspotId": @"102768-10008529"},
         @{@"addesc": @"全屏视频-穿山甲", @"adspotId": @"102768-10007829"},
         @{@"addesc": @"全屏视频-优量汇", @"adspotId": @"102768-10007832"},
@@ -36,14 +34,14 @@
 - (void)loadAdBtn1Action {
     if (![self checkAdspotId]) { return; }
 
-    self.advanceFullScreenVideo = [[AdvanceFullScreenVideo alloc] initWithAdspotId:self.adspotId customExt:nil viewController:self];
+    self.advanceFullScreenVideo = [[AdvanceFullScreenVideo alloc] initWithAdspotId:self.adspotId customExt:nil];
     self.advanceFullScreenVideo.delegate = self;
     [self.advanceFullScreenVideo loadAd];
 }
 
 - (void)loadAdBtn2Action {
     if (self.advanceFullScreenVideo.isAdValid) {
-        [self.advanceFullScreenVideo showAd];
+        [self.advanceFullScreenVideo showAdFromViewController:self];
     }
 }
 

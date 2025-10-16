@@ -17,13 +17,11 @@
 - (instancetype)initWithAdspotId:(NSString *)adspotid
                        customExt:(nullable NSDictionary *)ext
                   viewController:(nullable UIViewController *)viewController {
-    ADVLog(@"==================== 初始化开屏广告, id: %@====================", adspotid);
     NSMutableDictionary *extra = [NSMutableDictionary dictionaryWithDictionary:ext];
     [extra setValue:AdvSdkTypeAdNameSplash forKey: AdvSdkTypeAdName];
     
     if (self = [super initWithMediaId:[AdvSdkConfig shareInstance].appId adspotId:adspotid customExt:extra]) {
         self.viewController = viewController;
-        self.muted = YES;
     }
     return self;
 }

@@ -23,7 +23,6 @@
 @property (nonatomic, strong) BUSplashAd *csj_ad;
 @property (nonatomic, weak) AdvanceSplash *adspot;
 @property (nonatomic, strong) AdvSupplier *supplier;
-@property (nonatomic, strong) UIImageView *imgV;
 
 @end
 
@@ -34,13 +33,8 @@
         _adspot = adspot;
         _supplier = supplier;
         CGRect adFrame = [UIApplication sharedApplication].keyWindow.bounds;
-        // 设置logo
-        if (_adspot.logoImage && _adspot.showLogoRequire) {
-            
-            NSAssert(_adspot.logoImage != nil, @"showLogoRequire = YES时, 必须设置logoImage");
-            CGFloat real_w = [UIScreen mainScreen].bounds.size.width;
-            CGFloat real_h = _adspot.logoImage.size.height*(real_w/_adspot.logoImage.size.width);
-            adFrame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height-real_h);
+        if (_adspot.bottomLogoView) {
+            adFrame.size.height -= _adspot.bottomLogoView.bounds.size.height;
         }
         _csj_ad = [[BUSplashAd alloc] initWithSlotID:_supplier.adspotid adSize:adFrame.size];
         _csj_ad.delegate = self;
@@ -64,20 +58,8 @@
 }
 
 - (void)showInWindow:(UIWindow *)window {
-    
-    if (window && window.rootViewController) {
+    if (window.rootViewController) {
         [_csj_ad showSplashViewInRootViewController:window.rootViewController];
-    }
-
-    if (_adspot.showLogoRequire) {
-        // 添加Logo
-        NSAssert(_adspot.logoImage != nil, @"showLogoRequire = YES时, 必须设置logoImage");
-        CGFloat real_w = [UIScreen mainScreen].bounds.size.width;
-        CGFloat real_h = _adspot.logoImage.size.height*(real_w/_adspot.logoImage.size.width);
-        _imgV = [[UIImageView alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height-real_h, real_w, real_h)];
-        _imgV.userInteractionEnabled = YES;
-        _imgV.image = _adspot.logoImage;
-        [_csj_ad.splashRootViewController.view addSubview:_imgV];
     }
 }
 
@@ -96,7 +78,11 @@
 }
 
 - (void)splashAdRenderSuccess:(BUSplashAd *)splashAd {
-    
+    // 设置logo
+    if (_adspot.bottomLogoView) {
+        _adspot.bottomLogoView.frame = CGRectMake(0, UIScreen.mainScreen.bounds.size.height - _adspot.bottomLogoView.bounds.size.height, UIScreen.mainScreen.bounds.size.width, _adspot.bottomLogoView.bounds.size.height);
+        [_csj_ad.splashRootViewController.view addSubview:_adspot.bottomLogoView];
+    }
 }
 
 - (void)splashAdRenderFail:(nonnull BUSplashAd *)splashAd error:(BUAdError * _Nullable)error {
@@ -140,13 +126,13 @@
 
 
 - (void)csjAdDidClose {
+    [_adspot.bottomLogoView removeFromSuperview];
+    [self.csj_ad removeSplashView];
+    self.csj_ad = nil;
+    
     if ([self.delegate respondsToSelector:@selector(splashDidCloseForSpotId:extra:)]) {
         [self.delegate splashDidCloseForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
-    [self.csj_ad removeSplashView];
-    self.csj_ad = nil;
-    [self.imgV removeFromSuperview];
-    self.imgV = nil;
 }
 
 - (void)dealloc {

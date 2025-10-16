@@ -9,7 +9,6 @@
 #import "DemoListFeedExpressViewController.h"
 #import "CellBuilder.h"
 #import "BYExamCellModel.h"
-#import <AdvanceSDK/AdvSdkConfig.h>
 #import <AdvanceSDK/AdvanceNativeExpress.h>
 #import <AdvanceSDK/AdvanceNativeExpressAd.h>
 
@@ -64,16 +63,14 @@
     NSLog(@"广告位中某一个广告源开始加载广告 %s  sourceId: %@", __func__, sourceId);
 }
 
-/// 信息流广告数据拉取成功
+/// 信息流广告数据拉取成功后，聚合内部会执行渲染操作
 - (void)didFinishLoadingNativeExpressAds:(NSArray<AdvanceNativeExpressAd *> *)nativeAds spotId:(NSString *)spotId {
     NSLog(@"广告数据拉取成功 %s", __func__);
 }
 
 /// 信息流广告渲染成功
-/// 注意和广告数据拉取成功的区别  广告数据拉取成功, 但是渲染可能会失败
-/// 广告加载失败 是广点通 穿山甲 mercury 在拉取广告的时候就全部失败了
-/// 该回调的含义是: 比如: 广点通拉取广告成功了并返回了一组view  但是其中某个view的渲染失败了
-/// 该回调会触发多次
+/// 该回调可能会触发多次
+/// eg: 广点通拉取广告成功并返回一组view，其中某个view渲染成功
 - (void)nativeExpressAdViewRenderSuccess:(AdvanceNativeExpressAd *)nativeAd spotId:(NSString *)spotId extra:(NSDictionary *)extra {
     NSLog(@"广告渲染成功 %s %@", __func__, nativeAd);
     [_arrayData insertObject:nativeAd atIndex:1];
@@ -81,10 +78,8 @@
 }
 
 /// 信息流广告渲染失败
-/// 注意和广告加载失败的区别  广告数据拉取成功, 但是渲染可能会失败
-/// 广告加载失败 是广点通 穿山甲 mercury 在拉取广告的时候就全部失败了
-/// 该回调的含义是: 比如: 广点通拉取广告成功了并返回了一组view  但是其中某个view的渲染失败了
-/// 该回调会触发多次
+/// 该回调可能会触发多次
+/// eg: 广点通拉取广告成功并返回一组view，其中某个view渲染失败
 - (void)nativeExpressAdViewRenderFail:(AdvanceNativeExpressAd *)nativeAd spotId:(NSString *)spotId extra:(NSDictionary *)extra {
     NSLog(@"广告渲染失败 %s %@", __func__, nativeAd);
 }
@@ -112,15 +107,12 @@
 // MARK: ======================= UITableViewDelegate, UITableViewDataSource =======================
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-
     return _arrayData.count;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     if ([_arrayData[indexPath.row] isKindOfClass:[BYExamCellModelElement class]]) {
-        
         return ((BYExamCellModelElement *)_arrayData[indexPath.row]).cellh;
-        
     } else {
         AdvanceNativeExpressAd *nativeAd = _arrayData[indexPath.row];
         UIView *view = [nativeAd expressView];
@@ -142,7 +134,6 @@
         if ([subView superview]) {
             [subView removeFromSuperview];
         }
-        
         AdvanceNativeExpressAd *nativeAd = _arrayData[indexPath.row];
         UIView *view = [nativeAd expressView];
         view.tag = 1000;
@@ -151,10 +142,10 @@
         frame.origin.x = (cell.contentView.bounds.size.width - frame.size.width) / 2;
         view.frame = frame;
         cell.accessibilityIdentifier = @"nativeTemp_ad";
-        
         return cell;
     }
 }
+
 - (void)dealloc {
     NSLog(@"%s", __func__);
     self.advanceFeed = nil;

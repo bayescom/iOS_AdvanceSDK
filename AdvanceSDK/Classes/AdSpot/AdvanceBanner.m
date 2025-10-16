@@ -26,7 +26,6 @@
         self.adContainer = adContainer;
         self.viewController = viewController;
         self.refreshInterval = MAXINTERP;
-        self.muted = YES;
     }
     return self;
 }

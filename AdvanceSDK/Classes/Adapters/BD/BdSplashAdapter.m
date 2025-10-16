@@ -16,7 +16,6 @@
 @property (nonatomic, strong) BaiduMobAdSplash *bd_ad;
 @property (nonatomic, weak) AdvanceSplash *adspot;
 @property (nonatomic, strong) AdvSupplier *supplier;
-@property (nonatomic, strong) UIImageView *imgV;
 @property (nonatomic, assign) BOOL isAdExposed;
 
 @end
@@ -31,14 +30,12 @@
         _bd_ad.adUnitTag = supplier.adspotid;
         _bd_ad.publisherId = supplier.mediaid;
         _bd_ad.delegate = self;
+        _bd_ad.presentAdViewController = _adspot.viewController;
         _bd_ad.timeout = supplier.timeout * 1.0 / 1000.0;
         
         CGRect adFrame = [UIApplication sharedApplication].keyWindow.bounds;
-        if (_adspot.logoImage && _adspot.showLogoRequire) {
-            NSAssert(_adspot.logoImage != nil, @"showLogoRequire = YES时, 必须设置logoImage");
-            CGFloat real_w = [UIScreen mainScreen].bounds.size.width;
-            CGFloat real_h = _adspot.logoImage.size.height*(real_w/_adspot.logoImage.size.width);
-            adFrame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height-real_h);
+        if (_adspot.bottomLogoView) {
+            adFrame.size.height -= _adspot.bottomLogoView.bounds.size.height;
         }
         _bd_ad.adSize = adFrame.size;
     }
@@ -62,15 +59,10 @@
 
 - (void)showInWindow:(UIWindow *)window {
     // 设置logo
-    if (_adspot.logoImage && _adspot.showLogoRequire) {
-        NSAssert(_adspot.logoImage != nil, @"showLogoRequire = YES时, 必须设置logoImage");
-        CGFloat real_w = [UIScreen mainScreen].bounds.size.width;
-        CGFloat real_h = _adspot.logoImage.size.height*(real_w/_adspot.logoImage.size.width);
-        self.imgV = [[UIImageView alloc] initWithFrame:CGRectMake(0, UIScreen.mainScreen.bounds.size.height - real_h, real_w, real_h)];
-        self.imgV.userInteractionEnabled = YES;
-        self.imgV.image = _adspot.logoImage;
-        self.imgV.hidden = YES;
-        [window addSubview:self.imgV];
+    if (_adspot.bottomLogoView) {
+        _adspot.bottomLogoView.frame = CGRectMake(0, UIScreen.mainScreen.bounds.size.height - _adspot.bottomLogoView.bounds.size.height, UIScreen.mainScreen.bounds.size.width, _adspot.bottomLogoView.bounds.size.height);
+        _adspot.bottomLogoView.hidden = YES;
+        [window addSubview:_adspot.bottomLogoView];
     }
     [self.bd_ad showInContainerView:window];
 }
@@ -92,7 +84,7 @@
 }
 
 - (void)splashSuccessPresentScreen:(BaiduMobAdSplash *)splash {
-    self.imgV.hidden = NO;
+    _adspot.bottomLogoView.hidden = NO;
 }
 
 - (void)splashDidExposure:(BaiduMobAdSplash *)splash {
@@ -126,7 +118,7 @@
 }
 
 - (void)removeAdViews {
-    [self.imgV removeFromSuperview];
+    [_adspot.bottomLogoView removeFromSuperview];
     [_bd_ad stop];
 }
 

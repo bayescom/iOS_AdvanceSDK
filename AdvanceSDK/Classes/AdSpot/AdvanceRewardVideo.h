@@ -29,19 +29,14 @@ NS_ASSUME_NONNULL_BEGIN
 /// 初始化广告位
 /// @param adspotid 广告位id
 /// @param ext 自定义拓展参数
-/// @param viewController 广告加载容器 （建议传入当前控制器，广告需要提前加载可传nil）
 - (instancetype)initWithAdspotId:(NSString *)adspotid
-                       customExt:(nullable NSDictionary *)ext
-                  viewController:(nullable UIViewController *)viewController;
+                       customExt:(nullable NSDictionary *)ext;
 
 
 /// 加载广告
 - (void)loadAd;
 
-/// 初始化已传入viewController，展示广告可使用此方法
-- (void)showAd;
-
-/// 初始化未传入viewController，展示广告必须使用此方法
+/// 展示广告
 - (void)showAdFromViewController:(UIViewController *)viewController;
 
 

@@ -7,13 +7,11 @@
 //
 
 #import "DemoBannerViewController.h"
-#import "ViewBuilder.h"
-#import "AdvSdkConfig.h"
 #import <AdvanceSDK/AdvanceBanner.h>
 
 @interface DemoBannerViewController () <AdvanceBannerDelegate>
 @property (nonatomic, strong) AdvanceBanner *advanceBanner;
-@property (nonatomic, strong) UIView *contentV;
+@property (nonatomic, strong) UIView *bannerAdView;
 
 @end
 
@@ -25,8 +23,6 @@
     self.initDefSubviewsFlag = YES;
     self.adShowView.hidden = NO;
     self.adspotIdsArr = @[
-        //@{@"addesc": @"Banner", @"adspotId": @"100255-10000558"},
-        
         @{@"addesc": @"横幅-Bidding", @"adspotId": @"102768-10008517"},
         @{@"addesc": @"横幅-倍业", @"adspotId": @"102768-10007790"},
         @{@"addesc": @"横幅-穿山甲", @"adspotId": @"102768-10007800"},
@@ -38,10 +34,10 @@
 - (void)loadAdBtn1Action {
     if (![self checkAdspotId]) { return; }
 
-    [_contentV removeFromSuperview];
-    _contentV = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.width*5/32.0)];
+    [_bannerAdView removeFromSuperview];
+    _bannerAdView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.width*5/32.0)];
 
-    self.advanceBanner = [[AdvanceBanner alloc] initWithAdspotId:self.adspotId adContainer:self.contentV customExt:self.ext viewController:self];
+    self.advanceBanner = [[AdvanceBanner alloc] initWithAdspotId:self.adspotId adContainer:self.bannerAdView customExt:self.ext viewController:self];
     self.advanceBanner.delegate = self;
     self.advanceBanner.refreshInterval = 30;
 
@@ -72,7 +68,7 @@
     if (self.advanceBanner.isAdValid) {
         [self.advanceBanner showAd];
     }
-    [self.adShowView addSubview:self.contentV];
+    [self.adShowView addSubview:self.bannerAdView];
 }
 
 /// 广告曝光

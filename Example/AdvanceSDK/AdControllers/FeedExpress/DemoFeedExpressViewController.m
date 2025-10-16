@@ -20,10 +20,6 @@
     
     self.initDefSubviewsFlag = YES;
     self.adspotIdsArr = @[
-//        @{@"addesc": @"图片信息流", @"adspotId": @"100255-10002698"},
-//        @{@"addesc": @"图片信息流", @"adspotId": @"100255-10006500"},
-//        @{@"addesc": @"图片信息流", @"adspotId": @"100255-10006582"},
-        
         //@{@"addesc": @"信息流-GroMore", @"adspotId": @"102768-10008589"},
         @{@"addesc": @"信息流-Bidding", @"adspotId": @"102768-10008534"},
         @{@"addesc": @"信息流-倍业", @"adspotId": @"102768-10007789"},

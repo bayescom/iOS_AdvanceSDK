@@ -33,7 +33,6 @@
 }
 
 - (void)loadAd {
-    _adspot.viewController.modalPresentationStyle = 0;
     [_gdt_ad loadAd];
 }
 
@@ -48,18 +47,8 @@
 }
 
 - (void)showInWindow:(UIWindow *)window {
-    // 设置logo
-    UIImageView *imgV;
-    if (_adspot.logoImage) {
-        CGFloat real_w = [UIScreen mainScreen].bounds.size.width;
-        CGFloat real_h = _adspot.logoImage.size.height*(real_w/_adspot.logoImage.size.width);
-        imgV = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, real_w, real_h)];
-        imgV.userInteractionEnabled = YES;
-        imgV.image = _adspot.logoImage;
-    }
-   
     if ([self.gdt_ad isAdValid]) {
-        [_gdt_ad showAdInWindow:window withBottomView:imgV skipView:nil];
+        [_gdt_ad showAdInWindow:window withBottomView:_adspot.bottomLogoView skipView:nil];
     }
 }
 

@@ -17,7 +17,6 @@
 @property (nonatomic, strong) AdvSupplier *supplier;
 @property (nonatomic, strong) TXAdModel *adModel;
 @property(nonatomic, strong) UIView *templateView;
-@property (nonatomic, strong) UIImageView *imgV;
 
 @end
 
@@ -67,21 +66,13 @@
 }
 
 - (void)showInWindow:(UIWindow *)window {
+    CGRect adFrame = [UIApplication sharedApplication].keyWindow.bounds;
     // 设置logo
-    CGRect adFrame = [UIScreen mainScreen].bounds;
-    if (_adspot.logoImage && _adspot.showLogoRequire) {
-        
-        NSAssert(_adspot.logoImage != nil, @"showLogoRequire = YES时, 必须设置logoImage");
-        CGFloat real_w = [UIScreen mainScreen].bounds.size.width;
-        CGFloat real_h = _adspot.logoImage.size.height*(real_w/_adspot.logoImage.size.width);
-        adFrame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height-real_h);
-        
-        self.imgV = [[UIImageView alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height-real_h, real_w, real_h)];
-        self.imgV.userInteractionEnabled = YES;
-        self.imgV.image = _adspot.logoImage;
-        [window addSubview:self.imgV];
+    if (_adspot.bottomLogoView) {
+        adFrame.size.height -= _adspot.bottomLogoView.bounds.size.height;
+        _adspot.bottomLogoView.frame = CGRectMake(0, UIScreen.mainScreen.bounds.size.height - _adspot.bottomLogoView.bounds.size.height, UIScreen.mainScreen.bounds.size.width, _adspot.bottomLogoView.bounds.size.height);
+        [window addSubview:_adspot.bottomLogoView];
     }
-    
     TXAdSplashTemplateConfig *config = [[TXAdSplashTemplateConfig alloc] init];
     self.templateView = [self.tanx_ad renderSplashTemplateWithAdModel:self.adModel config:config];
     self.templateView.frame = adFrame;
@@ -99,13 +90,12 @@
 
 /// 关闭
 - (void)onSplashClose {
+    [_adspot.bottomLogoView removeFromSuperview];
+    [_templateView removeFromSuperview];
+    _templateView = nil;
     if ([self.delegate respondsToSelector:@selector(splashDidCloseForSpotId:extra:)]) {
         [self.delegate splashDidCloseForSpotId:self.adspot.adspotid extra:self.adspot.ext];
     }
-    [_imgV removeFromSuperview];
-    _imgV = nil;
-    [_templateView removeFromSuperview];
-    _templateView = nil;
 }
 
 /// 点击了跳转
