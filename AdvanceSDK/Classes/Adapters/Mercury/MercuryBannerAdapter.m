@@ -32,7 +32,7 @@
         _adspot = adspot;
         _supplier = supplier;
         CGRect rect = CGRectMake(0, 0, _adspot.adContainer.frame.size.width, _adspot.adContainer.frame.size.height);
-        _mercury_ad = [[MercuryBannerAdView alloc] initWithFrame:rect adspotId:_adspot.adspotid delegate:self];
+        _mercury_ad = [[MercuryBannerAdView alloc] initWithFrame:rect adspotId:supplier.adspotid delegate:self];
         _mercury_ad.controller = _adspot.viewController;
         _mercury_ad.interval = _adspot.refreshInterval;
 

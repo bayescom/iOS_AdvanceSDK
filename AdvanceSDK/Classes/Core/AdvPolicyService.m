@@ -103,16 +103,16 @@
         }
     }
     /// 取BiddingGroup组
-    NSArray *biddingSuppliers = [self.model.setting.headBiddingGroup map:^id(NSNumber *priority) {
-        return [self.model.suppliers filter:^BOOL(AdvSupplier *supplier) {
+    NSArray *biddingSuppliers = [self.model.setting.headBiddingGroup adv_map:^id(NSNumber *priority) {
+        return [self.model.suppliers adv_filter:^BOOL(AdvSupplier *supplier) {
             return supplier.priority == priority.integerValue;
         }].firstObject;
     }];
     _biddingSuppliers = [biddingSuppliers mutableCopy];
     
     /// 取parallelGroup当前第一层策略组
-    NSArray *firstGroupSuppliers = [self.model.setting.parallelGroup.firstObject map:^id(NSNumber *priority) {
-        return [self.model.suppliers filter:^BOOL(AdvSupplier *supplier) {
+    NSArray *firstGroupSuppliers = [self.model.setting.parallelGroup.firstObject adv_map:^id(NSNumber *priority) {
+        return [self.model.suppliers adv_filter:^BOOL(AdvSupplier *supplier) {
             return supplier.priority == priority.integerValue;
         }].firstObject;
     }];
@@ -152,14 +152,14 @@
 
 /// 超时监测
 - (void)observeLoadAdTimeout {
-    NSArray *timeoutParallelSuppliers = [_parallelSuppliers filter:^BOOL(AdvSupplier *supplier) {
+    NSArray *timeoutParallelSuppliers = [_parallelSuppliers adv_filter:^BOOL(AdvSupplier *supplier) {
         return supplier.loadAdState == AdvanceSupplierLoadAdReady;
     }];
     /// check方法中对_parallelSuppliers进行了移除操作，所以创建超时数组避免边遍历边移除带来问题
     [timeoutParallelSuppliers enumerateObjectsUsingBlock:^(AdvSupplier *  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         [self checkTargetWithResultfulSupplier:obj loadAdState:AdvanceSupplierLoadAdTimeout];
     }];
-    NSArray *timeoutBiddingSuppliers = [_biddingSuppliers filter:^BOOL(AdvSupplier *supplier) {
+    NSArray *timeoutBiddingSuppliers = [_biddingSuppliers adv_filter:^BOOL(AdvSupplier *supplier) {
         return supplier.loadAdState == AdvanceSupplierLoadAdReady;
     }];
     [timeoutBiddingSuppliers enumerateObjectsUsingBlock:^(AdvSupplier *  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -205,7 +205,7 @@
     } else { /// 混合竞价模式（瀑布流 + 头部竞价）
         
         /// 检测bidding组是否全部返回了结果，失败或超时渠道此前已被删除
-        if ([_biddingSuppliers filter:^BOOL(AdvSupplier *supplier) {
+        if ([_biddingSuppliers adv_filter:^BOOL(AdvSupplier *supplier) {
             return supplier.loadAdState == AdvanceSupplierLoadAdReady;
         }].count) {
             return;
@@ -243,8 +243,8 @@
     /// 如果当前的parallelSuppliers都返回失败，并且bidTarget 比下一组的最高价低 则需要开启下一组parallelGroup
     if (_parallelSuppliers.count == 0) {
         NSArray *nextGroupPriorities = self.model.setting.parallelGroup.firstObject;
-        NSMutableArray <AdvSupplier *> *nextGroupSuppliers = [nextGroupPriorities map:^id(NSNumber *priority) {
-            return [self.model.suppliers filter:^BOOL(AdvSupplier *supplier) {
+        NSMutableArray <AdvSupplier *> *nextGroupSuppliers = [nextGroupPriorities adv_map:^id(NSNumber *priority) {
+            return [self.model.suppliers adv_filter:^BOOL(AdvSupplier *supplier) {
                 return supplier.priority == priority.integerValue;
             }].firstObject;
         }].mutableCopy;

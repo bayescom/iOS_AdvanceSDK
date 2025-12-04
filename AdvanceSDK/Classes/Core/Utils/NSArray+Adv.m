@@ -2,7 +2,7 @@
 
 @implementation NSArray (Adv)
 
-- (NSArray *)map:(id(^)(id))handle {
+- (NSArray *)adv_map:(id(^)(id))handle {
     if (!handle || !self) return self;
     
     NSMutableArray *arr = NSMutableArray.array;
@@ -15,7 +15,7 @@
     return arr.copy;
 }
 
-- (NSArray *)filter:(BOOL(^)(id))handle {
+- (NSArray *)adv_filter:(BOOL(^)(id))handle {
     if (!handle || !self) return self;
     
     NSMutableArray *arr = NSMutableArray.array;
@@ -27,7 +27,7 @@
     return arr.copy;
 }
 
-- (id)reduce:(id(^)(id, id))handle initial:(id)initial {
+- (id)adv_reduce:(id(^)(id, id))handle initial:(id)initial {
     if (!handle || !self || !initial) return self;
     if (self.count < 1) return initial;
     

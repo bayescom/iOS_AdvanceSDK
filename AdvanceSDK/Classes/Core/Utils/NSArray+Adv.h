@@ -2,8 +2,8 @@
 
 @interface NSArray (Adv)
 
-- (NSArray *)map:(id(^)(id))handle;
-- (NSArray *)filter:(BOOL(^)(id))handle;
-- (id)reduce:(id(^)(id, id))handle initial:(id)initial;
+- (NSArray *)adv_map:(id(^)(id))handle;
+- (NSArray *)adv_filter:(BOOL(^)(id))handle;
+- (id)adv_reduce:(id(^)(id, id))handle initial:(id)initial;
 
 @end

@@ -341,7 +341,7 @@
 				6003F588195388D20070C39A /* Resources */,
 				DD802C9B010FB5F799395DE7 /* [CP] Embed Pods Frameworks */,
 				4EA928F3289BA45B00512BF2 /* Embed Frameworks */,
-				904BE716A44165680A47D5E2 /* [CP] Copy Pods Resources */,
+				6690C405F9B2CDFB2633E0E1 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -419,7 +419,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		904BE716A44165680A47D5E2 /* [CP] Copy Pods Resources */ = {
+		6690C405F9B2CDFB2633E0E1 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -429,25 +429,25 @@
 				"${PODS_ROOT}/Ads-CN-Beta/SDK/CSJAdSDK.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/AdvanceSDK/AdvanceSDK.bundle",
 				"${PODS_ROOT}/BaiduMobAdSDK/baidumobadsdk.bundle",
-				"${PODS_ROOT}/TanxSDK/TanxSDK/TanxSDK.library/TanxSDK.framework/TanxID.bundle/back_left.png",
-				"${PODS_ROOT}/TanxSDK/TanxSDK/TanxSDK.library/TanxSDK.framework/TanxID.bundle/feed_close@2x.png",
-				"${PODS_ROOT}/TanxSDK/TanxSDK/TanxSDK.library/TanxSDK.framework/TanxID.bundle/feed_close@3x.png",
-				"${PODS_ROOT}/TanxSDK/TanxSDK/TanxSDK.library/TanxSDK.framework/TanxID.bundle/feed_web_loading.gif",
-				"${PODS_ROOT}/TanxSDK/TanxSDK/TanxSDK.library/TanxSDK.framework/TanxID.bundle/loding@2x.png",
-				"${PODS_ROOT}/TanxSDK/TanxSDK/TanxSDK.library/TanxSDK.framework/TanxID.bundle/mute_icon.png",
-				"${PODS_ROOT}/TanxSDK/TanxSDK/TanxSDK.library/TanxSDK.framework/TanxID.bundle/pause@2x.png",
-				"${PODS_ROOT}/TanxSDK/TanxSDK/TanxSDK.library/TanxSDK.framework/TanxID.bundle/play_icon.png",
-				"${PODS_ROOT}/TanxSDK/TanxSDK/TanxSDK.library/TanxSDK.framework/TanxID.bundle/poor_content_night@3x.png",
-				"${PODS_ROOT}/TanxSDK/TanxSDK/TanxSDK.library/TanxSDK.framework/TanxID.bundle/poor_content_write@3x.png",
-				"${PODS_ROOT}/TanxSDK/TanxSDK/TanxSDK.library/TanxSDK.framework/TanxID.bundle/reward_gudie.gif",
-				"${PODS_ROOT}/TanxSDK/TanxSDK/TanxSDK.library/TanxSDK.framework/TanxID.bundle/shake_mobile@3x.png",
-				"${PODS_ROOT}/TanxSDK/TanxSDK/TanxSDK.library/TanxSDK.framework/TanxID.bundle/splash_jump@2x.png",
-				"${PODS_ROOT}/TanxSDK/TanxSDK/TanxSDK.library/TanxSDK.framework/TanxID.bundle/splash_jump@3x.png",
-				"${PODS_ROOT}/TanxSDK/TanxSDK/TanxSDK.library/TanxSDK.framework/TanxID.bundle/TXAdConfigure.txt",
-				"${PODS_ROOT}/TanxSDK/TanxSDK/TanxSDK.library/TanxSDK.framework/TanxID.bundle/uninterested_night@3x.png",
-				"${PODS_ROOT}/TanxSDK/TanxSDK/TanxSDK.library/TanxSDK.framework/TanxID.bundle/uninterested_write@3x.png",
-				"${PODS_ROOT}/TanxSDK/TanxSDK/TanxSDK.library/TanxSDK.framework/TanxID.bundle/unmute_icon.png",
-				"${PODS_ROOT}/TanxSDK/TanxSDK/TanxSDK.library/TanxSDK.framework/TanxID.bundle/white_close_icon.png",
+				"${PODS_ROOT}/TanxSDK/TanxSDK/TanxSDK.library/TanxSDK.xcframework/ios-arm64/TanxSDK.framework/TanxID.bundle/back_left.png",
+				"${PODS_ROOT}/TanxSDK/TanxSDK/TanxSDK.library/TanxSDK.xcframework/ios-arm64/TanxSDK.framework/TanxID.bundle/feed_close@2x.png",
+				"${PODS_ROOT}/TanxSDK/TanxSDK/TanxSDK.library/TanxSDK.xcframework/ios-arm64/TanxSDK.framework/TanxID.bundle/feed_close@3x.png",
+				"${PODS_ROOT}/TanxSDK/TanxSDK/TanxSDK.library/TanxSDK.xcframework/ios-arm64/TanxSDK.framework/TanxID.bundle/feed_web_loading.gif",
+				"${PODS_ROOT}/TanxSDK/TanxSDK/TanxSDK.library/TanxSDK.xcframework/ios-arm64/TanxSDK.framework/TanxID.bundle/loding@2x.png",
+				"${PODS_ROOT}/TanxSDK/TanxSDK/TanxSDK.library/TanxSDK.xcframework/ios-arm64/TanxSDK.framework/TanxID.bundle/mute_icon.png",
+				"${PODS_ROOT}/TanxSDK/TanxSDK/TanxSDK.library/TanxSDK.xcframework/ios-arm64/TanxSDK.framework/TanxID.bundle/pause@2x.png",
+				"${PODS_ROOT}/TanxSDK/TanxSDK/TanxSDK.library/TanxSDK.xcframework/ios-arm64/TanxSDK.framework/TanxID.bundle/play_icon.png",
+				"${PODS_ROOT}/TanxSDK/TanxSDK/TanxSDK.library/TanxSDK.xcframework/ios-arm64/TanxSDK.framework/TanxID.bundle/poor_content_night@3x.png",
+				"${PODS_ROOT}/TanxSDK/TanxSDK/TanxSDK.library/TanxSDK.xcframework/ios-arm64/TanxSDK.framework/TanxID.bundle/poor_content_write@3x.png",
+				"${PODS_ROOT}/TanxSDK/TanxSDK/TanxSDK.library/TanxSDK.xcframework/ios-arm64/TanxSDK.framework/TanxID.bundle/reward_gudie.gif",
+				"${PODS_ROOT}/TanxSDK/TanxSDK/TanxSDK.library/TanxSDK.xcframework/ios-arm64/TanxSDK.framework/TanxID.bundle/shake_mobile@3x.png",
+				"${PODS_ROOT}/TanxSDK/TanxSDK/TanxSDK.library/TanxSDK.xcframework/ios-arm64/TanxSDK.framework/TanxID.bundle/splash_jump@2x.png",
+				"${PODS_ROOT}/TanxSDK/TanxSDK/TanxSDK.library/TanxSDK.xcframework/ios-arm64/TanxSDK.framework/TanxID.bundle/splash_jump@3x.png",
+				"${PODS_ROOT}/TanxSDK/TanxSDK/TanxSDK.library/TanxSDK.xcframework/ios-arm64/TanxSDK.framework/TanxID.bundle/TXAdConfigure.txt",
+				"${PODS_ROOT}/TanxSDK/TanxSDK/TanxSDK.library/TanxSDK.xcframework/ios-arm64/TanxSDK.framework/TanxID.bundle/uninterested_night@3x.png",
+				"${PODS_ROOT}/TanxSDK/TanxSDK/TanxSDK.library/TanxSDK.xcframework/ios-arm64/TanxSDK.framework/TanxID.bundle/uninterested_write@3x.png",
+				"${PODS_ROOT}/TanxSDK/TanxSDK/TanxSDK.library/TanxSDK.xcframework/ios-arm64/TanxSDK.framework/TanxID.bundle/unmute_icon.png",
+				"${PODS_ROOT}/TanxSDK/TanxSDK/TanxSDK.library/TanxSDK.xcframework/ios-arm64/TanxSDK.framework/TanxID.bundle/white_close_icon.png",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
@@ -490,6 +490,7 @@
 				"${PODS_XCFRAMEWORKS_BUILD_DIR}/GDTMobSDK/GDTMobSDK.framework/GDTMobSDK",
 				"${PODS_XCFRAMEWORKS_BUILD_DIR}/GDTMobSDK/Tquic.framework/Tquic",
 				"${PODS_XCFRAMEWORKS_BUILD_DIR}/KSAdSDK/KSAdSDK.framework/KSAdSDK",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/TanxSDK/TanxMonitor.framework/TanxMonitor",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
@@ -497,6 +498,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GDTMobSDK.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Tquic.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KSAdSDK.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TanxMonitor.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
