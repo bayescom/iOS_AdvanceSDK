@@ -6,13 +6,7 @@
 //
 
 #import "KsSplashAdapter.h"
-
-#if __has_include(<KSAdSDK/KSAdSDK.h>)
 #import <KSAdSDK/KSAdSDK.h>
-#else
-#import "KSAdSDK.h"
-#endif
-
 #import "AdvanceSplash.h"
 #import "AdvLog.h"
 #import "AdvanceAdapter.h"

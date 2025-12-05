@@ -7,16 +7,9 @@
 //
 
 #import "MercurySplashAdapter.h"
-
-#if __has_include(<MercurySDK/MercurySplashAd.h>)
-#import <MercurySDK/MercurySplashAd.h>
-#else
-#import "MercurySplashAd.h"
-#endif
-
+#import <MercurySDK/MercurySDK.h>
 #import "AdvanceSplash.h"
 #import "AdvLog.h"
-#import <MercurySDK/MercurySDK.h>
 #import "AdvanceAdapter.h"
 
 @interface MercurySplashAdapter () <MercurySplashAdDelegate, AdvanceAdapter>

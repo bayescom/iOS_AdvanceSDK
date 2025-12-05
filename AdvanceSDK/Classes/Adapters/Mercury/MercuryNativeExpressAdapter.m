@@ -7,11 +7,7 @@
 //
 
 #import "MercuryNativeExpressAdapter.h"
-#if __has_include(<MercurySDK/MercuryNativeExpressAd.h>)
-#import <MercurySDK/MercuryNativeExpressAd.h>
-#else
-#import "MercuryNativeExpressAd.h"
-#endif
+#import <MercurySDK/MercurySDK.h>
 #import "AdvanceNativeExpress.h"
 #import "AdvLog.h"
 #import "AdvanceNativeExpressAd.h"

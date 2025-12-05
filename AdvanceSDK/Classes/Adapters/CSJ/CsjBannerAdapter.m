@@ -7,12 +7,7 @@
 //
 
 #import "CsjBannerAdapter.h"
-
-#if __has_include(<BUAdSDK/BUNativeExpressBannerView.h>)
-#import <BUAdSDK/BUNativeExpressBannerView.h>
-#else
-#import "BUNativeExpressBannerView.h"
-#endif
+#import <BUAdSDK/BUAdSDK.h>
 #import "AdvLog.h"
 #import "AdvanceBanner.h"
 #import "AdvanceAdapter.h"

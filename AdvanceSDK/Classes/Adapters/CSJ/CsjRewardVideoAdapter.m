@@ -7,18 +7,7 @@
 //
 
 #import "CsjRewardVideoAdapter.h"
-
-#if __has_include(<BUAdSDK/BUNativeExpressRewardedVideoAd.h>)
-#import <BUAdSDK/BUNativeExpressRewardedVideoAd.h>
-#else
-#import "BUNativeExpressRewardedVideoAd.h"
-#endif
-#if __has_include(<BUAdSDK/BURewardedVideoModel.h>)
-#import <BUAdSDK/BURewardedVideoModel.h>
-#else
-#import "BURewardedVideoModel.h"
-#endif
-
+#import <BUAdSDK/BUAdSDK.h>
 #import "AdvanceRewardVideo.h"
 #import "AdvLog.h"
 #import "AdvanceAdapter.h"

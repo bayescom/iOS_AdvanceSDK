@@ -6,7 +6,7 @@
 //
 
 #import "BdRewardVideoAdapter.h"
-#import <BaiduMobAdSDK/BaiduMobAdRewardVideo.h>
+#import <BaiduMobAdSDK/BaiduMobAdSDK.h>
 #import "AdvanceRewardVideo.h"
 #import "AdvLog.h"
 #import "AdvanceAdapter.h"

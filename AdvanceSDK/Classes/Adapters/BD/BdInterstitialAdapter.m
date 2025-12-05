@@ -6,7 +6,7 @@
 //
 
 #import "BdInterstitialAdapter.h"
-#import <BaiduMobAdSDK/BaiduMobAdExpressInterstitial.h>
+#import <BaiduMobAdSDK/BaiduMobAdSDK.h>
 #import "AdvanceInterstitial.h"
 #import "AdvLog.h"
 #import "AdvanceAdapter.h"

@@ -7,12 +7,7 @@
 //
 
 #import "MercuryInterstitialAdapter.h"
-#if __has_include(<MercurySDK/MercuryInterstitialAd.h>)
-#import <MercurySDK/MercuryInterstitialAd.h>
-#else
-#import "MercuryInterstitialAd.h"
-#endif
-
+#import <MercurySDK/MercurySDK.h>
 #import "AdvanceInterstitial.h"
 #import "AdvLog.h"
 #import "AdvanceAdapter.h"

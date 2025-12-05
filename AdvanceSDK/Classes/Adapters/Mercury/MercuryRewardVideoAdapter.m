@@ -7,11 +7,7 @@
 //
 
 #import "MercuryRewardVideoAdapter.h"
-#if __has_include(<MercurySDK/MercuryRewardVideoAd.h>)
-#import <MercurySDK/MercuryRewardVideoAd.h>
-#else
-#import "MercuryRewardVideoAd.h"
-#endif
+#import <MercurySDK/MercurySDK.h>
 #import "AdvanceRewardVideo.h"
 #import "AdvLog.h"
 #import "AdvanceAdapter.h"

@@ -6,8 +6,7 @@
 //
 
 #import "BdRenderFeedAdapter.h"
-#import <BaiduMobAdSDK/BaiduMobAdNative.h>
-#import <BaiduMobAdSDK/BaiduMobAdNativeAdObject.h>
+#import <BaiduMobAdSDK/BaiduMobAdSDK.h>
 #import "AdvanceRenderFeed.h"
 #import "AdvLog.h"
 #import "BdRenderFeedAdView.h"

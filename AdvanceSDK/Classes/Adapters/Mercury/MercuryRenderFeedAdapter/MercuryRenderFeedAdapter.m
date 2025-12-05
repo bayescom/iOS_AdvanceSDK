@@ -6,7 +6,7 @@
 //
 
 #import "MercuryRenderFeedAdapter.h"
-#import <MercurySDK/MercuryUnifiedNativeAd.h>
+#import <MercurySDK/MercurySDK.h>
 #import "AdvanceRenderFeed.h"
 #import "AdvLog.h"
 #import "MercuryRenderFeedAdView.h"

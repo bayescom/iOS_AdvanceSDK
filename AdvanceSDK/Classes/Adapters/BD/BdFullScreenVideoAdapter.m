@@ -6,7 +6,7 @@
 //
 
 #import "BdFullScreenVideoAdapter.h"
-#import <BaiduMobAdSDK/BaiduMobAdExpressFullScreenVideo.h>
+#import <BaiduMobAdSDK/BaiduMobAdSDK.h>
 #import "AdvanceFullScreenVideo.h"
 #import "AdvLog.h"
 #import "AdvanceAdapter.h"

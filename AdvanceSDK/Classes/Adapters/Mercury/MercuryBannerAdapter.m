@@ -7,13 +7,7 @@
 //
 
 #import "MercuryBannerAdapter.h"
-
-#if __has_include(<MercurySDK/MercuryBannerAdView.h>)
-#import <MercurySDK/MercuryBannerAdView.h>
-#else
-#import "MercuryBannerAdView.h"
-#endif
-
+#import <MercurySDK/MercurySDK.h>
 #import "AdvanceBanner.h"
 #import "AdvLog.h"
 #import "AdvanceAdapter.h"

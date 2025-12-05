@@ -6,12 +6,7 @@
 //
 
 #import "KsNativeExpressAdapter.h"
-#if __has_include(<KSAdSDK/KSAdSDK.h>)
 #import <KSAdSDK/KSAdSDK.h>
-#else
-#import "KSAdSDK.h"
-#endif
-
 #import "AdvanceNativeExpress.h"
 #import "AdvLog.h"
 #import "AdvanceNativeExpressAd.h"

@@ -6,8 +6,7 @@
 //
 
 #import "BdNativeExpressAdapter.h"
-#import <BaiduMobAdSDK/BaiduMobAdNative.h>
-#import <BaiduMobAdSDK/BaiduMobAdExpressNativeView.h>
+#import <BaiduMobAdSDK/BaiduMobAdSDK.h>
 #import "AdvanceNativeExpress.h"
 #import "AdvLog.h"
 #import "AdvanceNativeExpressAd.h"

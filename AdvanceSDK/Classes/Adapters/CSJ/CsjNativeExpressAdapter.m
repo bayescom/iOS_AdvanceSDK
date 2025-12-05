@@ -7,11 +7,7 @@
 //
 
 #import "CsjNativeExpressAdapter.h"
-#if __has_include(<BUAdSDK/BUAdSDK.h>)
 #import <BUAdSDK/BUAdSDK.h>
-#else
-#import "BUAdSDK.h"
-#endif
 #import "AdvanceNativeExpress.h"
 #import "AdvLog.h"
 #import "AdvanceNativeExpressAd.h"

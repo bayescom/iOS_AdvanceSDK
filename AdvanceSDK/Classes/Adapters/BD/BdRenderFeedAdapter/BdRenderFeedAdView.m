@@ -6,9 +6,6 @@
 //
 
 #import "BdRenderFeedAdView.h"
-#import <BaiduMobAdSDK/BaiduMobAdNativeAdView.h>
-#import <BaiduMobAdSDK/BaiduMobAdNativeVideoView.h>
-#import <BaiduMobAdSDK/BaiduMobAdNativeInterationDelegate.h>
 #import "BdAdLogoView.h"
 
 @interface BdRenderFeedAdView () <BaiduMobAdNativeInterationDelegate, BaiduMobAdNativeVideoViewDelegate>

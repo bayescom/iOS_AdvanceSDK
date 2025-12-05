@@ -6,7 +6,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <BaiduMobAdSDK/BaiduMobAdNativeAdObject.h>
+#import <BaiduMobAdSDK/BaiduMobAdSDK.h>
 #import "AdvanceRenderFeedDelegate.h"
 #import "AdvanceRenderFeed.h"
 

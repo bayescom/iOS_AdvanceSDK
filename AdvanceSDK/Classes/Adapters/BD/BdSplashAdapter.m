@@ -6,7 +6,7 @@
 //
 
 #import "BdSplashAdapter.h"
-#import <BaiduMobAdSDK/BaiduMobAdSplash.h>
+#import <BaiduMobAdSDK/BaiduMobAdSDK.h>
 #import "AdvanceSplash.h"
 #import "AdvLog.h"
 #import "AdvanceAdapter.h"

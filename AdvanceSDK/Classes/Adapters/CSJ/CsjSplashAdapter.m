@@ -7,13 +7,7 @@
 //
 
 #import "CsjSplashAdapter.h"
-
-#if __has_include(<BUAdSDK/BUAdSDK.h>)
 #import <BUAdSDK/BUAdSDK.h>
-#else
-#import "BUAdSDK.h"
-#endif
-
 #import "AdvanceSplash.h"
 #import "AdvLog.h"
 #import "AdvanceAdapter.h"
