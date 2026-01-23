@@ -10,7 +10,7 @@
 #import <AdvanceSDK/AdvanceFullScreenVideo.h>
 
 @interface DemoFullScreenVideoController () <AdvanceFullScreenVideoDelegate>
-@property (nonatomic, strong) AdvanceFullScreenVideo *advanceFullScreenVideo;
+@property (nonatomic, strong) AdvanceFullScreenVideo *fullscreenVideoAd;
 
 @end
 
@@ -18,8 +18,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    self.initDefSubviewsFlag = YES;
     self.adspotIdsArr = @[
         @{@"addesc": @"全屏视频-Bidding", @"adspotId": @"102768-10008529"},
         @{@"addesc": @"全屏视频-穿山甲", @"adspotId": @"102768-10007829"},
@@ -33,71 +31,58 @@
 
 - (void)loadAdBtn1Action {
     if (![self checkAdspotId]) { return; }
-
-    self.advanceFullScreenVideo = [[AdvanceFullScreenVideo alloc] initWithAdspotId:self.adspotId customExt:nil];
-    self.advanceFullScreenVideo.delegate = self;
-    [self.advanceFullScreenVideo loadAd];
+    self.fullscreenVideoAd = [[AdvanceFullScreenVideo alloc] initWithAdspotId:self.adspotId extra:nil delegate:self];
+    // 加载广告
+    [self.fullscreenVideoAd loadAd];
 }
 
 - (void)loadAdBtn2Action {
-    if (self.advanceFullScreenVideo.isAdValid) {
-        [self.advanceFullScreenVideo showAdFromViewController:self];
+    if (self.fullscreenVideoAd.isAdValid) {
+        [self.fullscreenVideoAd showAdFromViewController:self];
     }
 }
 
-// MARK: ======================= AdvanceFullScreenVideoDelegate =======================
 
-/// 广告策略加载成功
-- (void)didFinishLoadingADPolicyWithSpotId:(NSString *)spotId {
-    NSLog(@"%s 广告位id为: %@",__func__ , spotId);
+#pragma mark: - AdvanceFullScreenVideoDelegate
+/// 广告加载成功回调
+- (void)onFullScreenVideoAdDidLoad:(AdvanceFullScreenVideo *)fullscreenVideoAd {
+    NSLog(@"全屏视频广告加载成功 %s %@", __func__, fullscreenVideoAd);
+    [JDStatusBarNotification showWithStatus:@"广告加载成功" dismissAfter:0.7];
 }
 
-/// 广告策略或者渠道广告加载失败
-- (void)didFailLoadingADSourceWithSpotId:(NSString *)spotId error:(NSError *)error description:(NSDictionary *)description {
-    [JDStatusBarNotification showWithStatus:@"广告加载失败" dismissAfter:1.5];
-    NSLog(@"广告展示失败 %s  error: %@ 详情:%@", __func__, error, description);
+/// 广告加载失败回调
+-(void)onFullScreenVideoAdFailToLoad:(AdvanceFullScreenVideo *)fullscreenVideoAd error:(NSError *)error {
+    NSLog(@"全屏视频广告加载失败 %s %@", __func__, error);
+    [JDStatusBarNotification showWithStatus:@"广告加载失败" dismissAfter:0.7];
+    self.fullscreenVideoAd = nil;
 }
 
-/// 广告位中某一个广告源开始加载广告
-- (void)didStartLoadingADSourceWithSpotId:(NSString *)spotId sourceId:(NSString *)sourceId {
-    NSLog(@"广告位中某一个广告源开始加载广告 %s  sourceId: %@", __func__, sourceId);
+/// 广告曝光回调
+-(void)onFullScreenVideoAdExposured:(AdvanceFullScreenVideo *)fullscreenVideoAd {
+    NSLog(@"全屏视频广告曝光回调 %s %@", __func__, fullscreenVideoAd);
 }
 
-/// 全屏视频广告数据拉取成功
-- (void)didFinishLoadingFullscreenVideoADWithSpotId:(NSString *)spotId {
-    NSLog(@"广告数据拉取成功, 正在缓存... %s", __func__);
-    [JDStatusBarNotification showWithStatus:@"广告加载成功" dismissAfter:1.5];
+/// 广告展示失败回调
+-(void)onFullScreenVideoAdFailToPresent:(AdvanceFullScreenVideo *)fullscreenVideoAd error:(NSError *)error {
+    NSLog(@"全屏视频广告展示失败 %s %@", __func__, error);
+    [JDStatusBarNotification showWithStatus:@"广告展示失败" dismissAfter:0.7];
+    self.fullscreenVideoAd = nil;
 }
 
-/// 全屏视频缓存成功
-- (void)fullscreenVideoDidDownLoadForSpotId:(NSString *)spotId extra:(NSDictionary *)extra {
-    NSLog(@"广告缓存成功 %s", __func__);
-    [JDStatusBarNotification showWithStatus:@"视频缓存成功" dismissAfter:1.5];
+/// 广告点击回调
+- (void)onFullScreenVideoAdClicked:(AdvanceFullScreenVideo *)fullscreenVideoAd {
+    NSLog(@"全屏视频广告点击回调 %s %@", __func__, fullscreenVideoAd);
 }
 
-/// 全屏视频开始播放
-- (void)fullscreenVideoDidStartPlayingForSpotId:(NSString *)spotId extra:(NSDictionary *)extra {
-    NSLog(@"广告曝光回调 %s", __func__);
+/// 广告关闭回调
+- (void)onFullScreenVideoAdClosed:(AdvanceFullScreenVideo *)fullscreenVideoAd {
+    NSLog(@"全屏视频广告关闭回调 %s %@", __func__, fullscreenVideoAd);
+    self.fullscreenVideoAd = nil;
 }
 
-/// 全屏视频播放完成
-- (void)fullscreenVideoDidEndPlayingForSpotId:(NSString *)spotId extra:(NSDictionary *)extra {
-    NSLog(@"广告播放完成 %s", __func__);
-}
-
-/// 全屏视频广告点击
-- (void)fullscreenVideoDidClickForSpotId:(NSString *)spotId extra:(NSDictionary *)extra {
-    NSLog(@"广告点击 %s", __func__);
-}
-
-/// 全屏视频点击跳过
-- (void)fullscreenVideoDidClickSkipForSpotId:(NSString *)spotId extra:(NSDictionary *)extra {
-    NSLog(@"点击了跳过 %s", __func__);
-}
-
-/// 全屏视频广告关闭
-- (void)fullscreenVideoDidCloseForSpotId:(NSString *)spotId extra:(NSDictionary *)extra {
-    NSLog(@"广告关闭了 %s", __func__);
+/// 广告播放结束回调
+- (void)onFullScreenVideoAdDidPlayFinish:(AdvanceFullScreenVideo *)fullscreenVideoAd {
+    NSLog(@"全屏视频播放完成 %s", __func__);
 }
 
 @end

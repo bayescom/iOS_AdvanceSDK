@@ -13,5 +13,15 @@
 
 + (void)loadSupplier:(AdvSupplier *)supplier completion:(void (^)(void))completion;
 
++ (BOOL)isSDKInstalledWithSupplierId:(NSString *)supplierId;
+
++ (NSString *)mappingSplashAdapterClassNameWithSupplierId:(NSString *)supplierId;
+
++ (NSString *)mappingInterstitialAdapterClassNameWithSupplierId:(NSString *)supplierId;
+
++ (NSString *)mappingRewardAdapterClassNameWithSupplierId:(NSString *)supplierId;
+
++ (NSString *)mappingFullScreenAdapterClassNameWithSupplierId:(NSString *)supplierId;
+
 @end
 

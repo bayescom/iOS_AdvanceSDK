@@ -9,36 +9,14 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-/// 以字符串形式返回状态码
-NSString * ADVStringFromNAdvanceSdkSupplierRepoType(AdvanceSdkSupplierRepoType type) {
-    switch (type) {
-        case AdvanceSdkSupplierRepoLoaded:
-            return @"AdvanceSdkSupplierRepoLoaded(广告加载上报)";
-        case AdvanceSdkSupplierRepoClicked:
-            return @"AdvanceSdkSupplierRepoClicked(广告点击上报)";
-        case AdvanceSdkSupplierRepoSucceed:
-            return @"AdvanceSdkSupplierRepoSucceeded(广告获取成功上报)";
-        case AdvanceSdkSupplierRepoImped:
-            return @"AdvanceSdkSupplierRepoImped(广告曝光上报)";
-        case AdvanceSdkSupplierRepoFailed:
-            return @"AdvanceSdkSupplierRepoFaileded(广告获取/渲染失败上报)";
-        case AdvanceSdkSupplierRepoBidWin:
-            return @"AdvanceSdkSupplierRepoBidWin(广告竞胜上报)";
-        default:
-            return @"MercuryBaseAdRepoTKEventTypeUnknow(未知类型上报)";
-    }
-}
-
 #pragma mark - Private model interfaces
 
 
 @implementation AdvPolicyModel
 
-
 + (NSDictionary *)modelContainerPropertyGenericClass {
     return @{@"suppliers" : [AdvSupplier class]};
 }
-
 
 @end
 

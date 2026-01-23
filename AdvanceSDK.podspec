@@ -67,10 +67,10 @@ Pod::Spec.new do |s|
         ks.source_files = 'AdvanceSDK/Classes/Adapters/KS/**/*.{h,m}'
     end
     
-    s.subspec 'BDAdapter' do |bd|
+    s.subspec 'BaiduAdapter' do |bd|
         bd.dependency 'AdvanceSDK/AdSpot'
         bd.dependency 'BaiduMobAdSDK'
-        bd.source_files =  'AdvanceSDK/Classes/Adapters/BD/**/*.{h,m}'
+        bd.source_files =  'AdvanceSDK/Classes/Adapters/Baidu/**/*.{h,m}'
     end
     
     s.subspec 'TanxAdapter' do |tanx|
@@ -84,11 +84,5 @@ Pod::Spec.new do |s|
         sigmob.dependency 'SigmobAd-iOS'
         sigmob.source_files =  'AdvanceSDK/Classes/Adapters/Sigmob/**/*.{h,m}'
     end
-    
-#    s.subspec 'GroMoreBidding' do |bidding|
-#        bidding.dependency 'AdvanceSDK/AdSpot'
-#        bidding.dependency 'GroMoreBiddingSDK', '1.2.0'
-#        bidding.source_files = 'AdvanceSDK/Classes/GroMoreBidding/**/*.{h,m}'
-#    end
 
 end

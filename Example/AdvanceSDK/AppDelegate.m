@@ -8,7 +8,7 @@
 
 #import "AppDelegate.h"
 #import "ViewController.h"
-#import <AdvanceSDK/AdvSdkConfig.h>
+#import <AdvanceSDK/AdvanceSDKManager.h>
 #import <AppTrackingTransparency/AppTrackingTransparency.h>
 #import <AdSupport/AdSupport.h>
 
@@ -29,7 +29,7 @@
     self.window.rootViewController = nav;
     [self.window makeKeyAndVisible];
     
-    [AdvSdkConfig shareInstance].appId = @"102768";
+    [AdvanceSDKManager setAppId:@"102768"];
     
     return YES;
 }

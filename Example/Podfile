@@ -23,7 +23,7 @@ target 'AdvanceSDK_Example' do
   pod 'KSAdSDK', '4.11.20.1'
 
   #集成百度Adapter
-  pod 'AdvanceSDK/BDAdapter', :path => '../'
+  pod 'AdvanceSDK/BaiduAdapter', :path => '../'
   pod 'BaiduMobAdSDK', '10.022'
   
   #集成TanxAdapter

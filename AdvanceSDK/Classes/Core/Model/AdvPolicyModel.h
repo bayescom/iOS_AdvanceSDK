@@ -6,7 +6,8 @@
 //
 
 #import <Foundation/Foundation.h>
-
+#import "AdvDefines.h"
+#import "AdvYYModel.h"
 @class AdvPolicyModel;
 @class AdvSetting;
 @class AdvSupplier;
@@ -15,40 +16,7 @@
 @class Gromore_params;
 @class ServerReward;
 
-typedef NS_ENUM(NSUInteger, AdvanceSdkSupplierRepoType) {
-    /// 广告加载上报
-    AdvanceSdkSupplierRepoLoaded,
-    /// 广告获取成功上报
-    AdvanceSdkSupplierRepoSucceed,
-    /// 广告获取/渲染失败上报
-    AdvanceSdkSupplierRepoFailed,
-    /// 广告曝光上报
-    AdvanceSdkSupplierRepoImped,
-    /// 广告点击上报
-    AdvanceSdkSupplierRepoClicked,
-    /// 广告竞胜上报
-    AdvanceSdkSupplierRepoBidWin,
-
-};
-
-
-typedef NS_ENUM(NSUInteger, AdvanceSupplierLoadAdState) {
-    /// 准备就绪
-    AdvanceSupplierLoadAdReady = 0,
-    /// 渠道请求广告素材成功
-    AdvanceSupplierLoadAdSuccess,
-    /// 渠道请求广告素材失败
-    AdvanceSupplierLoadAdFailed,
-    /// 渠道请求广告素材超时
-    AdvanceSupplierLoadAdTimeout,
-};
-
-
 NS_ASSUME_NONNULL_BEGIN
-
-NSString * ADVStringFromNAdvanceSdkSupplierRepoType(AdvanceSdkSupplierRepoType type);
-
-#pragma mark - Object interfaces
 
 @interface AdvPolicyModel : NSObject
 @property (nonatomic, strong) Gro_more  *gro_more;
@@ -89,7 +57,7 @@ NSString * ADVStringFromNAdvanceSdkSupplierRepoType(AdvanceSdkSupplierRepoType t
 @property (nonatomic, strong) NSArray<NSString *> *wintk; // 上游sdk竞胜上报（仅在开启竞价情况下返回）
 
 /// 以下为自定义字段
-@property (nonatomic, assign) AdvanceSupplierLoadAdState loadAdState; // 广告加载状态
+@property (nonatomic, assign) AdvSupplierLoadAdState loadAdState; // 广告加载状态
 @property (nonatomic, assign) BOOL hited; // 是否已经命中过
 /// 用于存储对应的Adapter，key必须唯一，会有同渠道配置多个的情况
 @property (nonatomic, copy) NSString *supplierKey;
