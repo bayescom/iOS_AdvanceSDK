@@ -50,7 +50,7 @@
 - (void)interstitialAdLoadFailCode:(NSString *)errCode
                            message:(NSString *)message
                     interstitialAd:(BaiduMobAdExpressInterstitial *)interstitial {
-    NSError *error = [[NSError alloc] initWithDomain:@"BaiduAdErrorDomain" code:[errCode integerValue] userInfo:@{NSLocalizedDescriptionKey: message ?: @""}];
+    NSError *error = [NSError errorWithDomain:@"BaiduAdErrorDomain" code:[errCode integerValue] userInfo:@{NSLocalizedDescriptionKey: message ?: @""}];
     [self.delegate interstitialAdapter_failedToLoadAdWithAdapterId:self.adapterId error:error];
 }
 
@@ -59,7 +59,7 @@
 }
 
 - (void)interstitialAdExposureFail:(BaiduMobAdExpressInterstitial *)interstitial withError:(int)reason {
-    NSError *error = [[NSError alloc] initWithDomain:@"BaiduAdErrorDomain" code:reason userInfo:nil];
+    NSError *error = [NSError errorWithDomain:@"BaiduAdErrorDomain" code:reason userInfo:nil];
     [self.delegate interstitialAdapter_failedToShowAdWithAdapterId:self.adapterId error:error];
 }
 

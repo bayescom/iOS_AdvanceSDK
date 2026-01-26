@@ -45,7 +45,7 @@
             [strongSelf.delegate rewardAdapter_failedToLoadAdWithAdapterId:strongSelf.adapterId error:error];
         } else { // 获取广告成功
             strongSelf.adModel = rewardAdModels.firstObject;
-            NSInteger ecpm = self.adModel.bid.bidPrice.integerValue;
+            NSInteger ecpm = strongSelf.adModel.bid.bidPrice.integerValue;
             [strongSelf.delegate rewardAdapter_didLoadAdWithAdapterId:strongSelf.adapterId price:ecpm];
         }
     }];

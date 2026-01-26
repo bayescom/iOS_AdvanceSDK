@@ -23,5 +23,9 @@
 
 + (NSString *)mappingFullScreenAdapterClassNameWithSupplierId:(NSString *)supplierId;
 
++ (NSString *)mappingNativeExpressAdapterClassNameWithSupplierId:(NSString *)supplierId;
+
++ (NSString *)mappingRenderFeedAdapterClassNameWithSupplierId:(NSString *)supplierId;
+
 @end
 

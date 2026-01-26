@@ -49,12 +49,12 @@
 }
 
 - (void)fullScreenVideoAdLoadFailCode:(NSString *)errCode message:(NSString *)message fullScreenAd:(BaiduMobAdExpressFullScreenVideo *)video {
-    NSError *error = [[NSError alloc] initWithDomain:@"BaiduAdErrorDomain" code:[errCode integerValue] userInfo:@{NSLocalizedDescriptionKey: message ?: @""}];
+    NSError *error = [NSError errorWithDomain:@"BaiduAdErrorDomain" code:[errCode integerValue] userInfo:@{NSLocalizedDescriptionKey: message ?: @""}];
     [self.delegate fullscreenAdapter_failedToLoadAdWithAdapterId:self.adapterId error:error];
 }
 
 - (void)fullScreenVideoAdShowFailed:(BaiduMobAdExpressFullScreenVideo *)video withError:(BaiduMobFailReason)reason {
-    NSError *error = [[NSError alloc] initWithDomain:@"BaiduAdErrorDomain" code:reason userInfo:nil];
+    NSError *error = [NSError errorWithDomain:@"BaiduAdErrorDomain" code:reason userInfo:nil];
     [self.delegate fullscreenAdapter_failedToShowAdWithAdapterId:self.adapterId error:error];
 }
 

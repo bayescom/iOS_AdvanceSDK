@@ -35,8 +35,6 @@
 - (void)loadAdBtn1Action {
     if (![self checkAdspotId]) { return; }
     DemoListFeedExpressViewController *vc = [[DemoListFeedExpressViewController alloc] init];
-    vc.count = 1;
-    vc.mediaId = self.mediaId;
     vc.adspotId = self.adspotId;
     vc.ext = self.ext;
     [self.navigationController pushViewController:vc animated:YES];

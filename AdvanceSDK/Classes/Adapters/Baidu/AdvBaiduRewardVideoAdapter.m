@@ -57,12 +57,12 @@
 - (void)rewardedAdLoadFailCode:(NSString *)errCode
                        message:(NSString *)message
                     rewardedAd:(BaiduMobAdRewardVideo *)video {
-    NSError *error = [[NSError alloc] initWithDomain:@"BaiduAdErrorDomain" code:[errCode integerValue] userInfo:@{NSLocalizedDescriptionKey: message ?: @""}];
+    NSError *error = [NSError errorWithDomain:@"BaiduAdErrorDomain" code:[errCode integerValue] userInfo:@{NSLocalizedDescriptionKey: message ?: @""}];
     [self.delegate rewardAdapter_failedToLoadAdWithAdapterId:self.adapterId error:error];
 }
 
 - (void)rewardedVideoAdShowFailed:(BaiduMobAdRewardVideo *)video withError:(BaiduMobFailReason)reason {
-    NSError *error = [[NSError alloc] initWithDomain:@"BaiduAdErrorDomain" code:reason userInfo:nil];
+    NSError *error = [NSError errorWithDomain:@"BaiduAdErrorDomain" code:reason userInfo:nil];
     [self.delegate rewardAdapter_failedToShowAdWithAdapterId:self.adapterId error:error];
 }
 

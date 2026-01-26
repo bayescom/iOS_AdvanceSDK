@@ -1,5 +1,5 @@
 //
-//  AdvanceNativeExpressAd.h
+//  AdvNativeExpressAdObject.h
 //  AdvanceSDK
 //
 //  Created by MS on 2021/8/4.
@@ -9,8 +9,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface AdvanceNativeExpressAd : NSObject
-
+@interface AdvNativeExpressAdObject : NSObject
 // 信息流view
 @property (nonatomic, strong) UIView *expressView;
 // 渠道标识

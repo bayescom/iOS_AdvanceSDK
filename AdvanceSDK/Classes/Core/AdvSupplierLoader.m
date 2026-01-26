@@ -252,6 +252,44 @@ static NSMutableDictionary *_initializedDict = nil;
     return clsName;
 }
 
++ (NSString *)mappingNativeExpressAdapterClassNameWithSupplierId:(NSString *)supplierId {
+    NSString *clsName = @"";
+    if ([supplierId isEqualToString:SDK_ID_CSJ]) {
+        clsName = @"AdvCSJNativeExpressAdapter";
+    } else if ([supplierId isEqualToString:SDK_ID_GDT]) {
+        clsName = @"AdvGDTNativeExpressAdapter";
+    } else if ([supplierId isEqualToString:SDK_ID_KS]) {
+        clsName = @"AdvKSNativeExpressAdapter";
+    } else if ([supplierId isEqualToString:SDK_ID_BAIDU]) {
+        clsName = @"AdvBaiduNativeExpressAdapter";
+    } else if ([supplierId isEqualToString:SDK_ID_MERCURY]) {
+        clsName = @"AdvMercuryNativeExpressAdapter";
+    } else if ([supplierId isEqualToString:SDK_ID_TANX]) {
+        clsName = @"AdvTanxNativeExpressAdapter";
+    }
+    return clsName;
+}
+
++ (NSString *)mappingRenderFeedAdapterClassNameWithSupplierId:(NSString *)supplierId {
+    NSString *clsName = @"";
+    if ([supplierId isEqualToString:SDK_ID_CSJ]) {
+        clsName = @"AdvCSJRenderFeedAdapter";
+    } else if ([supplierId isEqualToString:SDK_ID_GDT]) {
+        clsName = @"AdvGDTRenderFeedAdapter";
+    } else if ([supplierId isEqualToString:SDK_ID_KS]) {
+        clsName = @"AdvKSRenderFeedAdapter";
+    } else if ([supplierId isEqualToString:SDK_ID_BAIDU]) {
+        clsName = @"AdvBaiduRenderFeedAdapter";
+    } else if ([supplierId isEqualToString:SDK_ID_MERCURY]) {
+        clsName = @"AdvMercuryRenderFeedAdapter";
+    } else if ([supplierId isEqualToString:SDK_ID_TANX]) {
+        clsName = @"AdvTanxRenderFeedAdapter";
+    } else if ([supplierId isEqualToString:SDK_ID_Sigmob]) {
+        clsName = @"AdvSigmobRenderFeedAdapter";
+    }
+    return clsName;
+}
+
 + (BOOL)isSDKInstalledWithSupplierId:(NSString *)supplierId {
     NSString *sdkName = [self mappingSDKClassNameWithSupplierId:supplierId];
     Class sdkClazz = NSClassFromString(sdkName);

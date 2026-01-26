@@ -67,12 +67,12 @@
 - (void)splashAdLoadFailCode:(NSString *)errCode
                      message:(NSString *)message
                     splashAd:(BaiduMobAdSplash *)nativeAd {
-    NSError *error = [[NSError alloc] initWithDomain:@"BaiduAdErrorDomain" code:[errCode integerValue] userInfo:@{NSLocalizedDescriptionKey: message ?: @""}];
+    NSError *error = [NSError errorWithDomain:@"BaiduAdErrorDomain" code:[errCode integerValue] userInfo:@{NSLocalizedDescriptionKey: message ?: @""}];
     [self.delegate splashAdapter_failedToLoadAdWithAdapterId:self.adapterId error:error];
 }
 
 - (void)splashlFailPresentScreen:(BaiduMobAdSplash *)splash withError:(BaiduMobFailReason)reason {
-    NSError *error = [[NSError alloc] initWithDomain:@"BaiduAdErrorDomain" code:reason userInfo:nil];
+    NSError *error = [NSError errorWithDomain:@"BaiduAdErrorDomain" code:reason userInfo:nil];
     [self.delegate splashAdapter_failedToShowAdWithAdapterId:self.adapterId error:error];
 }
 

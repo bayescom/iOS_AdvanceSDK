@@ -11,6 +11,8 @@
 		220A7EBD2BD11F1E0043492A /* DemoSplashViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 220A7EA92BD11F1E0043492A /* DemoSplashViewController.m */; };
 		222E14612F233DF1001C41F9 /* DemoRewardVideoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 222E14602F233DF1001C41F9 /* DemoRewardVideoViewController.m */; };
 		222E14642F23581C001C41F9 /* DemoFullScreenVideoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 222E14632F23581C001C41F9 /* DemoFullScreenVideoController.m */; };
+		222E146A2F238E8B001C41F9 /* DemoFeedExpressViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 222E14662F238E8B001C41F9 /* DemoFeedExpressViewController.m */; };
+		222E146B2F238E8B001C41F9 /* DemoListFeedExpressViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 222E14682F238E8B001C41F9 /* DemoListFeedExpressViewController.m */; };
 		22E9169C2F230CAD00830E19 /* DemoInterstitialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 22E9169B2F230CAD00830E19 /* DemoInterstitialViewController.m */; };
 		31FE7BC524482CEE00CB2062 /* ViewBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 31FE7BAD24482CEE00CB2062 /* ViewBuilder.m */; };
 		31FE7BC624482CEE00CB2062 /* JDStatusBarNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 31FE7BAF24482CEE00CB2062 /* JDStatusBarNotification.m */; };
@@ -61,6 +63,10 @@
 		222E14602F233DF1001C41F9 /* DemoRewardVideoViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DemoRewardVideoViewController.m; sourceTree = "<group>"; };
 		222E14622F23581C001C41F9 /* DemoFullScreenVideoController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DemoFullScreenVideoController.h; sourceTree = "<group>"; };
 		222E14632F23581C001C41F9 /* DemoFullScreenVideoController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DemoFullScreenVideoController.m; sourceTree = "<group>"; };
+		222E14652F238E8B001C41F9 /* DemoFeedExpressViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DemoFeedExpressViewController.h; sourceTree = "<group>"; };
+		222E14662F238E8B001C41F9 /* DemoFeedExpressViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DemoFeedExpressViewController.m; sourceTree = "<group>"; };
+		222E14672F238E8B001C41F9 /* DemoListFeedExpressViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DemoListFeedExpressViewController.h; sourceTree = "<group>"; };
+		222E14682F238E8B001C41F9 /* DemoListFeedExpressViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DemoListFeedExpressViewController.m; sourceTree = "<group>"; };
 		22E9169A2F230CAD00830E19 /* DemoInterstitialViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DemoInterstitialViewController.h; sourceTree = "<group>"; };
 		22E9169B2F230CAD00830E19 /* DemoInterstitialViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DemoInterstitialViewController.m; sourceTree = "<group>"; };
 		31FE7BAC24482CEE00CB2062 /* ViewBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewBuilder.h; sourceTree = "<group>"; };
@@ -132,6 +138,7 @@
 		220A7EA82BD11F1E0043492A /* AdControllers */ = {
 			isa = PBXGroup;
 			children = (
+				222E14692F238E8B001C41F9 /* NativeExpress */,
 				222E14622F23581C001C41F9 /* DemoFullScreenVideoController.h */,
 				222E14632F23581C001C41F9 /* DemoFullScreenVideoController.m */,
 				222E145F2F233DF1001C41F9 /* DemoRewardVideoViewController.h */,
@@ -142,6 +149,17 @@
 				22E9169B2F230CAD00830E19 /* DemoInterstitialViewController.m */,
 			);
 			path = AdControllers;
+			sourceTree = "<group>";
+		};
+		222E14692F238E8B001C41F9 /* NativeExpress */ = {
+			isa = PBXGroup;
+			children = (
+				222E14652F238E8B001C41F9 /* DemoFeedExpressViewController.h */,
+				222E14662F238E8B001C41F9 /* DemoFeedExpressViewController.m */,
+				222E14672F238E8B001C41F9 /* DemoListFeedExpressViewController.h */,
+				222E14682F238E8B001C41F9 /* DemoListFeedExpressViewController.m */,
+			);
+			path = NativeExpress;
 			sourceTree = "<group>";
 		};
 		31FE7BAA24482CEE00CB2062 /* AppViewBuilder */ = {
@@ -484,6 +502,8 @@
 				31FE7BCB24482CEE00CB2062 /* CellBuilder.m in Sources */,
 				220A7EBD2BD11F1E0043492A /* DemoSplashViewController.m in Sources */,
 				31FE7BCD24482CEE00CB2062 /* ExamTableViewCell.m in Sources */,
+				222E146A2F238E8B001C41F9 /* DemoFeedExpressViewController.m in Sources */,
+				222E146B2F238E8B001C41F9 /* DemoListFeedExpressViewController.m in Sources */,
 				222E14642F23581C001C41F9 /* DemoFullScreenVideoController.m in Sources */,
 				222E14612F233DF1001C41F9 /* DemoRewardVideoViewController.m in Sources */,
 				31FE7BC824482CEE00CB2062 /* JDStatusBarLayoutMarginHelper.m in Sources */,

@@ -24,5 +24,7 @@
 
 - (void)adapter_showAdFromRootViewController:(UIViewController *)rootViewController;
 
+- (void)adapter_render:(UIViewController *)rootViewController; // 模板信息流使用
+
 @end
 
