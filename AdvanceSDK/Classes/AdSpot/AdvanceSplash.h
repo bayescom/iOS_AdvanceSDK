@@ -41,8 +41,6 @@ NS_ASSUME_NONNULL_BEGIN
 /// 广告是否有效，建议在展示广告之前判断，否则会影响计费或展示失败
 @property (nonatomic, readonly) BOOL isAdValid;
 
-/// 实时价格（分）
-@property (nonatomic, assign) NSInteger price;
 
 /// 初始化广告位
 /// @param adspotid 广告位id

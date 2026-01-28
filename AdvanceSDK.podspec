@@ -31,7 +31,7 @@ Pod::Spec.new do |s|
        }
     
     # 默认的使用模块
-    s.default_subspec = 'Core'
+    s.default_subspec = 'AdSpot'
     
     s.subspec 'Core' do |core|
         core.source_files = 'AdvanceSDK/Classes/Core/**/*.{h,m}'

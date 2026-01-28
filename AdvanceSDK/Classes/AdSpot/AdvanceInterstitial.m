@@ -85,7 +85,7 @@
 
 // Bidding成功
 - (void)policyServiceFinishBiddingWithWinSupplier:(AdvSupplier *_Nonnull)supplier {
-    self.price = supplier.sdk_price;
+//    self.price = supplier.sdk_price;
     /// 获取竞胜的adpater
     self.targetAdapter = [self.adapterMap objectForKey:supplier.supplierKey];
     /// 获取插屏广告成功
@@ -110,7 +110,7 @@
     return [self.targetAdapter adapter_isAdValid];
 }
 
-#pragma mark: - MercuryPlusInterstitialCommonAdapter
+#pragma mark: - AdvanceInterstitialCommonAdapter
 - (void)interstitialAdapter_didLoadAdWithAdapterId:(NSString *)adapterId price:(NSInteger)price {
     AdvSupplier *supplier = [self getSupplierWithAdapterId:adapterId];
     AdvPolicyService *manager = self.manager;

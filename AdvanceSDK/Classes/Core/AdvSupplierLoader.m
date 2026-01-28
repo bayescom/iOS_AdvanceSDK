@@ -290,6 +290,18 @@ static NSMutableDictionary *_initializedDict = nil;
     return clsName;
 }
 
++ (NSString *)mappingBannerAdapterClassNameWithSupplierId:(NSString *)supplierId {
+    NSString *clsName = @"";
+    if ([supplierId isEqualToString:SDK_ID_CSJ]) {
+        clsName = @"AdvCSJBannerAdapter";
+    } else if ([supplierId isEqualToString:SDK_ID_GDT]) {
+        clsName = @"AdvGDTBannerAdapter";
+    } else if ([supplierId isEqualToString:SDK_ID_MERCURY]) {
+        clsName = @"AdvMercuryBannerAdapter";
+    }
+    return clsName;
+}
+
 + (BOOL)isSDKInstalledWithSupplierId:(NSString *)supplierId {
     NSString *sdkName = [self mappingSDKClassNameWithSupplierId:supplierId];
     Class sdkClazz = NSClassFromString(sdkName);

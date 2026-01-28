@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		0CB37BCDE076482B71A97BF5 /* Pods_AdvanceSDK_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 62CE9EA1BB71EBDC54112EC4 /* Pods_AdvanceSDK_Example.framework */; };
 		220A7EBD2BD11F1E0043492A /* DemoSplashViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 220A7EA92BD11F1E0043492A /* DemoSplashViewController.m */; };
+		2225DA692F29E48500D63C54 /* DemoBannerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2225DA682F29E48500D63C54 /* DemoBannerViewController.m */; };
 		222E14612F233DF1001C41F9 /* DemoRewardVideoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 222E14602F233DF1001C41F9 /* DemoRewardVideoViewController.m */; };
 		222E14642F23581C001C41F9 /* DemoFullScreenVideoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 222E14632F23581C001C41F9 /* DemoFullScreenVideoController.m */; };
 		222E146A2F238E8B001C41F9 /* DemoFeedExpressViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 222E14662F238E8B001C41F9 /* DemoFeedExpressViewController.m */; };
@@ -61,6 +62,8 @@
 		19B4DCB70CF5FFF496339425 /* Pods-AdvanceSDK_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AdvanceSDK_Example.release.xcconfig"; path = "Target Support Files/Pods-AdvanceSDK_Example/Pods-AdvanceSDK_Example.release.xcconfig"; sourceTree = "<group>"; };
 		220A7EA92BD11F1E0043492A /* DemoSplashViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DemoSplashViewController.m; sourceTree = "<group>"; };
 		220A7EB52BD11F1E0043492A /* DemoSplashViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DemoSplashViewController.h; sourceTree = "<group>"; };
+		2225DA672F29E48500D63C54 /* DemoBannerViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DemoBannerViewController.h; sourceTree = "<group>"; };
+		2225DA682F29E48500D63C54 /* DemoBannerViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DemoBannerViewController.m; sourceTree = "<group>"; };
 		222E145F2F233DF1001C41F9 /* DemoRewardVideoViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DemoRewardVideoViewController.h; sourceTree = "<group>"; };
 		222E14602F233DF1001C41F9 /* DemoRewardVideoViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DemoRewardVideoViewController.m; sourceTree = "<group>"; };
 		222E14622F23581C001C41F9 /* DemoFullScreenVideoController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DemoFullScreenVideoController.h; sourceTree = "<group>"; };
@@ -146,6 +149,8 @@
 			children = (
 				220A7EB52BD11F1E0043492A /* DemoSplashViewController.h */,
 				220A7EA92BD11F1E0043492A /* DemoSplashViewController.m */,
+				2225DA672F29E48500D63C54 /* DemoBannerViewController.h */,
+				2225DA682F29E48500D63C54 /* DemoBannerViewController.m */,
 				22E9169A2F230CAD00830E19 /* DemoInterstitialViewController.h */,
 				22E9169B2F230CAD00830E19 /* DemoInterstitialViewController.m */,
 				222E145F2F233DF1001C41F9 /* DemoRewardVideoViewController.h */,
@@ -514,6 +519,7 @@
 				22E9169C2F230CAD00830E19 /* DemoInterstitialViewController.m in Sources */,
 				31FE7BC624482CEE00CB2062 /* JDStatusBarNotification.m in Sources */,
 				31FE7BC724482CEE00CB2062 /* JDStatusBarView.m in Sources */,
+				2225DA692F29E48500D63C54 /* DemoBannerViewController.m in Sources */,
 				31FE7BC924482CEE00CB2062 /* JDStatusBarStyle.m in Sources */,
 				6003F59A195388D20070C39A /* main.m in Sources */,
 				31FE7BC524482CEE00CB2062 /* ViewBuilder.m in Sources */,

@@ -85,7 +85,7 @@
 
 // Bidding成功
 - (void)policyServiceFinishBiddingWithWinSupplier:(AdvSupplier *_Nonnull)supplier {
-    self.price = supplier.sdk_price;
+//    self.price = supplier.sdk_price;
     /// 获取竞胜的adpater
     self.targetAdapter = [self.adapterMap objectForKey:supplier.supplierKey];
     /// 获取全屏视频广告成功

@@ -28,5 +28,7 @@
 
 - (id)adapter_renderFeedAdWrapper; //自渲染信息流使用
 
+- (id)adapter_bannerView; //Banner使用
+
 @end
 

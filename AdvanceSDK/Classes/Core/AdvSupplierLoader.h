@@ -27,5 +27,7 @@
 
 + (NSString *)mappingRenderFeedAdapterClassNameWithSupplierId:(NSString *)supplierId;
 
++ (NSString *)mappingBannerAdapterClassNameWithSupplierId:(NSString *)supplierId;
+
 @end
 
