@@ -11,7 +11,7 @@
 #define AdvConstantHeader_h
 
 static NSString *const AdvanceSDKAPIVersion = @"3.0";
-static NSString *const AdvanceSDKVersion = @"3.0.0";
+static NSString *const AdvanceSDKVersion = @"5.5.0";
 static NSString *const AdvanceSDKRequestUrl = @"http://cruiser.bayescom.cn/";
 static NSString *const AdvanceSDKSecretKey = @"bayescom1000000w";
 
