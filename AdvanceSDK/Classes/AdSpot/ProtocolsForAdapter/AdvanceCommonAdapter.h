@@ -24,7 +24,9 @@
 
 - (void)adapter_showAdFromRootViewController:(UIViewController *)rootViewController;
 
-- (void)adapter_render:(UIViewController *)rootViewController; // 模板信息流使用
+- (void)adapter_render:(UIViewController *)rootViewController; //模板信息流使用
+
+- (id)adapter_renderFeedAdWrapper; //自渲染信息流使用
 
 @end
 

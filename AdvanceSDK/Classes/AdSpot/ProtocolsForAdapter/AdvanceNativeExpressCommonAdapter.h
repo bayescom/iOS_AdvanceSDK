@@ -6,7 +6,7 @@
 //
 
 #import "AdvanceCommonAdapter.h"
-#import "AdvNativeExpressAdObject.h"
+#import "AdvNativeExpressAdWrapper.h"
 
 @protocol AdvanceNativeExpressCommonAdapter <AdvanceCommonAdapter>
 
@@ -18,15 +18,15 @@
 
 - (void)nativeAdapter_failedToLoadAdWithAdapterId:(NSString *)adapterId error:(NSError *)error;
 
-- (void)nativeAdapter_didAdRenderSuccessWithAdapterId:(NSString *)adapterId object:(AdvNativeExpressAdObject *)object;
+- (void)nativeAdapter_didAdRenderSuccessWithAdapterId:(NSString *)adapterId wrapper:(AdvNativeExpressAdWrapper *)wrapper;
 
-- (void)nativeAdapter_didAdRenderFailWithAdapterId:(NSString *)adapterId object:(AdvNativeExpressAdObject *)object error:(NSError *)error;
+- (void)nativeAdapter_didAdRenderFailWithAdapterId:(NSString *)adapterId wrapper:(AdvNativeExpressAdWrapper *)wrapper error:(NSError *)error;
 
-- (void)nativeAdapter_didAdExposuredWithAdapterId:(NSString *)adapterId object:(AdvNativeExpressAdObject *)object;
+- (void)nativeAdapter_didAdExposuredWithAdapterId:(NSString *)adapterId wrapper:(AdvNativeExpressAdWrapper *)wrapper;
 
-- (void)nativeAdapter_didAdClickedWithAdapterId:(NSString *)adapterId object:(AdvNativeExpressAdObject *)object;
+- (void)nativeAdapter_didAdClickedWithAdapterId:(NSString *)adapterId wrapper:(AdvNativeExpressAdWrapper *)wrapper;
 
-- (void)nativeAdapter_didAdClosedWithAdapterId:(NSString *)adapterId object:(AdvNativeExpressAdObject *)object;
+- (void)nativeAdapter_didAdClosedWithAdapterId:(NSString *)adapterId wrapper:(AdvNativeExpressAdWrapper *)wrapper;
 
 @end
 

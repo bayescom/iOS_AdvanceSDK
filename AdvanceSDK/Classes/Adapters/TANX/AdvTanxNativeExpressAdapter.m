@@ -8,7 +8,7 @@
 #import "AdvTanxNativeExpressAdapter.h"
 #import <TanxSDK/TanxSDK.h>
 #import "AdvanceNativeExpressCommonAdapter.h"
-#import "AdvNativeExpressAdObject.h"
+#import "AdvNativeExpressAdWrapper.h"
 #import "AdvAdConfigHeader.h"
 #import "AdvError.h"
 #import "NSArray+Adv.h"
@@ -16,7 +16,7 @@
 @interface AdvTanxNativeExpressAdapter () <TXAdFeedManagerDelegate, AdvanceNativeExpressCommonAdapter>
 @property (nonatomic, strong) TXAdFeedManager *tanx_ad;
 @property (nonatomic, copy) NSString *adapterId;
-@property (nonatomic, strong) NSMutableArray<AdvNativeExpressAdObject *> *nativeAdObjects;
+@property (nonatomic, strong) NSMutableArray<AdvNativeExpressAdWrapper *> *nativeAdObjects;
 @property (nonatomic, strong) NSArray *adModels;
 @property (nonatomic, assign) CGSize adSize;
 
@@ -49,7 +49,7 @@
             
             strongSelf.nativeAdObjects = [NSMutableArray array];
             [viewModelArray enumerateObjectsUsingBlock:^(__kindof TXAdModel * _Nonnull model, NSUInteger idx, BOOL * _Nonnull stop) {
-                AdvNativeExpressAdObject *object = [[AdvNativeExpressAdObject alloc] init];
+                AdvNativeExpressAdWrapper *object = [[AdvNativeExpressAdWrapper alloc] init];
                 object.tanxAdModel = model;
                 object.identifier = strongSelf.adapterId;
                 [strongSelf.nativeAdObjects addObject:object];
@@ -66,16 +66,16 @@
     NSError *error;
     NSArray<TXAdFeedModule *> *feedModules = [self.tanx_ad renderFeedTemplateWithModel:self.adModels config:config error:&error];
     
-    AdvNativeExpressAdObject *object = [self.nativeAdObjects adv_filter:^BOOL(AdvNativeExpressAdObject *obj) {
+    AdvNativeExpressAdWrapper *wrapper = [self.nativeAdObjects adv_filter:^BOOL(AdvNativeExpressAdWrapper *obj) {
         return obj.tanxAdModel == self.adModels.firstObject;
     }].firstObject;
     if (!error) { /// render success
-        if (object) {
-            object.expressView = feedModules.firstObject.view;
-            [self.delegate nativeAdapter_didAdRenderSuccessWithAdapterId:self.adapterId object:object];
+        if (wrapper) {
+            wrapper.expressView = feedModules.firstObject.view;
+            [self.delegate nativeAdapter_didAdRenderSuccessWithAdapterId:self.adapterId wrapper:wrapper];
         }
     } else { /// render fail
-        [self.delegate nativeAdapter_didAdRenderFailWithAdapterId:self.adapterId object:object error:error];
+        [self.delegate nativeAdapter_didAdRenderFailWithAdapterId:self.adapterId wrapper:wrapper error:error];
     }
 }
 
@@ -87,33 +87,33 @@
 }
 
 - (void)onAdExposing:(TXAdModel *)model {
-    AdvNativeExpressAdObject *object = [self.nativeAdObjects adv_filter:^BOOL(AdvNativeExpressAdObject *obj) {
+    AdvNativeExpressAdWrapper *wrapper = [self.nativeAdObjects adv_filter:^BOOL(AdvNativeExpressAdWrapper *obj) {
         return obj.tanxAdModel == model;
     }].firstObject;
-    [self.delegate nativeAdapter_didAdExposuredWithAdapterId:self.adapterId object:object];
+    [self.delegate nativeAdapter_didAdExposuredWithAdapterId:self.adapterId wrapper:wrapper];
 }
 
 /// 广告点击
 - (void)onAdClick:(TXAdModel *)model {
-    AdvNativeExpressAdObject *object = [self.nativeAdObjects adv_filter:^BOOL(AdvNativeExpressAdObject *obj) {
+    AdvNativeExpressAdWrapper *wrapper = [self.nativeAdObjects adv_filter:^BOOL(AdvNativeExpressAdWrapper *obj) {
         return obj.tanxAdModel == model;
     }].firstObject;
-    [self.delegate nativeAdapter_didAdClickedWithAdapterId:self.adapterId object:object];
+    [self.delegate nativeAdapter_didAdClickedWithAdapterId:self.adapterId wrapper:wrapper];
 }
 
 /// 广告滑动跳转
 - (void)onAdSliding:(TXAdModel *)model {
-    AdvNativeExpressAdObject *object = [self.nativeAdObjects adv_filter:^BOOL(AdvNativeExpressAdObject *obj) {
+    AdvNativeExpressAdWrapper *wrapper = [self.nativeAdObjects adv_filter:^BOOL(AdvNativeExpressAdWrapper *obj) {
         return obj.tanxAdModel == model;
     }].firstObject;
-    [self.delegate nativeAdapter_didAdClickedWithAdapterId:self.adapterId object:object];
+    [self.delegate nativeAdapter_didAdClickedWithAdapterId:self.adapterId wrapper:wrapper];
 }
 
 - (void)onAdClose:(TXAdModel *)model {
-    AdvNativeExpressAdObject *object = [self.nativeAdObjects adv_filter:^BOOL(AdvNativeExpressAdObject *obj) {
+    AdvNativeExpressAdWrapper *wrapper = [self.nativeAdObjects adv_filter:^BOOL(AdvNativeExpressAdWrapper *obj) {
         return obj.tanxAdModel == model;
     }].firstObject;
-    [self.delegate nativeAdapter_didAdClosedWithAdapterId:self.adapterId object:object];
+    [self.delegate nativeAdapter_didAdClosedWithAdapterId:self.adapterId wrapper:wrapper];
 }
 
 - (void)dealloc {

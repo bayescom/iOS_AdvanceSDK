@@ -8,6 +8,8 @@
 
 #import "AdvanceBaseAdSpot.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class AdvanceInterstitial;
 @protocol AdvanceInterstitialDelegate <NSObject>
 
@@ -32,8 +34,6 @@
 - (void)onInterstitialAdClosed:(AdvanceInterstitial *)interstitialAd;
 
 @end
-
-NS_ASSUME_NONNULL_BEGIN
 
 @interface AdvanceInterstitial : AdvanceBaseAdSpot
 

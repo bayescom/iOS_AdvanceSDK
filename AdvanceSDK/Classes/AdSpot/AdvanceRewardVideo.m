@@ -30,7 +30,7 @@
                            extra:(NSDictionary *)extra
                         delegate:(id<AdvanceRewardVideoDelegate>)delegate {
     NSMutableDictionary *extraDict = [NSMutableDictionary dictionaryWithDictionary:extra];
-    [extraDict adv_safeSetObject:AdvSdkTypeAdNameRewardVideo forKey: AdvSdkTypeAdName];
+    [extraDict adv_safeSetObject:AdvSdkTypeAdNameRewardVideo forKey:AdvSdkTypeAdName];
     
     if (self = [super initWithAdspotId:adspotid extra:extraDict]) {
         self.delegate = delegate;

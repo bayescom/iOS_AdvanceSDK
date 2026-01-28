@@ -8,7 +8,7 @@
 #import "AdvBaiduNativeExpressAdapter.h"
 #import <BaiduMobAdSDK/BaiduMobAdSDK.h>
 #import "AdvanceNativeExpressCommonAdapter.h"
-#import "AdvNativeExpressAdObject.h"
+#import "AdvNativeExpressAdWrapper.h"
 #import "AdvAdConfigHeader.h"
 #import "AdvError.h"
 #import "NSArray+Adv.h"
@@ -16,7 +16,7 @@
 @interface AdvBaiduNativeExpressAdapter ()<BaiduMobAdNativeAdDelegate, BaiduMobAdNativeInterationDelegate, AdvanceNativeExpressCommonAdapter>
 @property (nonatomic, strong) BaiduMobAdNative *bd_ad;
 @property (nonatomic, copy) NSString *adapterId;
-@property (nonatomic, strong) NSMutableArray<AdvNativeExpressAdObject *> *nativeAdObjects;
+@property (nonatomic, strong) NSMutableArray<AdvNativeExpressAdWrapper *> *nativeAdObjects;
 @property (nonatomic, assign) CGSize adSize;
 
 @end
@@ -43,7 +43,7 @@
 }
 
 - (void)adapter_render:(UIViewController *)rootViewController {
-    [self.nativeAdObjects enumerateObjectsUsingBlock:^(__kindof AdvNativeExpressAdObject * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+    [self.nativeAdObjects enumerateObjectsUsingBlock:^(__kindof AdvNativeExpressAdWrapper * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         BaiduMobAdExpressNativeView *expressView = (BaiduMobAdExpressNativeView *)obj.expressView;
         expressView.interationDelegate = self;
         expressView.baseViewController = rootViewController;
@@ -55,7 +55,7 @@
         if (![expressView isExpired]) {
             [expressView render];
         } else {
-            [self.delegate nativeAdapter_didAdRenderFailWithAdapterId:self.adapterId object:obj error:[AdvError errorWithCode:AdvErrorCode_InvalidExpired].toNSError];
+            [self.delegate nativeAdapter_didAdRenderFailWithAdapterId:self.adapterId wrapper:obj error:[AdvError errorWithCode:AdvErrorCode_InvalidExpired].toNSError];
         }
     }];
 }
@@ -71,7 +71,7 @@
     
     self.nativeAdObjects = [NSMutableArray array];
     [nativeAds enumerateObjectsUsingBlock:^(__kindof BaiduMobAdExpressNativeView * _Nonnull view, NSUInteger idx, BOOL * _Nonnull stop) {
-        AdvNativeExpressAdObject *object = [[AdvNativeExpressAdObject alloc] init];
+        AdvNativeExpressAdWrapper *object = [[AdvNativeExpressAdWrapper alloc] init];
         object.expressView = view;
         object.identifier = self.adapterId;
         [self.nativeAdObjects addObject:object];
@@ -94,38 +94,38 @@
         frame.origin.x = (self.adSize.width - express.frame.size.width) / 2;
         frame;
     });
-    AdvNativeExpressAdObject *adObject = [self.nativeAdObjects adv_filter:^BOOL(AdvNativeExpressAdObject *obj) {
+    AdvNativeExpressAdWrapper *wrapper = [self.nativeAdObjects adv_filter:^BOOL(AdvNativeExpressAdWrapper *obj) {
         return obj.expressView == express;
     }].firstObject;
-    [self.delegate nativeAdapter_didAdRenderSuccessWithAdapterId:self.adapterId object:adObject];
+    [self.delegate nativeAdapter_didAdRenderSuccessWithAdapterId:self.adapterId wrapper:wrapper];
 }
 
 - (void)nativeAdExposure:(UIView *)nativeAdView nativeAdDataObject:(BaiduMobAdNativeAdObject *)object {
-    AdvNativeExpressAdObject *adObject = [self.nativeAdObjects adv_filter:^BOOL(AdvNativeExpressAdObject *obj) {
+    AdvNativeExpressAdWrapper *wrapper = [self.nativeAdObjects adv_filter:^BOOL(AdvNativeExpressAdWrapper *obj) {
         return obj.expressView == nativeAdView;
     }].firstObject;
-    [self.delegate nativeAdapter_didAdExposuredWithAdapterId:self.adapterId object:adObject];
+    [self.delegate nativeAdapter_didAdExposuredWithAdapterId:self.adapterId wrapper:wrapper];
 }
 
 - (void)nativeAdExposureFail:(UIView *)nativeAdView nativeAdDataObject:(BaiduMobAdNativeAdObject *)object failReason:(int)reason {
-    AdvNativeExpressAdObject *adObject = [self.nativeAdObjects adv_filter:^BOOL(AdvNativeExpressAdObject *obj) {
+    AdvNativeExpressAdWrapper *wrapper = [self.nativeAdObjects adv_filter:^BOOL(AdvNativeExpressAdWrapper *obj) {
         return obj.expressView == nativeAdView;
     }].firstObject;
-    [self.delegate nativeAdapter_didAdRenderFailWithAdapterId:self.adapterId object:adObject error:[AdvError errorWithCode:AdvErrorCode_InvalidExpired].toNSError];
+    [self.delegate nativeAdapter_didAdRenderFailWithAdapterId:self.adapterId wrapper:wrapper error:[AdvError errorWithCode:AdvErrorCode_InvalidExpired].toNSError];
 }
 
 - (void)nativeAdClicked:(UIView *)nativeAdView nativeAdDataObject:(BaiduMobAdNativeAdObject *)object {
-    AdvNativeExpressAdObject *adObject = [self.nativeAdObjects adv_filter:^BOOL(AdvNativeExpressAdObject *obj) {
+    AdvNativeExpressAdWrapper *wrapper = [self.nativeAdObjects adv_filter:^BOOL(AdvNativeExpressAdWrapper *obj) {
         return obj.expressView == nativeAdView;
     }].firstObject;
-    [self.delegate nativeAdapter_didAdClickedWithAdapterId:self.adapterId object:adObject];
+    [self.delegate nativeAdapter_didAdClickedWithAdapterId:self.adapterId wrapper:wrapper];
 }
 
 - (void)nativeAdDislikeClick:(UIView *)adView reason:(BaiduMobAdDislikeReasonType)reason; {
-    AdvNativeExpressAdObject *adObject = [self.nativeAdObjects adv_filter:^BOOL(AdvNativeExpressAdObject *obj) {
+    AdvNativeExpressAdWrapper *wrapper = [self.nativeAdObjects adv_filter:^BOOL(AdvNativeExpressAdWrapper *obj) {
         return obj.expressView == adView;
     }].firstObject;
-    [self.delegate nativeAdapter_didAdClosedWithAdapterId:self.adapterId object:adObject];
+    [self.delegate nativeAdapter_didAdClosedWithAdapterId:self.adapterId wrapper:wrapper];
 }
 
 - (void)dealloc {

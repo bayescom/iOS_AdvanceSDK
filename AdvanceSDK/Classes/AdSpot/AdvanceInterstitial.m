@@ -29,7 +29,7 @@
                            extra:(NSDictionary *)extra
                         delegate:(id<AdvanceInterstitialDelegate>)delegate {
     NSMutableDictionary *extraDict = [NSMutableDictionary dictionaryWithDictionary:extra];
-    [extraDict adv_safeSetObject:AdvSdkTypeAdNameInterstitial forKey: AdvSdkTypeAdName];
+    [extraDict adv_safeSetObject:AdvSdkTypeAdNameInterstitial forKey:AdvSdkTypeAdName];
     
     if (self = [super initWithAdspotId:adspotid extra:extraDict]) {
         self.delegate = delegate;

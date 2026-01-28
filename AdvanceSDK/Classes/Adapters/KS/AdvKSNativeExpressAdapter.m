@@ -8,7 +8,7 @@
 #import "AdvKSNativeExpressAdapter.h"
 #import <KSAdSDK/KSAdSDK.h>
 #import "AdvanceNativeExpressCommonAdapter.h"
-#import "AdvNativeExpressAdObject.h"
+#import "AdvNativeExpressAdWrapper.h"
 #import "AdvAdConfigHeader.h"
 #import "AdvError.h"
 #import "NSArray+Adv.h"
@@ -16,7 +16,7 @@
 @interface AdvKSNativeExpressAdapter ()<KSFeedAdsManagerDelegate, KSFeedAdDelegate, AdvanceNativeExpressCommonAdapter>
 @property (nonatomic, strong) KSFeedAdsManager *ks_ad;
 @property (nonatomic, copy) NSString *adapterId;
-@property (nonatomic, strong) NSMutableArray<AdvNativeExpressAdObject *> *nativeAdObjects;
+@property (nonatomic, strong) NSMutableArray<AdvNativeExpressAdWrapper *> *nativeAdObjects;
 @property (nonatomic, strong) NSArray<KSFeedAd *> *feedAdArray;
 
 @end
@@ -39,13 +39,13 @@
     [self.feedAdArray enumerateObjectsUsingBlock:^(KSFeedAd * _Nonnull feedAd, NSUInteger idx, BOOL * _Nonnull stop) {
         feedAd.delegate = self;
         
-        AdvNativeExpressAdObject *object = [self.nativeAdObjects adv_filter:^BOOL(AdvNativeExpressAdObject *obj) {
+        AdvNativeExpressAdWrapper *wrapper = [self.nativeAdObjects adv_filter:^BOOL(AdvNativeExpressAdWrapper *obj) {
             return obj.expressView == feedAd.feedView;
         }].firstObject;
         if (feedAd.materialReady) { // 有效性判断
-            [self.delegate nativeAdapter_didAdRenderSuccessWithAdapterId:self.adapterId object:object];
+            [self.delegate nativeAdapter_didAdRenderSuccessWithAdapterId:self.adapterId wrapper:wrapper];
         } else {
-            [self.delegate nativeAdapter_didAdRenderFailWithAdapterId:self.adapterId object:object error:[AdvError errorWithCode:AdvErrorCode_InvalidExpired].toNSError];
+            [self.delegate nativeAdapter_didAdRenderFailWithAdapterId:self.adapterId wrapper:wrapper error:[AdvError errorWithCode:AdvErrorCode_InvalidExpired].toNSError];
         }
     }];
 }
@@ -61,7 +61,7 @@
     
     self.nativeAdObjects = [NSMutableArray array];
     [feedAdDataArray enumerateObjectsUsingBlock:^(__kindof KSFeedAd * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        AdvNativeExpressAdObject *object = [[AdvNativeExpressAdObject alloc] init];
+        AdvNativeExpressAdWrapper *object = [[AdvNativeExpressAdWrapper alloc] init];
         object.expressView = obj.feedView;
         object.identifier = self.adapterId;
         [self.nativeAdObjects addObject:object];
@@ -75,24 +75,24 @@
 }
 
 - (void)feedAdDidShow:(KSFeedAd *)feedAd {
-    AdvNativeExpressAdObject *object = [self.nativeAdObjects adv_filter:^BOOL(AdvNativeExpressAdObject *obj) {
+    AdvNativeExpressAdWrapper *wrapper = [self.nativeAdObjects adv_filter:^BOOL(AdvNativeExpressAdWrapper *obj) {
         return obj.expressView == feedAd.feedView;
     }].firstObject;
-    [self.delegate nativeAdapter_didAdExposuredWithAdapterId:self.adapterId object:object];
+    [self.delegate nativeAdapter_didAdExposuredWithAdapterId:self.adapterId wrapper:wrapper];
 }
 
 - (void)feedAdDidClick:(KSFeedAd *)feedAd {
-    AdvNativeExpressAdObject *object = [self.nativeAdObjects adv_filter:^BOOL(AdvNativeExpressAdObject *obj) {
+    AdvNativeExpressAdWrapper *wrapper = [self.nativeAdObjects adv_filter:^BOOL(AdvNativeExpressAdWrapper *obj) {
         return obj.expressView == feedAd.feedView;
     }].firstObject;
-    [self.delegate nativeAdapter_didAdClickedWithAdapterId:self.adapterId object:object];
+    [self.delegate nativeAdapter_didAdClickedWithAdapterId:self.adapterId wrapper:wrapper];
 }
 
 - (void)feedAdDislike:(KSFeedAd *)feedAd {
-    AdvNativeExpressAdObject *object = [self.nativeAdObjects adv_filter:^BOOL(AdvNativeExpressAdObject *obj) {
+    AdvNativeExpressAdWrapper *wrapper = [self.nativeAdObjects adv_filter:^BOOL(AdvNativeExpressAdWrapper *obj) {
         return obj.expressView == feedAd.feedView;
     }].firstObject;
-    [self.delegate nativeAdapter_didAdClosedWithAdapterId:self.adapterId object:object];
+    [self.delegate nativeAdapter_didAdClosedWithAdapterId:self.adapterId wrapper:wrapper];
 }
 
 - (void)dealloc {

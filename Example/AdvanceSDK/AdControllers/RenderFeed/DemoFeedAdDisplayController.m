@@ -7,14 +7,14 @@
 //
 
 #import "DemoFeedAdDisplayController.h"
-#import <AdvanceRenderFeed.h>
-#import <AdvRenderFeedAd.h>
+#import "JDStatusBarNotification.h"
 #import <SDWebImage/UIImageView+WebCache.h>
+#import <AdvanceSDK/AdvanceRenderFeed.h>
 
 @interface DemoFeedAdDisplayController () <AdvanceRenderFeedDelegate>
 
-@property (nonatomic, strong) AdvanceRenderFeed *renderFeed;
-@property (nonatomic, strong) AdvRenderFeedAd *feedAd;
+@property (nonatomic, strong) AdvanceRenderFeed *renderFeedAd;
+@property (nonatomic, strong) AdvRenderFeedAdWrapper *feedAdWrapper;
 @property (nonatomic, strong) UIView *feedAdView;
 
 @property (nonatomic, strong) UIImageView *iconImageView;
@@ -36,9 +36,9 @@
 }
 
 - (void)loadRenderFeedAd {
-    _renderFeed = [[AdvanceRenderFeed alloc] initWithAdspotId:self.adspotId customExt:@{@"test1": @"value1"} viewController:self];
-    _renderFeed.delegate = self;
-    [_renderFeed loadAd];
+    _renderFeedAd = [[AdvanceRenderFeed alloc] initWithAdspotId:self.adspotId extra:@{@"test1": @"value1"} delegate:self];
+    _renderFeedAd.viewController = self;
+    [_renderFeedAd loadAd];
 }
 
 - (void)buildupFeedAdView {
@@ -63,7 +63,7 @@
     [self.feedAdView addSubview:self.adTitleLabel];
     
     /// 图片或者视频容器
-    if (!self.feedAd.feedAdElement.isVideoAd) {
+    if (!self.feedAdWrapper.feedAdElement.isVideoAd) {
         self.imgView = [[UIImageView alloc] init];
         [self.feedAdView addSubview:self.imgView];
     } else {
@@ -103,13 +103,13 @@
         [self.imgView sd_setImageWithURL:[NSURL URLWithString:element.imageUrlList.firstObject] placeholderImage:nil];
         mediaMaxY = CGRectGetMaxY(self.imgView.frame);
     } else { // 视频
-        self.feedAd.videoAdView.frame = CGRectMake(30, CGRectGetMaxY(self.iconImageView.frame) + 10, contentWidth, imageHeight);
-        mediaMaxY = CGRectGetMaxY(self.feedAd.videoAdView.frame);
+        self.feedAdWrapper.videoAdView.frame = CGRectMake(30, CGRectGetMaxY(self.iconImageView.frame) + 10, contentWidth, imageHeight);
+        mediaMaxY = CGRectGetMaxY(self.feedAdWrapper.videoAdView.frame);
     }
     
     /// 广告平台logo
-    CGSize logoSize = self.feedAd.logoSize;
-    self.feedAd.logoImageView.frame = CGRectMake(CGRectGetMaxX(self.feedAdView.frame) - logoSize.width - 4, 4, logoSize.width, logoSize.height);
+    CGSize logoSize = self.feedAdWrapper.logoSize;
+    self.feedAdWrapper.logoImageView.frame = CGRectMake(CGRectGetMaxX(self.feedAdView.frame) - logoSize.width - 4, 4, logoSize.width, logoSize.height);
     
     self.adDescriptionLabel.text = element.desc;
     self.adDescriptionLabel.frame = CGRectMake(30, mediaMaxY + 10, 200, 20);
@@ -119,60 +119,56 @@
     
 }
 
-// MARK: ======================= AdvanceRenderFeedDelegate =======================
 
-/// 广告策略加载成功
-- (void)didFinishLoadingADPolicyWithSpotId:(NSString *)spotId {
-    NSLog(@"%s 广告位id为: %@",__func__ , spotId);
-}
-
-/// 广告策略或者渠道广告加载失败
-- (void)didFailLoadingADSourceWithSpotId:(NSString *)spotId error:(NSError *)error description:(NSDictionary *)description{
-    NSLog(@"广告展示失败 %s  error: %@ 详情:%@", __func__, error, description);
-}
-
-/// 广告位中某一个广告源开始加载广告
-- (void)didStartLoadingADSourceWithSpotId:(NSString *)spotId sourceId:(NSString *)sourceId {
-    NSLog(@"广告位中某一个广告源开始加载广告 %s  sourceId: %@", __func__, sourceId);
-}
-
-/// 信息流广告数据拉取成功
-- (void)didFinishLoadingRenderFeedAd:(AdvRenderFeedAd *)feedAd spotId:(NSString *)spotId {
-    self.feedAd = feedAd;
-    self.feedAdView = feedAd.feedAdView;
+#pragma mark: - AdvanceRenderFeedDelegate
+/// 广告加载成功回调
+- (void)onRenderFeedAdSuccessToLoad:(AdvanceRenderFeed *)renderFeedAd feedAdWrapper:(AdvRenderFeedAdWrapper *)feedAdWrapper {
+    NSLog(@"自渲染信息流广告加载成功 %s %@", __func__, renderFeedAd);
+    self.feedAdWrapper = feedAdWrapper;
+    self.feedAdView = feedAdWrapper.feedAdView;
     
-    if (self.feedAd.feedAdElement.isAdValid) {
+    if (self.feedAdWrapper.feedAdElement.isAdValid) {
         [self buildupFeedAdView];
-        [self refreshFeedAdUIWithData:self.feedAd.feedAdElement];
-        [self.feedAd registerClickableViews:@[self.customLinkBtn, self.iconImageView] andCloseableView:self.closeBtn];
+        [self refreshFeedAdUIWithData:self.feedAdWrapper.feedAdElement];
+        [self.feedAdWrapper registerClickableViews:@[self.customLinkBtn, self.iconImageView] andCloseableView:self.closeBtn];
     }
 }
 
-/// 自渲染信息流广告曝光
-- (void)renderFeedAdDidShowForSpotId:(NSString *)spotId extra:(NSDictionary *)extra {
-    
+/// 广告加载失败回调
+- (void)onRenderFeedAdFailToLoad:(AdvanceRenderFeed *)renderFeedAd error:(NSError *)error {
+    NSLog(@"自渲染信息流广告加载失败 %s %@", __func__, error);
+    [JDStatusBarNotification showWithStatus:@"广告加载失败" dismissAfter:0.7];
+    self.renderFeedAd = nil;
 }
 
-/// 自渲染信息流广告点击
-- (void)renderFeedAdDidClickForSpotId:(NSString *)spotId extra:(NSDictionary *)extra {
-    
+/// 广告曝光回调
+-(void)onRenderFeedAdViewExposured:(AdvRenderFeedAdWrapper *)feedAdWrapper {
+    NSLog(@"自渲染信息流广告曝光回调 %s %@", __func__, feedAdWrapper);
 }
 
-/// 自渲染信息流广告关闭按钮点击
-- (void)renderFeedAdDidCloseForSpotId:(NSString *)spotId extra:(NSDictionary *)extra {
+/// 广告点击回调
+- (void)onRenderFeedAdViewClicked:(AdvRenderFeedAdWrapper *)feedAdWrapper {
+    NSLog(@"自渲染信息流广告点击回调 %s %@", __func__, feedAdWrapper);
+}
+
+/// 广告关闭回调
+- (void)onRenderFeedAdViewClosed:(AdvRenderFeedAdWrapper *)feedAdWrapper {
+    NSLog(@"自渲染信息流广告关闭回调 %s %@", __func__, feedAdWrapper);
     // 手动移除广告视图
     [self.feedAdView removeFromSuperview];
+    self.renderFeedAd = nil;
 }
 
-/// 自渲染信息流广告关闭详情页
-- (void)renderFeedAdDidCloseDetailPageForSpotId:(NSString *)spotId extra:(NSDictionary *)extra {
-    
+/// 广告详情页关闭回调
+- (void)onRenderFeedAdDidCloseDetailPage:(AdvRenderFeedAdWrapper *)feedAdWrapper {
+    NSLog(@"自渲染信息流广告详情页关闭回调 %s %@", __func__, feedAdWrapper);
 }
 
-/// 信息流视频广告播放完成
-- (void)renderFeedVideoDidEndPlayingForSpotId:(NSString *)spotId extra:(NSDictionary *)extra {
-    
+/// 视频广告播放结束回调
+- (void)onRenderFeedAdDidPlayFinish:(AdvRenderFeedAdWrapper *)feedAdWrapper {
+    NSLog(@"自渲染信息流广告视频播放结束回调 %s %@", __func__, feedAdWrapper);
 }
+
 
 - (UIButton *)customLinkBtn {
     if (!_customLinkBtn) {

@@ -29,7 +29,7 @@
                            extra:(NSDictionary *)extra
                         delegate:(id<AdvanceNativeExpressDelegate>)delegate {
     NSMutableDictionary *extraDict = [NSMutableDictionary dictionaryWithDictionary:extra];
-    [extraDict adv_safeSetObject:AdvSdkTypeAdNameNativeExpress forKey: AdvSdkTypeAdName];
+    [extraDict adv_safeSetObject:AdvSdkTypeAdNameNativeExpress forKey:AdvSdkTypeAdName];
     
     if (self = [super initWithAdspotId:adspotid extra:extraDict]) {
         self.delegate = delegate;
@@ -111,44 +111,44 @@
 }
 
 /// 竞胜的渠道广告执行以下回调
-- (void)nativeAdapter_didAdRenderSuccessWithAdapterId:(NSString *)adapterId object:(AdvNativeExpressAdObject *)object {
+- (void)nativeAdapter_didAdRenderSuccessWithAdapterId:(NSString *)adapterId wrapper:(AdvNativeExpressAdWrapper *)wrapper {
     if ([self.delegate respondsToSelector:@selector(onNativeExpressAdViewRenderSuccess:)]) {
-        [self.delegate onNativeExpressAdViewRenderSuccess:object];
+        [self.delegate onNativeExpressAdViewRenderSuccess:wrapper];
     }
 }
 
-- (void)nativeAdapter_didAdRenderFailWithAdapterId:(NSString *)adapterId object:(AdvNativeExpressAdObject *)object error:(NSError *)error {
+- (void)nativeAdapter_didAdRenderFailWithAdapterId:(NSString *)adapterId wrapper:(AdvNativeExpressAdWrapper *)wrapper error:(NSError *)error {
     AdvSupplier *supplier = [self getSupplierWithAdapterId:adapterId];
     AdvPolicyService *manager = self.manager;
     [manager reportAdDataWithEventType:AdvSupplierReportTKEventFailed supplier:supplier error:error];
     if ([self.delegate respondsToSelector:@selector(onNativeExpressAdViewRenderFail:error:)]) {
-        [self.delegate onNativeExpressAdViewRenderFail:object error:error];
+        [self.delegate onNativeExpressAdViewRenderFail:wrapper error:error];
     }
     /// 销毁各渠道Adapter对象
     [self destroyAdapters];
 }
 
-- (void)nativeAdapter_didAdExposuredWithAdapterId:(NSString *)adapterId object:(AdvNativeExpressAdObject *)object {
+- (void)nativeAdapter_didAdExposuredWithAdapterId:(NSString *)adapterId wrapper:(AdvNativeExpressAdWrapper *)wrapper {
     AdvSupplier *supplier = [self getSupplierWithAdapterId:adapterId];
     AdvPolicyService *manager = self.manager;
     [manager reportAdDataWithEventType:AdvSupplierReportTKEventExposed supplier:supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(onNativeExpressAdViewExposured:)]) {
-        [self.delegate onNativeExpressAdViewExposured:object];
+        [self.delegate onNativeExpressAdViewExposured:wrapper];
     }
 }
 
-- (void)nativeAdapter_didAdClickedWithAdapterId:(NSString *)adapterId object:(AdvNativeExpressAdObject *)object {
+- (void)nativeAdapter_didAdClickedWithAdapterId:(NSString *)adapterId wrapper:(AdvNativeExpressAdWrapper *)wrapper {
     AdvSupplier *supplier = [self getSupplierWithAdapterId:adapterId];
     AdvPolicyService *manager = self.manager;
     [manager reportAdDataWithEventType:AdvSupplierReportTKEventClicked supplier:supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(onNativeExpressAdViewClicked:)]) {
-        [self.delegate onNativeExpressAdViewClicked:object];
+        [self.delegate onNativeExpressAdViewClicked:wrapper];
     }
 }
 
-- (void)nativeAdapter_didAdClosedWithAdapterId:(NSString *)adapterId object:(AdvNativeExpressAdObject *)object {
+- (void)nativeAdapter_didAdClosedWithAdapterId:(NSString *)adapterId wrapper:(AdvNativeExpressAdWrapper *)wrapper {
     if ([self.delegate respondsToSelector:@selector(onNativeExpressAdViewClosed:)]) {
-        [self.delegate onNativeExpressAdViewClosed:object];
+        [self.delegate onNativeExpressAdViewClosed:wrapper];
     }
     /// 销毁各渠道Adapter对象
     [self destroyAdapters];

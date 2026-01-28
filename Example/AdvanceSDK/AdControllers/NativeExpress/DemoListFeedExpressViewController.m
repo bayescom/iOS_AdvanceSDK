@@ -46,45 +46,45 @@
 
 #pragma mark: - AdvanceNativeExpressDelegate
 /// 广告加载成功回调
-- (void)onNativeExpressAdSuccessToLoad:(AdvanceNativeExpress *)nativeExpress {
-    NSLog(@"模板信息流广告加载成功 %s %@", __func__, nativeExpress);
+- (void)onNativeExpressAdSuccessToLoad:(AdvanceNativeExpress *)nativeExpressAd {
+    NSLog(@"模板信息流广告加载成功 %s %@", __func__, nativeExpressAd);
 }
 
 /// 广告加载失败回调
--(void)onNativeExpressAdFailToLoad:(AdvanceNativeExpress *)nativeExpress error:(NSError *)error {
+-(void)onNativeExpressAdFailToLoad:(AdvanceNativeExpress *)nativeExpressAd error:(NSError *)error {
     NSLog(@"模板信息流广告加载失败 %s %@", __func__, error);
     [JDStatusBarNotification showWithStatus:@"广告加载失败" dismissAfter:0.7];
     self.nativeExpressAd = nil;
 }
 
-/// 模板广告渲染成功
-- (void)onNativeExpressAdViewRenderSuccess:(AdvNativeExpressAdObject *)nativeAdObject {
-    NSLog(@"模板信息流广告渲染成功 %s %@", __func__, nativeAdObject);
-    [_arrayData insertObject:nativeAdObject atIndex:1];
+/// 广告渲染成功
+- (void)onNativeExpressAdViewRenderSuccess:(AdvNativeExpressAdWrapper *)nativeAdWrapper {
+    NSLog(@"模板信息流广告渲染成功 %s %@", __func__, nativeAdWrapper);
+    [_arrayData insertObject:nativeAdWrapper atIndex:1];
     [self.tableView reloadData];
 }
 
-/// 模板广告渲染失败
-- (void)onNativeExpressAdViewRenderFail:(AdvNativeExpressAdObject *)nativeAdObject error:(NSError *)error {
+/// 广告渲染失败
+- (void)onNativeExpressAdViewRenderFail:(AdvNativeExpressAdWrapper *)nativeAdWrapper error:(NSError *)error {
     NSLog(@"模板信息流广告渲染失败 %s %@", __func__, error);
     [JDStatusBarNotification showWithStatus:@"广告渲染失败" dismissAfter:0.7];
     self.nativeExpressAd = nil;
 }
 
 /// 广告曝光回调
--(void)onNativeExpressAdViewExposured:(AdvNativeExpressAdObject *)nativeAdObject {
-    NSLog(@"模板信息流广告曝光回调 %s %@", __func__, nativeAdObject);
+-(void)onNativeExpressAdViewExposured:(AdvNativeExpressAdWrapper *)nativeAdWrapper {
+    NSLog(@"模板信息流广告曝光回调 %s %@", __func__, nativeAdWrapper);
 }
 
 /// 广告点击回调
-- (void)onNativeExpressAdViewClicked:(AdvNativeExpressAdObject *)nativeAdObject {
-    NSLog(@"模板信息流广告点击回调 %s %@", __func__, nativeAdObject);
+- (void)onNativeExpressAdViewClicked:(AdvNativeExpressAdWrapper *)nativeAdWrapper {
+    NSLog(@"模板信息流广告点击回调 %s %@", __func__, nativeAdWrapper);
 }
 
 /// 广告关闭回调
-- (void)onNativeExpressAdViewClosed:(AdvNativeExpressAdObject *)nativeAdObject {
-    NSLog(@"模板信息流广告关闭回调 %s %@", __func__, nativeAdObject);
-    [_arrayData removeObject:nativeAdObject];
+- (void)onNativeExpressAdViewClosed:(AdvNativeExpressAdWrapper *)nativeAdWrapper {
+    NSLog(@"模板信息流广告关闭回调 %s %@", __func__, nativeAdWrapper);
+    [_arrayData removeObject:nativeAdWrapper];
     [self.tableView reloadData];
     self.nativeExpressAd = nil;
 }
@@ -98,8 +98,8 @@
     if ([_arrayData[indexPath.row] isKindOfClass:[BYExamCellModelElement class]]) {
         return ((BYExamCellModelElement *)_arrayData[indexPath.row]).cellh;
     } else {
-        AdvNativeExpressAdObject *nativeAdObject = _arrayData[indexPath.row];
-        UIView *view = [nativeAdObject expressView];
+        AdvNativeExpressAdWrapper *nativeAdWrapper = _arrayData[indexPath.row];
+        UIView *view = nativeAdWrapper.expressView;
         return view.frame.size.height;
     }
 }
@@ -118,8 +118,8 @@
         if ([subView superview]) {
             [subView removeFromSuperview];
         }
-        AdvNativeExpressAdObject *nativeAdObject = _arrayData[indexPath.row];
-        UIView *view = [nativeAdObject expressView];
+        AdvNativeExpressAdWrapper *nativeAdWrapper = _arrayData[indexPath.row];
+        UIView *view = nativeAdWrapper.expressView;
         view.tag = 1000;
         [cell.contentView addSubview:view];
         CGRect frame = view.frame;

@@ -7,7 +7,7 @@
 //
 
 #import "AdvanceBaseAdSpot.h"
-#import "AdvNativeExpressAdObject.h"
+#import "AdvNativeExpressAdWrapper.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -17,32 +17,32 @@ NS_ASSUME_NONNULL_BEGIN
 @optional
 
 /// 广告加载成功回调
-- (void)onNativeExpressAdSuccessToLoad:(AdvanceNativeExpress *)nativeExpress;
+- (void)onNativeExpressAdSuccessToLoad:(AdvanceNativeExpress *)nativeExpressAd;
 
 /// 广告加载失败回调
-- (void)onNativeExpressAdFailToLoad:(AdvanceNativeExpress *)nativeExpress error:(NSError *)error;
+- (void)onNativeExpressAdFailToLoad:(AdvanceNativeExpress *)nativeExpressAd error:(NSError *)error;
 
-/// 模板广告渲染成功
-- (void)onNativeExpressAdViewRenderSuccess:(AdvNativeExpressAdObject *)nativeAdObject;
+/// 广告渲染成功
+- (void)onNativeExpressAdViewRenderSuccess:(AdvNativeExpressAdWrapper *)nativeAdWrapper;
 
-/// 模板广告渲染失败
-- (void)onNativeExpressAdViewRenderFail:(AdvNativeExpressAdObject *)nativeAdObject error:(NSError *)error;
+/// 广告渲染失败
+- (void)onNativeExpressAdViewRenderFail:(AdvNativeExpressAdWrapper *)nativeAdWrapper error:(NSError *)error;
 
 /// 广告曝光回调
--(void)onNativeExpressAdViewExposured:(AdvNativeExpressAdObject *)nativeAdObject;
+-(void)onNativeExpressAdViewExposured:(AdvNativeExpressAdWrapper *)nativeAdWrapper;
 
 /// 广告点击回调
-- (void)onNativeExpressAdViewClicked:(AdvNativeExpressAdObject *)nativeAdObject;
+- (void)onNativeExpressAdViewClicked:(AdvNativeExpressAdWrapper *)nativeAdWrapper;
 
 /// 广告关闭回调
-- (void)onNativeExpressAdViewClosed:(AdvNativeExpressAdObject *)nativeAdObject;
+- (void)onNativeExpressAdViewClosed:(AdvNativeExpressAdWrapper *)nativeAdWrapper;
 
 @end
 
 /// 模板渲染信息流广告
 @interface AdvanceNativeExpress : AdvanceBaseAdSpot
 
-/// 广告方法回调代理
+/// 广告代理
 @property (nonatomic, weak) id<AdvanceNativeExpressDelegate> delegate;
 
 /// 广告位尺寸
