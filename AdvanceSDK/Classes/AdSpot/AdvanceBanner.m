@@ -61,6 +61,8 @@
 - (void)policyServiceLoadAnySupplier:(nullable AdvSupplier *)supplier {
     // 加载渠道SDK进行初始化调用
     [AdvSupplierLoader loadSupplier:supplier completion:^{
+        AdvPolicyService *manager = self.manager;
+        [manager reportAdDataWithEventType:AdvSupplierReportTKEventLoadEnd supplier:supplier error:nil];
         // 根据渠道id初始化对应Adapter
         NSString *clsName = [AdvSupplierLoader mappingBannerAdapterClassNameWithSupplierId:supplier.identifier];
         id<AdvanceBannerCommonAdapter> adapter = [[NSClassFromString(clsName) alloc] init];

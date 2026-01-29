@@ -155,10 +155,10 @@
     }
     /// 并发执行混合策略下队列中的广告请求
     [templeSuppliers enumerateObjectsUsingBlock:^(AdvSupplier * _Nonnull supplier, NSUInteger idx, BOOL * _Nonnull stop) {
+        [self reportAdDataWithEventType:AdvSupplierReportTKEventLoaded supplier:supplier error:nil];
         if ([_delegate respondsToSelector:@selector(policyServiceLoadAnySupplier:)]) {
             [_delegate policyServiceLoadAnySupplier:supplier];
         }
-        [self reportAdDataWithEventType:AdvSupplierReportTKEventLoaded supplier:supplier error:nil];
     }];
     
     /// 执行完后移除parallel组渠道，确保再次调用此函数时能获取到下一组渠道

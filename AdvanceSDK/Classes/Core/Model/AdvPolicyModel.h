@@ -41,6 +41,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) NSInteger timeout; /// 上游sdk请求超时时间（ms）
 @property (nonatomic, copy) NSString *adspotid; /// 上游sdk分配给媒体的广告位id
 @property (nonatomic, assign) NSInteger sdk_price; /// 单位: 分
+@property (nonatomic, copy) NSString *sdk_id; /// 渠道SDK唯一id
+@property (nonatomic, assign) NSInteger enable_cache; /// 1：表示需要缓存 0：表示不需要缓存
+@property (nonatomic, assign) NSInteger cache_timeout; /// 缓存时间（秒），enable_cache为1时有值
 
 /// 此渠道广告是否勾选了头部竞价 1-是 0-否，如果该渠道SDK支持head_bidding，则去获取竞价
 @property (nonatomic, assign) NSInteger is_head_bidding;
@@ -51,6 +54,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong) NSArray<NSString *> *clicktk;
 @property (nonatomic, strong) NSArray<NSString *> *loadedtk;
+@property (nonatomic, strong) NSArray<NSString *> *loadendtk; // 用于渠道SDK初始化成功
 @property (nonatomic, strong) NSArray<NSString *> *imptk;
 @property (nonatomic, strong) NSArray<NSString *> *succeedtk;
 @property (nonatomic, strong) NSArray<NSString *> *failedtk;

@@ -1,7 +1,9 @@
 
 typedef NS_ENUM(NSUInteger, AdvSupplierReportTKEventType) {
-    /// 渠道SDK 启动成功
+    /// 渠道SDK 启动
     AdvSupplierReportTKEventLoaded = 0,
+    /// 渠道SDK 初始化成功
+    AdvSupplierReportTKEventLoadEnd,
     /// 渠道SDK广告 获取成功
     AdvSupplierReportTKEventSucceed,
     /// 渠道SDK广告 获取/渲染/超时 失败

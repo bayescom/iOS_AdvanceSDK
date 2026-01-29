@@ -22,10 +22,10 @@ NS_ASSUME_NONNULL_BEGIN
 /// 广告加载失败回调
 - (void)onNativeExpressAdFailToLoad:(AdvanceNativeExpress *)nativeExpressAd error:(NSError *)error;
 
-/// 广告渲染成功
+/// 广告渲染成功回调
 - (void)onNativeExpressAdViewRenderSuccess:(AdvNativeExpressAdWrapper *)nativeAdWrapper;
 
-/// 广告渲染失败
+/// 广告渲染失败回调
 - (void)onNativeExpressAdViewRenderFail:(AdvNativeExpressAdWrapper *)nativeAdWrapper error:(NSError *)error;
 
 /// 广告曝光回调

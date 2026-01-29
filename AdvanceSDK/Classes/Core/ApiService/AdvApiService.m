@@ -74,6 +74,8 @@
     /// 按照类型判断上报地址
     if (eventType == AdvSupplierReportTKEventLoaded) { // 启动SDK上报
         reportUrls = supplier.loadedtk;
+    } else if (eventType == AdvSupplierReportTKEventLoadEnd) { // 渠道SDK初始化成功上报
+        reportUrls = supplier.loadendtk;
     } else if (eventType == AdvSupplierReportTKEventSucceed) { // 获取广告成功上报
         reportUrls = supplier.succeedtk;
     } else if (eventType == AdvSupplierReportTKEventFailed) { // 获取广告失败上报

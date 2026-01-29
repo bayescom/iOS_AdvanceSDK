@@ -38,6 +38,7 @@
     
     switch (eventType) {
         case AdvSupplierReportTKEventLoaded:
+        case AdvSupplierReportTKEventLoadEnd:
             // 拼接SDK启动耗时
             urlString = [NSString stringWithFormat:@"%@&t_msg=l_%.0f", urlString, costTime];
             break;

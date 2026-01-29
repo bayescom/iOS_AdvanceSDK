@@ -22,8 +22,8 @@
     [AdvLog setLogEnable:enable];
 }
 
-+ (void)openAdTrack:(BOOL)open {
-    [AdvDeviceManager sharedInstance].isAdTrack = open;
++ (void)openAdTrack:(BOOL)enable {
+    [AdvDeviceManager sharedInstance].isAdTrack = enable;
 }
 
 @end
