@@ -59,6 +59,7 @@
 
 #pragma mark - WindMillSplashAdDelegate
 - (void)onSplashAdDidLoad:(WindSplashAdView *)splashAdView {
+    [self.delegate adapter_cacheAdapterIfNeeded:self adapterId:self.adapterId price:splashAdView.getEcpm.integerValue];
     [self.delegate splashAdapter_didLoadAdWithAdapterId:self.adapterId price:splashAdView.getEcpm.integerValue];
 }
 

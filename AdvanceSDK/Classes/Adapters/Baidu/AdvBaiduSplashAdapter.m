@@ -61,6 +61,7 @@
 
 #pragma mark: -BaiduMobAdSplashDelegate
 - (void)splashAdLoadSuccess:(BaiduMobAdSplash *)splash {
+    [self.delegate adapter_cacheAdapterIfNeeded:self adapterId:self.adapterId price:[[splash getECPMLevel] integerValue]];
     [self.delegate splashAdapter_didLoadAdWithAdapterId:self.adapterId price:[[splash getECPMLevel] integerValue]];
 }
 

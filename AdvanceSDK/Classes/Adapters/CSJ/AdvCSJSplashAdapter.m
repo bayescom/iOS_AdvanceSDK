@@ -54,6 +54,7 @@
 #pragma mark: - BUSplashAdDelegate
 - (void)splashAdLoadSuccess:(nonnull BUSplashAd *)splashAd {
     NSDictionary *ext = splashAd.mediaExt;
+    [self.delegate adapter_cacheAdapterIfNeeded:self adapterId:self.adapterId price:[ext[@"price"] integerValue]];
     [self.delegate splashAdapter_didLoadAdWithAdapterId:self.adapterId price:[ext[@"price"] integerValue]];
 }
 

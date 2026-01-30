@@ -24,6 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
                          eventType:(AdvSupplierReportTKEventType)eventType
                              price:(NSInteger)price
                      loadTimestamp:(NSTimeInterval)loadTimestamp
+                       cachedReqId:(nullable NSString *)cachedReqId
                              error:(nullable NSError *)error;
 
 @end

@@ -39,6 +39,7 @@
 
 #pragma mark: - MercurySplashAdDelegate
 - (void)mercury_splashAdDidLoad:(MercurySplashAd *)splashAd {
+    [self.delegate adapter_cacheAdapterIfNeeded:self adapterId:self.adapterId price:splashAd.price];
     [self.delegate splashAdapter_didLoadAdWithAdapterId:self.adapterId price:splashAd.price];
 }
 

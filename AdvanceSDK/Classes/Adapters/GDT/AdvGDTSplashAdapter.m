@@ -50,6 +50,7 @@
 
 #pragma mark: - GDTSplashAdDelegate
 - (void)splashAdDidLoad:(GDTSplashAd *)splashAd {
+    [self.delegate adapter_cacheAdapterIfNeeded:self adapterId:self.adapterId price:splashAd.eCPM];
     [self.delegate splashAdapter_didLoadAdWithAdapterId:self.adapterId price:splashAd.eCPM];
 }
 

@@ -41,7 +41,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) NSInteger timeout; /// 上游sdk请求超时时间（ms）
 @property (nonatomic, copy) NSString *adspotid; /// 上游sdk分配给媒体的广告位id
 @property (nonatomic, assign) NSInteger sdk_price; /// 单位: 分
-@property (nonatomic, copy) NSString *sdk_id; /// 渠道SDK唯一id
+@property (nonatomic, copy) NSString *sdk_id; /// 渠道SDK广告源唯一id
 @property (nonatomic, assign) NSInteger enable_cache; /// 1：表示需要缓存 0：表示不需要缓存
 @property (nonatomic, assign) NSInteger cache_timeout; /// 缓存时间（秒），enable_cache为1时有值
 
@@ -63,8 +63,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// 以下为自定义字段
 @property (nonatomic, assign) AdvSupplierLoadAdState loadAdState; // 广告加载状态
 @property (nonatomic, assign) BOOL hited; // 是否已经命中过
-/// 用于存储对应的Adapter，key必须唯一，会有同渠道配置多个的情况
-@property (nonatomic, copy) NSString *supplierKey;
+@property (nonatomic, copy) NSString *cachedReqId; // 缓存广告的reqId，用于tk上报
 
 @end
 

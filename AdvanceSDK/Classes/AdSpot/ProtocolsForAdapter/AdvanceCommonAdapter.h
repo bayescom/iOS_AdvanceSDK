@@ -30,5 +30,10 @@
 
 - (id)adapter_bannerView; //Banner使用
 
+//是否缓存广告对象
+- (void)adapter_cacheAdapterIfNeeded:(id)adapter
+                           adapterId:(NSString *)adapterId
+                               price:(NSInteger)price;
+
 @end
 

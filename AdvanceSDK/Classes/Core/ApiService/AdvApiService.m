@@ -91,7 +91,7 @@
     if (reportUrls.count == 0) {return;}
     
     [reportUrls enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        NSString *reportUrl = [AdvParameterHandler joinParamtersWithUrl:obj eventType:eventType price:supplier.sdk_price loadTimestamp:loadTimestamp error:error];
+        NSString *reportUrl = [AdvParameterHandler joinParamtersWithUrl:obj eventType:eventType price:supplier.sdk_price loadTimestamp:loadTimestamp cachedReqId:supplier.cachedReqId error:error];
         
         [AdvNetwork sendRequestByUrlString:reportUrl method:RequestMethod_GET parameters:nil headers:nil timeout:5.f success:^(id  _Nonnull response) {
             NSString *result = [[NSString alloc] initWithData:response encoding:NSUTF8StringEncoding];

@@ -15,6 +15,7 @@
 #import "AdvConstantHeader.h"
 #import "AdvParameterHandler.h"
 #import "AdvApiService.h"
+#import "AdvAdCacheManager.h"
 
 @interface AdvPolicyService ()
 
@@ -155,6 +156,11 @@
     }
     /// 并发执行混合策略下队列中的广告请求
     [templeSuppliers enumerateObjectsUsingBlock:^(AdvSupplier * _Nonnull supplier, NSUInteger idx, BOOL * _Nonnull stop) {
+        // 尝试获取Adapter缓存
+        AdvAdCacheModel *cacheModel = [[AdvAdCacheManager sharedInstance] adCacheModelFromCachedKey:supplier.sdk_id];
+        if (supplier.enable_cache && cacheModel) { //此次加载允许缓存 且 内存中存在Adapter缓存时
+            supplier.cachedReqId = cacheModel.sourceReqId; //用于tk上报
+        }
         [self reportAdDataWithEventType:AdvSupplierReportTKEventLoaded supplier:supplier error:nil];
         if ([_delegate respondsToSelector:@selector(policyServiceLoadAnySupplier:)]) {
             [_delegate policyServiceLoadAnySupplier:supplier];

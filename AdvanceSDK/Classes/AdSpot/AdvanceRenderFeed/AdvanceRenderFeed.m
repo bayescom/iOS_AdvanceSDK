@@ -66,8 +66,8 @@
         NSString *clsName = [AdvSupplierLoader mappingRenderFeedAdapterClassNameWithSupplierId:supplier.identifier];
         id<AdvanceRenderFeedCommonAdapter> adapter = [[NSClassFromString(clsName) alloc] init];
         if (adapter) {
-            [self.adapterMap setObject:adapter forKey:supplier.supplierKey];
-            [adapter adapter_setupWithAdapterId:supplier.supplierKey placementId:supplier.adspotid config:[self setupAdConfigWithSupplier:supplier]];
+            [self.adapterMap setObject:adapter forKey:supplier.sdk_id];
+            [adapter adapter_setupWithAdapterId:supplier.sdk_id placementId:supplier.adspotid config:[self setupAdConfigWithSupplier:supplier]];
             adapter.delegate = self;
             [adapter adapter_loadAd];
         }
@@ -88,7 +88,7 @@
 - (void)policyServiceFinishBiddingWithWinSupplier:(AdvSupplier *_Nonnull)supplier {
 //    self.price = supplier.sdk_price;
     /// 获取竞胜的adpater
-    self.targetAdapter = [self.adapterMap objectForKey:supplier.supplierKey];
+    self.targetAdapter = [self.adapterMap objectForKey:supplier.sdk_id];
     /// 获取广告包装类信息
     self.feedAdWrapper = [self.targetAdapter adapter_renderFeedAdWrapper];
     /// 获取模板信息流广告成功
@@ -163,7 +163,7 @@
 
 - (AdvSupplier *)getSupplierWithAdapterId:(NSString *)adapterId {
     return [self.suppliers adv_filter:^BOOL(AdvSupplier *obj) {
-        return [[NSString stringWithFormat:@"%@-%ld",obj.identifier,obj.priority] isEqualToString:adapterId];
+        return [obj.sdk_id isEqualToString:adapterId];
     }].firstObject;
 }
 

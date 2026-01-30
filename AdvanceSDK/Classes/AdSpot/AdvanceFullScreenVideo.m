@@ -67,8 +67,8 @@
         NSString *clsName = [AdvSupplierLoader mappingFullScreenAdapterClassNameWithSupplierId:supplier.identifier];
         id<AdvanceFullScreenVideoCommonAdapter> adapter = [[NSClassFromString(clsName) alloc] init];
         if (adapter) {
-            [self.adapterMap setObject:adapter forKey:supplier.supplierKey];
-            [adapter adapter_setupWithAdapterId:supplier.supplierKey placementId:supplier.adspotid config:[self setupAdConfigWithSupplier:supplier]];
+            [self.adapterMap setObject:adapter forKey:supplier.sdk_id];
+            [adapter adapter_setupWithAdapterId:supplier.sdk_id placementId:supplier.adspotid config:[self setupAdConfigWithSupplier:supplier]];
             adapter.delegate = self;
             [adapter adapter_loadAd];
         }
@@ -89,7 +89,7 @@
 - (void)policyServiceFinishBiddingWithWinSupplier:(AdvSupplier *_Nonnull)supplier {
 //    self.price = supplier.sdk_price;
     /// 获取竞胜的adpater
-    self.targetAdapter = [self.adapterMap objectForKey:supplier.supplierKey];
+    self.targetAdapter = [self.adapterMap objectForKey:supplier.sdk_id];
     /// 获取全屏视频广告成功
     if ([_delegate respondsToSelector:@selector(onFullScreenVideoAdDidLoad:)]) {
         [_delegate onFullScreenVideoAdDidLoad:self];
@@ -181,7 +181,7 @@
 
 - (AdvSupplier *)getSupplierWithAdapterId:(NSString *)adapterId {
     return [self.suppliers adv_filter:^BOOL(AdvSupplier *obj) {
-        return [[NSString stringWithFormat:@"%@-%ld",obj.identifier,obj.priority] isEqualToString:adapterId];
+        return [obj.sdk_id isEqualToString:adapterId];
     }].firstObject;
 }
 

@@ -29,18 +29,18 @@ NS_ASSUME_NONNULL_BEGIN
     };
 }
 
--(NSInteger)timeout {
+- (NSInteger)timeout {
     if (!_timeout) {
         return 3000;
     }
     return _timeout;
 }
 
-- (NSString *)supplierKey {
-    if (!_supplierKey) {
-        _supplierKey = [NSString stringWithFormat:@"%@-%ld",_identifier,_priority];
+- (NSInteger)cache_timeout {
+    if (_enable_cache && !_cache_timeout) {
+        return 1800;
     }
-    return _supplierKey;
+    return _cache_timeout;
 }
 
 @end

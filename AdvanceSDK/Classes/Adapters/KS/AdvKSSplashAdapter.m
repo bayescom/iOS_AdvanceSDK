@@ -55,6 +55,7 @@
 
 #pragma mark: - KSSplashAdViewDelegate
 - (void)ksad_splashAdContentDidLoad:(KSSplashAdView *)splashAdView {
+    [self.delegate adapter_cacheAdapterIfNeeded:self adapterId:self.adapterId price:splashAdView.ecpm];
     [self.delegate splashAdapter_didLoadAdWithAdapterId:self.adapterId price:splashAdView.ecpm];
 }
 

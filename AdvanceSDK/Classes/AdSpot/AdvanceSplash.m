@@ -3,6 +3,7 @@
 #import "AdvConstantHeader.h"
 #import "AdvPolicyService.h"
 #import "AdvanceSplashCommonAdapter.h"
+#import "AdvAdCacheManager.h"
 
 @interface AdvanceSplash () <AdvPolicyServiceDelegate, AdvanceSplashCommonAdapter>
 @property (nonatomic, strong) NSArray<AdvSupplier *> *suppliers;
@@ -55,12 +56,20 @@
     [AdvSupplierLoader loadSupplier:supplier completion:^{
         AdvPolicyService *manager = self.manager;
         [manager reportAdDataWithEventType:AdvSupplierReportTKEventLoadEnd supplier:supplier error:nil];
-        // 根据渠道id初始化对应Adapter
-        NSString *clsName = [AdvSupplierLoader mappingSplashAdapterClassNameWithSupplierId:supplier.identifier];
-        id<AdvanceSplashCommonAdapter> adapter = [[NSClassFromString(clsName) alloc] init];
-        if (adapter) {
-            [self.adapterMap setObject:adapter forKey:supplier.supplierKey];
-            [adapter adapter_setupWithAdapterId:supplier.supplierKey placementId:supplier.adspotid config:[self setupAdConfigWithSupplier:supplier]];
+        
+        id<AdvanceSplashCommonAdapter> adapter;
+        // 尝试获取Adapter缓存
+        AdvAdCacheModel *cacheModel = [[AdvAdCacheManager sharedInstance] adCacheModelFromCachedKey:supplier.sdk_id];
+        if (supplier.enable_cache && cacheModel) { //此次加载允许缓存 且 内存中存在Adapter缓存时，直接回调成功
+            adapter = cacheModel.adObject;
+            [self.adapterMap setObject:adapter forKey:supplier.sdk_id];
+            adapter.delegate = self;
+            [self splashAdapter_didLoadAdWithAdapterId:supplier.sdk_id price:cacheModel.price];
+        } else {// 根据渠道id初始化对应Adapter
+            NSString *clsName = [AdvSupplierLoader mappingSplashAdapterClassNameWithSupplierId:supplier.identifier];
+            adapter = [[NSClassFromString(clsName) alloc] init];
+            [self.adapterMap setObject:adapter forKey:supplier.sdk_id];
+            [adapter adapter_setupWithAdapterId:supplier.sdk_id placementId:supplier.adspotid config:[self setupAdConfigWithSupplier:supplier]];
             adapter.delegate = self;
             [adapter adapter_loadAd];
         }
@@ -81,7 +90,7 @@
 - (void)policyServiceFinishBiddingWithWinSupplier:(AdvSupplier *_Nonnull)supplier {
 //    self.price = supplier.sdk_price;
     /// 获取竞胜的adpater
-    self.targetAdapter = [self.adapterMap objectForKey:supplier.supplierKey];
+    self.targetAdapter = [self.adapterMap objectForKey:supplier.sdk_id];
     /// 获取开屏广告成功
     if ([_delegate respondsToSelector:@selector(onSplashAdDidLoad:)]) {
         [_delegate onSplashAdDidLoad:self];
@@ -111,6 +120,14 @@
     return [self.targetAdapter adapter_isAdValid];
 }
 
+#pragma mark: - AdvanceCommonAdapter
+- (void)adapter_cacheAdapterIfNeeded:(id)adapter adapterId:(NSString *)adapterId price:(NSInteger)price {
+    AdvSupplier *supplier = [self getSupplierWithAdapterId:adapterId];
+    if (supplier.enable_cache) { // 缓存Adapter
+        [[AdvAdCacheManager sharedInstance] cacheAdapter:adapter price:price expireTime:supplier.cache_timeout sourceReqId:self.reqId forKey:adapterId];
+    }
+}
+
 #pragma mark: - AdvanceSplashCommonAdapter
 - (void)splashAdapter_didLoadAdWithAdapterId:(NSString *)adapterId price:(NSInteger)price {
     AdvSupplier *supplier = [self getSupplierWithAdapterId:adapterId];
@@ -133,6 +150,7 @@
     if ([self.delegate respondsToSelector:@selector(onSplashAdExposured:)]) {
         [self.delegate onSplashAdExposured:self];
     }
+    [[AdvAdCacheManager sharedInstance] removeAdCacheModelFromCachedKey:adapterId];
 }
 
 - (void)splashAdapter_failedToShowAdWithAdapterId:(NSString *)adapterId error:(NSError *)error {
@@ -175,7 +193,7 @@
 
 - (AdvSupplier *)getSupplierWithAdapterId:(NSString *)adapterId {
     return [self.suppliers adv_filter:^BOOL(AdvSupplier *obj) {
-        return [[NSString stringWithFormat:@"%@-%ld",obj.identifier,obj.priority] isEqualToString:adapterId];
+        return [obj.sdk_id isEqualToString:adapterId];
     }].firstObject;
 }
 
