@@ -44,6 +44,7 @@
 
 #pragma mark: - BaiduMobAdExpressIntDelegate
 - (void)interstitialAdLoaded:(BaiduMobAdExpressInterstitial *)interstitial {
+    [self.delegate adapter_cacheAdapterIfNeeded:self adapterId:self.adapterId price:[[interstitial getECPMLevel] integerValue]];
     [self.delegate interstitialAdapter_didLoadAdWithAdapterId:self.adapterId price:[[interstitial getECPMLevel] integerValue]];
 }
 

@@ -378,6 +378,8 @@
             @"placement_id": [NSString adv_validString:placementId],
             @"adn_channel_id": [NSString adv_validString:supplier.identifier],
             @"adn_adspot_id": [NSString adv_validString:supplier.adspotid],
+            @"is_cached": supplier.cachedReqId.length ? @1 : @0,
+            @"cached_reqid": supplier.cachedReqId.length ? supplier.cachedReqId : @"",
         };
         [AdvApiService verifyServerSideRewardedURL:self.model.server_reward.url parameters:param completion:^(NSError * _Nonnull error) {
             if (!error) {

@@ -59,6 +59,7 @@
 
 #pragma mark: - MercuryRewardVideoAdDelegate
 - (void)mercury_rewardVideoAdDidLoad:(MercuryRewardVideoAd *)rewardVideoAd {
+    [self.delegate adapter_cacheAdapterIfNeeded:self adapterId:self.adapterId price:rewardVideoAd.price];
     [self.delegate rewardAdapter_didLoadAdWithAdapterId:self.adapterId price:rewardVideoAd.price];
 }
 

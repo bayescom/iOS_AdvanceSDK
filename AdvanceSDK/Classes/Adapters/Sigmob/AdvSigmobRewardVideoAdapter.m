@@ -56,6 +56,7 @@
 
 #pragma mark: - WindRewardVideoAdDelegate
 - (void)rewardVideoAdDidLoad:(WindRewardVideoAd *)rewardVideoAd {
+    [self.delegate adapter_cacheAdapterIfNeeded:self adapterId:self.adapterId price:rewardVideoAd.getEcpm.integerValue];
     [self.delegate rewardAdapter_didLoadAdWithAdapterId:self.adapterId price:rewardVideoAd.getEcpm.integerValue];
 }
 

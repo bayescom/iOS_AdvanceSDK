@@ -47,6 +47,7 @@
 #pragma mark: - KSSplashAdViewDelegate
 /// 必须在此回调中处理 广告才有效
 - (void)ksad_interstitialAdRenderSuccess:(KSInterstitialAd *)interstitialAd {
+    [self.delegate adapter_cacheAdapterIfNeeded:self adapterId:self.adapterId price:interstitialAd.ecpm];
     [self.delegate interstitialAdapter_didLoadAdWithAdapterId:self.adapterId price:interstitialAd.ecpm];
 }
 

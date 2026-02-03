@@ -51,6 +51,7 @@
 
 #pragma mark: - BaiduMobAdRewardVideoDelegate
 - (void)rewardedAdLoadSuccess:(BaiduMobAdRewardVideo *)video {
+    [self.delegate adapter_cacheAdapterIfNeeded:self adapterId:self.adapterId price:[[video getECPMLevel] integerValue]];
     [self.delegate rewardAdapter_didLoadAdWithAdapterId:self.adapterId price:[[video getECPMLevel] integerValue]];
 }
 

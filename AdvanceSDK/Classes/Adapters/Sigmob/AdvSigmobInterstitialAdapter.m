@@ -48,6 +48,7 @@
 
 #pragma mark - WindNewIntersititialAdDelegate
 - (void)intersititialAdDidLoad:(WindNewIntersititialAd *)intersititialAd {
+    [self.delegate adapter_cacheAdapterIfNeeded:self adapterId:self.adapterId price:intersititialAd.getEcpm.integerValue];
     [self.delegate interstitialAdapter_didLoadAdWithAdapterId:self.adapterId price:intersititialAd.getEcpm.integerValue];
 }
 

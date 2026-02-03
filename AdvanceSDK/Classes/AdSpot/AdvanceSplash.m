@@ -150,7 +150,10 @@
     if ([self.delegate respondsToSelector:@selector(onSplashAdExposured:)]) {
         [self.delegate onSplashAdExposured:self];
     }
-    [[AdvAdCacheManager sharedInstance] removeAdCacheModelFromCachedKey:adapterId];
+    // 删除缓存Adapter
+    if ([[AdvAdCacheManager sharedInstance] adCacheModelFromCachedKey:adapterId]) {
+        [[AdvAdCacheManager sharedInstance] removeAdCacheModelFromCachedKey:adapterId];
+    }
 }
 
 - (void)splashAdapter_failedToShowAdWithAdapterId:(NSString *)adapterId error:(NSError *)error {

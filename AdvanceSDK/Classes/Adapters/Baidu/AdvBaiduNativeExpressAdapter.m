@@ -77,6 +77,7 @@
         [self.nativeAdObjects addObject:object];
     }];
     
+    [self.delegate adapter_cacheAdapterIfNeeded:self adapterId:self.adapterId price:[[nativeAds.firstObject getECPMLevel] integerValue]];
     [self.delegate nativeAdapter_didLoadAdWithAdapterId:self.adapterId price:[[nativeAds.firstObject getECPMLevel] integerValue]];
 }
 

@@ -57,6 +57,7 @@
     AdvSigmobRenderFeedAdView *sigmobFeedAdView = [[AdvSigmobRenderFeedAdView alloc] initWithNativeAd:nativeAd delegate:self.delegate adapterId:self.adapterId viewController:self.rootViewController];
     self.feedAdWrapper = [[AdvRenderFeedAdWrapper alloc] initWithFeedAdView:sigmobFeedAdView feedAdElement:element];
     
+    [self.delegate adapter_cacheAdapterIfNeeded:self adapterId:self.adapterId price:adsManager.getEcpm.integerValue];
     [self.delegate renderAdapter_didLoadAdWithAdapterId:self.adapterId price:adsManager.getEcpm.integerValue];
 }
 

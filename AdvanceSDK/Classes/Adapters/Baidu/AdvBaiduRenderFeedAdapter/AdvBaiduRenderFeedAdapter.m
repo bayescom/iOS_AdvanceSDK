@@ -56,6 +56,7 @@
     AdvBaiduRenderFeedAdView *bdFeedAdView = [[AdvBaiduRenderFeedAdView alloc] initWithDataObject:dataObject delegate:self.delegate adapterId:self.adapterId];
     self.feedAdWrapper = [[AdvRenderFeedAdWrapper alloc] initWithFeedAdView:bdFeedAdView feedAdElement:element];
     
+    [self.delegate adapter_cacheAdapterIfNeeded:self adapterId:self.adapterId price:[[dataObject getECPMLevel] integerValue]];
     [self.delegate renderAdapter_didLoadAdWithAdapterId:self.adapterId price:[[dataObject getECPMLevel] integerValue]];
 }
 

@@ -53,6 +53,7 @@
     AdvMercuryRenderFeedAdView *mercuryFeedAdView = [[AdvMercuryRenderFeedAdView alloc] initWithDataObject:dataObject delegate:self.delegate adapterId:self.adapterId viewController:self.rootViewController];
     self.feedAdWrapper = [[AdvRenderFeedAdWrapper alloc] initWithFeedAdView:mercuryFeedAdView feedAdElement:element];
     
+    [self.delegate adapter_cacheAdapterIfNeeded:self adapterId:self.adapterId price:dataObject.price];
     [self.delegate renderAdapter_didLoadAdWithAdapterId:self.adapterId price:dataObject.price];
 }
 

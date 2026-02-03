@@ -57,6 +57,7 @@
 
 #pragma mark: - GDTRewardedVideoAdDelegate
 - (void)gdt_rewardVideoAdDidLoad:(GDTRewardVideoAd *)rewardedVideoAd {
+    [self.delegate adapter_cacheAdapterIfNeeded:self adapterId:self.adapterId price:rewardedVideoAd.eCPM];
     [self.delegate rewardAdapter_didLoadAdWithAdapterId:self.adapterId price:rewardedVideoAd.eCPM];
 }
 

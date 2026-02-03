@@ -9,6 +9,7 @@
 #import "AdvConstantHeader.h"
 #import "AdvPolicyService.h"
 #import "AdvanceRenderFeedCommonAdapter.h"
+#import "AdvAdCacheManager.h"
 
 @interface AdvanceRenderFeed () <AdvPolicyServiceDelegate, AdvanceRenderFeedCommonAdapter>
 @property (nonatomic, strong) NSArray<AdvSupplier *> *suppliers;
@@ -62,10 +63,18 @@
     [AdvSupplierLoader loadSupplier:supplier completion:^{
         AdvPolicyService *manager = self.manager;
         [manager reportAdDataWithEventType:AdvSupplierReportTKEventLoadEnd supplier:supplier error:nil];
-        // 根据渠道id初始化对应Adapter
-        NSString *clsName = [AdvSupplierLoader mappingRenderFeedAdapterClassNameWithSupplierId:supplier.identifier];
-        id<AdvanceRenderFeedCommonAdapter> adapter = [[NSClassFromString(clsName) alloc] init];
-        if (adapter) {
+        
+        id<AdvanceRenderFeedCommonAdapter> adapter;
+        // 尝试获取Adapter缓存
+        AdvAdCacheModel *cacheModel = [[AdvAdCacheManager sharedInstance] adCacheModelFromCachedKey:supplier.sdk_id];
+        if (supplier.enable_cache && cacheModel) { //此次加载允许缓存 且 内存中存在Adapter缓存时，直接回调成功
+            adapter = cacheModel.adObject;
+            [self.adapterMap setObject:adapter forKey:supplier.sdk_id];
+            adapter.delegate = self;
+            [self renderAdapter_didLoadAdWithAdapterId:supplier.sdk_id price:cacheModel.price];
+        } else {// 根据渠道id初始化对应Adapter
+            NSString *clsName = [AdvSupplierLoader mappingRenderFeedAdapterClassNameWithSupplierId:supplier.identifier];
+            adapter = [[NSClassFromString(clsName) alloc] init];
             [self.adapterMap setObject:adapter forKey:supplier.sdk_id];
             [adapter adapter_setupWithAdapterId:supplier.sdk_id placementId:supplier.adspotid config:[self setupAdConfigWithSupplier:supplier]];
             adapter.delegate = self;
@@ -97,6 +106,14 @@
     }
 }
 
+#pragma mark: - AdvanceCommonAdapter
+- (void)adapter_cacheAdapterIfNeeded:(id)adapter adapterId:(NSString *)adapterId price:(NSInteger)price {
+    AdvSupplier *supplier = [self getSupplierWithAdapterId:adapterId];
+    if (supplier.enable_cache) { // 缓存Adapter
+        [[AdvAdCacheManager sharedInstance] cacheAdapter:adapter price:price expireTime:supplier.cache_timeout sourceReqId:self.reqId forKey:adapterId];
+    }
+}
+
 #pragma mark: - AdvanceNativeExpressCommonAdapter
 - (void)renderAdapter_didLoadAdWithAdapterId:(NSString *)adapterId price:(NSInteger)price {
     AdvSupplier *supplier = [self getSupplierWithAdapterId:adapterId];
@@ -118,6 +135,10 @@
     [manager reportAdDataWithEventType:AdvSupplierReportTKEventExposed supplier:supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(onRenderFeedAdViewExposured:)]) {
         [self.delegate onRenderFeedAdViewExposured:self.feedAdWrapper];
+    }
+    // 删除缓存Adapter
+    if ([[AdvAdCacheManager sharedInstance] adCacheModelFromCachedKey:adapterId]) {
+        [[AdvAdCacheManager sharedInstance] removeAdCacheModelFromCachedKey:adapterId];
     }
 }
 

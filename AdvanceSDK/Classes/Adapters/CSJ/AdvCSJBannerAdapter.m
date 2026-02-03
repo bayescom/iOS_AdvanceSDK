@@ -49,6 +49,7 @@
 - (void)nativeExpressBannerAdViewDidLoad:(BUNativeExpressBannerView *)bannerAdView {
     self.bannerView = bannerAdView;
     NSDictionary *ext = bannerAdView.mediaExt;
+    [self.delegate adapter_cacheAdapterIfNeeded:self adapterId:self.adapterId price:[ext[@"price"] integerValue]];
     [self.delegate bannerAdapter_didLoadAdWithAdapterId:self.adapterId price:[ext[@"price"] integerValue]];
 }
 

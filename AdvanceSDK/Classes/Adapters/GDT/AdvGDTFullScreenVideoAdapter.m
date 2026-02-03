@@ -48,6 +48,7 @@
 
 #pragma mark: - GDTUnifiedInterstitialAdDelegate
 - (void)unifiedInterstitialSuccessToLoadAd:(GDTUnifiedInterstitialAd *)unifiedInterstitial {
+    [self.delegate adapter_cacheAdapterIfNeeded:self adapterId:self.adapterId price:unifiedInterstitial.eCPM];
     [self.delegate fullscreenAdapter_didLoadAdWithAdapterId:self.adapterId price:unifiedInterstitial.eCPM];
 }
 

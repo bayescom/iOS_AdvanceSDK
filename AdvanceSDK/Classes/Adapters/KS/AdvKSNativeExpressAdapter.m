@@ -67,6 +67,7 @@
         [self.nativeAdObjects addObject:object];
     }];
     
+    [self.delegate adapter_cacheAdapterIfNeeded:self adapterId:self.adapterId price:feedAdDataArray.firstObject.ecpm];
     [self.delegate nativeAdapter_didLoadAdWithAdapterId:self.adapterId price:feedAdDataArray.firstObject.ecpm];
 }
 

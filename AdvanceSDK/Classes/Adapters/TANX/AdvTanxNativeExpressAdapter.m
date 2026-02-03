@@ -55,6 +55,7 @@
                 [strongSelf.nativeAdObjects addObject:object];
             }];
             
+            [strongSelf.delegate adapter_cacheAdapterIfNeeded:strongSelf adapterId:strongSelf.adapterId price:ecpm];
             [strongSelf.delegate nativeAdapter_didLoadAdWithAdapterId:strongSelf.adapterId price:ecpm];
         }
     }];

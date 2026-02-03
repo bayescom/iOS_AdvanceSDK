@@ -46,6 +46,7 @@
         } else { // 获取广告成功
             strongSelf.adModel = rewardAdModels.firstObject;
             NSInteger ecpm = strongSelf.adModel.bid.bidPrice.integerValue;
+            [strongSelf.delegate adapter_cacheAdapterIfNeeded:strongSelf adapterId:strongSelf.adapterId price:ecpm];
             [strongSelf.delegate rewardAdapter_didLoadAdWithAdapterId:strongSelf.adapterId price:ecpm];
         }
     }];
@@ -78,6 +79,10 @@
 
 - (void)onAdDidPlayFinish:(TXAdModel *)model {
     [self.delegate rewardAdapter_didAdPlayFinishWithAdapterId:self.adapterId];
+}
+
+- (void)dealloc {
+    
 }
 
 @end

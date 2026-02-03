@@ -47,6 +47,7 @@
 
 #pragma mark: - KSFullscreenVideoAdDelegate
 - (void)fullscreenVideoAdDidLoad:(KSFullscreenVideoAd *)fullscreenVideoAd {
+    [self.delegate adapter_cacheAdapterIfNeeded:self adapterId:self.adapterId price:fullscreenVideoAd.ecpm];
     [self.delegate fullscreenAdapter_didLoadAdWithAdapterId:self.adapterId price:fullscreenVideoAd.ecpm];
 }
 

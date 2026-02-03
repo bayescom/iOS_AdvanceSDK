@@ -6,7 +6,6 @@
 //
 
 #import "AdvanceCommonAdapter.h"
-#import "AdvRenderFeedAdWrapper.h"
 
 @protocol AdvanceRenderFeedCommonAdapter <AdvanceCommonAdapter>
 

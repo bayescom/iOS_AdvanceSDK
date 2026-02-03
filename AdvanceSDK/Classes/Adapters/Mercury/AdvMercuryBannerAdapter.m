@@ -52,6 +52,7 @@
 // 广告数据拉取成功回调
 - (void)mercury_bannerViewDidReceived:(MercuryBannerAdView *)banner {
     self.bannerView = banner;
+    [self.delegate adapter_cacheAdapterIfNeeded:self adapterId:self.adapterId price:banner.price];
     [self.delegate bannerAdapter_didLoadAdWithAdapterId:self.adapterId price:banner.price];
 }
 

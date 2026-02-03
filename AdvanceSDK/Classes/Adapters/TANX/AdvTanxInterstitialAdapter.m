@@ -37,6 +37,7 @@
         } else { // 获取广告成功
             strongSelf.adModel = tableScreenModels.firstObject;
             NSInteger ecpm = strongSelf.adModel.bid.bidPrice.integerValue;
+            [strongSelf.delegate adapter_cacheAdapterIfNeeded:strongSelf adapterId:strongSelf.adapterId price:ecpm];
             [strongSelf.delegate interstitialAdapter_didLoadAdWithAdapterId:strongSelf.adapterId price:ecpm];
         }
     }];
@@ -66,6 +67,10 @@
 
 - (void)onAdRenderFail:(TXAdModel *)model withError:(NSError *)error {
     [self.delegate interstitialAdapter_failedToShowAdWithAdapterId:self.adapterId error:error];
+}
+
+- (void)dealloc {
+    
 }
 
 @end

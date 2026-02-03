@@ -59,6 +59,7 @@
 
 #pragma mark: - KSRewardedVideoAdDelegate
 - (void)rewardedVideoAdDidLoad:(KSRewardedVideoAd *)rewardedVideoAd {
+    [self.delegate adapter_cacheAdapterIfNeeded:self adapterId:self.adapterId price:rewardedVideoAd.ecpm];
     [self.delegate rewardAdapter_didLoadAdWithAdapterId:self.adapterId price:rewardedVideoAd.ecpm];
 }
 

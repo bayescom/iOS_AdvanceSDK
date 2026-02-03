@@ -52,6 +52,7 @@
         strongSelf.tanx_ad.delegate = tanxFeedAdView;
         strongSelf.feedAdWrapper = [[AdvRenderFeedAdWrapper alloc] initWithFeedAdView:tanxFeedAdView feedAdElement:element];
         
+        [strongSelf.delegate adapter_cacheAdapterIfNeeded:strongSelf adapterId:strongSelf.adapterId price:ecpm];
         [strongSelf.delegate renderAdapter_didLoadAdWithAdapterId:self.adapterId price:ecpm];
     }];
 }

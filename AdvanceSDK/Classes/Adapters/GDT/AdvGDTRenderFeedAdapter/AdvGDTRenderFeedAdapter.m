@@ -55,6 +55,7 @@
     AdvGDTRenderFeedAdView *gdtFeedAdView = [[AdvGDTRenderFeedAdView alloc] initWithDataObject:dataObject delegate:self.delegate adapterId:self.adapterId viewController:self.rootViewController];
     self.feedAdWrapper = [[AdvRenderFeedAdWrapper alloc] initWithFeedAdView:gdtFeedAdView feedAdElement:element];
     
+    [self.delegate adapter_cacheAdapterIfNeeded:self adapterId:self.adapterId price:dataObject.eCPM];
     [self.delegate renderAdapter_didLoadAdWithAdapterId:self.adapterId price:dataObject.eCPM];
 }
 

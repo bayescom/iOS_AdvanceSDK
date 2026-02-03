@@ -43,6 +43,7 @@
 #pragma mark: - BUNativeExpressFullscreenVideoAdDelegate
 - (void)nativeExpressFullscreenVideoAdDidLoad:(BUNativeExpressFullscreenVideoAd *)fullscreenVideoAd {
     NSDictionary *ext = fullscreenVideoAd.mediaExt;
+    [self.delegate adapter_cacheAdapterIfNeeded:self adapterId:self.adapterId price:[ext[@"price"] integerValue]];
     [self.delegate interstitialAdapter_didLoadAdWithAdapterId:self.adapterId price:[ext[@"price"] integerValue]];
 }
 

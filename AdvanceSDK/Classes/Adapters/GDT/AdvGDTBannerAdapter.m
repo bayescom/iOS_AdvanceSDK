@@ -53,6 +53,7 @@
 #pragma mark: - GDTUnifiedBannerViewDelegate
 - (void)unifiedBannerViewDidLoad:(GDTUnifiedBannerView *)unifiedBannerView {
     self.bannerView = unifiedBannerView;
+    [self.delegate adapter_cacheAdapterIfNeeded:self adapterId:self.adapterId price:unifiedBannerView.eCPM];
     [self.delegate bannerAdapter_didLoadAdWithAdapterId:self.adapterId price:unifiedBannerView.eCPM];
 }
 

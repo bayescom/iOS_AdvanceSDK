@@ -46,6 +46,7 @@
 
 #pragma mark: - MercuryInterstitialAdDelegate
 - (void)mercury_interstitialSuccessToLoadAd:(MercuryInterstitialAd *)interstitialAd  {
+    [self.delegate adapter_cacheAdapterIfNeeded:self adapterId:self.adapterId price:interstitialAd.price];
     [self.delegate interstitialAdapter_didLoadAdWithAdapterId:self.adapterId price:interstitialAd.price];
 }
 

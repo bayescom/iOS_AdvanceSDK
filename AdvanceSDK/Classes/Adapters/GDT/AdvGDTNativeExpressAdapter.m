@@ -66,6 +66,7 @@
         [self.nativeAdObjects addObject:object];
     }];
     
+    [self.delegate adapter_cacheAdapterIfNeeded:self adapterId:self.adapterId price:views.firstObject.eCPM];
     [self.delegate nativeAdapter_didLoadAdWithAdapterId:self.adapterId price:views.firstObject.eCPM];
 }
 

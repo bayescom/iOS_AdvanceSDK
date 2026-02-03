@@ -56,6 +56,7 @@
 #pragma mark: - BUNativeExpressRewardedVideoAdDelegate
 - (void)nativeExpressRewardedVideoAdDidLoad:(BUNativeExpressRewardedVideoAd *)rewardedVideoAd {
     NSDictionary *ext = rewardedVideoAd.mediaExt;
+    [self.delegate adapter_cacheAdapterIfNeeded:self adapterId:self.adapterId price:[ext[@"price"] integerValue]];
     [self.delegate rewardAdapter_didLoadAdWithAdapterId:self.adapterId price:[ext[@"price"] integerValue]];
 }
 

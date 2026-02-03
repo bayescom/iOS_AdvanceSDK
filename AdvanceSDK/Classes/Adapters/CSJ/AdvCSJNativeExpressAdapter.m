@@ -66,6 +66,7 @@
     }];
     
     NSDictionary *ext = views.firstObject.mediaExt;
+    [self.delegate adapter_cacheAdapterIfNeeded:self adapterId:self.adapterId price:[ext[@"price"] integerValue]];
     [self.delegate nativeAdapter_didLoadAdWithAdapterId:self.adapterId price:[ext[@"price"] integerValue]];
 }
 

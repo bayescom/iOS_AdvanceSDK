@@ -45,6 +45,7 @@
 
 #pragma mark - BaiduMobAdExpressFullScreenVideoDelegate
 - (void)fullScreenVideoAdLoadSuccess:(BaiduMobAdExpressFullScreenVideo *)video {
+    [self.delegate adapter_cacheAdapterIfNeeded:self adapterId:self.adapterId price:[[video getECPMLevel] integerValue]];
     [self.delegate fullscreenAdapter_didLoadAdWithAdapterId:self.adapterId price:[[video getECPMLevel] integerValue]];
 }
 

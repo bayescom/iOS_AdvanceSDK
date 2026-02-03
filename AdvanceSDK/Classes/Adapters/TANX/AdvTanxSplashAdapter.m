@@ -45,7 +45,7 @@
         } else { // 获取广告成功
             strongSelf.adModel = splashModels.firstObject;
             NSInteger ecpm = strongSelf.adModel.bid.bidPrice.integerValue;
-            [strongSelf.delegate adapter_cacheAdapterIfNeeded:self adapterId:self.adapterId price:ecpm];
+            [strongSelf.delegate adapter_cacheAdapterIfNeeded:strongSelf adapterId:strongSelf.adapterId price:ecpm];
             [strongSelf.delegate splashAdapter_didLoadAdWithAdapterId:strongSelf.adapterId price:ecpm];
         }
     }];
