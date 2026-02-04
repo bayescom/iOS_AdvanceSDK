@@ -6,64 +6,59 @@
 
 
 
-## 1.广告位属性及方法说明
+## 1.广告位接口说明
+| 属性| 	介绍|
+|--------- |---------------|  
+|muted |设定是否静音播放视频，默认为YES| 
+|isAdValid |广告是否有效，建议在展示广告之前判断，否则会影响计费或展示失败| 
+|rewardedVideoModel | 用户信息、奖励信息对象|
 
-| 属性           | 	介绍            |
-|--------------------|---------------------------------|  
-| isAdValid          | 广告是否有效，建议在展示广告之前判断，否则会影响计费或展示失败 | 
-| rewardedVideoModel | 用户信息、奖励信息对象                     |
+| 方法| 	介绍|
+|--------- |---------------| 
+|- initWithAdspotId: extra: delegate: |广告位初始化方法<br>adspotid: 广告位id <br>extra: 自定义扩展参数（可为空）<br>delegate: 广告代理对象| 
+|- loadAd |加载广告| 
+|- showAdFromViewController: |展示广告<br>viewController: 当前视图控制器|                                                       
 
-| 方法                     | 	介绍    |                                                                                          
-|----------------|---------------------------| 
-| - initWithAdspotId: customExt: | 广告位初始化方法<br>adspotid: 广告位id <br>customExt: 自定义拓展参数（可为空）| 
-| - loadAd                                       | 加载广告   |                                                                                                    
-| - showAdFromViewController:                    | 展示广告   |                                                          
+## 2.广告位监听回调
+| 回调方法| 	介绍|
+|--------- |---------------|  
+|- onRewardVideoAdDidLoad: | 广告加载成功回调 |  
+|- onRewardVideoAdFailToLoad: error: | 广告加载失败回调 |  
+|- onRewardVideoAdExposured: | 广告曝光回调|  
+|- onRewardVideoAdFailToPresent: error: |广告展示失败回调|
+|- onRewardVideoAdClicked: |广告点击回调|
+|- onRewardVideoAdClosed: |广告关闭回调|
+|- onRewardVideoAdDidRewardSuccess: rewardInfo: |广告奖励发放成功回调|
+|- onRewardVideoAdDidServerRewardFail: error: |服务端验证奖励失败回调|
+|- onRewardVideoAdDidPlayFinish: |广告播放结束回调|
 
-| 代理方法          | 	介绍              |
-|---------------------|---------------------------|  
-| - didFinishLoadingADPolicyWithSpotId:                        | 广告策略服务加载成功                               |  
-| - didFailLoadingADSourceWithSpotId: error: description:      | 广告策略或者渠道广告加载失败                           |  
-| - didStartLoadingADSourceWithSpotId: sourceId:               | 广告位中某一个广告源开始加载广告<br> sourceId :将要加载的渠道id |  
-| - didFinishLoadingRewardedVideoADWithSpotId:                 | 激励视频广告数据拉取成功                             |
-| - rewardedVideoDidDownLoadForSpotId: extra:                  | 激励视频缓存成功                                 |
-| - rewardedVideoDidStartPlayingForSpotId: extra:              | 激励视频开始播放                                 |
-| - rewardedVideoDidEndPlayingForSpotId: extra:                | 激励视频播放完成                                 |
-| - rewardedVideoDidClickForSpotId: extra:                     | 激励视频广告被点击                                |
-| - rewardedVideoDidCloseForSpotId: extra:                     | 激励视频广告被关闭                                |
-| - rewardedVideoDidRewardSuccessForSpotId: extra: rewardInfo: | 激励视频广告激励成功                               |
-| - rewardedVideoServerRewardDidFailForSpotId: extra: error:   | 服务端验证激励失败                                |
-***
+## 3.接入代码示例
 
-## 2.接入代码示例
-
-- <span style="background-color: #297497"><font  color=#FFFFF> 激励视频广告类为AdvanceReward</font></span>
-- 激励视频分为广告数据加载，视频缓存，以及展示阶段，当视频缓存成功回调后可以调用展示方法展示激励视频。
+- <span style="background-color: #297497"><font  color=#FFFFF> 激励视频广告类为AdvanceRewardVideo</font></span>
 - 集成期间可先使用预先配置好的Demo广告位ID进行集成，[查看详情](advance/ios/faq/test.md)
 
 #### 加载广告
 ```
 - (void)loadAd {
-    self.advanceRewardVideo = [[AdvanceRewardVideo alloc] initWithAdspotId:self.adspotId
-                                                                 customExt:self.ext];
-    self.advanceRewardVideo.delegate = self;
+    self.rewardVideoAd = [[AdvanceRewardVideo alloc] initWithAdspotId:self.adspotId extra:nil delegate:self];
     
     // 奖励设置（可选）
-    AdvRewardedVideoModel *model = [[AdvRewardedVideoModel alloc] init];
+    AdvRewardVideoModel *model = [[AdvRewardVideoModel alloc] init];
     model.userId = @"123456";
     model.rewardAmount = 100;
     model.rewardName = @"福利";
 //    model.extra = @{@"key1" : @"value1"}.modelToJSONString; // 透传参数
-    self.advanceRewardVideo.rewardedVideoModel = model;
+    self.rewardVideoAd.rewardVideoModel = model;
     // 加载广告
-    [self.advanceRewardVideo loadAd];
+    [self.rewardVideoAd loadAd];
 }
 ```
 
 #### 展示广告
 ```
 - (void)showAd {
-    if (self.advanceRewardVideo.isAdValid) {
-        [self.advanceRewardVideo showAdFromViewController:self];
+    if (self.rewardVideoAd.isAdValid) {
+        [self.rewardVideoAd showAdFromViewController:self];
     }
 }
 ```
@@ -71,65 +66,55 @@
 #### 广告回调
 
 ```
-/// 广告策略加载成功
-- (void)didFinishLoadingADPolicyWithSpotId:(NSString *)spotId {
-    NSLog(@"%s 广告位id为: %@",__func__ , spotId);
+/// 广告加载成功回调
+- (void)onRewardVideoAdDidLoad:(AdvanceRewardVideo *)rewardVideoAd {
+    NSLog(@"激励视频广告加载成功 %s %@", __func__, rewardVideoAd);
+    [JDStatusBarNotification showWithStatus:@"广告加载成功" dismissAfter:0.7];
 }
 
-/// 广告策略或者渠道广告加载失败
-- (void)didFailLoadingADSourceWithSpotId:(NSString *)spotId error:(NSError *)error description:(NSDictionary *)description {
-    NSLog(@"广告展示失败 %s  error: %@ 详情:%@", __func__, error,description);
-    [JDStatusBarNotification showWithStatus:@"广告加载失败" dismissAfter:1.5];
-    self.advanceRewardVideo.delegate = nil;
-    self.advanceRewardVideo = nil;
+/// 广告加载失败回调
+-(void)onRewardVideoAdFailToLoad:(AdvanceRewardVideo *)rewardVideoAd error:(NSError *)error {
+    NSLog(@"激励视频广告加载失败 %s %@", __func__, error);
+    [JDStatusBarNotification showWithStatus:@"广告加载失败" dismissAfter:0.7];
+    self.rewardVideoAd = nil;
 }
 
-/// 广告位中某一个广告源开始加载广告
-- (void)didStartLoadingADSourceWithSpotId:(NSString *)spotId sourceId:(NSString *)sourceId {
-    NSLog(@"广告位中某一个广告源开始加载广告 %s  sourceId: %@", __func__, sourceId);
+/// 广告曝光回调
+-(void)onRewardVideoAdExposured:(AdvanceRewardVideo *)rewardVideoAd {
+    NSLog(@"激励视频广告曝光回调 %s %@", __func__, rewardVideoAd);
 }
 
-/// 激励视频广告数据拉取成功
-- (void)didFinishLoadingRewardedVideoADWithSpotId:(NSString *)spotId {
-    NSLog(@"广告数据拉取成功, 正在缓存... %s", __func__);
-    [JDStatusBarNotification showWithStatus:@"广告加载成功" dismissAfter:1.5];
+/// 广告展示失败回调
+-(void)onRewardVideoAdFailToPresent:(AdvanceRewardVideo *)rewardVideoAd error:(NSError *)error {
+    NSLog(@"激励视频广告展示失败 %s %@", __func__, error);
+    [JDStatusBarNotification showWithStatus:@"广告展示失败" dismissAfter:0.7];
+    self.rewardVideoAd = nil;
 }
 
-/// 激励视频缓存成功
-- (void)rewardedVideoDidDownLoadForSpotId:(NSString *)spotId extra:(NSDictionary *)extra{
-    NSLog(@"视频缓存成功 %s", __func__);
+/// 广告点击回调
+- (void)onRewardVideoAdClicked:(AdvanceRewardVideo *)rewardVideoAd {
+    NSLog(@"激励视频广告点击回调 %s %@", __func__, rewardVideoAd);
 }
 
-/// 激励视频开始播放
-- (void)rewardedVideoDidStartPlayingForSpotId:(NSString *)spotId extra:(NSDictionary *)extra {
-    NSLog(@"广告曝光回调 %s", __func__);
+/// 广告关闭回调
+- (void)onRewardVideoAdClosed:(AdvanceRewardVideo *)rewardVideoAd {
+    NSLog(@"激励视频广告关闭回调 %s %@", __func__, rewardVideoAd);
+    self.rewardVideoAd = nil;
 }
 
-/// 激励视频到达激励时间
-- (void)rewardedVideoDidRewardSuccessForSpotId:(NSString *)spotId extra:(NSDictionary *)extra rewardInfo:(AdvRewardCallbackInfo *)rewardInfo {
-    NSLog(@"到达激励时间 %s %@", __func__, rewardInfo);
+/// 广告奖励发放成功回调
+- (void)onRewardVideoAdDidRewardSuccess:(AdvanceRewardVideo *)rewardVideoAd rewardInfo:(AdvRewardCallbackInfo *)rewardInfo {
+    NSLog(@"激励视频广告奖励发放成功回调 %s %@", __func__, rewardInfo);
 }
 
-/// 服务端验证激励失败
-- (void)rewardedVideoServerRewardDidFailForSpotId:(NSString *)spotId extra:(NSDictionary *)extra error:(NSError *)error {
-    NSLog(@"服务端验证激励失败 %s %@", __func__, error);
+/// 服务端验证奖励失败回调
+- (void)onRewardVideoAdDidServerRewardFail:(AdvanceRewardVideo *)rewardVideoAd error:(NSError *)error {
+    NSLog(@"服务端验证激励失败回调 %s %@", __func__, error);
 }
 
-/// 激励视频播放完成
-- (void)rewardedVideoDidEndPlayingForSpotId:(NSString *)spotId extra:(NSDictionary *)extra {
-    NSLog(@"播放完成 %s", __func__);
-}
-
-/// 激励视频广告点击
-- (void)rewardedVideoDidClickForSpotId:(NSString *)spotId extra:(NSDictionary *)extra {
-    NSLog(@"广告点击 %s", __func__);
-}
-
-/// 激励视频广告关闭
-- (void)rewardedVideoDidCloseForSpotId:(NSString *)spotId extra:(NSDictionary *)extra {
-    NSLog(@"广告关闭了 %s", __func__);
-    self.advanceRewardVideo.delegate = nil;
-    self.advanceRewardVideo = nil;
+/// 广告播放结束回调
+- (void)onRewardVideoAdDidPlayFinish:(AdvanceRewardVideo *)rewardVideoAd {
+    NSLog(@"激励视频播放完成 %s", __func__);
 }
 ```
 
@@ -142,7 +127,7 @@
 
 开发者在代码中通过聚合SDK的API 传入UserID(用户唯一ID)和用户自定义数据，这些参数最终将通过回调URL 回传给开发者 （参考第二部分代码示例）
 
-当客户端播放激励视频广告，触发激励发放时，首先由广告SDK通过客户端回调方式回调激励达成事件，聚合SDK收到激励达成事件后，会通过Advance服务器请求开发者配置在**倍联后台的服务端激励回调url**（APP服务端和Advance服务端之间的具体交互说明可参考 3.2 中内容），拿到结果后再通过`- rewardedVideoDidRewardSuccessForSpotId: extra: rewardInfo:`或者`- rewardedVideoServerRewardDidFailForSpotId: extra: error:` 回调形式告诉开发者。
+当客户端播放激励视频广告，触发激励发放时，首先由广告SDK通过客户端回调方式回调激励达成事件，聚合SDK收到激励达成事件后，会通过Advance服务器请求开发者配置在**倍联后台的服务端激励回调url**（APP服务端和Advance服务端之间的具体交互说明可参考 3.2 中内容），拿到结果后再通过`- onRewardVideoAdDidRewardSuccess: rewardInfo:`或者`- onRewardVideoAdDidServerRewardFail: error:` 回调形式告诉开发者。
 
 
 * AdvRewardCallbackInfo 信息内容详解

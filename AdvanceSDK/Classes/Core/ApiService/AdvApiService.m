@@ -15,10 +15,10 @@
 
 @implementation AdvApiService
 
-+ (NSString*)genAdRequestLink:(NSString *)command {
-    NSString *url = [NSString stringWithFormat:@"%@%@", AdvanceSDKRequestUrl, command];
-    return url;
-}
+//+ (NSString*)genAdRequestLink:(NSString *)command {
+//    NSString *url = [NSString stringWithFormat:@"%@%@", AdvanceSDKRequestUrl, command];
+//    return url;
+//}
 
 + (void)loadPolicyDataWithParameters:(NSDictionary *)parameters completion:(void (^)(AdvPolicyModel *model, NSError *error))completion {
     
@@ -30,7 +30,7 @@
         return completion(nil, [AdvError errorWithCode:AdvErrorCode_NoNetwork].toNSError);
     }
     
-    [AdvNetwork sendRequestByUrlString:[self genAdRequestLink:@"cruiser"] method:RequestMethod_POST parameters:parameters headers:nil timeout:5.f success:^(id  _Nonnull response) {
+    [AdvNetwork sendRequestByUrlString:AdvanceSDKRequestUrl method:RequestMethod_POST parameters:parameters headers:nil timeout:5.f success:^(id  _Nonnull response) {
         
         if (![response isKindOfClass:[NSData class]]) {
             return completion(nil, [AdvError errorWithCode:AdvErrorCode_ResponseTypeError].toNSError);

@@ -4,45 +4,51 @@
 ***
 <font color=#757575 size=2>**简介：** 自渲染广告在原生广告中是相对比较高级的用法，开发者可获取广告的所有素材内容进行自定义布局的广告渲染。一般开发者会嵌套在产品自身的布局中实现。</font>
 
-## 1.广告位代理方法及广告对象说明
+## 1.广告位接口说明
+| 属性| 	介绍|
+|--------- |---------------|  
+|viewController |用于广告跳转的视图控制器|  
 
-| 广告素材数据对象| 	介绍|
+| 方法| 	介绍|
+|--------- |---------------| 
+|- initWithAdspotId: extra: delegate: |广告位初始化方法<br>adspotid: 广告位id <br>extra: 自定义扩展参数（可为空）<br>delegate: 广告代理对象| 
+|- loadAd |加载广告| 
+
+## 2.广告对象说明
+| 广告素材信息| 	介绍|
 |--------- |---------------|  
 |AdvRenderFeedAdElement |自渲染信息流广告素材：<br>包含广告标题、广告描述、广告图标、多媒体信息、广告有效性等| 
 
-| 广告位数据对象| 	介绍|
+| 广告包装类信息| 	介绍|
 |--------- |---------------|  
-|AdvRenderFeedAd |用户通过回调获取的广告位信息：<br>包含广告素材对象、自渲染展示容器、广告平台logo、视频播放视图等 <br>-registerClickableViews: andCloseableView: 此方法用于绑定可点击、可关闭的视图| 
+|AdvRenderFeedAdWrapper |用户通过回调获取的广告包装类信息：<br>包含广告素材对象、自渲染展示容器、广告平台logo、视频播放视图等 <br>-registerClickableViews: andCloseableView: 此方法用于绑定可点击、可关闭的视图| 
 
-| 代理方法| 	介绍|
+## 3.广告位监听回调
+| 回调方法| 	介绍|
 |--------- |---------------|  
-|- didFinishLoadingADPolicyWithSpotId: | 广告策略服务加载成功 |  
-|- didFailLoadingADSourceWithSpotId: error: description: | 广告策略或者渠道广告加载失败 |  
-|- didStartLoadingADSourceWithSpotId: sourceId: | 广告位中某一个广告源开始加载广告<br> sourceId :将要加载的渠道id|  
-|- didFinishLoadingRenderFeedAd: spotId:|自渲染信息流广告数据拉取成功|
-|- renderFeedAdDidShowForSpotId: extra: |广告曝光的回调|
-|- renderFeedAdDidClickForSpotId: extra: |广告被点击的回调|
-|- renderFeedAdDidCloseForSpotId: extra:|广告被关闭的回调|
-|- renderFeedAdDidCloseDetailPageForSpotId: extra: |广告详情页被关闭的回调|
-|- renderFeedVideoDidEndPlayingForSpotId: extra: |视频广告播放完成的回调|
+|- onRenderFeedAdSuccessToLoad: feedAdWrapper: | 广告加载成功回调 |  
+|- onRenderFeedAdFailToLoad: error: | 广告加载失败回调 |  
+|- onRenderFeedAdViewExposured: | 广告曝光回调|  
+|- onRenderFeedAdViewClicked: |广告点击回调|
+|- onRenderFeedAdViewClosed: |广告关闭回调|
+|- onRenderFeedAdDidCloseDetailPage: |广告详情页关闭回调|
+|- onRenderFeedAdDidPlayFinish: |视频广告播放结束回调|
 
 
-***
-
-## 2.接入代码示例
+## 4.接入代码示例
 
 - <span style="background-color: #297497"><font  color=#FFFFF> 自渲染信息流广告类为AdvanceRenderFeed</font></span>
-- 自渲染信息流广告加载分为几个阶段:加载广告获得自渲染信息流对象，用户自渲染广告素材，展示自渲染广告。
-- 需要注意的是，开发者需要在当前页面持有SDK返回的AdvRenderFeedAd对象以及自渲染容器视图feedAdView。用户点击关闭按钮后，开发者需要把feedAdView视图移除。
+- 自渲染信息流广告加载分为几个阶段:加载广告获得自渲染信息流对象和用户自渲染广告素材，展示自渲染广告。
+- 需要注意的是，开发者需要在当前页面持有SDK返回的AdvRenderFeedAdWrapper对象以及自渲染容器视图feedAdView。用户点击关闭按钮后，开发者需要把feedAdView视图移除。
 - 开发者自渲染的视图务必添加至feedAdView容器之中。详情可参照Demo文件DemoFeedAdDisplayController.m
 - 开发者创建完视图后，使用AdvRenderFeedAdElement对象更新数据。**重要：** 紧接着调用registerClickableViews: andCloseableView:进行视图绑定操作。
 
 #### 加载广告
 ```
 - (void)loadRenderFeedAd {
-    _renderFeed = [[AdvanceRenderFeed alloc] initWithAdspotId:self.adspotId customExt:@{@"test1": @"value1"} viewController:self];
-    _renderFeed.delegate = self;
-    [_renderFeed loadAd];
+    _renderFeedAd = [[AdvanceRenderFeed alloc] initWithAdspotId:self.adspotId extra:@{@"test1": @"value1"} delegate:self];
+    _renderFeedAd.viewController = self;
+    [_renderFeedAd loadAd];
 }
 ```
 
@@ -86,57 +92,52 @@
 #### 广告回调
 
 ```
-/// 广告策略加载成功
-- (void)didFinishLoadingADPolicyWithSpotId:(NSString *)spotId {
-    NSLog(@"%s 广告位id为: %@",__func__ , spotId);
-}
-
-/// 广告策略或者渠道广告加载失败
-- (void)didFailLoadingADSourceWithSpotId:(NSString *)spotId error:(NSError *)error description:(NSDictionary *)description{
-    NSLog(@"广告展示失败 %s  error: %@ 详情:%@", __func__, error, description);
-}
-
-/// 广告位中某一个广告源开始加载广告
-- (void)didStartLoadingADSourceWithSpotId:(NSString *)spotId sourceId:(NSString *)sourceId {
-    NSLog(@"广告位中某一个广告源开始加载广告 %s  sourceId: %@", __func__, sourceId);
-}
-
-/// 信息流广告数据拉取成功
-- (void)didFinishLoadingRenderFeedAd:(AdvRenderFeedAd *)feedAd spotId:(NSString *)spotId {
-    self.feedAd = feedAd;
-    self.feedAdView = feedAd.feedAdView;
+/// 广告加载成功回调
+- (void)onRenderFeedAdSuccessToLoad:(AdvanceRenderFeed *)renderFeedAd feedAdWrapper:(AdvRenderFeedAdWrapper *)feedAdWrapper {
+    NSLog(@"自渲染信息流广告加载成功 %s %@", __func__, renderFeedAd);
+    self.feedAdWrapper = feedAdWrapper;
+    self.feedAdView = feedAdWrapper.feedAdView;
     
-    if (self.feedAd.feedAdElement.isAdValid) {
+    if (self.feedAdWrapper.feedAdElement.isAdValid) {
         [self buildupFeedAdView];
-        [self refreshFeedAdUIWithData:self.feedAd.feedAdElement];
-        [self.feedAd registerClickableViews:@[self.customLinkBtn, self.iconImageView] andCloseableView:self.closeBtn];
+        [self refreshFeedAdUIWithData:self.feedAdWrapper.feedAdElement];
+        [self.feedAdWrapper registerClickableViews:@[self.customLinkBtn, self.iconImageView] andCloseableView:self.closeBtn];
     }
 }
 
-/// 自渲染信息流广告关闭按钮点击
-- (void)renderFeedAdDidCloseForSpotId:(NSString *)spotId extra:(NSDictionary *)extra {
+/// 广告加载失败回调
+- (void)onRenderFeedAdFailToLoad:(AdvanceRenderFeed *)renderFeedAd error:(NSError *)error {
+    NSLog(@"自渲染信息流广告加载失败 %s %@", __func__, error);
+    [JDStatusBarNotification showWithStatus:@"广告加载失败" dismissAfter:0.7];
+    self.renderFeedAd = nil;
+}
+
+/// 广告曝光回调
+-(void)onRenderFeedAdViewExposured:(AdvRenderFeedAdWrapper *)feedAdWrapper {
+    NSLog(@"自渲染信息流广告曝光回调 %s %@", __func__, feedAdWrapper);
+}
+
+/// 广告点击回调
+- (void)onRenderFeedAdViewClicked:(AdvRenderFeedAdWrapper *)feedAdWrapper {
+    NSLog(@"自渲染信息流广告点击回调 %s %@", __func__, feedAdWrapper);
+}
+
+/// 广告关闭回调
+- (void)onRenderFeedAdViewClosed:(AdvRenderFeedAdWrapper *)feedAdWrapper {
+    NSLog(@"自渲染信息流广告关闭回调 %s %@", __func__, feedAdWrapper);
     // 手动移除广告视图
     [self.feedAdView removeFromSuperview];
+    self.renderFeedAd = nil;
 }
 
-/// 自渲染信息流广告曝光
-- (void)renderFeedAdDidShowForSpotId:(NSString *)spotId extra:(NSDictionary *)extra {
-    
+/// 广告详情页关闭回调
+- (void)onRenderFeedAdDidCloseDetailPage:(AdvRenderFeedAdWrapper *)feedAdWrapper {
+    NSLog(@"自渲染信息流广告详情页关闭回调 %s %@", __func__, feedAdWrapper);
 }
 
-/// 自渲染信息流广告点击
-- (void)renderFeedAdDidClickForSpotId:(NSString *)spotId extra:(NSDictionary *)extra {
-    
-}
-
-/// 自渲染信息流广告关闭详情页
-- (void)renderFeedAdDidCloseDetailPageForSpotId:(NSString *)spotId extra:(NSDictionary *)extra {
-    
-}
-
-/// 信息流视频广告播放完成
-- (void)renderFeedVideoDidEndPlayingForSpotId:(NSString *)spotId extra:(NSDictionary *)extra {
-    
+/// 视频广告播放结束回调
+- (void)onRenderFeedAdDidPlayFinish:(AdvRenderFeedAdWrapper *)feedAdWrapper {
+    NSLog(@"自渲染信息流广告视频播放结束回调 %s %@", __func__, feedAdWrapper);
 }
 ```
 

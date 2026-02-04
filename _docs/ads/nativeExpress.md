@@ -4,31 +4,38 @@
 ***
 <font color=#757575 size=2>**简介：** 平台模板包含多种广告场景：动态信息流/横幅/贴片,在应用的内容流中与应用内容穿插展示</font>
 
-## 1.广告位代理方法及属性说明
-
+## 1.广告位接口说明
 | 属性| 	介绍|
 |--------- |---------------|  
-| adSize | 广告的尺寸<br>**注意:** 该尺寸务必与相应渠道后台的设置的尺寸相符,不然会影响曝光率| 
+|adSize |广告位尺寸| 
+|viewController |用于广告跳转的视图控制器| 
+|muted |设定是否静音播放视频，默认为YES| 
 
+| 方法| 	介绍|
+|--------- |---------------| 
+|- initWithAdspotId: extra: delegate: |广告位初始化方法<br>adspotid: 广告位id <br>extra: 自定义扩展参数（可为空）<br>delegate: 广告代理对象| 
+|- loadAd |加载广告| 
 
-| 代理方法| 	介绍|
+## 2.广告对象说明
+| 广告包装类信息| 	介绍|
 |--------- |---------------|  
-|- didFinishLoadingADPolicyWithSpotId: | 广告策略服务加载成功 |  
-|- didFailLoadingADSourceWithSpotId: error: description: | 广告策略或者渠道广告加载失败 |  
-|- didStartLoadingADSourceWithSpotId: sourceId: | 广告位中某一个广告源开始加载广告<br> sourceId :将要加载的渠道id|  
-|- didFinishLoadingNativeExpressAds: spotId:|信息流广告数据拉取成功|
-|- nativeExpressAdViewRenderSuccess: spotId: extra: |广告曝光的回调|
-|- nativeExpressAdViewRenderFail: spotId: extra: |广告被点击的回调|
-|- didShowNativeExpressAd: spotId: extra: |广告渲染成功的回调|
-|- didClickNativeExpressAd: spotId: extra: |广告渲染失败的回调|
-|- didCloseNativeExpressAd: spotId: extra:|广告被关闭的回调|
+|AdvNativeExpressAdWrapper |用户通过回调获取的广告包装类信息：<br>包含信息流视图对象、渠道标识等| 
 
-***
+## 3.广告位监听回调
+| 回调方法| 	介绍|
+|--------- |---------------|  
+|- onNativeExpressAdSuccessToLoad: | 广告加载成功回调 |  
+|- onNativeExpressAdFailToLoad: error: | 广告加载失败回调 |  
+|- onNativeExpressAdViewRenderSuccess: | 广告渲染成功回调 |  
+|- onNativeExpressAdViewRenderFail: error: | 广告渲染失败回调 |  
+|- onNativeExpressAdViewExposured: | 广告曝光回调|  
+|- onNativeExpressAdViewClicked: |广告点击回调|
+|- onNativeExpressAdViewClosed: |广告关闭回调|
 
-## 2.接入代码示例
+## 4.接入代码示例
 
 - <span style="background-color: #297497"><font  color=#FFFFF> 原生模板信息流广告类为AdvanceNativeExpress</font></span>
-- 原生模板广告分为几个阶段:加载广告获得模板对象，渲染广告模板，展示广告模板，需要注意的是，开发者需要在当前页面持有SDK返回的NativeAd对象，否则该对象会自动释放，无法渲染成功。用户点击关闭按钮后，开发者需要从数组和视图中把关闭的NativeAd对象移除。
+- 原生模板广告分为几个阶段:加载广告获得模板对象，渲染广告模板，展示广告模板，需要注意的是，开发者需要在当前页面持有广告位AdvanceNativeExpress对象，否则该对象会自动释放，无法渲染成功。用户点击关闭按钮后，开发者需要从数组和视图中把关闭的nativeAdWrapper对象移除。
 - 集成期间可先使用预先配置好的Demo广告位ID进行集成，[查看详情](advance/ios/faq/test.md)
 
 #### 加载并展示广告
@@ -39,17 +46,18 @@
 
 - (void)loadAd {
     // adSize 高度设置0自适应
-    _advanceFeed = [[AdvanceNativeExpress alloc] initWithAdspotId:self.adspotId customExt:self.ext viewController:self adSize:CGSizeMake(self.view.bounds.size.width, 0)];
-    _advanceFeed.delegate = self;
-    [_advanceFeed loadAd];
+    _nativeExpressAd = [[AdvanceNativeExpress alloc] initWithAdspotId:self.adspotId extra:self.ext delegate:self];
+    _nativeExpressAd.adSize = CGSizeMake(self.view.bounds.size.width, 0);
+    _nativeExpressAd.viewController = self;
+    [_nativeExpressAd loadAd];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     if ([_arrayData[indexPath.row] isKindOfClass:[BYExamCellModelElement class]]) {
         return 44;
     } else {
-        AdvanceNativeExpressAd *nativeAd = _arrayData[indexPath.row];
-        UIView *view = [nativeAd expressView];
+        AdvNativeExpressAdWrapper *nativeAdWrapper = _arrayData[indexPath.row];
+        UIView *view = nativeAdWrapper.expressView;
         return view.frame.size.height;
     }
 }
@@ -67,8 +75,8 @@
         if ([subView superview]) {
             [subView removeFromSuperview];
         }
-        AdvanceNativeExpressAd *nativeAd = _arrayData[indexPath.row];
-        UIView *view = [nativeAd expressView];
+        AdvNativeExpressAdWrapper *nativeAdWrapper = _arrayData[indexPath.row];
+        UIView *view = nativeAdWrapper.expressView;
         view.tag = 1000;
         [cell.contentView addSubview:view];
         CGRect frame = view.frame;
@@ -83,59 +91,48 @@
 #### 广告回调
 
 ```
-/// 广告策略加载成功
-- (void)didFinishLoadingADPolicyWithSpotId:(NSString *)spotId {
-    NSLog(@"%s 广告位id为: %@",__func__ , spotId);
+/// 广告加载成功回调
+- (void)onNativeExpressAdSuccessToLoad:(AdvanceNativeExpress *)nativeExpressAd {
+    NSLog(@"模板信息流广告加载成功 %s %@", __func__, nativeExpressAd);
 }
 
-/// 广告策略或者渠道广告加载失败
-- (void)didFailLoadingADSourceWithSpotId:(NSString *)spotId error:(NSError *)error description:(NSDictionary *)description{
-    NSLog(@"广告展示失败 %s  error: %@ 详情:%@", __func__, error, description);
+/// 广告加载失败回调
+-(void)onNativeExpressAdFailToLoad:(AdvanceNativeExpress *)nativeExpressAd error:(NSError *)error {
+    NSLog(@"模板信息流广告加载失败 %s %@", __func__, error);
+    [JDStatusBarNotification showWithStatus:@"广告加载失败" dismissAfter:0.7];
+    self.nativeExpressAd = nil;
 }
 
-/// 广告位中某一个广告源开始加载广告
-- (void)didStartLoadingADSourceWithSpotId:(NSString *)spotId sourceId:(NSString *)sourceId {
-    NSLog(@"广告位中某一个广告源开始加载广告 %s  sourceId: %@", __func__, sourceId);
-}
-
-/// 信息流广告数据拉取成功后，聚合内部会执行渲染操作
-- (void)didFinishLoadingNativeExpressAds:(NSArray<AdvanceNativeExpressAd *> *)nativeAds spotId:(NSString *)spotId {
-    NSLog(@"广告数据拉取成功 %s", __func__);
-}
-
-/// 信息流广告渲染成功
-/// 该回调可能会触发多次
-/// eg: 广点通拉取广告成功并返回一组view，其中某个view渲染成功
-- (void)nativeExpressAdViewRenderSuccess:(AdvanceNativeExpressAd *)nativeAd spotId:(NSString *)spotId extra:(NSDictionary *)extra {
-    NSLog(@"广告渲染成功 %s %@", __func__, nativeAd);
-    [_arrayData insertObject:nativeAd atIndex:1];
+/// 广告渲染成功
+- (void)onNativeExpressAdViewRenderSuccess:(AdvNativeExpressAdWrapper *)nativeAdWrapper {
+    NSLog(@"模板信息流广告渲染成功 %s %@", __func__, nativeAdWrapper);
+    [_arrayData insertObject:nativeAdWrapper atIndex:1];
     [self.tableView reloadData];
 }
 
-/// 信息流广告渲染失败
-/// 该回调可能会触发多次
-/// eg: 广点通拉取广告成功并返回一组view，其中某个view渲染失败
-- (void)nativeExpressAdViewRenderFail:(AdvanceNativeExpressAd *)nativeAd spotId:(NSString *)spotId extra:(NSDictionary *)extra {
-    NSLog(@"广告渲染失败 %s %@", __func__, nativeAd);
+/// 广告渲染失败
+- (void)onNativeExpressAdViewRenderFail:(AdvNativeExpressAdWrapper *)nativeAdWrapper error:(NSError *)error {
+    NSLog(@"模板信息流广告渲染失败 %s %@", __func__, error);
+    [JDStatusBarNotification showWithStatus:@"广告渲染失败" dismissAfter:0.7];
+    self.nativeExpressAd = nil;
 }
 
-/// 信息流广告曝光
--(void)didShowNativeExpressAd:(AdvanceNativeExpressAd *)nativeAd spotId:(NSString *)spotId extra:(NSDictionary *)extra {
-    NSLog(@"广告曝光 %s", __func__);
+/// 广告曝光回调
+-(void)onNativeExpressAdViewExposured:(AdvNativeExpressAdWrapper *)nativeAdWrapper {
+    NSLog(@"模板信息流广告曝光回调 %s %@", __func__, nativeAdWrapper);
 }
 
-/// 信息流广告点击
--(void)didClickNativeExpressAd:(AdvanceNativeExpressAd *)nativeAd spotId:(NSString *)spotId extra:(NSDictionary *)extra {
-    NSLog(@"广告点击 %s", __func__);
+/// 广告点击回调
+- (void)onNativeExpressAdViewClicked:(AdvNativeExpressAdWrapper *)nativeAdWrapper {
+    NSLog(@"模板信息流广告点击回调 %s %@", __func__, nativeAdWrapper);
 }
 
-/// 信息流广告关闭
--(void)didCloseNativeExpressAd:(AdvanceNativeExpressAd *)nativeAd spotId:(NSString *)spotId extra:(NSDictionary *)extra {
-    //需要从tableview中删除
-    NSLog(@"广告关闭 %s", __func__);
-    [_arrayData removeObject: nativeAd];
+/// 广告关闭回调
+- (void)onNativeExpressAdViewClosed:(AdvNativeExpressAdWrapper *)nativeAdWrapper {
+    NSLog(@"模板信息流广告关闭回调 %s %@", __func__, nativeAdWrapper);
+    [_arrayData removeObject:nativeAdWrapper];
     [self.tableView reloadData];
-    self.advanceFeed = nil;
+    self.nativeExpressAd = nil;
 }
 ```
 
