@@ -7,7 +7,6 @@
 
 #import "AdvSigmobRenderFeedAdapter.h"
 #import <WindSDK/WindSDK.h>
-#import <MercurySDK/MercurySDK.h>
 #import "AdvanceRenderFeedCommonAdapter.h"
 #import "AdvRenderFeedAdWrapper.h"
 #import "AdvSigmobRenderFeedAdView.h"
