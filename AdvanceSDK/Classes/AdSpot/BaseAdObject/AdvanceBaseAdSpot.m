@@ -49,6 +49,7 @@
     [self setBaiduSDKVersion];
     [self setTanxSDKVersion];
     [self setSigmobSDKVersion];
+    [self setFunlinkSDKVersion];
 }
 
 - (void)setGDTSDKVersion {
@@ -111,6 +112,15 @@
     if (clazz && [clazz.class respondsToSelector:selector]) {
         NSString *version = ((NSString* (*)(id, SEL))objc_msgSend)(clazz.class, selector);
         [_extraDict adv_safeSetObject:version forKey:@"sig_v"];
+    }
+}
+
+- (void)setFunlinkSDKVersion {
+    Class clazz = NSClassFromString(@"FLinkAdSDKManager");
+    SEL selector = NSSelectorFromString(@"SDKVersion");
+    if (clazz && [clazz.class respondsToSelector:selector]) {
+        NSString *version = ((NSString* (*)(id, SEL))objc_msgSend)(clazz.class, selector);
+        [_extraDict adv_safeSetObject:version forKey:@"flink_v"];
     }
 }
 

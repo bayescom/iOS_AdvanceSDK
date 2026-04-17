@@ -25,7 +25,8 @@
         @{@"addesc": @"自渲染-百度图片", @"adspotId": @"102768-10009948"},
         @{@"addesc": @"自渲染-百度视频", @"adspotId": @"102768-10009949"},
         @{@"addesc": @"自渲染-Tanx随机", @"adspotId": @"102768-10009464"},
-        @{@"addesc": @"自渲染-Sigmob随机", @"adspotId": @"102768-10011991"}
+        @{@"addesc": @"自渲染-Sigmob随机", @"adspotId": @"102768-10011991"},
+        @{@"addesc": @"自渲染-Funlink随机", @"adspotId": @"102768-10014892"}
     ];
     self.btn1Title = @"展示广告";
 }

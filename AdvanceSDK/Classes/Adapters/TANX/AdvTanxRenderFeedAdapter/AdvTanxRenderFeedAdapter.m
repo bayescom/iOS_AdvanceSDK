@@ -40,7 +40,7 @@
     [self.tanx_ad getFeedAdsWithAdCount:1 renderMode:TXAdRenderModeCustom adsBlock:^(NSArray<TXAdModel *> * _Nullable viewModelArray, NSError * _Nullable error) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         if (error) {
-            [strongSelf.delegate renderAdapter_failedToLoadAdWithAdapterId:self.adapterId error:error];
+            [strongSelf.delegate renderAdapter_failedToLoadAdWithAdapterId:strongSelf.adapterId error:error];
             return;
         }
         
@@ -48,12 +48,12 @@
         strongSelf.binder = binder;
         NSInteger ecpm = binder.adModel.bid.bidPrice.integerValue;
         AdvRenderFeedAdElement *element = [strongSelf generateFeedAdElementWithAdModel:binder.adModel];
-        AdvTanxRenderFeedAdView<TXAdFeedManagerDelegate> *tanxFeedAdView = [[AdvTanxRenderFeedAdView alloc] initWithBinder:binder delegate:strongSelf.delegate adapterId:self.adapterId];
+        AdvTanxRenderFeedAdView<TXAdFeedManagerDelegate> *tanxFeedAdView = [[AdvTanxRenderFeedAdView alloc] initWithBinder:binder delegate:strongSelf.delegate adapterId:strongSelf.adapterId];
         strongSelf.tanx_ad.delegate = tanxFeedAdView;
         strongSelf.feedAdWrapper = [[AdvRenderFeedAdWrapper alloc] initWithFeedAdView:tanxFeedAdView feedAdElement:element];
         
         [strongSelf.delegate adapter_cacheAdapterIfNeeded:strongSelf adapterId:strongSelf.adapterId price:ecpm];
-        [strongSelf.delegate renderAdapter_didLoadAdWithAdapterId:self.adapterId price:ecpm];
+        [strongSelf.delegate renderAdapter_didLoadAdWithAdapterId:strongSelf.adapterId price:ecpm];
     }];
 }
 

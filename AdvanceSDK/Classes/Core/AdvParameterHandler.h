@@ -20,7 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
                                        extra:(NSDictionary *)extra;
 
 // tk上报拼接参数
-+ (NSString *)joinParamtersWithUrl:(NSString *)urlString
++ (NSString *)joinParametersWithUrl:(NSString *)urlString
                          eventType:(AdvSupplierReportTKEventType)eventType
                              price:(NSInteger)price
                      loadTimestamp:(NSTimeInterval)loadTimestamp

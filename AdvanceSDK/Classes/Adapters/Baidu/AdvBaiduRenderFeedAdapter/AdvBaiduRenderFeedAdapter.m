@@ -73,7 +73,7 @@
     element.title = dataObject.title;
     element.desc = dataObject.text;
     element.iconUrl = dataObject.iconImageURLString;
-    if (dataObject.morepics) { // 三图
+    if (dataObject.morepics.count) { // 三图
         element.imageUrlList = dataObject.morepics;
     } else if (dataObject.mainImageURLString.length) { // 单图
         element.imageUrlList = @[dataObject.mainImageURLString];

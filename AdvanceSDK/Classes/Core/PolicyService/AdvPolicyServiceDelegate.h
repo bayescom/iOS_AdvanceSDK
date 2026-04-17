@@ -29,9 +29,8 @@
 /// @param supplier 竞胜渠道
 - (void)policyServiceFinishBiddingWithWinSupplier:(AdvSupplier *_Nonnull)supplier;
 
-/// Bidding失败 (超时时间内，所有Bidding渠道返回广告都失败)
-/// @param error 聚合SDK的策略错误信息
-/// @param description 每个渠道的错误描述，部分情况下为nil
-- (void)policyServiceFailedBiddingWithError:(NSError *_Nullable)error description:(NSDictionary *_Nullable)description;
+/// 所有Bidding渠道返回广告失败
+/// @param error 错误信息
+- (void)policyServiceAllAdnLoadAdFailedWithError:(NSError *_Nullable)error;
 
 @end

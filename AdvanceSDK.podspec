@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
     
     s.name             = 'AdvanceSDK'
-    s.version          = '5.5.0'
+    s.version          = '5.5.1'
     s.license          = { :type => 'MIT', :file => 'LICENSE' }
     s.summary          = 'bayescom iOS AdvanceSDK'
     s.description      = <<-DESC
@@ -83,6 +83,12 @@ Pod::Spec.new do |s|
         sigmob.dependency 'AdvanceSDK/AdSpot'
         sigmob.dependency 'SigmobAd-iOS'
         sigmob.source_files =  'AdvanceSDK/Classes/Adapters/Sigmob/**/*.{h,m}'
+    end
+    
+    s.subspec 'FunlinkAdapter' do |funlink|
+        funlink.dependency 'AdvanceSDK/AdSpot'
+        funlink.dependency 'FunlinkSDK'
+        funlink.source_files =  'AdvanceSDK/Classes/Adapters/Funlink/**/*.{h,m}'
     end
 
 end

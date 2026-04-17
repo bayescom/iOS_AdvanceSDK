@@ -12,6 +12,7 @@
 #import <objc/message.h>
 #import "NSArray+Adv.h"
 #import "NSString+Adv.h"
+#import "NSDictionary+Adv.h"
 #import "AdvConstantHeader.h"
 #import "AdvParameterHandler.h"
 #import "AdvApiService.h"
@@ -120,8 +121,8 @@
         
         /// 策略组无数据说明所有的组加载广告全部没有成功（因为第一层执行完总会被remove掉）
         if (self.model.setting.parallelGroup.count == 0) {
-            if ([_delegate respondsToSelector:@selector(policyServiceFailedBiddingWithError:description:)]) {
-                [_delegate policyServiceFailedBiddingWithError:[AdvError errorWithCode:AdvErrorCode_AllLoadAdFailed].toNSError description:_errorInfo];
+            if ([_delegate respondsToSelector:@selector(policyServiceAllAdnLoadAdFailedWithError:)]) {
+                [_delegate policyServiceAllAdnLoadAdFailedWithError:[AdvError errorWithCode:AdvErrorCode_AllLoadAdFailed message:[NSString stringWithFormat:@"所有平台都未返回广告（失败或超时）\n详情：%@", _errorInfo.toErrorJSONString]].toNSError];
             }
             return;
         }
@@ -206,7 +207,7 @@
                                    state:(AdvSupplierLoadAdState)state
                                    error:(NSError *)error {
     
-    /// 监测超时的方法中已经执行了本方法，所以超时后渠道返回的数据直接丢弃
+    /// 监测超时的回调中已经执行了本方法，所以超时后渠道再返回的数据直接丢弃
     if (supplier.loadAdState == AdvSupplierLoadAdTimeout) {
         return;
     }
@@ -279,7 +280,7 @@
 - (void)enterWaterfallMixedHeadbiddingFlow {
     
     /// 如果当前的parallelSuppliers都返回失败，并且bidTarget 比下一组的最高价低 则需要开启下一组parallelGroup
-    if (_parallelSuppliers.count == 0) {
+    if (_parallelSuppliers.count == 0 && self.model.setting.parallelGroup.count) {
         NSArray *nextGroupPriorities = self.model.setting.parallelGroup.firstObject;
         NSMutableArray <AdvSupplier *> *nextGroupSuppliers = [nextGroupPriorities adv_map:^id(NSNumber *priority) {
             return [self.model.suppliers adv_filter:^BOOL(AdvSupplier *supplier) {
@@ -311,9 +312,9 @@
 /// 命中用于展示的渠道并回调
 - (void)hitTheTargetWithSuppliers:(NSMutableArray <AdvSupplier *> *)suppliers {
     AdvSupplier *target = suppliers.firstObject;
-    if (target.loadAdState == AdvSupplierLoadAdSuccess && !target.hited) {
+    if (target.loadAdState == AdvSupplierLoadAdSuccess && !target.isHit) {
         [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(observeLoadAdTimeout) object:nil];
-        target.hited = YES;
+        target.isHit = YES;
         if ([_delegate respondsToSelector:@selector(policyServiceFinishBiddingWithWinSupplier:)]) {
             [_delegate policyServiceFinishBiddingWithWinSupplier:target];
         }
@@ -351,8 +352,8 @@
 }
 
 - (void)collectErrorInfoWithSupplier:(AdvSupplier *)supplier error:(NSError *)error {
-    // key: 渠道名-渠道id
-    NSString *key = [NSString stringWithFormat:@"sdkname:%@-id:%@",supplier.name, supplier.identifier];
+    // key: 渠道名-渠道id-sdk_id
+    NSString *key = [NSString stringWithFormat:@"sdkname:%@-id:%@-sdkid:%@",supplier.name, supplier.identifier, supplier.sdk_id];
     [_errorInfo adv_safeSetObject:error forKey:key];
 }
 

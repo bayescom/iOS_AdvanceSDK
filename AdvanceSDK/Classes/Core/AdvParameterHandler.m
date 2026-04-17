@@ -25,7 +25,7 @@
     return parameters;
 }
 
-+ (NSString *)joinParamtersWithUrl:(NSString *)urlString
++ (NSString *)joinParametersWithUrl:(NSString *)urlString
                          eventType:(AdvSupplierReportTKEventType)eventType
                              price:(NSInteger)price
                      loadTimestamp:(NSTimeInterval)loadTimestamp

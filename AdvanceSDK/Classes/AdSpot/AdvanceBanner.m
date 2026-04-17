@@ -84,9 +84,8 @@
     }];
 }
 
-// Bidding失败（渠道广告全部加载失败）
-- (void)policyServiceFailedBiddingWithError:(NSError *)error description:(NSDictionary * _Nullable)description {
-    AdvLog(@"渠道广告全部加载失败：%@", description);
+// 所有Bidding渠道返回广告失败
+- (void)policyServiceAllAdnLoadAdFailedWithError:(NSError *)error {
     /// 获取开屏广告失败
     if ([_delegate respondsToSelector:@selector(onBannerAdFailToLoad:error:)]) {
         [_delegate onBannerAdFailToLoad:self error:error];

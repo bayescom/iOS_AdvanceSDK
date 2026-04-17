@@ -11,7 +11,7 @@
 #define AdvConstantHeader_h
 
 static NSString *const AdvanceSDKAPIVersion = @"3.0";
-static NSString *const AdvanceSDKVersion = @"5.5.0";
+static NSString *const AdvanceSDKVersion = @"5.5.1";
 static NSString *const AdvanceSDKRequestUrl = @"http://cruiser.bayescom.cn/cruiser";
 static NSString *const AdvanceSDKSecretKey = @"bayescom1000000w";
 
@@ -22,6 +22,7 @@ static NSString *const SDK_ID_BAIDU = @"4";
 static NSString *const SDK_ID_KS = @"5";
 static NSString *const SDK_ID_TANX = @"7";
 static NSString *const SDK_ID_Sigmob = @"11";
+static NSString *const SDK_ID_Funlink = @"19";
 
 // MARK: ======================= 广告位类型名称 =======================
 static NSString * const AdvSdkTypeAdName = @"ADNAME";

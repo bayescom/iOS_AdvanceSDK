@@ -145,6 +145,17 @@ static NSMutableDictionary *_initializedDict = nil;
                 completion();
             }
         }
+        
+    } else if ([supplier.identifier isEqualToString:SDK_ID_Funlink]) {// Funlink SDK
+        
+        SEL selector = NSSelectorFromString(@"registerAppId:");
+        if ([clazz.class respondsToSelector:selector]) {
+            BOOL res = ((BOOL (*)(id, SEL, NSString *))objc_msgSend)(clazz.class, selector, supplier.mediaid);
+            NSError *error = res? nil : [AdvError errorWithCode:-100 message:@"FunlinkSDK初始化失败"].toNSError;
+            [self markSupplierInitialized:supplier error:error];
+            completion();
+        }
+        
     }
     
 }
@@ -174,6 +185,8 @@ static NSMutableDictionary *_initializedDict = nil;
         clsName = @"TXAdSDKInitializtion";
     } else if ([supplierId isEqualToString:SDK_ID_Sigmob]){
         clsName = @"WindAds";
+    } else if ([supplierId isEqualToString:SDK_ID_Funlink]){
+        clsName = @"FLinkAdSDKManager";
     }
     return clsName;
 }
@@ -194,6 +207,8 @@ static NSMutableDictionary *_initializedDict = nil;
         clsName = @"AdvTanxSplashAdapter";
     } else if ([supplierId isEqualToString:SDK_ID_Sigmob]) {
         clsName = @"AdvSigmobSplashAdapter";
+    } else if ([supplierId isEqualToString:SDK_ID_Funlink]){
+        clsName = @"AdvFunlinkSplashAdapter";
     }
     return clsName;
 }
@@ -214,6 +229,8 @@ static NSMutableDictionary *_initializedDict = nil;
         clsName = @"AdvTanxInterstitialAdapter";
     } else if ([supplierId isEqualToString:SDK_ID_Sigmob]) {
         clsName = @"AdvSigmobInterstitialAdapter";
+    } else if ([supplierId isEqualToString:SDK_ID_Funlink]){
+        clsName = @"AdvFunlinkInterstitialAdapter";
     }
     return clsName;
 }
@@ -234,6 +251,8 @@ static NSMutableDictionary *_initializedDict = nil;
         clsName = @"AdvTanxRewardVideoAdapter";
     } else if ([supplierId isEqualToString:SDK_ID_Sigmob]) {
         clsName = @"AdvSigmobRewardVideoAdapter";
+    } else if ([supplierId isEqualToString:SDK_ID_Funlink]){
+        clsName = @"AdvFunlinkRewardVideoAdapter";
     }
     return clsName;
 }
@@ -266,6 +285,8 @@ static NSMutableDictionary *_initializedDict = nil;
         clsName = @"AdvMercuryNativeExpressAdapter";
     } else if ([supplierId isEqualToString:SDK_ID_TANX]) {
         clsName = @"AdvTanxNativeExpressAdapter";
+    } else if ([supplierId isEqualToString:SDK_ID_Funlink]){
+        clsName = @"AdvFunlinkNativeExpressAdapter";
     }
     return clsName;
 }
@@ -286,6 +307,8 @@ static NSMutableDictionary *_initializedDict = nil;
         clsName = @"AdvTanxRenderFeedAdapter";
     } else if ([supplierId isEqualToString:SDK_ID_Sigmob]) {
         clsName = @"AdvSigmobRenderFeedAdapter";
+    } else if ([supplierId isEqualToString:SDK_ID_Funlink]){
+        clsName = @"AdvFunlinkRenderFeedAdapter";
     }
     return clsName;
 }
@@ -298,6 +321,8 @@ static NSMutableDictionary *_initializedDict = nil;
         clsName = @"AdvGDTBannerAdapter";
     } else if ([supplierId isEqualToString:SDK_ID_MERCURY]) {
         clsName = @"AdvMercuryBannerAdapter";
+    } else if ([supplierId isEqualToString:SDK_ID_Funlink]){
+        clsName = @"AdvFunlinkBannerAdapter";
     }
     return clsName;
 }

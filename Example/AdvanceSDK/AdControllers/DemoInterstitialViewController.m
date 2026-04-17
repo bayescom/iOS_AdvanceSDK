@@ -26,7 +26,8 @@
         @{@"addesc": @"插屏-快手", @"adspotId": @"102768-10007818"},
         @{@"addesc": @"插屏-百度", @"adspotId": @"102768-10007836"},
         @{@"addesc": @"插屏-Tanx", @"adspotId": @"102768-10009460"},
-        @{@"addesc": @"插屏-Sigmob", @"adspotId": @"102768-10011980"}
+        @{@"addesc": @"插屏-Sigmob", @"adspotId": @"102768-10011980"},
+        @{@"addesc": @"插屏-Funlink", @"adspotId": @"102768-10014877"}
     ];
     self.btn1Title = @"加载并展示广告";
 //    self.btn2Title = @"展示广告";

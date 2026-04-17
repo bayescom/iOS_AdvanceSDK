@@ -62,7 +62,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// 以下为自定义字段
 @property (nonatomic, assign) AdvSupplierLoadAdState loadAdState; // 广告加载状态
-@property (nonatomic, assign) BOOL hited; // 是否已经命中过
+@property (nonatomic, assign) BOOL isHit; // 是否已经命中过
 @property (nonatomic, copy) NSString *cachedReqId; // 缓存广告的reqId，用于tk上报
 
 @end

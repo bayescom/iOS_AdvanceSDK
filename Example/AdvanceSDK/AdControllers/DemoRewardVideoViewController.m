@@ -28,7 +28,8 @@
         @{@"addesc": @"激励视频-快手", @"adspotId": @"102768-10007819"},
         @{@"addesc": @"激励视频-百度", @"adspotId": @"102768-10007837"},
         @{@"addesc": @"激励视频-Tanx", @"adspotId": @"102768-10009461"},
-        @{@"addesc": @"激励视频-Sigmob", @"adspotId": @"102768-10011964"}
+        @{@"addesc": @"激励视频-Sigmob", @"adspotId": @"102768-10011964"},
+        @{@"addesc": @"激励视频-Funlink", @"adspotId": @"102768-10014889"}
     ];
     
     self.btn1Title = @"加载广告";
