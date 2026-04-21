@@ -56,6 +56,13 @@
     return valid;
 }
 
+- (void)adapter_sendWinNotificationWithSecondPrice:(NSInteger)secondPrice winPrice:(NSInteger)winPrice {
+//    [_sigmob_ad sendWinNotificationWithInfo:@{AUCTION_PRICE: @(secondPrice)}];
+}
+
+- (void)adapter_sendLossNotificationWithFirstPrice:(NSInteger)firstPrice {
+//    [_sigmob_ad sendLossNotificationWithInfo:@{AUCTION_PRICE: @(firstPrice)}];
+}
 
 #pragma mark - WindMillSplashAdDelegate
 - (void)onSplashAdDidLoad:(WindSplashAdView *)splashAdView {

@@ -49,6 +49,16 @@
     }];
 }
 
+- (void)adapter_sendWinNotificationWithSecondPrice:(NSInteger)secondPrice winPrice:(NSInteger)winPrice {
+    GDTNativeExpressAdView *expressView = (GDTNativeExpressAdView *)self.nativeAdObjects.firstObject.expressView;
+    [expressView sendWinNotificationWithInfo:@{GDT_M_W_H_LOSS_PRICE: @(secondPrice), GDT_M_W_E_COST_PRICE: @(winPrice)}];
+}
+
+- (void)adapter_sendLossNotificationWithFirstPrice:(NSInteger)firstPrice {
+    GDTNativeExpressAdView *expressView = (GDTNativeExpressAdView *)self.nativeAdObjects.firstObject.expressView;
+    [expressView sendLossNotificationWithInfo:@{GDT_M_L_WIN_PRICE: @(firstPrice)}];
+}
+
 
 #pragma mark: - GDTNativeExpressAdDelegete
 - (void)nativeExpressAdSuccessToLoad:(GDTNativeExpressAd *)nativeExpressAd views:(NSArray<__kindof GDTNativeExpressAdView *> *)views {

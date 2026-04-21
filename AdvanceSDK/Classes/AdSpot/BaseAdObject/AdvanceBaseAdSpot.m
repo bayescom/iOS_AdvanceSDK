@@ -17,6 +17,7 @@
 @synthesize adapterMap = _adapterMap;
 @synthesize targetAdapter = _targetAdapter;
 @synthesize manager = _manager;
+@synthesize suppliers = _suppliers;
 
 - (instancetype)initWithAdspotId:(NSString *)adspotid
                            extra:(NSDictionary *)extra {
@@ -27,6 +28,7 @@
         _manager = [AdvPolicyService manager];
         ((AdvPolicyService *)_manager).delegate = self;
         _adapterMap = [NSMutableDictionary dictionary];
+        _suppliers = [NSMutableArray array];
         [self setupAllSDKVersion];
     }
     return self;

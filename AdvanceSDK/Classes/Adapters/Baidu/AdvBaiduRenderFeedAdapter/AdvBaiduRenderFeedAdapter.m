@@ -16,6 +16,7 @@
 @interface AdvBaiduRenderFeedAdapter () <BaiduMobAdNativeAdDelegate, AdvanceRenderFeedCommonAdapter>
 
 @property (nonatomic, strong) BaiduMobAdNative *bd_ad;
+@property (nonatomic, strong) BaiduMobAdNativeAdObject *dataObject;
 @property (nonatomic, copy) NSString *adapterId;
 @property (nonatomic, strong) AdvRenderFeedAdWrapper *feedAdWrapper;
 
@@ -43,6 +44,14 @@
     return self.feedAdWrapper;
 }
 
+- (void)adapter_sendWinNotificationWithSecondPrice:(NSInteger)secondPrice winPrice:(NSInteger)winPrice {
+    [_dataObject biddingSuccessWithSecondInfo:@{@"ecpm": @(secondPrice)} completion:^(BOOL success, NSString * _Nonnull errorInfo) {}];
+}
+
+- (void)adapter_sendLossNotificationWithFirstPrice:(NSInteger)firstPrice {
+    [_dataObject biddingFailWithWinInfo:@{@"ecpm": @(firstPrice)} completion:^(BOOL success, NSString * _Nonnull errorInfo) {}];
+}
+
 #pragma mark - BaiduMobAdNativeAdDelegate
 - (void)nativeAdObjectsSuccessLoad:(NSArray*)nativeAds nativeAd:(BaiduMobAdNative *)nativeAd {
     if (!nativeAds.count) {
@@ -52,6 +61,7 @@
     }
     
     BaiduMobAdNativeAdObject *dataObject = nativeAds.firstObject;
+    self.dataObject = dataObject;
     AdvRenderFeedAdElement *element = [self generateFeedAdElementWithDataObject:dataObject];
     AdvBaiduRenderFeedAdView *bdFeedAdView = [[AdvBaiduRenderFeedAdView alloc] initWithDataObject:dataObject delegate:self.delegate adapterId:self.adapterId];
     self.feedAdWrapper = [[AdvRenderFeedAdWrapper alloc] initWithFeedAdView:bdFeedAdView feedAdElement:element];

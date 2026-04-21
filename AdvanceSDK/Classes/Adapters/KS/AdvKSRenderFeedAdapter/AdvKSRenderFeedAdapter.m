@@ -16,6 +16,7 @@
 @interface AdvKSRenderFeedAdapter () <KSNativeAdsManagerDelegate, AdvanceRenderFeedCommonAdapter>
 
 @property (nonatomic, strong) KSNativeAdsManager *ks_ad;
+@property (nonatomic, strong) KSNativeAd *nativeAd;
 @property (nonatomic, copy) NSString *adapterId;
 @property (nonatomic, strong) AdvRenderFeedAdWrapper *feedAdWrapper;
 @property (nonatomic, weak) UIViewController *rootViewController;
@@ -42,6 +43,16 @@
     return self.feedAdWrapper;
 }
 
+- (void)adapter_sendWinNotificationWithSecondPrice:(NSInteger)secondPrice winPrice:(NSInteger)winPrice {
+    [_nativeAd setBidEcpm:winPrice highestLossEcpm:secondPrice];
+}
+
+- (void)adapter_sendLossNotificationWithFirstPrice:(NSInteger)firstPrice {
+    KSAdExposureReportParam *param = [[KSAdExposureReportParam alloc] init];
+    param.winEcpm = firstPrice;
+    [_nativeAd reportAdExposureFailed:KSAdExposureFailureBidFailed reportParam:param];
+}
+
 
 #pragma mark - KSNativeAdsManagerDelegate
 - (void)nativeAdsManagerSuccessToLoad:(KSNativeAdsManager *)adsManager nativeAds:(NSArray<KSNativeAd *> *_Nullable)nativeAdDataArray {
@@ -52,6 +63,7 @@
     }
     
     KSNativeAd *nativeAd = nativeAdDataArray.firstObject;
+    self.nativeAd = nativeAd;
     AdvRenderFeedAdElement *element = [self generateFeedAdElementWithNativeAd:nativeAd];
     AdvKSRenderFeedAdView *ksFeedAdView = [[AdvKSRenderFeedAdView alloc] initWithNativeAd:nativeAd delegate:self.delegate adapterId:self.adapterId viewController:self.rootViewController];
     self.feedAdWrapper = [[AdvRenderFeedAdWrapper alloc] initWithFeedAdView:ksFeedAdView feedAdElement:element];

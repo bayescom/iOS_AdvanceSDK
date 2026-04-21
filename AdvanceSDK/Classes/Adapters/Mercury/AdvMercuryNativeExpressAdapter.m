@@ -48,6 +48,15 @@
     }];
 }
 
+- (void)adapter_sendWinNotificationWithSecondPrice:(NSInteger)secondPrice winPrice:(NSInteger)winPrice {
+    
+}
+
+- (void)adapter_sendLossNotificationWithFirstPrice:(NSInteger)firstPrice {
+    MercuryNativeExpressAdView *expressView = (MercuryNativeExpressAdView *)self.nativeAdObjects.firstObject.expressView;
+    [expressView sendLossNotificationWithPrice:firstPrice];
+}
+
 #pragma mark: - MercuryNativeExpressAdDelegete
 /// 拉取原生模板广告成功
 - (void)mercury_nativeExpressAdSuccessToLoad:(id)nativeExpressAd views:(NSArray<MercuryNativeExpressAdView *> *)views {

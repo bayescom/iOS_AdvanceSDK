@@ -56,6 +56,16 @@
     return valid;
 }
 
+- (void)adapter_sendWinNotificationWithSecondPrice:(NSInteger)secondPrice winPrice:(NSInteger)winPrice {
+    [_ks_ad setBidEcpm:winPrice highestLossEcpm:secondPrice];
+}
+
+- (void)adapter_sendLossNotificationWithFirstPrice:(NSInteger)firstPrice {
+    KSAdExposureReportParam *param = [[KSAdExposureReportParam alloc] init];
+    param.winEcpm = firstPrice;
+    [_ks_ad reportAdExposureFailed:KSAdExposureFailureBidFailed reportParam:param];
+}
+
 
 #pragma mark: - KSRewardedVideoAdDelegate
 - (void)rewardedVideoAdDidLoad:(KSRewardedVideoAd *)rewardedVideoAd {

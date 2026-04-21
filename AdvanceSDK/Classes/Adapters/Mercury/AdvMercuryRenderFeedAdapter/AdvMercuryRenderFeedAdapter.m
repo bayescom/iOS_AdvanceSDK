@@ -16,6 +16,7 @@
 @interface AdvMercuryRenderFeedAdapter () <MercuryUnifiedNativeAdDelegate, AdvanceRenderFeedCommonAdapter>
 
 @property (nonatomic, strong) MercuryUnifiedNativeAd *mercury_ad;
+@property (nonatomic, strong) MercuryUnifiedNativeAdDataObject *dataObject;
 @property (nonatomic, copy) NSString *adapterId;
 @property (nonatomic, strong) AdvRenderFeedAdWrapper *feedAdWrapper;
 @property (nonatomic, weak) UIViewController *rootViewController;
@@ -41,6 +42,14 @@
     return self.feedAdWrapper;
 }
 
+- (void)adapter_sendWinNotificationWithSecondPrice:(NSInteger)secondPrice winPrice:(NSInteger)winPrice {
+    
+}
+
+- (void)adapter_sendLossNotificationWithFirstPrice:(NSInteger)firstPrice {
+    [_dataObject sendLossNotificationWithPrice:firstPrice];
+}
+
 #pragma mark - MercuryUnifiedNativeAdDelegate
 - (void)mercury_unifiedNativeAdLoaded:(NSArray<MercuryUnifiedNativeAdDataObject *> *)unifiedNativeAdDataObjects error:(NSError *)error {
     if (error) {
@@ -49,6 +58,7 @@
     }
     
     MercuryUnifiedNativeAdDataObject *dataObject = unifiedNativeAdDataObjects.firstObject;
+    self.dataObject = dataObject;
     AdvRenderFeedAdElement *element = [self generateFeedAdElementWithDataObject:dataObject];
     AdvMercuryRenderFeedAdView *mercuryFeedAdView = [[AdvMercuryRenderFeedAdView alloc] initWithDataObject:dataObject delegate:self.delegate adapterId:self.adapterId viewController:self.rootViewController];
     self.feedAdWrapper = [[AdvRenderFeedAdWrapper alloc] initWithFeedAdView:mercuryFeedAdView feedAdElement:element];

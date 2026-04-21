@@ -42,6 +42,14 @@
     return YES;
 }
 
+- (void)adapter_sendWinNotificationWithSecondPrice:(NSInteger)secondPrice winPrice:(NSInteger)winPrice {
+    [_bd_ad biddingSuccessWithSecondInfo:@{@"ecpm": @(secondPrice)} completion:^(BOOL success, NSString *errorInfo) {}];
+}
+
+- (void)adapter_sendLossNotificationWithFirstPrice:(NSInteger)firstPrice {
+    [_bd_ad biddingFailWithWinInfo:@{@"ecpm": @(firstPrice)} completion:^(BOOL success, NSString *errorInfo) {}];
+}
+
 #pragma mark: - BaiduMobAdExpressIntDelegate
 - (void)interstitialAdLoaded:(BaiduMobAdExpressInterstitial *)interstitial {
     [self.delegate adapter_cacheAdapterIfNeeded:self adapterId:self.adapterId price:[[interstitial getECPMLevel] integerValue]];

@@ -43,6 +43,14 @@
     return valid;
 }
 
+- (void)adapter_sendWinNotificationWithSecondPrice:(NSInteger)secondPrice winPrice:(NSInteger)winPrice {
+    
+}
+
+- (void)adapter_sendLossNotificationWithFirstPrice:(NSInteger)firstPrice {
+    [_mercury_ad sendLossNotificationWithPrice:firstPrice];
+}
+
 
 #pragma mark: - MercuryInterstitialAdDelegate
 - (void)mercury_interstitialSuccessToLoadAd:(MercuryInterstitialAd *)interstitialAd  {

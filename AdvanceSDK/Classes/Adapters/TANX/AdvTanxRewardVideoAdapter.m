@@ -60,6 +60,14 @@
     return YES;
 }
 
+- (void)adapter_sendWinNotificationWithSecondPrice:(NSInteger)secondPrice winPrice:(NSInteger)winPrice {
+    [_tanx_ad uploadBidding:_adModel result:YES];
+}
+
+- (void)adapter_sendLossNotificationWithFirstPrice:(NSInteger)firstPrice {
+    [_tanx_ad uploadBidding:_adModel result:NO];
+}
+
 #pragma mark: -TXAdRewardAdsDelegate
 - (void)onAdShow:(TXAdModel *)model {
     [self.delegate rewardAdapter_didAdExposuredWithAdapterId:self.adapterId];

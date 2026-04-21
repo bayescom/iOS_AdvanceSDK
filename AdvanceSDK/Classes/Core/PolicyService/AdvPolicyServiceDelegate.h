@@ -27,7 +27,13 @@
 
 /// Bidding成功
 /// @param supplier 竞胜渠道
-- (void)policyServiceFinishBiddingWithWinSupplier:(AdvSupplier *_Nonnull)supplier;
+/// @param secondPrice 二价 （单位：分）
+- (void)policyServiceFinishBiddingWithWinSupplier:(AdvSupplier *_Nonnull)supplier secondPrice:(NSInteger)secondPrice;
+
+/// Bidding失败
+/// @param supplier 参竞的渠道
+/// @param firstPrice 一价 （单位：分）
+- (void)policyServiceBidFailedWithBiddingSupplier:(AdvSupplier *_Nonnull)supplier firstPrice:(NSInteger)firstPrice;
 
 /// 所有Bidding渠道返回广告失败
 /// @param error 错误信息

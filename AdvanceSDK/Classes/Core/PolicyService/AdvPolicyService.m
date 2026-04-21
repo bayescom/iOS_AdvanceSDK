@@ -31,6 +31,8 @@
 @property (nonatomic, strong) NSMutableArray <AdvSupplier *> *parallelSuppliers;
 /// headbidding组渠道
 @property (nonatomic, strong) NSMutableArray <AdvSupplier *> *biddingSuppliers;
+/// 所有参与并发的渠道
+@property (nonatomic, strong) NSMutableArray <AdvSupplier *> *allSuppliers;
 /// 混合策略组渠道
 @property (nonatomic, strong) NSMutableArray <AdvSupplier *> *mixedSuppliers;
 /// bidding组中最高价渠道
@@ -43,6 +45,7 @@
 - (instancetype)init {
     if (self = [super init]) {
         _errorInfo = [NSMutableDictionary dictionary];
+        _allSuppliers = [NSMutableArray array];
     }
     return self;
 }
@@ -121,6 +124,13 @@
         
         /// 策略组无数据说明所有的组加载广告全部没有成功（因为第一层执行完总会被remove掉）
         if (self.model.setting.parallelGroup.count == 0) {
+            /// 竞败回调
+            [_allSuppliers enumerateObjectsUsingBlock:^(AdvSupplier * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                if ([_delegate respondsToSelector:@selector(policyServiceBidFailedWithBiddingSupplier:firstPrice:)]) {
+                    [_delegate policyServiceBidFailedWithBiddingSupplier:obj firstPrice:0];
+                }
+            }];
+            /// 所有平台都未返回广告
             if ([_delegate respondsToSelector:@selector(policyServiceAllAdnLoadAdFailedWithError:)]) {
                 [_delegate policyServiceAllAdnLoadAdFailedWithError:[AdvError errorWithCode:AdvErrorCode_AllLoadAdFailed message:[NSString stringWithFormat:@"所有平台都未返回广告（失败或超时）\n详情：%@", _errorInfo.toErrorJSONString]].toNSError];
             }
@@ -142,6 +152,10 @@
         }].firstObject;
     }];
     _parallelSuppliers = [firstGroupSuppliers mutableCopy];
+    /// 对parallelSuppliers进行排序
+    if (_parallelSuppliers.count > 1) {
+        [self sortedForPriceWithSuppliers:_parallelSuppliers];
+    }
     
     /// 合并2个组，开始执行竞价策略的回调
     NSMutableArray *templeSuppliers = [NSMutableArray array];
@@ -157,14 +171,16 @@
     }
     /// 并发执行混合策略下队列中的广告请求
     [templeSuppliers enumerateObjectsUsingBlock:^(AdvSupplier * _Nonnull supplier, NSUInteger idx, BOOL * _Nonnull stop) {
+        // 这样写防止丢失parallelGroup第二组的渠道
+        [self.allSuppliers addObject:supplier];
         // 尝试获取Adapter缓存
         AdvAdCacheModel *cacheModel = [[AdvAdCacheManager sharedInstance] adCacheModelFromCachedKey:supplier.sdk_id];
         if (supplier.enable_cache && cacheModel) { //此次加载允许缓存 且 内存中存在Adapter缓存时
             supplier.cachedReqId = cacheModel.sourceReqId; //用于tk上报
         }
         [self reportAdDataWithEventType:AdvSupplierReportTKEventLoaded supplier:supplier error:nil];
-        if ([_delegate respondsToSelector:@selector(policyServiceLoadAnySupplier:)]) {
-            [_delegate policyServiceLoadAnySupplier:supplier];
+        if ([self.delegate respondsToSelector:@selector(policyServiceLoadAnySupplier:)]) {
+            [self.delegate policyServiceLoadAnySupplier:supplier];
         }
     }];
     
@@ -315,11 +331,25 @@
     if (target.loadAdState == AdvSupplierLoadAdSuccess && !target.isHit) {
         [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(observeLoadAdTimeout) object:nil];
         target.isHit = YES;
-        if ([_delegate respondsToSelector:@selector(policyServiceFinishBiddingWithWinSupplier:)]) {
-            [_delegate policyServiceFinishBiddingWithWinSupplier:target];
+        /// 竞胜回调
+        if ([_delegate respondsToSelector:@selector(policyServiceFinishBiddingWithWinSupplier:secondPrice:)]) {
+            NSInteger secondPrice = 0;
+            if (suppliers.count > 1) {
+                secondPrice = suppliers[1].sdk_price;
+            }
+            [_delegate policyServiceFinishBiddingWithWinSupplier:target secondPrice:secondPrice];
         }
         /// 竞胜上报
         [self reportAdDataWithEventType:AdvSupplierReportTKEventBidWin supplier:target error:nil];
+        
+        /// 竞败回调
+        [[_allSuppliers adv_filter:^BOOL(AdvSupplier *supplier) {
+            return supplier != target;
+        }] enumerateObjectsUsingBlock:^(AdvSupplier * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            if ([_delegate respondsToSelector:@selector(policyServiceBidFailedWithBiddingSupplier:firstPrice:)]) {
+                [_delegate policyServiceBidFailedWithBiddingSupplier:obj firstPrice:target.sdk_price];
+            }
+        }];
     }
 }
 

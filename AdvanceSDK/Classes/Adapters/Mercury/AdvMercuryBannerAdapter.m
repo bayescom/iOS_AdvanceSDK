@@ -48,6 +48,14 @@
     return self.bannerView;
 }
 
+- (void)adapter_sendWinNotificationWithSecondPrice:(NSInteger)secondPrice winPrice:(NSInteger)winPrice {
+    
+}
+
+- (void)adapter_sendLossNotificationWithFirstPrice:(NSInteger)firstPrice {
+    [_mercury_ad sendLossNotificationWithPrice:firstPrice];
+}
+
 #pragma mark: - MercuryBannerAdViewDelegate
 // 广告数据拉取成功回调
 - (void)mercury_bannerViewDidReceived:(MercuryBannerAdView *)banner {

@@ -80,6 +80,14 @@
     }
 }
 
+- (void)adapter_sendWinNotificationWithSecondPrice:(NSInteger)secondPrice winPrice:(NSInteger)winPrice {
+    [_tanx_ad uploadBidding:_adModels.firstObject result:YES];
+}
+
+- (void)adapter_sendLossNotificationWithFirstPrice:(NSInteger)firstPrice {
+    [_tanx_ad uploadBidding:_adModels.firstObject result:NO];
+}
+
 
 #pragma mark: - TXAdFeedManagerDelegate
 /// ❌❌ 当feedModules获取为空时，还是会进入渲染成功回调

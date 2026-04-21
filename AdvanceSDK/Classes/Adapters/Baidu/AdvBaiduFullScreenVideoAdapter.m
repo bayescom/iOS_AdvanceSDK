@@ -43,6 +43,14 @@
     return YES;
 }
 
+- (void)adapter_sendWinNotificationWithSecondPrice:(NSInteger)secondPrice winPrice:(NSInteger)winPrice {
+    [_bd_ad biddingSuccessWithSecondInfo:@{@"ecpm": @(secondPrice)} completion:nil];
+}
+
+- (void)adapter_sendLossNotificationWithFirstPrice:(NSInteger)firstPrice {
+    [_bd_ad biddingFailWithWinInfo:@{@"ecpm": @(firstPrice)} completion:nil];
+}
+
 #pragma mark - BaiduMobAdExpressFullScreenVideoDelegate
 - (void)fullScreenVideoAdLoadSuccess:(BaiduMobAdExpressFullScreenVideo *)video {
     [self.delegate adapter_cacheAdapterIfNeeded:self adapterId:self.adapterId price:[[video getECPMLevel] integerValue]];

@@ -50,6 +50,17 @@
     }];
 }
 
+- (void)adapter_sendWinNotificationWithSecondPrice:(NSInteger)secondPrice winPrice:(NSInteger)winPrice {
+    
+    [_feedAdArray.firstObject setBidEcpm:winPrice highestLossEcpm:secondPrice];
+}
+
+- (void)adapter_sendLossNotificationWithFirstPrice:(NSInteger)firstPrice {
+    KSAdExposureReportParam *param = [[KSAdExposureReportParam alloc] init];
+    param.winEcpm = firstPrice;
+    [_feedAdArray.firstObject reportAdExposureFailed:KSAdExposureFailureBidFailed reportParam:param];
+}
+
 #pragma mark: - KSFeedAdsManagerDelegate, KSFeedAdDelegate
 - (void)feedAdsManagerSuccessToLoad:(KSFeedAdsManager *)adsManager nativeAds:(NSArray<KSFeedAd *> *_Nullable)feedAdDataArray {
     self.feedAdArray = feedAdDataArray;

@@ -52,6 +52,14 @@
     return YES;
 }
 
+- (void)adapter_sendWinNotificationWithSecondPrice:(NSInteger)secondPrice winPrice:(NSInteger)winPrice {
+    [_tanx_ad uploadBidding:_adModel result:YES];
+}
+
+- (void)adapter_sendLossNotificationWithFirstPrice:(NSInteger)firstPrice {
+    [_tanx_ad uploadBidding:_adModel result:NO];
+}
+
 #pragma mark: -TXAdTableScreenManagerDelegate
 - (void)onAdShow:(TXAdModel *)model{
     [self.delegate interstitialAdapter_didAdExposuredWithAdapterId:self.adapterId];

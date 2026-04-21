@@ -69,6 +69,14 @@
     return YES;
 }
 
+- (void)adapter_sendWinNotificationWithSecondPrice:(NSInteger)secondPrice winPrice:(NSInteger)winPrice {
+    [_tanx_ad uploadBidding:_adModel result:YES];
+}
+
+- (void)adapter_sendLossNotificationWithFirstPrice:(NSInteger)firstPrice {
+    [_tanx_ad uploadBidding:_adModel result:NO];
+}
+
 #pragma mark: -TXAdSplashManagerDelegate
 /// 展示
 - (void)onSplashShow {

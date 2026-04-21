@@ -35,5 +35,11 @@
                            adapterId:(NSString *)adapterId
                                price:(NSInteger)price;
 
+//Adn竞胜后回传二价
+- (void)adapter_sendWinNotificationWithSecondPrice:(NSInteger)secondPrice winPrice:(NSInteger)winPrice;
+
+//Adn竞败后回传最高价
+- (void)adapter_sendLossNotificationWithFirstPrice:(NSInteger)firstPrice;
+
 @end
 

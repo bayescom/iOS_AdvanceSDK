@@ -61,6 +61,14 @@
     return self.feedAdWrapper;
 }
 
+- (void)adapter_sendWinNotificationWithSecondPrice:(NSInteger)secondPrice winPrice:(NSInteger)winPrice {
+    [_tanx_ad uploadBidding:_binder.adModel result:YES];
+}
+
+- (void)adapter_sendLossNotificationWithFirstPrice:(NSInteger)firstPrice {
+    [_tanx_ad uploadBidding:_binder.adModel result:NO];
+}
+
 
 - (AdvRenderFeedAdElement *)generateFeedAdElementWithAdModel:(TXAdModel *)adModel {
     AdvRenderFeedAdElement *element = [[AdvRenderFeedAdElement alloc] init];

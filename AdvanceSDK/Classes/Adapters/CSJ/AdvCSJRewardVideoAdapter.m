@@ -52,6 +52,14 @@
     return YES;
 }
 
+- (void)adapter_sendWinNotificationWithSecondPrice:(NSInteger)secondPrice winPrice:(NSInteger)winPrice {
+    [_csj_ad win:@(secondPrice)];
+}
+
+- (void)adapter_sendLossNotificationWithFirstPrice:(NSInteger)firstPrice {
+    [_csj_ad loss:@(firstPrice) lossReason:nil winBidder:nil];
+}
+
 
 #pragma mark: - BUNativeExpressRewardedVideoAdDelegate
 - (void)nativeExpressRewardedVideoAdDidLoad:(BUNativeExpressRewardedVideoAd *)rewardedVideoAd {

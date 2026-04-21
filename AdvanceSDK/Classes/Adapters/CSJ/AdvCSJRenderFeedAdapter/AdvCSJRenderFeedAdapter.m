@@ -16,6 +16,7 @@
 @interface AdvCSJRenderFeedAdapter () <BUNativeAdsManagerDelegate, AdvanceRenderFeedCommonAdapter>
 
 @property (nonatomic, strong) BUNativeAdsManager *csj_ad;
+@property (nonatomic, strong) BUNativeAd *nativeAd;
 @property (nonatomic, copy) NSString *adapterId;
 @property (nonatomic, strong) AdvRenderFeedAdWrapper *feedAdWrapper;
 @property (nonatomic, weak) UIViewController *rootViewController;
@@ -47,6 +48,14 @@
     return self.feedAdWrapper;
 }
 
+- (void)adapter_sendWinNotificationWithSecondPrice:(NSInteger)secondPrice winPrice:(NSInteger)winPrice {
+    [_nativeAd win:@(secondPrice)];
+}
+
+- (void)adapter_sendLossNotificationWithFirstPrice:(NSInteger)firstPrice {
+    [_nativeAd loss:@(firstPrice) lossReason:nil winBidder:nil];
+}
+
 #pragma mark - BUNativeAdsManagerDelegate
 - (void)nativeAdsManagerSuccessToLoad:(BUNativeAdsManager *)adsManager nativeAds:(NSArray<BUNativeAd *> *_Nullable)nativeAdDataArray {
     if (!nativeAdDataArray.count) {
@@ -56,6 +65,7 @@
     }
     
     BUNativeAd *nativeAd = nativeAdDataArray.firstObject;
+    self.nativeAd = nativeAd;
     NSDictionary *ext = nativeAd.data.mediaExt;
     AdvRenderFeedAdElement *element = [self generateFeedAdElementWithNativeAd:nativeAd];
     AdvCSJRenderFeedAdView *csjFeedAdView = [[AdvCSJRenderFeedAdView alloc] initWithNativeAd:nativeAd delegate:self.delegate adapterId:self.adapterId viewController:self.rootViewController];

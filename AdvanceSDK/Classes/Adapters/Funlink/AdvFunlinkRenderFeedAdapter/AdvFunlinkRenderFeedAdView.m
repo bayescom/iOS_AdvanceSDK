@@ -37,6 +37,7 @@
 
 - (void)registerClickableViews:(nullable NSArray<UIView *> *)clickableViews andCloseableView:(nullable UIView *)closeableView {
     self.clickableViews = clickableViews;
+    self.adData.isCustomRender = YES;
     [self.manager registerAdForView:self adData:self.adData];
     if (closeableView) {
         [self setupCloseView:closeableView];

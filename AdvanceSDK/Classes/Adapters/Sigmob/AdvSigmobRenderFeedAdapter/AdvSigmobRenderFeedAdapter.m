@@ -45,6 +45,14 @@
     return self.feedAdWrapper;
 }
 
+- (void)adapter_sendWinNotificationWithSecondPrice:(NSInteger)secondPrice winPrice:(NSInteger)winPrice {
+//    [_sigmob_ad sendWinNotificationWithInfo:@{AUCTION_PRICE: @(secondPrice)}];
+}
+
+- (void)adapter_sendLossNotificationWithFirstPrice:(NSInteger)firstPrice {
+//    [_sigmob_ad sendLossNotificationWithInfo:@{AUCTION_PRICE: @(firstPrice)}];
+}
+
 
 #pragma mark: - WindNativeAdsManagerDelegate
 /// 广告加载成功回调

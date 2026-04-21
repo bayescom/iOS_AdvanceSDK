@@ -48,6 +48,16 @@
     }];
 }
 
+- (void)adapter_sendWinNotificationWithSecondPrice:(NSInteger)secondPrice winPrice:(NSInteger)winPrice {
+    BUNativeExpressAdView *expressView = (BUNativeExpressAdView *)self.nativeAdObjects.firstObject.expressView;
+    [expressView win:@(secondPrice)];
+}
+
+- (void)adapter_sendLossNotificationWithFirstPrice:(NSInteger)firstPrice {
+    BUNativeExpressAdView *expressView = (BUNativeExpressAdView *)self.nativeAdObjects.firstObject.expressView;
+    [expressView loss:@(firstPrice) lossReason:nil winBidder:nil];
+}
+
 
 #pragma mark: - BUNativeExpressAdViewDelegate
 - (void)nativeExpressAdSuccessToLoad:(id)nativeExpressAd views:(nonnull NSArray<__kindof BUNativeExpressAdView *> *)views {

@@ -21,6 +21,9 @@ NS_ASSUME_NONNULL_BEGIN
 /// 策略管理对象
 @property (nonatomic, strong) id _Nullable manager;
 
+/// 渠道对象列表
+@property (nonatomic, strong) NSMutableArray *suppliers;
+
 /// 初始化广告位
 /// @param adspotid 广告位id
 /// @param extra 自定义扩展参数

@@ -59,6 +59,14 @@
     [self.bd_ad showInContainerView:window];
 }
 
+- (void)adapter_sendWinNotificationWithSecondPrice:(NSInteger)secondPrice winPrice:(NSInteger)winPrice {
+    [_bd_ad biddingSuccessWithSecondInfo:@{@"ecpm": @(secondPrice)} completion:nil];
+}
+
+- (void)adapter_sendLossNotificationWithFirstPrice:(NSInteger)firstPrice {
+    [_bd_ad biddingFailWithWinInfo:@{@"ecpm": @(firstPrice)} completion:nil];
+}
+
 #pragma mark: -BaiduMobAdSplashDelegate
 - (void)splashAdLoadSuccess:(BaiduMobAdSplash *)splash {
     [self.delegate adapter_cacheAdapterIfNeeded:self adapterId:self.adapterId price:[[splash getECPMLevel] integerValue]];

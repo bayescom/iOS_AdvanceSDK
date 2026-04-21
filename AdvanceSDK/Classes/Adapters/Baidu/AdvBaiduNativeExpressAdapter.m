@@ -60,6 +60,16 @@
     }];
 }
 
+- (void)adapter_sendWinNotificationWithSecondPrice:(NSInteger)secondPrice winPrice:(NSInteger)winPrice {
+    BaiduMobAdExpressNativeView *expressView = (BaiduMobAdExpressNativeView *)self.nativeAdObjects.firstObject.expressView;
+    [expressView biddingSuccessWithSecondInfo:@{@"ecpm": @(secondPrice)} completion:nil];
+}
+
+- (void)adapter_sendLossNotificationWithFirstPrice:(NSInteger)firstPrice {
+    BaiduMobAdExpressNativeView *expressView = (BaiduMobAdExpressNativeView *)self.nativeAdObjects.firstObject.expressView;
+    [expressView biddingFailWithWinInfo:@{@"ecpm": @(firstPrice)} completion:nil];
+}
+
 
 #pragma mark: - BaiduMobAdNativeAdDelegate, BaiduMobAdNativeInterationDelegate
 - (void)nativeAdObjectsSuccessLoad:(NSArray*)nativeAds nativeAd:(BaiduMobAdNative *)nativeAd {

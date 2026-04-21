@@ -13,7 +13,6 @@
 #import "AdvAdCacheManager.h"
 
 @interface AdvanceNativeExpress () <AdvPolicyServiceDelegate, AdvanceNativeExpressCommonAdapter>
-@property (nonatomic, strong) NSArray<AdvSupplier *> *suppliers;
 
 @end
 
@@ -55,7 +54,7 @@
 
 // 开始Bidding
 - (void)policyServiceStartBiddingWithSuppliers:(NSArray <AdvSupplier *> *_Nullable)suppliers {
-    self.suppliers = suppliers;
+    [self.suppliers addObjectsFromArray:suppliers];
 }
 
 /// 加载某一个渠道对象
@@ -94,7 +93,7 @@
 }
 
 // Bidding成功
-- (void)policyServiceFinishBiddingWithWinSupplier:(AdvSupplier *_Nonnull)supplier {
+- (void)policyServiceFinishBiddingWithWinSupplier:(AdvSupplier *_Nonnull)supplier secondPrice:(NSInteger)secondPrice {
 //    self.price = supplier.sdk_price;
     /// 获取竞胜的adpater
     self.targetAdapter = [self.adapterMap objectForKey:supplier.sdk_id];
@@ -104,7 +103,15 @@
     }
     /// 渲染广告
     [self.targetAdapter adapter_render:self.viewController];
+    [self.targetAdapter adapter_sendWinNotificationWithSecondPrice:secondPrice winPrice:supplier.sdk_price];
 }
+
+// 参竞渠道失败
+- (void)policyServiceBidFailedWithBiddingSupplier:(AdvSupplier *)supplier firstPrice:(NSInteger)firstPrice {
+    id<AdvanceNativeExpressCommonAdapter> adapter = [self.adapterMap objectForKey:supplier.sdk_id];
+    [adapter adapter_sendLossNotificationWithFirstPrice:firstPrice];
+}
+
 
 #pragma mark: - AdvanceCommonAdapter
 - (void)adapter_cacheAdapterIfNeeded:(id)adapter adapterId:(NSString *)adapterId price:(NSInteger)price {

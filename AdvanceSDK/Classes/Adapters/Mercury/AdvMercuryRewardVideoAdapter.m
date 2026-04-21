@@ -56,6 +56,13 @@
     return valid;
 }
 
+- (void)adapter_sendWinNotificationWithSecondPrice:(NSInteger)secondPrice winPrice:(NSInteger)winPrice {
+    
+}
+
+- (void)adapter_sendLossNotificationWithFirstPrice:(NSInteger)firstPrice {
+    [_mercury_ad sendLossNotificationWithPrice:firstPrice];
+}
 
 #pragma mark: - MercuryRewardVideoAdDelegate
 - (void)mercury_rewardVideoAdDidLoad:(MercuryRewardVideoAd *)rewardVideoAd {

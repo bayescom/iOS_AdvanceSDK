@@ -46,6 +46,14 @@
     return valid;
 }
 
+- (void)adapter_sendWinNotificationWithSecondPrice:(NSInteger)secondPrice winPrice:(NSInteger)winPrice {
+    [_flink_ad sendWinNotificationWithPrice:secondPrice];
+}
+
+- (void)adapter_sendLossNotificationWithFirstPrice:(NSInteger)firstPrice {
+    [_flink_ad sendLossNotificationWithPrice:firstPrice];
+}
+
 #pragma mark: - FLinkSplashDelegate
 - (void)splashAdDidLoad {
     NSInteger ecpm = self.flink_ad.getCurrentBaseEcpmInfo.ecpm;

@@ -54,6 +54,14 @@
     return valid;
 }
 
+- (void)adapter_sendWinNotificationWithSecondPrice:(NSInteger)secondPrice winPrice:(NSInteger)winPrice {
+    [_gdt_ad sendWinNotificationWithInfo:@{GDT_M_W_H_LOSS_PRICE: @(secondPrice), GDT_M_W_E_COST_PRICE: @(winPrice)}];
+}
+
+- (void)adapter_sendLossNotificationWithFirstPrice:(NSInteger)firstPrice {
+    [_gdt_ad sendLossNotificationWithInfo:@{GDT_M_L_WIN_PRICE: @(firstPrice)}];
+}
+
 
 #pragma mark: - GDTRewardedVideoAdDelegate
 - (void)gdt_rewardVideoAdDidLoad:(GDTRewardVideoAd *)rewardedVideoAd {

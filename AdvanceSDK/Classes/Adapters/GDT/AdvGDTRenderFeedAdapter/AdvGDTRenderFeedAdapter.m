@@ -16,6 +16,7 @@
 @interface AdvGDTRenderFeedAdapter () <GDTUnifiedNativeAdDelegate, AdvanceRenderFeedCommonAdapter>
 
 @property (nonatomic, strong) GDTUnifiedNativeAd *gdt_ad;
+@property (nonatomic, strong) GDTUnifiedNativeAdDataObject *dataObject;
 @property (nonatomic, copy) NSString *adapterId;
 @property (nonatomic, strong) AdvRenderFeedAdWrapper *feedAdWrapper;
 @property (nonatomic, weak) UIViewController *rootViewController;
@@ -42,6 +43,14 @@
     return self.feedAdWrapper;
 }
 
+- (void)adapter_sendWinNotificationWithSecondPrice:(NSInteger)secondPrice winPrice:(NSInteger)winPrice {
+    [_dataObject sendWinNotificationWithInfo:@{GDT_M_W_H_LOSS_PRICE: @(secondPrice), GDT_M_W_E_COST_PRICE: @(winPrice)}];
+}
+
+- (void)adapter_sendLossNotificationWithFirstPrice:(NSInteger)firstPrice {
+    [_dataObject sendLossNotificationWithInfo:@{GDT_M_L_WIN_PRICE: @(firstPrice)}];
+}
+
 
 #pragma mark - GDTUnifiedNativeAdDelegate
 - (void)gdt_unifiedNativeAdLoaded:(NSArray<GDTUnifiedNativeAdDataObject *> *)unifiedNativeAdDataObjects error:(NSError *)error {
@@ -51,6 +60,7 @@
     }
      
     GDTUnifiedNativeAdDataObject *dataObject = unifiedNativeAdDataObjects.firstObject;
+    self.dataObject = dataObject;
     AdvRenderFeedAdElement *element = [self generateFeedAdElementWithDataObject:dataObject];
     AdvGDTRenderFeedAdView *gdtFeedAdView = [[AdvGDTRenderFeedAdView alloc] initWithDataObject:dataObject delegate:self.delegate adapterId:self.adapterId viewController:self.rootViewController];
     self.feedAdWrapper = [[AdvRenderFeedAdWrapper alloc] initWithFeedAdView:gdtFeedAdView feedAdElement:element];
