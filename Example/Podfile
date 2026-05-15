@@ -8,35 +8,35 @@ target 'AdvanceSDK_Example' do
   
   #集成倍业Adapter
   pod 'AdvanceSDK/MercuryAdapter', :path => '../'
-  pod 'MercurySDK', '4.6.7'
+  pod 'MercurySDK', '4.7.2'
 
   #集成穿山甲Adapter
   pod 'AdvanceSDK/CSJAdapter',  :path => '../'
-  pod 'Ads-CN-Beta', '7.6.0.0', :subspecs => ['BUAdSDK']
+  pod 'Ads-CN-Beta', '7.6.0.4', :subspecs => ['BUAdSDK']
 
   #集成广点通Adapter
   pod 'AdvanceSDK/GDTAdapter', :path => '../'
-  pod 'GDTMobSDK', '4.15.80'
+  pod 'GDTMobSDK', '4.15.90'
 
   #集成快手Adapter
   pod 'AdvanceSDK/KSAdapter', :path => '../'
-  pod 'KSAdSDK', '5.3.20.1'
+  pod 'KSAdSDK', '5.4.10.1'
 
   #集成百度Adapter
   pod 'AdvanceSDK/BaiduAdapter', :path => '../'
-  pod 'BaiduMobAdSDK', '10.050'
+  pod 'BaiduMobAdSDK', '10.051'
   
   #集成TanxAdapter
   pod 'AdvanceSDK/TanxAdapter', :path => '../'
-  pod 'TanxSDK', '3.7.26'
+  pod 'TanxSDK', '3.7.27'
   
   #集成SigMobAdapter
   pod 'AdvanceSDK/SigmobAdapter', :path => '../'
-  pod 'SigmobAd-iOS', '4.20.9'
+  pod 'SigmobAd-iOS', '4.20.21'
   
   #集成FunlinkAdapter
   pod 'AdvanceSDK/FunlinkAdapter', :path => '../'
-  pod 'FunlinkSDK', '2.9.0.0.6'
+  pod 'FunlinkSDK', '2.9.0.1.2'
   
 
   #Third
