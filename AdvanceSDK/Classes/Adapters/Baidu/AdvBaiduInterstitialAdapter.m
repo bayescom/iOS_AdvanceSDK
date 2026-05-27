@@ -7,34 +7,32 @@
 
 #import "AdvBaiduInterstitialAdapter.h"
 #import <BaiduMobAdSDK/BaiduMobAdSDK.h>
-#import "AdvanceInterstitialCommonAdapter.h"
+#import "AdvanceCommonAdapter.h"
 #import "AdvAdConfigHeader.h"
-#import "AdvError.h"
 
-@interface AdvBaiduInterstitialAdapter ()<BaiduMobAdExpressIntDelegate, AdvanceInterstitialCommonAdapter>
+@interface AdvBaiduInterstitialAdapter ()<BaiduMobAdExpressIntDelegate, AdvanceCommonInterstitialAdapter>
+
+@property (nonatomic, weak) id<AdvanceCommonInterstitialAdapterBridge> bridge;
 @property (nonatomic, strong) BaiduMobAdExpressInterstitial *bd_ad;
-@property (nonatomic, copy) NSString *adapterId;
 
 @end
 
 @implementation AdvBaiduInterstitialAdapter
 
-@synthesize delegate = _delegate;
+- (void)adapter_setInterstitialBridge:(id<AdvanceCommonInterstitialAdapterBridge>)bridge {
+    _bridge = bridge;
+}
 
-- (void)adapter_setupWithAdapterId:(NSString *)adapterId placementId:(NSString *)placementId config:(NSDictionary *)config {
-    _adapterId = adapterId;
+- (void)adapter_loadAdWithPlacementId:(NSString *)placementId config:(NSDictionary *)config {
     _bd_ad = [[BaiduMobAdExpressInterstitial alloc] init];
     _bd_ad.adUnitTag = placementId;
     _bd_ad.publisherId = config[kAdvanceSupplierMediaIdKey];
     _bd_ad.delegate = self;
-}
-
-- (void)adapter_loadAd {
-    [self.bd_ad load];
+    [_bd_ad load];
 }
 
 - (void)adapter_showAdFromRootViewController:(UIViewController *)rootViewController {
-    [self.bd_ad showFromViewController:rootViewController];
+    [_bd_ad showFromViewController:rootViewController];
 }
 
 - (BOOL)adapter_isAdValid {
@@ -42,42 +40,41 @@
     return YES;
 }
 
-- (void)adapter_sendWinNotificationWithSecondPrice:(NSInteger)secondPrice winPrice:(NSInteger)winPrice {
-    [_bd_ad biddingSuccessWithSecondInfo:@{@"ecpm": @(secondPrice)} completion:^(BOOL success, NSString *errorInfo) {}];
-}
-
-- (void)adapter_sendLossNotificationWithFirstPrice:(NSInteger)firstPrice {
-    [_bd_ad biddingFailWithWinInfo:@{@"ecpm": @(firstPrice)} completion:^(BOOL success, NSString *errorInfo) {}];
+- (void)adapter_sendNotificationWithBidResult:(AdvBidWinLossResult *)result {
+    if (result.bidResultType == AdvBidWinLossResultTypeWin) {
+        [_bd_ad biddingSuccessWithSecondInfo:@{@"ecpm": @(result.secondPrice)} completion:^(BOOL success, NSString * _Nonnull errorInfo) {}];
+    } else {
+        [_bd_ad biddingFailWithWinInfo:@{@"ecpm": @(result.winPrice)} completion:^(BOOL success, NSString * _Nonnull errorInfo) {}];
+    }
 }
 
 #pragma mark: - BaiduMobAdExpressIntDelegate
 - (void)interstitialAdLoaded:(BaiduMobAdExpressInterstitial *)interstitial {
-    [self.delegate adapter_cacheAdapterIfNeeded:self adapterId:self.adapterId price:[[interstitial getECPMLevel] integerValue]];
-    [self.delegate interstitialAdapter_didLoadAdWithAdapterId:self.adapterId price:[[interstitial getECPMLevel] integerValue]];
+    [self.bridge interstitial_didLoadAdWithAdapter:self price:[[interstitial getECPMLevel] integerValue]];
 }
 
 - (void)interstitialAdLoadFailCode:(NSString *)errCode
                            message:(NSString *)message
                     interstitialAd:(BaiduMobAdExpressInterstitial *)interstitial {
     NSError *error = [NSError errorWithDomain:@"BaiduAdErrorDomain" code:[errCode integerValue] userInfo:@{NSLocalizedDescriptionKey: message ?: @""}];
-    [self.delegate interstitialAdapter_failedToLoadAdWithAdapterId:self.adapterId error:error];
+    [self.bridge interstitial_failedToLoadAdWithAdapter:self error:error];
 }
 
 - (void)interstitialAdExposure:(BaiduMobAdExpressInterstitial *)interstitial {
-    [self.delegate interstitialAdapter_didAdExposuredWithAdapterId:self.adapterId];
+    [self.bridge interstitial_didAdExposuredWithAdapter:self];
 }
 
 - (void)interstitialAdExposureFail:(BaiduMobAdExpressInterstitial *)interstitial withError:(int)reason {
     NSError *error = [NSError errorWithDomain:@"BaiduAdErrorDomain" code:reason userInfo:nil];
-    [self.delegate interstitialAdapter_failedToShowAdWithAdapterId:self.adapterId error:error];
+    [self.bridge interstitial_failedToShowAdWithAdapter:self error:error];
 }
 
 - (void)interstitialAdDidClick:(BaiduMobAdExpressInterstitial *)interstitial {
-    [self.delegate interstitialAdapter_didAdClickedWithAdapterId:self.adapterId];
+    [self.bridge interstitial_didAdClickedWithAdapter:self];
 }
 
 - (void)interstitialAdDidClose:(BaiduMobAdExpressInterstitial *)interstitial {
-    [self.delegate interstitialAdapter_didAdClosedWithAdapterId:self.adapterId];
+    [self.bridge interstitial_didAdClosedWithAdapter:self];
 }
 
 - (void)dealloc {

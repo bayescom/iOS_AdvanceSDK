@@ -1,74 +1,65 @@
 #import "AdvMercurySplashAdapter.h"
 #import <MercurySDK/MercurySDK.h>
-#import "AdvanceSplashCommonAdapter.h"
+#import "AdvanceCommonAdapter.h"
 #import "AdvAdConfigHeader.h"
-#import "AdvError.h"
 
-@interface AdvMercurySplashAdapter () <MercurySplashAdDelegate, AdvanceSplashCommonAdapter>
+@interface AdvMercurySplashAdapter () <MercurySplashAdDelegate, AdvanceCommonSplashAdapter>
+
+@property (nonatomic, weak) id<AdvanceCommonSplashAdapterBridge> bridge;
 @property (nonatomic, strong) MercurySplashAd *mercury_ad;
-@property (nonatomic, copy) NSString *adapterId;
 
 @end
 
 @implementation AdvMercurySplashAdapter
 
-@synthesize delegate = _delegate;
+- (void)adapter_setSplashBridge:(id<AdvanceCommonSplashAdapterBridge>)bridge {
+    _bridge = bridge;
+}
 
-- (void)adapter_setupWithAdapterId:(NSString *)adapterId placementId:(NSString *)placementId config:(NSDictionary *)config {
-    _adapterId = adapterId;
+- (void)adapter_loadAdWithPlacementId:(NSString *)placementId config:(NSDictionary *)config {
     _mercury_ad = [[MercurySplashAd alloc] initAdWithAdspotId:placementId delegate:self];
     _mercury_ad.controller = config[kAdvanceAdPresentControllerKey];
     _mercury_ad.bottomLogoView = config[kAdvanceSplashBottomViewKey];
-}
-
-- (void)adapter_loadAd {
     [_mercury_ad loadAd];
 }
 
 - (void)adapter_showAdInWindow:(UIWindow *)window {
-    [self.mercury_ad showAdInWindow:window];
+    [_mercury_ad showAdInWindow:window];
 }
 
 - (BOOL)adapter_isAdValid {
-    BOOL valid = _mercury_ad.isAdValid;
-    if (!valid) {
-        [self.delegate splashAdapter_failedToShowAdWithAdapterId:self.adapterId error:[AdvError errorWithCode:AdvErrorCode_InvalidExpired].toNSError];
+    return _mercury_ad.isAdValid;
+}
+
+- (void)adapter_sendNotificationWithBidResult:(AdvBidWinLossResult *)result {
+    if (result.bidResultType == AdvBidWinLossResultTypeLoss) {
+        [_mercury_ad sendLossNotificationWithPrice:result.winPrice];
     }
-    return valid;
-}
-
-- (void)adapter_sendWinNotificationWithSecondPrice:(NSInteger)secondPrice winPrice:(NSInteger)winPrice {
-    
-}
-
-- (void)adapter_sendLossNotificationWithFirstPrice:(NSInteger)firstPrice {
-    [_mercury_ad sendLossNotificationWithPrice:firstPrice];
 }
 
 #pragma mark: - MercurySplashAdDelegate
 - (void)mercury_splashAdDidLoad:(MercurySplashAd *)splashAd {
-    [self.delegate adapter_cacheAdapterIfNeeded:self adapterId:self.adapterId price:splashAd.price];
-    [self.delegate splashAdapter_didLoadAdWithAdapterId:self.adapterId price:splashAd.price];
+    [self.bridge splash_didLoadAdWithAdapter:self price:splashAd.price];
 }
 
 - (void)mercury_splashAdFailToLoad:(MercurySplashAd * _Nullable)splashAd error:(NSError * _Nullable)error {
-    [self.delegate splashAdapter_failedToLoadAdWithAdapterId:self.adapterId error:error];
+    [self.bridge splash_failedToLoadAdWithAdapter:self error:error];
 }
 
 - (void)mercury_splashAdRenderFail:(MercurySplashAd *)splashAd error:(NSError *)error {
-    [self.delegate splashAdapter_failedToShowAdWithAdapterId:self.adapterId error:error];
+    [self.bridge splash_failedToShowAdWithAdapter:self error:error];
 }
 
 - (void)mercury_splashAdExposured:(MercurySplashAd *)splashAd {
-    [self.delegate splashAdapter_didAdExposuredWithAdapterId:self.adapterId];
+    [self.bridge splash_didAdExposuredWithAdapter:self];
 }
 
 - (void)mercury_splashAdClicked:(MercurySplashAd *)splashAd {
-    [self.delegate splashAdapter_didAdClickedWithAdapterId:self.adapterId];
+    [self.bridge splash_didAdClickedWithAdapter:self];
 }
 
 - (void)mercury_splashAdClosed:(MercurySplashAd *)splashAd {
-    [self.delegate splashAdapter_didAdClosedWithAdapterId:self.adapterId];
+    [self.bridge splash_didAdClosedWithAdapter:self];
 }
 
 - (void)dealloc {

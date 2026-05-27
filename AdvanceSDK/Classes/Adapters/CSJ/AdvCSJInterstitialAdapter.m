@@ -8,28 +8,26 @@
 
 #import "AdvCSJInterstitialAdapter.h"
 #import <BUAdSDK/BUAdSDK.h>
-#import "AdvanceInterstitialCommonAdapter.h"
+#import "AdvanceCommonAdapter.h"
 #import "AdvAdConfigHeader.h"
-#import "AdvError.h"
 
-@interface AdvCSJInterstitialAdapter () <BUNativeExpressFullscreenVideoAdDelegate, AdvanceInterstitialCommonAdapter>
+@interface AdvCSJInterstitialAdapter () <BUNativeExpressFullscreenVideoAdDelegate, AdvanceCommonInterstitialAdapter>
+
+@property (nonatomic, weak) id<AdvanceCommonInterstitialAdapterBridge> bridge;
 @property (nonatomic, strong) BUNativeExpressFullscreenVideoAd *csj_ad;
-@property (nonatomic, copy) NSString *adapterId;
 
 @end
 
 @implementation AdvCSJInterstitialAdapter
 
-@synthesize delegate = _delegate;
-
-- (void)adapter_setupWithAdapterId:(NSString *)adapterId placementId:(NSString *)placementId config:(NSDictionary *)config {
-    _adapterId = adapterId;
-    _csj_ad = [[BUNativeExpressFullscreenVideoAd alloc] initWithSlotID:placementId];
-    _csj_ad.delegate = self;
+- (void)adapter_setInterstitialBridge:(id<AdvanceCommonInterstitialAdapterBridge>)bridge {
+    _bridge = bridge;
 }
 
-- (void)adapter_loadAd {
-    [self.csj_ad loadAdData];
+- (void)adapter_loadAdWithPlacementId:(NSString *)placementId config:(NSDictionary *)config {
+    _csj_ad = [[BUNativeExpressFullscreenVideoAd alloc] initWithSlotID:placementId];
+    _csj_ad.delegate = self;
+    [_csj_ad loadAdData];
 }
 
 - (void)adapter_showAdFromRootViewController:(UIViewController *)rootViewController {
@@ -40,39 +38,38 @@
     return YES;
 }
 
-- (void)adapter_sendWinNotificationWithSecondPrice:(NSInteger)secondPrice winPrice:(NSInteger)winPrice {
-    [_csj_ad win:@(secondPrice)];
-}
-
-- (void)adapter_sendLossNotificationWithFirstPrice:(NSInteger)firstPrice {
-    [_csj_ad loss:@(firstPrice) lossReason:nil winBidder:nil];
+- (void)adapter_sendNotificationWithBidResult:(AdvBidWinLossResult *)result {
+    if (result.bidResultType == AdvBidWinLossResultTypeWin) {
+        [_csj_ad win:@(result.secondPrice)];
+    } else {
+        [_csj_ad loss:@(result.winPrice) lossReason:nil winBidder:nil];
+    }
 }
 
 #pragma mark: - BUNativeExpressFullscreenVideoAdDelegate
 - (void)nativeExpressFullscreenVideoAdDidLoad:(BUNativeExpressFullscreenVideoAd *)fullscreenVideoAd {
     NSDictionary *ext = fullscreenVideoAd.mediaExt;
-    [self.delegate adapter_cacheAdapterIfNeeded:self adapterId:self.adapterId price:[ext[@"price"] integerValue]];
-    [self.delegate interstitialAdapter_didLoadAdWithAdapterId:self.adapterId price:[ext[@"price"] integerValue]];
+    [self.bridge interstitial_didLoadAdWithAdapter:self price:[ext[@"price"] integerValue]];
 }
 
 - (void)nativeExpressFullscreenVideoAd:(BUNativeExpressFullscreenVideoAd *)fullscreenVideoAd didFailWithError:(NSError *_Nullable)error {
-    [self.delegate interstitialAdapter_failedToLoadAdWithAdapterId:self.adapterId error:error];
+    [self.bridge interstitial_failedToLoadAdWithAdapter:self error:error];
 }
 
 - (void)nativeExpressFullscreenVideoAdViewRenderFail:(BUNativeExpressFullscreenVideoAd *)rewardedVideoAd error:(NSError *_Nullable)error {
-    [self.delegate interstitialAdapter_failedToShowAdWithAdapterId:self.adapterId error:error];
+    [self.bridge interstitial_failedToShowAdWithAdapter:self error:error];
 }
 
 - (void)nativeExpressFullscreenVideoAdDidVisible:(BUNativeExpressFullscreenVideoAd *)fullscreenVideoAd {
-    [self.delegate interstitialAdapter_didAdExposuredWithAdapterId:self.adapterId];
+    [self.bridge interstitial_didAdExposuredWithAdapter:self];
 }
 
 - (void)nativeExpressFullscreenVideoAdDidClick:(BUNativeExpressFullscreenVideoAd *)fullscreenVideoAd {
-    [self.delegate interstitialAdapter_didAdClickedWithAdapterId:self.adapterId];
+    [self.bridge interstitial_didAdClickedWithAdapter:self];
 }
 
 - (void)nativeExpressFullscreenVideoAdDidClose:(BUNativeExpressFullscreenVideoAd *)fullscreenVideoAd {
-    [self.delegate interstitialAdapter_didAdClosedWithAdapterId:self.adapterId];
+    [self.bridge interstitial_didAdClosedWithAdapter:self];
 }
 
 - (void)dealloc {

@@ -7,29 +7,27 @@
 
 #import "AdvSigmobInterstitialAdapter.h"
 #import <WindSDK/WindSDK.h>
-#import "AdvanceInterstitialCommonAdapter.h"
+#import "AdvanceCommonAdapter.h"
 #import "AdvAdConfigHeader.h"
-#import "AdvError.h"
 
-@interface AdvSigmobInterstitialAdapter () <WindNewIntersititialAdDelegate, AdvanceInterstitialCommonAdapter>
+@interface AdvSigmobInterstitialAdapter () <WindNewIntersititialAdDelegate, AdvanceCommonInterstitialAdapter>
+
+@property (nonatomic, weak) id<AdvanceCommonInterstitialAdapterBridge> bridge;
 @property (nonatomic, strong) WindNewIntersititialAd *sigmob_ad;
-@property (nonatomic, copy) NSString *adapterId;
 
 @end
 
 @implementation AdvSigmobInterstitialAdapter
 
-@synthesize delegate = _delegate;
+- (void)adapter_setInterstitialBridge:(id<AdvanceCommonInterstitialAdapterBridge>)bridge {
+    _bridge = bridge;
+}
 
-- (void)adapter_setupWithAdapterId:(NSString *)adapterId placementId:(NSString *)placementId config:(NSDictionary *)config {
-    _adapterId = adapterId;
+- (void)adapter_loadAdWithPlacementId:(NSString *)placementId config:(NSDictionary *)config {
     WindAdRequest *request = [WindAdRequest request];
     request.placementId = placementId;
     _sigmob_ad = [[WindNewIntersititialAd alloc] initWithRequest:request];
     _sigmob_ad.delegate = self;
-}
-
-- (void)adapter_loadAd {
     [_sigmob_ad loadAdData];
 }
 
@@ -38,46 +36,37 @@
 }
 
 - (BOOL)adapter_isAdValid {
-    BOOL valid = _sigmob_ad.ready;
-    if (!valid) {
-        [self.delegate interstitialAdapter_failedToShowAdWithAdapterId:self.adapterId error:[AdvError errorWithCode:AdvErrorCode_InvalidExpired].toNSError];
-    }
-    return valid;
+    return _sigmob_ad.ready;
 }
 
-- (void)adapter_sendWinNotificationWithSecondPrice:(NSInteger)secondPrice winPrice:(NSInteger)winPrice {
-//    [_sigmob_ad sendWinNotificationWithInfo:@{AUCTION_PRICE: @(secondPrice)}];
-}
-
-- (void)adapter_sendLossNotificationWithFirstPrice:(NSInteger)firstPrice {
-//    [_sigmob_ad sendLossNotificationWithInfo:@{AUCTION_PRICE: @(firstPrice)}];
+- (void)adapter_sendNotificationWithBidResult:(AdvBidWinLossResult *)result {
+    
 }
 
 
 #pragma mark - WindNewIntersititialAdDelegate
 - (void)intersititialAdDidLoad:(WindNewIntersititialAd *)intersititialAd {
-    [self.delegate adapter_cacheAdapterIfNeeded:self adapterId:self.adapterId price:intersititialAd.getEcpm.integerValue];
-    [self.delegate interstitialAdapter_didLoadAdWithAdapterId:self.adapterId price:intersititialAd.getEcpm.integerValue];
+    [self.bridge interstitial_didLoadAdWithAdapter:self price:intersititialAd.getEcpm.integerValue];
 }
 
 - (void)intersititialAdDidLoad:(WindNewIntersititialAd *)intersititialAd didFailWithError:(NSError *)error {
-    [self.delegate interstitialAdapter_failedToLoadAdWithAdapterId:self.adapterId error:error];
+    [self.bridge interstitial_failedToLoadAdWithAdapter:self error:error];
 }
 
 - (void)intersititialAdDidVisible:(WindNewIntersititialAd *)intersititialAd {
-    [self.delegate interstitialAdapter_didAdExposuredWithAdapterId:self.adapterId];
+    [self.bridge interstitial_didAdExposuredWithAdapter:self];
 }
 
 - (void)intersititialAdDidShowFailed:(WindNewIntersititialAd *)intersititialAd error:(NSError *)error {
-    [self.delegate interstitialAdapter_failedToShowAdWithAdapterId:self.adapterId error:error];
+    [self.bridge interstitial_failedToShowAdWithAdapter:self error:error];
 }
 
 - (void)intersititialAdDidClick:(WindNewIntersititialAd *)intersititialAd {
-    [self.delegate interstitialAdapter_didAdClickedWithAdapterId:self.adapterId];
+    [self.bridge interstitial_didAdClickedWithAdapter:self];
 }
 
 - (void)intersititialAdDidClose:(WindNewIntersititialAd *)intersititialAd {
-    [self.delegate interstitialAdapter_didAdClosedWithAdapterId:self.adapterId];
+    [self.bridge interstitial_didAdClosedWithAdapter:self];
 }
 
 @end

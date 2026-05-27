@@ -7,78 +7,70 @@
 
 #import "AdvFunlinkSplashAdapter.h"
 #import <FLinkAdSaas/FLinkAdSaas.h>
-#import "AdvanceSplashCommonAdapter.h"
+#import "AdvanceCommonAdapter.h"
 #import "AdvAdConfigHeader.h"
-#import "AdvError.h"
 
-@interface AdvFunlinkSplashAdapter () <FLinkSplashDelegate, AdvanceSplashCommonAdapter>
+@interface AdvFunlinkSplashAdapter () <FLinkSplashDelegate, AdvanceCommonSplashAdapter>
 
+@property (nonatomic, weak) id<AdvanceCommonSplashAdapterBridge> bridge;
 @property (nonatomic, strong) FLinkSplashManager *flink_ad;
-@property (nonatomic, copy) NSString *adapterId;
 
 @end
 
 @implementation AdvFunlinkSplashAdapter
 
-@synthesize delegate = _delegate;
+- (void)adapter_setSplashBridge:(id<AdvanceCommonSplashAdapterBridge>)bridge {
+    _bridge = bridge;
+}
 
-- (void)adapter_setupWithAdapterId:(NSString *)adapterId placementId:(NSString *)placementId config:(NSDictionary *)config {
-    _adapterId = adapterId;
+- (void)adapter_loadAdWithPlacementId:(NSString *)placementId config:(NSDictionary *)config {
     _flink_ad = [[FLinkSplashManager alloc] init];
     _flink_ad.delegate = self;
     _flink_ad.mediaId = placementId;
     _flink_ad.bottomView = config[kAdvanceSplashBottomViewKey];
-}
-
-- (void)adapter_loadAd {
-    [self.flink_ad loadAdData];
+    [_flink_ad loadAdData];
 }
 
 - (void)adapter_showAdInWindow:(UIWindow *)window {
-    [self.flink_ad showSplashAdWithWindow:window];
+    [_flink_ad showSplashAdWithWindow:window];
 }
 
 - (BOOL)adapter_isAdValid {
-    BOOL valid = _flink_ad.getCurrentBaseEcpmInfo.isAdValid;
-    if (!valid) {
-        [self.delegate splashAdapter_failedToShowAdWithAdapterId:self.adapterId error:[AdvError errorWithCode:AdvErrorCode_InvalidExpired].toNSError];
+    return _flink_ad.getCurrentBaseEcpmInfo.isAdValid;
+}
+
+- (void)adapter_sendNotificationWithBidResult:(AdvBidWinLossResult *)result {
+    if (result.bidResultType == AdvBidWinLossResultTypeWin) {
+        [_flink_ad sendWinNotificationWithPrice:result.secondPrice];
+    } else {
+        [_flink_ad sendLossNotificationWithPrice:result.winPrice];
     }
-    return valid;
-}
-
-- (void)adapter_sendWinNotificationWithSecondPrice:(NSInteger)secondPrice winPrice:(NSInteger)winPrice {
-    [_flink_ad sendWinNotificationWithPrice:secondPrice];
-}
-
-- (void)adapter_sendLossNotificationWithFirstPrice:(NSInteger)firstPrice {
-    [_flink_ad sendLossNotificationWithPrice:firstPrice];
 }
 
 #pragma mark: - FLinkSplashDelegate
 - (void)splashAdDidLoad {
     NSInteger ecpm = self.flink_ad.getCurrentBaseEcpmInfo.ecpm;
-    [self.delegate adapter_cacheAdapterIfNeeded:self adapterId:self.adapterId price:ecpm];
-    [self.delegate splashAdapter_didLoadAdWithAdapterId:self.adapterId price:ecpm];
+    [self.bridge splash_didLoadAdWithAdapter:self price:ecpm];
 }
 
 - (void)splashAdDidFailed:(NSError *)error {
-    [self.delegate splashAdapter_failedToLoadAdWithAdapterId:self.adapterId error:error];
+    [self.bridge splash_failedToLoadAdWithAdapter:self error:error];
 }
 
 - (void)splashAdDidVisible {
-    [self.delegate splashAdapter_didAdExposuredWithAdapterId:self.adapterId];
+    [self.bridge splash_didAdExposuredWithAdapter:self];
 }
 
 - (void)splashAdFailToVisible:(NSError *)error {
-    [self.delegate splashAdapter_failedToShowAdWithAdapterId:self.adapterId error:error];
+    [self.bridge splash_failedToShowAdWithAdapter:self error:error];
 }
 
 - (void)splashAdDidClickedWithUrlStr:(NSString *_Nullable)urlStr {
-    [self.delegate splashAdapter_didAdClickedWithAdapterId:self.adapterId];
+    [self.bridge splash_didAdClickedWithAdapter:self];
 }
 
 - (void)splashAdDidShowFinish {
-    [self.delegate splashAdapter_didAdClosedWithAdapterId:self.adapterId];
+    [self.bridge splash_didAdClosedWithAdapter:self];
 }
 
 

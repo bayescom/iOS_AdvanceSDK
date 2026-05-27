@@ -8,28 +8,26 @@
 
 #import "AdvGDTInterstitialAdapter.h"
 #import <GDTMobSDK/GDTMobSDK.h>
-#import "AdvanceInterstitialCommonAdapter.h"
+#import "AdvanceCommonAdapter.h"
 #import "AdvAdConfigHeader.h"
-#import "AdvError.h"
 
-@interface AdvGDTInterstitialAdapter () <GDTUnifiedInterstitialAdDelegate, AdvanceInterstitialCommonAdapter>
+@interface AdvGDTInterstitialAdapter () <GDTUnifiedInterstitialAdDelegate, AdvanceCommonInterstitialAdapter>
+
+@property (nonatomic, weak) id<AdvanceCommonInterstitialAdapterBridge> bridge;
 @property (nonatomic, strong) GDTUnifiedInterstitialAd *gdt_ad;
-@property (nonatomic, copy) NSString *adapterId;
 
 @end
 
 @implementation AdvGDTInterstitialAdapter
 
-@synthesize delegate = _delegate;
+- (void)adapter_setInterstitialBridge:(id<AdvanceCommonInterstitialAdapterBridge>)bridge {
+    _bridge = bridge;
+}
 
-- (void)adapter_setupWithAdapterId:(NSString *)adapterId placementId:(NSString *)placementId config:(NSDictionary *)config {
-    _adapterId = adapterId;
+- (void)adapter_loadAdWithPlacementId:(NSString *)placementId config:(NSDictionary *)config {
     _gdt_ad = [[GDTUnifiedInterstitialAd alloc] initWithPlacementId:placementId];
     _gdt_ad.videoMuted = [config[kAdvanceAdVideoMutedKey] boolValue];
     _gdt_ad.delegate = self;
-}
-
-- (void)adapter_loadAd {
     [_gdt_ad loadAd];
 }
 
@@ -38,51 +36,47 @@
 }
 
 - (BOOL)adapter_isAdValid {
-    BOOL valid = _gdt_ad.isAdValid;
-    if (!valid) {
-        [self.delegate interstitialAdapter_failedToShowAdWithAdapterId:self.adapterId error:[AdvError errorWithCode:AdvErrorCode_InvalidExpired].toNSError];
+    return _gdt_ad.isAdValid;
+}
+
+- (void)adapter_sendNotificationWithBidResult:(AdvBidWinLossResult *)result {
+    if (result.bidResultType == AdvBidWinLossResultTypeWin) {
+        [_gdt_ad sendWinNotificationWithInfo:@{GDT_M_W_H_LOSS_PRICE: @(result.secondPrice), GDT_M_W_E_COST_PRICE: @(result.winPrice)}];
+    } else {
+        [_gdt_ad sendLossNotificationWithInfo:@{GDT_M_L_WIN_PRICE: @(result.winPrice)}];
     }
-    return valid;
 }
 
-- (void)adapter_sendWinNotificationWithSecondPrice:(NSInteger)secondPrice winPrice:(NSInteger)winPrice {
-    [_gdt_ad sendWinNotificationWithInfo:@{GDT_M_W_H_LOSS_PRICE: @(secondPrice), GDT_M_W_E_COST_PRICE: @(winPrice)}];
-}
-
-- (void)adapter_sendLossNotificationWithFirstPrice:(NSInteger)firstPrice {
-    [_gdt_ad sendLossNotificationWithInfo:@{GDT_M_L_WIN_PRICE: @(firstPrice)}];
-}
 
 #pragma mark: - GDTUnifiedInterstitialAdDelegate
 - (void)unifiedInterstitialSuccessToLoadAd:(GDTUnifiedInterstitialAd *)unifiedInterstitial {
-    [self.delegate adapter_cacheAdapterIfNeeded:self adapterId:self.adapterId price:unifiedInterstitial.eCPM];
-    [self.delegate interstitialAdapter_didLoadAdWithAdapterId:self.adapterId price:unifiedInterstitial.eCPM];
+    [self.bridge interstitial_didLoadAdWithAdapter:self price:unifiedInterstitial.eCPM];
 }
 
 - (void)unifiedInterstitialFailToLoadAd:(GDTUnifiedInterstitialAd *)unifiedInterstitial error:(NSError *)error {
-    [self.delegate interstitialAdapter_failedToLoadAdWithAdapterId:self.adapterId error:error];
+    [self.bridge interstitial_failedToLoadAdWithAdapter:self error:error];
 }
 
 /// 渲染失败
 - (void)unifiedInterstitialRenderFail:(GDTUnifiedInterstitialAd *)unifiedInterstitial error:(NSError *)error {
-    [self.delegate interstitialAdapter_failedToShowAdWithAdapterId:self.adapterId error:error];
+    [self.bridge interstitial_failedToShowAdWithAdapter:self error:error];
 }
 
 /// 展示失败
 - (void)unifiedInterstitialFailToPresent:(GDTUnifiedInterstitialAd *)unifiedInterstitial error:(NSError *)error {
-    [self.delegate interstitialAdapter_failedToShowAdWithAdapterId:self.adapterId error:error];
+    [self.bridge interstitial_failedToShowAdWithAdapter:self error:error];
 }
 
 - (void)unifiedInterstitialWillExposure:(GDTUnifiedInterstitialAd *)unifiedInterstitial {
-    [self.delegate interstitialAdapter_didAdExposuredWithAdapterId:self.adapterId];
+    [self.bridge interstitial_didAdExposuredWithAdapter:self];
 }
 
 - (void)unifiedInterstitialClicked:(GDTUnifiedInterstitialAd *)unifiedInterstitial {
-    [self.delegate interstitialAdapter_didAdClickedWithAdapterId:self.adapterId];
+    [self.bridge interstitial_didAdClickedWithAdapter:self];
 }
 
 - (void)unifiedInterstitialDidDismissScreen:(id)unifiedInterstitial {
-    [self.delegate interstitialAdapter_didAdClosedWithAdapterId:self.adapterId];
+    [self.bridge interstitial_didAdClosedWithAdapter:self];
 }
 
 - (void)dealloc {

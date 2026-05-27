@@ -7,25 +7,25 @@
 
 #import "AdvTanxRewardVideoAdapter.h"
 #import <TanxSDK/TanxSDK.h>
-#import "AdvanceRewardVideoCommonAdapter.h"
+#import "AdvanceCommonAdapter.h"
 #import "AdvAdConfigHeader.h"
-#import "AdvError.h"
 #import "AdvRewardVideoModel.h"
 
-@interface AdvTanxRewardVideoAdapter () <TXAdRewardAdsDelegate, AdvanceRewardVideoCommonAdapter>
+@interface AdvTanxRewardVideoAdapter () <TXAdRewardAdsDelegate, AdvanceCommonRewardVideoAdapter>
+
+@property (nonatomic, weak) id<AdvanceCommonRewardVideoAdapterBridge> bridge;
 @property (nonatomic, strong) TXAdRewardManager *tanx_ad;
-@property (nonatomic, copy) NSString *adapterId;
 @property (nonatomic, strong) TXAdModel *adModel;
 
 @end
 
 @implementation AdvTanxRewardVideoAdapter
 
-@synthesize delegate = _delegate;
+- (void)adapter_setRewardVideoBridge:(id<AdvanceCommonRewardVideoAdapterBridge>)bridge {
+    _bridge = bridge;
+}
 
-- (void)adapter_setupWithAdapterId:(NSString *)adapterId placementId:(NSString *)placementId config:(NSDictionary *)config {
-    _adapterId = adapterId;
-    
+- (void)adapter_loadAdWithPlacementId:(NSString *)placementId config:(NSDictionary *)config {
     TXAdRewardVideoSlotModel *slotModel = [[TXAdRewardVideoSlotModel alloc] init];
     slotModel.defaultAudioState = ([config[kAdvanceAdVideoMutedKey] boolValue] ? TXAdRewardVideoAdDefaultAudioStateMuted : TXAdRewardVideoAdDefaultAudioStateVocal);
     slotModel.pid = placementId;
@@ -35,19 +35,15 @@
     }
     _tanx_ad = [[TXAdRewardManager alloc] initWithSlotModel:slotModel];
     _tanx_ad.delegate = self;
-}
-
-- (void)adapter_loadAd {
     __weak typeof(self) weakSelf = self;
     [self.tanx_ad getRewardAdsWithAdsDataBlock:^(NSArray<TXAdModel *> * _Nullable rewardAdModels, NSError * _Nullable error) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         if (error) { // 获取广告失败
-            [strongSelf.delegate rewardAdapter_failedToLoadAdWithAdapterId:strongSelf.adapterId error:error];
+            [strongSelf.bridge rewardVideo_failedToLoadAdWithAdapter:strongSelf error:error];
         } else { // 获取广告成功
             strongSelf.adModel = rewardAdModels.firstObject;
             NSInteger ecpm = strongSelf.adModel.bid.bidPrice.integerValue;
-            [strongSelf.delegate adapter_cacheAdapterIfNeeded:strongSelf adapterId:strongSelf.adapterId price:ecpm];
-            [strongSelf.delegate rewardAdapter_didLoadAdWithAdapterId:strongSelf.adapterId price:ecpm];
+            [strongSelf.bridge rewardVideo_didLoadAdWithAdapter:strongSelf price:ecpm];
         }
     }];
 }
@@ -60,33 +56,33 @@
     return YES;
 }
 
-- (void)adapter_sendWinNotificationWithSecondPrice:(NSInteger)secondPrice winPrice:(NSInteger)winPrice {
-    [_tanx_ad uploadBidding:_adModel result:YES];
-}
-
-- (void)adapter_sendLossNotificationWithFirstPrice:(NSInteger)firstPrice {
-    [_tanx_ad uploadBidding:_adModel result:NO];
+- (void)adapter_sendNotificationWithBidResult:(AdvBidWinLossResult *)result {
+    if (result.bidResultType == AdvBidWinLossResultTypeWin) {
+        [_tanx_ad uploadBidding:_adModel result:YES];
+    } else {
+        [_tanx_ad uploadBidding:_adModel result:NO];
+    }
 }
 
 #pragma mark: -TXAdRewardAdsDelegate
 - (void)onAdShow:(TXAdModel *)model {
-    [self.delegate rewardAdapter_didAdExposuredWithAdapterId:self.adapterId];
+    [self.bridge rewardVideo_didAdExposuredWithAdapter:self];
 }
 
 - (void)onAdClick:(TXAdModel *)model {
-    [self.delegate rewardAdapter_didAdClickedWithAdapterId:self.adapterId];
+    [self.bridge rewardVideo_didAdClickedWithAdapter:self];
 }
 
 - (void)onAdClose:(TXAdModel *)model {
-    [self.delegate rewardAdapter_didAdClosedWithAdapterId:self.adapterId];
+    [self.bridge rewardVideo_didAdClosedWithAdapter:self];
 }
 
 - (void)onAdDidReceiveRewardInfo:(TXAdRewardVideoRewardInfo *)rewardInfo withModel:(TXAdModel *)model {
-    [self.delegate rewardAdapter_didAdVerifyRewardWithAdapterId:self.adapterId];
+    [self.bridge rewardVideo_didAdVerifyRewardWithAdapter:self];
 }
 
 - (void)onAdDidPlayFinish:(TXAdModel *)model {
-    [self.delegate rewardAdapter_didAdPlayFinishWithAdapterId:self.adapterId];
+    [self.bridge rewardVideo_didAdPlayFinishWithAdapter:self];
 }
 
 - (void)dealloc {

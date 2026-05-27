@@ -7,38 +7,35 @@
 
 #import "AdvTanxInterstitialAdapter.h"
 #import <TanxSDK/TanxSDK.h>
-#import "AdvanceInterstitialCommonAdapter.h"
+#import "AdvanceCommonAdapter.h"
 #import "AdvAdConfigHeader.h"
-#import "AdvError.h"
 
-@interface AdvTanxInterstitialAdapter () <TXAdTableScreenManagerDelegate, AdvanceInterstitialCommonAdapter>
+@interface AdvTanxInterstitialAdapter () <TXAdTableScreenManagerDelegate, AdvanceCommonInterstitialAdapter>
+
+@property (nonatomic, weak) id<AdvanceCommonInterstitialAdapterBridge> bridge;
 @property(nonatomic, strong) TXAdTableScreenManager *tanx_ad;
-@property (nonatomic, copy) NSString *adapterId;
 @property (nonatomic, strong) TXAdModel *adModel;
 
 @end
 
 @implementation AdvTanxInterstitialAdapter
 
-@synthesize delegate = _delegate;
-
-- (void)adapter_setupWithAdapterId:(NSString *)adapterId placementId:(NSString *)placementId config:(NSDictionary *)config {
-    _adapterId = adapterId;
-    _tanx_ad = [[TXAdTableScreenManager alloc] initWithPid:placementId];
-    _tanx_ad.delegate = self;
+- (void)adapter_setInterstitialBridge:(id<AdvanceCommonInterstitialAdapterBridge>)bridge {
+    _bridge = bridge;
 }
 
-- (void)adapter_loadAd {
+- (void)adapter_loadAdWithPlacementId:(NSString *)placementId config:(NSDictionary *)config {
+    _tanx_ad = [[TXAdTableScreenManager alloc] initWithPid:placementId];
+    _tanx_ad.delegate = self;
     __weak typeof(self) weakSelf = self;
     [self.tanx_ad getTableScreenAdsWithAdsDataBlock:^(NSArray<TXAdModel *> * _Nullable tableScreenModels, NSError * _Nullable error) {
         __strong typeof(weakSelf) strongSelf = weakSelf;
         if (error) { // 获取广告失败
-            [strongSelf.delegate interstitialAdapter_failedToLoadAdWithAdapterId:strongSelf.adapterId error:error];
+            [strongSelf.bridge interstitial_failedToLoadAdWithAdapter:strongSelf error:error];
         } else { // 获取广告成功
             strongSelf.adModel = tableScreenModels.firstObject;
             NSInteger ecpm = strongSelf.adModel.bid.bidPrice.integerValue;
-            [strongSelf.delegate adapter_cacheAdapterIfNeeded:strongSelf adapterId:strongSelf.adapterId price:ecpm];
-            [strongSelf.delegate interstitialAdapter_didLoadAdWithAdapterId:strongSelf.adapterId price:ecpm];
+            [strongSelf.bridge interstitial_didLoadAdWithAdapter:strongSelf price:ecpm];
         }
     }];
 }
@@ -52,29 +49,29 @@
     return YES;
 }
 
-- (void)adapter_sendWinNotificationWithSecondPrice:(NSInteger)secondPrice winPrice:(NSInteger)winPrice {
-    [_tanx_ad uploadBidding:_adModel result:YES];
-}
-
-- (void)adapter_sendLossNotificationWithFirstPrice:(NSInteger)firstPrice {
-    [_tanx_ad uploadBidding:_adModel result:NO];
+- (void)adapter_sendNotificationWithBidResult:(AdvBidWinLossResult *)result {
+    if (result.bidResultType == AdvBidWinLossResultTypeWin) {
+        [_tanx_ad uploadBidding:_adModel result:YES];
+    } else {
+        [_tanx_ad uploadBidding:_adModel result:NO];
+    }
 }
 
 #pragma mark: -TXAdTableScreenManagerDelegate
 - (void)onAdShow:(TXAdModel *)model{
-    [self.delegate interstitialAdapter_didAdExposuredWithAdapterId:self.adapterId];
+    [self.bridge interstitial_didAdExposuredWithAdapter:self];
 }
 
 - (void)onAdClick:(TXAdModel *)model{
-    [self.delegate interstitialAdapter_didAdClickedWithAdapterId:self.adapterId];
+    [self.bridge interstitial_didAdClickedWithAdapter:self];
 }
 
 - (void)onAdClose:(TXAdModel *)model{
-    [self.delegate interstitialAdapter_didAdClosedWithAdapterId:self.adapterId];
+    [self.bridge interstitial_didAdClosedWithAdapter:self];
 }
 
 - (void)onAdRenderFail:(TXAdModel *)model withError:(NSError *)error {
-    [self.delegate interstitialAdapter_failedToShowAdWithAdapterId:self.adapterId error:error];
+    [self.bridge interstitial_failedToShowAdWithAdapter:self error:error];
 }
 
 - (void)dealloc {

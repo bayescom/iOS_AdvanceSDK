@@ -6,6 +6,7 @@
 
 @class AdvPolicyModel;
 @class AdvSupplier;
+@class AdvBidWinLossResult;
 
 @protocol AdvPolicyServiceDelegate <NSObject>
 
@@ -27,13 +28,13 @@
 
 /// Bidding成功
 /// @param supplier 竞胜渠道
-/// @param secondPrice 二价 （单位：分）
-- (void)policyServiceFinishBiddingWithWinSupplier:(AdvSupplier *_Nonnull)supplier secondPrice:(NSInteger)secondPrice;
+/// @param bidResult 二价结果 （单位：分）
+- (void)policyServiceFinishBiddingWithWinSupplier:(AdvSupplier *_Nonnull)supplier bidResult:(AdvBidWinLossResult *_Nonnull)bidResult;
 
 /// Bidding失败
 /// @param supplier 参竞的渠道
-/// @param firstPrice 一价 （单位：分）
-- (void)policyServiceBidFailedWithBiddingSupplier:(AdvSupplier *_Nonnull)supplier firstPrice:(NSInteger)firstPrice;
+/// @param bidResult 一价结果 （单位：分）
+- (void)policyServiceBidFailedWithBiddingSupplier:(AdvSupplier *_Nonnull)supplier bidResult:(AdvBidWinLossResult *_Nonnull)bidResult;
 
 /// 所有Bidding渠道返回广告失败
 /// @param error 错误信息

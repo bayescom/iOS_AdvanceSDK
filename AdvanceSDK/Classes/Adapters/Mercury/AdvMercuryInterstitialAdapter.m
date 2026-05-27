@@ -8,26 +8,24 @@
 
 #import "AdvMercuryInterstitialAdapter.h"
 #import <MercurySDK/MercurySDK.h>
-#import "AdvanceInterstitialCommonAdapter.h"
+#import "AdvanceCommonAdapter.h"
 #import "AdvAdConfigHeader.h"
-#import "AdvError.h"
 
-@interface AdvMercuryInterstitialAdapter () <MercuryInterstitialAdDelegate, AdvanceInterstitialCommonAdapter>
+@interface AdvMercuryInterstitialAdapter () <MercuryInterstitialAdDelegate, AdvanceCommonInterstitialAdapter>
+
+@property (nonatomic, weak) id<AdvanceCommonInterstitialAdapterBridge> bridge;
 @property (nonatomic, strong) MercuryInterstitialAd *mercury_ad;
-@property (nonatomic, copy) NSString *adapterId;
 
 @end
 
 @implementation AdvMercuryInterstitialAdapter
 
-@synthesize delegate = _delegate;
-
-- (void)adapter_setupWithAdapterId:(NSString *)adapterId placementId:(NSString *)placementId config:(NSDictionary *)config {
-    _adapterId = adapterId;
-    _mercury_ad = [[MercuryInterstitialAd alloc] initAdWithAdspotId:placementId delegate:self];
+- (void)adapter_setInterstitialBridge:(id<AdvanceCommonInterstitialAdapterBridge>)bridge {
+    _bridge = bridge;
 }
 
-- (void)adapter_loadAd {
+- (void)adapter_loadAdWithPlacementId:(NSString *)placementId config:(NSDictionary *)config {
+    _mercury_ad = [[MercuryInterstitialAd alloc] initAdWithAdspotId:placementId delegate:self];
     [_mercury_ad loadAd];
 }
 
@@ -36,46 +34,39 @@
 }
 
 - (BOOL)adapter_isAdValid {
-    BOOL valid = _mercury_ad.isAdValid;
-    if (!valid) {
-        [self.delegate interstitialAdapter_failedToShowAdWithAdapterId:self.adapterId error:[AdvError errorWithCode:AdvErrorCode_InvalidExpired].toNSError];
+    return _mercury_ad.isAdValid;
+}
+
+- (void)adapter_sendNotificationWithBidResult:(AdvBidWinLossResult *)result {
+    if (result.bidResultType == AdvBidWinLossResultTypeLoss) {
+        [_mercury_ad sendLossNotificationWithPrice:result.winPrice];
     }
-    return valid;
-}
-
-- (void)adapter_sendWinNotificationWithSecondPrice:(NSInteger)secondPrice winPrice:(NSInteger)winPrice {
-    
-}
-
-- (void)adapter_sendLossNotificationWithFirstPrice:(NSInteger)firstPrice {
-    [_mercury_ad sendLossNotificationWithPrice:firstPrice];
 }
 
 
 #pragma mark: - MercuryInterstitialAdDelegate
 - (void)mercury_interstitialSuccessToLoadAd:(MercuryInterstitialAd *)interstitialAd  {
-    [self.delegate adapter_cacheAdapterIfNeeded:self adapterId:self.adapterId price:interstitialAd.price];
-    [self.delegate interstitialAdapter_didLoadAdWithAdapterId:self.adapterId price:interstitialAd.price];
+    [self.bridge interstitial_didLoadAdWithAdapter:self price:interstitialAd.price];
 }
 
 - (void)mercury_interstitialFailToLoadAd:(MercuryInterstitialAd *)interstitialAd error:(NSError *)error {
-    [self.delegate interstitialAdapter_failedToLoadAdWithAdapterId:self.adapterId error:error];
+    [self.bridge interstitial_failedToLoadAdWithAdapter:self error:error];
 }
 
 - (void)mercury_interstitialRenderFail:(MercuryInterstitialAd *)interstitialAd error:(NSError *)error {
-    [self.delegate interstitialAdapter_failedToShowAdWithAdapterId:self.adapterId error:error];
+    [self.bridge interstitial_failedToShowAdWithAdapter:self error:error];
 }
 
 - (void)mercury_interstitialDidPresentScreen:(MercuryInterstitialAd *)interstitialAd {
-    [self.delegate interstitialAdapter_didAdExposuredWithAdapterId:self.adapterId];
+    [self.bridge interstitial_didAdExposuredWithAdapter:self];
 }
 
 - (void)mercury_interstitialClicked:(MercuryInterstitialAd *)interstitialAd {
-    [self.delegate interstitialAdapter_didAdClickedWithAdapterId:self.adapterId];
+    [self.bridge interstitial_didAdClickedWithAdapter:self];
 }
 
 - (void)mercury_interstitialDidDismissScreen:(MercuryInterstitialAd *)interstitialAd {
-    [self.delegate interstitialAdapter_didAdClosedWithAdapterId:self.adapterId];
+    [self.bridge interstitial_didAdClosedWithAdapter:self];
 }
 
 - (void)dealloc {

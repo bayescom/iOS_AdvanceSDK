@@ -7,29 +7,27 @@
 
 #import "AdvKSFullScreenVideoAdapter.h"
 #import <KSAdSDK/KSAdSDK.h>
-#import "AdvanceFullScreenVideoCommonAdapter.h"
+#import "AdvanceCommonAdapter.h"
 #import "AdvAdConfigHeader.h"
-#import "AdvError.h"
 
-@interface AdvKSFullScreenVideoAdapter ()<KSFullscreenVideoAdDelegate, AdvanceFullScreenVideoCommonAdapter>
+@interface AdvKSFullScreenVideoAdapter ()<KSFullscreenVideoAdDelegate, AdvanceCommonFullscreenVideoAdapter>
+
+@property (nonatomic, weak) id<AdvanceCommonFullscreenVideoAdapterBridge> bridge;
 @property (nonatomic, strong) KSFullscreenVideoAd *ks_ad;
-@property (nonatomic, copy) NSString *adapterId;
 
 @end
 
 @implementation AdvKSFullScreenVideoAdapter
 
-@synthesize delegate = _delegate;
+- (void)adapter_setFullscreenBridge:(id<AdvanceCommonFullscreenVideoAdapterBridge>)bridge {
+    _bridge = bridge;
+}
 
-- (void)adapter_setupWithAdapterId:(NSString *)adapterId placementId:(NSString *)placementId config:(NSDictionary *)config {
-    _adapterId = adapterId;
+- (void)adapter_loadAdWithPlacementId:(NSString *)placementId config:(NSDictionary *)config {
     _ks_ad = [[KSFullscreenVideoAd alloc] initWithPosId:placementId];
     _ks_ad.showDirection = KSAdShowDirection_Vertical;
     _ks_ad.shouldMuted = [config[kAdvanceAdVideoMutedKey] boolValue];
     _ks_ad.delegate = self;
-}
-
-- (void)adapter_loadAd {
     [_ks_ad loadAdData];
 }
 
@@ -38,48 +36,43 @@
 }
 
 - (BOOL)adapter_isAdValid {
-    BOOL valid = _ks_ad.isValid;
-    if (!valid) {
-        [self.delegate fullscreenAdapter_failedToShowAdWithAdapterId:self.adapterId error:[AdvError errorWithCode:AdvErrorCode_InvalidExpired].toNSError];
+    return _ks_ad.isValid;
+}
+
+- (void)adapter_sendNotificationWithBidResult:(AdvBidWinLossResult *)result {
+    if (result.bidResultType == AdvBidWinLossResultTypeWin) {
+        [_ks_ad setBidEcpm:result.winPrice highestLossEcpm:result.secondPrice];
+    } else {
+        KSAdExposureReportParam *param = [[KSAdExposureReportParam alloc] init];
+        param.winEcpm = result.winPrice;
+        [_ks_ad reportAdExposureFailed:KSAdExposureFailureBidFailed reportParam:param];
     }
-    return valid;
-}
-
-- (void)adapter_sendWinNotificationWithSecondPrice:(NSInteger)secondPrice winPrice:(NSInteger)winPrice {
-    [_ks_ad setBidEcpm:winPrice highestLossEcpm:secondPrice];
-}
-
-- (void)adapter_sendLossNotificationWithFirstPrice:(NSInteger)firstPrice {
-    KSAdExposureReportParam *param = [[KSAdExposureReportParam alloc] init];
-    param.winEcpm = firstPrice;
-    [_ks_ad reportAdExposureFailed:KSAdExposureFailureBidFailed reportParam:param];
 }
 
 #pragma mark: - KSFullscreenVideoAdDelegate
 - (void)fullscreenVideoAdDidLoad:(KSFullscreenVideoAd *)fullscreenVideoAd {
-    [self.delegate adapter_cacheAdapterIfNeeded:self adapterId:self.adapterId price:fullscreenVideoAd.ecpm];
-    [self.delegate fullscreenAdapter_didLoadAdWithAdapterId:self.adapterId price:fullscreenVideoAd.ecpm];
+    [self.bridge fullscreen_didLoadAdWithAdapter:self price:fullscreenVideoAd.ecpm];
 }
 
 - (void)fullscreenVideoAd:(KSFullscreenVideoAd *)fullscreenVideoAd didFailWithError:(NSError *_Nullable)error {
-    [self.delegate fullscreenAdapter_failedToLoadAdWithAdapterId:self.adapterId error:error];
+    [self.bridge fullscreen_failedToLoadAdWithAdapter:self error:error];
 }
 
 - (void)fullscreenVideoAdDidVisible:(KSFullscreenVideoAd *)fullscreenVideoAd {
-    [self.delegate fullscreenAdapter_didAdExposuredWithAdapterId:self.adapterId];
+    [self.bridge fullscreen_didAdExposuredWithAdapter:self];
 }
 
 - (void)fullscreenVideoAdDidClick:(KSFullscreenVideoAd *)fullscreenVideoAd {
-    [self.delegate fullscreenAdapter_didAdClickedWithAdapterId:self.adapterId];
+    [self.bridge fullscreen_didAdClickedWithAdapter:self];
 }
 
 - (void)fullscreenVideoAdDidClose:(KSFullscreenVideoAd *)fullscreenVideoAd {
-    [self.delegate fullscreenAdapter_didAdClosedWithAdapterId:self.adapterId];
+    [self.bridge fullscreen_didAdClosedWithAdapter:self];
 }
 
 - (void)fullscreenVideoAdDidPlayFinish:(KSFullscreenVideoAd *)fullscreenVideoAd didFailWithError:(NSError *_Nullable)error {
     if (!error) {
-        [self.delegate fullscreenAdapter_didAdPlayFinishWithAdapterId:self.adapterId];
+        [self.bridge fullscreen_didAdPlayFinishWithAdapter:self];
     }
 }
 

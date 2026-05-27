@@ -7,39 +7,119 @@
 
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
+#import "AdvBidWinLossResult.h"
+#import "AdvanceCommonSplashAdapterBridge.h"
+#import "AdvanceCommonBannerAdapterBridge.h"
+#import "AdvanceCommonInterstitialAdapterBridge.h"
+#import "AdvanceCommonRewardVideoAdapterBridge.h"
+#import "AdvanceCommonFullscreenVideoAdapterBridge.h"
+#import "AdvanceCommonNativeExpressAdapterBridge.h"
 
+#pragma mark: - 广告的adapter基协议
 @protocol AdvanceCommonAdapter <NSObject>
+/// 加载广告的方法
+/// @param placementId adn的广告位ID
+/// @param config 广告加载的参数
+- (void)adapter_loadAdWithPlacementId:(NSString *)placementId
+                               config:(NSDictionary *)config;
 
-@optional
-
-- (void)adapter_setupWithAdapterId:(NSString *)adapterId
-                       placementId:(NSString *)placementId
-                            config:(NSDictionary *)config;
-
-- (void)adapter_loadAd;
-
+/// 广告是否有效
 - (BOOL)adapter_isAdValid;
 
-- (void)adapter_showAdInWindow:(UIWindow *)window;
+@optional
+// Adn竞胜/竞败后回传信息
+- (void)adapter_sendNotificationWithBidResult:(AdvBidWinLossResult *)result;
 
-- (void)adapter_showAdFromRootViewController:(UIViewController *)rootViewController;
+
 
 - (void)adapter_render:(UIViewController *)rootViewController; //模板信息流使用
 
 - (id)adapter_renderFeedAdWrapper; //自渲染信息流使用
 
-- (id)adapter_bannerView; //Banner使用
-
 //是否缓存广告对象
 - (void)adapter_cacheAdapterIfNeeded:(id)adapter
                            adapterId:(NSString *)adapterId
                                price:(NSInteger)price;
+- (void)adapter_setupWithAdapterId:(NSString *)adapterId
+                       placementId:(NSString *)placementId
+                            config:(NSDictionary *)config;
+- (void)adapter_loadAd;
 
-//Adn竞胜后回传二价
-- (void)adapter_sendWinNotificationWithSecondPrice:(NSInteger)secondPrice winPrice:(NSInteger)winPrice;
 
-//Adn竞败后回传最高价
-- (void)adapter_sendLossNotificationWithFirstPrice:(NSInteger)firstPrice;
+
+@end
+
+
+#pragma mark: - 开屏广告的adapter广告协议
+@protocol AdvanceCommonSplashAdapter <AdvanceCommonAdapter>
+/// 设置开屏 bridge 用于回传广告状态
+- (void)adapter_setSplashBridge:(id<AdvanceCommonSplashAdapterBridge>)bridge;
+
+/// 展示广告
+- (void)adapter_showAdInWindow:(UIWindow *)window;
+
+@end
+
+
+#pragma mark: - Banner广告的adapter广告协议
+@protocol AdvanceCommonBannerAdapter <AdvanceCommonAdapter>
+/// 设置横幅 bridge 用于回传广告状态
+- (void)adapter_setBannerBridge:(id<AdvanceCommonBannerAdapterBridge>)bridge;
+
+/// 提供Adn的广告视图
+- (UIView *)adapter_bannerView;
+
+@end
+
+
+#pragma mark: - 插屏广告的adapter广告协议
+@protocol AdvanceCommonInterstitialAdapter <AdvanceCommonAdapter>
+/// 设置插屏 bridge 用于回传广告状态
+- (void)adapter_setInterstitialBridge:(id<AdvanceCommonInterstitialAdapterBridge>)bridge;
+
+/// 展示广告
+- (void)adapter_showAdFromRootViewController:(UIViewController *)rootViewController;
+
+@end
+
+
+#pragma mark: - 激励视频广告的adapter广告协议
+@protocol AdvanceCommonRewardVideoAdapter <AdvanceCommonAdapter>
+/// 设置激励视频 bridge 用于回传广告状态
+- (void)adapter_setRewardVideoBridge:(id<AdvanceCommonRewardVideoAdapterBridge>)bridge;
+
+/// 展示广告
+- (void)adapter_showAdFromRootViewController:(UIViewController *)rootViewController;
+
+@end
+
+
+#pragma mark: - 全屏视频广告的adapter广告协议
+@protocol AdvanceCommonFullscreenVideoAdapter <AdvanceCommonAdapter>
+/// 设置全屏视频 bridge 用于回传广告状态
+- (void)adapter_setFullscreenBridge:(id<AdvanceCommonFullscreenVideoAdapterBridge>)bridge;
+
+/// 展示广告
+- (void)adapter_showAdFromRootViewController:(UIViewController *)rootViewController;
+
+@end
+
+
+#pragma mark: - 信息流（模板渲染）广告的adapter广告协议
+@protocol AdvanceCommonNativeExpressAdapter <AdvanceCommonAdapter>
+/// 设置信息流 bridge 用于回传广告状态
+- (void)adapter_setNativeExpressBridge:(id<AdvanceCommonNativeExpressAdapterBridge>)bridge;
+
+/// 渲染广告，为模板广告设置控制器
+- (void)adapter_render:(UIViewController *)rootViewController;
+
+@end
+
+
+#pragma mark: - 信息流（自渲染）广告的adapter广告协议
+@protocol AdvanceCommonRenderFeedAdapter <AdvanceCommonAdapter>
+
+
 
 @end
 

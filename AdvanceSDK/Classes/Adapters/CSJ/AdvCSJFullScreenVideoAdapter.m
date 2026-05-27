@@ -8,27 +8,25 @@
 
 #import "AdvCSJFullScreenVideoAdapter.h"
 #import <BUAdSDK/BUAdSDK.h>
-#import "AdvanceFullScreenVideoCommonAdapter.h"
+#import "AdvanceCommonAdapter.h"
 #import "AdvAdConfigHeader.h"
-#import "AdvError.h"
 
-@interface AdvCSJFullScreenVideoAdapter () <BUNativeExpressFullscreenVideoAdDelegate, AdvanceFullScreenVideoCommonAdapter>
+@interface AdvCSJFullScreenVideoAdapter () <BUNativeExpressFullscreenVideoAdDelegate, AdvanceCommonFullscreenVideoAdapter>
+
+@property (nonatomic, weak) id<AdvanceCommonFullscreenVideoAdapterBridge> bridge;
 @property (nonatomic, strong) BUNativeExpressFullscreenVideoAd *csj_ad;
-@property (nonatomic, copy) NSString *adapterId;
 
 @end
 
 @implementation AdvCSJFullScreenVideoAdapter
 
-@synthesize delegate = _delegate;
-
-- (void)adapter_setupWithAdapterId:(NSString *)adapterId placementId:(NSString *)placementId config:(NSDictionary *)config {
-    _adapterId = adapterId;
-    _csj_ad = [[BUNativeExpressFullscreenVideoAd alloc] initWithSlotID:placementId];
-    _csj_ad.delegate = self;
+- (void)adapter_setFullscreenBridge:(id<AdvanceCommonFullscreenVideoAdapterBridge>)bridge {
+    _bridge = bridge;
 }
 
-- (void)adapter_loadAd {
+- (void)adapter_loadAdWithPlacementId:(NSString *)placementId config:(NSDictionary *)config {
+    _csj_ad = [[BUNativeExpressFullscreenVideoAd alloc] initWithSlotID:placementId];
+    _csj_ad.delegate = self;
     [_csj_ad loadAdData];
 }
 
@@ -40,44 +38,43 @@
     return YES;
 }
 
-- (void)adapter_sendWinNotificationWithSecondPrice:(NSInteger)secondPrice winPrice:(NSInteger)winPrice {
-    [_csj_ad win:@(secondPrice)];
-}
-
-- (void)adapter_sendLossNotificationWithFirstPrice:(NSInteger)firstPrice {
-    [_csj_ad loss:@(firstPrice) lossReason:nil winBidder:nil];
+- (void)adapter_sendNotificationWithBidResult:(AdvBidWinLossResult *)result {
+    if (result.bidResultType == AdvBidWinLossResultTypeWin) {
+        [_csj_ad win:@(result.secondPrice)];
+    } else {
+        [_csj_ad loss:@(result.winPrice) lossReason:nil winBidder:nil];
+    }
 }
 
 
 #pragma mark: - BUNativeExpressFullscreenVideoAdDelegate
 - (void)nativeExpressFullscreenVideoAdDidLoad:(BUNativeExpressFullscreenVideoAd *)fullscreenVideoAd {
     NSDictionary *ext = fullscreenVideoAd.mediaExt;
-    [self.delegate adapter_cacheAdapterIfNeeded:self adapterId:self.adapterId price:[ext[@"price"] integerValue]];
-    [self.delegate fullscreenAdapter_didLoadAdWithAdapterId:self.adapterId price:[ext[@"price"] integerValue]];
+    [self.bridge fullscreen_didLoadAdWithAdapter:self price:[ext[@"price"] integerValue]];
 }
 
 - (void)nativeExpressFullscreenVideoAd:(BUNativeExpressFullscreenVideoAd *)fullscreenVideoAd didFailWithError:(NSError *_Nullable)error {
-    [self.delegate fullscreenAdapter_failedToLoadAdWithAdapterId:self.adapterId error:error];
+    [self.bridge fullscreen_failedToLoadAdWithAdapter:self error:error];
 }
 
 - (void)nativeExpressFullscreenVideoAdViewRenderFail:(BUNativeExpressFullscreenVideoAd *)fullscreenedVideoAd error:(NSError *_Nullable)error {
-    [self.delegate fullscreenAdapter_failedToShowAdWithAdapterId:self.adapterId error:error];
+    [self.bridge fullscreen_failedToShowAdWithAdapter:self error:error];
 }
 
 - (void)nativeExpressFullscreenVideoAdDidVisible:(BUNativeExpressFullscreenVideoAd *)fullscreenVideoAd {
-    [self.delegate fullscreenAdapter_didAdExposuredWithAdapterId:self.adapterId];
+    [self.bridge fullscreen_didAdExposuredWithAdapter:self];
 }
 
 - (void)nativeExpressFullscreenVideoAdDidClick:(BUNativeExpressFullscreenVideoAd *)fullscreenVideoAd {
-    [self.delegate fullscreenAdapter_didAdClickedWithAdapterId:self.adapterId];
+    [self.bridge fullscreen_didAdClickedWithAdapter:self];
 }
 
 - (void)nativeExpressFullscreenVideoAdDidClose:(BUNativeExpressFullscreenVideoAd *)fullscreenVideoAd {
-    [self.delegate fullscreenAdapter_didAdClosedWithAdapterId:self.adapterId];
+    [self.bridge fullscreen_didAdClosedWithAdapter:self];
 }
 
 - (void)nativeExpressFullscreenVideoAdDidPlayFinish:(BUNativeExpressFullscreenVideoAd *)fullscreenVideoAd didFailWithError:(NSError *_Nullable)error {
-    [self.delegate fullscreenAdapter_didAdPlayFinishWithAdapterId:self.adapterId];
+    [self.bridge fullscreen_didAdPlayFinishWithAdapter:self];
 }
 
 @end

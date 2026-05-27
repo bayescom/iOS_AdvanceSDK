@@ -9,10 +9,11 @@
 #import "AdvanceBanner.h"
 #import "AdvConstantHeader.h"
 #import "AdvPolicyService.h"
-#import "AdvanceBannerCommonAdapter.h"
+#import "AdvanceCommonAdapter.h"
 #import "AdvAdCacheManager.h"
+#import "AdvError.h"
 
-@interface AdvanceBanner () <AdvPolicyServiceDelegate, AdvanceBannerCommonAdapter>
+@interface AdvanceBanner () <AdvPolicyServiceDelegate, AdvanceCommonBannerAdapterBridge>
 
 @end
 
@@ -64,21 +65,20 @@
         AdvPolicyService *manager = self.manager;
         [manager reportAdDataWithEventType:AdvSupplierReportTKEventLoadEnd supplier:supplier error:nil];
         
-        id<AdvanceBannerCommonAdapter> adapter;
+        id<AdvanceCommonBannerAdapter> adapter;
         // 尝试获取Adapter缓存
         AdvAdCacheModel *cacheModel = [[AdvAdCacheManager sharedInstance] adCacheModelFromCachedKey:supplier.sdk_id];
         if (supplier.enable_cache && cacheModel) { //此次加载允许缓存 且 内存中存在Adapter缓存时，直接回调成功
             adapter = cacheModel.adObject;
             [self.adapterMap setObject:adapter forKey:supplier.sdk_id];
-            adapter.delegate = self;
-            [self bannerAdapter_didLoadAdWithAdapterId:supplier.sdk_id price:cacheModel.price];
+            [adapter adapter_setBannerBridge:self];
+            [self banner_didLoadAdWithAdapter:adapter price:cacheModel.price];
         } else {// 根据渠道id初始化对应Adapter
             NSString *clsName = [AdvSupplierLoader mappingBannerAdapterClassNameWithSupplierId:supplier.identifier];
             adapter = [[NSClassFromString(clsName) alloc] init];
             [self.adapterMap setObject:adapter forKey:supplier.sdk_id];
-            [adapter adapter_setupWithAdapterId:supplier.sdk_id placementId:supplier.adspotid config:[self setupAdConfigWithSupplier:supplier]];
-            adapter.delegate = self;
-            [adapter adapter_loadAd];
+            [adapter adapter_setBannerBridge:self];
+            [adapter adapter_loadAdWithPlacementId:supplier.adspotid config:[self setupAdConfigWithSupplier:supplier]];
         }
     }];
 }
@@ -93,7 +93,7 @@
 }
 
 // Bidding成功
-- (void)policyServiceFinishBiddingWithWinSupplier:(AdvSupplier *_Nonnull)supplier secondPrice:(NSInteger)secondPrice {
+- (void)policyServiceFinishBiddingWithWinSupplier:(AdvSupplier *_Nonnull)supplier bidResult:(AdvBidWinLossResult * _Nonnull)bidResult {
     //self.price = supplier.sdk_price;
     /// 获取竞胜的adpater
     self.targetAdapter = [self.adapterMap objectForKey:supplier.sdk_id];
@@ -101,13 +101,17 @@
     if ([_delegate respondsToSelector:@selector(onBannerAdDidLoad:)]) {
         [_delegate onBannerAdDidLoad:self];
     }
-    [self.targetAdapter adapter_sendWinNotificationWithSecondPrice:secondPrice winPrice:supplier.sdk_price];
+    if ([(id<AdvanceCommonBannerAdapter>)self.targetAdapter respondsToSelector:@selector(adapter_sendNotificationWithBidResult:)]) {
+        [self.targetAdapter adapter_sendNotificationWithBidResult:bidResult];
+    }
 }
 
 // 参竞渠道失败
-- (void)policyServiceBidFailedWithBiddingSupplier:(AdvSupplier *)supplier firstPrice:(NSInteger)firstPrice {
-    id<AdvanceBannerCommonAdapter> adapter = [self.adapterMap objectForKey:supplier.sdk_id];
-    [adapter adapter_sendLossNotificationWithFirstPrice:firstPrice];
+- (void)policyServiceBidFailedWithBiddingSupplier:(AdvSupplier *)supplier bidResult:(AdvBidWinLossResult * _Nonnull)bidResult {
+    id<AdvanceCommonBannerAdapter> adapter = [self.adapterMap objectForKey:supplier.sdk_id];
+    if ([adapter respondsToSelector:@selector(adapter_sendNotificationWithBidResult:)]) {
+        [adapter adapter_sendNotificationWithBidResult:bidResult];
+    }
 }
 
 
@@ -117,51 +121,56 @@
 }
 
 - (BOOL)isAdValid {
-    return [self.targetAdapter adapter_isAdValid];
+    BOOL valid = YES;
+    if ([(id<AdvanceCommonBannerAdapter>)self.targetAdapter respondsToSelector:@selector(adapter_isAdValid)]) {
+        valid = [self.targetAdapter adapter_isAdValid];
+    }
+    if (!valid) {
+        [self banner_failedToShowAdWithAdapter:self.targetAdapter error:[AdvError errorWithCode:AdvErrorCode_InvalidExpired].toNSError];
+    }
+    return valid;
 }
 
 - (UIView *)bannerView {
-    return [self.targetAdapter adapter_bannerView];
-}
-
-#pragma mark: - AdvanceCommonAdapter
-- (void)adapter_cacheAdapterIfNeeded:(id)adapter adapterId:(NSString *)adapterId price:(NSInteger)price {
-    AdvSupplier *supplier = [self getSupplierWithAdapterId:adapterId];
-    if (supplier.enable_cache) { // 缓存Adapter
-        [[AdvAdCacheManager sharedInstance] cacheAdapter:adapter price:price expireTime:supplier.cache_timeout sourceReqId:self.reqId forKey:adapterId];
+    if ([(id<AdvanceCommonBannerAdapter>)self.targetAdapter respondsToSelector:@selector(adapter_bannerView)]) {
+        return [self.targetAdapter adapter_bannerView];
     }
+    return nil;
 }
 
-#pragma mark: - AdvanceBannerCommonAdapter
-- (void)bannerAdapter_didLoadAdWithAdapterId:(NSString *)adapterId price:(NSInteger)price {
-    AdvSupplier *supplier = [self getSupplierWithAdapterId:adapterId];
+#pragma mark: - AdvanceCommonBannerAdapterBridge
+- (void)banner_didLoadAdWithAdapter:(id<AdvanceCommonBannerAdapter>)adapter price:(NSInteger)price {
+    AdvSupplier *supplier = [self getSupplierWithAdapter:adapter];
+    if (supplier.enable_cache && ![[AdvAdCacheManager sharedInstance] adCacheModelFromCachedKey:supplier.sdk_id]) { // 缓存Adapter
+        [[AdvAdCacheManager sharedInstance] cacheAdapter:adapter price:price expireTime:supplier.cache_timeout sourceReqId:self.reqId forKey:supplier.sdk_id];
+    }
     AdvPolicyService *manager = self.manager;
     [manager setECPMIfNeeded:price supplier:supplier];
     [manager checkTargetWithResultfulSupplier:supplier state:AdvSupplierLoadAdSuccess error:nil];
 }
 
-- (void)bannerAdapter_failedToLoadAdWithAdapterId:(NSString *)adapterId error:(NSError *)error {
-    AdvSupplier *supplier = [self getSupplierWithAdapterId:adapterId];
+- (void)banner_failedToLoadAdWithAdapter:(id<AdvanceCommonBannerAdapter>)adapter error:(NSError *)error {
+    AdvSupplier *supplier = [self getSupplierWithAdapter:adapter];
     AdvPolicyService *manager = self.manager;
     [manager checkTargetWithResultfulSupplier:supplier state:AdvSupplierLoadAdFailed error:error];
 }
 
 /// 竞胜的渠道广告执行以下回调
-- (void)bannerAdapter_didAdExposuredWithAdapterId:(NSString *)adapterId {
-    AdvSupplier *supplier = [self getSupplierWithAdapterId:adapterId];
+- (void)banner_didAdExposuredWithAdapter:(id<AdvanceCommonBannerAdapter>)adapter {
+    AdvSupplier *supplier = [self getSupplierWithAdapter:adapter];
     AdvPolicyService *manager = self.manager;
     [manager reportAdDataWithEventType:AdvSupplierReportTKEventExposed supplier:supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(onBannerAdExposured:)]) {
         [self.delegate onBannerAdExposured:self];
     }
     // 删除缓存Adapter
-    if ([[AdvAdCacheManager sharedInstance] adCacheModelFromCachedKey:adapterId]) {
-        [[AdvAdCacheManager sharedInstance] removeAdCacheModelFromCachedKey:adapterId];
+    if ([[AdvAdCacheManager sharedInstance] adCacheModelFromCachedKey:supplier.sdk_id]) {
+        [[AdvAdCacheManager sharedInstance] removeAdCacheModelFromCachedKey:supplier.sdk_id];
     }
 }
 
-- (void)bannerAdapter_failedToShowAdWithAdapterId:(NSString *)adapterId error:(NSError *)error {
-    AdvSupplier *supplier = [self getSupplierWithAdapterId:adapterId];
+- (void)banner_failedToShowAdWithAdapter:(id<AdvanceCommonBannerAdapter>)adapter error:(NSError *)error {
+    AdvSupplier *supplier = [self getSupplierWithAdapter:adapter];
     AdvPolicyService *manager = self.manager;
     [manager reportAdDataWithEventType:AdvSupplierReportTKEventFailed supplier:supplier error:error];
     if ([self.delegate respondsToSelector:@selector(onBannerAdFailToPresent:error:)]) {
@@ -171,8 +180,8 @@
     [self destroyAdapters];
 }
 
-- (void)bannerAdapter_didAdClickedWithAdapterId:(NSString *)adapterId {
-    AdvSupplier *supplier = [self getSupplierWithAdapterId:adapterId];
+- (void)banner_didAdClickedWithAdapter:(id<AdvanceCommonBannerAdapter>)adapter {
+    AdvSupplier *supplier = [self getSupplierWithAdapter:adapter];
     AdvPolicyService *manager = self.manager;
     [manager reportAdDataWithEventType:AdvSupplierReportTKEventClicked supplier:supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(onBannerAdClicked:)]) {
@@ -180,7 +189,7 @@
     }
 }
 
-- (void)bannerAdapter_didAdClosedWithAdapterId:(NSString *)adapterId {
+- (void)banner_didAdClosedWithAdapter:(id<AdvanceCommonBannerAdapter>)adapter {
     if ([self.delegate respondsToSelector:@selector(onBannerAdClosed:)]) {
         [self.delegate onBannerAdClosed:self];
     }
@@ -198,9 +207,12 @@
     return config.copy;
 }
 
-- (AdvSupplier *)getSupplierWithAdapterId:(NSString *)adapterId {
+- (AdvSupplier *)getSupplierWithAdapter:(id<AdvanceCommonBannerAdapter>)adapter {
+    NSString *foundKey = [self.adapterMap.allKeys adv_filter:^BOOL(NSString *key) {
+        return self.adapterMap[key] == adapter;
+    }].firstObject;
     return [self.suppliers adv_filter:^BOOL(AdvSupplier *obj) {
-        return [obj.sdk_id isEqualToString:adapterId];
+        return [obj.sdk_id isEqualToString:foundKey];
     }].firstObject;
 }
 

@@ -8,24 +8,24 @@
 
 #import "AdvCSJSplashAdapter.h"
 #import <BUAdSDK/BUAdSDK.h>
-#import "AdvanceSplashCommonAdapter.h"
+#import "AdvanceCommonAdapter.h"
 #import "AdvAdConfigHeader.h"
-#import "AdvError.h"
 
-@interface AdvCSJSplashAdapter () <BUSplashAdDelegate, AdvanceSplashCommonAdapter>
+@interface AdvCSJSplashAdapter () <BUSplashAdDelegate, AdvanceCommonSplashAdapter>
 
+@property (nonatomic, weak) id<AdvanceCommonSplashAdapterBridge> bridge;
 @property (nonatomic, strong) BUSplashAd *csj_ad;
-@property (nonatomic, copy) NSString *adapterId;
 @property (nonatomic, strong) UIView *bottomLogoView;
 
 @end
 
 @implementation AdvCSJSplashAdapter
 
-@synthesize delegate = _delegate;
+- (void)adapter_setSplashBridge:(id<AdvanceCommonSplashAdapterBridge>)bridge {
+    _bridge = bridge;
+}
 
-- (void)adapter_setupWithAdapterId:(NSString *)adapterId placementId:(NSString *)placementId config:(NSDictionary *)config {
-    _adapterId = adapterId;
+- (void)adapter_loadAdWithPlacementId:(NSString *)placementId config:(NSDictionary *)config {
     CGRect adFrame = [UIScreen mainScreen].bounds;
     _bottomLogoView = config[kAdvanceSplashBottomViewKey];
     NSInteger timeout = [config[kAdvanceAdLoadTimeoutKey] integerValue];
@@ -35,15 +35,12 @@
     _csj_ad = [[BUSplashAd alloc] initWithSlotID:placementId adSize:adFrame.size];
     _csj_ad.delegate = self;
     _csj_ad.tolerateTimeout = timeout * 1.0 / 1000.0;
-}
-
-- (void)adapter_loadAd {
-    [self.csj_ad loadAdData];
+    [_csj_ad loadAdData];
 }
 
 - (void)adapter_showAdInWindow:(UIWindow *)window {
     if (window.rootViewController) {
-        [self.csj_ad showSplashViewInRootViewController:window.rootViewController];
+        [_csj_ad showSplashViewInRootViewController:window.rootViewController];
     }
 }
 
@@ -51,26 +48,29 @@
     return YES;
 }
 
-- (void)adapter_sendWinNotificationWithSecondPrice:(NSInteger)secondPrice winPrice:(NSInteger)winPrice {
-    [_csj_ad win:@(secondPrice)];
-}
-
-- (void)adapter_sendLossNotificationWithFirstPrice:(NSInteger)firstPrice {
-    [_csj_ad loss:@(firstPrice) lossReason:nil winBidder:nil];
+- (void)adapter_sendNotificationWithBidResult:(AdvBidWinLossResult *)result {
+    if (result.bidResultType == AdvBidWinLossResultTypeWin) {
+        [_csj_ad win:@(result.secondPrice)];
+    } else {
+        [_csj_ad loss:@(result.winPrice) lossReason:nil winBidder:nil];
+    }
 }
 
 #pragma mark: - BUSplashAdDelegate
 - (void)splashAdLoadSuccess:(nonnull BUSplashAd *)splashAd {
     NSDictionary *ext = splashAd.mediaExt;
-    [self.delegate adapter_cacheAdapterIfNeeded:self adapterId:self.adapterId price:[ext[@"price"] integerValue]];
-    [self.delegate splashAdapter_didLoadAdWithAdapterId:self.adapterId price:[ext[@"price"] integerValue]];
+    [self.bridge splash_didLoadAdWithAdapter:self price:[ext[@"price"] integerValue]];
 }
 
 - (void)splashAdLoadFail:(nonnull BUSplashAd *)splashAd error:(BUAdError * _Nullable)error {
-    [self.delegate splashAdapter_failedToLoadAdWithAdapterId:self.adapterId error:error];
+    [self.bridge splash_failedToLoadAdWithAdapter:self error:error];
 }
 
-- (void)splashAdRenderSuccess:(BUSplashAd *)splashAd {
+- (void)splashAdRenderFail:(nonnull BUSplashAd *)splashAd error:(BUAdError * _Nullable)error {
+    [self.bridge splash_failedToShowAdWithAdapter:self error:error];
+}
+
+- (void)splashAdWillShow:(nonnull BUSplashAd *)splashAd {
     // 设置logo
     if (_bottomLogoView) {
         _bottomLogoView.frame = CGRectMake(0, UIScreen.mainScreen.bounds.size.height - _bottomLogoView.bounds.size.height, UIScreen.mainScreen.bounds.size.width, _bottomLogoView.bounds.size.height);
@@ -78,16 +78,12 @@
     }
 }
 
-- (void)splashAdRenderFail:(nonnull BUSplashAd *)splashAd error:(BUAdError * _Nullable)error {
-    [self.delegate splashAdapter_failedToShowAdWithAdapterId:self.adapterId error:error];
-}
-
 - (void)splashAdDidShow:(nonnull BUSplashAd *)splashAd {
-    [self.delegate splashAdapter_didAdExposuredWithAdapterId:self.adapterId];
+    [self.bridge splash_didAdExposuredWithAdapter:self];
 }
 
 - (void)splashAdDidClick:(nonnull BUSplashAd *)splashAd {
-    [self.delegate splashAdapter_didAdClickedWithAdapterId:self.adapterId];
+    [self.bridge splash_didAdClickedWithAdapter:self];
 }
 
 - (void)splashAdDidClose:(nonnull BUSplashAd *)splashAd closeType:(BUSplashAdCloseType)closeType {
@@ -98,11 +94,11 @@
     [_bottomLogoView removeFromSuperview];
     [self.csj_ad removeSplashView];
     self.csj_ad = nil;
-    [self.delegate splashAdapter_didAdClosedWithAdapterId:self.adapterId];
+    [self.bridge splash_didAdClosedWithAdapter:self];
 }
 
+- (void)splashAdRenderSuccess:(BUSplashAd *)splashAd {}
 - (void)splashAdViewControllerDidClose:(nonnull BUSplashAd *)splashAd {}
-- (void)splashAdWillShow:(nonnull BUSplashAd *)splashAd {}
 - (void)splashDidCloseOtherController:(nonnull BUSplashAd *)splashAd interactionType:(BUInteractionType)interactionType {}
 - (void)splashVideoAdDidPlayFinish:(nonnull BUSplashAd *)splashAd didFailWithError:(NSError * _Nullable)error {}
 

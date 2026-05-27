@@ -7,28 +7,26 @@
 
 #import "AdvFunlinkInterstitialAdapter.h"
 #import <FLinkAdSaas/FLinkAdSaas.h>
-#import "AdvanceInterstitialCommonAdapter.h"
+#import "AdvanceCommonAdapter.h"
 #import "AdvAdConfigHeader.h"
-#import "AdvError.h"
 
-@interface AdvFunlinkInterstitialAdapter () <FLinkInterstitialDelegate, AdvanceInterstitialCommonAdapter>
+@interface AdvFunlinkInterstitialAdapter () <FLinkInterstitialDelegate, AdvanceCommonInterstitialAdapter>
+
+@property (nonatomic, weak) id<AdvanceCommonInterstitialAdapterBridge> bridge;
 @property (nonatomic, strong) FLinkInterstitialManager *flink_ad;
-@property (nonatomic, copy) NSString *adapterId;
 
 @end
 
 @implementation AdvFunlinkInterstitialAdapter
 
-@synthesize delegate = _delegate;
+- (void)adapter_setInterstitialBridge:(id<AdvanceCommonInterstitialAdapterBridge>)bridge {
+    _bridge = bridge;
+}
 
-- (void)adapter_setupWithAdapterId:(NSString *)adapterId placementId:(NSString *)placementId config:(NSDictionary *)config {
-    _adapterId = adapterId;
+- (void)adapter_loadAdWithPlacementId:(NSString *)placementId config:(NSDictionary *)config {
     _flink_ad = [[FLinkInterstitialManager alloc] init];
     _flink_ad.delegate = self;
     _flink_ad.mediaId = placementId;
-}
-
-- (void)adapter_loadAd {
     [_flink_ad loadAdData];
 }
 
@@ -38,42 +36,37 @@
 }
 
 - (BOOL)adapter_isAdValid {
-    BOOL valid = _flink_ad.getCurrentBaseEcpmInfo.isAdValid;
-    if (!valid) {
-        [self.delegate interstitialAdapter_failedToShowAdWithAdapterId:self.adapterId error:[AdvError errorWithCode:AdvErrorCode_InvalidExpired].toNSError];
+    return _flink_ad.getCurrentBaseEcpmInfo.isAdValid;
+}
+
+- (void)adapter_sendNotificationWithBidResult:(AdvBidWinLossResult *)result {
+    if (result.bidResultType == AdvBidWinLossResultTypeWin) {
+        [_flink_ad sendWinNotificationWithPrice:result.secondPrice];
+    } else {
+        [_flink_ad sendLossNotificationWithPrice:result.winPrice];
     }
-    return valid;
-}
-
-- (void)adapter_sendWinNotificationWithSecondPrice:(NSInteger)secondPrice winPrice:(NSInteger)winPrice {
-    [_flink_ad sendWinNotificationWithPrice:secondPrice];
-}
-
-- (void)adapter_sendLossNotificationWithFirstPrice:(NSInteger)firstPrice {
-    [_flink_ad sendLossNotificationWithPrice:firstPrice];
 }
 
 #pragma mark: - FLinkInterstitialDelegate
 - (void)interstitialAdDidLoad  {
     NSInteger ecpm = self.flink_ad.getCurrentBaseEcpmInfo.ecpm;
-    [self.delegate adapter_cacheAdapterIfNeeded:self adapterId:self.adapterId price:ecpm];
-    [self.delegate interstitialAdapter_didLoadAdWithAdapterId:self.adapterId price:ecpm];
+    [self.bridge interstitial_didLoadAdWithAdapter:self price:ecpm];
 }
 
 - (void)interstitialAdDidFailed:(NSError *)error {
-    [self.delegate interstitialAdapter_failedToLoadAdWithAdapterId:self.adapterId error:error];
+    [self.bridge interstitial_failedToLoadAdWithAdapter:self error:error];
 }
 
 - (void)interstitialAdDidVisible {
-    [self.delegate interstitialAdapter_didAdExposuredWithAdapterId:self.adapterId];
+    [self.bridge interstitial_didAdExposuredWithAdapter:self];
 }
 
 - (void)interstitialAdDidClick {
-    [self.delegate interstitialAdapter_didAdClickedWithAdapterId:self.adapterId];
+    [self.bridge interstitial_didAdClickedWithAdapter:self];
 }
 
 - (void)interstitialAdDidAutoClose:(BOOL)autoClose {
-    [self.delegate interstitialAdapter_didAdClosedWithAdapterId:self.adapterId];
+    [self.bridge interstitial_didAdClosedWithAdapter:self];
 }
 
 - (void)dealloc {

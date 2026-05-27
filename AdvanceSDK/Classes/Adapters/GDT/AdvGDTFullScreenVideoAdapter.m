@@ -8,28 +8,26 @@
 
 #import "AdvGDTFullScreenVideoAdapter.h"
 #import <GDTMobSDK/GDTMobSDK.h>
-#import "AdvanceFullScreenVideoCommonAdapter.h"
+#import "AdvanceCommonAdapter.h"
 #import "AdvAdConfigHeader.h"
-#import "AdvError.h"
 
-@interface AdvGDTFullScreenVideoAdapter () <GDTUnifiedInterstitialAdDelegate, AdvanceFullScreenVideoCommonAdapter>
+@interface AdvGDTFullScreenVideoAdapter () <GDTUnifiedInterstitialAdDelegate, AdvanceCommonFullscreenVideoAdapter>
+
+@property (nonatomic, weak) id<AdvanceCommonFullscreenVideoAdapterBridge> bridge;
 @property (nonatomic, strong) GDTUnifiedInterstitialAd *gdt_ad;
-@property (nonatomic, copy) NSString *adapterId;
 
 @end
 
 @implementation AdvGDTFullScreenVideoAdapter
 
-@synthesize delegate = _delegate;
+- (void)adapter_setFullscreenBridge:(id<AdvanceCommonFullscreenVideoAdapterBridge>)bridge {
+    _bridge = bridge;
+}
 
-- (void)adapter_setupWithAdapterId:(NSString *)adapterId placementId:(NSString *)placementId config:(NSDictionary *)config {
-    _adapterId = adapterId;
+- (void)adapter_loadAdWithPlacementId:(NSString *)placementId config:(NSDictionary *)config {
     _gdt_ad = [[GDTUnifiedInterstitialAd alloc] initWithPlacementId:placementId];
     _gdt_ad.videoMuted = [config[kAdvanceAdVideoMutedKey] boolValue];
     _gdt_ad.delegate = self;
-}
-
-- (void)adapter_loadAd {
     [_gdt_ad loadFullScreenAd];
 }
 
@@ -38,58 +36,53 @@
 }
 
 - (BOOL)adapter_isAdValid {
-    BOOL valid = _gdt_ad.isAdValid;
-    if (!valid) {
-        [self.delegate fullscreenAdapter_failedToShowAdWithAdapterId:self.adapterId error:[AdvError errorWithCode:AdvErrorCode_InvalidExpired].toNSError];
+    return _gdt_ad.isAdValid;
+}
+
+- (void)adapter_sendNotificationWithBidResult:(AdvBidWinLossResult *)result {
+    if (result.bidResultType == AdvBidWinLossResultTypeWin) {
+        [_gdt_ad sendWinNotificationWithInfo:@{GDT_M_W_H_LOSS_PRICE: @(result.secondPrice), GDT_M_W_E_COST_PRICE: @(result.winPrice)}];
+    } else {
+        [_gdt_ad sendLossNotificationWithInfo:@{GDT_M_L_WIN_PRICE: @(result.winPrice)}];
     }
-    return valid;
-}
-
-- (void)adapter_sendWinNotificationWithSecondPrice:(NSInteger)secondPrice winPrice:(NSInteger)winPrice {
-    [_gdt_ad sendWinNotificationWithInfo:@{GDT_M_W_H_LOSS_PRICE: @(secondPrice), GDT_M_W_E_COST_PRICE: @(winPrice)}];
-}
-
-- (void)adapter_sendLossNotificationWithFirstPrice:(NSInteger)firstPrice {
-    [_gdt_ad sendLossNotificationWithInfo:@{GDT_M_L_WIN_PRICE: @(firstPrice)}];
 }
 
 
 #pragma mark: - GDTUnifiedInterstitialAdDelegate
 - (void)unifiedInterstitialSuccessToLoadAd:(GDTUnifiedInterstitialAd *)unifiedInterstitial {
-    [self.delegate adapter_cacheAdapterIfNeeded:self adapterId:self.adapterId price:unifiedInterstitial.eCPM];
-    [self.delegate fullscreenAdapter_didLoadAdWithAdapterId:self.adapterId price:unifiedInterstitial.eCPM];
+    [self.bridge fullscreen_didLoadAdWithAdapter:self price:unifiedInterstitial.eCPM];
 }
 
 - (void)unifiedInterstitialFailToLoadAd:(GDTUnifiedInterstitialAd *)unifiedInterstitial error:(NSError *)error {
-    [self.delegate fullscreenAdapter_failedToLoadAdWithAdapterId:self.adapterId error:error];
+    [self.bridge fullscreen_failedToLoadAdWithAdapter:self error:error];
 }
 
 /// 渲染失败
 - (void)unifiedInterstitialRenderFail:(GDTUnifiedInterstitialAd *)unifiedInterstitial error:(NSError *)error {
-    [self.delegate fullscreenAdapter_failedToShowAdWithAdapterId:self.adapterId error:error];
+    [self.bridge fullscreen_failedToShowAdWithAdapter:self error:error];
 }
 
 /// 展示失败
 - (void)unifiedInterstitialFailToPresent:(GDTUnifiedInterstitialAd *)unifiedInterstitial error:(NSError *)error {
-    [self.delegate fullscreenAdapter_failedToShowAdWithAdapterId:self.adapterId error:error];
+    [self.bridge fullscreen_failedToShowAdWithAdapter:self error:error];
 }
 
 - (void)unifiedInterstitialWillExposure:(GDTUnifiedInterstitialAd *)unifiedInterstitial {
-    [self.delegate fullscreenAdapter_didAdExposuredWithAdapterId:self.adapterId];
+    [self.bridge fullscreen_didAdExposuredWithAdapter:self];
 }
 
 - (void)unifiedInterstitialClicked:(GDTUnifiedInterstitialAd *)unifiedInterstitial {
-    [self.delegate fullscreenAdapter_didAdClickedWithAdapterId:self.adapterId];
+    [self.bridge fullscreen_didAdClickedWithAdapter:self];
 }
 
 - (void)unifiedInterstitialDidDismissScreen:(id)unifiedInterstitial {
-    [self.delegate fullscreenAdapter_didAdClosedWithAdapterId:self.adapterId];
+    [self.bridge fullscreen_didAdClosedWithAdapter:self];
 }
 
 /// 视频播放状态发生改变
 - (void)unifiedInterstitialAd:(GDTUnifiedInterstitialAd *)unifiedInterstitial playerStatusChanged:(GDTMediaPlayerStatus)status {
     if (status == GDTMediaPlayerStatusStoped) {
-        [self.delegate fullscreenAdapter_didAdPlayFinishWithAdapterId:self.adapterId];
+        [self.bridge fullscreen_didAdPlayFinishWithAdapter:self];
     }
 }
 

@@ -7,30 +7,28 @@
 
 #import "AdvBaiduFullScreenVideoAdapter.h"
 #import <BaiduMobAdSDK/BaiduMobAdSDK.h>
-#import "AdvanceFullScreenVideoCommonAdapter.h"
+#import "AdvanceCommonAdapter.h"
 #import "AdvAdConfigHeader.h"
-#import "AdvError.h"
 
-@interface AdvBaiduFullScreenVideoAdapter ()<BaiduMobAdExpressFullScreenVideoDelegate, AdvanceFullScreenVideoCommonAdapter>
+@interface AdvBaiduFullScreenVideoAdapter ()<BaiduMobAdExpressFullScreenVideoDelegate, AdvanceCommonFullscreenVideoAdapter>
+
+@property (nonatomic, weak) id<AdvanceCommonFullscreenVideoAdapterBridge> bridge;
 @property (nonatomic, strong) BaiduMobAdExpressFullScreenVideo *bd_ad;
-@property (nonatomic, copy) NSString *adapterId;
 
 @end
 
 @implementation AdvBaiduFullScreenVideoAdapter
 
-@synthesize delegate = _delegate;
+- (void)adapter_setFullscreenBridge:(id<AdvanceCommonFullscreenVideoAdapterBridge>)bridge {
+    _bridge = bridge;
+}
 
-- (void)adapter_setupWithAdapterId:(NSString *)adapterId placementId:(NSString *)placementId config:(NSDictionary *)config {
-    _adapterId = adapterId;
+- (void)adapter_loadAdWithPlacementId:(NSString *)placementId config:(NSDictionary *)config {
     _bd_ad = [[BaiduMobAdExpressFullScreenVideo alloc] init];
     _bd_ad.delegate = self;
     _bd_ad.adUnitTag = placementId;
     _bd_ad.publisherId = config[kAdvanceSupplierMediaIdKey];
     _bd_ad.adType = BaiduMobAdTypeFullScreenVideo;
-}
-
-- (void)adapter_loadAd {
     [_bd_ad load];
 }
 
@@ -43,44 +41,43 @@
     return YES;
 }
 
-- (void)adapter_sendWinNotificationWithSecondPrice:(NSInteger)secondPrice winPrice:(NSInteger)winPrice {
-    [_bd_ad biddingSuccessWithSecondInfo:@{@"ecpm": @(secondPrice)} completion:nil];
-}
-
-- (void)adapter_sendLossNotificationWithFirstPrice:(NSInteger)firstPrice {
-    [_bd_ad biddingFailWithWinInfo:@{@"ecpm": @(firstPrice)} completion:nil];
+- (void)adapter_sendNotificationWithBidResult:(AdvBidWinLossResult *)result {
+    if (result.bidResultType == AdvBidWinLossResultTypeWin) {
+        [_bd_ad biddingSuccessWithSecondInfo:@{@"ecpm": @(result.secondPrice)} completion:nil];
+    } else {
+        [_bd_ad biddingFailWithWinInfo:@{@"ecpm": @(result.winPrice)} completion:nil];
+    }
 }
 
 #pragma mark - BaiduMobAdExpressFullScreenVideoDelegate
 - (void)fullScreenVideoAdLoadSuccess:(BaiduMobAdExpressFullScreenVideo *)video {
-    [self.delegate adapter_cacheAdapterIfNeeded:self adapterId:self.adapterId price:[[video getECPMLevel] integerValue]];
-    [self.delegate fullscreenAdapter_didLoadAdWithAdapterId:self.adapterId price:[[video getECPMLevel] integerValue]];
+    [self.bridge fullscreen_didLoadAdWithAdapter:self price:[[video getECPMLevel] integerValue]];
 }
 
 - (void)fullScreenVideoAdLoadFailCode:(NSString *)errCode message:(NSString *)message fullScreenAd:(BaiduMobAdExpressFullScreenVideo *)video {
     NSError *error = [NSError errorWithDomain:@"BaiduAdErrorDomain" code:[errCode integerValue] userInfo:@{NSLocalizedDescriptionKey: message ?: @""}];
-    [self.delegate fullscreenAdapter_failedToLoadAdWithAdapterId:self.adapterId error:error];
+    [self.bridge fullscreen_failedToLoadAdWithAdapter:self error:error];
 }
 
 - (void)fullScreenVideoAdShowFailed:(BaiduMobAdExpressFullScreenVideo *)video withError:(BaiduMobFailReason)reason {
     NSError *error = [NSError errorWithDomain:@"BaiduAdErrorDomain" code:reason userInfo:nil];
-    [self.delegate fullscreenAdapter_failedToShowAdWithAdapterId:self.adapterId error:error];
+    [self.bridge fullscreen_failedToShowAdWithAdapter:self error:error];
 }
 
 - (void)fullScreenVideoAdDidStarted:(BaiduMobAdExpressFullScreenVideo *)video {
-    [self.delegate fullscreenAdapter_didAdExposuredWithAdapterId:self.adapterId];
+    [self.bridge fullscreen_didAdExposuredWithAdapter:self];
 }
 
 - (void)fullScreenVideoAdDidClick:(BaiduMobAdExpressFullScreenVideo *)video withPlayingProgress:(CGFloat)progress {
-    [self.delegate fullscreenAdapter_didAdClickedWithAdapterId:self.adapterId];
+    [self.bridge fullscreen_didAdClickedWithAdapter:self];
 }
 
 - (void)fullScreenVideoAdDidClose:(BaiduMobAdExpressFullScreenVideo *)video withPlayingProgress:(CGFloat)progress {
-    [self.delegate fullscreenAdapter_didAdClosedWithAdapterId:self.adapterId];
+    [self.bridge fullscreen_didAdClosedWithAdapter:self];
 }
 
 - (void)fullScreenVideoAdDidPlayFinish:(BaiduMobAdExpressFullScreenVideo *)video {
-    [self.delegate fullscreenAdapter_didAdPlayFinishWithAdapterId:self.adapterId];
+    [self.bridge fullscreen_didAdPlayFinishWithAdapter:self];
 }
 
 @end

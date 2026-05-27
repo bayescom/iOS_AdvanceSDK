@@ -7,32 +7,30 @@
 
 #import "AdvSigmobSplashAdapter.h"
 #import <WindSDK/WindSDK.h>
-#import "AdvanceSplashCommonAdapter.h"
+#import "AdvanceCommonAdapter.h"
 #import "AdvAdConfigHeader.h"
-#import "AdvError.h"
 
-@interface AdvSigmobSplashAdapter () <WindSplashAdViewDelegate, AdvanceSplashCommonAdapter>
+@interface AdvSigmobSplashAdapter () <WindSplashAdViewDelegate, AdvanceCommonSplashAdapter>
+
+@property (nonatomic, weak) id<AdvanceCommonSplashAdapterBridge> bridge;
 @property (nonatomic, strong) WindSplashAdView *sigmob_ad;
-@property (nonatomic, copy) NSString *adapterId;
 @property (nonatomic, strong) UIView *bottomLogoView;
 
 @end
 
 @implementation AdvSigmobSplashAdapter
 
-@synthesize delegate = _delegate;
+- (void)adapter_setSplashBridge:(id<AdvanceCommonSplashAdapterBridge>)bridge {
+    _bridge = bridge;
+}
 
-- (void)adapter_setupWithAdapterId:(NSString *)adapterId placementId:(NSString *)placementId config:(NSDictionary *)config {
-    _adapterId = adapterId;
+- (void)adapter_loadAdWithPlacementId:(NSString *)placementId config:(NSDictionary *)config {
     _bottomLogoView = config[kAdvanceSplashBottomViewKey];
     WindAdRequest *request = [WindAdRequest request];
     request.placementId = placementId;
     _sigmob_ad = [[WindSplashAdView alloc] initWithRequest:request];
     _sigmob_ad.delegate = self;
     _sigmob_ad.rootViewController = config[kAdvanceAdPresentControllerKey];
-}
-
-- (void)adapter_loadAd {
     [_sigmob_ad loadAdData];
 }
 
@@ -45,45 +43,36 @@
         [window addSubview:_bottomLogoView];
     }
     _sigmob_ad.frame = adFrame;
-    [window addSubview:self.sigmob_ad];
+    [window addSubview:_sigmob_ad];
 }
 
 - (BOOL)adapter_isAdValid {
-    BOOL valid =  _sigmob_ad.adValid;
-    if (!valid) {
-        [self.delegate splashAdapter_failedToShowAdWithAdapterId:self.adapterId error:[AdvError errorWithCode:AdvErrorCode_InvalidExpired].toNSError];
-    }
-    return valid;
+    return _sigmob_ad.adValid;
 }
 
-- (void)adapter_sendWinNotificationWithSecondPrice:(NSInteger)secondPrice winPrice:(NSInteger)winPrice {
-//    [_sigmob_ad sendWinNotificationWithInfo:@{AUCTION_PRICE: @(secondPrice)}];
-}
-
-- (void)adapter_sendLossNotificationWithFirstPrice:(NSInteger)firstPrice {
-//    [_sigmob_ad sendLossNotificationWithInfo:@{AUCTION_PRICE: @(firstPrice)}];
-}
+//- (void)adapter_sendNotificationWithBidResult:(AdvBidWinLossResult *)result {
+//    
+//}
 
 #pragma mark - WindMillSplashAdDelegate
 - (void)onSplashAdDidLoad:(WindSplashAdView *)splashAdView {
-    [self.delegate adapter_cacheAdapterIfNeeded:self adapterId:self.adapterId price:splashAdView.getEcpm.integerValue];
-    [self.delegate splashAdapter_didLoadAdWithAdapterId:self.adapterId price:splashAdView.getEcpm.integerValue];
+    [self.bridge splash_didLoadAdWithAdapter:self price:splashAdView.getEcpm.integerValue];
 }
 
 - (void)onSplashAdLoadFail:(WindSplashAdView *)splashAdView error:(NSError *)error {
-    [self.delegate splashAdapter_failedToLoadAdWithAdapterId:self.adapterId error:error];
+    [self.bridge splash_failedToLoadAdWithAdapter:self error:error];
 }
 
 - (void)onSplashAdSuccessPresentScreen:(WindSplashAdView *)splashAdView {
-    [self.delegate splashAdapter_didAdExposuredWithAdapterId:self.adapterId];
+    [self.bridge splash_didAdExposuredWithAdapter:self];
 }
 
 - (void)onSplashAdFailToPresent:(WindSplashAdView *)splashAdView withError:(NSError *)error {
-    [self.delegate splashAdapter_failedToShowAdWithAdapterId:self.adapterId error:error];
+    [self.bridge splash_failedToShowAdWithAdapter:self error:error];
 }
 
 - (void)onSplashAdClicked:(WindSplashAdView *)splashAdView {
-    [self.delegate splashAdapter_didAdClickedWithAdapterId:self.adapterId];
+    [self.bridge splash_didAdClickedWithAdapter:self];
 }
 
 - (void)onSplashAdClosed:(WindSplashAdView *)splashAdView {
@@ -94,7 +83,7 @@
     [_sigmob_ad removeFromSuperview];
     [_bottomLogoView removeFromSuperview];
     _sigmob_ad = nil;
-    [self.delegate splashAdapter_didAdClosedWithAdapterId:self.adapterId];
+    [self.bridge splash_didAdClosedWithAdapter:self];
 }
 
 @end

@@ -92,7 +92,7 @@
 }
 
 // Bidding成功
-- (void)policyServiceFinishBiddingWithWinSupplier:(AdvSupplier *_Nonnull)supplier secondPrice:(NSInteger)secondPrice {
+- (void)policyServiceFinishBiddingWithWinSupplier:(AdvSupplier *_Nonnull)supplier bidResult:(AdvBidWinLossResult * _Nonnull)bidResult {
 //    self.price = supplier.sdk_price;
     /// 获取竞胜的adpater
     self.targetAdapter = [self.adapterMap objectForKey:supplier.sdk_id];
@@ -102,13 +102,13 @@
     if ([_delegate respondsToSelector:@selector(onRenderFeedAdSuccessToLoad:feedAdWrapper:)]) {
         [_delegate onRenderFeedAdSuccessToLoad:self feedAdWrapper:self.feedAdWrapper];
     }
-    [self.targetAdapter adapter_sendWinNotificationWithSecondPrice:secondPrice winPrice:supplier.sdk_price];
+    [self.targetAdapter adapter_sendNotificationWithBidResult:bidResult];
 }
 
 // 参竞渠道失败
-- (void)policyServiceBidFailedWithBiddingSupplier:(AdvSupplier *)supplier firstPrice:(NSInteger)firstPrice {
+- (void)policyServiceBidFailedWithBiddingSupplier:(AdvSupplier *)supplier bidResult:(AdvBidWinLossResult * _Nonnull)bidResult {
     id<AdvanceRenderFeedCommonAdapter> adapter = [self.adapterMap objectForKey:supplier.sdk_id];
-    [adapter adapter_sendLossNotificationWithFirstPrice:firstPrice];
+    [adapter adapter_sendNotificationWithBidResult:bidResult];
 }
 
 

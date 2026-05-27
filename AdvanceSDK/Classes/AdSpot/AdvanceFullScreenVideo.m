@@ -9,10 +9,11 @@
 #import "AdvanceFullScreenVideo.h"
 #import "AdvConstantHeader.h"
 #import "AdvPolicyService.h"
-#import "AdvanceFullScreenVideoCommonAdapter.h"
+#import "AdvanceCommonAdapter.h"
 #import "AdvAdCacheManager.h"
+#import "AdvError.h"
 
-@interface AdvanceFullScreenVideo () <AdvPolicyServiceDelegate, AdvanceFullScreenVideoCommonAdapter>
+@interface AdvanceFullScreenVideo () <AdvPolicyServiceDelegate, AdvanceCommonFullscreenVideoAdapterBridge>
 
 @end
 
@@ -64,21 +65,20 @@
         AdvPolicyService *manager = self.manager;
         [manager reportAdDataWithEventType:AdvSupplierReportTKEventLoadEnd supplier:supplier error:nil];
         
-        id<AdvanceFullScreenVideoCommonAdapter> adapter;
+        id<AdvanceCommonFullscreenVideoAdapter> adapter;
         // 尝试获取Adapter缓存
         AdvAdCacheModel *cacheModel = [[AdvAdCacheManager sharedInstance] adCacheModelFromCachedKey:supplier.sdk_id];
         if (supplier.enable_cache && cacheModel) { //此次加载允许缓存 且 内存中存在Adapter缓存时，直接回调成功
             adapter = cacheModel.adObject;
             [self.adapterMap setObject:adapter forKey:supplier.sdk_id];
-            adapter.delegate = self;
-            [self fullscreenAdapter_didLoadAdWithAdapterId:supplier.sdk_id price:cacheModel.price];
+            [adapter adapter_setFullscreenBridge:self];
+            [self fullscreen_didLoadAdWithAdapter:adapter price:cacheModel.price];
         } else {// 根据渠道id初始化对应Adapter
             NSString *clsName = [AdvSupplierLoader mappingFullScreenAdapterClassNameWithSupplierId:supplier.identifier];
             adapter = [[NSClassFromString(clsName) alloc] init];
             [self.adapterMap setObject:adapter forKey:supplier.sdk_id];
-            [adapter adapter_setupWithAdapterId:supplier.sdk_id placementId:supplier.adspotid config:[self setupAdConfigWithSupplier:supplier]];
-            adapter.delegate = self;
-            [adapter adapter_loadAd];
+            [adapter adapter_setFullscreenBridge:self];
+            [adapter adapter_loadAdWithPlacementId:supplier.adspotid config:[self setupAdConfigWithSupplier:supplier]];
         }
     }];
 }
@@ -93,7 +93,7 @@
 }
 
 // Bidding成功
-- (void)policyServiceFinishBiddingWithWinSupplier:(AdvSupplier *_Nonnull)supplier secondPrice:(NSInteger)secondPrice {
+- (void)policyServiceFinishBiddingWithWinSupplier:(AdvSupplier *_Nonnull)supplier bidResult:(AdvBidWinLossResult * _Nonnull)bidResult {
 //    self.price = supplier.sdk_price;
     /// 获取竞胜的adpater
     self.targetAdapter = [self.adapterMap objectForKey:supplier.sdk_id];
@@ -101,83 +101,16 @@
     if ([_delegate respondsToSelector:@selector(onFullScreenVideoAdDidLoad:)]) {
         [_delegate onFullScreenVideoAdDidLoad:self];
     }
-    [self.targetAdapter adapter_sendWinNotificationWithSecondPrice:secondPrice winPrice:supplier.sdk_price];
+    if ([(id<AdvanceCommonFullscreenVideoAdapter>)self.targetAdapter respondsToSelector:@selector(adapter_sendNotificationWithBidResult:)]) {
+        [self.targetAdapter adapter_sendNotificationWithBidResult:bidResult];
+    }
 }
 
 // 参竞渠道失败
-- (void)policyServiceBidFailedWithBiddingSupplier:(AdvSupplier *)supplier firstPrice:(NSInteger)firstPrice {
-    id<AdvanceFullScreenVideoCommonAdapter> adapter = [self.adapterMap objectForKey:supplier.sdk_id];
-    [adapter adapter_sendLossNotificationWithFirstPrice:firstPrice];
-}
-
-
-#pragma mark: - AdvanceCommonAdapter
-- (void)adapter_cacheAdapterIfNeeded:(id)adapter adapterId:(NSString *)adapterId price:(NSInteger)price {
-    AdvSupplier *supplier = [self getSupplierWithAdapterId:adapterId];
-    if (supplier.enable_cache) { // 缓存Adapter
-        [[AdvAdCacheManager sharedInstance] cacheAdapter:adapter price:price expireTime:supplier.cache_timeout sourceReqId:self.reqId forKey:adapterId];
-    }
-}
-
-#pragma mark: - AdvanceFullScreenVideoCommonAdapter
-- (void)fullscreenAdapter_didLoadAdWithAdapterId:(NSString *)adapterId price:(NSInteger)price {
-    AdvSupplier *supplier = [self getSupplierWithAdapterId:adapterId];
-    AdvPolicyService *manager = self.manager;
-    [manager setECPMIfNeeded:price supplier:supplier];
-    [manager checkTargetWithResultfulSupplier:supplier state:AdvSupplierLoadAdSuccess error:nil];
-}
-
-- (void)fullscreenAdapter_failedToLoadAdWithAdapterId:(NSString *)adapterId error:(NSError *)error {
-    AdvSupplier *supplier = [self getSupplierWithAdapterId:adapterId];
-    AdvPolicyService *manager = self.manager;
-    [manager checkTargetWithResultfulSupplier:supplier state:AdvSupplierLoadAdFailed error:error];
-}
-
-/// 竞胜的渠道广告执行以下回调
-- (void)fullscreenAdapter_didAdExposuredWithAdapterId:(NSString *)adapterId {
-    AdvSupplier *supplier = [self getSupplierWithAdapterId:adapterId];
-    AdvPolicyService *manager = self.manager;
-    [manager reportAdDataWithEventType:AdvSupplierReportTKEventExposed supplier:supplier error:nil];
-    if ([self.delegate respondsToSelector:@selector(onFullScreenVideoAdExposured:)]) {
-        [self.delegate onFullScreenVideoAdExposured:self];
-    }
-    // 删除缓存Adapter
-    if ([[AdvAdCacheManager sharedInstance] adCacheModelFromCachedKey:adapterId]) {
-        [[AdvAdCacheManager sharedInstance] removeAdCacheModelFromCachedKey:adapterId];
-    }
-}
-
-- (void)fullscreenAdapter_failedToShowAdWithAdapterId:(NSString *)adapterId error:(NSError *)error {
-    AdvSupplier *supplier = [self getSupplierWithAdapterId:adapterId];
-    AdvPolicyService *manager = self.manager;
-    [manager reportAdDataWithEventType:AdvSupplierReportTKEventFailed supplier:supplier error:error];
-    if ([self.delegate respondsToSelector:@selector(onFullScreenVideoAdFailToPresent:error:)]) {
-        [self.delegate onFullScreenVideoAdFailToPresent:self error:error];
-    }
-    /// 销毁各渠道Adapter对象
-    [self destroyAdapters];
-}
-
-- (void)fullscreenAdapter_didAdClickedWithAdapterId:(NSString *)adapterId {
-    AdvSupplier *supplier = [self getSupplierWithAdapterId:adapterId];
-    AdvPolicyService *manager = self.manager;
-    [manager reportAdDataWithEventType:AdvSupplierReportTKEventClicked supplier:supplier error:nil];
-    if ([self.delegate respondsToSelector:@selector(onFullScreenVideoAdClicked:)]) {
-        [self.delegate onFullScreenVideoAdClicked:self];
-    }
-}
-
-- (void)fullscreenAdapter_didAdClosedWithAdapterId:(NSString *)adapterId {
-    if ([self.delegate respondsToSelector:@selector(onFullScreenVideoAdClosed:)]) {
-        [self.delegate onFullScreenVideoAdClosed:self];
-    }
-    /// 销毁各渠道Adapter对象
-    [self destroyAdapters];
-}
-
-- (void)fullscreenAdapter_didAdPlayFinishWithAdapterId:(NSString *)adapterId {
-    if ([self.delegate respondsToSelector:@selector(onFullScreenVideoAdDidPlayFinish:)]) {
-        [self.delegate onFullScreenVideoAdDidPlayFinish:self];
+- (void)policyServiceBidFailedWithBiddingSupplier:(AdvSupplier *)supplier bidResult:(AdvBidWinLossResult * _Nonnull)bidResult {
+    id<AdvanceCommonFullscreenVideoAdapter> adapter = [self.adapterMap objectForKey:supplier.sdk_id];
+    if ([adapter respondsToSelector:@selector(adapter_sendNotificationWithBidResult:)]) {
+        [adapter adapter_sendNotificationWithBidResult:bidResult];
     }
 }
 
@@ -194,7 +127,79 @@
 }
 
 - (BOOL)isAdValid {
-    return [self.targetAdapter adapter_isAdValid];
+    BOOL valid = YES;
+    if ([(id<AdvanceCommonFullscreenVideoAdapter>)self.targetAdapter respondsToSelector:@selector(adapter_isAdValid)]) {
+        valid = [self.targetAdapter adapter_isAdValid];
+    }
+    if (!valid) {
+        [self fullscreen_failedToShowAdWithAdapter:self.targetAdapter error:[AdvError errorWithCode:AdvErrorCode_InvalidExpired].toNSError];
+    }
+    return valid;
+}
+
+#pragma mark: - AdvanceCommonFullscreenVideoAdapterBridge
+- (void)fullscreen_didLoadAdWithAdapter:(id<AdvanceCommonFullscreenVideoAdapter>)adapter price:(NSInteger)price {
+    AdvSupplier *supplier = [self getSupplierWithAdapter:adapter];
+    if (supplier.enable_cache && ![[AdvAdCacheManager sharedInstance] adCacheModelFromCachedKey:supplier.sdk_id]) { // 缓存Adapter
+        [[AdvAdCacheManager sharedInstance] cacheAdapter:adapter price:price expireTime:supplier.cache_timeout sourceReqId:self.reqId forKey:supplier.sdk_id];
+    }
+    AdvPolicyService *manager = self.manager;
+    [manager setECPMIfNeeded:price supplier:supplier];
+    [manager checkTargetWithResultfulSupplier:supplier state:AdvSupplierLoadAdSuccess error:nil];
+}
+
+- (void)fullscreen_failedToLoadAdWithAdapter:(id<AdvanceCommonFullscreenVideoAdapter>)adapter error:(NSError *)error {
+    AdvSupplier *supplier = [self getSupplierWithAdapter:adapter];
+    AdvPolicyService *manager = self.manager;
+    [manager checkTargetWithResultfulSupplier:supplier state:AdvSupplierLoadAdFailed error:error];
+}
+
+/// 竞胜的渠道广告执行以下回调
+- (void)fullscreen_didAdExposuredWithAdapter:(id<AdvanceCommonFullscreenVideoAdapter>)adapter {
+    AdvSupplier *supplier = [self getSupplierWithAdapter:adapter];
+    AdvPolicyService *manager = self.manager;
+    [manager reportAdDataWithEventType:AdvSupplierReportTKEventExposed supplier:supplier error:nil];
+    if ([self.delegate respondsToSelector:@selector(onFullScreenVideoAdExposured:)]) {
+        [self.delegate onFullScreenVideoAdExposured:self];
+    }
+    // 删除缓存Adapter
+    if ([[AdvAdCacheManager sharedInstance] adCacheModelFromCachedKey:supplier.sdk_id]) {
+        [[AdvAdCacheManager sharedInstance] removeAdCacheModelFromCachedKey:supplier.sdk_id];
+    }
+}
+
+- (void)fullscreen_failedToShowAdWithAdapter:(id<AdvanceCommonFullscreenVideoAdapter>)adapter error:(NSError *)error {
+    AdvSupplier *supplier = [self getSupplierWithAdapter:adapter];
+    AdvPolicyService *manager = self.manager;
+    [manager reportAdDataWithEventType:AdvSupplierReportTKEventFailed supplier:supplier error:error];
+    if ([self.delegate respondsToSelector:@selector(onFullScreenVideoAdFailToPresent:error:)]) {
+        [self.delegate onFullScreenVideoAdFailToPresent:self error:error];
+    }
+    /// 销毁各渠道Adapter对象
+    [self destroyAdapters];
+}
+
+- (void)fullscreen_didAdClickedWithAdapter:(id<AdvanceCommonFullscreenVideoAdapter>)adapter {
+    AdvSupplier *supplier = [self getSupplierWithAdapter:adapter];
+    AdvPolicyService *manager = self.manager;
+    [manager reportAdDataWithEventType:AdvSupplierReportTKEventClicked supplier:supplier error:nil];
+    if ([self.delegate respondsToSelector:@selector(onFullScreenVideoAdClicked:)]) {
+        [self.delegate onFullScreenVideoAdClicked:self];
+    }
+}
+
+- (void)fullscreen_didAdClosedWithAdapter:(id<AdvanceCommonFullscreenVideoAdapter>)adapter {
+    if ([self.delegate respondsToSelector:@selector(onFullScreenVideoAdClosed:)]) {
+        [self.delegate onFullScreenVideoAdClosed:self];
+    }
+    /// 销毁各渠道Adapter对象
+    [self destroyAdapters];
+}
+
+- (void)fullscreen_didAdPlayFinishWithAdapter:(id<AdvanceCommonFullscreenVideoAdapter>)adapter {
+    if ([self.delegate respondsToSelector:@selector(onFullScreenVideoAdDidPlayFinish:)]) {
+        [self.delegate onFullScreenVideoAdDidPlayFinish:self];
+    }
 }
 
 #pragma mark: - setting
@@ -205,9 +210,12 @@
     return config.copy;
 }
 
-- (AdvSupplier *)getSupplierWithAdapterId:(NSString *)adapterId {
+- (AdvSupplier *)getSupplierWithAdapter:(id<AdvanceCommonFullscreenVideoAdapter>)adapter {
+    NSString *foundKey = [self.adapterMap.allKeys adv_filter:^BOOL(NSString *key) {
+        return self.adapterMap[key] == adapter;
+    }].firstObject;
     return [self.suppliers adv_filter:^BOOL(AdvSupplier *obj) {
-        return [obj.sdk_id isEqualToString:adapterId];
+        return [obj.sdk_id isEqualToString:foundKey];
     }].firstObject;
 }
 

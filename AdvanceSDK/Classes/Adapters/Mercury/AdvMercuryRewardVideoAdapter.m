@@ -8,23 +8,24 @@
 
 #import "AdvMercuryRewardVideoAdapter.h"
 #import <MercurySDK/MercurySDK.h>
-#import "AdvanceRewardVideoCommonAdapter.h"
+#import "AdvanceCommonAdapter.h"
 #import "AdvAdConfigHeader.h"
-#import "AdvError.h"
 #import "AdvRewardVideoModel.h"
 
-@interface AdvMercuryRewardVideoAdapter () <MercuryRewardVideoAdDelegate, AdvanceRewardVideoCommonAdapter>
+@interface AdvMercuryRewardVideoAdapter () <MercuryRewardVideoAdDelegate, AdvanceCommonRewardVideoAdapter>
+
+@property (nonatomic, weak) id<AdvanceCommonRewardVideoAdapterBridge> bridge;
 @property (nonatomic, strong) MercuryRewardVideoAd *mercury_ad;
-@property (nonatomic, copy) NSString *adapterId;
 
 @end
 
 @implementation AdvMercuryRewardVideoAdapter
 
-@synthesize delegate = _delegate;
+- (void)adapter_setRewardVideoBridge:(id<AdvanceCommonRewardVideoAdapterBridge>)bridge {
+    _bridge = bridge;
+}
 
-- (void)adapter_setupWithAdapterId:(NSString *)adapterId placementId:(NSString *)placementId config:(NSDictionary *)config {
-    _adapterId = adapterId;
+- (void)adapter_loadAdWithPlacementId:(NSString *)placementId config:(NSDictionary *)config {
     _mercury_ad = [[MercuryRewardVideoAd alloc] initAdWithAdspotId:placementId delegate:self];
     
     AdvRewardVideoModel *rewardVideoModel = config[kAdvanceRewardVideoModelKey];
@@ -38,9 +39,6 @@
         model.rewardName = rewardVideoModel.rewardName ?: serverRewardName;
         _mercury_ad.rewardedVideoModel = model;
     }
-}
-
-- (void)adapter_loadAd {
     [_mercury_ad loadAd];
 }
 
@@ -49,49 +47,42 @@
 }
 
 - (BOOL)adapter_isAdValid {
-    BOOL valid = _mercury_ad.isAdValid;
-    if (!valid) {
-        [self.delegate rewardAdapter_failedToShowAdWithAdapterId:self.adapterId error:[AdvError errorWithCode:AdvErrorCode_InvalidExpired].toNSError];
+    return _mercury_ad.isAdValid;
+}
+
+- (void)adapter_sendNotificationWithBidResult:(AdvBidWinLossResult *)result {
+    if (result.bidResultType == AdvBidWinLossResultTypeLoss) {
+        [_mercury_ad sendLossNotificationWithPrice:result.winPrice];
     }
-    return valid;
-}
-
-- (void)adapter_sendWinNotificationWithSecondPrice:(NSInteger)secondPrice winPrice:(NSInteger)winPrice {
-    
-}
-
-- (void)adapter_sendLossNotificationWithFirstPrice:(NSInteger)firstPrice {
-    [_mercury_ad sendLossNotificationWithPrice:firstPrice];
 }
 
 #pragma mark: - MercuryRewardVideoAdDelegate
 - (void)mercury_rewardVideoAdDidLoad:(MercuryRewardVideoAd *)rewardVideoAd {
-    [self.delegate adapter_cacheAdapterIfNeeded:self adapterId:self.adapterId price:rewardVideoAd.price];
-    [self.delegate rewardAdapter_didLoadAdWithAdapterId:self.adapterId price:rewardVideoAd.price];
+    [self.bridge rewardVideo_didLoadAdWithAdapter:self price:rewardVideoAd.price];
 }
 
 - (void)mercury_rewardVideoAd:(MercuryRewardVideoAd *_Nonnull)rewardVideoAd didFailWithError:(NSError *_Nullable)error {
-    [self.delegate rewardAdapter_failedToLoadAdWithAdapterId:self.adapterId error:error];
+    [self.bridge rewardVideo_failedToLoadAdWithAdapter:self error:error];
 }
 
 - (void)mercury_rewardVideoAdDidExposed:(MercuryRewardVideoAd *)rewardVideoAd {
-    [self.delegate rewardAdapter_didAdExposuredWithAdapterId:self.adapterId];
+    [self.bridge rewardVideo_didAdExposuredWithAdapter:self];
 }
 
 - (void)mercury_rewardVideoAdDidClicked:(MercuryRewardVideoAd *)rewardVideoAd {
-    [self.delegate rewardAdapter_didAdClickedWithAdapterId:self.adapterId];
+    [self.bridge rewardVideo_didAdClickedWithAdapter:self];
 }
 
 - (void)mercury_rewardVideoAdDidClose:(MercuryRewardVideoAd *)rewardVideoAd {
-    [self.delegate rewardAdapter_didAdClosedWithAdapterId:self.adapterId];
+    [self.bridge rewardVideo_didAdClosedWithAdapter:self];
 }
 
 - (void)mercury_rewardVideoAdDidRewardEffective:(MercuryRewardVideoAd *)rewardVideoAd {
-    [self.delegate rewardAdapter_didAdVerifyRewardWithAdapterId:self.adapterId];
+    [self.bridge rewardVideo_didAdVerifyRewardWithAdapter:self];
 }
 
 - (void)mercury_rewardVideoAdDidPlayFinish:(MercuryRewardVideoAd *)rewardVideoAd {
-    [self.delegate rewardAdapter_didAdPlayFinishWithAdapterId:self.adapterId];
+    [self.bridge rewardVideo_didAdPlayFinishWithAdapter:self];
 }
 
 - (void)dealloc {

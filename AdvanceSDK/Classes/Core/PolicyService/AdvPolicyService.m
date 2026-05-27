@@ -17,6 +17,7 @@
 #import "AdvParameterHandler.h"
 #import "AdvApiService.h"
 #import "AdvAdCacheManager.h"
+#import "AdvBidWinLossResult.h"
 
 @interface AdvPolicyService ()
 
@@ -125,9 +126,10 @@
         /// 策略组无数据说明所有的组加载广告全部没有成功（因为第一层执行完总会被remove掉）
         if (self.model.setting.parallelGroup.count == 0) {
             /// 竞败回调
+            AdvBidWinLossResult *bidResult = [[AdvBidWinLossResult alloc] initWithBidResultType:AdvBidWinLossResultTypeLoss winPrice:0 secondPrice:0];
             [_allSuppliers enumerateObjectsUsingBlock:^(AdvSupplier * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                if ([_delegate respondsToSelector:@selector(policyServiceBidFailedWithBiddingSupplier:firstPrice:)]) {
-                    [_delegate policyServiceBidFailedWithBiddingSupplier:obj firstPrice:0];
+                if ([_delegate respondsToSelector:@selector(policyServiceBidFailedWithBiddingSupplier:bidResult:)]) {
+                    [_delegate policyServiceBidFailedWithBiddingSupplier:obj bidResult:bidResult];
                 }
             }];
             /// 所有平台都未返回广告
@@ -332,22 +334,23 @@
         [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(observeLoadAdTimeout) object:nil];
         target.isHit = YES;
         /// 竞胜回调
-        if ([_delegate respondsToSelector:@selector(policyServiceFinishBiddingWithWinSupplier:secondPrice:)]) {
+        if ([_delegate respondsToSelector:@selector(policyServiceFinishBiddingWithWinSupplier:bidResult:)]) {
             NSInteger secondPrice = 0;
             if (suppliers.count > 1) {
                 secondPrice = suppliers[1].sdk_price;
             }
-            [_delegate policyServiceFinishBiddingWithWinSupplier:target secondPrice:secondPrice];
+            [_delegate policyServiceFinishBiddingWithWinSupplier:target bidResult:[[AdvBidWinLossResult alloc] initWithBidResultType:AdvBidWinLossResultTypeWin winPrice:target.sdk_price secondPrice:secondPrice]];
         }
         /// 竞胜上报
         [self reportAdDataWithEventType:AdvSupplierReportTKEventBidWin supplier:target error:nil];
         
         /// 竞败回调
+        AdvBidWinLossResult *bidResult = [[AdvBidWinLossResult alloc] initWithBidResultType:AdvBidWinLossResultTypeLoss winPrice:target.sdk_price secondPrice:0];
         [[_allSuppliers adv_filter:^BOOL(AdvSupplier *supplier) {
             return supplier != target;
         }] enumerateObjectsUsingBlock:^(AdvSupplier * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            if ([_delegate respondsToSelector:@selector(policyServiceBidFailedWithBiddingSupplier:firstPrice:)]) {
-                [_delegate policyServiceBidFailedWithBiddingSupplier:obj firstPrice:target.sdk_price];
+            if ([_delegate respondsToSelector:@selector(policyServiceBidFailedWithBiddingSupplier:bidResult:)]) {
+                [_delegate policyServiceBidFailedWithBiddingSupplier:obj bidResult:bidResult];
             }
         }];
     }

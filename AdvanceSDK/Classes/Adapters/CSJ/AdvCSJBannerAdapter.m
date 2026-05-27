@@ -8,31 +8,29 @@
 
 #import "AdvCSJBannerAdapter.h"
 #import <BUAdSDK/BUAdSDK.h>
-#import "AdvanceBannerCommonAdapter.h"
+#import "AdvanceCommonAdapter.h"
 #import "AdvAdConfigHeader.h"
-#import "AdvError.h"
 
-@interface AdvCSJBannerAdapter () <BUNativeExpressBannerViewDelegate, AdvanceBannerCommonAdapter>
+@interface AdvCSJBannerAdapter () <BUNativeExpressBannerViewDelegate, AdvanceCommonBannerAdapter>
+
+@property (nonatomic, weak) id<AdvanceCommonBannerAdapterBridge> bridge;
 @property (nonatomic, strong) BUNativeExpressBannerView *csj_ad;
-@property (nonatomic, copy) NSString *adapterId;
 @property (nonatomic, strong) UIView *bannerView;
 
 @end
 
 @implementation AdvCSJBannerAdapter
 
-@synthesize delegate = _delegate;
+- (void)adapter_setBannerBridge:(id<AdvanceCommonBannerAdapterBridge>)bridge {
+    _bridge = bridge;
+}
 
-- (void)adapter_setupWithAdapterId:(NSString *)adapterId placementId:(NSString *)placementId config:(NSDictionary *)config {
-    _adapterId = adapterId;
+- (void)adapter_loadAdWithPlacementId:(NSString *)placementId config:(NSDictionary *)config {
     CGSize adSize = [config[kAdvanceAdSizeKey] CGSizeValue];
     CGRect rect = CGRectMake(0, 0, adSize.width, adSize.height);
     _csj_ad = [[BUNativeExpressBannerView alloc] initWithSlotID:placementId rootViewController:config[kAdvanceAdPresentControllerKey] adSize:adSize];
     _csj_ad.frame = rect;
     _csj_ad.delegate = self;
-}
-
-- (void)adapter_loadAd {
     [_csj_ad loadAdData];
 }
 
@@ -40,16 +38,16 @@
     return YES;
 }
 
-- (id)adapter_bannerView {
+- (UIView *)adapter_bannerView {
     return self.bannerView;
 }
 
-- (void)adapter_sendWinNotificationWithSecondPrice:(NSInteger)secondPrice winPrice:(NSInteger)winPrice {
-    [_csj_ad win:@(secondPrice)];
-}
-
-- (void)adapter_sendLossNotificationWithFirstPrice:(NSInteger)firstPrice {
-    [_csj_ad loss:@(firstPrice) lossReason:nil winBidder:nil];
+- (void)adapter_sendNotificationWithBidResult:(AdvBidWinLossResult *)result {
+    if (result.bidResultType == AdvBidWinLossResultTypeWin) {
+        [_csj_ad win:@(result.secondPrice)];
+    } else {
+        [_csj_ad loss:@(result.winPrice) lossReason:nil winBidder:nil];
+    }
 }
 
 
@@ -57,30 +55,29 @@
 - (void)nativeExpressBannerAdViewDidLoad:(BUNativeExpressBannerView *)bannerAdView {
     self.bannerView = bannerAdView;
     NSDictionary *ext = bannerAdView.mediaExt;
-    [self.delegate adapter_cacheAdapterIfNeeded:self adapterId:self.adapterId price:[ext[@"price"] integerValue]];
-    [self.delegate bannerAdapter_didLoadAdWithAdapterId:self.adapterId price:[ext[@"price"] integerValue]];
+    [self.bridge banner_didLoadAdWithAdapter:self price:[ext[@"price"] integerValue]];
 }
 
 - (void)nativeExpressBannerAdView:(BUNativeExpressBannerView *)bannerAdView didLoadFailWithError:(NSError *)error {
-    [self.delegate bannerAdapter_failedToLoadAdWithAdapterId:self.adapterId error:error];
+    [self.bridge banner_failedToLoadAdWithAdapter:self error:error];
 }
 
 - (void)nativeExpressBannerAdViewWillBecomVisible:(BUNativeExpressBannerView *)bannerAdView {
-    [self.delegate bannerAdapter_didAdExposuredWithAdapterId:self.adapterId];
+    [self.bridge banner_didAdExposuredWithAdapter:self];
 }
 
 - (void)nativeExpressBannerAdViewRenderFail:(BUNativeExpressBannerView *)bannerAdView error:(NSError *)error {
-    [self.delegate bannerAdapter_failedToShowAdWithAdapterId:self.adapterId error:error];
+    [self.bridge banner_failedToShowAdWithAdapter:self error:error];
 }
 
 - (void)nativeExpressBannerAdViewDidClick:(BUNativeExpressBannerView *)bannerAdView {
-    [self.delegate bannerAdapter_didAdClickedWithAdapterId:self.adapterId];
+    [self.bridge banner_didAdClickedWithAdapter:self];
 }
 
 - (void)nativeExpressBannerAdView:(BUNativeExpressBannerView *)bannerAdView dislikeWithReason:(NSArray<BUDislikeWords *> *_Nullable)filterwords {
     [self.csj_ad removeFromSuperview];
     self.csj_ad = nil;
-    [self.delegate bannerAdapter_didAdClosedWithAdapterId:self.adapterId];
+    [self.bridge banner_didAdClosedWithAdapter:self];
 }
 
 - (void)dealloc {

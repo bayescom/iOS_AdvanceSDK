@@ -8,23 +8,24 @@
 
 #import "AdvGDTRewardVideoAdapter.h"
 #import <GDTMobSDK/GDTMobSDK.h>
-#import "AdvanceRewardVideoCommonAdapter.h"
+#import "AdvanceCommonAdapter.h"
 #import "AdvAdConfigHeader.h"
-#import "AdvError.h"
 #import "AdvRewardVideoModel.h"
 
-@interface AdvGDTRewardVideoAdapter () <GDTRewardedVideoAdDelegate, AdvanceRewardVideoCommonAdapter>
+@interface AdvGDTRewardVideoAdapter () <GDTRewardedVideoAdDelegate, AdvanceCommonRewardVideoAdapter>
+
+@property (nonatomic, weak) id<AdvanceCommonRewardVideoAdapterBridge> bridge;
 @property (nonatomic, strong) GDTRewardVideoAd *gdt_ad;
-@property (nonatomic, copy) NSString *adapterId;
 
 @end
 
 @implementation AdvGDTRewardVideoAdapter
 
-@synthesize delegate = _delegate;
+- (void)adapter_setRewardVideoBridge:(id<AdvanceCommonRewardVideoAdapterBridge>)bridge {
+    _bridge = bridge;
+}
 
-- (void)adapter_setupWithAdapterId:(NSString *)adapterId placementId:(NSString *)placementId config:(NSDictionary *)config {
-    _adapterId = adapterId;
+- (void)adapter_loadAdWithPlacementId:(NSString *)placementId config:(NSDictionary *)config {
     _gdt_ad = [[GDTRewardVideoAd alloc] initWithPlacementId:placementId];
     
     AdvRewardVideoModel *rewardVideoModel = config[kAdvanceRewardVideoModelKey];
@@ -36,9 +37,6 @@
     }
     _gdt_ad.videoMuted = [config[kAdvanceAdVideoMutedKey] boolValue];
     _gdt_ad.delegate = self;
-}
-
-- (void)adapter_loadAd {
     [_gdt_ad loadAd];
 }
 
@@ -47,50 +45,45 @@
 }
 
 - (BOOL)adapter_isAdValid {
-    BOOL valid = _gdt_ad.isAdValid;
-    if (!valid) {
-        [self.delegate rewardAdapter_failedToShowAdWithAdapterId:self.adapterId error:[AdvError errorWithCode:AdvErrorCode_InvalidExpired].toNSError];
+    return _gdt_ad.isAdValid;
+}
+
+- (void)adapter_sendNotificationWithBidResult:(AdvBidWinLossResult *)result {
+    if (result.bidResultType == AdvBidWinLossResultTypeWin) {
+        [_gdt_ad sendWinNotificationWithInfo:@{GDT_M_W_H_LOSS_PRICE: @(result.secondPrice), GDT_M_W_E_COST_PRICE: @(result.winPrice)}];
+    } else {
+        [_gdt_ad sendLossNotificationWithInfo:@{GDT_M_L_WIN_PRICE: @(result.winPrice)}];
     }
-    return valid;
-}
-
-- (void)adapter_sendWinNotificationWithSecondPrice:(NSInteger)secondPrice winPrice:(NSInteger)winPrice {
-    [_gdt_ad sendWinNotificationWithInfo:@{GDT_M_W_H_LOSS_PRICE: @(secondPrice), GDT_M_W_E_COST_PRICE: @(winPrice)}];
-}
-
-- (void)adapter_sendLossNotificationWithFirstPrice:(NSInteger)firstPrice {
-    [_gdt_ad sendLossNotificationWithInfo:@{GDT_M_L_WIN_PRICE: @(firstPrice)}];
 }
 
 
 #pragma mark: - GDTRewardedVideoAdDelegate
 - (void)gdt_rewardVideoAdDidLoad:(GDTRewardVideoAd *)rewardedVideoAd {
-    [self.delegate adapter_cacheAdapterIfNeeded:self adapterId:self.adapterId price:rewardedVideoAd.eCPM];
-    [self.delegate rewardAdapter_didLoadAdWithAdapterId:self.adapterId price:rewardedVideoAd.eCPM];
+    [self.bridge rewardVideo_didLoadAdWithAdapter:self price:rewardedVideoAd.eCPM];
 }
 
 - (void)gdt_rewardVideoAd:(GDTRewardVideoAd *)rewardedVideoAd didFailWithError:(NSError *)error {
-    [self.delegate rewardAdapter_failedToLoadAdWithAdapterId:self.adapterId error:error];
+    [self.bridge rewardVideo_failedToLoadAdWithAdapter:self error:error];
 }
 
 - (void)gdt_rewardVideoAdDidExposed:(GDTRewardVideoAd *)rewardedVideoAd {
-    [self.delegate rewardAdapter_didAdExposuredWithAdapterId:self.adapterId];
+    [self.bridge rewardVideo_didAdExposuredWithAdapter:self];
 }
 
 - (void)gdt_rewardVideoAdDidClicked:(GDTRewardVideoAd *)rewardedVideoAd {
-    [self.delegate rewardAdapter_didAdClickedWithAdapterId:self.adapterId];
+    [self.bridge rewardVideo_didAdClickedWithAdapter:self];
 }
 
 - (void)gdt_rewardVideoAdDidClose:(GDTRewardVideoAd *)rewardedVideoAd {
-    [self.delegate rewardAdapter_didAdClosedWithAdapterId:self.adapterId];
+    [self.bridge rewardVideo_didAdClosedWithAdapter:self];
 }
 
-- (void)gdt_rewardVideoAdDidRewardEffective:(GDTRewardVideoAd *)rewardedVideoAd info:(NSDictionary *)info {
-    [self.delegate rewardAdapter_didAdVerifyRewardWithAdapterId:self.adapterId];
+- (void)gdt_adDidRewardEffective:(id<GDTAdProtocol>)adInstance info:(NSDictionary *)info {
+    [self.bridge rewardVideo_didAdVerifyRewardWithAdapter:self];
 }
 
 - (void)gdt_rewardVideoAdDidPlayFinish:(GDTRewardVideoAd *)rewardedVideoAd {
-    [self.delegate rewardAdapter_didAdPlayFinishWithAdapterId:self.adapterId];
+    [self.bridge rewardVideo_didAdPlayFinishWithAdapter:self];
 }
 
 - (void)dealloc {
