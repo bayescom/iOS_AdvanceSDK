@@ -8,55 +8,47 @@
 
 #import "AdvGDTNativeExpressAdapter.h"
 #import <GDTMobSDK/GDTMobSDK.h>
-#import "AdvanceNativeExpressCommonAdapter.h"
-#import "AdvNativeExpressAdWrapper.h"
+#import "AdvanceCommonAdapter.h"
 #import "AdvAdConfigHeader.h"
 #import "AdvError.h"
-#import "NSArray+Adv.h"
 
-@interface AdvGDTNativeExpressAdapter () <GDTNativeExpressAdDelegete, AdvanceNativeExpressCommonAdapter>
+@interface AdvGDTNativeExpressAdapter () <GDTNativeExpressAdDelegete, AdvanceCommonNativeExpressAdapter>
+
+@property (nonatomic, weak) id<AdvanceCommonNativeExpressAdapterBridge> bridge;
 @property (nonatomic, strong) GDTNativeExpressAd *gdt_ad;
-@property (nonatomic, copy) NSString *adapterId;
-@property (nonatomic, strong) NSMutableArray<AdvNativeExpressAdWrapper *> *nativeAdObjects;
+@property (nonatomic, strong) GDTNativeExpressAdView *expressAdView;
 
 @end
 
 @implementation AdvGDTNativeExpressAdapter
 
-@synthesize delegate = _delegate;
+- (void)adapter_setNativeExpressBridge:(id<AdvanceCommonNativeExpressAdapterBridge>)bridge {
+    _bridge = bridge;
+}
 
-- (void)adapter_setupWithAdapterId:(NSString *)adapterId placementId:(NSString *)placementId config:(NSDictionary *)config {
-    _adapterId = adapterId;
+- (void)adapter_loadAdWithPlacementId:(NSString *)placementId config:(NSDictionary *)config {
     _gdt_ad = [[GDTNativeExpressAd alloc] initWithPlacementId:placementId
                                                        adSize:[config[kAdvanceAdSizeKey] CGSizeValue]];
     _gdt_ad.videoMuted = [config[kAdvanceAdVideoMutedKey] boolValue];
     _gdt_ad.delegate = self;
-}
-
-- (void)adapter_loadAd {
     [_gdt_ad loadAd:1];
 }
 
-- (void)adapter_render:(UIViewController *)rootViewController {
-    [self.nativeAdObjects enumerateObjectsUsingBlock:^(__kindof AdvNativeExpressAdWrapper * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        GDTNativeExpressAdView *expressView = (GDTNativeExpressAdView *)obj.expressView;
-        expressView.controller = rootViewController;
-        if (expressView.isAdValid) { // 有效性判断
-            [expressView render];
-        } else {
-            [self.delegate nativeAdapter_didAdRenderFailWithAdapterId:self.adapterId wrapper:obj error:[AdvError errorWithCode:AdvErrorCode_InvalidExpired].toNSError];
-        }
-    }];
+- (void)adapter_renderAd:(UIViewController *)viewController {
+    self.expressAdView.controller = viewController;
+    if (self.expressAdView.isAdValid) { // 有效性判断
+        [self.expressAdView render];
+    } else {
+        [self.bridge nativeExpress_didAdRenderFailWithAdapter:self expressView:self.expressAdView error:[AdvError errorWithCode:AdvErrorCode_InvalidExpired].toNSError];
+    }
 }
 
-- (void)adapter_sendWinNotificationWithSecondPrice:(NSInteger)secondPrice winPrice:(NSInteger)winPrice {
-    GDTNativeExpressAdView *expressView = (GDTNativeExpressAdView *)self.nativeAdObjects.firstObject.expressView;
-    [expressView sendWinNotificationWithInfo:@{GDT_M_W_H_LOSS_PRICE: @(secondPrice), GDT_M_W_E_COST_PRICE: @(winPrice)}];
-}
-
-- (void)adapter_sendLossNotificationWithFirstPrice:(NSInteger)firstPrice {
-    GDTNativeExpressAdView *expressView = (GDTNativeExpressAdView *)self.nativeAdObjects.firstObject.expressView;
-    [expressView sendLossNotificationWithInfo:@{GDT_M_L_WIN_PRICE: @(firstPrice)}];
+- (void)adapter_sendNotificationWithBidResult:(AdvBidWinLossResult *)result {
+    if (result.bidResultType == AdvBidWinLossResultTypeWin) {
+        [self.expressAdView sendWinNotificationWithInfo:@{GDT_M_W_H_LOSS_PRICE: @(result.secondPrice), GDT_M_W_E_COST_PRICE: @(result.winPrice)}];
+    } else {
+        [self.expressAdView sendLossNotificationWithInfo:@{GDT_M_L_WIN_PRICE: @(result.winPrice)}];
+    }
 }
 
 
@@ -64,59 +56,36 @@
 - (void)nativeExpressAdSuccessToLoad:(GDTNativeExpressAd *)nativeExpressAd views:(NSArray<__kindof GDTNativeExpressAdView *> *)views {
     if (!views.count) {
         NSError *error = [NSError errorWithDomain:@"GDTAdErrorDomain" code:1 userInfo:@{NSLocalizedDescriptionKey: @"无广告返回"}];
-        [self.delegate nativeAdapter_failedToLoadAdWithAdapterId:self.adapterId error:error];
+        [self.bridge nativeExpress_failedToLoadAdWithAdapter:self error:error];
         return;
     }
-
-    self.nativeAdObjects = [NSMutableArray array];
-    [views enumerateObjectsUsingBlock:^(__kindof GDTNativeExpressAdView * _Nonnull view, NSUInteger idx, BOOL * _Nonnull stop) {
-        AdvNativeExpressAdWrapper *object = [[AdvNativeExpressAdWrapper alloc] init];
-        object.expressView = view;
-        object.identifier = self.adapterId;
-        [self.nativeAdObjects addObject:object];
-    }];
     
-    [self.delegate adapter_cacheAdapterIfNeeded:self adapterId:self.adapterId price:views.firstObject.eCPM];
-    [self.delegate nativeAdapter_didLoadAdWithAdapterId:self.adapterId price:views.firstObject.eCPM];
+    self.expressAdView = views.firstObject;
+    [self.bridge nativeExpress_didLoadAdWithAdapter:self price:views.firstObject.eCPM];
 }
 
 - (void)nativeExpressAdFailToLoad:(GDTNativeExpressAd *)nativeExpressAd error:(NSError *)error {
-    [self.delegate nativeAdapter_failedToLoadAdWithAdapterId:self.adapterId error:error];
+    [self.bridge nativeExpress_failedToLoadAdWithAdapter:self error:error];
 }
 
 - (void)nativeExpressAdViewRenderSuccess:(GDTNativeExpressAdView *)nativeExpressAdView {
-    AdvNativeExpressAdWrapper *wrapper = [self.nativeAdObjects adv_filter:^BOOL(AdvNativeExpressAdWrapper *obj) {
-        return obj.expressView == nativeExpressAdView;
-    }].firstObject;
-    [self.delegate nativeAdapter_didAdRenderSuccessWithAdapterId:self.adapterId wrapper:wrapper];
+    [self.bridge nativeExpress_didAdRenderSuccessWithAdapter:self expressView:nativeExpressAdView];
 }
 
 - (void)nativeExpressAdViewRenderFail:(GDTNativeExpressAdView *)nativeExpressAdView {
-    AdvNativeExpressAdWrapper *wrapper = [self.nativeAdObjects adv_filter:^BOOL(AdvNativeExpressAdWrapper *obj) {
-        return obj.expressView == nativeExpressAdView;
-    }].firstObject;
-    [self.delegate nativeAdapter_didAdRenderFailWithAdapterId:self.adapterId wrapper:wrapper error:[AdvError errorWithCode:AdvErrorCode_InvalidExpired].toNSError];
+    [self.bridge nativeExpress_didAdRenderFailWithAdapter:self expressView:nativeExpressAdView error:[AdvError errorWithCode:AdvErrorCode_InvalidExpired].toNSError];
 }
 
 - (void)nativeExpressAdViewExposure:(GDTNativeExpressAdView *)nativeExpressAdView {
-    AdvNativeExpressAdWrapper *wrapper = [self.nativeAdObjects adv_filter:^BOOL(AdvNativeExpressAdWrapper *obj) {
-        return obj.expressView == nativeExpressAdView;
-    }].firstObject;
-    [self.delegate nativeAdapter_didAdExposuredWithAdapterId:self.adapterId wrapper:wrapper];
+    [self.bridge nativeExpress_didAdExposuredWithAdapter:self expressView:nativeExpressAdView];
 }
 
 - (void)nativeExpressAdViewClicked:(GDTNativeExpressAdView *)nativeExpressAdView {
-    AdvNativeExpressAdWrapper *wrapper = [self.nativeAdObjects adv_filter:^BOOL(AdvNativeExpressAdWrapper *obj) {
-        return obj.expressView == nativeExpressAdView;
-    }].firstObject;
-    [self.delegate nativeAdapter_didAdClickedWithAdapterId:self.adapterId wrapper:wrapper];
+    [self.bridge nativeExpress_didAdClickedWithAdapter:self expressView:nativeExpressAdView];
 }
 
 - (void)nativeExpressAdViewClosed:(GDTNativeExpressAdView *)nativeExpressAdView {
-    AdvNativeExpressAdWrapper *wrapper = [self.nativeAdObjects adv_filter:^BOOL(AdvNativeExpressAdWrapper *obj) {
-        return obj.expressView == nativeExpressAdView;
-    }].firstObject;
-    [self.delegate nativeAdapter_didAdClosedWithAdapterId:self.adapterId wrapper:wrapper];
+    [self.bridge nativeExpress_didAdClosedWithAdapter:self expressView:nativeExpressAdView];
 }
 
 - (void)dealloc {

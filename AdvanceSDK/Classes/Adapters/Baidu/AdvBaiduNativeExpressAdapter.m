@@ -7,27 +7,27 @@
 
 #import "AdvBaiduNativeExpressAdapter.h"
 #import <BaiduMobAdSDK/BaiduMobAdSDK.h>
-#import "AdvanceNativeExpressCommonAdapter.h"
-#import "AdvNativeExpressAdWrapper.h"
+#import "AdvanceCommonAdapter.h"
 #import "AdvAdConfigHeader.h"
 #import "AdvError.h"
-#import "NSArray+Adv.h"
 
-@interface AdvBaiduNativeExpressAdapter ()<BaiduMobAdNativeAdDelegate, BaiduMobAdNativeInterationDelegate, AdvanceNativeExpressCommonAdapter>
+@interface AdvBaiduNativeExpressAdapter ()<BaiduMobAdNativeAdDelegate, BaiduMobAdNativeInterationDelegate, AdvanceCommonNativeExpressAdapter>
+
+@property (nonatomic, weak) id<AdvanceCommonNativeExpressAdapterBridge> bridge;
 @property (nonatomic, strong) BaiduMobAdNative *bd_ad;
-@property (nonatomic, copy) NSString *adapterId;
-@property (nonatomic, strong) NSMutableArray<AdvNativeExpressAdWrapper *> *nativeAdObjects;
 @property (nonatomic, assign) CGSize adSize;
+@property (nonatomic, strong) BaiduMobAdExpressNativeView *expressAdView;
 
 @end
 
 @implementation AdvBaiduNativeExpressAdapter
 
-@synthesize delegate = _delegate;
+- (void)adapter_setNativeExpressBridge:(id<AdvanceCommonNativeExpressAdapterBridge>)bridge {
+    _bridge = bridge;
+}
 
-- (void)adapter_setupWithAdapterId:(NSString *)adapterId placementId:(NSString *)placementId config:(NSDictionary *)config {
-    _adapterId = adapterId;
-    self.adSize = [config[kAdvanceAdSizeKey] CGSizeValue];
+- (void)adapter_loadAdWithPlacementId:(NSString *)placementId config:(NSDictionary *)config {
+    _adSize = [config[kAdvanceAdSizeKey] CGSizeValue];
     _bd_ad = [[BaiduMobAdNative alloc] init];
     _bd_ad.adDelegate = self;
     _bd_ad.adUnitTag = placementId;
@@ -36,38 +36,29 @@
     _bd_ad.baiduMobAdsHeight = @(self.adSize.height);
     _bd_ad.presentAdViewController = config[kAdvanceAdPresentControllerKey];
     _bd_ad.isExpressNativeAds = YES;
-}
-
-- (void)adapter_loadAd {
     [_bd_ad load];
 }
 
-- (void)adapter_render:(UIViewController *)rootViewController {
-    [self.nativeAdObjects enumerateObjectsUsingBlock:^(__kindof AdvNativeExpressAdWrapper * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        BaiduMobAdExpressNativeView *expressView = (BaiduMobAdExpressNativeView *)obj.expressView;
-        expressView.interationDelegate = self;
-        expressView.baseViewController = rootViewController;
-        
-        if (expressView.style_type == FeedType_PORTRAIT_VIDEO) {
-            expressView.width = self.adSize.width * 0.8;
-        }
-        // 展示前检查是否过期，2h后广告将过期
-        if (![expressView isExpired]) {
-            [expressView render];
-        } else {
-            [self.delegate nativeAdapter_didAdRenderFailWithAdapterId:self.adapterId wrapper:obj error:[AdvError errorWithCode:AdvErrorCode_InvalidExpired].toNSError];
-        }
-    }];
+- (void)adapter_renderAd:(UIViewController *)viewController {
+    self.expressAdView.baseViewController = viewController;
+    self.expressAdView.interationDelegate = self;
+    if (self.expressAdView.style_type == FeedType_PORTRAIT_VIDEO) {
+        self.expressAdView.width = self.adSize.width * 0.8;
+    }
+    // 展示前检查是否过期，2h后广告将过期
+    if (![self.expressAdView isExpired]) {
+        [self.expressAdView render];
+    } else {
+        [self.bridge nativeExpress_didAdRenderFailWithAdapter:self expressView:self.expressAdView error:[AdvError errorWithCode:AdvErrorCode_InvalidExpired].toNSError];
+    }
 }
 
-- (void)adapter_sendWinNotificationWithSecondPrice:(NSInteger)secondPrice winPrice:(NSInteger)winPrice {
-    BaiduMobAdExpressNativeView *expressView = (BaiduMobAdExpressNativeView *)self.nativeAdObjects.firstObject.expressView;
-    [expressView biddingSuccessWithSecondInfo:@{@"ecpm": @(secondPrice)} completion:nil];
-}
-
-- (void)adapter_sendLossNotificationWithFirstPrice:(NSInteger)firstPrice {
-    BaiduMobAdExpressNativeView *expressView = (BaiduMobAdExpressNativeView *)self.nativeAdObjects.firstObject.expressView;
-    [expressView biddingFailWithWinInfo:@{@"ecpm": @(firstPrice)} completion:nil];
+- (void)adapter_sendNotificationWithBidResult:(AdvBidWinLossResult *)result {
+    if (result.bidResultType == AdvBidWinLossResultTypeWin) {
+        [self.expressAdView biddingSuccessWithSecondInfo:@{@"ecpm": @(result.secondPrice)} completion:nil];
+    } else {
+        [self.expressAdView biddingFailWithWinInfo:@{@"ecpm": @(result.winPrice)} completion:nil];
+    }
 }
 
 
@@ -75,20 +66,12 @@
 - (void)nativeAdObjectsSuccessLoad:(NSArray*)nativeAds nativeAd:(BaiduMobAdNative *)nativeAd {
     if (!nativeAds.count) {
         NSError *error = [NSError errorWithDomain:@"BaiduAdErrorDomain" code:1 userInfo:@{NSLocalizedDescriptionKey: @"无广告返回"}];
-        [self.delegate nativeAdapter_failedToLoadAdWithAdapterId:self.adapterId error:error];
+        [self.bridge nativeExpress_failedToLoadAdWithAdapter:self error:error];
         return;
     }
     
-    self.nativeAdObjects = [NSMutableArray array];
-    [nativeAds enumerateObjectsUsingBlock:^(__kindof BaiduMobAdExpressNativeView * _Nonnull view, NSUInteger idx, BOOL * _Nonnull stop) {
-        AdvNativeExpressAdWrapper *object = [[AdvNativeExpressAdWrapper alloc] init];
-        object.expressView = view;
-        object.identifier = self.adapterId;
-        [self.nativeAdObjects addObject:object];
-    }];
-    
-    [self.delegate adapter_cacheAdapterIfNeeded:self adapterId:self.adapterId price:[[nativeAds.firstObject getECPMLevel] integerValue]];
-    [self.delegate nativeAdapter_didLoadAdWithAdapterId:self.adapterId price:[[nativeAds.firstObject getECPMLevel] integerValue]];
+    self.expressAdView = (BaiduMobAdExpressNativeView *)nativeAds.firstObject;
+    [self.bridge nativeExpress_didLoadAdWithAdapter:self price:[[nativeAds.firstObject getECPMLevel] integerValue]];
 }
 
 - (void)nativeAdsFailLoadCode:(NSString *)errCode
@@ -96,7 +79,7 @@
                      nativeAd:(BaiduMobAdNative *)nativeAd
                      adObject:(BaiduMobAdNativeAdObject *)adObject {
     NSError *error = [NSError errorWithDomain:@"BaiduAdErrorDomain" code:[errCode integerValue] userInfo:@{NSLocalizedDescriptionKey: message ?: @""}];
-    [self.delegate nativeAdapter_failedToLoadAdWithAdapterId:self.adapterId error:error];
+    [self.bridge nativeExpress_failedToLoadAdWithAdapter:self error:error];
 }
 
 - (void)nativeAdExpressSuccessRender:(BaiduMobAdExpressNativeView *)express nativeAd:(BaiduMobAdNative *)nativeAd {
@@ -105,38 +88,23 @@
         frame.origin.x = (self.adSize.width - express.frame.size.width) / 2;
         frame;
     });
-    AdvNativeExpressAdWrapper *wrapper = [self.nativeAdObjects adv_filter:^BOOL(AdvNativeExpressAdWrapper *obj) {
-        return obj.expressView == express;
-    }].firstObject;
-    [self.delegate nativeAdapter_didAdRenderSuccessWithAdapterId:self.adapterId wrapper:wrapper];
+    [self.bridge nativeExpress_didAdRenderSuccessWithAdapter:self expressView:express];
 }
 
 - (void)nativeAdExposure:(UIView *)nativeAdView nativeAdDataObject:(BaiduMobAdNativeAdObject *)object {
-    AdvNativeExpressAdWrapper *wrapper = [self.nativeAdObjects adv_filter:^BOOL(AdvNativeExpressAdWrapper *obj) {
-        return obj.expressView == nativeAdView;
-    }].firstObject;
-    [self.delegate nativeAdapter_didAdExposuredWithAdapterId:self.adapterId wrapper:wrapper];
+    [self.bridge nativeExpress_didAdExposuredWithAdapter:self expressView:nativeAdView];
 }
 
 - (void)nativeAdExposureFail:(UIView *)nativeAdView nativeAdDataObject:(BaiduMobAdNativeAdObject *)object failReason:(int)reason {
-    AdvNativeExpressAdWrapper *wrapper = [self.nativeAdObjects adv_filter:^BOOL(AdvNativeExpressAdWrapper *obj) {
-        return obj.expressView == nativeAdView;
-    }].firstObject;
-    [self.delegate nativeAdapter_didAdRenderFailWithAdapterId:self.adapterId wrapper:wrapper error:[AdvError errorWithCode:AdvErrorCode_InvalidExpired].toNSError];
+    [self.bridge nativeExpress_didAdRenderFailWithAdapter:self expressView:nativeAdView error:[AdvError errorWithCode:AdvErrorCode_InvalidExpired].toNSError];
 }
 
 - (void)nativeAdClicked:(UIView *)nativeAdView nativeAdDataObject:(BaiduMobAdNativeAdObject *)object {
-    AdvNativeExpressAdWrapper *wrapper = [self.nativeAdObjects adv_filter:^BOOL(AdvNativeExpressAdWrapper *obj) {
-        return obj.expressView == nativeAdView;
-    }].firstObject;
-    [self.delegate nativeAdapter_didAdClickedWithAdapterId:self.adapterId wrapper:wrapper];
+    [self.bridge nativeExpress_didAdClickedWithAdapter:self expressView:nativeAdView];
 }
 
 - (void)nativeAdDislikeClick:(UIView *)adView reason:(BaiduMobAdDislikeReasonType)reason; {
-    AdvNativeExpressAdWrapper *wrapper = [self.nativeAdObjects adv_filter:^BOOL(AdvNativeExpressAdWrapper *obj) {
-        return obj.expressView == adView;
-    }].firstObject;
-    [self.delegate nativeAdapter_didAdClosedWithAdapterId:self.adapterId wrapper:wrapper];
+    [self.bridge nativeExpress_didAdClosedWithAdapter:self expressView:adView];
 }
 
 - (void)dealloc {

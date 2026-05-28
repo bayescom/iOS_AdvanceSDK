@@ -9,10 +9,10 @@
 #import "AdvanceNativeExpress.h"
 #import "AdvConstantHeader.h"
 #import "AdvPolicyService.h"
-#import "AdvanceNativeExpressCommonAdapter.h"
+#import "AdvanceCommonAdapter.h"
 #import "AdvAdCacheManager.h"
 
-@interface AdvanceNativeExpress () <AdvPolicyServiceDelegate, AdvanceNativeExpressCommonAdapter>
+@interface AdvanceNativeExpress () <AdvPolicyServiceDelegate, AdvanceCommonNativeExpressAdapterBridge>
 
 @end
 
@@ -64,21 +64,20 @@
         AdvPolicyService *manager = self.manager;
         [manager reportAdDataWithEventType:AdvSupplierReportTKEventLoadEnd supplier:supplier error:nil];
        
-        id<AdvanceNativeExpressCommonAdapter> adapter;
+        id<AdvanceCommonNativeExpressAdapter> adapter;
         // 尝试获取Adapter缓存
         AdvAdCacheModel *cacheModel = [[AdvAdCacheManager sharedInstance] adCacheModelFromCachedKey:supplier.sdk_id];
         if (supplier.enable_cache && cacheModel) { //此次加载允许缓存 且 内存中存在Adapter缓存时，直接回调成功
             adapter = cacheModel.adObject;
             [self.adapterMap setObject:adapter forKey:supplier.sdk_id];
-            adapter.delegate = self;
-            [self nativeAdapter_didLoadAdWithAdapterId:supplier.sdk_id price:cacheModel.price];
+            [adapter adapter_setNativeExpressBridge:self];
+            [self nativeExpress_didLoadAdWithAdapter:adapter price:cacheModel.price];
         } else {// 根据渠道id初始化对应Adapter
             NSString *clsName = [AdvSupplierLoader mappingNativeExpressAdapterClassNameWithSupplierId:supplier.identifier];
             adapter = [[NSClassFromString(clsName) alloc] init];
             [self.adapterMap setObject:adapter forKey:supplier.sdk_id];
-            [adapter adapter_setupWithAdapterId:supplier.sdk_id placementId:supplier.adspotid config:[self setupAdConfigWithSupplier:supplier]];
-            adapter.delegate = self;
-            [adapter adapter_loadAd];
+            [adapter adapter_setNativeExpressBridge:self];
+            [adapter adapter_loadAdWithPlacementId:supplier.adspotid config:[self setupAdConfigWithSupplier:supplier]];
         }
     }];
 }
@@ -93,7 +92,7 @@
 }
 
 // Bidding成功
-- (void)policyServiceFinishBiddingWithWinSupplier:(AdvSupplier *_Nonnull)supplier adapter_sendNotificationWithBidResult:bidResult {
+- (void)policyServiceFinishBiddingWithWinSupplier:(AdvSupplier *_Nonnull)supplier bidResult:(AdvBidWinLossResult * _Nonnull)bidResult {
 //    self.price = supplier.sdk_price;
     /// 获取竞胜的adpater
     self.targetAdapter = [self.adapterMap objectForKey:supplier.sdk_id];
@@ -101,83 +100,89 @@
     if ([_delegate respondsToSelector:@selector(onNativeExpressAdSuccessToLoad:)]) {
         [_delegate onNativeExpressAdSuccessToLoad:self];
     }
-    /// 渲染广告
-    [self.targetAdapter adapter_render:self.viewController];
-    [self.targetAdapter adapter_sendNotificationWithBidResult:bidResult];
-}
-
-// 参竞渠道失败
-- (void)policyServiceBidFailedWithBiddingSupplier:(AdvSupplier *)supplier adapter_sendNotificationWithBidResult:bidResult {
-    id<AdvanceNativeExpressCommonAdapter> adapter = [self.adapterMap objectForKey:supplier.sdk_id];
-    [adapter adapter_sendNotificationWithBidResult:bidResult];
-}
-
-
-#pragma mark: - AdvanceCommonAdapter
-- (void)adapter_cacheAdapterIfNeeded:(id)adapter adapterId:(NSString *)adapterId price:(NSInteger)price {
-    AdvSupplier *supplier = [self getSupplierWithAdapterId:adapterId];
-    if (supplier.enable_cache) { // 缓存Adapter
-        [[AdvAdCacheManager sharedInstance] cacheAdapter:adapter price:price expireTime:supplier.cache_timeout sourceReqId:self.reqId forKey:adapterId];
+    /// 竞胜通知
+    if ([(id<AdvanceCommonNativeExpressAdapter>)self.targetAdapter respondsToSelector:@selector(adapter_sendNotificationWithBidResult:)]) {
+        [self.targetAdapter adapter_sendNotificationWithBidResult:bidResult];
+    }
+    /// 渲染广告并设置控制器
+    if ([(id<AdvanceCommonNativeExpressAdapter>)self.targetAdapter respondsToSelector:@selector(adapter_renderAd:)]) {
+        [self.targetAdapter adapter_renderAd:self.viewController];
     }
 }
 
-#pragma mark: - AdvanceNativeExpressCommonAdapter
-- (void)nativeAdapter_didLoadAdWithAdapterId:(NSString *)adapterId price:(NSInteger)price {
-    AdvSupplier *supplier = [self getSupplierWithAdapterId:adapterId];
+// 参竞渠道失败
+- (void)policyServiceBidFailedWithBiddingSupplier:(AdvSupplier *)supplier bidResult:(AdvBidWinLossResult * _Nonnull)bidResult {
+    id<AdvanceCommonNativeExpressAdapter> adapter = [self.adapterMap objectForKey:supplier.sdk_id];
+    if ([adapter respondsToSelector:@selector(adapter_sendNotificationWithBidResult:)]) {
+        [adapter adapter_sendNotificationWithBidResult:bidResult];
+    }
+}
+
+#pragma mark: - AdvanceCommonNativeExpressAdapterBridge
+- (void)nativeExpress_didLoadAdWithAdapter:(id<AdvanceCommonNativeExpressAdapter>)adapter price:(NSInteger)price {
+    AdvSupplier *supplier = [self getSupplierWithAdapter:adapter];
+    if (supplier.enable_cache && ![[AdvAdCacheManager sharedInstance] adCacheModelFromCachedKey:supplier.sdk_id]) { // 缓存Adapter
+        [[AdvAdCacheManager sharedInstance] cacheAdapter:adapter price:price expireTime:supplier.cache_timeout sourceReqId:self.reqId forKey:supplier.sdk_id];
+    }
     AdvPolicyService *manager = self.manager;
     [manager setECPMIfNeeded:price supplier:supplier];
     [manager checkTargetWithResultfulSupplier:supplier state:AdvSupplierLoadAdSuccess error:nil];
 }
 
-- (void)nativeAdapter_failedToLoadAdWithAdapterId:(NSString *)adapterId error:(NSError *)error {
-    AdvSupplier *supplier = [self getSupplierWithAdapterId:adapterId];
+- (void)nativeExpress_failedToLoadAdWithAdapter:(id<AdvanceCommonNativeExpressAdapter>)adapter error:(NSError *)error {
+    AdvSupplier *supplier = [self getSupplierWithAdapter:adapter];
     AdvPolicyService *manager = self.manager;
     [manager checkTargetWithResultfulSupplier:supplier state:AdvSupplierLoadAdFailed error:error];
 }
 
 /// 竞胜的渠道广告执行以下回调
-- (void)nativeAdapter_didAdRenderSuccessWithAdapterId:(NSString *)adapterId wrapper:(AdvNativeExpressAdWrapper *)wrapper {
+- (void)nativeExpress_didAdRenderSuccessWithAdapter:(id<AdvanceCommonNativeExpressAdapter>)adapter expressView:(UIView *)expressView {
+    AdvSupplier *supplier = [self getSupplierWithAdapter:adapter];
     if ([self.delegate respondsToSelector:@selector(onNativeExpressAdViewRenderSuccess:)]) {
-        [self.delegate onNativeExpressAdViewRenderSuccess:wrapper];
+        [self.delegate onNativeExpressAdViewRenderSuccess:expressView];
+    }
+    /// 删除缓存Adapter
+    if ([[AdvAdCacheManager sharedInstance] adCacheModelFromCachedKey:supplier.sdk_id]) {
+        [[AdvAdCacheManager sharedInstance] removeAdCacheModelFromCachedKey:supplier.sdk_id];
     }
 }
 
-- (void)nativeAdapter_didAdRenderFailWithAdapterId:(NSString *)adapterId wrapper:(AdvNativeExpressAdWrapper *)wrapper error:(NSError *)error {
-    AdvSupplier *supplier = [self getSupplierWithAdapterId:adapterId];
+- (void)nativeExpress_didAdRenderFailWithAdapter:(id<AdvanceCommonNativeExpressAdapter>)adapter expressView:(UIView *)expressView error:(NSError *)error {
+    AdvSupplier *supplier = [self getSupplierWithAdapter:adapter];
     AdvPolicyService *manager = self.manager;
     [manager reportAdDataWithEventType:AdvSupplierReportTKEventFailed supplier:supplier error:error];
     if ([self.delegate respondsToSelector:@selector(onNativeExpressAdViewRenderFail:error:)]) {
-        [self.delegate onNativeExpressAdViewRenderFail:wrapper error:error];
+        [self.delegate onNativeExpressAdViewRenderFail:expressView error:error];
     }
     /// 销毁各渠道Adapter对象
     [self destroyAdapters];
+    /// 删除缓存Adapter
+    if ([[AdvAdCacheManager sharedInstance] adCacheModelFromCachedKey:supplier.sdk_id]) {
+        [[AdvAdCacheManager sharedInstance] removeAdCacheModelFromCachedKey:supplier.sdk_id];
+    }
 }
 
-- (void)nativeAdapter_didAdExposuredWithAdapterId:(NSString *)adapterId wrapper:(AdvNativeExpressAdWrapper *)wrapper {
-    AdvSupplier *supplier = [self getSupplierWithAdapterId:adapterId];
+- (void)nativeExpress_didAdExposuredWithAdapter:(id<AdvanceCommonNativeExpressAdapter>)adapter expressView:(UIView *)expressView {
+    AdvSupplier *supplier = [self getSupplierWithAdapter:adapter];
     AdvPolicyService *manager = self.manager;
     [manager reportAdDataWithEventType:AdvSupplierReportTKEventExposed supplier:supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(onNativeExpressAdViewExposured:)]) {
-        [self.delegate onNativeExpressAdViewExposured:wrapper];
-    }
-    // 删除缓存Adapter
-    if ([[AdvAdCacheManager sharedInstance] adCacheModelFromCachedKey:adapterId]) {
-        [[AdvAdCacheManager sharedInstance] removeAdCacheModelFromCachedKey:adapterId];
+        [self.delegate onNativeExpressAdViewExposured:expressView];
     }
 }
 
-- (void)nativeAdapter_didAdClickedWithAdapterId:(NSString *)adapterId wrapper:(AdvNativeExpressAdWrapper *)wrapper {
-    AdvSupplier *supplier = [self getSupplierWithAdapterId:adapterId];
+- (void)nativeExpress_didAdClickedWithAdapter:(id<AdvanceCommonNativeExpressAdapter>)adapter expressView:(UIView *)expressView {
+    AdvSupplier *supplier = [self getSupplierWithAdapter:adapter];
     AdvPolicyService *manager = self.manager;
     [manager reportAdDataWithEventType:AdvSupplierReportTKEventClicked supplier:supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(onNativeExpressAdViewClicked:)]) {
-        [self.delegate onNativeExpressAdViewClicked:wrapper];
+        [self.delegate onNativeExpressAdViewClicked:expressView];
     }
 }
 
-- (void)nativeAdapter_didAdClosedWithAdapterId:(NSString *)adapterId wrapper:(AdvNativeExpressAdWrapper *)wrapper {
+- (void)nativeExpress_didAdClosedWithAdapter:(id<AdvanceCommonNativeExpressAdapter>)adapter expressView:(UIView *)expressView {
     if ([self.delegate respondsToSelector:@selector(onNativeExpressAdViewClosed:)]) {
-        [self.delegate onNativeExpressAdViewClosed:wrapper];
+        [self.delegate onNativeExpressAdViewClosed:expressView];
     }
     /// 销毁各渠道Adapter对象
     [self destroyAdapters];
@@ -198,9 +203,12 @@
     return config.copy;
 }
 
-- (AdvSupplier *)getSupplierWithAdapterId:(NSString *)adapterId {
+- (AdvSupplier *)getSupplierWithAdapter:(id<AdvanceCommonNativeExpressAdapter>)adapter {
+    NSString *foundKey = [self.adapterMap.allKeys adv_filter:^BOOL(NSString *key) {
+        return self.adapterMap[key] == adapter;
+    }].firstObject;
     return [self.suppliers adv_filter:^BOOL(AdvSupplier *obj) {
-        return [obj.sdk_id isEqualToString:adapterId];
+        return [obj.sdk_id isEqualToString:foundKey];
     }].firstObject;
 }
 

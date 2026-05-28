@@ -7,7 +7,6 @@
 //
 
 #import "AdvanceBaseAdSpot.h"
-#import "AdvNativeExpressAdWrapper.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -23,19 +22,19 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)onNativeExpressAdFailToLoad:(AdvanceNativeExpress *)nativeExpressAd error:(NSError *)error;
 
 /// 广告渲染成功回调
-- (void)onNativeExpressAdViewRenderSuccess:(AdvNativeExpressAdWrapper *)nativeAdWrapper;
+- (void)onNativeExpressAdViewRenderSuccess:(UIView *)nativeExpressAdView;
 
 /// 广告渲染失败回调
-- (void)onNativeExpressAdViewRenderFail:(AdvNativeExpressAdWrapper *)nativeAdWrapper error:(NSError *)error;
+- (void)onNativeExpressAdViewRenderFail:(UIView *)nativeExpressAdView error:(NSError *)error;
 
 /// 广告曝光回调
--(void)onNativeExpressAdViewExposured:(AdvNativeExpressAdWrapper *)nativeAdWrapper;
+-(void)onNativeExpressAdViewExposured:(UIView *)nativeExpressAdView;
 
 /// 广告点击回调
-- (void)onNativeExpressAdViewClicked:(AdvNativeExpressAdWrapper *)nativeAdWrapper;
+- (void)onNativeExpressAdViewClicked:(UIView *)nativeExpressAdView;
 
 /// 广告关闭回调
-- (void)onNativeExpressAdViewClosed:(AdvNativeExpressAdWrapper *)nativeAdWrapper;
+- (void)onNativeExpressAdViewClosed:(UIView *)nativeExpressAdView;
 
 @end
 

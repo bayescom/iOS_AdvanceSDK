@@ -7,104 +7,76 @@
 
 #import "AdvKSNativeExpressAdapter.h"
 #import <KSAdSDK/KSAdSDK.h>
-#import "AdvanceNativeExpressCommonAdapter.h"
-#import "AdvNativeExpressAdWrapper.h"
+#import "AdvanceCommonAdapter.h"
 #import "AdvAdConfigHeader.h"
 #import "AdvError.h"
-#import "NSArray+Adv.h"
 
-@interface AdvKSNativeExpressAdapter ()<KSFeedAdsManagerDelegate, KSFeedAdDelegate, AdvanceNativeExpressCommonAdapter>
+@interface AdvKSNativeExpressAdapter ()<KSFeedAdsManagerDelegate, KSFeedAdDelegate, AdvanceCommonNativeExpressAdapter>
+
+@property (nonatomic, weak) id<AdvanceCommonNativeExpressAdapterBridge> bridge;
 @property (nonatomic, strong) KSFeedAdsManager *ks_ad;
 @property (nonatomic, copy) NSString *adapterId;
-@property (nonatomic, strong) NSMutableArray<AdvNativeExpressAdWrapper *> *nativeAdObjects;
-@property (nonatomic, strong) NSArray<KSFeedAd *> *feedAdArray;
+@property (nonatomic, strong) KSFeedAd *feedAd;
 
 @end
 
 @implementation AdvKSNativeExpressAdapter
 
-@synthesize delegate = _delegate;
-
-- (void)adapter_setupWithAdapterId:(NSString *)adapterId placementId:(NSString *)placementId config:(NSDictionary *)config {
-    _adapterId = adapterId;
-    _ks_ad = [[KSFeedAdsManager alloc] initWithPosId:placementId size:[config[kAdvanceAdSizeKey] CGSizeValue]];
-    _ks_ad.delegate = self;
+- (void)adapter_setNativeExpressBridge:(id<AdvanceCommonNativeExpressAdapterBridge>)bridge {
+    _bridge = bridge;
 }
 
-- (void)adapter_loadAd {
+- (void)adapter_loadAdWithPlacementId:(NSString *)placementId config:(NSDictionary *)config {
+    _ks_ad = [[KSFeedAdsManager alloc] initWithPosId:placementId size:[config[kAdvanceAdSizeKey] CGSizeValue]];
+    _ks_ad.delegate = self;
     [_ks_ad loadAdDataWithCount:1];
 }
 
-- (void)adapter_render:(UIViewController *)rootViewController {
-    [self.feedAdArray enumerateObjectsUsingBlock:^(KSFeedAd * _Nonnull feedAd, NSUInteger idx, BOOL * _Nonnull stop) {
-        feedAd.delegate = self;
-        
-        AdvNativeExpressAdWrapper *wrapper = [self.nativeAdObjects adv_filter:^BOOL(AdvNativeExpressAdWrapper *obj) {
-            return obj.expressView == feedAd.feedView;
-        }].firstObject;
-        if (feedAd.materialReady) { // 有效性判断
-            [self.delegate nativeAdapter_didAdRenderSuccessWithAdapterId:self.adapterId wrapper:wrapper];
-        } else {
-            [self.delegate nativeAdapter_didAdRenderFailWithAdapterId:self.adapterId wrapper:wrapper error:[AdvError errorWithCode:AdvErrorCode_InvalidExpired].toNSError];
-        }
-    }];
+- (void)adapter_renderAd:(UIViewController *)viewController {
+    self.feedAd.delegate = self;
+    if (self.feedAd.materialReady) { // 有效性判断
+        [self.bridge nativeExpress_didAdRenderSuccessWithAdapter:self expressView:self.feedAd.feedView];
+    } else {
+        [self.bridge nativeExpress_didAdRenderFailWithAdapter:self expressView:self.feedAd.feedView error:[AdvError errorWithCode:AdvErrorCode_InvalidExpired].toNSError];
+    }
 }
 
-- (void)adapter_sendWinNotificationWithSecondPrice:(NSInteger)secondPrice winPrice:(NSInteger)winPrice {
-    
-    [_feedAdArray.firstObject setBidEcpm:winPrice highestLossEcpm:secondPrice];
-}
-
-- (void)adapter_sendLossNotificationWithFirstPrice:(NSInteger)firstPrice {
-    KSAdExposureReportParam *param = [[KSAdExposureReportParam alloc] init];
-    param.winEcpm = firstPrice;
-    [_feedAdArray.firstObject reportAdExposureFailed:KSAdExposureFailureBidFailed reportParam:param];
+- (void)adapter_sendNotificationWithBidResult:(AdvBidWinLossResult *)result {
+    if (result.bidResultType == AdvBidWinLossResultTypeWin) {
+        [self.feedAd setBidEcpm:result.winPrice highestLossEcpm:result.secondPrice];
+    } else {
+        KSAdExposureReportParam *param = [[KSAdExposureReportParam alloc] init];
+        param.winEcpm = result.winPrice;
+        [self.feedAd reportAdExposureFailed:KSAdExposureFailureBidFailed reportParam:param];
+    }
 }
 
 #pragma mark: - KSFeedAdsManagerDelegate, KSFeedAdDelegate
 - (void)feedAdsManagerSuccessToLoad:(KSFeedAdsManager *)adsManager nativeAds:(NSArray<KSFeedAd *> *_Nullable)feedAdDataArray {
-    self.feedAdArray = feedAdDataArray;
     if (!feedAdDataArray.count) {
         NSError *error = [NSError errorWithDomain:@"KSADErrorDomain" code:1 userInfo:@{NSLocalizedDescriptionKey: @"无广告返回"}];
-        [self.delegate nativeAdapter_failedToLoadAdWithAdapterId:self.adapterId error:error];
+        [self.bridge nativeExpress_failedToLoadAdWithAdapter:self error:error];
         return;
     }
     
-    self.nativeAdObjects = [NSMutableArray array];
-    [feedAdDataArray enumerateObjectsUsingBlock:^(__kindof KSFeedAd * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        AdvNativeExpressAdWrapper *object = [[AdvNativeExpressAdWrapper alloc] init];
-        object.expressView = obj.feedView;
-        object.identifier = self.adapterId;
-        [self.nativeAdObjects addObject:object];
-    }];
-    
-    [self.delegate adapter_cacheAdapterIfNeeded:self adapterId:self.adapterId price:feedAdDataArray.firstObject.ecpm];
-    [self.delegate nativeAdapter_didLoadAdWithAdapterId:self.adapterId price:feedAdDataArray.firstObject.ecpm];
+    self.feedAd = feedAdDataArray.firstObject;
+    [self.bridge nativeExpress_didLoadAdWithAdapter:self price:feedAdDataArray.firstObject.ecpm];
 }
 
 - (void)feedAdsManager:(KSFeedAdsManager *)adsManager didFailWithError:(NSError *)error {
-    [self.delegate nativeAdapter_failedToLoadAdWithAdapterId:self.adapterId error:error];
+    [self.bridge nativeExpress_failedToLoadAdWithAdapter:self error:error];
 }
 
 - (void)feedAdDidShow:(KSFeedAd *)feedAd {
-    AdvNativeExpressAdWrapper *wrapper = [self.nativeAdObjects adv_filter:^BOOL(AdvNativeExpressAdWrapper *obj) {
-        return obj.expressView == feedAd.feedView;
-    }].firstObject;
-    [self.delegate nativeAdapter_didAdExposuredWithAdapterId:self.adapterId wrapper:wrapper];
+    [self.bridge nativeExpress_didAdExposuredWithAdapter:self expressView:self.feedAd.feedView];
 }
 
 - (void)feedAdDidClick:(KSFeedAd *)feedAd {
-    AdvNativeExpressAdWrapper *wrapper = [self.nativeAdObjects adv_filter:^BOOL(AdvNativeExpressAdWrapper *obj) {
-        return obj.expressView == feedAd.feedView;
-    }].firstObject;
-    [self.delegate nativeAdapter_didAdClickedWithAdapterId:self.adapterId wrapper:wrapper];
+    [self.bridge nativeExpress_didAdClickedWithAdapter:self expressView:self.feedAd.feedView];
 }
 
 - (void)feedAdDislike:(KSFeedAd *)feedAd {
-    AdvNativeExpressAdWrapper *wrapper = [self.nativeAdObjects adv_filter:^BOOL(AdvNativeExpressAdWrapper *obj) {
-        return obj.expressView == feedAd.feedView;
-    }].firstObject;
-    [self.delegate nativeAdapter_didAdClosedWithAdapterId:self.adapterId wrapper:wrapper];
+    [self.bridge nativeExpress_didAdClosedWithAdapter:self expressView:self.feedAd.feedView];
 }
 
 - (void)dealloc {

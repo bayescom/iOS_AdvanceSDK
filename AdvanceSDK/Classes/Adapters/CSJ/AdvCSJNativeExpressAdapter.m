@@ -8,25 +8,24 @@
 
 #import "AdvCSJNativeExpressAdapter.h"
 #import <BUAdSDK/BUAdSDK.h>
-#import "AdvanceNativeExpressCommonAdapter.h"
-#import "AdvNativeExpressAdWrapper.h"
+#import "AdvanceCommonAdapter.h"
 #import "AdvAdConfigHeader.h"
-#import "AdvError.h"
-#import "NSArray+Adv.h"
 
-@interface AdvCSJNativeExpressAdapter () <BUNativeExpressAdViewDelegate, BUCustomEventProtocol, AdvanceNativeExpressCommonAdapter>
+@interface AdvCSJNativeExpressAdapter () <BUNativeExpressAdViewDelegate, BUCustomEventProtocol, AdvanceCommonNativeExpressAdapter>
+
+@property (nonatomic, weak) id<AdvanceCommonNativeExpressAdapterBridge> bridge;
 @property (nonatomic, strong) BUNativeExpressAdManager *csj_ad;
-@property (nonatomic, copy) NSString *adapterId;
-@property (nonatomic, strong) NSMutableArray<AdvNativeExpressAdWrapper *> *nativeAdObjects;
+@property (nonatomic, strong) BUNativeExpressAdView *expressAdView;
 
 @end
 
 @implementation AdvCSJNativeExpressAdapter
 
-@synthesize delegate = _delegate;
+- (void)adapter_setNativeExpressBridge:(id<AdvanceCommonNativeExpressAdapterBridge>)bridge {
+    _bridge = bridge;
+}
 
-- (void)adapter_setupWithAdapterId:(NSString *)adapterId placementId:(NSString *)placementId config:(NSDictionary *)config {
-    _adapterId = adapterId;
+- (void)adapter_loadAdWithPlacementId:(NSString *)placementId config:(NSDictionary *)config {
     BUAdSlot *slot = [[BUAdSlot alloc] init];
     slot.ID = placementId;
     slot.AdType = BUAdSlotAdTypeFeed;
@@ -34,89 +33,57 @@
     slot.imgSize = [BUSize sizeBy:BUProposalSize_Feed228_150];
     _csj_ad = [[BUNativeExpressAdManager alloc] initWithSlot:slot adSize:[config[kAdvanceAdSizeKey] CGSizeValue]];
     _csj_ad.delegate = self;
-}
-
-- (void)adapter_loadAd {
     [_csj_ad loadAdDataWithCount:1];
 }
 
-- (void)adapter_render:(UIViewController *)rootViewController {
-    [self.nativeAdObjects enumerateObjectsUsingBlock:^(__kindof AdvNativeExpressAdWrapper * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        BUNativeExpressAdView *expressView = (BUNativeExpressAdView *)obj.expressView;
-        expressView.rootViewController = rootViewController;
-        [expressView render];
-    }];
+- (void)adapter_renderAd:(UIViewController *)viewController {
+    [self.expressAdView render];
+    self.expressAdView.rootViewController = viewController;
 }
 
-- (void)adapter_sendWinNotificationWithSecondPrice:(NSInteger)secondPrice winPrice:(NSInteger)winPrice {
-    BUNativeExpressAdView *expressView = (BUNativeExpressAdView *)self.nativeAdObjects.firstObject.expressView;
-    [expressView win:@(secondPrice)];
+- (void)adapter_sendNotificationWithBidResult:(AdvBidWinLossResult *)result {
+    if (result.bidResultType == AdvBidWinLossResultTypeWin) {
+        [self.expressAdView win:@(result.secondPrice)];
+    } else {
+        [self.expressAdView loss:@(result.winPrice) lossReason:nil winBidder:nil];
+    }
 }
-
-- (void)adapter_sendLossNotificationWithFirstPrice:(NSInteger)firstPrice {
-    BUNativeExpressAdView *expressView = (BUNativeExpressAdView *)self.nativeAdObjects.firstObject.expressView;
-    [expressView loss:@(firstPrice) lossReason:nil winBidder:nil];
-}
-
 
 #pragma mark: - BUNativeExpressAdViewDelegate
 - (void)nativeExpressAdSuccessToLoad:(id)nativeExpressAd views:(nonnull NSArray<__kindof BUNativeExpressAdView *> *)views {
     if (!views.count) {
         NSError *error = [NSError errorWithDomain:@"BUAdErrorDomain" code:1 userInfo:@{NSLocalizedDescriptionKey: @"无广告返回"}];
-        [self.delegate nativeAdapter_failedToLoadAdWithAdapterId:self.adapterId error:error];
+        [self.bridge nativeExpress_failedToLoadAdWithAdapter:self error:error];
         return;
     }
     
-    self.nativeAdObjects = [NSMutableArray array];
-    [views enumerateObjectsUsingBlock:^(__kindof BUNativeExpressAdView * _Nonnull view, NSUInteger idx, BOOL * _Nonnull stop) {
-        AdvNativeExpressAdWrapper *object = [[AdvNativeExpressAdWrapper alloc] init];
-        object.expressView = view;
-        object.identifier = self.adapterId;
-        [self.nativeAdObjects addObject:object];
-    }];
-    
+    self.expressAdView = views.firstObject;
     NSDictionary *ext = views.firstObject.mediaExt;
-    [self.delegate adapter_cacheAdapterIfNeeded:self adapterId:self.adapterId price:[ext[@"price"] integerValue]];
-    [self.delegate nativeAdapter_didLoadAdWithAdapterId:self.adapterId price:[ext[@"price"] integerValue]];
+    [self.bridge nativeExpress_didLoadAdWithAdapter:self price:[ext[@"price"] integerValue]];
 }
 
 - (void)nativeExpressAdFailToLoad:(BUNativeExpressAdManager *)nativeExpressAd error:(NSError *)error {
-    [self.delegate nativeAdapter_failedToLoadAdWithAdapterId:self.adapterId error:error];
+    [self.bridge nativeExpress_failedToLoadAdWithAdapter:self error:error];
 }
 
 - (void)nativeExpressAdViewRenderSuccess:(BUNativeExpressAdView *)nativeExpressAdView {
-    AdvNativeExpressAdWrapper *wrapper = [self.nativeAdObjects adv_filter:^BOOL(AdvNativeExpressAdWrapper *obj) {
-        return obj.expressView == nativeExpressAdView;
-    }].firstObject;
-    [self.delegate nativeAdapter_didAdRenderSuccessWithAdapterId:self.adapterId wrapper:wrapper];
+    [self.bridge nativeExpress_didAdRenderSuccessWithAdapter:self expressView:nativeExpressAdView];
 }
 
 - (void)nativeExpressAdViewRenderFail:(BUNativeExpressAdView *)nativeExpressAdView error:(NSError *)error {
-    AdvNativeExpressAdWrapper *wrapper = [self.nativeAdObjects adv_filter:^BOOL(AdvNativeExpressAdWrapper *obj) {
-        return obj.expressView == nativeExpressAdView;
-    }].firstObject;
-    [self.delegate nativeAdapter_didAdRenderFailWithAdapterId:self.adapterId wrapper:wrapper error:[AdvError errorWithCode:AdvErrorCode_InvalidExpired].toNSError];
+    [self.bridge nativeExpress_didAdRenderFailWithAdapter:self expressView:nativeExpressAdView error:error];
 }
 
 - (void)nativeExpressAdViewWillShow:(BUNativeExpressAdView *)nativeExpressAdView {
-    AdvNativeExpressAdWrapper *wrapper = [self.nativeAdObjects adv_filter:^BOOL(AdvNativeExpressAdWrapper *obj) {
-        return obj.expressView == nativeExpressAdView;
-    }].firstObject;
-    [self.delegate nativeAdapter_didAdExposuredWithAdapterId:self.adapterId wrapper:wrapper];
+    [self.bridge nativeExpress_didAdExposuredWithAdapter:self expressView:nativeExpressAdView];
 }
 
 - (void)nativeExpressAdViewDidClick:(BUNativeExpressAdView *)nativeExpressAdView {
-    AdvNativeExpressAdWrapper *wrapper = [self.nativeAdObjects adv_filter:^BOOL(AdvNativeExpressAdWrapper *obj) {
-        return obj.expressView == nativeExpressAdView;
-    }].firstObject;
-    [self.delegate nativeAdapter_didAdClickedWithAdapterId:self.adapterId wrapper:wrapper];
+    [self.bridge nativeExpress_didAdClickedWithAdapter:self expressView:nativeExpressAdView];
 }
 
 - (void)nativeExpressAdView:(BUNativeExpressAdView *)nativeExpressAdView dislikeWithReason:(NSArray<BUDislikeWords *> *)filterWords {
-    AdvNativeExpressAdWrapper *wrapper = [self.nativeAdObjects adv_filter:^BOOL(AdvNativeExpressAdWrapper *obj) {
-        return obj.expressView == nativeExpressAdView;
-    }].firstObject;
-    [self.delegate nativeAdapter_didAdClosedWithAdapterId:self.adapterId wrapper:wrapper];
+    [self.bridge nativeExpress_didAdClosedWithAdapter:self expressView:nativeExpressAdView];
 }
 
 - (void)dealloc {

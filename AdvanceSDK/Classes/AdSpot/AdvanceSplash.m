@@ -94,6 +94,7 @@
     if ([_delegate respondsToSelector:@selector(onSplashAdDidLoad:)]) {
         [_delegate onSplashAdDidLoad:self];
     }
+    /// 竞胜通知
     if ([(id<AdvanceCommonSplashAdapter>)self.targetAdapter respondsToSelector:@selector(adapter_sendNotificationWithBidResult:)]) {
         [self.targetAdapter adapter_sendNotificationWithBidResult:bidResult];
     }
@@ -163,7 +164,7 @@
     if ([self.delegate respondsToSelector:@selector(onSplashAdExposured:)]) {
         [self.delegate onSplashAdExposured:self];
     }
-    // 删除缓存Adapter
+    /// 删除缓存Adapter
     if ([[AdvAdCacheManager sharedInstance] adCacheModelFromCachedKey:supplier.sdk_id]) {
         [[AdvAdCacheManager sharedInstance] removeAdCacheModelFromCachedKey:supplier.sdk_id];
     }
@@ -178,6 +179,10 @@
     }
     /// 销毁各渠道Adapter对象
     [self destroyAdapters];
+    /// 删除缓存Adapter
+    if ([[AdvAdCacheManager sharedInstance] adCacheModelFromCachedKey:supplier.sdk_id]) {
+        [[AdvAdCacheManager sharedInstance] removeAdCacheModelFromCachedKey:supplier.sdk_id];
+    }
 }
 
 - (void)splash_didAdClickedWithAdapter:(id<AdvanceCommonSplashAdapter>)adapter {

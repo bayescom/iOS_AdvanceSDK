@@ -58,33 +58,33 @@
 }
 
 /// 广告渲染成功
-- (void)onNativeExpressAdViewRenderSuccess:(AdvNativeExpressAdWrapper *)nativeAdWrapper {
-    NSLog(@"模板信息流广告渲染成功 %s %@", __func__, nativeAdWrapper);
-    [_arrayData insertObject:nativeAdWrapper atIndex:1];
+- (void)onNativeExpressAdViewRenderSuccess:(UIView *)nativeExpressAdView {
+    NSLog(@"模板信息流广告渲染成功 %s %@", __func__, nativeExpressAdView);
+    [_arrayData insertObject:nativeExpressAdView atIndex:1];
     [self.tableView reloadData];
 }
 
 /// 广告渲染失败
-- (void)onNativeExpressAdViewRenderFail:(AdvNativeExpressAdWrapper *)nativeAdWrapper error:(NSError *)error {
+- (void)onNativeExpressAdViewRenderFail:(UIView *)nativeExpressAdView error:(NSError *)error {
     NSLog(@"模板信息流广告渲染失败 %s %@", __func__, error);
     [JDStatusBarNotification showWithStatus:@"广告渲染失败" dismissAfter:0.7];
     self.nativeExpressAd = nil;
 }
 
 /// 广告曝光回调
--(void)onNativeExpressAdViewExposured:(AdvNativeExpressAdWrapper *)nativeAdWrapper {
-    NSLog(@"模板信息流广告曝光回调 %s %@", __func__, nativeAdWrapper);
+-(void)onNativeExpressAdViewExposured:(UIView *)nativeExpressAdView {
+    NSLog(@"模板信息流广告曝光回调 %s %@", __func__, nativeExpressAdView);
 }
 
 /// 广告点击回调
-- (void)onNativeExpressAdViewClicked:(AdvNativeExpressAdWrapper *)nativeAdWrapper {
-    NSLog(@"模板信息流广告点击回调 %s %@", __func__, nativeAdWrapper);
+- (void)onNativeExpressAdViewClicked:(UIView *)nativeExpressAdView {
+    NSLog(@"模板信息流广告点击回调 %s %@", __func__, nativeExpressAdView);
 }
 
 /// 广告关闭回调
-- (void)onNativeExpressAdViewClosed:(AdvNativeExpressAdWrapper *)nativeAdWrapper {
-    NSLog(@"模板信息流广告关闭回调 %s %@", __func__, nativeAdWrapper);
-    [_arrayData removeObject:nativeAdWrapper];
+- (void)onNativeExpressAdViewClosed:(UIView *)nativeExpressAdView {
+    NSLog(@"模板信息流广告关闭回调 %s %@", __func__, nativeExpressAdView);
+    [_arrayData removeObject:nativeExpressAdView];
     [self.tableView reloadData];
     self.nativeExpressAd = nil;
 }
@@ -98,8 +98,7 @@
     if ([_arrayData[indexPath.row] isKindOfClass:[BYExamCellModelElement class]]) {
         return ((BYExamCellModelElement *)_arrayData[indexPath.row]).cellh;
     } else {
-        AdvNativeExpressAdWrapper *nativeAdWrapper = _arrayData[indexPath.row];
-        UIView *view = nativeAdWrapper.expressView;
+        UIView *view = _arrayData[indexPath.row];
         return view.frame.size.height;
     }
 }
@@ -118,8 +117,7 @@
         if ([subView superview]) {
             [subView removeFromSuperview];
         }
-        AdvNativeExpressAdWrapper *nativeAdWrapper = _arrayData[indexPath.row];
-        UIView *view = nativeAdWrapper.expressView;
+        UIView *view = _arrayData[indexPath.row];
         view.tag = 1000;
         [cell.contentView addSubview:view];
         CGRect frame = view.frame;

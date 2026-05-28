@@ -17,22 +17,21 @@
 
 #pragma mark: - 广告的adapter基协议
 @protocol AdvanceCommonAdapter <NSObject>
+@required
 /// 加载广告的方法
 /// @param placementId adn的广告位ID
 /// @param config 广告加载的参数
 - (void)adapter_loadAdWithPlacementId:(NSString *)placementId
                                config:(NSDictionary *)config;
 
+
+@optional
 /// 广告是否有效
 - (BOOL)adapter_isAdValid;
 
-@optional
 // Adn竞胜/竞败后回传信息
 - (void)adapter_sendNotificationWithBidResult:(AdvBidWinLossResult *)result;
 
-
-
-- (void)adapter_render:(UIViewController *)rootViewController; //模板信息流使用
 
 - (id)adapter_renderFeedAdWrapper; //自渲染信息流使用
 
@@ -110,8 +109,11 @@
 /// 设置信息流 bridge 用于回传广告状态
 - (void)adapter_setNativeExpressBridge:(id<AdvanceCommonNativeExpressAdapterBridge>)bridge;
 
-/// 渲染广告，为模板广告设置控制器
-- (void)adapter_render:(UIViewController *)rootViewController;
+/**
+ 渲染广告并为广告设置控制器
+ 如果adn广告不需要render，请尽量模拟回调renderSuccess
+ */
+- (void)adapter_renderAd:(UIViewController *)viewController;
 
 @end
 
