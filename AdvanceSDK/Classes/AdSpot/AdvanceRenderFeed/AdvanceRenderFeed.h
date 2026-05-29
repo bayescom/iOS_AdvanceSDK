@@ -22,19 +22,19 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)onRenderFeedAdFailToLoad:(AdvanceRenderFeed *)renderFeedAd error:(NSError *)error;
 
 /// 广告曝光回调
--(void)onRenderFeedAdViewExposured:(AdvRenderFeedAdWrapper *)feedAdWrapper;
+-(void)onRenderFeedAdViewExposured:(AdvanceRenderFeed *)renderFeedAd;
 
 /// 广告点击回调
-- (void)onRenderFeedAdViewClicked:(AdvRenderFeedAdWrapper *)feedAdWrapper;
+- (void)onRenderFeedAdViewClicked:(AdvanceRenderFeed *)renderFeedAd;
 
 /// 广告关闭回调
-- (void)onRenderFeedAdViewClosed:(AdvRenderFeedAdWrapper *)feedAdWrapper;
+- (void)onRenderFeedAdViewClosed:(AdvanceRenderFeed *)renderFeedAd;
 
 /// 广告详情页关闭回调
-- (void)onRenderFeedAdDidCloseDetailPage:(AdvRenderFeedAdWrapper *)feedAdWrapper;
+- (void)onRenderFeedAdDidCloseDetailPage:(AdvanceRenderFeed *)renderFeedAd;
 
 /// 视频广告播放结束回调
-- (void)onRenderFeedAdDidPlayFinish:(AdvRenderFeedAdWrapper *)feedAdWrapper;
+- (void)onRenderFeedAdDidPlayFinish:(AdvanceRenderFeed *)renderFeedAd;
 
 @end
 

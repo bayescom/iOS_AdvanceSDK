@@ -7,17 +7,16 @@
 
 #import "AdvGDTRenderFeedAdapter.h"
 #import <GDTMobSDK/GDTMobSDK.h>
-#import "AdvanceRenderFeedCommonAdapter.h"
+#import "AdvanceCommonAdapter.h"
 #import "AdvRenderFeedAdWrapper.h"
 #import "AdvGDTRenderFeedAdView.h"
 #import "AdvAdConfigHeader.h"
-#import "AdvError.h"
 
-@interface AdvGDTRenderFeedAdapter () <GDTUnifiedNativeAdDelegate, AdvanceRenderFeedCommonAdapter>
+@interface AdvGDTRenderFeedAdapter () <GDTUnifiedNativeAdDelegate, AdvanceCommonRenderFeedAdapter>
 
+@property (nonatomic, weak) id<AdvanceCommonRenderFeedAdapterBridge> bridge;
 @property (nonatomic, strong) GDTUnifiedNativeAd *gdt_ad;
 @property (nonatomic, strong) GDTUnifiedNativeAdDataObject *dataObject;
-@property (nonatomic, copy) NSString *adapterId;
 @property (nonatomic, strong) AdvRenderFeedAdWrapper *feedAdWrapper;
 @property (nonatomic, weak) UIViewController *rootViewController;
  
@@ -25,17 +24,15 @@
 
 @implementation AdvGDTRenderFeedAdapter
 
-@synthesize delegate = _delegate;
+- (void)adapter_setRenderFeedBridge:(id<AdvanceCommonRenderFeedAdapterBridge>)bridge {
+    _bridge = bridge;
+}
 
-- (void)adapter_setupWithAdapterId:(NSString *)adapterId placementId:(NSString *)placementId config:(NSDictionary *)config {
-    _adapterId = adapterId;
+- (void)adapter_loadAdWithPlacementId:(NSString *)placementId config:(NSDictionary *)config {
     _rootViewController = config[kAdvanceAdPresentControllerKey];
     
     _gdt_ad = [[GDTUnifiedNativeAd alloc] initWithPlacementId:placementId];
     _gdt_ad.delegate = self;
-}
-
-- (void)adapter_loadAd {
     [_gdt_ad loadAd];
 }
 
@@ -43,30 +40,29 @@
     return self.feedAdWrapper;
 }
 
-- (void)adapter_sendWinNotificationWithSecondPrice:(NSInteger)secondPrice winPrice:(NSInteger)winPrice {
-    [_dataObject sendWinNotificationWithInfo:@{GDT_M_W_H_LOSS_PRICE: @(secondPrice), GDT_M_W_E_COST_PRICE: @(winPrice)}];
-}
-
-- (void)adapter_sendLossNotificationWithFirstPrice:(NSInteger)firstPrice {
-    [_dataObject sendLossNotificationWithInfo:@{GDT_M_L_WIN_PRICE: @(firstPrice)}];
+- (void)adapter_sendNotificationWithBidResult:(AdvBidWinLossResult *)result {
+    if (result.bidResultType == AdvBidWinLossResultTypeWin) {
+        [_dataObject sendWinNotificationWithInfo:@{GDT_M_W_H_LOSS_PRICE: @(result.secondPrice), GDT_M_W_E_COST_PRICE: @(result.winPrice)}];
+    } else {
+        [_dataObject sendLossNotificationWithInfo:@{GDT_M_L_WIN_PRICE: @(result.winPrice)}];
+    }
 }
 
 
 #pragma mark - GDTUnifiedNativeAdDelegate
 - (void)gdt_unifiedNativeAdLoaded:(NSArray<GDTUnifiedNativeAdDataObject *> *)unifiedNativeAdDataObjects error:(NSError *)error {
     if (error) {
-        [self.delegate renderAdapter_failedToLoadAdWithAdapterId:self.adapterId error:error];
+        [self.bridge renderFeed_failedToLoadAdWithAdapter:self error:error];
         return;
     }
      
     GDTUnifiedNativeAdDataObject *dataObject = unifiedNativeAdDataObjects.firstObject;
     self.dataObject = dataObject;
     AdvRenderFeedAdElement *element = [self generateFeedAdElementWithDataObject:dataObject];
-    AdvGDTRenderFeedAdView *gdtFeedAdView = [[AdvGDTRenderFeedAdView alloc] initWithDataObject:dataObject delegate:self.delegate adapterId:self.adapterId viewController:self.rootViewController];
+    AdvGDTRenderFeedAdView *gdtFeedAdView = [[AdvGDTRenderFeedAdView alloc] initWithNativeAd:dataObject bridge:self.bridge adapter:self manager:nil viewController:self.rootViewController];
     self.feedAdWrapper = [[AdvRenderFeedAdWrapper alloc] initWithFeedAdView:gdtFeedAdView feedAdElement:element];
     
-    [self.delegate adapter_cacheAdapterIfNeeded:self adapterId:self.adapterId price:dataObject.eCPM];
-    [self.delegate renderAdapter_didLoadAdWithAdapterId:self.adapterId price:dataObject.eCPM];
+    [self.bridge renderFeed_didLoadAdWithAdapter:self price:dataObject.eCPM];
 }
 
 - (AdvRenderFeedAdElement *)generateFeedAdElementWithDataObject:(GDTUnifiedNativeAdDataObject *)dataObject {

@@ -6,26 +6,29 @@
 //
 
 #import "AdvCSJRenderFeedAdView.h"
+#import <BUAdSDK/BUAdSDK.h>
 
 @interface AdvCSJRenderFeedAdView () <BUNativeAdDelegate, BUCustomEventProtocol, BUVideoAdViewDelegate>
 
-@property (nonatomic, weak) id<AdvanceRenderFeedCommonAdapter> bridge;
+@property (nonatomic, weak) id<AdvanceCommonRenderFeedAdapterBridge> bridge;
+@property (nonatomic, weak) id<AdvanceCommonRenderFeedAdapter>adapter;
 @property (nonatomic, strong) BUNativeAd *nativeAd;
 @property (nonatomic, strong) BUNativeAdRelatedView *nativeAdRelatedView;
-@property (nonatomic, copy) NSString *adapterId;
 
 @end
 
 @implementation AdvCSJRenderFeedAdView
 
+#pragma mark: - AdvanceRenderFeedAdViewProtocol
 - (instancetype)initWithNativeAd:(BUNativeAd *)nativeAd
-                        delegate:(id<AdvanceRenderFeedCommonAdapter>)delegate
-                       adapterId:(NSString *)adapterId
+                          bridge:(id<AdvanceCommonRenderFeedAdapterBridge>)bridge
+                         adapter:(id<AdvanceCommonRenderFeedAdapter>)adapter
+                         manager:(id)manager
                   viewController:(UIViewController *)viewController {
     if (self = [super init]) {
         self.nativeAd = nativeAd;
-        self.bridge = delegate;
-        self.adapterId = adapterId;
+        self.bridge = bridge;
+        self.adapter = adapter;
         
         self.nativeAd.delegate = self;
         self.nativeAd.rootViewController = viewController;
@@ -40,16 +43,6 @@
     if (closeableView) {
         [self setupCloseView:closeableView];
     }
-}
-
-- (void)setupCloseView:(UIView *)closeableView {
-    closeableView.userInteractionEnabled = YES;
-    UITapGestureRecognizer *gr = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapCloseViewAction:)];
-    [closeableView addGestureRecognizer:gr];
-}
-
-- (void)tapCloseViewAction:(UITapGestureRecognizer *)gr {
-    [self.bridge renderAdapter_didAdClosedWithAdapterId:self.adapterId];
 }
 
 - (CGSize)logoSize {
@@ -73,6 +66,18 @@
     return self.nativeAdRelatedView.mediaAdView;
 }
 
+#pragma mark: - Actions
+- (void)setupCloseView:(UIView *)closeableView {
+    closeableView.userInteractionEnabled = YES;
+    UITapGestureRecognizer *gr = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapCloseViewAction:)];
+    [closeableView addGestureRecognizer:gr];
+}
+
+- (void)tapCloseViewAction:(UITapGestureRecognizer *)gr {
+    [self.bridge renderFeed_didAdClosedWithAdapter:self.adapter];
+}
+
+
 #pragma mark - BUNativeAdDelegate
 - (void)nativeAdDidLoad:(BUNativeAd *)nativeAd {
     
@@ -86,15 +91,15 @@
 }
 
 - (void)nativeAdDidBecomeVisible:(BUNativeAd *)nativeAd {
-    [self.bridge renderAdapter_didAdExposuredWithAdapterId:self.adapterId];
+    [self.bridge renderFeed_didAdExposuredWithAdapter:self.adapter];
 }
 
 - (void)nativeAdDidCloseOtherController:(BUNativeAd *)nativeAd interactionType:(BUInteractionType)interactionType {
-    [self.bridge renderAdapter_didAdClosedDetailPageWithAdapterId:self.adapterId];
+    [self.bridge renderFeed_didAdClosedDetailPageWithAdapter:self.adapter];
 }
 
 - (void)nativeAdDidClick:(BUNativeAd *)nativeAd withView:(UIView *_Nullable)view {
-    [self.bridge renderAdapter_didAdClickedWithAdapterId:self.adapterId];
+    [self.bridge renderFeed_didAdClickedWithAdapter:self.adapter];
 }
 
 - (void)nativeAd:(BUNativeAd *)nativeAd dislikeWithReason:(NSArray<BUDislikeWords *> *)filterWords {
@@ -111,15 +116,15 @@
 }
 
 - (void)playerDidPlayFinish:(BUMediaAdView *)adView {
-    [self.bridge renderAdapter_didAdPlayFinishWithAdapterId:self.adapterId];
+    [self.bridge renderFeed_didAdPlayFinishWithAdapter:self.adapter];
 }
 
 - (void)videoAdViewDidClick:(BUMediaAdView *)adView {
-    [self.bridge renderAdapter_didAdClickedWithAdapterId:self.adapterId];
+    [self.bridge renderFeed_didAdClickedWithAdapter:self.adapter];
 }
 
 - (void)videoAdViewFinishViewDidClick:(BUMediaAdView *)adView {
-    [self.bridge renderAdapter_didAdClickedWithAdapterId:self.adapterId];
+    [self.bridge renderFeed_didAdClickedWithAdapter:self.adapter];
 }
 
 - (void)videoAdViewDidCloseOtherController:(BUMediaAdView *)adView interactionType:(BUInteractionType)interactionType {

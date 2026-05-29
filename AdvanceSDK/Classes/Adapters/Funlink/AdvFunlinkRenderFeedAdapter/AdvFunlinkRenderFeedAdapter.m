@@ -7,36 +7,32 @@
 
 #import "AdvFunlinkRenderFeedAdapter.h"
 #import <FLinkAdSaas/FLinkAdSaas.h>
-#import "AdvanceRenderFeedCommonAdapter.h"
+#import "AdvanceCommonAdapter.h"
 #import "AdvRenderFeedAdWrapper.h"
 #import "AdvFunlinkRenderFeedAdView.h"
 #import "AdvAdConfigHeader.h"
-#import "AdvError.h"
 
-@interface AdvFunlinkRenderFeedAdapter () <FLinkNativeDelegate, AdvanceRenderFeedCommonAdapter>
+@interface AdvFunlinkRenderFeedAdapter () <FLinkNativeDelegate, AdvanceCommonRenderFeedAdapter>
 
+@property (nonatomic, weak) id<AdvanceCommonRenderFeedAdapterBridge> bridge;
 @property (nonatomic, strong) FLinkNativeManager *flink_ad;
-@property (nonatomic, copy) NSString *adapterId;
 @property (nonatomic, strong) AdvRenderFeedAdWrapper *feedAdWrapper;
 
 @end
 
 @implementation AdvFunlinkRenderFeedAdapter
 
-@synthesize delegate = _delegate;
+- (void)adapter_setRenderFeedBridge:(id<AdvanceCommonRenderFeedAdapterBridge>)bridge {
+    _bridge = bridge;
+}
 
-- (void)adapter_setupWithAdapterId:(NSString *)adapterId placementId:(NSString *)placementId config:(NSDictionary *)config {
-    _adapterId = adapterId;
-    
+- (void)adapter_loadAdWithPlacementId:(NSString *)placementId config:(NSDictionary *)config {
     _flink_ad = [[FLinkNativeManager alloc] init];
     _flink_ad.delegate = self;
     _flink_ad.mediaId = placementId;
     _flink_ad.adCount = 1;
     _flink_ad.size = [config[kAdvanceAdSizeKey] CGSizeValue];
     _flink_ad.showAdController = config[kAdvanceAdPresentControllerKey];
-}
-
-- (void)adapter_loadAd {
     [_flink_ad loadAdData];
 }
 
@@ -44,34 +40,33 @@
     return self.feedAdWrapper;
 }
 
-- (void)adapter_sendWinNotificationWithSecondPrice:(NSInteger)secondPrice winPrice:(NSInteger)winPrice {
-    [_flink_ad sendWinNotificationWithPrice:secondPrice];
-}
-
-- (void)adapter_sendLossNotificationWithFirstPrice:(NSInteger)firstPrice {
-    [_flink_ad sendLossNotificationWithPrice:firstPrice];
+- (void)adapter_sendNotificationWithBidResult:(AdvBidWinLossResult *)result {
+    if (result.bidResultType == AdvBidWinLossResultTypeWin) {
+        [_flink_ad sendWinNotificationWithPrice:result.secondPrice];
+    } else {
+        [_flink_ad sendLossNotificationWithPrice:result.winPrice];
+    }
 }
 
 #pragma mark: - FLinkNativeDelegate
 - (void)nativeAdDidLoadDatas:(NSArray<__kindof FLinkFeedAdData *> *)datas {
     if (!datas.count) {
         NSError *error = [NSError errorWithDomain:@"FunlinkADErrorDomain" code:1 userInfo:@{NSLocalizedDescriptionKey: @"无广告返回"}];
-        [self.delegate renderAdapter_failedToLoadAdWithAdapterId:self.adapterId error:error];
+        [self.bridge renderFeed_failedToLoadAdWithAdapter:self error:error];
         return;
     }
     
     FLinkFeedAdData *feedAdData = datas.firstObject;
     AdvRenderFeedAdElement *element = [self generateFeedAdElementWithNativeAd:feedAdData];
-    AdvFunlinkRenderFeedAdView *flinkFeedAdView = [[AdvFunlinkRenderFeedAdView alloc] initWithAdData:feedAdData manager:self.flink_ad delegate:self.delegate adapterId:self.adapterId];
+    AdvFunlinkRenderFeedAdView *flinkFeedAdView = [[AdvFunlinkRenderFeedAdView alloc] initWithNativeAd:feedAdData bridge:self.bridge adapter:self manager:self.flink_ad viewController:nil];
     self.feedAdWrapper = [[AdvRenderFeedAdWrapper alloc] initWithFeedAdView:flinkFeedAdView feedAdElement:element];
     
     NSInteger ecpm = self.flink_ad.getCurrentBaseEcpmInfo.ecpm;
-    [self.delegate adapter_cacheAdapterIfNeeded:self adapterId:self.adapterId price:ecpm];
-    [self.delegate renderAdapter_didLoadAdWithAdapterId:self.adapterId price:ecpm];
+    [self.bridge renderFeed_didLoadAdWithAdapter:self price:ecpm];
 }
 
 - (void)nativeAdDidFailed:(NSError *)error {
-    [self.delegate renderAdapter_failedToLoadAdWithAdapterId:self.adapterId error:error];
+    [self.bridge renderFeed_failedToLoadAdWithAdapter:self error:error];
 }
 
 - (AdvRenderFeedAdElement *)generateFeedAdElementWithNativeAd:(FLinkFeedAdData *)feedAdData {

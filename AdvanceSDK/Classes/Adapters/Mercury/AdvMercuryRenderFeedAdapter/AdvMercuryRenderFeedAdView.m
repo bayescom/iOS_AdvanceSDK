@@ -9,23 +9,24 @@
 
 @interface AdvMercuryRenderFeedAdView () <MercuryUnifiedNativeAdViewDelegate, MercuryMediaViewDelegate>
 
-@property (nonatomic, weak) id<AdvanceRenderFeedCommonAdapter> bridge;
+@property (nonatomic, weak) id<AdvanceCommonRenderFeedAdapterBridge> bridge;
+@property (nonatomic, weak) id<AdvanceCommonRenderFeedAdapter>adapter;
 @property (nonatomic, strong) MercuryUnifiedNativeAdDataObject *adDataObject;
-@property (nonatomic, copy) NSString *adapterId;
 
 @end
 
 @implementation AdvMercuryRenderFeedAdView
 
-- (instancetype)initWithDataObject:(MercuryUnifiedNativeAdDataObject *)dataObject
-                          delegate:(id<AdvanceRenderFeedCommonAdapter>)delegate
-                         adapterId:(NSString *)adapterId
-                    viewController:(UIViewController *)viewController {
-    
+#pragma mark: - AdvanceRenderFeedAdViewProtocol
+- (instancetype)initWithNativeAd:(MercuryUnifiedNativeAdDataObject *)nativeAd
+                          bridge:(id<AdvanceCommonRenderFeedAdapterBridge>)bridge
+                         adapter:(id<AdvanceCommonRenderFeedAdapter>)adapter
+                         manager:(id)manager
+                  viewController:(UIViewController *)viewController {
     if (self = [super init]) {
-        self.adDataObject = dataObject;
-        self.bridge = delegate;
-        self.adapterId = adapterId;
+        self.adDataObject = nativeAd;
+        self.bridge = bridge;
+        self.adapter = adapter;
         
         self.delegate = self;
         self.viewController = viewController;
@@ -34,8 +35,10 @@
 }
 
 - (void)registerClickableViews:(nullable NSArray<UIView *> *)clickableViews andCloseableView:(nullable UIView *)closeableView {
-    MercuryVideoConfig *videoConfig = [[MercuryVideoConfig alloc] init];
-    self.adDataObject.videoConfig = videoConfig;
+    if (self.dataObject.isVideoAd) {
+        MercuryVideoConfig *videoConfig = [[MercuryVideoConfig alloc] init];
+        self.adDataObject.videoConfig = videoConfig;
+    }
     [super registerDataObject:self.dataObject clickableViews:clickableViews closeableViews:@[closeableView]];
 }
 
@@ -61,28 +64,28 @@
 
 /// 广告曝光回调
 - (void)mercury_unifiedNativeAdViewWillExpose:(MercuryUnifiedNativeAdView *)unifiedNativeAdView {
-    [self.bridge renderAdapter_didAdExposuredWithAdapterId:self.adapterId];
+    [self.bridge renderFeed_didAdExposuredWithAdapter:self.adapter];
 }
 
 /// 广告点击回调
 - (void)mercury_unifiedNativeAdViewDidClick:(MercuryUnifiedNativeAdView *)unifiedNativeAdView {
-    [self.bridge renderAdapter_didAdClickedWithAdapterId:self.adapterId];
+    [self.bridge renderFeed_didAdClickedWithAdapter:self.adapter];
 }
 
 /// 广告关闭回调
 - (void)mercury_unifiedNativeAdViewDidClose:(MercuryUnifiedNativeAdView *)unifiedNativeAdView {
-    [self.bridge renderAdapter_didAdClosedWithAdapterId:self.adapterId];
+    [self.bridge renderFeed_didAdClosedWithAdapter:self.adapter];
 }
 
 /// 广告详情页关闭回调
 - (void)mercury_unifiedNativeAdDetailViewClosed:(MercuryUnifiedNativeAdView *)unifiedNativeAdView {
-    [self.bridge renderAdapter_didAdClosedDetailPageWithAdapterId:self.adapterId];
+    [self.bridge renderFeed_didAdClosedDetailPageWithAdapter:self.adapter];
 }
 
 #pragma mark - MercuryMediaViewDelegate
 
 - (void)mercury_mediaViewDidPlayFinish:(MercuryMediaView *)mediaView {
-    [self.bridge renderAdapter_didAdPlayFinishWithAdapterId:self.adapterId];
+    [self.bridge renderFeed_didAdPlayFinishWithAdapter:self.adapter];
 }
 
 - (void)dealloc {

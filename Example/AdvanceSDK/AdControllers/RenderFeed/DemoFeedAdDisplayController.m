@@ -96,7 +96,7 @@
     self.closeBtn.frame = CGRectMake(width - 70, 10, 40, 40);
     
     CGFloat contentWidth = width - 60;
-    const CGFloat imageHeight = contentWidth * ((element.mediaHeight * 1.0) / (element.mediaWidth * 1.0));
+    const CGFloat imageHeight = contentWidth * ((element.mediaHeight * 1.0) / (element.mediaWidth * 1.0 ?: 1.0));
     CGFloat mediaMaxY = 0;
     if (!element.isVideoAd) { // 图片
         self.imgView.frame = CGRectMake(30, CGRectGetMaxY(self.iconImageView.frame) + 10, contentWidth, imageHeight);
@@ -142,31 +142,31 @@
 }
 
 /// 广告曝光回调
--(void)onRenderFeedAdViewExposured:(AdvRenderFeedAdWrapper *)feedAdWrapper {
-    NSLog(@"自渲染信息流广告曝光回调 %s %@", __func__, feedAdWrapper);
+-(void)onRenderFeedAdViewExposured:(AdvanceRenderFeed *)renderFeedAd {
+    NSLog(@"自渲染信息流广告曝光回调 %s %@", __func__, renderFeedAd);
 }
 
 /// 广告点击回调
-- (void)onRenderFeedAdViewClicked:(AdvRenderFeedAdWrapper *)feedAdWrapper {
-    NSLog(@"自渲染信息流广告点击回调 %s %@", __func__, feedAdWrapper);
+- (void)onRenderFeedAdViewClicked:(AdvanceRenderFeed *)renderFeedAd {
+    NSLog(@"自渲染信息流广告点击回调 %s %@", __func__, renderFeedAd);
 }
 
 /// 广告关闭回调
-- (void)onRenderFeedAdViewClosed:(AdvRenderFeedAdWrapper *)feedAdWrapper {
-    NSLog(@"自渲染信息流广告关闭回调 %s %@", __func__, feedAdWrapper);
+- (void)onRenderFeedAdViewClosed:(AdvanceRenderFeed *)renderFeedAd {
+    NSLog(@"自渲染信息流广告关闭回调 %s %@", __func__, renderFeedAd);
     // 手动移除广告视图
     [self.feedAdView removeFromSuperview];
     self.renderFeedAd = nil;
 }
 
 /// 广告详情页关闭回调
-- (void)onRenderFeedAdDidCloseDetailPage:(AdvRenderFeedAdWrapper *)feedAdWrapper {
-    NSLog(@"自渲染信息流广告详情页关闭回调 %s %@", __func__, feedAdWrapper);
+- (void)onRenderFeedAdDidCloseDetailPage:(AdvanceRenderFeed *)renderFeedAd {
+    NSLog(@"自渲染信息流广告详情页关闭回调 %s %@", __func__, renderFeedAd);
 }
 
 /// 视频广告播放结束回调
-- (void)onRenderFeedAdDidPlayFinish:(AdvRenderFeedAdWrapper *)feedAdWrapper {
-    NSLog(@"自渲染信息流广告视频播放结束回调 %s %@", __func__, feedAdWrapper);
+- (void)onRenderFeedAdDidPlayFinish:(AdvanceRenderFeed *)renderFeedAd {
+    NSLog(@"自渲染信息流广告视频播放结束回调 %s %@", __func__, renderFeedAd);
 }
 
 

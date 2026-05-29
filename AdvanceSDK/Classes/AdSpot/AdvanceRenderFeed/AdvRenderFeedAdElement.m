@@ -19,7 +19,7 @@
 
 - (BOOL)isAdValid {
     if (!_isAdValid) {
-        AdvLog(@"[show]广告展示前广告已失效过期");
+        AdvLog(@"[show]信息流广告展示前广告已失效过期");
     }
     return _isAdValid;
 }

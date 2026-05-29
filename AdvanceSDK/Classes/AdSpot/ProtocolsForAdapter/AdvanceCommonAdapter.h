@@ -14,6 +14,7 @@
 #import "AdvanceCommonRewardVideoAdapterBridge.h"
 #import "AdvanceCommonFullscreenVideoAdapterBridge.h"
 #import "AdvanceCommonNativeExpressAdapterBridge.h"
+#import "AdvanceCommonRenderFeedAdapterBridge.h"
 
 #pragma mark: - 广告的adapter基协议
 @protocol AdvanceCommonAdapter <NSObject>
@@ -24,27 +25,12 @@
 - (void)adapter_loadAdWithPlacementId:(NSString *)placementId
                                config:(NSDictionary *)config;
 
-
 @optional
 /// 广告是否有效
 - (BOOL)adapter_isAdValid;
 
-// Adn竞胜/竞败后回传信息
+/// Adn竞胜/竞败后回传信息
 - (void)adapter_sendNotificationWithBidResult:(AdvBidWinLossResult *)result;
-
-
-- (id)adapter_renderFeedAdWrapper; //自渲染信息流使用
-
-//是否缓存广告对象
-- (void)adapter_cacheAdapterIfNeeded:(id)adapter
-                           adapterId:(NSString *)adapterId
-                               price:(NSInteger)price;
-- (void)adapter_setupWithAdapterId:(NSString *)adapterId
-                       placementId:(NSString *)placementId
-                            config:(NSDictionary *)config;
-- (void)adapter_loadAd;
-
-
 
 @end
 
@@ -120,8 +106,11 @@
 
 #pragma mark: - 信息流（自渲染）广告的adapter广告协议
 @protocol AdvanceCommonRenderFeedAdapter <AdvanceCommonAdapter>
+/// 设置信息流 bridge 用于回传广告状态
+- (void)adapter_setRenderFeedBridge:(id<AdvanceCommonRenderFeedAdapterBridge>)bridge;
 
-
+/// 获取广告包装类信息
+- (id)adapter_renderFeedAdWrapper;
 
 @end
 

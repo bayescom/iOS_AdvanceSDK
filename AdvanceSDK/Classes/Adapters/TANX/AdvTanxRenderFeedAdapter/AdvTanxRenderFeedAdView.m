@@ -10,9 +10,9 @@
 
 @interface AdvTanxRenderFeedAdView () <TXAdFeedPlayerViewDelegate>
 
-@property (nonatomic, weak) id<AdvanceRenderFeedCommonAdapter> bridge;
+@property (nonatomic, weak) id<AdvanceCommonRenderFeedAdapterBridge> bridge;
+@property (nonatomic, weak) id<AdvanceCommonRenderFeedAdapter>adapter;
 @property (nonatomic, strong) TXAdFeedBinder *binder;
-@property (nonatomic, copy) NSString *adapterId;
 @property (nonatomic, strong) TXAdFeedPlayerView *tanxVideoView;
 @property (nonatomic, strong) AdvTanxAdLogoView *adLogoView;
 
@@ -20,14 +20,16 @@
 
 @implementation AdvTanxRenderFeedAdView
 
-- (instancetype)initWithBinder:(TXAdFeedBinder *)binder
-                      delegate:(id<AdvanceRenderFeedCommonAdapter>)delegate
-                     adapterId:(NSString *)adapterId {
-    
+#pragma mark: - AdvanceRenderFeedAdViewProtocol
+- (instancetype)initWithNativeAd:(TXAdFeedBinder *)nativeAd
+                          bridge:(id<AdvanceCommonRenderFeedAdapterBridge>)bridge
+                         adapter:(id<AdvanceCommonRenderFeedAdapter>)adapter
+                         manager:(id)manager
+                  viewController:(UIViewController *)viewController {
     if (self = [super init]) {
-        self.binder = binder;
-        self.bridge = delegate;
-        self.adapterId = adapterId;
+        self.binder = nativeAd;
+        self.bridge = bridge;
+        self.adapter = adapter;
     }
     return self;
 }
@@ -59,6 +61,7 @@
     return self.tanxVideoView;
 }
 
+#pragma mark: - Actions
 - (TXAdFeedPlayerView *)tanxVideoView {
     if (!_tanxVideoView) {
         TXAdFeedTemplateConfig *config =  [[TXAdFeedTemplateConfig alloc] init];
@@ -76,22 +79,22 @@
 
 #pragma mark: - TXAdFeedManagerDelegate
 - (void)onAdExposing:(TXAdModel *)model {
-    [self.bridge renderAdapter_didAdExposuredWithAdapterId:self.adapterId];
+    [self.bridge renderFeed_didAdExposuredWithAdapter:self.adapter];
 }
 
 - (void)onAdClick:(TXAdModel *)model clickView:(UIView *)clickView {
-    [self.bridge renderAdapter_didAdClickedWithAdapterId:self.adapterId];
+    [self.bridge renderFeed_didAdClickedWithAdapter:self.adapter];
 }
 
 - (void)onAdClose:(TXAdModel *)model {
-    [self.bridge renderAdapter_didAdClosedWithAdapterId:self.adapterId];
+    [self.bridge renderFeed_didAdClosedWithAdapter:self.adapter];
 }
 
 #pragma mark - TXAdFeedPlayerViewDelegate
 
 // 视频播放完成回调
 - (void)onVideoComplete {
-    [self.bridge renderAdapter_didAdPlayFinishWithAdapterId:self.adapterId];
+    [self.bridge renderFeed_didAdPlayFinishWithAdapter:self.adapter];
 }
 
 - (void)dealloc {

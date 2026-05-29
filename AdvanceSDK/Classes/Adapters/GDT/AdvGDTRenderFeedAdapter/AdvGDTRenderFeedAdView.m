@@ -9,50 +9,43 @@
 
 @interface AdvGDTRenderFeedAdView () <GDTUnifiedNativeAdViewDelegate, GDTMediaViewDelegate>
 
-@property (nonatomic, weak) id<AdvanceRenderFeedCommonAdapter> bridge;
+@property (nonatomic, weak) id<AdvanceCommonRenderFeedAdapterBridge> bridge;
+@property (nonatomic, weak) id<AdvanceCommonRenderFeedAdapter>adapter;
 @property (nonatomic, strong) GDTUnifiedNativeAdDataObject *adDataObject;
-@property (nonatomic, copy) NSString *adapterId;
 
 @end
 
 @implementation AdvGDTRenderFeedAdView
 
-- (instancetype)initWithDataObject:(GDTUnifiedNativeAdDataObject *)dataObject
-                          delegate:(id<AdvanceRenderFeedCommonAdapter>)delegate
-                         adapterId:(NSString *)adapterId
-                    viewController:(UIViewController *)viewController {
+#pragma mark: - AdvanceRenderFeedAdViewProtocol
+- (instancetype)initWithNativeAd:(GDTUnifiedNativeAdDataObject *)nativeAd
+                          bridge:(id<AdvanceCommonRenderFeedAdapterBridge>)bridge
+                         adapter:(id<AdvanceCommonRenderFeedAdapter>)adapter
+                         manager:(id)manager
+                  viewController:(UIViewController *)viewController {
     if (self = [super init]) {
-        self.adDataObject = dataObject;
-        self.bridge = delegate;
-        self.adapterId = adapterId;
+        self.adDataObject = nativeAd;
+        self.bridge = bridge;
+        self.adapter = adapter;
         
         self.delegate = self;
         self.viewController = viewController;
     }
     return self;
+    
 }
 
 - (void)registerClickableViews:(nullable NSArray<UIView *> *)clickableViews andCloseableView:(nullable UIView *)closeableView {
-    if ([self.adDataObject isAdValid]) {
+    if ([self.adDataObject isVideoAd]) {
         GDTVideoConfig *videoConfig = [[GDTVideoConfig alloc] init];
         videoConfig.videoMuted = YES;
         videoConfig.userControlEnable = YES;
         self.adDataObject.videoConfig = videoConfig;
-        [super registerDataObject:self.adDataObject clickableViews:clickableViews];
     }
+    [super registerDataObject:self.adDataObject clickableViews:clickableViews];
     if (closeableView) {
         [self setupCloseView:closeableView];
     }
-}
-
-- (void)setupCloseView:(UIView *)closeableView {
-    closeableView.userInteractionEnabled = YES;
-    UITapGestureRecognizer *gr = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapCloseViewAction:)];
-    [closeableView addGestureRecognizer:gr];
-}
-
-- (void)tapCloseViewAction:(UITapGestureRecognizer *)gr {
-    [self.bridge renderAdapter_didAdClosedWithAdapterId:self.adapterId];
 }
 
 - (CGSize)logoSize {
@@ -70,18 +63,30 @@
     return self.mediaView;
 }
 
+#pragma mark: - Actions
+- (void)setupCloseView:(UIView *)closeableView {
+    closeableView.userInteractionEnabled = YES;
+    UITapGestureRecognizer *gr = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapCloseViewAction:)];
+    [closeableView addGestureRecognizer:gr];
+}
+
+- (void)tapCloseViewAction:(UITapGestureRecognizer *)gr {
+    [self.bridge renderFeed_didAdClosedWithAdapter:self.adapter];
+}
+
+
 
 #pragma mark - GDTUnifiedNativeAdViewDelegate
 - (void)gdt_unifiedNativeAdViewDidClick:(GDTUnifiedNativeAdView *)unifiedNativeAdView {
-    [self.bridge renderAdapter_didAdClickedWithAdapterId:self.adapterId];
+    [self.bridge renderFeed_didAdClickedWithAdapter:self.adapter];
 }
 
 - (void)gdt_unifiedNativeAdViewWillExpose:(GDTUnifiedNativeAdView *)unifiedNativeAdView {
-    [self.bridge renderAdapter_didAdExposuredWithAdapterId:self.adapterId];
+    [self.bridge renderFeed_didAdExposuredWithAdapter:self.adapter];
 }
 
 - (void)gdt_unifiedNativeAdDetailViewClosed:(GDTUnifiedNativeAdView *)unifiedNativeAdView {
-    [self.bridge renderAdapter_didAdClosedDetailPageWithAdapterId:self.adapterId];
+    [self.bridge renderFeed_didAdClosedDetailPageWithAdapter:self.adapter];
 }
 
 - (void)gdt_unifiedNativeAdViewApplicationWillEnterBackground:(GDTUnifiedNativeAdView *)unifiedNativeAdView {
@@ -98,11 +103,11 @@
 
 #pragma mark - GDTMediaViewDelegate
 - (void)gdt_mediaViewDidPlayFinished:(GDTMediaView *)mediaView {
-    [self.bridge renderAdapter_didAdPlayFinishWithAdapterId:self.adapterId];
+    [self.bridge renderFeed_didAdPlayFinishWithAdapter:self.adapter];
 }
 
 - (void)gdt_mediaViewDidTapped:(GDTMediaView *)mediaView {
-    [self.bridge renderAdapter_didAdClickedWithAdapterId:self.adapterId];
+    [self.bridge renderFeed_didAdClickedWithAdapter:self.adapter];
 }
 
 -(void)dealloc {

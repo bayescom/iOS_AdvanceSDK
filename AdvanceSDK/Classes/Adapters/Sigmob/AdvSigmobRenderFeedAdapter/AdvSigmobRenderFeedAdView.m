@@ -10,23 +10,23 @@
 
 @interface AdvSigmobRenderFeedAdView () <WindNativeAdViewDelegate>
 
-@property (nonatomic, weak) id<AdvanceRenderFeedCommonAdapter> bridge;
-@property (nonatomic, strong) WindNativeAd *adDataObject;
-@property (nonatomic, copy) NSString *adapterId;
+@property (nonatomic, weak) id<AdvanceCommonRenderFeedAdapterBridge> bridge;
+@property (nonatomic, weak) id<AdvanceCommonRenderFeedAdapter>adapter;
 @property (nonatomic, strong) AdvSigmobAdLogoView *adLogoView;
 
 @end
 
 @implementation AdvSigmobRenderFeedAdView
 
-- (instancetype)initWithNativeAd:(WindNativeAd *)nativeAd
-                        delegate:(id<AdvanceRenderFeedCommonAdapter>)delegate
-                       adapterId:(NSString *)adapterId
+#pragma mark: - AdvanceRenderFeedAdViewProtocol
+- (instancetype)initWithNativeAd:(id)nativeAd
+                          bridge:(id<AdvanceCommonRenderFeedAdapterBridge>)bridge
+                         adapter:(id<AdvanceCommonRenderFeedAdapter>)adapter
+                         manager:(id)manager
                   viewController:(UIViewController *)viewController {
     if (self = [super init]) {
-        self.adDataObject = nativeAd;
-        self.bridge = delegate;
-        self.adapterId = adapterId;
+        self.bridge = bridge;
+        self.adapter = adapter;
         
         self.delegate = self;
         self.viewController = viewController;
@@ -44,16 +44,6 @@
     }
 }
 
-- (void)setupCloseView:(UIView *)closeableView {
-    closeableView.userInteractionEnabled = YES;
-    UITapGestureRecognizer *gr = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapCloseViewAction:)];
-    [closeableView addGestureRecognizer:gr];
-}
-
-- (void)tapCloseViewAction:(UITapGestureRecognizer *)gr {
-    [self.bridge renderAdapter_didAdClosedWithAdapterId:self.adapterId];
-}
-
 - (CGSize)logoSize {
     return CGSizeMake(43, 16);
 }
@@ -69,6 +59,17 @@
     return self.mediaView;
 }
 
+#pragma mark - Actions
+- (void)setupCloseView:(UIView *)closeableView {
+    closeableView.userInteractionEnabled = YES;
+    UITapGestureRecognizer *gr = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapCloseViewAction:)];
+    [closeableView addGestureRecognizer:gr];
+}
+
+- (void)tapCloseViewAction:(UITapGestureRecognizer *)gr {
+    [self.bridge renderFeed_didAdClosedWithAdapter:self.adapter];
+}
+
 - (AdvSigmobAdLogoView *)adLogoView {
     if (!_adLogoView) {
         _adLogoView = [[AdvSigmobAdLogoView alloc] init];
@@ -79,18 +80,18 @@
 #pragma mark - WindNativeAdViewDelegate
 /// 广告曝光回调
 - (void)nativeAdViewWillExpose:(WindNativeAdView *)nativeAdView {
-    [self.bridge renderAdapter_didAdExposuredWithAdapterId:self.adapterId];
+    [self.bridge renderFeed_didAdExposuredWithAdapter:self.adapter];
 }
 
 /// 广告点击回调
 - (void)nativeAdViewDidClick:(WindNativeAdView *)nativeAdView {
-    [self.bridge renderAdapter_didAdClickedWithAdapterId:self.adapterId];
+    [self.bridge renderFeed_didAdClickedWithAdapter:self.adapter];
 }
 
 /// 视频播放结束回调
 - (void)nativeAdView:(WindNativeAdView *)nativeAdView playerStatusChanged:(WindMediaPlayerStatus)status userInfo:(NSDictionary *)userInfo {
     if (status == WindMediaPlayerStatusStoped) {
-        [self.bridge renderAdapter_didAdPlayFinishWithAdapterId:self.adapterId];
+        [self.bridge renderFeed_didAdPlayFinishWithAdapter:self.adapter];
     }
 }
 

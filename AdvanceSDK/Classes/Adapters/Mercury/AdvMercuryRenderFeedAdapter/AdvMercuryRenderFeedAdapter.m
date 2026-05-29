@@ -7,17 +7,16 @@
 
 #import "AdvMercuryRenderFeedAdapter.h"
 #import <MercurySDK/MercurySDK.h>
-#import "AdvanceRenderFeedCommonAdapter.h"
+#import "AdvanceCommonAdapter.h"
 #import "AdvRenderFeedAdWrapper.h"
 #import "AdvMercuryRenderFeedAdView.h"
 #import "AdvAdConfigHeader.h"
-#import "AdvError.h"
 
-@interface AdvMercuryRenderFeedAdapter () <MercuryUnifiedNativeAdDelegate, AdvanceRenderFeedCommonAdapter>
+@interface AdvMercuryRenderFeedAdapter () <MercuryUnifiedNativeAdDelegate, AdvanceCommonRenderFeedAdapter>
 
+@property (nonatomic, weak) id<AdvanceCommonRenderFeedAdapterBridge> bridge;
 @property (nonatomic, strong) MercuryUnifiedNativeAd *mercury_ad;
 @property (nonatomic, strong) MercuryUnifiedNativeAdDataObject *dataObject;
-@property (nonatomic, copy) NSString *adapterId;
 @property (nonatomic, strong) AdvRenderFeedAdWrapper *feedAdWrapper;
 @property (nonatomic, weak) UIViewController *rootViewController;
  
@@ -25,16 +24,14 @@
 
 @implementation AdvMercuryRenderFeedAdapter
 
-@synthesize delegate = _delegate;
+- (void)adapter_setRenderFeedBridge:(id<AdvanceCommonRenderFeedAdapterBridge>)bridge {
+    _bridge = bridge;
+}
 
-- (void)adapter_setupWithAdapterId:(NSString *)adapterId placementId:(NSString *)placementId config:(NSDictionary *)config {
-    _adapterId = adapterId;
+- (void)adapter_loadAdWithPlacementId:(NSString *)placementId config:(NSDictionary *)config {
     _rootViewController = config[kAdvanceAdPresentControllerKey];
     
     _mercury_ad = [[MercuryUnifiedNativeAd alloc] initAdWithAdspotId:placementId delegate:self];
-}
-
-- (void)adapter_loadAd {
     [_mercury_ad loadAd];
 }
 
@@ -42,29 +39,26 @@
     return self.feedAdWrapper;
 }
 
-- (void)adapter_sendWinNotificationWithSecondPrice:(NSInteger)secondPrice winPrice:(NSInteger)winPrice {
-    
-}
-
-- (void)adapter_sendLossNotificationWithFirstPrice:(NSInteger)firstPrice {
-    [_dataObject sendLossNotificationWithPrice:firstPrice];
+- (void)adapter_sendNotificationWithBidResult:(AdvBidWinLossResult *)result {
+    if (result.bidResultType == AdvBidWinLossResultTypeLoss) {
+        [_dataObject sendLossNotificationWithPrice:result.winPrice];
+    }
 }
 
 #pragma mark - MercuryUnifiedNativeAdDelegate
 - (void)mercury_unifiedNativeAdLoaded:(NSArray<MercuryUnifiedNativeAdDataObject *> *)unifiedNativeAdDataObjects error:(NSError *)error {
     if (error) {
-        [self.delegate renderAdapter_failedToLoadAdWithAdapterId:self.adapterId error:error];
+        [self.bridge renderFeed_failedToLoadAdWithAdapter:self error:error];
         return;
     }
     
     MercuryUnifiedNativeAdDataObject *dataObject = unifiedNativeAdDataObjects.firstObject;
     self.dataObject = dataObject;
     AdvRenderFeedAdElement *element = [self generateFeedAdElementWithDataObject:dataObject];
-    AdvMercuryRenderFeedAdView *mercuryFeedAdView = [[AdvMercuryRenderFeedAdView alloc] initWithDataObject:dataObject delegate:self.delegate adapterId:self.adapterId viewController:self.rootViewController];
+    AdvMercuryRenderFeedAdView *mercuryFeedAdView = [[AdvMercuryRenderFeedAdView alloc] initWithNativeAd:dataObject bridge:self.bridge adapter:self manager:nil viewController:self.rootViewController];
     self.feedAdWrapper = [[AdvRenderFeedAdWrapper alloc] initWithFeedAdView:mercuryFeedAdView feedAdElement:element];
     
-    [self.delegate adapter_cacheAdapterIfNeeded:self adapterId:self.adapterId price:dataObject.price];
-    [self.delegate renderAdapter_didLoadAdWithAdapterId:self.adapterId price:dataObject.price];
+    [self.bridge renderFeed_didLoadAdWithAdapter:self price:dataObject.price];
 }
 
 - (AdvRenderFeedAdElement *)generateFeedAdElementWithDataObject:(MercuryUnifiedNativeAdDataObject *)dataObject {

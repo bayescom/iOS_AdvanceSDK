@@ -7,17 +7,16 @@
 
 #import "AdvCSJRenderFeedAdapter.h"
 #import <BUAdSDK/BUAdSDK.h>
-#import "AdvanceRenderFeedCommonAdapter.h"
+#import "AdvanceCommonAdapter.h"
 #import "AdvRenderFeedAdWrapper.h"
 #import "AdvCSJRenderFeedAdView.h"
 #import "AdvAdConfigHeader.h"
-#import "AdvError.h"
 
-@interface AdvCSJRenderFeedAdapter () <BUNativeAdsManagerDelegate, AdvanceRenderFeedCommonAdapter>
+@interface AdvCSJRenderFeedAdapter () <BUNativeAdsManagerDelegate, AdvanceCommonRenderFeedAdapter>
 
+@property (nonatomic, weak) id<AdvanceCommonRenderFeedAdapterBridge> bridge;
 @property (nonatomic, strong) BUNativeAdsManager *csj_ad;
 @property (nonatomic, strong) BUNativeAd *nativeAd;
-@property (nonatomic, copy) NSString *adapterId;
 @property (nonatomic, strong) AdvRenderFeedAdWrapper *feedAdWrapper;
 @property (nonatomic, weak) UIViewController *rootViewController;
  
@@ -25,10 +24,11 @@
 
 @implementation AdvCSJRenderFeedAdapter
 
-@synthesize delegate = _delegate;
+- (void)adapter_setRenderFeedBridge:(id<AdvanceCommonRenderFeedAdapterBridge>)bridge {
+    _bridge = bridge;
+}
 
-- (void)adapter_setupWithAdapterId:(NSString *)adapterId placementId:(NSString *)placementId config:(NSDictionary *)config {
-    _adapterId = adapterId;
+- (void)adapter_loadAdWithPlacementId:(NSString *)placementId config:(NSDictionary *)config {
     _rootViewController = config[kAdvanceAdPresentControllerKey];
     
     BUAdSlot *slot = [[BUAdSlot alloc] init];
@@ -38,9 +38,6 @@
     slot.imgSize = [BUSize sizeBy:BUProposalSize_Feed690_388];
     _csj_ad = [[BUNativeAdsManager alloc] initWithSlot:slot];
     _csj_ad.delegate = self;
-}
-
-- (void)adapter_loadAd {
     [_csj_ad loadAdDataWithCount:1];
 }
 
@@ -48,19 +45,20 @@
     return self.feedAdWrapper;
 }
 
-- (void)adapter_sendWinNotificationWithSecondPrice:(NSInteger)secondPrice winPrice:(NSInteger)winPrice {
-    [_nativeAd win:@(secondPrice)];
+- (void)adapter_sendNotificationWithBidResult:(AdvBidWinLossResult *)result {
+    if (result.bidResultType == AdvBidWinLossResultTypeWin) {
+        [_nativeAd win:@(result.secondPrice)];
+    } else {
+        [_nativeAd loss:@(result.winPrice) lossReason:nil winBidder:nil];
+    }
 }
 
-- (void)adapter_sendLossNotificationWithFirstPrice:(NSInteger)firstPrice {
-    [_nativeAd loss:@(firstPrice) lossReason:nil winBidder:nil];
-}
 
 #pragma mark - BUNativeAdsManagerDelegate
 - (void)nativeAdsManagerSuccessToLoad:(BUNativeAdsManager *)adsManager nativeAds:(NSArray<BUNativeAd *> *_Nullable)nativeAdDataArray {
     if (!nativeAdDataArray.count) {
         NSError *error = [NSError errorWithDomain:@"BUAdErrorDomain" code:1 userInfo:@{NSLocalizedDescriptionKey: @"无广告返回"}];
-        [self.delegate renderAdapter_failedToLoadAdWithAdapterId:self.adapterId error:error];
+        [self.bridge renderFeed_failedToLoadAdWithAdapter:self error:error];
         return;
     }
     
@@ -68,15 +66,14 @@
     self.nativeAd = nativeAd;
     NSDictionary *ext = nativeAd.data.mediaExt;
     AdvRenderFeedAdElement *element = [self generateFeedAdElementWithNativeAd:nativeAd];
-    AdvCSJRenderFeedAdView *csjFeedAdView = [[AdvCSJRenderFeedAdView alloc] initWithNativeAd:nativeAd delegate:self.delegate adapterId:self.adapterId viewController:self.rootViewController];
+    AdvCSJRenderFeedAdView *csjFeedAdView = [[AdvCSJRenderFeedAdView alloc] initWithNativeAd:nativeAd bridge:self.bridge adapter:self manager:nil viewController:self.rootViewController];
     self.feedAdWrapper = [[AdvRenderFeedAdWrapper alloc] initWithFeedAdView:csjFeedAdView feedAdElement:element];
     
-    [self.delegate adapter_cacheAdapterIfNeeded:self adapterId:self.adapterId price:[ext[@"price"] integerValue]];
-    [self.delegate renderAdapter_didLoadAdWithAdapterId:self.adapterId price:[ext[@"price"] integerValue]];
+    [self.bridge renderFeed_didLoadAdWithAdapter:self price:[ext[@"price"] integerValue]];
 }
 
 - (void)nativeAdsManager:(BUNativeAdsManager *)adsManager didFailWithError:(NSError *)error {
-    [self.delegate renderAdapter_failedToLoadAdWithAdapterId:self.adapterId error:error];
+    [self.bridge renderFeed_failedToLoadAdWithAdapter:self error:error];
 }
 
 - (AdvRenderFeedAdElement *)generateFeedAdElementWithNativeAd:(BUNativeAd *)nativeAd {

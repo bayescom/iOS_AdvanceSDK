@@ -7,13 +7,14 @@
 
 #import "AdvFunlinkRenderFeedAdView.h"
 #import "AdvFunlinkAdLogoView.h"
+#import <FLinkAdSaas/FLinkAdSaas.h>
 
 @interface AdvFunlinkRenderFeedAdView () <FLinkNativeDelegate, FLinkNativeAdRenderProtocol>
 
-@property (nonatomic, weak) id<AdvanceRenderFeedCommonAdapter> bridge;
+@property (nonatomic, weak) id<AdvanceCommonRenderFeedAdapterBridge> bridge;
+@property (nonatomic, weak) id<AdvanceCommonRenderFeedAdapter>adapter;
 @property (nonatomic, weak) FLinkNativeManager *manager;
 @property (nonatomic, strong) FLinkFeedAdData *adData;
-@property (nonatomic, copy) NSString *adapterId;
 @property (nonatomic, strong) AdvFunlinkAdLogoView *adLogoView;
 @property (nonatomic, strong) NSArray *clickableViews;
 
@@ -21,16 +22,18 @@
 
 @implementation AdvFunlinkRenderFeedAdView
 
-- (instancetype)initWithAdData:(FLinkFeedAdData*)data
-                       manager:(FLinkNativeManager *)manager
-                      delegate:(id<AdvanceRenderFeedCommonAdapter>)delegate
-                     adapterId:(NSString *)adapterId {
+#pragma mark: - AdvanceRenderFeedAdViewProtocol
+- (instancetype)initWithNativeAd:(FLinkFeedAdData *)nativeAd
+                          bridge:(id<AdvanceCommonRenderFeedAdapterBridge>)bridge
+                         adapter:(id<AdvanceCommonRenderFeedAdapter>)adapter
+                         manager:(FLinkNativeManager *)manager
+                  viewController:(UIViewController *)viewController {
     if (self = [super init]) {
-        self.adData = data;
+        self.adData = nativeAd;
         self.manager = manager;
         self.manager.delegate = self;
-        self.bridge = delegate;
-        self.adapterId = adapterId;
+        self.bridge = bridge;
+        self.adapter = adapter;
     }
     return self;
 }
@@ -42,16 +45,6 @@
     if (closeableView) {
         [self setupCloseView:closeableView];
     }
-}
-
-- (void)setupCloseView:(UIView *)closeableView {
-    closeableView.userInteractionEnabled = YES;
-    UITapGestureRecognizer *gr = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapCloseViewAction:)];
-    [closeableView addGestureRecognizer:gr];
-}
-
-- (void)tapCloseViewAction:(UITapGestureRecognizer *)gr {
-    [self.bridge renderAdapter_didAdClosedWithAdapterId:self.adapterId];
 }
 
 - (CGSize)logoSize {
@@ -70,6 +63,17 @@
         [self addSubview:self.adData.mediaView];
     }
     return self.adData.mediaView;
+}
+
+#pragma mark: - Actions
+- (void)setupCloseView:(UIView *)closeableView {
+    closeableView.userInteractionEnabled = YES;
+    UITapGestureRecognizer *gr = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapCloseViewAction:)];
+    [closeableView addGestureRecognizer:gr];
+}
+
+- (void)tapCloseViewAction:(UITapGestureRecognizer *)gr {
+    [self.bridge renderFeed_didAdClosedWithAdapter:self.adapter];
 }
 
 - (AdvFunlinkAdLogoView *)adLogoView {
@@ -97,15 +101,15 @@
 
 #pragma mark - FLinkNativeDelegate
 - (void)nativeAdDidVisible {
-    [self.bridge renderAdapter_didAdExposuredWithAdapterId:self.adapterId];
+    [self.bridge renderFeed_didAdExposuredWithAdapter:self.adapter];
 }
 
 - (void)nativeAdDidClicked {
-    [self.bridge renderAdapter_didAdClickedWithAdapterId:self.adapterId];
+    [self.bridge renderFeed_didAdClickedWithAdapter:self.adapter];
 }
 
 - (void)nativeAdDidCloseWithADView:(UIView *)nativeAdView {
-    [self.bridge renderAdapter_didAdClosedDetailPageWithAdapterId:self.adapterId];
+    [self.bridge renderFeed_didAdClosedDetailPageWithAdapter:self.adapter];
 }
 
 

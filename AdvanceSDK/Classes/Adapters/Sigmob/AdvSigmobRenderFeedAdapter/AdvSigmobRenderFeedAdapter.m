@@ -7,16 +7,15 @@
 
 #import "AdvSigmobRenderFeedAdapter.h"
 #import <WindSDK/WindSDK.h>
-#import "AdvanceRenderFeedCommonAdapter.h"
+#import "AdvanceCommonAdapter.h"
 #import "AdvRenderFeedAdWrapper.h"
 #import "AdvSigmobRenderFeedAdView.h"
 #import "AdvAdConfigHeader.h"
-#import "AdvError.h"
 
-@interface AdvSigmobRenderFeedAdapter () <WindNativeAdsManagerDelegate, AdvanceRenderFeedCommonAdapter>
+@interface AdvSigmobRenderFeedAdapter () <WindNativeAdsManagerDelegate, AdvanceCommonRenderFeedAdapter>
 
+@property (nonatomic, weak) id<AdvanceCommonRenderFeedAdapterBridge> bridge;
 @property (nonatomic, strong) WindNativeAdsManager *sigmob_ad;
-@property (nonatomic, copy) NSString *adapterId;
 @property (nonatomic, strong) AdvRenderFeedAdWrapper *feedAdWrapper;
 @property (nonatomic, weak) UIViewController *rootViewController;
 @property (nonatomic, assign) BOOL hasFailed;
@@ -25,19 +24,17 @@
 
 @implementation AdvSigmobRenderFeedAdapter
 
-@synthesize delegate = _delegate;
+- (void)adapter_setRenderFeedBridge:(id<AdvanceCommonRenderFeedAdapterBridge>)bridge {
+    _bridge = bridge;
+}
 
-- (void)adapter_setupWithAdapterId:(NSString *)adapterId placementId:(NSString *)placementId config:(NSDictionary *)config {
-    _adapterId = adapterId;
+- (void)adapter_loadAdWithPlacementId:(NSString *)placementId config:(NSDictionary *)config {
     _rootViewController = config[kAdvanceAdPresentControllerKey];
     
     WindAdRequest *request = [WindAdRequest request];
     request.placementId = placementId;
     _sigmob_ad = [[WindNativeAdsManager alloc] initWithRequest:request];
     _sigmob_ad.delegate = self;
-}
-
-- (void)adapter_loadAd {
     [_sigmob_ad loadAdDataWithCount:1];
 }
 
@@ -45,12 +42,8 @@
     return self.feedAdWrapper;
 }
 
-- (void)adapter_sendWinNotificationWithSecondPrice:(NSInteger)secondPrice winPrice:(NSInteger)winPrice {
-//    [_sigmob_ad sendWinNotificationWithInfo:@{AUCTION_PRICE: @(secondPrice)}];
-}
-
-- (void)adapter_sendLossNotificationWithFirstPrice:(NSInteger)firstPrice {
-//    [_sigmob_ad sendLossNotificationWithInfo:@{AUCTION_PRICE: @(firstPrice)}];
+- (void)adapter_sendNotificationWithBidResult:(AdvBidWinLossResult *)result {
+    
 }
 
 
@@ -61,11 +54,10 @@
     
     WindNativeAd *nativeAd = nativeAdDataArray.firstObject;
     AdvRenderFeedAdElement *element = [self generateFeedAdElementWithNativeAd:nativeAd];
-    AdvSigmobRenderFeedAdView *sigmobFeedAdView = [[AdvSigmobRenderFeedAdView alloc] initWithNativeAd:nativeAd delegate:self.delegate adapterId:self.adapterId viewController:self.rootViewController];
+    AdvSigmobRenderFeedAdView *sigmobFeedAdView = [[AdvSigmobRenderFeedAdView alloc] initWithNativeAd:nativeAd bridge:self.bridge adapter:self manager:nil viewController:nil];
     self.feedAdWrapper = [[AdvRenderFeedAdWrapper alloc] initWithFeedAdView:sigmobFeedAdView feedAdElement:element];
     
-    [self.delegate adapter_cacheAdapterIfNeeded:self adapterId:self.adapterId price:adsManager.getEcpm.integerValue];
-    [self.delegate renderAdapter_didLoadAdWithAdapterId:self.adapterId price:adsManager.getEcpm.integerValue];
+    [self.bridge renderFeed_didLoadAdWithAdapter:self price:adsManager.getEcpm.integerValue];
 }
 
 /// 广告加载出错回调
@@ -73,7 +65,7 @@
         didFailWithError:(NSError *)error {
     if (!_hasFailed) { /// 某些错误码时，会重复进入此回调导致接口频繁上报线程崩溃
         _hasFailed = YES;
-        [self.delegate renderAdapter_failedToLoadAdWithAdapterId:self.adapterId error:nil];
+        [self.bridge renderFeed_failedToLoadAdWithAdapter:self error:error];
     }
 }
 

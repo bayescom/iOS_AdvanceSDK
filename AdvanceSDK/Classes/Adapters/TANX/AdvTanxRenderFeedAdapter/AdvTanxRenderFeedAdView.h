@@ -7,24 +7,11 @@
 
 #import <UIKit/UIKit.h>
 #import <TanxSDK/TanxSDK.h>
-#import "AdvanceRenderFeedCommonAdapter.h"
+#import "AdvanceRenderFeedAdViewProtocol.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface AdvTanxRenderFeedAdView : TXAdFeedView <TXAdFeedManagerDelegate>
-
-- (instancetype)initWithBinder:(TXAdFeedBinder *)binder
-                      delegate:(id<AdvanceRenderFeedCommonAdapter>)delegate
-                     adapterId:(NSString *)adapterId;
-
-- (void)registerClickableViews:(nullable NSArray<UIView *> *)clickableViews
-              andCloseableView:(nullable UIView *)closeableView;
-
-@property (nonatomic, strong, readonly) UIView *logoImageView;
-
-@property (nonatomic, strong, readonly) UIView *videoAdView;
-
-@property (nonatomic, assign, readonly) CGSize logoSize;
+@interface AdvTanxRenderFeedAdView : TXAdFeedView <TXAdFeedManagerDelegate, AdvanceRenderFeedAdViewProtocol>
 
 @end
 

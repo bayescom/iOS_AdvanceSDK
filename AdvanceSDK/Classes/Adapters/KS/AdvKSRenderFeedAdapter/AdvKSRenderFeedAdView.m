@@ -7,27 +7,30 @@
 
 #import "AdvKSRenderFeedAdView.h"
 #import "AdvKSAdLogoView.h"
+#import <KSAdSDK/KSAdSDK.h>
 
 @interface AdvKSRenderFeedAdView () <KSNativeAdDelegate>
 
-@property (nonatomic, weak) id<AdvanceRenderFeedCommonAdapter> bridge;
+@property (nonatomic, weak) id<AdvanceCommonRenderFeedAdapterBridge> bridge;
+@property (nonatomic, weak) id<AdvanceCommonRenderFeedAdapter>adapter;
 @property (nonatomic, strong) KSNativeAd *nativeAd;
 @property (nonatomic, strong) KSNativeAdRelatedView *nativeAdRelatedView;
-@property (nonatomic, copy) NSString *adapterId;
 @property (nonatomic, strong) AdvKSAdLogoView *adLogoView;
 
 @end
 
 @implementation AdvKSRenderFeedAdView
 
+#pragma mark: - AdvanceRenderFeedAdViewProtocol
 - (instancetype)initWithNativeAd:(KSNativeAd *)nativeAd
-                        delegate:(id<AdvanceRenderFeedCommonAdapter>)delegate
-                       adapterId:(NSString *)adapterId
+                          bridge:(id<AdvanceCommonRenderFeedAdapterBridge>)bridge
+                         adapter:(id<AdvanceCommonRenderFeedAdapter>)adapter
+                         manager:(id)manager
                   viewController:(UIViewController *)viewController {
     if (self = [super init]) {
         self.nativeAd = nativeAd;
-        self.bridge = delegate;
-        self.adapterId = adapterId;
+        self.bridge = bridge;
+        self.adapter = adapter;
         
         self.nativeAd.delegate = self;
         self.nativeAd.rootViewController = viewController;
@@ -42,16 +45,6 @@
     if (closeableView) {
         [self setupCloseView:closeableView];
     }
-}
-
-- (void)setupCloseView:(UIView *)closeableView {
-    closeableView.userInteractionEnabled = YES;
-    UITapGestureRecognizer *gr = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapCloseViewAction:)];
-    [closeableView addGestureRecognizer:gr];
-}
-
-- (void)tapCloseViewAction:(UITapGestureRecognizer *)gr {
-    [self.bridge renderAdapter_didAdClosedWithAdapterId:self.adapterId];
 }
 
 - (CGSize)logoSize {
@@ -72,6 +65,18 @@
     return self.nativeAdRelatedView.videoAdView;
 }
 
+#pragma mark: - Actions
+- (void)setupCloseView:(UIView *)closeableView {
+    closeableView.userInteractionEnabled = YES;
+    UITapGestureRecognizer *gr = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapCloseViewAction:)];
+    [closeableView addGestureRecognizer:gr];
+}
+
+- (void)tapCloseViewAction:(UITapGestureRecognizer *)gr {
+    [self.bridge renderFeed_didAdClosedWithAdapter:self.adapter];
+}
+
+
 - (AdvKSAdLogoView *)adLogoView {
     if (!_adLogoView) {
         _adLogoView = [[AdvKSAdLogoView alloc] init];
@@ -90,19 +95,19 @@
 }
 
 - (void)nativeAdDidBecomeVisible:(KSNativeAd *)nativeAd {
-    [self.bridge renderAdapter_didAdExposuredWithAdapterId:self.adapterId];
+    [self.bridge renderFeed_didAdExposuredWithAdapter:self.adapter];
 }
 
 - (void)nativeAdDidCloseOtherController:(KSNativeAd *)nativeAd interactionType:(KSAdInteractionType)interactionType {
-    [self.bridge renderAdapter_didAdClosedDetailPageWithAdapterId:self.adapterId];
+    [self.bridge renderFeed_didAdClosedDetailPageWithAdapter:self.adapter];
 }
 
 - (void)nativeAdDidClick:(KSNativeAd *)nativeAd withView:(UIView *_Nullable)view {
-    [self.bridge renderAdapter_didAdClickedWithAdapterId:self.adapterId];
+    [self.bridge renderFeed_didAdClickedWithAdapter:self.adapter];
 }
 
 - (void)nativeAdVideoPlayFinished:(KSNativeAd *)nativeAd {
-    [self.bridge renderAdapter_didAdPlayFinishWithAdapterId:self.adapterId];
+    [self.bridge renderFeed_didAdPlayFinishWithAdapter:self.adapter];
 }
 
 - (void)nativeAdVideoPlayError:(KSNativeAd *)nativeAd {

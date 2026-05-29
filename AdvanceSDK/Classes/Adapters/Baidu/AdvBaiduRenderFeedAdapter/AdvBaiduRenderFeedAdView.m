@@ -7,12 +7,13 @@
 
 #import "AdvBaiduRenderFeedAdView.h"
 #import "AdvBaiduAdLogoView.h"
+#import <BaiduMobAdSDK/BaiduMobAdSDK.h>
 
 @interface AdvBaiduRenderFeedAdView () <BaiduMobAdNativeInterationDelegate, BaiduMobAdNativeVideoViewDelegate>
 
-@property (nonatomic, weak) id<AdvanceRenderFeedCommonAdapter> bridge;
+@property (nonatomic, weak) id<AdvanceCommonRenderFeedAdapterBridge> bridge;
+@property (nonatomic, weak) id<AdvanceCommonRenderFeedAdapter>adapter;
 @property (nonatomic, strong) BaiduMobAdNativeAdObject *adDataObject;
-@property (nonatomic, copy) NSString *adapterId;
 @property (nonatomic, strong) BaiduMobAdNativeVideoView *bdVideoView;
 @property (nonatomic, strong) AdvBaiduAdLogoView *adLogoView;
 
@@ -20,21 +21,23 @@
 
 @implementation AdvBaiduRenderFeedAdView
 
-- (instancetype)initWithDataObject:(BaiduMobAdNativeAdObject *)dataObject
-                          delegate:(id<AdvanceRenderFeedCommonAdapter>)delegate
-                         adapterId:(NSString *)adapterId {
-    
+#pragma mark: - AdvanceRenderFeedAdViewProtocol
+- (instancetype)initWithNativeAd:(BaiduMobAdNativeAdObject *)nativeAd
+                          bridge:(id<AdvanceCommonRenderFeedAdapterBridge>)bridge
+                         adapter:(id<AdvanceCommonRenderFeedAdapter>)adapter
+                         manager:(id)manager
+                  viewController:(UIViewController *)viewController {
     if (self = [super init]) {
-        self.adDataObject = dataObject;
-        self.bridge = delegate;
-        self.adapterId = adapterId;
+        self.adDataObject = nativeAd;
+        self.bridge = bridge;
+        self.adapter = adapter;
         
         self.adDataObject.interationDelegate = self;
     }
     return self;
 }
 
-- (void)registerClickableViews:(nullable NSArray<UIView *> *)clickableViews andCloseableView:(nullable UIView *)closeableView {
+- (void)registerClickableViews:(NSArray<UIView *> *)clickableViews andCloseableView:(UIView *)closeableView {
     
     /// 需要用BaiduMobAdNativeAdView进行渲染和曝光
     BaiduMobAdNativeAdView *nativeAdView = [[BaiduMobAdNativeAdView alloc] initWithFrame:self.bounds];
@@ -51,28 +54,6 @@
     if (closeableView) {
         [self setupCloseView:closeableView];
     }
-}
-
-- (void)setupClickView:(NSArray<UIView *> *)clickableViews {
-    [clickableViews enumerateObjectsUsingBlock:^(UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        obj.userInteractionEnabled = YES;
-        UITapGestureRecognizer *gr = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapClickViewAction:)];
-        [obj addGestureRecognizer:gr];
-    }];
-}
-
-- (void)tapClickViewAction:(UITapGestureRecognizer *)gr {
-    [self.adDataObject handleClick:gr.view];
-}
-
-- (void)setupCloseView:(UIView *)closeableView {
-    closeableView.userInteractionEnabled = YES;
-    UITapGestureRecognizer *gr = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapCloseViewAction:)];
-    [closeableView addGestureRecognizer:gr];
-}
-
-- (void)tapCloseViewAction:(UITapGestureRecognizer *)gr {
-    [self.bridge renderAdapter_didAdClosedWithAdapterId:self.adapterId];
 }
 
 - (CGSize)logoSize {
@@ -96,6 +77,29 @@
     return self.bdVideoView;
 }
 
+#pragma mark: - Actions
+- (void)setupClickView:(NSArray<UIView *> *)clickableViews {
+    [clickableViews enumerateObjectsUsingBlock:^(UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        obj.userInteractionEnabled = YES;
+        UITapGestureRecognizer *gr = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapClickViewAction:)];
+        [obj addGestureRecognizer:gr];
+    }];
+}
+
+- (void)tapClickViewAction:(UITapGestureRecognizer *)gr {
+    [self.adDataObject handleClick:gr.view];
+}
+
+- (void)setupCloseView:(UIView *)closeableView {
+    closeableView.userInteractionEnabled = YES;
+    UITapGestureRecognizer *gr = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapCloseViewAction:)];
+    [closeableView addGestureRecognizer:gr];
+}
+
+- (void)tapCloseViewAction:(UITapGestureRecognizer *)gr {
+    [self.bridge renderFeed_didAdClosedWithAdapter:self.adapter];
+}
+
 - (BaiduMobAdNativeVideoView *)bdVideoView {
     if (!_bdVideoView) {
         _bdVideoView = [[BaiduMobAdNativeVideoView alloc] initWithFrame:CGRectZero andObject:_adDataObject];
@@ -116,7 +120,7 @@
  *  广告曝光成功
  */
 - (void)nativeAdExposure:(UIView *)nativeAdView nativeAdDataObject:(BaiduMobAdNativeAdObject *)object {
-    [self.bridge renderAdapter_didAdExposuredWithAdapterId:self.adapterId];
+    [self.bridge renderFeed_didAdExposuredWithAdapter:self.adapter];
 }
 
 /**
@@ -132,14 +136,14 @@
  *  广告点击
  */
 - (void)nativeAdClicked:(UIView *)nativeAdView nativeAdDataObject:(BaiduMobAdNativeAdObject *)object {
-    [self.bridge renderAdapter_didAdClickedWithAdapterId:self.adapterId];
+    [self.bridge renderFeed_didAdClickedWithAdapter:self.adapter];
 }
 
 /**
  *  广告详情页关闭
  */
 - (void)didDismissLandingPage:(UIView *)nativeAdView {
-    [self.bridge renderAdapter_didAdClosedDetailPageWithAdapterId:self.adapterId];
+    [self.bridge renderFeed_didAdClosedDetailPageWithAdapter:self.adapter];
 }
 
 #pragma mark - BaiduMobAdNativeVideoViewDelegate
@@ -147,7 +151,7 @@
  视频播放完成
  */
 - (void)nativeVideoAdDidComplete:(BaiduMobAdNativeVideoView *)videoView {
-    [self.bridge renderAdapter_didAdPlayFinishWithAdapterId:self.adapterId];
+    [self.bridge renderFeed_didAdPlayFinishWithAdapter:self.adapter];
 }
 
 - (void)dealloc {
