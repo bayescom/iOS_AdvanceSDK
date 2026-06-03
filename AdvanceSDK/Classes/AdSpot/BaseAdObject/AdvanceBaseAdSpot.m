@@ -2,8 +2,7 @@
 #import "AdvLog.h"
 #import "AdvPolicyService.h"
 #import "AdvConstantHeader.h"
-#import <objc/runtime.h>
-#import <objc/message.h>
+#import "AdvanceCommonConfigAdapter.h"
 
 @interface AdvanceBaseAdSpot () <AdvPolicyServiceDelegate>
 
@@ -55,73 +54,73 @@
 }
 
 - (void)setGDTSDKVersion {
-    Class clazz = NSClassFromString(@"GDTSDKConfig");
-    SEL selector = NSSelectorFromString(@"sdkVersion");
-    if (clazz && [clazz.class respondsToSelector:selector]) {
-        NSString *version = ((NSString* (*)(id, SEL))objc_msgSend)(clazz.class, selector);
+    NSString *configClass = [AdvSupplierLoader mappingConfigAdapterNameWithSupplierId:SDK_ID_GDT];
+    Class<AdvanceCommonConfigAdapter> clazz = NSClassFromString(configClass);
+    if ([clazz respondsToSelector:@selector(sdkVersion)]) {
+        NSString *version = [clazz sdkVersion];
         [_extraDict adv_safeSetObject:version forKey:@"gdt_v"];
     }
 }
 
 - (void)setCSJSDKVersion {
-    Class clazz = NSClassFromString(@"BUAdSDKManager");
-    SEL selector = NSSelectorFromString(@"SDKVersion");
-    if (clazz && [clazz.class respondsToSelector:selector]) {
-        NSString *version = ((NSString* (*)(id, SEL))objc_msgSend)(clazz.class, selector);
+    NSString *configClass = [AdvSupplierLoader mappingConfigAdapterNameWithSupplierId:SDK_ID_CSJ];
+    Class<AdvanceCommonConfigAdapter> clazz = NSClassFromString(configClass);
+    if ([clazz respondsToSelector:@selector(sdkVersion)]) {
+        NSString *version = [clazz sdkVersion];
         [_extraDict adv_safeSetObject:version forKey:@"csj_v"];
     }
 }
 
 - (void)setMercurySDKVersion {
-    Class clazz = NSClassFromString(@"MercuryConfigManager");
-    SEL selector = NSSelectorFromString(@"sdkVersion");
-    if (clazz && [clazz.class respondsToSelector:selector]) {
-        NSString *version = ((NSString* (*)(id, SEL))objc_msgSend)(clazz.class, selector);
+    NSString *configClass = [AdvSupplierLoader mappingConfigAdapterNameWithSupplierId:SDK_ID_MERCURY];
+    Class<AdvanceCommonConfigAdapter> clazz = NSClassFromString(configClass);
+    if ([clazz respondsToSelector:@selector(sdkVersion)]) {
+        NSString *version = [clazz sdkVersion];
         [_extraDict adv_safeSetObject:version forKey:@"mry_v"];
     }
 }
 
 - (void)setKSSDKVersion {
-    Class clazz = NSClassFromString(@"KSAdSDKManager");
-    SEL selector = NSSelectorFromString(@"SDKVersion");
-    if (clazz && [clazz.class respondsToSelector:selector]) {
-        NSString *version = ((NSString* (*)(id, SEL))objc_msgSend)(clazz.class, selector);
+    NSString *configClass = [AdvSupplierLoader mappingConfigAdapterNameWithSupplierId:SDK_ID_KS];
+    Class<AdvanceCommonConfigAdapter> clazz = NSClassFromString(configClass);
+    if ([clazz respondsToSelector:@selector(sdkVersion)]) {
+        NSString *version = [clazz sdkVersion];
         [_extraDict adv_safeSetObject:version forKey:@"ks_v"];
     }
 }
 
 - (void)setBaiduSDKVersion {
-    Class clazz = NSClassFromString(@"BaiduMobAdManager");
-    SEL selector = NSSelectorFromString(@"getSDKVersion");
-    if (clazz && [clazz.class respondsToSelector:selector]) {
-        NSString *version = ((NSString* (*)(id, SEL))objc_msgSend)(clazz.class, selector);
+    NSString *configClass = [AdvSupplierLoader mappingConfigAdapterNameWithSupplierId:SDK_ID_BAIDU];
+    Class<AdvanceCommonConfigAdapter> clazz = NSClassFromString(configClass);
+    if ([clazz respondsToSelector:@selector(sdkVersion)]) {
+        NSString *version = [clazz sdkVersion];
         [_extraDict adv_safeSetObject:version forKey:@"bd_v"];
     }
 }
 
 - (void)setTanxSDKVersion {
-    Class clazz = NSClassFromString(@"TXAdSDKConfiguration");
-    SEL selector = NSSelectorFromString(@"sdkVersion");
-    if (clazz && [clazz.class respondsToSelector:selector]) {
-        NSString *version = ((NSString* (*)(id, SEL))objc_msgSend)(clazz.class, selector);
+    NSString *configClass = [AdvSupplierLoader mappingConfigAdapterNameWithSupplierId:SDK_ID_TANX];
+    Class<AdvanceCommonConfigAdapter> clazz = NSClassFromString(configClass);
+    if ([clazz respondsToSelector:@selector(sdkVersion)]) {
+        NSString *version = [clazz sdkVersion];
         [_extraDict adv_safeSetObject:version forKey:@"tanx_v"];
     }
 }
 
 - (void)setSigmobSDKVersion {
-    Class clazz = NSClassFromString(@"WindAds");
-    SEL selector = NSSelectorFromString(@"sdkVersion");
-    if (clazz && [clazz.class respondsToSelector:selector]) {
-        NSString *version = ((NSString* (*)(id, SEL))objc_msgSend)(clazz.class, selector);
+    NSString *configClass = [AdvSupplierLoader mappingConfigAdapterNameWithSupplierId:SDK_ID_Sigmob];
+    Class<AdvanceCommonConfigAdapter> clazz = NSClassFromString(configClass);
+    if ([clazz respondsToSelector:@selector(sdkVersion)]) {
+        NSString *version = [clazz sdkVersion];
         [_extraDict adv_safeSetObject:version forKey:@"sig_v"];
     }
 }
 
 - (void)setFunlinkSDKVersion {
-    Class clazz = NSClassFromString(@"FLinkAdSDKManager");
-    SEL selector = NSSelectorFromString(@"SDKVersion");
-    if (clazz && [clazz.class respondsToSelector:selector]) {
-        NSString *version = ((NSString* (*)(id, SEL))objc_msgSend)(clazz.class, selector);
+    NSString *configClass = [AdvSupplierLoader mappingConfigAdapterNameWithSupplierId:SDK_ID_Funlink];
+    Class<AdvanceCommonConfigAdapter> clazz = NSClassFromString(configClass);
+    if ([clazz respondsToSelector:@selector(sdkVersion)]) {
+        NSString *version = [clazz sdkVersion];
         [_extraDict adv_safeSetObject:version forKey:@"flink_v"];
     }
 }

@@ -74,31 +74,31 @@
         
         self.model = model;
         /// 过滤掉在后台添加了广告源，但客户端未集成SDK的渠道
-        self.model.suppliers = [self.model.suppliers adv_filter:^BOOL(AdvSupplier *supplier) {
-            return [AdvSupplierLoader isSDKInstalledWithSupplierId:supplier.identifier];
-        }].mutableCopy;
-        /// 所有渠道SDK都未安装回调
-        if (!self.model.suppliers.count) {
-            if ([self.delegate respondsToSelector:@selector(policyServiceLoadFailedWithError:)]) {
-                [self.delegate policyServiceLoadFailedWithError:[AdvError errorWithCode:AdvErrorCode_SupplierUninstalled].toNSError];
-            }
-            return;
-        }
-        self.model.setting.headBiddingGroup = [self.model.setting.headBiddingGroup adv_filter:^BOOL(NSNumber *priority) {
-            return [self.model.suppliers adv_filter:^BOOL(AdvSupplier *supplier) {
-                return supplier.priority == priority.integerValue;
-            }].count;
-        }].mutableCopy;
-        self.model.setting.parallelGroup = [self.model.setting.parallelGroup adv_map:^id(NSArray *group) {
-            return [group adv_filter:^BOOL(NSNumber *priority) {
-                return [self.model.suppliers adv_filter:^BOOL(AdvSupplier *supplier) {
-                    return supplier.priority == priority.integerValue;
-                }].count;
-            }];
-        }].mutableCopy;
-        self.model.setting.parallelGroup = [self.model.setting.parallelGroup adv_filter:^BOOL(NSArray *group) {
-            return group.count;
-        }].mutableCopy;
+//        self.model.suppliers = [self.model.suppliers adv_filter:^BOOL(AdvSupplier *supplier) {
+//            return [AdvSupplierLoader isSDKInstalledWithSupplierId:supplier.identifier];
+//        }].mutableCopy;
+//        /// 所有渠道SDK都未安装回调
+//        if (!self.model.suppliers.count) {
+//            if ([self.delegate respondsToSelector:@selector(policyServiceLoadFailedWithError:)]) {
+//                [self.delegate policyServiceLoadFailedWithError:[AdvError errorWithCode:AdvErrorCode_SupplierUninstalled].toNSError];
+//            }
+//            return;
+//        }
+//        self.model.setting.headBiddingGroup = [self.model.setting.headBiddingGroup adv_filter:^BOOL(NSNumber *priority) {
+//            return [self.model.suppliers adv_filter:^BOOL(AdvSupplier *supplier) {
+//                return supplier.priority == priority.integerValue;
+//            }].count;
+//        }].mutableCopy;
+//        self.model.setting.parallelGroup = [self.model.setting.parallelGroup adv_map:^id(NSArray *group) {
+//            return [group adv_filter:^BOOL(NSNumber *priority) {
+//                return [self.model.suppliers adv_filter:^BOOL(AdvSupplier *supplier) {
+//                    return supplier.priority == priority.integerValue;
+//                }].count;
+//            }];
+//        }].mutableCopy;
+//        self.model.setting.parallelGroup = [self.model.setting.parallelGroup adv_filter:^BOOL(NSArray *group) {
+//            return group.count;
+//        }].mutableCopy;
         
         // Success Callback
         if ([self.delegate respondsToSelector:@selector(policyServiceLoadSuccessWithModel:)]) {
@@ -175,15 +175,22 @@
     [templeSuppliers enumerateObjectsUsingBlock:^(AdvSupplier * _Nonnull supplier, NSUInteger idx, BOOL * _Nonnull stop) {
         // 这样写防止丢失parallelGroup第二组的渠道
         [self.allSuppliers addObject:supplier];
-        // 尝试获取Adapter缓存
-        AdvAdCacheModel *cacheModel = [[AdvAdCacheManager sharedInstance] adCacheModelFromCachedKey:supplier.sdk_id];
-        if (supplier.enable_cache && cacheModel) { //此次加载允许缓存 且 内存中存在Adapter缓存时
-            supplier.cachedReqId = cacheModel.sourceReqId; //用于tk上报
-        }
         [self reportAdDataWithEventType:AdvSupplierReportTKEventLoaded supplier:supplier error:nil];
-        if ([self.delegate respondsToSelector:@selector(policyServiceLoadAnySupplier:)]) {
-            [self.delegate policyServiceLoadAnySupplier:supplier];
-        }
+        
+        // 初始化SDK
+        [AdvSupplierLoader loadSupplier:supplier completion:^(NSError *error) {
+            if (error) {
+                AdvLog(@"%@渠道SDK执行初始化失败:%@", supplier.name, error);
+                [self checkTargetWithResultfulSupplier:supplier state:AdvSupplierLoadAdFailed error:error];
+                return;
+            }
+            AdvLog(@"%@渠道SDK执行初始化成功", supplier.name);
+            [self reportAdDataWithEventType:AdvSupplierReportTKEventLoadEnd supplier:supplier error:nil];
+            
+            if ([self.delegate respondsToSelector:@selector(policyServiceLoadAnySupplier:)]) {
+                [self.delegate policyServiceLoadAnySupplier:supplier];
+            }
+        }];
     }];
     
     /// 执行完后移除parallel组渠道，确保再次调用此函数时能获取到下一组渠道
@@ -428,7 +435,7 @@
 }
 
 - (void)dealloc {
-
+    
 }
 
 @end

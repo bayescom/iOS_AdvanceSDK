@@ -7,9 +7,8 @@
 
 #import "AdvSupplierLoader.h"
 #import "AdvConstantHeader.h"
-#import <objc/runtime.h>
-#import <objc/message.h>
 #import "AdvError.h"
+#import "AdvanceCommonConfigAdapter.h"
 
 @interface AdvSupplierLoader ()
 
@@ -33,165 +32,190 @@ static NSMutableDictionary *_initializedDict = nil;
 }
 
 // 加载渠道SDK进行初始化调用
-+ (void)loadSupplier:(AdvSupplier *)supplier completion:(void (^)(void))completion {
++ (void)loadSupplier:(AdvSupplier *)supplier completion:(void (^)(NSError *error))completion {
+    /// 媒体未引入渠道SDK或Adapter
+    if (![self isSDKInstalledWithSupplierId:supplier.identifier]) {
+        dispatch_async(dispatch_get_main_queue(), ^{ // 将当前调用延迟到下一个 RunLoop 周期执行。
+            completion([AdvError errorWithCode:AdvErrorCode_SupplierUninstalled].toNSError);
+        });
+        return;
+    }
     /// 已经初始化过的渠道 直接返回成功
     if ([[AdvSupplierLoader.initializedDict objectForKey:supplier.identifier] boolValue]) {
-        return completion();
+        dispatch_async(dispatch_get_main_queue(), ^{
+            completion(nil);
+        });
+        return;
     }
     
-    /// 未被引入的渠道SDK或Adapter已在策略层过滤 这里的Clazz必存在
-    NSString *clsName = [self mappingSDKClassNameWithSupplierId:supplier.identifier];
-    Class clazz = NSClassFromString(clsName);
-    
-    if ([supplier.identifier isEqualToString:SDK_ID_CSJ]) {// 穿山甲SDK
-        
-        id config = ((id (*)(id, SEL))objc_msgSend)(NSClassFromString(@"BUAdSDKConfiguration").class, NSSelectorFromString(@"configuration"));
-        ((void (*)(id, SEL, NSString *))objc_msgSend)(config, NSSelectorFromString(@"setAppID:"), supplier.mediaid);
-        // 定义block
-        void (^completionHandler)(BOOL success, NSError *error) = ^void (BOOL success, NSError *error) {
-            /// 穿山甲是异步初始化，回调需要切换到主线程
+    NSString *clsName = [self mappingConfigAdapterNameWithSupplierId:supplier.identifier];
+    Class<AdvanceCommonConfigAdapter> protocolClass = NSClassFromString(clsName);
+    if ([protocolClass respondsToSelector:@selector(initializeAdapterWithAppId:appKey:completion:)]) {
+        [protocolClass initializeAdapterWithAppId:supplier.mediaid
+                                           appKey:supplier.mediakey
+                                       completion:^(NSError *error) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                [self markSupplierInitialized:supplier error:error];
-                completion();
+                NSError *wrappedError = [self markSupplierInitialized:supplier error:error];
+                completion(wrappedError);
             });
-        };
-        SEL selector = NSSelectorFromString(@"startWithAsyncCompletionHandler:");
-        if ([clazz.class respondsToSelector:selector]) {
-            ((void (*)(id, SEL, id))objc_msgSend)(clazz.class, selector, completionHandler);
-        }
-        
-    } else if ([supplier.identifier isEqualToString:SDK_ID_GDT]) {// 广点通SDK
-        /// 4.14.60（包含）版本之后初始化方式
-        SEL initSelector = NSSelectorFromString(@"initWithAppId:");
-        if ([clazz.class respondsToSelector:initSelector]) {
-            ((void (*)(id, SEL, NSString *))objc_msgSend)(clazz.class, initSelector, supplier.mediaid);
-        }
-        // 定义block
-        void (^completionHandler)(BOOL success, NSError *error) = ^void (BOOL success, NSError *error) {
-            [self markSupplierInitialized:supplier error:error];
-            completion();
-        };
-        SEL newSelector = NSSelectorFromString(@"startWithCompletionHandler:");
-        if ([clazz.class respondsToSelector:newSelector]) {
-            ((void (*)(id, SEL, id))objc_msgSend)(clazz.class, newSelector, completionHandler);
-        }
-        
-    } else if ([supplier.identifier isEqualToString:SDK_ID_KS]) {// 快手SDK
-        /// 3.3.61（包含）版本之后初始化方式
-        id config = ((id (*)(id, SEL))objc_msgSend)(NSClassFromString(@"KSAdSDKConfiguration").class, NSSelectorFromString(@"configuration"));
-        ((void (*)(id, SEL, NSString *))objc_msgSend)(config, NSSelectorFromString(@"setAppId:"), supplier.mediaid);
-        // 定义block
-        void (^completionHandler)(BOOL success, NSError *error) = ^void (BOOL success, NSError *error) {
-            [self markSupplierInitialized:supplier error:error];
-            completion();
-        };
-        SEL newSelector = NSSelectorFromString(@"startWithCompletionHandler:");
-        if ([clazz.class respondsToSelector:newSelector]) {
-            ((void (*)(id, SEL, id))objc_msgSend)(clazz.class, newSelector, completionHandler);
-        }
-        
-    } else if ([supplier.identifier isEqualToString:SDK_ID_BAIDU]) {// 百度SDK
-        /// 新初始化方式
-        SEL selector = NSSelectorFromString(@"setAppsid:");
-        if ([clazz.class respondsToSelector:selector]) {
-            ((void (*)(id, SEL, NSString *))objc_msgSend)(clazz.class, selector, supplier.mediaid);
-        }
-        // 定义block
-        void (^completionHandler)(BOOL success, NSError *error) = ^void (BOOL success, NSError *error) {
-            [self markSupplierInitialized:supplier error:error];
-            completion();
-        };
-        SEL newSelector = NSSelectorFromString(@"startWithCompletionHandler:");
-        if ([clazz.class respondsToSelector:newSelector]) {
-            ((void (*)(id, SEL, id))objc_msgSend)(clazz.class, newSelector, completionHandler);
-        }
-        
-    } else if ([supplier.identifier isEqualToString:SDK_ID_MERCURY]) {// 倍业SDK
-        /// 4.4.0（包含）版本之后初始化方式
-        SEL initSelector = NSSelectorFromString(@"initWithAppId:appKey:");
-        if ([clazz.class respondsToSelector:initSelector]) {
-            ((void (*)(id, SEL, NSString *, NSString *))objc_msgSend)(clazz.class, initSelector, supplier.mediaid, supplier.mediakey);
-        }
-        // 定义block
-        void (^completionHandler)(BOOL success, NSError *error) = ^void (BOOL success, NSError *error) {
-            [self markSupplierInitialized:supplier error:error];
-            completion();
-        };
-        SEL newSelector = NSSelectorFromString(@"startWithCompletionHandler:");
-        if ([clazz.class respondsToSelector:newSelector]) {
-            ((void (*)(id, SEL, id))objc_msgSend)(clazz.class, newSelector, completionHandler);
-        }
-        
-    } else if ([supplier.identifier isEqualToString:SDK_ID_TANX]) {// Tanx SDK
-        
-        SEL selector = NSSelectorFromString(@"setupSDKWithAppID:andAppKey:");
-        if ([clazz.class respondsToSelector:selector]) {
-            BOOL res = ((BOOL (*)(id, SEL, NSString *, NSString *))objc_msgSend)(clazz.class, selector, supplier.mediaid, supplier.mediakey);
-            NSError *error = res? nil : [AdvError errorWithCode:-100 message:@"TanxSDK初始化失败"].toNSError;
-            [self markSupplierInitialized:supplier error:error];
-            completion();
-        }
-        
-    } else if ([supplier.identifier isEqualToString:SDK_ID_Sigmob]) {// Sigmob SDK
-        
-        id option = ((id (*)(id, SEL))objc_msgSend)(NSClassFromString(@"WindAdOptions"), NSSelectorFromString(@"alloc"));
-        SEL selector = NSSelectorFromString(@"initWithAppId:appKey:");
-        if ([option respondsToSelector:selector]) {
-            id optionInstance =  ((id (*)(id, SEL, NSString *, NSString *))objc_msgSend)(option, selector, supplier.mediaid, supplier.mediakey);
-            SEL startSelector = NSSelectorFromString(@"startWithOptions:");
-            if ([clazz.class respondsToSelector:startSelector]) {
-                ((void (*)(id, SEL, id))objc_msgSend)(clazz.class, startSelector, optionInstance);
-                [self markSupplierInitialized:supplier error:nil];
-                completion();
-            }
-        }
-        
-    } else if ([supplier.identifier isEqualToString:SDK_ID_Funlink]) {// Funlink SDK
-        
-        SEL selector = NSSelectorFromString(@"registerAppId:");
-        if ([clazz.class respondsToSelector:selector]) {
-            BOOL res = ((BOOL (*)(id, SEL, NSString *))objc_msgSend)(clazz.class, selector, supplier.mediaid);
-            NSError *error = res? nil : [AdvError errorWithCode:-100 message:@"FunlinkSDK初始化失败"].toNSError;
-            [self markSupplierInitialized:supplier error:error];
-            completion();
-        }
-        
+        }];
+    } else { // 只有自定义ADN才会进入
+        dispatch_async(dispatch_get_main_queue(), ^{
+            completion([AdvError errorWithCode:-100 message:@"自定义ADN未遵循初始化协议"].toNSError);
+        });
     }
+    
+//    if ([supplier.identifier isEqualToString:SDK_ID_CSJ]) {// 穿山甲SDK
+//        
+//        
+//        
+//    } else if ([supplier.identifier isEqualToString:SDK_ID_GDT] || [supplier.identifier isEqualToString:SDK_ID_KS]) {// 广点通SDK
+//        if ([clazz conformsToProtocol:@protocol(AdvanceCommonConfigAdapter)]) {
+//            Class<AdvanceCommonConfigAdapter> protocolClass = clazz;
+//            if ([protocolClass respondsToSelector:@selector(initializeAdapterWithAppId:appKey:completion:)]) {
+//                [protocolClass initializeAdapterWithAppId:supplier.mediaid
+//                                                   appKey:supplier.mediakey
+//                                               completion:^(NSError *error) {
+//                    dispatch_async(dispatch_get_main_queue(), ^{
+//                        NSError *wrappedError = [self markSupplierInitialized:supplier error:error];
+//                        completion(wrappedError);
+//                    });
+//                }];
+//            }
+//        }
+//        
+//    }  else if ([supplier.identifier isEqualToString:SDK_ID_BAIDU]) {// 百度SDK
+//        if ([clazz conformsToProtocol:@protocol(AdvanceCommonConfigAdapter)]) {
+//            Class<AdvanceCommonConfigAdapter> protocolClass = clazz;
+//            if ([protocolClass respondsToSelector:@selector(initializeAdapterWithAppId:appKey:completion:)]) {
+//                [protocolClass initializeAdapterWithAppId:supplier.mediaid
+//                                                   appKey:supplier.mediakey
+//                                               completion:^(NSError *error) {
+//                    dispatch_async(dispatch_get_main_queue(), ^{
+//                        NSError *wrappedError = [self markSupplierInitialized:supplier error:error];
+//                        completion(wrappedError);
+//                    });
+//                }];
+//            }
+//        }
+//        
+//    } else if ([supplier.identifier isEqualToString:SDK_ID_MERCURY]) {// 倍业SDK
+//        /// 4.4.0（包含）版本之后初始化方式
+//        SEL initSelector = NSSelectorFromString(@"initWithAppId:appKey:");
+//        if ([clazz respondsToSelector:initSelector]) {
+//            ((void (*)(id, SEL, NSString *, NSString *))objc_msgSend)(clazz, initSelector, supplier.mediaid, supplier.mediakey);
+//        }
+//        // 定义block
+//        void (^completionHandler)(BOOL success, NSError *error) = ^void (BOOL success, NSError *error) {
+//            dispatch_async(dispatch_get_main_queue(), ^{
+//                NSError *wrappedError = [self markSupplierInitialized:supplier error:error];
+//                completion(wrappedError);
+//            });
+//        };
+//        SEL newSelector = NSSelectorFromString(@"startWithCompletionHandler:");
+//        if ([clazz respondsToSelector:newSelector]) {
+//            ((void (*)(id, SEL, id))objc_msgSend)(clazz, newSelector, completionHandler);
+//        }
+//        
+//    } else if ([supplier.identifier isEqualToString:SDK_ID_TANX]) {// Tanx SDK
+//        
+//        SEL selector = NSSelectorFromString(@"setupSDKWithAppID:andAppKey:");
+//        if ([clazz respondsToSelector:selector]) {
+//            BOOL res = ((BOOL (*)(id, SEL, NSString *, NSString *))objc_msgSend)(clazz, selector, supplier.mediaid, supplier.mediakey);
+//            NSError *error = res? nil : [AdvError errorWithCode:AdvErrorCode_SupplierInitFailed].toNSError;
+//            dispatch_async(dispatch_get_main_queue(), ^{
+//                NSError *wrappedError = [self markSupplierInitialized:supplier error:error];
+//                completion(wrappedError);
+//            });
+//        }
+//        
+//    } else if ([supplier.identifier isEqualToString:SDK_ID_Sigmob]) {// Sigmob SDK
+//        
+//        id option = ((id (*)(id, SEL))objc_msgSend)(NSClassFromString(@"WindAdOptions"), NSSelectorFromString(@"alloc"));
+//        SEL selector = NSSelectorFromString(@"initWithAppId:appKey:");
+//        if ([option respondsToSelector:selector]) {
+//            id optionInstance =  ((id (*)(id, SEL, NSString *, NSString *))objc_msgSend)(option, selector, supplier.mediaid, supplier.mediakey);
+//            SEL startSelector = NSSelectorFromString(@"startWithOptions:");
+//            if ([clazz respondsToSelector:startSelector]) {
+//                ((void (*)(id, SEL, id))objc_msgSend)(clazz, startSelector, optionInstance);
+//                dispatch_async(dispatch_get_main_queue(), ^{
+//                    [self markSupplierInitialized:supplier error:nil];
+//                    completion(nil);
+//                });
+//            }
+//        }
+//        
+//    } else if ([supplier.identifier isEqualToString:SDK_ID_Funlink]) {// Funlink SDK
+//        
+//        if ([clazz conformsToProtocol:@protocol(AdvanceCommonConfigAdapter)]) {
+//            Class<AdvanceCommonConfigAdapter> protocolClass = clazz;
+//            if ([protocolClass respondsToSelector:@selector(initializeAdapterWithAppId:appKey:completion:)]) {
+//                [protocolClass initializeAdapterWithAppId:supplier.mediaid
+//                                                   appKey:supplier.mediakey
+//                                               completion:^(NSError *error) {
+//                    dispatch_async(dispatch_get_main_queue(), ^{
+//                        NSError *wrappedError = [self markSupplierInitialized:supplier error:error];
+//                        completion(wrappedError);
+//                    });
+//                }];
+//            }
+//        }
+//        
+//    } else if (supplier.isCustom) { // 自定义ADN渠道
+////        //从缓存中获取Adn初始化类，执行特定初始化操作
+////        NSString *className = @"TBMercuryConfigAdapter";
+////        Class clazz = NSClassFromString(className);
+//        if ([clazz conformsToProtocol:@protocol(AdvanceCommonConfigAdapter)]) {
+//            Class<AdvanceCommonConfigAdapter> protocolClass = clazz;
+//            if ([protocolClass respondsToSelector:@selector(initializeAdapterWithAppId:appKey:completion:)]) {
+//                [protocolClass initializeAdapterWithAppId:supplier.mediaid
+//                                                   appKey:supplier.mediakey
+//                                               completion:^(NSError *error) {
+//                    dispatch_async(dispatch_get_main_queue(), ^{
+//                        NSError *wrappedError = [self markSupplierInitialized:supplier error:error];
+//                        completion(wrappedError);
+//                    });
+//                }];
+//            }
+//        }
+//    }
     
 }
 
 /// 标记渠道已经被初始化
-+ (void)markSupplierInitialized:(AdvSupplier *)supplier error:(NSError *)error {
++ (NSError *)markSupplierInitialized:(AdvSupplier *)supplier error:(NSError *)error {
     if (!error) {
         [AdvSupplierLoader.initializedDict setObject:@YES forKey:supplier.identifier];
-        return;
+        return nil;
     }
-    AdvLog(@"%@渠道SDK初始化失败:%@",supplier.name, error);
+    /// 包装成更容易识别的错误信息
+    NSError *wrappedError = [AdvError errorWithCode:AdvErrorCode_SupplierInitFailed message:error.userInfo[NSLocalizedDescriptionKey]].toNSError;
+    return wrappedError;
 }
 
-+ (NSString *)mappingSDKClassNameWithSupplierId:(NSString *)supplierId {
++ (NSString *)mappingConfigAdapterNameWithSupplierId:(NSString *)supplierId {
     NSString *clsName = @"";
     if ([supplierId isEqualToString:SDK_ID_CSJ]) {
-        clsName = @"BUAdSDKManager";
-    } if ([supplierId isEqualToString:SDK_ID_GDT]) {
-        clsName = @"GDTSDKConfig";
+        clsName = @"AdvCSJConfigAdapter";
+    } else if ([supplierId isEqualToString:SDK_ID_GDT]) {
+        clsName = @"AdvGDTConfigAdapter";
     } else if ([supplierId isEqualToString:SDK_ID_KS]) {
-        clsName = @"KSAdSDKManager";
-    } else if ([supplierId isEqualToString:SDK_ID_BAIDU]){
-        clsName = @"BaiduMobAdManager";
+        clsName = @"AdvKSConfigAdapter";
+    } else if ([supplierId isEqualToString:SDK_ID_BAIDU]) {
+        clsName = @"AdvBaiduConfigAdapter";
     } else if ([supplierId isEqualToString:SDK_ID_MERCURY]) {
-        clsName = @"MercuryConfigManager";
-    } else if ([supplierId isEqualToString:SDK_ID_TANX]){
-        clsName = @"TXAdSDKInitializtion";
-    } else if ([supplierId isEqualToString:SDK_ID_Sigmob]){
-        clsName = @"WindAds";
+        clsName = @"AdvMercuryConfigAdapter";
+    } else if ([supplierId isEqualToString:SDK_ID_TANX]) {
+        clsName = @"AdvTanxConfigAdapter";
+    } else if ([supplierId isEqualToString:SDK_ID_Sigmob]) {
+        clsName = @"AdvSigmobConfigAdapter";
     } else if ([supplierId isEqualToString:SDK_ID_Funlink]){
-        clsName = @"FLinkAdSDKManager";
+        clsName = @"AdvFunlinkConfigAdapter";
     }
     return clsName;
 }
 
-+ (NSString *)mappingSplashAdapterClassNameWithSupplierId:(NSString *)supplierId {
++ (NSString *)mappingSplashAdapterNameWithSupplierId:(NSString *)supplierId {
     NSString *clsName = @"";
     if ([supplierId isEqualToString:SDK_ID_CSJ]) {
         clsName = @"AdvCSJSplashAdapter";
@@ -213,7 +237,7 @@ static NSMutableDictionary *_initializedDict = nil;
     return clsName;
 }
 
-+ (NSString *)mappingInterstitialAdapterClassNameWithSupplierId:(NSString *)supplierId {
++ (NSString *)mappingInterstitialAdapterNameWithSupplierId:(NSString *)supplierId {
     NSString *clsName = @"";
     if ([supplierId isEqualToString:SDK_ID_CSJ]) {
         clsName = @"AdvCSJInterstitialAdapter";
@@ -235,7 +259,7 @@ static NSMutableDictionary *_initializedDict = nil;
     return clsName;
 }
 
-+ (NSString *)mappingRewardAdapterClassNameWithSupplierId:(NSString *)supplierId {
++ (NSString *)mappingRewardAdapterNameWithSupplierId:(NSString *)supplierId {
     NSString *clsName = @"";
     if ([supplierId isEqualToString:SDK_ID_CSJ]) {
         clsName = @"AdvCSJRewardVideoAdapter";
@@ -257,7 +281,7 @@ static NSMutableDictionary *_initializedDict = nil;
     return clsName;
 }
 
-+ (NSString *)mappingFullScreenAdapterClassNameWithSupplierId:(NSString *)supplierId {
++ (NSString *)mappingFullScreenAdapterNameWithSupplierId:(NSString *)supplierId {
     NSString *clsName = @"";
     if ([supplierId isEqualToString:SDK_ID_CSJ]) {
         clsName = @"AdvCSJFullScreenVideoAdapter";
@@ -271,7 +295,7 @@ static NSMutableDictionary *_initializedDict = nil;
     return clsName;
 }
 
-+ (NSString *)mappingNativeExpressAdapterClassNameWithSupplierId:(NSString *)supplierId {
++ (NSString *)mappingNativeExpressAdapterNameWithSupplierId:(NSString *)supplierId {
     NSString *clsName = @"";
     if ([supplierId isEqualToString:SDK_ID_CSJ]) {
         clsName = @"AdvCSJNativeExpressAdapter";
@@ -291,7 +315,7 @@ static NSMutableDictionary *_initializedDict = nil;
     return clsName;
 }
 
-+ (NSString *)mappingRenderFeedAdapterClassNameWithSupplierId:(NSString *)supplierId {
++ (NSString *)mappingRenderFeedAdapterNameWithSupplierId:(NSString *)supplierId {
     NSString *clsName = @"";
     if ([supplierId isEqualToString:SDK_ID_CSJ]) {
         clsName = @"AdvCSJRenderFeedAdapter";
@@ -313,7 +337,7 @@ static NSMutableDictionary *_initializedDict = nil;
     return clsName;
 }
 
-+ (NSString *)mappingBannerAdapterClassNameWithSupplierId:(NSString *)supplierId {
++ (NSString *)mappingBannerAdapterNameWithSupplierId:(NSString *)supplierId {
     NSString *clsName = @"";
     if ([supplierId isEqualToString:SDK_ID_CSJ]) {
         clsName = @"AdvCSJBannerAdapter";
@@ -327,13 +351,35 @@ static NSMutableDictionary *_initializedDict = nil;
     return clsName;
 }
 
+//+ (NSString *)mappingSDKClassNameWithSupplierId:(NSString *)supplierId {
+//    NSString *clsName = @"";
+//    if ([supplierId isEqualToString:SDK_ID_CSJ]) {
+//        clsName = @"BUAdSDKManager";
+//    } if ([supplierId isEqualToString:SDK_ID_GDT]) {
+//        clsName = @"GDTSDKConfig";
+//    } else if ([supplierId isEqualToString:SDK_ID_KS]) {
+//        clsName = @"KSAdSDKManager";
+//    } else if ([supplierId isEqualToString:SDK_ID_BAIDU]){
+//        clsName = @"BaiduMobAdManager";
+//    } else if ([supplierId isEqualToString:SDK_ID_MERCURY]) {
+//        clsName = @"MercuryConfigManager";
+//    } else if ([supplierId isEqualToString:SDK_ID_TANX]){
+//        clsName = @"TXAdSDKInitializtion";
+//    } else if ([supplierId isEqualToString:SDK_ID_Sigmob]){
+//        clsName = @"WindAds";
+//    } else if ([supplierId isEqualToString:SDK_ID_Funlink]){
+//        clsName = @"FLinkAdSDKManager";
+//    }
+//    return clsName;
+//}
+
 + (BOOL)isSDKInstalledWithSupplierId:(NSString *)supplierId {
-    NSString *sdkName = [self mappingSDKClassNameWithSupplierId:supplierId];
-    Class sdkClazz = NSClassFromString(sdkName);
-    if (!sdkClazz) {
-        return NO;
-    }
-    NSString *adapterName = [self mappingSplashAdapterClassNameWithSupplierId:supplierId];
+//    NSString *sdkName = [self mappingSDKClassNameWithSupplierId:supplierId];
+//    Class sdkClazz = NSClassFromString(sdkName);
+//    if (!sdkClazz) {
+//        return NO;
+//    }
+    NSString *adapterName = [self mappingConfigAdapterNameWithSupplierId:supplierId];
     Class adapterClazz = NSClassFromString(adapterName);
     return adapterClazz;
 }

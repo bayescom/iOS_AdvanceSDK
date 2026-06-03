@@ -60,27 +60,22 @@
 
 /// 加载某一个渠道对象
 - (void)policyServiceLoadAnySupplier:(nullable AdvSupplier *)supplier {
-    // 加载渠道SDK进行初始化调用
-    [AdvSupplierLoader loadSupplier:supplier completion:^{
-        AdvPolicyService *manager = self.manager;
-        [manager reportAdDataWithEventType:AdvSupplierReportTKEventLoadEnd supplier:supplier error:nil];
-        
-        id<AdvanceCommonFullscreenVideoAdapter> adapter;
-        // 尝试获取Adapter缓存
-        AdvAdCacheModel *cacheModel = [[AdvAdCacheManager sharedInstance] adCacheModelFromCachedKey:supplier.sdk_id];
-        if (supplier.enable_cache && cacheModel) { //此次加载允许缓存 且 内存中存在Adapter缓存时，直接回调成功
-            adapter = cacheModel.adObject;
-            [self.adapterMap setObject:adapter forKey:supplier.sdk_id];
-            [adapter adapter_setFullscreenBridge:self];
-            [self fullscreen_didLoadAdWithAdapter:adapter price:cacheModel.price];
-        } else {// 根据渠道id初始化对应Adapter
-            NSString *clsName = [AdvSupplierLoader mappingFullScreenAdapterClassNameWithSupplierId:supplier.identifier];
-            adapter = [[NSClassFromString(clsName) alloc] init];
-            [self.adapterMap setObject:adapter forKey:supplier.sdk_id];
-            [adapter adapter_setFullscreenBridge:self];
-            [adapter adapter_loadAdWithPlacementId:supplier.adspotid config:[self setupAdConfigWithSupplier:supplier]];
-        }
-    }];
+    id<AdvanceCommonFullscreenVideoAdapter> adapter;
+    // 尝试获取Adapter缓存
+    AdvAdCacheModel *cacheModel = [[AdvAdCacheManager sharedInstance] adCacheModelFromCachedKey:supplier.sdk_id];
+    if (supplier.enable_cache && cacheModel) { //此次加载允许缓存 且 内存中存在Adapter缓存时，直接回调成功
+        supplier.cachedReqId = cacheModel.sourceReqId; //用于tk上报
+        adapter = cacheModel.adObject;
+        [self.adapterMap setObject:adapter forKey:supplier.sdk_id];
+        [adapter adapter_setFullscreenBridge:self];
+        [self fullscreen_didLoadAdWithAdapter:adapter price:cacheModel.price];
+    } else {// 根据渠道id初始化对应Adapter
+        NSString *clsName = [AdvSupplierLoader mappingFullScreenAdapterNameWithSupplierId:supplier.identifier];
+        adapter = [[NSClassFromString(clsName) alloc] init];
+        [self.adapterMap setObject:adapter forKey:supplier.sdk_id];
+        [adapter adapter_setFullscreenBridge:self];
+        [adapter adapter_loadAdWithPlacementId:supplier.adspotid config:[self setupAdConfigWithSupplier:supplier]];
+    }
 }
 
 // 所有Bidding渠道返回广告失败

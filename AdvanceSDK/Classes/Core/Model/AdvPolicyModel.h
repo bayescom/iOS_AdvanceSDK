@@ -44,6 +44,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSString *sdk_id; /// 渠道SDK广告源唯一id
 @property (nonatomic, assign) NSInteger enable_cache; /// 1：表示需要缓存 0：表示不需要缓存
 @property (nonatomic, assign) NSInteger cache_timeout; /// 缓存时间（秒），enable_cache为1时有值
+/// 自定义 ADN 相关
+@property (nonatomic, assign) BOOL isCustom; /// 是否自定义渠道
+@property (nonatomic, copy) NSString *customParameters; /// 自定义JSON参数
 
 /// 此渠道广告是否勾选了头部竞价 1-是 0-否，如果该渠道SDK支持head_bidding，则去获取竞价
 @property (nonatomic, assign) NSInteger is_head_bidding;

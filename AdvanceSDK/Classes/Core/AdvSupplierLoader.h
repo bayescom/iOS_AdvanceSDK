@@ -11,23 +11,23 @@
 //MARK: 渠道SDK初始化器
 @interface AdvSupplierLoader : NSObject
 
-+ (void)loadSupplier:(AdvSupplier *)supplier completion:(void (^)(void))completion;
++ (void)loadSupplier:(AdvSupplier *)supplier completion:(void (^)(NSError *error))completion;
 
-+ (BOOL)isSDKInstalledWithSupplierId:(NSString *)supplierId;
++ (NSString *)mappingConfigAdapterNameWithSupplierId:(NSString *)supplierId;
 
-+ (NSString *)mappingSplashAdapterClassNameWithSupplierId:(NSString *)supplierId;
++ (NSString *)mappingSplashAdapterNameWithSupplierId:(NSString *)supplierId;
 
-+ (NSString *)mappingInterstitialAdapterClassNameWithSupplierId:(NSString *)supplierId;
++ (NSString *)mappingInterstitialAdapterNameWithSupplierId:(NSString *)supplierId;
 
-+ (NSString *)mappingRewardAdapterClassNameWithSupplierId:(NSString *)supplierId;
++ (NSString *)mappingRewardAdapterNameWithSupplierId:(NSString *)supplierId;
 
-+ (NSString *)mappingFullScreenAdapterClassNameWithSupplierId:(NSString *)supplierId;
++ (NSString *)mappingFullScreenAdapterNameWithSupplierId:(NSString *)supplierId;
 
-+ (NSString *)mappingNativeExpressAdapterClassNameWithSupplierId:(NSString *)supplierId;
++ (NSString *)mappingNativeExpressAdapterNameWithSupplierId:(NSString *)supplierId;
 
-+ (NSString *)mappingRenderFeedAdapterClassNameWithSupplierId:(NSString *)supplierId;
++ (NSString *)mappingRenderFeedAdapterNameWithSupplierId:(NSString *)supplierId;
 
-+ (NSString *)mappingBannerAdapterClassNameWithSupplierId:(NSString *)supplierId;
++ (NSString *)mappingBannerAdapterNameWithSupplierId:(NSString *)supplierId;
 
 @end
 
