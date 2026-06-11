@@ -14,6 +14,14 @@
 		222E14642F23581C001C41F9 /* DemoFullScreenVideoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 222E14632F23581C001C41F9 /* DemoFullScreenVideoController.m */; };
 		222E146A2F238E8B001C41F9 /* DemoFeedExpressViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 222E14662F238E8B001C41F9 /* DemoFeedExpressViewController.m */; };
 		222E146B2F238E8B001C41F9 /* DemoListFeedExpressViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 222E14682F238E8B001C41F9 /* DemoListFeedExpressViewController.m */; };
+		2279D02D2FD188D700CD4FC3 /* AdvXXCustomSplashAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 2279D0222FCFFAF400CD4FC3 /* AdvXXCustomSplashAdapter.m */; };
+		2279D02E2FD193C000CD4FC3 /* AdvXXCustomConfigAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 2279D01F2FCFF7D100CD4FC3 /* AdvXXCustomConfigAdapter.m */; };
+		2279D0312FD68D9300CD4FC3 /* AdvXXCustomBannerAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 2279D0302FD68D9300CD4FC3 /* AdvXXCustomBannerAdapter.m */; };
+		2279D0342FD68DAB00CD4FC3 /* AdvXXCustomInterstitialAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 2279D0332FD68DAB00CD4FC3 /* AdvXXCustomInterstitialAdapter.m */; };
+		2279D0372FD68DC400CD4FC3 /* AdvXXCustomRewardVideoAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 2279D0362FD68DC400CD4FC3 /* AdvXXCustomRewardVideoAdapter.m */; };
+		2279D03A2FD68DD700CD4FC3 /* AdvXXCustomNativeExpressAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 2279D0392FD68DD700CD4FC3 /* AdvXXCustomNativeExpressAdapter.m */; };
+		2279D0412FD69C8E00CD4FC3 /* AdvXXCustomRenderFeedAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 2279D03F2FD69C8E00CD4FC3 /* AdvXXCustomRenderFeedAdapter.m */; };
+		2279D0442FD69D1F00CD4FC3 /* AdvXXRenderFeedAdView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2279D0432FD69D1F00CD4FC3 /* AdvXXRenderFeedAdView.m */; };
 		22A07C9F2F2897C7007AF503 /* DemoFeedAdDisplayController.m in Sources */ = {isa = PBXBuildFile; fileRef = 22A07C9B2F2897C7007AF503 /* DemoFeedAdDisplayController.m */; };
 		22A07CA02F2897C7007AF503 /* DemoRenderFeedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 22A07C9D2F2897C7007AF503 /* DemoRenderFeedViewController.m */; };
 		22E9169C2F230CAD00830E19 /* DemoInterstitialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 22E9169B2F230CAD00830E19 /* DemoInterstitialViewController.m */; };
@@ -72,6 +80,22 @@
 		222E14662F238E8B001C41F9 /* DemoFeedExpressViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DemoFeedExpressViewController.m; sourceTree = "<group>"; };
 		222E14672F238E8B001C41F9 /* DemoListFeedExpressViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DemoListFeedExpressViewController.h; sourceTree = "<group>"; };
 		222E14682F238E8B001C41F9 /* DemoListFeedExpressViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DemoListFeedExpressViewController.m; sourceTree = "<group>"; };
+		2279D01E2FCFF7D100CD4FC3 /* AdvXXCustomConfigAdapter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AdvXXCustomConfigAdapter.h; sourceTree = "<group>"; };
+		2279D01F2FCFF7D100CD4FC3 /* AdvXXCustomConfigAdapter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AdvXXCustomConfigAdapter.m; sourceTree = "<group>"; };
+		2279D0212FCFFAF400CD4FC3 /* AdvXXCustomSplashAdapter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AdvXXCustomSplashAdapter.h; sourceTree = "<group>"; };
+		2279D0222FCFFAF400CD4FC3 /* AdvXXCustomSplashAdapter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AdvXXCustomSplashAdapter.m; sourceTree = "<group>"; };
+		2279D02F2FD68D9300CD4FC3 /* AdvXXCustomBannerAdapter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AdvXXCustomBannerAdapter.h; sourceTree = "<group>"; };
+		2279D0302FD68D9300CD4FC3 /* AdvXXCustomBannerAdapter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AdvXXCustomBannerAdapter.m; sourceTree = "<group>"; };
+		2279D0322FD68DAB00CD4FC3 /* AdvXXCustomInterstitialAdapter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AdvXXCustomInterstitialAdapter.h; sourceTree = "<group>"; };
+		2279D0332FD68DAB00CD4FC3 /* AdvXXCustomInterstitialAdapter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AdvXXCustomInterstitialAdapter.m; sourceTree = "<group>"; };
+		2279D0352FD68DC400CD4FC3 /* AdvXXCustomRewardVideoAdapter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AdvXXCustomRewardVideoAdapter.h; sourceTree = "<group>"; };
+		2279D0362FD68DC400CD4FC3 /* AdvXXCustomRewardVideoAdapter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AdvXXCustomRewardVideoAdapter.m; sourceTree = "<group>"; };
+		2279D0382FD68DD700CD4FC3 /* AdvXXCustomNativeExpressAdapter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AdvXXCustomNativeExpressAdapter.h; sourceTree = "<group>"; };
+		2279D0392FD68DD700CD4FC3 /* AdvXXCustomNativeExpressAdapter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AdvXXCustomNativeExpressAdapter.m; sourceTree = "<group>"; };
+		2279D03E2FD69C8E00CD4FC3 /* AdvXXCustomRenderFeedAdapter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AdvXXCustomRenderFeedAdapter.h; sourceTree = "<group>"; };
+		2279D03F2FD69C8E00CD4FC3 /* AdvXXCustomRenderFeedAdapter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AdvXXCustomRenderFeedAdapter.m; sourceTree = "<group>"; };
+		2279D0422FD69D1F00CD4FC3 /* AdvXXRenderFeedAdView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AdvXXRenderFeedAdView.h; sourceTree = "<group>"; };
+		2279D0432FD69D1F00CD4FC3 /* AdvXXRenderFeedAdView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AdvXXRenderFeedAdView.m; sourceTree = "<group>"; };
 		22A07C9A2F2897C7007AF503 /* DemoFeedAdDisplayController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DemoFeedAdDisplayController.h; sourceTree = "<group>"; };
 		22A07C9B2F2897C7007AF503 /* DemoFeedAdDisplayController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DemoFeedAdDisplayController.m; sourceTree = "<group>"; };
 		22A07C9C2F2897C7007AF503 /* DemoRenderFeedViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DemoRenderFeedViewController.h; sourceTree = "<group>"; };
@@ -177,8 +201,32 @@
 		2279CFE62FCD852400CD4FC3 /* CustomAdapter */ = {
 			isa = PBXGroup;
 			children = (
+				2279D01E2FCFF7D100CD4FC3 /* AdvXXCustomConfigAdapter.h */,
+				2279D01F2FCFF7D100CD4FC3 /* AdvXXCustomConfigAdapter.m */,
+				2279D0212FCFFAF400CD4FC3 /* AdvXXCustomSplashAdapter.h */,
+				2279D0222FCFFAF400CD4FC3 /* AdvXXCustomSplashAdapter.m */,
+				2279D02F2FD68D9300CD4FC3 /* AdvXXCustomBannerAdapter.h */,
+				2279D0302FD68D9300CD4FC3 /* AdvXXCustomBannerAdapter.m */,
+				2279D0322FD68DAB00CD4FC3 /* AdvXXCustomInterstitialAdapter.h */,
+				2279D0332FD68DAB00CD4FC3 /* AdvXXCustomInterstitialAdapter.m */,
+				2279D0352FD68DC400CD4FC3 /* AdvXXCustomRewardVideoAdapter.h */,
+				2279D0362FD68DC400CD4FC3 /* AdvXXCustomRewardVideoAdapter.m */,
+				2279D0382FD68DD700CD4FC3 /* AdvXXCustomNativeExpressAdapter.h */,
+				2279D0392FD68DD700CD4FC3 /* AdvXXCustomNativeExpressAdapter.m */,
+				2279D0402FD69C8E00CD4FC3 /* RenderFeed */,
 			);
 			path = CustomAdapter;
+			sourceTree = "<group>";
+		};
+		2279D0402FD69C8E00CD4FC3 /* RenderFeed */ = {
+			isa = PBXGroup;
+			children = (
+				2279D03E2FD69C8E00CD4FC3 /* AdvXXCustomRenderFeedAdapter.h */,
+				2279D03F2FD69C8E00CD4FC3 /* AdvXXCustomRenderFeedAdapter.m */,
+				2279D0422FD69D1F00CD4FC3 /* AdvXXRenderFeedAdView.h */,
+				2279D0432FD69D1F00CD4FC3 /* AdvXXRenderFeedAdView.m */,
+			);
+			path = RenderFeed;
 			sourceTree = "<group>";
 		};
 		22A07C9E2F2897C7007AF503 /* RenderFeed */ = {
@@ -521,10 +569,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				31FE7BD924482D0500CB2062 /* ViewController.m in Sources */,
+				2279D0442FD69D1F00CD4FC3 /* AdvXXRenderFeedAdView.m in Sources */,
 				6003F59E195388D20070C39A /* AppDelegate.m in Sources */,
+				2279D0312FD68D9300CD4FC3 /* AdvXXCustomBannerAdapter.m in Sources */,
 				31FE7BCF24482CEE00CB2062 /* BaseViewController.m in Sources */,
 				31FE7BCA24482CEE00CB2062 /* BYExamCellModel.m in Sources */,
+				2279D0342FD68DAB00CD4FC3 /* AdvXXCustomInterstitialAdapter.m in Sources */,
 				22E9169C2F230CAD00830E19 /* DemoInterstitialViewController.m in Sources */,
+				2279D02D2FD188D700CD4FC3 /* AdvXXCustomSplashAdapter.m in Sources */,
 				31FE7BC624482CEE00CB2062 /* JDStatusBarNotification.m in Sources */,
 				31FE7BC724482CEE00CB2062 /* JDStatusBarView.m in Sources */,
 				2225DA692F29E48500D63C54 /* DemoBannerViewController.m in Sources */,
@@ -532,10 +584,14 @@
 				6003F59A195388D20070C39A /* main.m in Sources */,
 				31FE7BC524482CEE00CB2062 /* ViewBuilder.m in Sources */,
 				31FE7BCB24482CEE00CB2062 /* CellBuilder.m in Sources */,
+				2279D0372FD68DC400CD4FC3 /* AdvXXCustomRewardVideoAdapter.m in Sources */,
 				220A7EBD2BD11F1E0043492A /* DemoSplashViewController.m in Sources */,
+				2279D03A2FD68DD700CD4FC3 /* AdvXXCustomNativeExpressAdapter.m in Sources */,
 				31FE7BCD24482CEE00CB2062 /* ExamTableViewCell.m in Sources */,
 				222E146A2F238E8B001C41F9 /* DemoFeedExpressViewController.m in Sources */,
+				2279D02E2FD193C000CD4FC3 /* AdvXXCustomConfigAdapter.m in Sources */,
 				22A07C9F2F2897C7007AF503 /* DemoFeedAdDisplayController.m in Sources */,
+				2279D0412FD69C8E00CD4FC3 /* AdvXXCustomRenderFeedAdapter.m in Sources */,
 				22A07CA02F2897C7007AF503 /* DemoRenderFeedViewController.m in Sources */,
 				222E146B2F238E8B001C41F9 /* DemoListFeedExpressViewController.m in Sources */,
 				222E14642F23581C001C41F9 /* DemoFullScreenVideoController.m in Sources */,

@@ -48,6 +48,7 @@
         @(AdvErrorCode_AllLoadAdFailed) : @"所有平台都未返回广告（失败或超时）",
         @(AdvErrorCode_SupplierUninstalled) : @"渠道SDK未被安装",
         @(AdvErrorCode_SupplierInitFailed) : @"渠道SDK初始化失败",
+        @(AdvErrorCode_CustomAdnLoadFailed) : @"自定义Adn配置类获取失败",
     };
     return [codeMap objectForKey:@(code)];
 }

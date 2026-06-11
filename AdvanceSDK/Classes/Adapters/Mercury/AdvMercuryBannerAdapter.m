@@ -15,7 +15,6 @@
 
 @property (nonatomic, weak) id<AdvanceCommonBannerAdapterBridge> bridge;
 @property (nonatomic, strong) MercuryBannerAdView *mercury_ad;
-@property (nonatomic, strong) UIView *bannerView;
 
 @end
 
@@ -39,7 +38,7 @@
 }
 
 - (UIView *)adapter_bannerView {
-    return self.bannerView;
+    return self.mercury_ad;
 }
 
 - (void)adapter_sendNotificationWithBidResult:(AdvBidWinLossResult *)result {
@@ -51,7 +50,6 @@
 #pragma mark: - MercuryBannerAdViewDelegate
 // 广告数据拉取成功回调
 - (void)mercury_bannerViewDidReceived:(MercuryBannerAdView *)banner {
-    self.bannerView = banner;
     [self.bridge banner_didLoadAdWithAdapter:self price:banner.price];
 }
 

@@ -150,16 +150,16 @@ static void _AdvYYDiskCacheSetGlobal(AdvYYDiskCache *cache) {
     return filename;
 }
 
-- (void)_appWillBeTerminated {
-    Lock();
-    _kv = nil;
-    Unlock();
-}
+//- (void)_appWillBeTerminated {
+//    Lock();
+//    _kv = nil;
+//    Unlock();
+//}
 
 #pragma mark - public
 
 - (void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillTerminateNotification object:nil];
+    //[[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillTerminateNotification object:nil];
 }
 
 - (instancetype)init {
@@ -205,7 +205,7 @@ static void _AdvYYDiskCacheSetGlobal(AdvYYDiskCache *cache) {
     [self _trimRecursively];
     _AdvYYDiskCacheSetGlobal(self);
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_appWillBeTerminated) name:UIApplicationWillTerminateNotification object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_appWillBeTerminated) name:UIApplicationWillTerminateNotification object:nil];
     return self;
 }
 

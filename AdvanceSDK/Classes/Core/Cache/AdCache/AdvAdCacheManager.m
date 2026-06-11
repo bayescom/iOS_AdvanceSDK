@@ -19,9 +19,9 @@ static AdvAdCacheManager *_instance = nil;
 + (instancetype) sharedInstance {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        _instance = [[super allocWithZone:NULL] init] ;
+        _instance = [[super allocWithZone:NULL] init];
     }) ;
-    return _instance ;
+    return _instance;
 }
 
 - (instancetype)init {

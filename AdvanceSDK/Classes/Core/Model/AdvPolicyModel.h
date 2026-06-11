@@ -44,16 +44,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSString *sdk_id; /// 渠道SDK广告源唯一id
 @property (nonatomic, assign) NSInteger enable_cache; /// 1：表示需要缓存 0：表示不需要缓存
 @property (nonatomic, assign) NSInteger cache_timeout; /// 缓存时间（秒），enable_cache为1时有值
-/// 自定义 ADN 相关
-@property (nonatomic, assign) BOOL isCustom; /// 是否自定义渠道
-@property (nonatomic, copy) NSString *customParameters; /// 自定义JSON参数
-
 /// 此渠道广告是否勾选了头部竞价 1-是 0-否，如果该渠道SDK支持head_bidding，则去获取竞价
 @property (nonatomic, assign) NSInteger is_head_bidding;
 /// 竞价sdk用于和GroMore比价时的加强系数, 目前全是 1
-@property (nonatomic, assign) CGFloat bidRatio;
-/// 穿山甲开屏，1代表使用旧API加载开屏广告，其他代表使用新API，默认使用新API。
-@property (nonatomic, assign) NSInteger versionTag;
+@property (nonatomic, assign) CGFloat bid_ratio;
 
 @property (nonatomic, strong) NSArray<NSString *> *clicktk;
 @property (nonatomic, strong) NSArray<NSString *> *loadedtk;
@@ -62,6 +56,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSArray<NSString *> *succeedtk;
 @property (nonatomic, strong) NSArray<NSString *> *failedtk;
 @property (nonatomic, strong) NSArray<NSString *> *wintk; // 上游sdk竞胜上报（仅在开启竞价情况下返回）
+
+/// Custom ADN 相关
+@property (nonatomic, assign) NSInteger is_custom_adn; /// 是否自定义渠道
+@property (nonatomic, copy) NSString *custom_params; /// 自定义JSON参数
+
 
 /// 以下为自定义字段
 @property (nonatomic, assign) AdvSupplierLoadAdState loadAdState; // 广告加载状态
@@ -73,9 +72,9 @@ NS_ASSUME_NONNULL_BEGIN
 // 全局配置信息
 @interface AdvSetting : NSObject
 /// 1:使用缓存模式加载策略，其他使用实时策略
-@property (nonatomic, assign) NSInteger useCache;
+@property (nonatomic, assign) NSInteger use_cache;
 /// 策略缓存时长
-@property (nonatomic, assign) NSInteger cacheDur;
+@property (nonatomic, assign) NSInteger cache_dur;
 /// 聚合竞价模式：0表示普通竞价，1 为 GroMore 竞价
 @property (nonatomic, assign) NSInteger bidding_type;
 /// SDK并行请求总体超时时长(ms)

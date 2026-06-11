@@ -15,7 +15,6 @@
 
 @property (nonatomic, weak) id<AdvanceCommonBannerAdapterBridge> bridge;
 @property (nonatomic, strong) GDTUnifiedBannerView *gdt_ad;
-@property (nonatomic, strong) UIView *bannerView;
 
 @end
 
@@ -40,7 +39,7 @@
 }
 
 - (UIView *)adapter_bannerView {
-    return self.bannerView;
+    return self.gdt_ad;
 }
 
 - (void)adapter_sendNotificationWithBidResult:(AdvBidWinLossResult *)result {
@@ -53,7 +52,6 @@
 
 #pragma mark: - GDTUnifiedBannerViewDelegate
 - (void)unifiedBannerViewDidLoad:(GDTUnifiedBannerView *)unifiedBannerView {
-    self.bannerView = unifiedBannerView;
     [self.bridge banner_didLoadAdWithAdapter:self price:unifiedBannerView.eCPM];
 }
 

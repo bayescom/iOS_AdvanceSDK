@@ -25,7 +25,6 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSDictionary *)modelCustomPropertyMapper {
     return @{
         @"identifier": @"id",
-        @"bidRatio": @"bid_ratio",
     };
 }
 
@@ -48,8 +47,6 @@ NS_ASSUME_NONNULL_BEGIN
 @implementation AdvSetting
 + (NSDictionary *)modelCustomPropertyMapper {
     return @{
-        @"useCache": @"use_cache",
-        @"cacheDur": @"cache_dur",
         @"parallelGroup": @"parallel_group",
         @"headBiddingGroup": @"head_bidding_group",
     };

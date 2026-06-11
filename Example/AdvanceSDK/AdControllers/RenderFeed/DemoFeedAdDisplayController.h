@@ -3,7 +3,7 @@
 //  AdvanceSDK_Example
 //
 //  Created by guangyao on 2023/9/11.
-//  Copyright © 2023 Cheng455153666. All rights reserved.
+//  Copyright © 2023. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>

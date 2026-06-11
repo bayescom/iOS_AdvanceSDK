@@ -3,6 +3,7 @@
 #import "AdvPolicyService.h"
 #import "AdvConstantHeader.h"
 #import "AdvanceCommonConfigAdapter.h"
+#import "AdvCustomAdnCacheManager.h"
 
 @interface AdvanceBaseAdSpot () <AdvPolicyServiceDelegate>
 
@@ -51,6 +52,7 @@
     [self setTanxSDKVersion];
     [self setSigmobSDKVersion];
     [self setFunlinkSDKVersion];
+    [self setCustomAdnVersion];
 }
 
 - (void)setGDTSDKVersion {
@@ -122,6 +124,20 @@
     if ([clazz respondsToSelector:@selector(sdkVersion)]) {
         NSString *version = [clazz sdkVersion];
         [_extraDict adv_safeSetObject:version forKey:@"flink_v"];
+    }
+}
+
+- (void)setCustomAdnVersion {
+    // 从缓存中获取adnlist信息
+    AdvCustomAdnListInfo *cacheInfo = [[AdvCustomAdnCacheManager sharedInstance] customAdnlistInfo];
+    if (cacheInfo.custom_adn_list.count) {
+        [cacheInfo.custom_adn_list enumerateObjectsUsingBlock:^(AdvCustomAdnModel *obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            Class<AdvanceCommonConfigAdapter> clazz = NSClassFromString(obj.customConfigAdapterClassName);
+            if ([clazz respondsToSelector:@selector(sdkVersion)]) {
+                NSString *version = [clazz sdkVersion];
+                [_extraDict adv_safeSetObject:version forKey:[NSString stringWithFormat:@"%@_v", obj.adnTag]];
+            }
+        }];
     }
 }
 

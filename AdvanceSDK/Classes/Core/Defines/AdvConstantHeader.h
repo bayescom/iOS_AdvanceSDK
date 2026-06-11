@@ -4,6 +4,7 @@
 #import "AdvLog.h"
 #import "AdvDefines.h"
 #import "NSArray+Adv.h"
+#import "NSString+Adv.h"
 #import "AdvSupplierLoader.h"
 #import "AdvAdConfigHeader.h"
 

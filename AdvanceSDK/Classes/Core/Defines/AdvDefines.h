@@ -56,5 +56,7 @@ typedef NS_ENUM(NSUInteger, AdvErrorCode) {
     AdvErrorCode_SupplierUninstalled = 9401,
     /// 渠道SDK初始化失败
     AdvErrorCode_SupplierInitFailed = 9402,
+    /// 自定义Adn配置类获取失败
+    AdvErrorCode_CustomAdnLoadFailed = 9403,
     
 };

@@ -1,24 +1,24 @@
 //
-//  AdvCSJBannerAdapter.m
-//  AdvanceSDK
+//  AdvXXCustomBannerAdapter.m
+//  AdvanceSDK_Example
 //
-//  Created by CherryKing on 2020/4/9.
-//  Copyright © 2020 bayescom. All rights reserved.
+//  Created by guangyao on 2026/6/8.
+//  Copyright © 2026. All rights reserved.
 //
 
-#import "AdvCSJBannerAdapter.h"
+#import "AdvXXCustomBannerAdapter.h"
 #import <BUAdSDK/BUAdSDK.h>
-#import "AdvanceCommonAdapter.h"
-#import "AdvAdConfigHeader.h"
+#import <AdvanceSDK/AdvanceCommonAdapter.h>
+#import <AdvanceSDK/AdvAdConfigHeader.h>
 
-@interface AdvCSJBannerAdapter () <BUNativeExpressBannerViewDelegate, AdvanceCommonBannerAdapter>
+@interface AdvXXCustomBannerAdapter () <BUNativeExpressBannerViewDelegate, AdvanceCommonBannerAdapter>
 
 @property (nonatomic, weak) id<AdvanceCommonBannerAdapterBridge> bridge;
-@property (nonatomic, strong) BUNativeExpressBannerView *csj_ad;
+@property (nonatomic, strong) BUNativeExpressBannerView *bannerAdView;
 
 @end
 
-@implementation AdvCSJBannerAdapter
+@implementation AdvXXCustomBannerAdapter
 
 - (void)adapter_setBannerBridge:(id<AdvanceCommonBannerAdapterBridge>)bridge {
     _bridge = bridge;
@@ -27,10 +27,10 @@
 - (void)adapter_loadAdWithPlacementId:(NSString *)placementId config:(NSDictionary *)config {
     CGSize adSize = [config[kAdvanceAdSizeKey] CGSizeValue];
     CGRect rect = CGRectMake(0, 0, adSize.width, adSize.height);
-    _csj_ad = [[BUNativeExpressBannerView alloc] initWithSlotID:placementId rootViewController:config[kAdvanceAdPresentControllerKey] adSize:adSize];
-    _csj_ad.frame = rect;
-    _csj_ad.delegate = self;
-    [_csj_ad loadAdData];
+    _bannerAdView = [[BUNativeExpressBannerView alloc] initWithSlotID:placementId rootViewController:config[kAdvanceAdPresentControllerKey] adSize:adSize];
+    _bannerAdView.frame = rect;
+    _bannerAdView.delegate = self;
+    [_bannerAdView loadAdData];
 }
 
 - (BOOL)adapter_isAdValid {
@@ -38,14 +38,14 @@
 }
 
 - (UIView *)adapter_bannerView {
-    return _csj_ad;
+    return self.bannerAdView;
 }
 
 - (void)adapter_sendNotificationWithBidResult:(AdvBidWinLossResult *)result {
     if (result.bidResultType == AdvBidWinLossResultTypeWin) {
-        [_csj_ad win:@(result.secondPrice)];
+        [_bannerAdView win:@(result.secondPrice)];
     } else {
-        [_csj_ad loss:@(result.winPrice) lossReason:nil winBidder:nil];
+        [_bannerAdView loss:@(result.winPrice) lossReason:nil winBidder:nil];
     }
 }
 
@@ -73,8 +73,8 @@
 }
 
 - (void)nativeExpressBannerAdView:(BUNativeExpressBannerView *)bannerAdView dislikeWithReason:(NSArray<BUDislikeWords *> *_Nullable)filterwords {
-    [self.csj_ad removeFromSuperview];
-    self.csj_ad = nil;
+    [self.bannerAdView removeFromSuperview];
+    self.bannerAdView = nil;
     [self.bridge banner_didAdClosedWithAdapter:self];
 }
 

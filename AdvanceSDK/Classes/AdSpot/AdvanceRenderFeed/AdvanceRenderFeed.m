@@ -10,6 +10,7 @@
 #import "AdvPolicyService.h"
 #import "AdvanceCommonAdapter.h"
 #import "AdvAdCacheManager.h"
+#import "AdvError.h"
 
 @interface AdvanceRenderFeed () <AdvPolicyServiceDelegate, AdvanceCommonRenderFeedAdapterBridge>
 
@@ -63,15 +64,19 @@
     if (supplier.enable_cache && cacheModel) { //此次加载允许缓存 且 内存中存在Adapter缓存时，直接回调成功
         supplier.cachedReqId = cacheModel.sourceReqId; //用于tk上报
         adapter = cacheModel.adObject;
-        [self.adapterMap setObject:adapter forKey:supplier.sdk_id];
+        [self.adapterMap adv_safeSetObject:adapter forKey:supplier.sdk_id];
         [adapter adapter_setRenderFeedBridge:self]; // 现有的adapter实现方式，在更新bridge的时候，所属的AdView未及时更新bridge导致后续回调中断。
         [self renderFeed_didLoadAdWithAdapter:adapter price:cacheModel.price];
     } else {// 根据渠道id初始化对应Adapter
         NSString *clsName = [AdvSupplierLoader mappingRenderFeedAdapterNameWithSupplierId:supplier.identifier];
         adapter = [[NSClassFromString(clsName) alloc] init];
-        [self.adapterMap setObject:adapter forKey:supplier.sdk_id];
-        [adapter adapter_setRenderFeedBridge:self];
-        [adapter adapter_loadAdWithPlacementId:supplier.adspotid config:[self setupAdConfigWithSupplier:supplier]];
+        if (adapter) {
+            [self.adapterMap adv_safeSetObject:adapter forKey:supplier.sdk_id];
+            [adapter adapter_setRenderFeedBridge:self];
+            [adapter adapter_loadAdWithPlacementId:supplier.adspotid config:[self setupAdConfigWithSupplier:supplier]];
+        } else { // 开发者自定义adapter类不存在
+            [(AdvPolicyService *)self.manager checkTargetWithResultfulSupplier:supplier state:AdvSupplierLoadAdFailed error:[AdvError errorWithCode:AdvErrorCode_CustomAdnLoadFailed].toNSError];
+        }
     }
 }
 
@@ -177,7 +182,8 @@
 
 #pragma mark: - setting
 - (NSDictionary *)setupAdConfigWithSupplier:(AdvSupplier *)supplier {
-    NSMutableDictionary *config = [NSMutableDictionary dictionary];
+    // 先获取supplier.custom_params
+    NSMutableDictionary *config = [NSMutableDictionary dictionaryWithDictionary:[NSString adv_dictionaryWithJsonString:supplier.custom_params]];
     [config adv_safeSetObject:supplier.mediaid forKey:kAdvanceSupplierMediaIdKey];
     [config adv_safeSetObject:self.viewController forKey:kAdvanceAdPresentControllerKey];
     return config.copy;

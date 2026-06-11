@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "AdvPolicyModel.h"
+#import "AdvCustomAdnModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -28,6 +29,10 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)verifyServerSideRewardedURL:(NSString *)URLString
                          parameters:(nullable NSDictionary *)parameters
                          completion:(void(^)(NSError *error))completion;
+
+/// 获取自定义AdnList信息
++ (void)getCustomAdnlistInfoWithVersion:(NSString *)version
+                             completion:(void(^)(AdvCustomAdnListInfo *info, NSError *error))completion;
 
 @end
 

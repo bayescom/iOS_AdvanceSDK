@@ -122,4 +122,26 @@
     }];
 }
 
++ (void)getCustomAdnlistInfoWithVersion:(NSString *)version
+                             completion:(void(^)(AdvCustomAdnListInfo *info, NSError *error))completion {
+    
+    NSDictionary *params = @{@"appid": [AdvDeviceManager sharedInstance].appId, @"os": @1, @"version": version};
+    
+    AdvCustomAdnListInfo *info = [[AdvCustomAdnListInfo alloc] init];
+    AdvCustomAdnModel *adn = [[AdvCustomAdnModel alloc] init];
+    adn.adnId = @"321";
+    adn.adnName = @"自定义穿山甲";
+    adn.adnTag = @"custom_csj";
+    adn.customConfigAdapterClassName = @"AdvXXCustomConfigAdapter";
+    adn.customSplashAdapterClassName = @"AdvXXCustomSplashAdapter";
+    adn.customBannerAdapterClassName = @"AdvXXCustomBannerAdapter";
+    adn.customInterstitialAdapterClassName = @"AdvXXCustomInterstitialAdapter";
+    adn.customRewardVideoAdapterClassName = @"AdvXXCustomRewardVideoAdapter";
+    adn.customNativeExpressAdapterClassName = @"AdvXXCustomNativeExpressAdapter";
+    adn.customRenderFeedAdapterClassName = @"AdvXXCustomRenderFeedAdapter";
+    info.custom_adn_list = @[adn];
+    info.version = @"123456";
+    completion(info, nil);
+}
+
 @end

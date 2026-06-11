@@ -10,8 +10,6 @@
 #import "AdvLog.h"
 #import <objc/runtime.h>
 #import <objc/message.h>
-#import "NSArray+Adv.h"
-#import "NSString+Adv.h"
 #import "NSDictionary+Adv.h"
 #import "AdvConstantHeader.h"
 #import "AdvParameterHandler.h"
@@ -73,32 +71,16 @@
         }
         
         self.model = model;
-        /// 过滤掉在后台添加了广告源，但客户端未集成SDK的渠道
-//        self.model.suppliers = [self.model.suppliers adv_filter:^BOOL(AdvSupplier *supplier) {
-//            return [AdvSupplierLoader isSDKInstalledWithSupplierId:supplier.identifier];
-//        }].mutableCopy;
-//        /// 所有渠道SDK都未安装回调
-//        if (!self.model.suppliers.count) {
-//            if ([self.delegate respondsToSelector:@selector(policyServiceLoadFailedWithError:)]) {
-//                [self.delegate policyServiceLoadFailedWithError:[AdvError errorWithCode:AdvErrorCode_SupplierUninstalled].toNSError];
-//            }
-//            return;
-//        }
-//        self.model.setting.headBiddingGroup = [self.model.setting.headBiddingGroup adv_filter:^BOOL(NSNumber *priority) {
-//            return [self.model.suppliers adv_filter:^BOOL(AdvSupplier *supplier) {
-//                return supplier.priority == priority.integerValue;
-//            }].count;
-//        }].mutableCopy;
-//        self.model.setting.parallelGroup = [self.model.setting.parallelGroup adv_map:^id(NSArray *group) {
-//            return [group adv_filter:^BOOL(NSNumber *priority) {
-//                return [self.model.suppliers adv_filter:^BOOL(AdvSupplier *supplier) {
-//                    return supplier.priority == priority.integerValue;
-//                }].count;
-//            }];
-//        }].mutableCopy;
-//        self.model.setting.parallelGroup = [self.model.setting.parallelGroup adv_filter:^BOOL(NSArray *group) {
-//            return group.count;
-//        }].mutableCopy;
+        
+        // mock数据
+        [self.model.suppliers enumerateObjectsUsingBlock:^(AdvSupplier * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            if ([obj.identifier isEqualToString:@"3"]) {
+                obj.identifier = @"321";
+                obj.is_custom_adn = 1;
+                obj.name = @"自定义穿山甲";
+                obj.custom_params = [NSString adv_jsonStringWithDictionary:@{@"customKey": @"customValue"}];
+            }
+        }];
         
         // Success Callback
         if ([self.delegate respondsToSelector:@selector(policyServiceLoadSuccessWithModel:)]) {
