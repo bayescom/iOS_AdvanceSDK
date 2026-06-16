@@ -6,7 +6,8 @@
 //
 
 #import "AdvanceBaseAdSpot.h"
-#import "AdvRenderFeedAdWrapper.h"
+#import "AdvRenderFeedAdView.h"
+#import "AdvRenderFeedAdData.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -16,25 +17,22 @@ NS_ASSUME_NONNULL_BEGIN
 @optional
 
 /// 广告加载成功回调
-- (void)onRenderFeedAdSuccessToLoad:(AdvanceRenderFeed *)renderFeedAd feedAdWrapper:(AdvRenderFeedAdWrapper *)feedAdWrapper;
+- (void)onRenderFeedAdSuccessToLoad:(AdvanceRenderFeed *)renderFeedAd feedAdView:(AdvRenderFeedAdView *)feedAdView feedAdData:(AdvRenderFeedAdData *)feedAdData;
 
 /// 广告加载失败回调
 - (void)onRenderFeedAdFailToLoad:(AdvanceRenderFeed *)renderFeedAd error:(NSError *)error;
 
 /// 广告曝光回调
--(void)onRenderFeedAdViewExposured:(AdvanceRenderFeed *)renderFeedAd;
+-(void)onRenderFeedAdViewExposured:(AdvRenderFeedAdView *)feedAdView;
 
 /// 广告点击回调
-- (void)onRenderFeedAdViewClicked:(AdvanceRenderFeed *)renderFeedAd;
-
-/// 广告关闭回调
-- (void)onRenderFeedAdViewClosed:(AdvanceRenderFeed *)renderFeedAd;
+- (void)onRenderFeedAdViewClicked:(AdvRenderFeedAdView *)feedAdView;
 
 /// 广告详情页关闭回调
-- (void)onRenderFeedAdDidCloseDetailPage:(AdvanceRenderFeed *)renderFeedAd;
+- (void)onRenderFeedAdDidCloseDetailPage:(AdvRenderFeedAdView *)feedAdView;
 
 /// 视频广告播放结束回调
-- (void)onRenderFeedAdDidPlayFinish:(AdvanceRenderFeed *)renderFeedAd;
+- (void)onRenderFeedAdDidPlayFinish:(AdvRenderFeedAdView *)feedAdView;
 
 @end
 

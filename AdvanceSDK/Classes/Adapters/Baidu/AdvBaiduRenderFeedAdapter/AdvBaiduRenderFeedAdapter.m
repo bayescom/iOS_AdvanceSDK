@@ -9,10 +9,11 @@
 #import <BaiduMobAdSDK/BaiduMobAdSDK.h>
 #import "AdvanceCommonAdapter.h"
 #import "AdvRenderFeedAdWrapper.h"
-#import "AdvBaiduRenderFeedAdView.h"
+#import "AdvBaiduRenderFeedAdViewCreator.h"
+#import "AdvBaiduRenderFeedAdDataSource.h"
 #import "AdvAdConfigHeader.h"
 
-@interface AdvBaiduRenderFeedAdapter () <BaiduMobAdNativeAdDelegate, AdvanceCommonRenderFeedAdapter>
+@interface AdvBaiduRenderFeedAdapter () <BaiduMobAdNativeAdDelegate, BaiduMobAdNativeInterationDelegate, BaiduMobAdNativeVideoViewDelegate, AdvanceCommonRenderFeedAdapter>
 
 @property (nonatomic, weak) id<AdvanceCommonRenderFeedAdapterBridge> bridge;
 @property (nonatomic, strong) BaiduMobAdNative *bd_ad;
@@ -59,9 +60,18 @@
     
     BaiduMobAdNativeAdObject *dataObject = nativeAds.firstObject;
     self.dataObject = dataObject;
-    AdvRenderFeedAdElement *element = [self generateFeedAdElementWithDataObject:dataObject];
-    AdvBaiduRenderFeedAdView *bdFeedAdView = [[AdvBaiduRenderFeedAdView alloc] initWithNativeAd:dataObject bridge:self.bridge adapter:self manager:nil viewController:nil];
-    self.feedAdWrapper = [[AdvRenderFeedAdWrapper alloc] initWithFeedAdView:bdFeedAdView feedAdElement:element];
+    self.dataObject.interationDelegate = self;
+    id<AdvRenderFeedAdDataSource> dataSource = [[AdvBaiduRenderFeedAdDataSource alloc] initWithDataObject:dataObject];
+    BaiduMobAdNativeVideoView *bdVideoView = nil;
+    if (dataSource.isVideoAd) {
+        bdVideoView = [[BaiduMobAdNativeVideoView alloc] initWithFrame:CGRectZero andObject:dataObject];
+        bdVideoView.videoDelegate = self;
+    }
+    BaiduMobAdNativeAdView *adView = [[BaiduMobAdNativeAdView alloc] init];
+    self.feedAdWrapper = [[AdvRenderFeedAdWrapper alloc] init];
+    self.feedAdWrapper.dataSource = dataSource;
+    self.feedAdWrapper.view = adView;
+    self.feedAdWrapper.viewCreator = [[AdvBaiduRenderFeedAdViewCreator alloc] initWithDataObject:dataObject adView:adView videoView:bdVideoView];
     
     [self.bridge renderFeed_didLoadAdWithAdapter:self price:[[dataObject getECPMLevel] integerValue]];
 }
@@ -74,24 +84,44 @@
     [self.bridge renderFeed_failedToLoadAdWithAdapter:self error:error];
 }
 
-- (AdvRenderFeedAdElement *)generateFeedAdElementWithDataObject:(BaiduMobAdNativeAdObject *)dataObject {
-    AdvRenderFeedAdElement *element = [[AdvRenderFeedAdElement alloc] init];
-    element.title = dataObject.title;
-    element.desc = dataObject.text;
-    element.iconUrl = dataObject.iconImageURLString;
-    if (dataObject.morepics.count) { // 三图
-        element.imageUrlList = dataObject.morepics;
-    } else if (dataObject.mainImageURLString.length) { // 单图
-        element.imageUrlList = @[dataObject.mainImageURLString];
-    }
-    element.mediaWidth = dataObject.w.integerValue;
-    element.mediaHeight = dataObject.h.integerValue;
-    element.buttonText = dataObject.actButtonString;
-    element.isVideoAd = (dataObject.materialType == VIDEO);
-    element.videoDuration = dataObject.videoDuration.integerValue;
-    element.isAdValid = !dataObject.isExpired;
+#pragma mark - BaiduMobAdNativeInterationDelegate
+
+/**
+ *  广告曝光成功
+ */
+- (void)nativeAdExposure:(UIView *)nativeAdView nativeAdDataObject:(BaiduMobAdNativeAdObject *)object {
+    [self.bridge renderFeed_didAdExposuredWithAdapter:self];
+}
+
+/**
+ *  广告曝光失败
+ */
+- (void)nativeAdExposureFail:(UIView *)nativeAdView
+          nativeAdDataObject:(BaiduMobAdNativeAdObject *)object
+                  failReason:(int)reason {
     
-    return element;
+}
+
+/**
+ *  广告点击
+ */
+- (void)nativeAdClicked:(UIView *)nativeAdView nativeAdDataObject:(BaiduMobAdNativeAdObject *)object {
+    [self.bridge renderFeed_didAdClickedWithAdapter:self];
+}
+
+/**
+ *  广告详情页关闭
+ */
+- (void)didDismissLandingPage:(UIView *)nativeAdView {
+    [self.bridge renderFeed_didAdClosedDetailPageWithAdapter:self];
+}
+
+#pragma mark - BaiduMobAdNativeVideoViewDelegate
+/**
+ 视频播放完成
+ */
+- (void)nativeVideoAdDidComplete:(BaiduMobAdNativeVideoView *)videoView {
+    [self.bridge renderFeed_didAdPlayFinishWithAdapter:self];
 }
 
 - (void)dealloc {

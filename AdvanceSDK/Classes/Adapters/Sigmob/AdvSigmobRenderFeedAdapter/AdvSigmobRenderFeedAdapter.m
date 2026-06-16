@@ -9,10 +9,11 @@
 #import <WindSDK/WindSDK.h>
 #import "AdvanceCommonAdapter.h"
 #import "AdvRenderFeedAdWrapper.h"
-#import "AdvSigmobRenderFeedAdView.h"
+#import "AdvSigmobRenderFeedAdViewCreator.h"
+#import "AdvSigmobRenderFeedAdDataSource.h"
 #import "AdvAdConfigHeader.h"
 
-@interface AdvSigmobRenderFeedAdapter () <WindNativeAdsManagerDelegate, AdvanceCommonRenderFeedAdapter>
+@interface AdvSigmobRenderFeedAdapter () <WindNativeAdsManagerDelegate, WindNativeAdViewDelegate, AdvanceCommonRenderFeedAdapter>
 
 @property (nonatomic, weak) id<AdvanceCommonRenderFeedAdapterBridge> bridge;
 @property (nonatomic, strong) WindNativeAdsManager *sigmob_ad;
@@ -53,9 +54,15 @@
                             nativeAds:(NSArray<WindNativeAd *> *)nativeAdDataArray {
     
     WindNativeAd *nativeAd = nativeAdDataArray.firstObject;
-    AdvRenderFeedAdElement *element = [self generateFeedAdElementWithNativeAd:nativeAd];
-    AdvSigmobRenderFeedAdView *sigmobFeedAdView = [[AdvSigmobRenderFeedAdView alloc] initWithNativeAd:nativeAd bridge:self.bridge adapter:self manager:nil viewController:nil];
-    self.feedAdWrapper = [[AdvRenderFeedAdWrapper alloc] initWithFeedAdView:sigmobFeedAdView feedAdElement:element];
+    id<AdvRenderFeedAdDataSource> dataSource = [[AdvSigmobRenderFeedAdDataSource alloc] initWithNativeAd:nativeAd];
+    WindNativeAdView *adView = [[WindNativeAdView alloc] init];
+    adView.delegate = self;
+    adView.viewController = self.rootViewController;
+    
+    self.feedAdWrapper = [[AdvRenderFeedAdWrapper alloc] init];
+    self.feedAdWrapper.dataSource = dataSource;
+    self.feedAdWrapper.view = adView;
+    self.feedAdWrapper.viewCreator = [[AdvSigmobRenderFeedAdViewCreator alloc] initWithNativeAd:nativeAd adView:adView];
     
     [self.bridge renderFeed_didLoadAdWithAdapter:self price:adsManager.getEcpm.integerValue];
 }
@@ -69,49 +76,22 @@
     }
 }
 
-- (AdvRenderFeedAdElement *)generateFeedAdElementWithNativeAd:(WindNativeAd *)nativeAd {
-    AdvRenderFeedAdElement *element = [[AdvRenderFeedAdElement alloc] init];
-    element.title = nativeAd.title;
-    element.desc = nativeAd.desc;
-    element.iconUrl = nativeAd.iconUrl;
-    element.imageUrlList = nativeAd.imageUrlList;
-    element.mediaWidth = [[self splitImageSizeString:nativeAd.imageSizeList.firstObject].firstObject integerValue];
-    element.mediaHeight = [[self splitImageSizeString:nativeAd.imageSizeList.firstObject].lastObject integerValue];
-    element.buttonText = nativeAd.callToAction;
-    element.isVideoAd = [self isVideoAd:nativeAd];
-    if (element.isVideoAd) {
-        element.mediaWidth = nativeAd.videoWidth;
-        element.mediaHeight = nativeAd.videoHeight;
-    }
-    element.appRating = nativeAd.rating;
-    element.isAdValid = YES;
-    return element;
+#pragma mark - WindNativeAdViewDelegate
+/// 广告曝光回调
+- (void)nativeAdViewWillExpose:(WindNativeAdView *)nativeAdView {
+    [self.bridge renderFeed_didAdExposuredWithAdapter:self];
 }
 
-- (BOOL)isVideoAd:(WindNativeAd *)nativeAd {
-    switch (nativeAd.feedADMode) {
-        case WindFeedADModeVideo:
-        case WindFeedADModeVideoPortrait:
-        case WindFeedADModeVideoLandSpace:
-            return YES;
-        default:
-            return NO;
-    }
+/// 广告点击回调
+- (void)nativeAdViewDidClick:(WindNativeAdView *)nativeAdView {
+    [self.bridge renderFeed_didAdClickedWithAdapter:self];
 }
 
-/// 解析字符串 " {100, 200} "
-- (NSArray *)splitImageSizeString:(NSString *)sizeString {
-    // 去掉大括号
-    NSString *cleanedString = [sizeString stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"{}"]];
-    // 使用逗号分隔字符串
-    NSArray *components = [cleanedString componentsSeparatedByString:@","];
-    // 转换为数字
-    if (components.count == 2) {
-        NSString *firstString = [components[0] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-        NSString *secondString = [components[1] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-        return @[firstString, secondString];
+/// 视频播放结束回调
+- (void)nativeAdView:(WindNativeAdView *)nativeAdView playerStatusChanged:(WindMediaPlayerStatus)status userInfo:(NSDictionary *)userInfo {
+    if (status == WindMediaPlayerStatusStoped) {
+        [self.bridge renderFeed_didAdPlayFinishWithAdapter:self];
     }
-    return @[];
 }
 
 - (void)dealloc {

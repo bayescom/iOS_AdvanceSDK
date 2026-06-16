@@ -73,14 +73,14 @@
         self.model = model;
         
         // mock数据
-        [self.model.suppliers enumerateObjectsUsingBlock:^(AdvSupplier * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            if ([obj.identifier isEqualToString:@"3"]) {
-                obj.identifier = @"321";
-                obj.is_custom_adn = 1;
-                obj.name = @"自定义穿山甲";
-                obj.custom_params = [NSString adv_jsonStringWithDictionary:@{@"customKey": @"customValue"}];
-            }
-        }];
+//        [self.model.suppliers enumerateObjectsUsingBlock:^(AdvSupplier * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+//            if ([obj.identifier isEqualToString:@"3"]) {
+//                obj.identifier = @"321";
+//                obj.is_custom_adn = 1;
+//                obj.name = @"自定义穿山甲";
+//                obj.custom_params = [NSString adv_jsonStringWithDictionary:@{@"customKey": @"customValue"}];
+//            }
+//        }];
         
         // Success Callback
         if ([self.delegate respondsToSelector:@selector(policyServiceLoadSuccessWithModel:)]) {

@@ -9,10 +9,11 @@
 #import <BUAdSDK/BUAdSDK.h>
 #import "AdvanceCommonAdapter.h"
 #import "AdvRenderFeedAdWrapper.h"
-#import "AdvCSJRenderFeedAdView.h"
+#import "AdvCSJRenderFeedAdViewCreator.h"
+#import "AdvCSJRenderFeedAdDataSource.h"
 #import "AdvAdConfigHeader.h"
 
-@interface AdvCSJRenderFeedAdapter () <BUNativeAdsManagerDelegate, AdvanceCommonRenderFeedAdapter>
+@interface AdvCSJRenderFeedAdapter () <BUNativeAdsManagerDelegate, BUNativeAdDelegate, BUCustomEventProtocol, BUVideoAdViewDelegate, AdvanceCommonRenderFeedAdapter>
 
 @property (nonatomic, weak) id<AdvanceCommonRenderFeedAdapterBridge> bridge;
 @property (nonatomic, strong) BUNativeAdsManager *csj_ad;
@@ -64,56 +65,82 @@
     
     BUNativeAd *nativeAd = nativeAdDataArray.firstObject;
     self.nativeAd = nativeAd;
-    NSDictionary *ext = nativeAd.data.mediaExt;
-    AdvRenderFeedAdElement *element = [self generateFeedAdElementWithNativeAd:nativeAd];
-    AdvCSJRenderFeedAdView *csjFeedAdView = [[AdvCSJRenderFeedAdView alloc] initWithNativeAd:nativeAd bridge:self.bridge adapter:self manager:nil viewController:self.rootViewController];
-    self.feedAdWrapper = [[AdvRenderFeedAdWrapper alloc] initWithFeedAdView:csjFeedAdView feedAdElement:element];
+    self.nativeAd.delegate = self;
+    self.nativeAd.rootViewController = self.rootViewController;
+    id<AdvRenderFeedAdDataSource> dataSource = [[AdvCSJRenderFeedAdDataSource alloc] initWithNativeAdData:nativeAd.data];
+    BUNativeAdRelatedView *adView = [[BUNativeAdRelatedView alloc] init]; // 非UIView类型
+    if (dataSource.isVideoAd) {
+        adView.mediaAdView.delegate = self;
+    }
+    self.feedAdWrapper = [[AdvRenderFeedAdWrapper alloc] init];
+    self.feedAdWrapper.dataSource = dataSource;
+    self.feedAdWrapper.viewCreator = [[AdvCSJRenderFeedAdViewCreator alloc] initWithNativeAd:self.nativeAd adView:adView];
     
+    NSDictionary *ext = nativeAd.data.mediaExt;
     [self.bridge renderFeed_didLoadAdWithAdapter:self price:[ext[@"price"] integerValue]];
 }
 
+#pragma mark - BUNativeAdsManagerDelegate
 - (void)nativeAdsManager:(BUNativeAdsManager *)adsManager didFailWithError:(NSError *)error {
     [self.bridge renderFeed_failedToLoadAdWithAdapter:self error:error];
 }
 
-- (AdvRenderFeedAdElement *)generateFeedAdElementWithNativeAd:(BUNativeAd *)nativeAd {
-    BUMaterialMeta *data = nativeAd.data;
-    AdvRenderFeedAdElement *element = [[AdvRenderFeedAdElement alloc] init];
-    element.title = data.AdTitle;
-    element.desc = data.AdDescription;
-    element.iconUrl = data.icon.imageURL;
-    NSMutableArray *urlList = [NSMutableArray array];
-    for (BUImage * image in data.imageAry) {
-        [urlList addObject:image.imageURL];
-    }
-    element.imageUrlList = [urlList copy];
-    element.mediaWidth = data.imageAry.firstObject.width;
-    element.mediaHeight = data.imageAry.firstObject.height;
-    element.buttonText = data.buttonText;
-    element.isVideoAd = [self isVideoAd:nativeAd];
-    if (element.isVideoAd) {
-        element.mediaWidth = data.videoResolutionWidth;
-        element.mediaHeight = data.videoResolutionHeight;
-    }
-    element.videoDuration = data.videoDuration;
-    element.appRating = data.score;
-    element.isAdValid = YES;
+#pragma mark - BUNativeAdDelegate
+- (void)nativeAdDidLoad:(BUNativeAd *)nativeAd {
     
-    return element;
+}
+- (void)nativeAdDidLoad:(BUNativeAd *)nativeAd view:(UIView *)view {
+    
 }
 
-- (BOOL)isVideoAd:(BUNativeAd *)nativeAd {
-    switch (nativeAd.data.imageMode) {
-        case BUFeedVideoAdModeImage:
-        case BUFeedVideoAdModePortrait:
-        case BUFeedADModeSquareVideo:
-        //Live Stream Ad. v5200 add
-        case 166:
-            return YES;
-            
-        default:
-            return NO;
-    }
+- (void)nativeAd:(BUNativeAd *)nativeAd didFailWithError:(NSError *_Nullable)error {
+    
+}
+
+- (void)nativeAdDidBecomeVisible:(BUNativeAd *)nativeAd {
+    [self.bridge renderFeed_didAdExposuredWithAdapter:self];
+}
+
+- (void)nativeAdDidCloseOtherController:(BUNativeAd *)nativeAd interactionType:(BUInteractionType)interactionType {
+    [self.bridge renderFeed_didAdClosedDetailPageWithAdapter:self];
+}
+
+- (void)nativeAdDidClick:(BUNativeAd *)nativeAd withView:(UIView *_Nullable)view {
+    [self.bridge renderFeed_didAdClickedWithAdapter:self];
+}
+
+- (void)nativeAd:(BUNativeAd *)nativeAd dislikeWithReason:(NSArray<BUDislikeWords *> *)filterWords {
+    
+}
+
+#pragma mark - BUVideoAdViewDelegate
+- (void)videoAdView:(BUMediaAdView *)adView stateDidChanged:(BUPlayerPlayState)playerState {
+    
+}
+
+- (void)videoAdView:(BUMediaAdView *)adView didLoadFailWithError:(NSError *_Nullable)error {
+    
+}
+
+- (void)playerDidPlayFinish:(BUMediaAdView *)adView {
+    [self.bridge renderFeed_didAdPlayFinishWithAdapter:self];
+}
+
+- (void)videoAdViewDidClick:(BUMediaAdView *)adView {
+    [self.bridge renderFeed_didAdClickedWithAdapter:self];
+}
+
+- (void)videoAdViewFinishViewDidClick:(BUMediaAdView *)adView {
+    [self.bridge renderFeed_didAdClickedWithAdapter:self];
+}
+
+- (void)videoAdViewDidCloseOtherController:(BUMediaAdView *)adView interactionType:(BUInteractionType)interactionType {
+    
+}
+
+- (void)videoAdView:(BUMediaAdView *)adView
+ rewardDidCountDown:(NSInteger)countDown {
+    
 }
 
 - (void)dealloc {

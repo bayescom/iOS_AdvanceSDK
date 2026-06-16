@@ -9,10 +9,11 @@
 #import <FLinkAdSaas/FLinkAdSaas.h>
 #import "AdvanceCommonAdapter.h"
 #import "AdvRenderFeedAdWrapper.h"
-#import "AdvFunlinkRenderFeedAdView.h"
+#import "AdvFunlinkRenderFeedAdViewCreator.h"
+#import "AdvFunlinkRenderFeedAdDataSource.h"
 #import "AdvAdConfigHeader.h"
 
-@interface AdvFunlinkRenderFeedAdapter () <FLinkNativeDelegate, AdvanceCommonRenderFeedAdapter>
+@interface AdvFunlinkRenderFeedAdapter () <FLinkNativeDelegate, FLinkNativeDelegate, AdvanceCommonRenderFeedAdapter>
 
 @property (nonatomic, weak) id<AdvanceCommonRenderFeedAdapterBridge> bridge;
 @property (nonatomic, strong) FLinkNativeManager *flink_ad;
@@ -57,9 +58,12 @@
     }
     
     FLinkFeedAdData *feedAdData = datas.firstObject;
-    AdvRenderFeedAdElement *element = [self generateFeedAdElementWithNativeAd:feedAdData];
-    AdvFunlinkRenderFeedAdView *flinkFeedAdView = [[AdvFunlinkRenderFeedAdView alloc] initWithNativeAd:feedAdData bridge:self.bridge adapter:self manager:self.flink_ad viewController:nil];
-    self.feedAdWrapper = [[AdvRenderFeedAdWrapper alloc] initWithFeedAdView:flinkFeedAdView feedAdElement:element];
+    id<AdvRenderFeedAdDataSource> dataSource = [[AdvFunlinkRenderFeedAdDataSource alloc] initWithAdData:feedAdData];
+    AdvFunlinkRenderFeedAdView<FLinkNativeAdRenderProtocol> *adView = [[AdvFunlinkRenderFeedAdView alloc] init];
+    self.feedAdWrapper = [[AdvRenderFeedAdWrapper alloc] init];
+    self.feedAdWrapper.dataSource = dataSource;
+    self.feedAdWrapper.view = adView;
+    self.feedAdWrapper.viewCreator = [[AdvFunlinkRenderFeedAdViewCreator alloc] initWithManager:self.flink_ad data:feedAdData adView:adView];
     
     NSInteger ecpm = self.flink_ad.getCurrentBaseEcpmInfo.ecpm;
     [self.bridge renderFeed_didLoadAdWithAdapter:self price:ecpm];
@@ -69,27 +73,17 @@
     [self.bridge renderFeed_failedToLoadAdWithAdapter:self error:error];
 }
 
-- (AdvRenderFeedAdElement *)generateFeedAdElementWithNativeAd:(FLinkFeedAdData *)feedAdData {
-    AdvRenderFeedAdElement *element = [[AdvRenderFeedAdElement alloc] init];
-    element.title = feedAdData.adTitle;
-    element.desc = feedAdData.adContent;
-    element.iconUrl = feedAdData.iconUrl;
-    if (feedAdData.imageUrl.length) {
-        element.imageUrlList = @[feedAdData.imageUrl];
-    } else if (feedAdData.mediaUrlList.count) {
-        element.imageUrlList = feedAdData.mediaUrlList;
-    }
-    element.mediaWidth = feedAdData.imageWidth;
-    element.mediaHeight = feedAdData.imageHeight;
-    element.buttonText = feedAdData.buttonText;
-    element.isVideoAd = feedAdData.isVideoAd;
-    if (element.isVideoAd) {
-        element.mediaWidth = feedAdData.videoWidth;
-        element.mediaHeight = feedAdData.videoHeight;
-    }
-    element.videoDuration = feedAdData.videoDuration;
-    element.isAdValid = self.flink_ad.getCurrentBaseEcpmInfo.isAdValid;
-    return element;
+#pragma mark - FLinkNativeDelegate
+- (void)nativeAdDidVisible {
+    [self.bridge renderFeed_didAdExposuredWithAdapter:self];
+}
+
+- (void)nativeAdDidClicked {
+    [self.bridge renderFeed_didAdClickedWithAdapter:self];
+}
+
+- (void)nativeAdDidCloseWithADView:(UIView *)nativeAdView {
+    [self.bridge renderFeed_didAdClosedDetailPageWithAdapter:self];
 }
 
 - (void)dealloc {

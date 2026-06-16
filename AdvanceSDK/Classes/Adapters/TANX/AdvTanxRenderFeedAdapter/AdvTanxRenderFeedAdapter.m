@@ -9,10 +9,11 @@
 #import <TanxSDK/TanxSDK.h>
 #import "AdvanceCommonAdapter.h"
 #import "AdvRenderFeedAdWrapper.h"
-#import "AdvTanxRenderFeedAdView.h"
+#import "AdvTanxRenderFeedAdViewCreator.h"
+#import "AdvTanxRenderFeedAdDataSource.h"
 #import "AdvAdConfigHeader.h"
 
-@interface AdvTanxRenderFeedAdapter () <AdvanceCommonRenderFeedAdapter>
+@interface AdvTanxRenderFeedAdapter () <TXAdFeedManagerDelegate, TXAdFeedPlayerViewDelegate, AdvanceCommonRenderFeedAdapter>
 
 @property (nonatomic, weak) id<AdvanceCommonRenderFeedAdapterBridge> bridge;
 @property (nonatomic, strong) TXAdFeedManager *tanx_ad;
@@ -32,6 +33,7 @@
     slotModel.pid = placementId;
     slotModel.showAdFeedBackView = NO;
     _tanx_ad = [[TXAdFeedManager alloc] initWithSlotModel:slotModel];
+    _tanx_ad.delegate = self;
     
     __weak typeof(self) weakSelf = self;
     [self.tanx_ad getFeedAdsWithAdCount:1 renderMode:TXAdRenderModeCustom adsBlock:^(NSArray<TXAdModel *> * _Nullable viewModelArray, NSError * _Nullable error) {
@@ -43,12 +45,21 @@
         
         TXAdFeedBinder *binder = [strongSelf.tanx_ad customRenderingBinderWithModels:viewModelArray].firstObject;
         strongSelf.binder = binder;
-        NSInteger ecpm = binder.adModel.bid.bidPrice.integerValue;
-        AdvRenderFeedAdElement *element = [strongSelf generateFeedAdElementWithAdModel:binder.adModel];
-        AdvTanxRenderFeedAdView *tanxFeedAdView = [[AdvTanxRenderFeedAdView alloc] initWithNativeAd:binder bridge:strongSelf.bridge adapter:strongSelf manager:nil viewController:nil];
-        strongSelf.tanx_ad.delegate = tanxFeedAdView;
-        strongSelf.feedAdWrapper = [[AdvRenderFeedAdWrapper alloc] initWithFeedAdView:tanxFeedAdView feedAdElement:element];
+        id<AdvRenderFeedAdDataSource> dataSource = [[AdvTanxRenderFeedAdDataSource alloc] initWithAdModel:binder.adModel];
+        TXAdFeedPlayerView *tanxVideoView = nil;
+        if (dataSource.isVideoAd) {
+            TXAdFeedTemplateConfig *config =  [[TXAdFeedTemplateConfig alloc] init];
+            tanxVideoView = [binder getVideoAdViewWithFrame:CGRectZero playConfig:config];
+            tanxVideoView.delegate = strongSelf;
+        }
+        // 必须设置frame，否则bind失效影响曝光
+        TXAdFeedView *adView = [[TXAdFeedView alloc] initWithFrame:CGRectMake(0, 0, 100, 100)];
+        strongSelf.feedAdWrapper = [[AdvRenderFeedAdWrapper alloc] init];
+        strongSelf.feedAdWrapper.dataSource = dataSource;
+        strongSelf.feedAdWrapper.view = adView;
+        strongSelf.feedAdWrapper.viewCreator = [[AdvTanxRenderFeedAdViewCreator alloc] initWithBinder:binder adView:adView videoView:tanxVideoView];
         
+        NSInteger ecpm = binder.adModel.bid.bidPrice.integerValue;
         [strongSelf.bridge renderFeed_didLoadAdWithAdapter:strongSelf price:ecpm];
     }];
 }
@@ -65,19 +76,22 @@
     }
 }
 
+#pragma mark: - TXAdFeedManagerDelegate
+- (void)onAdExposing:(TXAdModel *)model {
+    [self.bridge renderFeed_didAdExposuredWithAdapter:self];
+}
 
-- (AdvRenderFeedAdElement *)generateFeedAdElementWithAdModel:(TXAdModel *)adModel {
-    AdvRenderFeedAdElement *element = [[AdvRenderFeedAdElement alloc] init];
-    NSDictionary *dict = adModel.adMaterialDict;
-    element.title = dict[@"title"];
-    element.desc = dict[@"description"];
-    element.iconUrl = dict[@"smImageUrl"];
-    element.imageUrlList = @[dict[@"assetUrl"] ?: @""];
-    element.mediaWidth = [dict[@"width"] integerValue];
-    element.mediaHeight = [dict[@"height"] integerValue];
-    element.isVideoAd = adModel.adType == TanXAdTypeFeedVideo;
-    element.isAdValid = YES;
-    return element;
+- (void)onAdClick:(TXAdModel *)model clickView:(UIView *)clickView {
+    [self.bridge renderFeed_didAdClickedWithAdapter:self];
+}
+
+- (void)onAdClose:(TXAdModel *)model {
+    
+}
+
+#pragma mark - TXAdFeedPlayerViewDelegate
+- (void)onVideoComplete {
+    [self.bridge renderFeed_didAdPlayFinishWithAdapter:self];
 }
 
 - (void)dealloc {

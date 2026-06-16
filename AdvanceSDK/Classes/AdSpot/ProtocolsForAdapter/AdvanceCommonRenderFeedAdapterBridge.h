@@ -18,8 +18,6 @@
 
 - (void)renderFeed_didAdClickedWithAdapter:(id<AdvanceCommonRenderFeedAdapter>)adapter;
 
-- (void)renderFeed_didAdClosedWithAdapter:(id<AdvanceCommonRenderFeedAdapter>)adapter;
-
 - (void)renderFeed_didAdClosedDetailPageWithAdapter:(id<AdvanceCommonRenderFeedAdapter>)adapter;
 
 - (void)renderFeed_didAdPlayFinishWithAdapter:(id<AdvanceCommonRenderFeedAdapter>)adapter;

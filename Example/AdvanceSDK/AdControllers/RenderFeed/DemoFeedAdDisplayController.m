@@ -14,8 +14,8 @@
 @interface DemoFeedAdDisplayController () <AdvanceRenderFeedDelegate>
 
 @property (nonatomic, strong) AdvanceRenderFeed *renderFeedAd;
-@property (nonatomic, strong) AdvRenderFeedAdWrapper *feedAdWrapper;
-@property (nonatomic, strong) UIView *feedAdView;
+@property (nonatomic, strong) AdvRenderFeedAdData *feedAdData;
+@property (nonatomic, strong) AdvRenderFeedAdView *feedAdView;
 
 @property (nonatomic, strong) UIImageView *iconImageView;
 @property (nonatomic, strong, nullable) UIImageView *imgView;
@@ -63,7 +63,7 @@
     [self.feedAdView addSubview:self.adTitleLabel];
     
     /// 图片或者视频容器
-    if (!self.feedAdWrapper.feedAdElement.isVideoAd) {
+    if (!self.feedAdData.isVideoAd) {
         self.imgView = [[UIImageView alloc] init];
         [self.feedAdView addSubview:self.imgView];
     } else {
@@ -83,38 +83,38 @@
     [self.feedAdView addSubview:self.closeBtn];
 }
 
-- (void)refreshFeedAdUIWithData:(AdvRenderFeedAdElement *)element {
+- (void)refreshFeedAdUIWithData:(AdvRenderFeedAdData *)data {
     
     CGFloat width = [[UIScreen mainScreen] bounds].size.width;
     
     self.iconImageView.frame = CGRectMake(30, 10, 40, 40);
-    [self.iconImageView sd_setImageWithURL:[NSURL URLWithString:element.iconUrl] placeholderImage:nil];
+    [self.iconImageView sd_setImageWithURL:[NSURL URLWithString:data.iconUrl] placeholderImage:nil];
     
-    self.adTitleLabel.text = element.title;
+    self.adTitleLabel.text = data.title;
     self.adTitleLabel.frame = CGRectMake(80, 20, 200, 20);
     
     self.closeBtn.frame = CGRectMake(width - 70, 10, 40, 40);
     
     CGFloat contentWidth = width - 60;
-    const CGFloat imageHeight = contentWidth * ((element.mediaHeight * 1.0) / (element.mediaWidth * 1.0 ?: 1.0));
+    const CGFloat imageHeight = contentWidth * ((data.mediaHeight * 1.0) / (data.mediaWidth * 1.0));
     CGFloat mediaMaxY = 0;
-    if (!element.isVideoAd) { // 图片
+    if (!data.isVideoAd) { // 图片
         self.imgView.frame = CGRectMake(30, CGRectGetMaxY(self.iconImageView.frame) + 10, contentWidth, imageHeight);
-        [self.imgView sd_setImageWithURL:[NSURL URLWithString:element.imageUrlList.firstObject] placeholderImage:nil];
+        [self.imgView sd_setImageWithURL:[NSURL URLWithString:data.imageUrlList.firstObject] placeholderImage:nil];
         mediaMaxY = CGRectGetMaxY(self.imgView.frame);
     } else { // 视频
-        self.feedAdWrapper.videoAdView.frame = CGRectMake(30, CGRectGetMaxY(self.iconImageView.frame) + 10, contentWidth, imageHeight);
-        mediaMaxY = CGRectGetMaxY(self.feedAdWrapper.videoAdView.frame);
+        self.feedAdView.videoAdView.frame = CGRectMake(30, CGRectGetMaxY(self.iconImageView.frame) + 10, contentWidth, imageHeight);
+        mediaMaxY = CGRectGetMaxY(self.feedAdView.videoAdView.frame);
     }
     
     /// 广告平台logo
-    CGSize logoSize = self.feedAdWrapper.logoSize;
-    self.feedAdWrapper.logoImageView.frame = CGRectMake(CGRectGetMaxX(self.feedAdView.frame) - logoSize.width - 4, 4, logoSize.width, logoSize.height);
+    CGSize logoSize = self.feedAdView.logoSize;
+    self.feedAdView.logoImageView.frame = CGRectMake(CGRectGetMaxX(self.feedAdView.frame) - logoSize.width - 4, 4, logoSize.width, logoSize.height);
     
-    self.adDescriptionLabel.text = element.desc;
+    self.adDescriptionLabel.text = data.desc;
     self.adDescriptionLabel.frame = CGRectMake(30, mediaMaxY + 10, 200, 20);
     
-    [self.customLinkBtn setTitle:element.buttonText forState:UIControlStateNormal];
+    [self.customLinkBtn setTitle:data.buttonText forState:UIControlStateNormal];
     self.customLinkBtn.frame = CGRectMake(contentWidth - 60 ,self.adDescriptionLabel.frame.origin.y, 100, 20);
     
 }
@@ -122,16 +122,15 @@
 
 #pragma mark: - AdvanceRenderFeedDelegate
 /// 广告加载成功回调
-- (void)onRenderFeedAdSuccessToLoad:(AdvanceRenderFeed *)renderFeedAd feedAdWrapper:(AdvRenderFeedAdWrapper *)feedAdWrapper {
+- (void)onRenderFeedAdSuccessToLoad:(AdvanceRenderFeed *)renderFeedAd feedAdView:(AdvRenderFeedAdView *)feedAdView feedAdData:(AdvRenderFeedAdData *)feedAdData {
     NSLog(@"自渲染信息流广告加载成功 %s %@", __func__, renderFeedAd);
-    self.feedAdWrapper = feedAdWrapper;
-    self.feedAdView = feedAdWrapper.feedAdView;
+    self.feedAdData = feedAdData;
+    self.feedAdView = feedAdView;
     
-    if (self.feedAdWrapper.feedAdElement.isAdValid) {
-        [self buildupFeedAdView];
-        [self refreshFeedAdUIWithData:self.feedAdWrapper.feedAdElement];
-        [self.feedAdWrapper registerClickableViews:@[self.customLinkBtn, self.iconImageView] andCloseableView:self.closeBtn];
-    }
+    [self.feedAdView refreshData];
+    [self buildupFeedAdView];
+    [self refreshFeedAdUIWithData:self.feedAdData];
+    [self.feedAdView registerClickableViews:@[self.customLinkBtn, self.iconImageView]];
 }
 
 /// 广告加载失败回调
@@ -142,31 +141,30 @@
 }
 
 /// 广告曝光回调
--(void)onRenderFeedAdViewExposured:(AdvanceRenderFeed *)renderFeedAd {
-    NSLog(@"自渲染信息流广告曝光回调 %s %@", __func__, renderFeedAd);
+-(void)onRenderFeedAdViewExposured:(AdvRenderFeedAdView *)feedAdView {
+    NSLog(@"自渲染信息流广告曝光回调 %s %@", __func__, feedAdView);
 }
 
 /// 广告点击回调
-- (void)onRenderFeedAdViewClicked:(AdvanceRenderFeed *)renderFeedAd {
-    NSLog(@"自渲染信息流广告点击回调 %s %@", __func__, renderFeedAd);
-}
-
-/// 广告关闭回调
-- (void)onRenderFeedAdViewClosed:(AdvanceRenderFeed *)renderFeedAd {
-    NSLog(@"自渲染信息流广告关闭回调 %s %@", __func__, renderFeedAd);
-    // 手动移除广告视图
-    [self.feedAdView removeFromSuperview];
-    self.renderFeedAd = nil;
+- (void)onRenderFeedAdViewClicked:(AdvRenderFeedAdView *)feedAdView {
+    NSLog(@"自渲染信息流广告点击回调 %s %@", __func__, feedAdView);
 }
 
 /// 广告详情页关闭回调
-- (void)onRenderFeedAdDidCloseDetailPage:(AdvanceRenderFeed *)renderFeedAd {
-    NSLog(@"自渲染信息流广告详情页关闭回调 %s %@", __func__, renderFeedAd);
+- (void)onRenderFeedAdDidCloseDetailPage:(AdvRenderFeedAdView *)feedAdView {
+    NSLog(@"自渲染信息流广告详情页关闭回调 %s %@", __func__, feedAdView);
 }
 
 /// 视频广告播放结束回调
-- (void)onRenderFeedAdDidPlayFinish:(AdvanceRenderFeed *)renderFeedAd {
-    NSLog(@"自渲染信息流广告视频播放结束回调 %s %@", __func__, renderFeedAd);
+- (void)onRenderFeedAdDidPlayFinish:(AdvRenderFeedAdView *)feedAdView {
+    NSLog(@"自渲染信息流广告视频播放结束回调 %s %@", __func__, feedAdView);
+}
+
+- (void)onCloseViewAction:(UIButton *)sender {
+    NSLog(@"自渲染信息流广告关闭 %s %@", __func__, sender);
+    // 手动移除广告视图
+    [self.feedAdView removeFromSuperview];
+    self.renderFeedAd = nil;
 }
 
 
@@ -185,6 +183,7 @@
         [_closeBtn setTitleColor:UIColor.blueColor forState:UIControlStateNormal];
         [_closeBtn setTitle:@"X" forState:UIControlStateNormal];
         _closeBtn.titleLabel.font = [UIFont boldSystemFontOfSize:20];
+        [_closeBtn addTarget:self action:@selector(onCloseViewAction:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _closeBtn;
 }

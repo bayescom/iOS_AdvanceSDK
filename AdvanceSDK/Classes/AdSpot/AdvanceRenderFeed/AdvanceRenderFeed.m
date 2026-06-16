@@ -11,8 +11,12 @@
 #import "AdvanceCommonAdapter.h"
 #import "AdvAdCacheManager.h"
 #import "AdvError.h"
+#import "AdvRenderFeedAdWrapper.h"
+#import "objc/message.h"
 
 @interface AdvanceRenderFeed () <AdvPolicyServiceDelegate, AdvanceCommonRenderFeedAdapterBridge>
+
+@property (nonatomic, strong) AdvRenderFeedAdView *feedAdView;
 
 @end
 
@@ -65,7 +69,7 @@
         supplier.cachedReqId = cacheModel.sourceReqId; //用于tk上报
         adapter = cacheModel.adObject;
         [self.adapterMap adv_safeSetObject:adapter forKey:supplier.sdk_id];
-        [adapter adapter_setRenderFeedBridge:self]; // 现有的adapter实现方式，在更新bridge的时候，所属的AdView未及时更新bridge导致后续回调中断。
+        [adapter adapter_setRenderFeedBridge:self];
         [self renderFeed_didLoadAdWithAdapter:adapter price:cacheModel.price];
     } else {// 根据渠道id初始化对应Adapter
         NSString *clsName = [AdvSupplierLoader mappingRenderFeedAdapterNameWithSupplierId:supplier.identifier];
@@ -95,15 +99,30 @@
     /// 获取竞胜的adpater
     self.targetAdapter = [self.adapterMap objectForKey:supplier.sdk_id];
     
-    /// 获取广告包装类信息
+    /// 获取广告包装类后生成自渲染视图
     AdvRenderFeedAdWrapper *feedAdWrapper = [self.targetAdapter adapter_renderFeedAdWrapper];
+    self.feedAdView = [[AdvRenderFeedAdView alloc] init];
+    SEL selector = NSSelectorFromString(@"initWithRenderFeedAdWrapper:");
+    if ([self.feedAdView respondsToSelector:selector]) {
+        ((void (*)(id, SEL, id))objc_msgSend)(self.feedAdView, selector, feedAdWrapper);
+    }
+    AdvRenderFeedAdData *feedAdData = [[AdvRenderFeedAdData alloc] init];
+    SEL selector2 = NSSelectorFromString(@"initWithDataSource:");
+    if ([feedAdData respondsToSelector:selector2]) {
+        ((void (*)(id, SEL, id))objc_msgSend)(feedAdData, selector2, feedAdWrapper.dataSource);
+    }
+    
     /// 获取模板信息流广告成功
-    if ([_delegate respondsToSelector:@selector(onRenderFeedAdSuccessToLoad:feedAdWrapper:)]) {
-        [_delegate onRenderFeedAdSuccessToLoad:self feedAdWrapper:feedAdWrapper];
+    if ([_delegate respondsToSelector:@selector(onRenderFeedAdSuccessToLoad:feedAdView:feedAdData:)]) {
+        [_delegate onRenderFeedAdSuccessToLoad:self feedAdView:self.feedAdView feedAdData:feedAdData];
     }
     /// 竞胜通知
     if ([(id<AdvanceCommonRenderFeedAdapter>)self.targetAdapter respondsToSelector:@selector(adapter_sendNotificationWithBidResult:)]) {
         [self.targetAdapter adapter_sendNotificationWithBidResult:bidResult];
+    }
+    /// 删除缓存Adapter
+    if ([[AdvAdCacheManager sharedInstance] adCacheModelFromCachedKey:supplier.sdk_id]) {
+        [[AdvAdCacheManager sharedInstance] removeAdCacheModelFromCachedKey:supplier.sdk_id];
     }
 }
 
@@ -119,10 +138,9 @@
 #pragma mark: - AdvanceCommonRenderFeedAdapterBridge
 - (void)renderFeed_didLoadAdWithAdapter:(id<AdvanceCommonRenderFeedAdapter>)adapter price:(NSInteger)price {
     AdvSupplier *supplier = [self getSupplierWithAdapter:adapter];
-    /// 先不做缓存，有bug详见上述细节
-//    if (supplier.enable_cache && ![[AdvAdCacheManager sharedInstance] adCacheModelFromCachedKey:supplier.sdk_id]) { // 缓存Adapter
-//        [[AdvAdCacheManager sharedInstance] cacheAdapter:adapter price:price expireTime:supplier.cache_timeout sourceReqId:self.reqId forKey:supplier.sdk_id];
-//    }
+    if (supplier.enable_cache && ![[AdvAdCacheManager sharedInstance] adCacheModelFromCachedKey:supplier.sdk_id]) { // 缓存Adapter
+        [[AdvAdCacheManager sharedInstance] cacheAdapter:adapter price:price expireTime:supplier.cache_timeout sourceReqId:self.reqId forKey:supplier.sdk_id];
+    }
     AdvPolicyService *manager = self.manager;
     [manager setECPMIfNeeded:price supplier:supplier];
     [manager checkTargetWithResultfulSupplier:supplier state:AdvSupplierLoadAdSuccess error:nil];
@@ -140,12 +158,8 @@
     AdvPolicyService *manager = self.manager;
     [manager reportAdDataWithEventType:AdvSupplierReportTKEventExposed supplier:supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(onRenderFeedAdViewExposured:)]) {
-        [self.delegate onRenderFeedAdViewExposured:self];
+        [self.delegate onRenderFeedAdViewExposured:self.feedAdView];
     }
-    /// 删除缓存Adapter
-//    if ([[AdvAdCacheManager sharedInstance] adCacheModelFromCachedKey:supplier.sdk_id]) {
-//        [[AdvAdCacheManager sharedInstance] removeAdCacheModelFromCachedKey:supplier.sdk_id];
-//    }
 }
 
 - (void)renderFeed_didAdClickedWithAdapter:(id<AdvanceCommonRenderFeedAdapter>)adapter {
@@ -153,25 +167,19 @@
     AdvPolicyService *manager = self.manager;
     [manager reportAdDataWithEventType:AdvSupplierReportTKEventClicked supplier:supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(onRenderFeedAdViewClicked:)]) {
-        [self.delegate onRenderFeedAdViewClicked:self];
-    }
-}
-
-- (void)renderFeed_didAdClosedWithAdapter:(id<AdvanceCommonRenderFeedAdapter>)adapter {
-    if ([self.delegate respondsToSelector:@selector(onRenderFeedAdViewClosed:)]) {
-        [self.delegate onRenderFeedAdViewClosed:self];
+        [self.delegate onRenderFeedAdViewClicked:self.feedAdView];
     }
 }
 
 - (void)renderFeed_didAdClosedDetailPageWithAdapter:(id<AdvanceCommonRenderFeedAdapter>)adapter {
     if ([self.delegate respondsToSelector:@selector(onRenderFeedAdDidCloseDetailPage:)]) {
-        [self.delegate onRenderFeedAdDidCloseDetailPage:self];
+        [self.delegate onRenderFeedAdDidCloseDetailPage:self.feedAdView];
     }
 }
 
 - (void)renderFeed_didAdPlayFinishWithAdapter:(id<AdvanceCommonRenderFeedAdapter>)adapter {
     if ([self.delegate respondsToSelector:@selector(onRenderFeedAdDidPlayFinish:)]) {
-        [self.delegate onRenderFeedAdDidPlayFinish:self];
+        [self.delegate onRenderFeedAdDidPlayFinish:self.feedAdView];
     }
 }
 

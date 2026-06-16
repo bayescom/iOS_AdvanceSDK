@@ -18,8 +18,5 @@
 /// adn的版本号
 + (NSString *)sdkVersion;
 
-/// adapter的版本号
-//+ (NSString *)adapterVersion;
-
 @end
 

@@ -9,10 +9,11 @@
 #import <KSAdSDK/KSAdSDK.h>
 #import "AdvanceCommonAdapter.h"
 #import "AdvRenderFeedAdWrapper.h"
-#import "AdvKSRenderFeedAdView.h"
+#import "AdvKSRenderFeedAdViewCreator.h"
+#import "AdvKSRenderFeedAdDataSource.h"
 #import "AdvAdConfigHeader.h"
 
-@interface AdvKSRenderFeedAdapter () <KSNativeAdsManagerDelegate, AdvanceCommonRenderFeedAdapter>
+@interface AdvKSRenderFeedAdapter () <KSNativeAdsManagerDelegate, KSNativeAdDelegate, AdvanceCommonRenderFeedAdapter>
 
 @property (nonatomic, weak) id<AdvanceCommonRenderFeedAdapterBridge> bridge;
 @property (nonatomic, strong) KSNativeAdsManager *ks_ad;
@@ -61,9 +62,14 @@
     
     KSNativeAd *nativeAd = nativeAdDataArray.firstObject;
     self.nativeAd = nativeAd;
-    AdvRenderFeedAdElement *element = [self generateFeedAdElementWithNativeAd:nativeAd];
-    AdvKSRenderFeedAdView *ksFeedAdView = [[AdvKSRenderFeedAdView alloc] initWithNativeAd:nativeAd bridge:self.bridge adapter:self manager:nil viewController:self.rootViewController];
-    self.feedAdWrapper = [[AdvRenderFeedAdWrapper alloc] initWithFeedAdView:ksFeedAdView feedAdElement:element];
+    self.nativeAd.delegate = self;
+    self.nativeAd.rootViewController = self.rootViewController;
+    id<AdvRenderFeedAdDataSource> dataSource = [[AdvKSRenderFeedAdDataSource alloc] initWithNativeAdData:nativeAd.data];
+    KSNativeAdRelatedView *adView = [[KSNativeAdRelatedView alloc] init]; // 非UIView类型
+    
+    self.feedAdWrapper = [[AdvRenderFeedAdWrapper alloc] init];
+    self.feedAdWrapper.dataSource = dataSource;
+    self.feedAdWrapper.viewCreator = [[AdvKSRenderFeedAdViewCreator alloc] initWithNativeAd:self.nativeAd adView:adView];
     
     [self.bridge renderFeed_didLoadAdWithAdapter:self price:nativeAd.ecpm];
 }
@@ -72,29 +78,34 @@
     [self.bridge renderFeed_failedToLoadAdWithAdapter:self error:error];
 }
 
-- (AdvRenderFeedAdElement *)generateFeedAdElementWithNativeAd:(KSNativeAd *)nativeAd {
-    KSMaterialMeta *data = nativeAd.data;
-    AdvRenderFeedAdElement *element = [[AdvRenderFeedAdElement alloc] init];
-    element.title = data.appName.length ? data.appName : data.productName;
-    element.desc = data.adDescription;
-    element.iconUrl = data.appIconImage.imageURL;
-    NSMutableArray *urlList = [NSMutableArray array];
-    for (KSAdImage *image in data.imageArray) {
-        [urlList addObject:image.imageURL];
-    }
-    element.imageUrlList = [urlList copy];
-    element.mediaWidth = data.imageArray.firstObject.width;
-    element.mediaHeight = data.imageArray.firstObject.height;
-    element.buttonText = data.actionDescription;
-    element.isVideoAd = (data.materialType == KSAdMaterialTypeVideo);
-    if (element.isVideoAd) {
-        element.mediaWidth = data.videoCoverImage.width;
-        element.mediaHeight = data.videoCoverImage.height;
-    }
-    element.videoDuration = data.videoDuration;
-    element.appRating = data.appScore;
-    element.isAdValid = YES;
-    return element;
+#pragma mark - KSNativeAdDelegate
+
+- (void)nativeAdDidLoad:(KSNativeAd *)nativeAd {
+    
+}
+
+- (void)nativeAd:(KSNativeAd *)nativeAd didFailWithError:(NSError *_Nullable)error {
+    
+}
+
+- (void)nativeAdDidBecomeVisible:(KSNativeAd *)nativeAd {
+    [self.bridge renderFeed_didAdExposuredWithAdapter:self];
+}
+
+- (void)nativeAdDidCloseOtherController:(KSNativeAd *)nativeAd interactionType:(KSAdInteractionType)interactionType {
+    [self.bridge renderFeed_didAdClosedDetailPageWithAdapter:self];
+}
+
+- (void)nativeAdDidClick:(KSNativeAd *)nativeAd withView:(UIView *_Nullable)view {
+    [self.bridge renderFeed_didAdClickedWithAdapter:self];
+}
+
+- (void)nativeAdVideoPlayFinished:(KSNativeAd *)nativeAd {
+    [self.bridge renderFeed_didAdPlayFinishWithAdapter:self];
+}
+
+- (void)nativeAdVideoPlayError:(KSNativeAd *)nativeAd {
+    
 }
 
 - (void)dealloc {

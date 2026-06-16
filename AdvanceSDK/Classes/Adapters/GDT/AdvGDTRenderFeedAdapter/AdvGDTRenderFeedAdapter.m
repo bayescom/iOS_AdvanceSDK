@@ -9,10 +9,11 @@
 #import <GDTMobSDK/GDTMobSDK.h>
 #import "AdvanceCommonAdapter.h"
 #import "AdvRenderFeedAdWrapper.h"
-#import "AdvGDTRenderFeedAdView.h"
+#import "AdvGDTRenderFeedAdViewCreator.h"
+#import "AdvGDTRenderFeedAdDataSource.h"
 #import "AdvAdConfigHeader.h"
 
-@interface AdvGDTRenderFeedAdapter () <GDTUnifiedNativeAdDelegate, AdvanceCommonRenderFeedAdapter>
+@interface AdvGDTRenderFeedAdapter () <GDTUnifiedNativeAdDelegate, GDTUnifiedNativeAdViewDelegate, GDTMediaViewDelegate, AdvanceCommonRenderFeedAdapter>
 
 @property (nonatomic, weak) id<AdvanceCommonRenderFeedAdapterBridge> bridge;
 @property (nonatomic, strong) GDTUnifiedNativeAd *gdt_ad;
@@ -58,35 +59,57 @@
      
     GDTUnifiedNativeAdDataObject *dataObject = unifiedNativeAdDataObjects.firstObject;
     self.dataObject = dataObject;
-    AdvRenderFeedAdElement *element = [self generateFeedAdElementWithDataObject:dataObject];
-    AdvGDTRenderFeedAdView *gdtFeedAdView = [[AdvGDTRenderFeedAdView alloc] initWithNativeAd:dataObject bridge:self.bridge adapter:self manager:nil viewController:self.rootViewController];
-    self.feedAdWrapper = [[AdvRenderFeedAdWrapper alloc] initWithFeedAdView:gdtFeedAdView feedAdElement:element];
+    id<AdvRenderFeedAdDataSource> dataSource = [[AdvGDTRenderFeedAdDataSource alloc] initWithDataObject:dataObject];
+    GDTUnifiedNativeAdView *adView = [[GDTUnifiedNativeAdView alloc] init];
+    adView.delegate = self;
+    adView.viewController = self.rootViewController;
+    if (dataSource.isVideoAd) {
+        GDTVideoConfig *videoConfig = [[GDTVideoConfig alloc] init];
+        videoConfig.videoMuted = YES;
+        videoConfig.userControlEnable = YES;
+        dataObject.videoConfig = videoConfig;
+        adView.mediaView.delegate = self;
+    }
+    self.feedAdWrapper = [[AdvRenderFeedAdWrapper alloc] init];
+    self.feedAdWrapper.dataSource = dataSource;
+    self.feedAdWrapper.view = adView;
+    self.feedAdWrapper.viewCreator = [[AdvGDTRenderFeedAdViewCreator alloc] initWithDataObject:dataObject adView:adView];
     
     [self.bridge renderFeed_didLoadAdWithAdapter:self price:dataObject.eCPM];
 }
 
-- (AdvRenderFeedAdElement *)generateFeedAdElementWithDataObject:(GDTUnifiedNativeAdDataObject *)dataObject {
-    AdvRenderFeedAdElement *element = [[AdvRenderFeedAdElement alloc] init];
-    element.title = dataObject.title;
-    element.desc = dataObject.desc;
-    element.iconUrl = dataObject.iconUrl;
-    if (dataObject.isThreeImgsAd) { // 三图
-        element.imageUrlList = dataObject.mediaUrlList;
-    } else if (dataObject.imageUrl.length) { // 单图
-        element.imageUrlList = @[dataObject.imageUrl];
-    }
-    element.mediaWidth = dataObject.imageWidth;
-    element.mediaHeight = dataObject.imageHeight;
-    element.buttonText = dataObject.buttonText;
-    element.isVideoAd = [self isVideoAd:dataObject];
-    element.videoDuration = dataObject.duration;
-    element.appRating = dataObject.appRating;
-    element.isAdValid = dataObject.isAdValid;
-    return element;
+#pragma mark - GDTUnifiedNativeAdViewDelegate
+- (void)gdt_unifiedNativeAdViewDidClick:(GDTUnifiedNativeAdView *)unifiedNativeAdView {
+    [self.bridge renderFeed_didAdClickedWithAdapter:self];
 }
 
-- (BOOL)isVideoAd:(GDTUnifiedNativeAdDataObject *)dataObject {
-    return [dataObject isVideoAd] || [dataObject isVastAd];
+- (void)gdt_unifiedNativeAdViewWillExpose:(GDTUnifiedNativeAdView *)unifiedNativeAdView {
+    [self.bridge renderFeed_didAdExposuredWithAdapter:self];
+}
+
+- (void)gdt_unifiedNativeAdDetailViewClosed:(GDTUnifiedNativeAdView *)unifiedNativeAdView {
+    [self.bridge renderFeed_didAdClosedDetailPageWithAdapter:self];
+}
+
+- (void)gdt_unifiedNativeAdViewApplicationWillEnterBackground:(GDTUnifiedNativeAdView *)unifiedNativeAdView {
+    
+}
+
+- (void)gdt_unifiedNativeAdDetailViewWillPresentScreen:(GDTUnifiedNativeAdView *)unifiedNativeAdView {
+    
+}
+
+- (void)gdt_unifiedNativeAdView:(GDTUnifiedNativeAdView *)unifiedNativeAdView playerStatusChanged:(GDTMediaPlayerStatus)status userInfo:(NSDictionary *)userInfo {
+    
+}
+
+#pragma mark - GDTMediaViewDelegate
+- (void)gdt_mediaViewDidPlayFinished:(GDTMediaView *)mediaView {
+    [self.bridge renderFeed_didAdPlayFinishWithAdapter:self];
+}
+
+- (void)gdt_mediaViewDidTapped:(GDTMediaView *)mediaView {
+    [self.bridge renderFeed_didAdClickedWithAdapter:self];
 }
 
 - (void)dealloc {

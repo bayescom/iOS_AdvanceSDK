@@ -5,13 +5,9 @@
 //  Created by guangyao on 2026/4/14.
 //
 
-#import <Foundation/Foundation.h>
-#import "AdvanceRenderFeedAdViewProtocol.h"
+#import <FLinkAdSaas/FLinkAdSaas.h>
 
-NS_ASSUME_NONNULL_BEGIN
-
-@interface AdvFunlinkRenderFeedAdView : UIView <AdvanceRenderFeedAdViewProtocol>
+@interface AdvFunlinkRenderFeedAdView : UIView <FLinkNativeAdRenderProtocol>
+@property (nonatomic, strong) NSArray *clickableViews;
 
 @end
-
-NS_ASSUME_NONNULL_END

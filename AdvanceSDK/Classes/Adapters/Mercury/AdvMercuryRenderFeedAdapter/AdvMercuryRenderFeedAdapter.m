@@ -9,10 +9,11 @@
 #import <MercurySDK/MercurySDK.h>
 #import "AdvanceCommonAdapter.h"
 #import "AdvRenderFeedAdWrapper.h"
-#import "AdvMercuryRenderFeedAdView.h"
+#import "AdvMercuryRenderFeedAdViewCreator.h"
+#import "AdvMercuryRenderFeedAdDataSource.h"
 #import "AdvAdConfigHeader.h"
 
-@interface AdvMercuryRenderFeedAdapter () <MercuryUnifiedNativeAdDelegate, AdvanceCommonRenderFeedAdapter>
+@interface AdvMercuryRenderFeedAdapter () <MercuryUnifiedNativeAdDelegate, MercuryUnifiedNativeAdViewDelegate, MercuryMediaViewDelegate, AdvanceCommonRenderFeedAdapter>
 
 @property (nonatomic, weak) id<AdvanceCommonRenderFeedAdapterBridge> bridge;
 @property (nonatomic, strong) MercuryUnifiedNativeAd *mercury_ad;
@@ -54,29 +55,50 @@
     
     MercuryUnifiedNativeAdDataObject *dataObject = unifiedNativeAdDataObjects.firstObject;
     self.dataObject = dataObject;
-    AdvRenderFeedAdElement *element = [self generateFeedAdElementWithDataObject:dataObject];
-    AdvMercuryRenderFeedAdView *mercuryFeedAdView = [[AdvMercuryRenderFeedAdView alloc] initWithNativeAd:dataObject bridge:self.bridge adapter:self manager:nil viewController:self.rootViewController];
-    self.feedAdWrapper = [[AdvRenderFeedAdWrapper alloc] initWithFeedAdView:mercuryFeedAdView feedAdElement:element];
+    id<AdvRenderFeedAdDataSource> dataSource = [[AdvMercuryRenderFeedAdDataSource alloc] initWithDataObject:dataObject];
+    MercuryUnifiedNativeAdView *adView = [[MercuryUnifiedNativeAdView alloc] init];
+    adView.delegate = self;
+    adView.viewController = self.rootViewController;
+    if (dataSource.isVideoAd) {
+        MercuryVideoConfig *videoConfig = [[MercuryVideoConfig alloc] init];
+        videoConfig.videoMuted = YES;
+        dataObject.videoConfig = videoConfig;
+        adView.mediaView.delegate = self;
+    }
+    self.feedAdWrapper = [[AdvRenderFeedAdWrapper alloc] init];
+    self.feedAdWrapper.dataSource = dataSource;
+    self.feedAdWrapper.view = adView;
+    self.feedAdWrapper.viewCreator = [[AdvMercuryRenderFeedAdViewCreator alloc] initWithDataObject:dataObject adView:adView];
     
     [self.bridge renderFeed_didLoadAdWithAdapter:self price:dataObject.price];
 }
 
-- (AdvRenderFeedAdElement *)generateFeedAdElementWithDataObject:(MercuryUnifiedNativeAdDataObject *)dataObject {
-    AdvRenderFeedAdElement *element = [[AdvRenderFeedAdElement alloc] init];
-    element.title = dataObject.title;
-    element.desc = dataObject.desc;
-    element.iconUrl = dataObject.iconUrl;
-    if (dataObject.isThreeImgsAd) { // 三图
-        element.imageUrlList = dataObject.imageUrlList;
-    } else if (dataObject.imageUrl.length) { // 单图
-        element.imageUrlList = @[dataObject.imageUrl];
-    }
-    element.mediaWidth = dataObject.mediaWidth;
-    element.mediaHeight = dataObject.mediaHeight;
-    element.buttonText = dataObject.buttonText;
-    element.isVideoAd = dataObject.isVideoAd;
-    element.isAdValid = dataObject.isAdValid;
-    return element;
+#pragma mark - MercuryUnifiedNativeAdViewDelegate
+
+/// 广告曝光回调
+- (void)mercury_unifiedNativeAdViewWillExpose:(MercuryUnifiedNativeAdView *)unifiedNativeAdView {
+    [self.bridge renderFeed_didAdExposuredWithAdapter:self];
+}
+
+/// 广告点击回调
+- (void)mercury_unifiedNativeAdViewDidClick:(MercuryUnifiedNativeAdView *)unifiedNativeAdView {
+    [self.bridge renderFeed_didAdClickedWithAdapter:self];
+}
+
+/// 广告关闭回调
+- (void)mercury_unifiedNativeAdViewDidClose:(MercuryUnifiedNativeAdView *)unifiedNativeAdView {
+
+}
+
+/// 广告详情页关闭回调
+- (void)mercury_unifiedNativeAdDetailViewClosed:(MercuryUnifiedNativeAdView *)unifiedNativeAdView {
+    [self.bridge renderFeed_didAdClosedDetailPageWithAdapter:self];
+}
+
+#pragma mark - MercuryMediaViewDelegate
+
+- (void)mercury_mediaViewDidPlayFinish:(MercuryMediaView *)mediaView {
+    [self.bridge renderFeed_didAdPlayFinishWithAdapter:self];
 }
 
 - (void)dealloc {
