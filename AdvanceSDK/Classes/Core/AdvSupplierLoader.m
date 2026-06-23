@@ -8,8 +8,8 @@
 #import "AdvSupplierLoader.h"
 #import "AdvConstantHeader.h"
 #import "AdvError.h"
-#import "AdvanceCommonConfigAdapter.h"
 #import "AdvCustomAdnCacheManager.h"
+#import "objc/message.h"
 
 @interface AdvSupplierLoader ()
 
@@ -55,16 +55,17 @@ static NSMutableDictionary *_initializedDict = nil;
         return;
     }
     
-    Class<AdvanceCommonConfigAdapter> protocolClass = NSClassFromString(adapterName);
-    if ([protocolClass respondsToSelector:@selector(initializeAdapterWithAppId:appKey:completion:)]) {
-        [protocolClass initializeAdapterWithAppId:supplier.mediaid
-                                           appKey:supplier.mediakey
-                                       completion:^(NSError *error) {
+    Class protocolClass = NSClassFromString(adapterName);
+    SEL initSelector = NSSelectorFromString(@"initializeAdapterWithAppId:appKey:completion:");
+    if ([protocolClass respondsToSelector:initSelector]) {
+        // 定义block
+        void (^completionHandler)(NSError *error) = ^void (NSError *error) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 NSError *wrappedError = [self markSupplierInitialized:supplier error:error];
                 completion(wrappedError);
             });
-        }];
+        };
+        ((void (*)(id, SEL, id, id, id))objc_msgSend)(protocolClass, initSelector, supplier.mediaid, supplier.mediakey, completionHandler);
     } else { // 只有自定义ADN才会进入
         dispatch_async(dispatch_get_main_queue(), ^{
             completion([AdvError errorWithCode:-100 message:@"自定义ADN未遵循初始化协议"].toNSError);

@@ -8,7 +8,7 @@ target 'AdvanceSDK_Example' do
   
   #集成倍业Adapter
   pod 'AdvanceSDK/MercuryAdapter', :path => '../'
-  pod 'MercurySDK', '4.7.2'
+  pod 'MercurySDK', '4.7.4'
 
   #集成穿山甲Adapter
   pod 'AdvanceSDK/CSJAdapter',  :path => '../'
@@ -20,7 +20,7 @@ target 'AdvanceSDK_Example' do
 
   #集成快手Adapter
   pod 'AdvanceSDK/KSAdapter', :path => '../'
-  pod 'KSAdSDK', '5.4.10.1'
+  pod 'KSAdSDK', '5.5.10.1'
 
   #集成百度Adapter
   pod 'AdvanceSDK/BaiduAdapter', :path => '../'
@@ -28,15 +28,15 @@ target 'AdvanceSDK_Example' do
   
   #集成TanxAdapter
   pod 'AdvanceSDK/TanxAdapter', :path => '../'
-  pod 'TanxSDK', '3.7.27'
+  pod 'TanxSDK', '3.7.30'
   
   #集成SigMobAdapter
   pod 'AdvanceSDK/SigmobAdapter', :path => '../'
-  pod 'SigmobAd-iOS', '4.20.21'
+  pod 'SigmobAd-iOS', '4.20.23'
   
   #集成FunlinkAdapter
   pod 'AdvanceSDK/FunlinkAdapter', :path => '../'
-  pod 'FunlinkSDK', '2.9.0.1.2'
+  pod 'FunlinkSDK', '2.9.0.1.8'
   
 
   #Third
