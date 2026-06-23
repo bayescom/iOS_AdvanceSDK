@@ -20,7 +20,7 @@
     [super viewDidLoad];
     self.initDefSubviewsFlag = YES;
     self.adspotIdsArr = @[
-        //@{@"addesc": @"开屏-GroMore", @"adspotId": @"102768-10008570"},
+        @{@"addesc": @"开屏-自定义ADN", @"adspotId": @"102768-10015415"},
         @{@"addesc": @"开屏-Bidding", @"adspotId": @"102768-10008229"},
         @{@"addesc": @"开屏-倍业", @"adspotId": @"102768-10007788"},
         @{@"addesc": @"开屏-穿山甲", @"adspotId": @"102768-10007798"},

@@ -24,8 +24,6 @@
 @property (nonatomic, copy) NSString *adnId;
 /// 自定义adn 名称
 @property (nonatomic, copy) NSString *adnName;
-/// 自定义adn 标识
-@property (nonatomic, copy) NSString *adnTag;
 /// 自定义adapter 初始化的配置类名
 @property (nonatomic, copy) NSString *customConfigAdapterClassName;
 /// 自定义adapter 开屏广告的配置类名

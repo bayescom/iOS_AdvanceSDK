@@ -15,10 +15,10 @@
 
 @implementation AdvApiService
 
-//+ (NSString*)genAdRequestLink:(NSString *)command {
-//    NSString *url = [NSString stringWithFormat:@"%@%@", AdvanceSDKRequestUrl, command];
-//    return url;
-//}
++ (NSString*)genAdRequestLink:(NSString *)command {
+    NSString *url = [NSString stringWithFormat:@"%@%@", AdvanceSDKRequestUrl, command];
+    return url;
+}
 
 + (void)loadPolicyDataWithParameters:(NSDictionary *)parameters completion:(void (^)(AdvPolicyModel *model, NSError *error))completion {
     
@@ -30,7 +30,7 @@
         return completion(nil, [AdvError errorWithCode:AdvErrorCode_NoNetwork].toNSError);
     }
     
-    [AdvNetwork sendRequestByUrlString:AdvanceSDKRequestUrl method:RequestMethod_POST parameters:parameters headers:nil timeout:5.f success:^(id  _Nonnull response) {
+    [AdvNetwork sendRequestByUrlString:[self genAdRequestLink:@"cruiser"] method:RequestMethod_POST parameters:parameters headers:nil timeout:5.f success:^(id  _Nonnull response) {
         
         if (![response isKindOfClass:[NSData class]]) {
             return completion(nil, [AdvError errorWithCode:AdvErrorCode_ResponseTypeError].toNSError);
@@ -125,23 +125,17 @@
 + (void)getCustomAdnlistInfoWithVersion:(NSString *)version
                              completion:(void(^)(AdvCustomAdnListInfo *info, NSError *error))completion {
     
-    NSDictionary *params = @{@"appid": [AdvDeviceManager sharedInstance].appId, @"os": @1, @"version": version};
-    
-    AdvCustomAdnListInfo *info = [[AdvCustomAdnListInfo alloc] init];
-    AdvCustomAdnModel *adn = [[AdvCustomAdnModel alloc] init];
-    adn.adnId = @"321";
-    adn.adnName = @"自定义穿山甲";
-    adn.adnTag = @"custom_csj";
-    adn.customConfigAdapterClassName = @"AdvXXCustomConfigAdapter";
-    adn.customSplashAdapterClassName = @"AdvXXCustomSplashAdapter";
-    adn.customBannerAdapterClassName = @"AdvXXCustomBannerAdapter";
-    adn.customInterstitialAdapterClassName = @"AdvXXCustomInterstitialAdapter";
-    adn.customRewardVideoAdapterClassName = @"AdvXXCustomRewardVideoAdapter";
-    adn.customNativeExpressAdapterClassName = @"AdvXXCustomNativeExpressAdapter";
-    adn.customRenderFeedAdapterClassName = @"AdvXXCustomRenderFeedAdapter";
-    info.custom_adn_list = @[adn];
-    info.version = @"123456";
-    completion(info, nil);
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:@{@"appid": [AdvDeviceManager sharedInstance].appId}];
+    [params adv_safeSetObject:version forKey:@"version"];
+    [AdvNetwork sendRequestByUrlString:[self genAdRequestLink:@"custom_adn"] method:RequestMethod_GET parameters:params headers:nil timeout:5.f success:^(id  _Nonnull response) {
+        if(![response isKindOfClass:[NSData class]]) {
+            return completion(nil, [AdvError errorWithCode:AdvErrorCode_ResponseTypeError].toNSError);
+        }
+        AdvCustomAdnListInfo *info = [AdvCustomAdnListInfo adv_modelWithJSON:response];
+        completion(info, nil);
+    } failure:^(NSError * _Nonnull error) {
+        completion(nil, error);
+    }];
 }
 
 @end

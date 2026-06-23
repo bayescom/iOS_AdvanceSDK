@@ -21,6 +21,7 @@
     [super viewDidLoad];
     self.adShowView.hidden = NO;
     self.adspotIdsArr = @[
+        @{@"addesc": @"横幅-自定义ADN", @"adspotId": @"102768-10015421"},
         @{@"addesc": @"横幅-Bidding", @"adspotId": @"102768-10008517"},
         @{@"addesc": @"横幅-倍业", @"adspotId": @"102768-10007790"},
         @{@"addesc": @"横幅-穿山甲", @"adspotId": @"102768-10007800"},

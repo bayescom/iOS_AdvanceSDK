@@ -7,10 +7,6 @@
 
 #import "AdvFunlinkRenderFeedAdView.h"
 
-@interface AdvFunlinkRenderFeedAdView ()
-
-@end
-
 @implementation AdvFunlinkRenderFeedAdView
 
 #pragma mark - FLinkNativeAdRenderProtocol

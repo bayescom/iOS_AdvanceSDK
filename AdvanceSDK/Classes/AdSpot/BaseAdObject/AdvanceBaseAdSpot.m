@@ -135,7 +135,7 @@
             Class<AdvanceCommonConfigAdapter> clazz = NSClassFromString(obj.customConfigAdapterClassName);
             if ([clazz respondsToSelector:@selector(sdkVersion)]) {
                 NSString *version = [clazz sdkVersion];
-                [_extraDict adv_safeSetObject:version forKey:[NSString stringWithFormat:@"%@_v", obj.adnTag]];
+                [_extraDict adv_safeSetObject:version forKey:[NSString stringWithFormat:@"custom_%@_v", obj.adnId]];
             }
         }];
     }

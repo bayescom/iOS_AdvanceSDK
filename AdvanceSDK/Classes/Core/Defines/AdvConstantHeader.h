@@ -13,7 +13,7 @@
 
 static NSString *const AdvanceSDKAPIVersion = @"3.0";
 static NSString *const AdvanceSDKVersion = @"5.6.0";
-static NSString *const AdvanceSDKRequestUrl = @"http://cruiser.bayescom.cn/cruiser";
+static NSString *const AdvanceSDKRequestUrl = @"http://cruiser.bayescom.cn/";
 static NSString *const AdvanceSDKSecretKey = @"bayescom1000000w";
 
 static NSString *const SDK_ID_MERCURY = @"1";

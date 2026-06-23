@@ -14,7 +14,6 @@
 		222E14642F23581C001C41F9 /* DemoFullScreenVideoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 222E14632F23581C001C41F9 /* DemoFullScreenVideoController.m */; };
 		222E146A2F238E8B001C41F9 /* DemoFeedExpressViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 222E14662F238E8B001C41F9 /* DemoFeedExpressViewController.m */; };
 		222E146B2F238E8B001C41F9 /* DemoListFeedExpressViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 222E14682F238E8B001C41F9 /* DemoListFeedExpressViewController.m */; };
-		2279D02D2FD188D700CD4FC3 /* AdvXXCustomSplashAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 2279D0222FCFFAF400CD4FC3 /* AdvXXCustomSplashAdapter.m */; };
 		2279D02E2FD193C000CD4FC3 /* AdvXXCustomConfigAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 2279D01F2FCFF7D100CD4FC3 /* AdvXXCustomConfigAdapter.m */; };
 		2279D0312FD68D9300CD4FC3 /* AdvXXCustomBannerAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 2279D0302FD68D9300CD4FC3 /* AdvXXCustomBannerAdapter.m */; };
 		2279D0342FD68DAB00CD4FC3 /* AdvXXCustomInterstitialAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 2279D0332FD68DAB00CD4FC3 /* AdvXXCustomInterstitialAdapter.m */; };
@@ -22,6 +21,10 @@
 		2279D03A2FD68DD700CD4FC3 /* AdvXXCustomNativeExpressAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 2279D0392FD68DD700CD4FC3 /* AdvXXCustomNativeExpressAdapter.m */; };
 		22A07C9F2F2897C7007AF503 /* DemoFeedAdDisplayController.m in Sources */ = {isa = PBXBuildFile; fileRef = 22A07C9B2F2897C7007AF503 /* DemoFeedAdDisplayController.m */; };
 		22A07CA02F2897C7007AF503 /* DemoRenderFeedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 22A07C9D2F2897C7007AF503 /* DemoRenderFeedViewController.m */; };
+		22AF50752FE3C76600E84443 /* AdvXXCustomRenderFeedAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 22AF50742FE3C76600E84443 /* AdvXXCustomRenderFeedAdapter.m */; };
+		22AF50782FE3C7B800E84443 /* AdvXXCustomRenderFeedAdDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 22AF50772FE3C7B800E84443 /* AdvXXCustomRenderFeedAdDataSource.m */; };
+		22AF507B2FE3C7DC00E84443 /* AdvXXCustomRenderFeedAdViewCreator.m in Sources */ = {isa = PBXBuildFile; fileRef = 22AF507A2FE3C7DC00E84443 /* AdvXXCustomRenderFeedAdViewCreator.m */; };
+		22AF507C2FE3EED100E84443 /* AdvXXCustomSplashAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 2279D0222FCFFAF400CD4FC3 /* AdvXXCustomSplashAdapter.m */; };
 		22E9169C2F230CAD00830E19 /* DemoInterstitialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 22E9169B2F230CAD00830E19 /* DemoInterstitialViewController.m */; };
 		31FE7BC524482CEE00CB2062 /* ViewBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 31FE7BAD24482CEE00CB2062 /* ViewBuilder.m */; };
 		31FE7BC624482CEE00CB2062 /* JDStatusBarNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 31FE7BAF24482CEE00CB2062 /* JDStatusBarNotification.m */; };
@@ -94,6 +97,12 @@
 		22A07C9B2F2897C7007AF503 /* DemoFeedAdDisplayController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DemoFeedAdDisplayController.m; sourceTree = "<group>"; };
 		22A07C9C2F2897C7007AF503 /* DemoRenderFeedViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DemoRenderFeedViewController.h; sourceTree = "<group>"; };
 		22A07C9D2F2897C7007AF503 /* DemoRenderFeedViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DemoRenderFeedViewController.m; sourceTree = "<group>"; };
+		22AF50732FE3C76600E84443 /* AdvXXCustomRenderFeedAdapter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AdvXXCustomRenderFeedAdapter.h; sourceTree = "<group>"; };
+		22AF50742FE3C76600E84443 /* AdvXXCustomRenderFeedAdapter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AdvXXCustomRenderFeedAdapter.m; sourceTree = "<group>"; };
+		22AF50762FE3C7B800E84443 /* AdvXXCustomRenderFeedAdDataSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AdvXXCustomRenderFeedAdDataSource.h; sourceTree = "<group>"; };
+		22AF50772FE3C7B800E84443 /* AdvXXCustomRenderFeedAdDataSource.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AdvXXCustomRenderFeedAdDataSource.m; sourceTree = "<group>"; };
+		22AF50792FE3C7DC00E84443 /* AdvXXCustomRenderFeedAdViewCreator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AdvXXCustomRenderFeedAdViewCreator.h; sourceTree = "<group>"; };
+		22AF507A2FE3C7DC00E84443 /* AdvXXCustomRenderFeedAdViewCreator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AdvXXCustomRenderFeedAdViewCreator.m; sourceTree = "<group>"; };
 		22E9169A2F230CAD00830E19 /* DemoInterstitialViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DemoInterstitialViewController.h; sourceTree = "<group>"; };
 		22E9169B2F230CAD00830E19 /* DemoInterstitialViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DemoInterstitialViewController.m; sourceTree = "<group>"; };
 		31FE7BAC24482CEE00CB2062 /* ViewBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewBuilder.h; sourceTree = "<group>"; };
@@ -215,6 +224,12 @@
 		2279D0402FD69C8E00CD4FC3 /* RenderFeed */ = {
 			isa = PBXGroup;
 			children = (
+				22AF50732FE3C76600E84443 /* AdvXXCustomRenderFeedAdapter.h */,
+				22AF50742FE3C76600E84443 /* AdvXXCustomRenderFeedAdapter.m */,
+				22AF50762FE3C7B800E84443 /* AdvXXCustomRenderFeedAdDataSource.h */,
+				22AF50772FE3C7B800E84443 /* AdvXXCustomRenderFeedAdDataSource.m */,
+				22AF50792FE3C7DC00E84443 /* AdvXXCustomRenderFeedAdViewCreator.h */,
+				22AF507A2FE3C7DC00E84443 /* AdvXXCustomRenderFeedAdViewCreator.m */,
 			);
 			path = RenderFeed;
 			sourceTree = "<group>";
@@ -559,13 +574,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				31FE7BD924482D0500CB2062 /* ViewController.m in Sources */,
+				22AF507C2FE3EED100E84443 /* AdvXXCustomSplashAdapter.m in Sources */,
 				6003F59E195388D20070C39A /* AppDelegate.m in Sources */,
 				2279D0312FD68D9300CD4FC3 /* AdvXXCustomBannerAdapter.m in Sources */,
 				31FE7BCF24482CEE00CB2062 /* BaseViewController.m in Sources */,
 				31FE7BCA24482CEE00CB2062 /* BYExamCellModel.m in Sources */,
 				2279D0342FD68DAB00CD4FC3 /* AdvXXCustomInterstitialAdapter.m in Sources */,
 				22E9169C2F230CAD00830E19 /* DemoInterstitialViewController.m in Sources */,
-				2279D02D2FD188D700CD4FC3 /* AdvXXCustomSplashAdapter.m in Sources */,
 				31FE7BC624482CEE00CB2062 /* JDStatusBarNotification.m in Sources */,
 				31FE7BC724482CEE00CB2062 /* JDStatusBarView.m in Sources */,
 				2225DA692F29E48500D63C54 /* DemoBannerViewController.m in Sources */,
@@ -578,9 +593,12 @@
 				2279D03A2FD68DD700CD4FC3 /* AdvXXCustomNativeExpressAdapter.m in Sources */,
 				31FE7BCD24482CEE00CB2062 /* ExamTableViewCell.m in Sources */,
 				222E146A2F238E8B001C41F9 /* DemoFeedExpressViewController.m in Sources */,
+				22AF50752FE3C76600E84443 /* AdvXXCustomRenderFeedAdapter.m in Sources */,
 				2279D02E2FD193C000CD4FC3 /* AdvXXCustomConfigAdapter.m in Sources */,
 				22A07C9F2F2897C7007AF503 /* DemoFeedAdDisplayController.m in Sources */,
 				22A07CA02F2897C7007AF503 /* DemoRenderFeedViewController.m in Sources */,
+				22AF50782FE3C7B800E84443 /* AdvXXCustomRenderFeedAdDataSource.m in Sources */,
+				22AF507B2FE3C7DC00E84443 /* AdvXXCustomRenderFeedAdViewCreator.m in Sources */,
 				222E146B2F238E8B001C41F9 /* DemoListFeedExpressViewController.m in Sources */,
 				222E14642F23581C001C41F9 /* DemoFullScreenVideoController.m in Sources */,
 				222E14612F233DF1001C41F9 /* DemoRewardVideoViewController.m in Sources */,

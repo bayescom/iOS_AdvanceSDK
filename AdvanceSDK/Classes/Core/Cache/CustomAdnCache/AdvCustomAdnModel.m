@@ -35,7 +35,6 @@
     return @{
         @"adnId": @"id",
         @"adnName": @"name",
-        @"adnTag": @"tag",
         @"customConfigAdapterClassName": @"custom_config_adapter",
         @"customSplashAdapterClassName": @"custom_splash_adapter",
         @"customBannerAdapterClassName": @"custom_banner_adapter",
@@ -50,7 +49,6 @@
     if (self = [super init]) {
         self.adnId = [aDecoder decodeObjectForKey:@"adnId"];
         self.adnName = [aDecoder decodeObjectForKey:@"adnName"];
-        self.adnTag = [aDecoder decodeObjectForKey:@"adnTag"];
         self.customConfigAdapterClassName = [aDecoder decodeObjectForKey:@"customConfigAdapterClassName"];
         self.customSplashAdapterClassName = [aDecoder decodeObjectForKey:@"customSplashAdapterClassName"];
         self.customBannerAdapterClassName = [aDecoder decodeObjectForKey:@"customBannerAdapterClassName"];
@@ -65,7 +63,6 @@
 - (void)encodeWithCoder:(NSCoder *)aCoder {
     [aCoder encodeObject:self.adnId forKey:@"adnId"];
     [aCoder encodeObject:self.adnName forKey:@"adnName"];
-    [aCoder encodeObject:self.adnTag forKey:@"adnTag"];
     [aCoder encodeObject:self.customConfigAdapterClassName forKey:@"customConfigAdapterClassName"];
     [aCoder encodeObject:self.customSplashAdapterClassName forKey:@"customSplashAdapterClassName"];
     [aCoder encodeObject:self.customBannerAdapterClassName forKey:@"customBannerAdapterClassName"];

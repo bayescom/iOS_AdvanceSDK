@@ -14,6 +14,7 @@
     
     self.initDefSubviewsFlag = YES;
     self.adspotIdsArr = @[
+        @{@"addesc": @"自渲染-自定义ADN", @"adspotId": @"102768-10015425"},
         @{@"addesc": @"自渲染-Bidding", @"adspotId": @"102768-10008339"},
         @{@"addesc": @"自渲染-穿山甲随机", @"adspotId": @"102768-10008353"},
         @{@"addesc": @"自渲染-优量汇图片", @"adspotId": @"102768-10008354"},

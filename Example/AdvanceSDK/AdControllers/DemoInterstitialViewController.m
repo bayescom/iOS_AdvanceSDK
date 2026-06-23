@@ -18,7 +18,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.adspotIdsArr = @[
-        //@{@"addesc": @"插屏-GroMore", @"adspotId": @"102768-10008588"},
+        @{@"addesc": @"插屏-自定义ADN", @"adspotId": @"102768-10015422"},
         @{@"addesc": @"插屏-Bidding", @"adspotId": @"102768-10008520"},
         @{@"addesc": @"插屏-倍业", @"adspotId": @"102768-10007791"},
         @{@"addesc": @"插屏-穿山甲", @"adspotId": @"102768-10007801"},

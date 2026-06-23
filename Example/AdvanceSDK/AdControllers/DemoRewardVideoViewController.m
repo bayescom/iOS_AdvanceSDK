@@ -18,9 +18,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.adspotIdsArr = @[
-        //@{@"addesc": @"激励视频-GroMore", @"adspotId": @"102768-10008583"},
-        // 10012265: 服务端激励验证
+    self.adspotIdsArr = @[// 10012265: 服务端激励验证
+        @{@"addesc": @"激励视频-自定义ADN", @"adspotId": @"102768-10015423"},
         @{@"addesc": @"激励视频-Bidding", @"adspotId": @"102768-10008526"},
         @{@"addesc": @"激励视频-倍业", @"adspotId": @"102768-10007792"},
         @{@"addesc": @"激励视频-穿山甲", @"adspotId": @"102768-10007802"},
