@@ -32,11 +32,12 @@
     _tableView.delegate = self;
     _tableView.dataSource = self;
     
+    _arrayData = [NSMutableArray arrayWithArray:[CellBuilder dataFromJsonFile:@"cell01"]];
+    
     [self loadAd];
 }
 
 - (void)loadAd {
-    _arrayData = [NSMutableArray arrayWithArray:[CellBuilder dataFromJsonFile:@"cell01"]];
     // adSize 高度设置0自适应
     _nativeExpressAd = [[AdvanceNativeExpress alloc] initWithAdspotId:self.adspotId extra:self.ext delegate:self];
     _nativeExpressAd.adSize = CGSizeMake(self.view.bounds.size.width, 0);

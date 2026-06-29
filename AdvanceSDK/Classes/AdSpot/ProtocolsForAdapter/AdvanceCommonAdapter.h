@@ -109,7 +109,7 @@
 /// 设置信息流 bridge 用于回传广告状态
 - (void)adapter_setRenderFeedBridge:(id<AdvanceCommonRenderFeedAdapterBridge>)bridge;
 
-/// 获取广告包装类信息
+/// 提供广告包装类信息
 - (id)adapter_renderFeedAdWrapper;
 
 @end
