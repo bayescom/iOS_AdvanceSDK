@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
     
     s.name             = 'AdvanceSDK'
-    s.version          = '5.6.0'
+    s.version          = '5.6.1'
     s.license          = { :type => 'MIT', :file => 'LICENSE' }
     s.summary          = 'bayescom iOS AdvanceSDK'
     s.description      = <<-DESC
@@ -31,62 +31,57 @@ Pod::Spec.new do |s|
        }
     
     # 默认的使用模块
-    s.default_subspec = 'AdSpot'
+    s.default_subspec = 'Advance'
     
-    s.subspec 'Core' do |core|
-        core.source_files = 'AdvanceSDK/Classes/Core/**/*.{h,m}'
-        core.frameworks = 'UIKit', 'Foundation', 'AdSupport'
-    end
-    
-    s.subspec 'AdSpot' do |adSpot|
-        adSpot.dependency 'AdvanceSDK/Core'
-        adSpot.source_files = 'AdvanceSDK/Classes/AdSpot/**/*.{h,m}'
+    s.subspec 'Advance' do |adv|
+        adv.source_files = 'AdvanceSDK/Classes/Advance/**/*.{h,m}'
+        adv.frameworks = 'UIKit', 'Foundation', 'AdSupport'
     end
     
     s.subspec 'MercuryAdapter' do |mer|
-        mer.dependency 'AdvanceSDK/AdSpot'
+        mer.dependency 'AdvanceSDK/Advance'
         mer.dependency 'MercurySDK'
         mer.source_files = 'AdvanceSDK/Classes/Adapters/Mercury/**/*.{h,m}'
     end
     
     s.subspec 'CSJAdapter' do |csj|
-        csj.dependency 'AdvanceSDK/AdSpot'
+        csj.dependency 'AdvanceSDK/Advance'
         csj.dependency 'Ads-CN-Beta/BUAdSDK'
         csj.source_files = 'AdvanceSDK/Classes/Adapters/CSJ/**/*.{h,m}'
     end
     
     s.subspec 'GDTAdapter' do |gdt|
-        gdt.dependency 'AdvanceSDK/AdSpot'
+        gdt.dependency 'AdvanceSDK/Advance'
         gdt.dependency 'GDTMobSDK'
         gdt.source_files =  'AdvanceSDK/Classes/Adapters/GDT/**/*.{h,m}'
     end
      
     s.subspec 'KSAdapter' do |ks|
-        ks.dependency 'AdvanceSDK/AdSpot'
+        ks.dependency 'AdvanceSDK/Advance'
         ks.dependency 'KSAdSDK'
         ks.source_files = 'AdvanceSDK/Classes/Adapters/KS/**/*.{h,m}'
     end
     
     s.subspec 'BaiduAdapter' do |bd|
-        bd.dependency 'AdvanceSDK/AdSpot'
+        bd.dependency 'AdvanceSDK/Advance'
         bd.dependency 'BaiduMobAdSDK'
         bd.source_files =  'AdvanceSDK/Classes/Adapters/Baidu/**/*.{h,m}'
     end
     
     s.subspec 'TanxAdapter' do |tanx|
-        tanx.dependency 'AdvanceSDK/AdSpot'
+        tanx.dependency 'AdvanceSDK/Advance'
         tanx.dependency 'TanxSDK'
         tanx.source_files =  'AdvanceSDK/Classes/Adapters/TANX/**/*.{h,m}'
     end
     
     s.subspec 'SigmobAdapter' do |sigmob|
-        sigmob.dependency 'AdvanceSDK/AdSpot'
+        sigmob.dependency 'AdvanceSDK/Advance'
         sigmob.dependency 'SigmobAd-iOS'
         sigmob.source_files =  'AdvanceSDK/Classes/Adapters/Sigmob/**/*.{h,m}'
     end
     
     s.subspec 'FunlinkAdapter' do |funlink|
-        funlink.dependency 'AdvanceSDK/AdSpot'
+        funlink.dependency 'AdvanceSDK/Advance'
         funlink.dependency 'FunlinkSDK'
         funlink.source_files =  'AdvanceSDK/Classes/Adapters/Funlink/**/*.{h,m}'
     end
