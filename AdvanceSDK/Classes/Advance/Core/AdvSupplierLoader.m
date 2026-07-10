@@ -12,29 +12,43 @@
 #import "objc/message.h"
 
 @interface AdvSupplierLoader ()
-
-@property (nonatomic, strong, class) NSMutableDictionary *initializedDict;
+// 状态表：平台id -> 当前初始化状态 @(AdvAdnInitState)
+@property (nonatomic, strong, class) NSMutableDictionary <NSString *, NSNumber *> *initializeStatus;
+// 回调队列：平台id -> NSMutableArray<Completion.copy>
+@property (nonatomic, strong, class) NSMutableDictionary <NSString *, NSMutableArray *> *pendingCompletions;
 
 @end
 
-static NSMutableDictionary *_initializedDict = nil;
+static NSMutableDictionary *_initializeStatus = nil;
+static NSMutableDictionary *_pendingCompletions = nil;
 
 @implementation AdvSupplierLoader
 
-+ (NSMutableDictionary *)initializedDict {
-    if (!_initializedDict) {
-        _initializedDict = [NSMutableDictionary dictionary];
++ (NSMutableDictionary *)initializeStatus {
+    if (!_initializeStatus) {
+        _initializeStatus = [NSMutableDictionary dictionary];
     }
-    return _initializedDict;
+    return _initializeStatus;
 }
 
-+ (void)setInitializedDict:(NSMutableDictionary *)initializedDict {
-    _initializedDict = initializedDict;
++ (void)setInitializeStatus:(NSMutableDictionary *)initializeStatus {
+    _initializeStatus = _initializeStatus;
+}
+
++ (NSMutableDictionary *)pendingCompletions {
+    if (!_pendingCompletions) {
+        _pendingCompletions = [NSMutableDictionary dictionary];
+    }
+    return _pendingCompletions;
+}
+
++ (void)setPendingCompletions:(NSMutableDictionary *)pendingCompletions {
+    _pendingCompletions = pendingCompletions;
 }
 
 // 加载渠道SDK进行初始化调用
 + (void)loadSupplier:(AdvSupplier *)supplier completion:(void (^)(NSError *error))completion {
-    
+
     NSString *adapterName = [self mappingConfigAdapterNameWithSupplierId:supplier.identifier];
     /// 媒体未引入渠道SDK或Adapter
     if (!NSClassFromString(adapterName)) {
@@ -47,41 +61,76 @@ static NSMutableDictionary *_initializedDict = nil;
         });
         return;
     }
-    /// 已经初始化过的渠道 直接返回成功
-    if ([[AdvSupplierLoader.initializedDict objectForKey:supplier.identifier] boolValue]) {
+    
+    /// 初始化该平台的队列与状态
+    if (!self.pendingCompletions[supplier.identifier]) {
+        self.pendingCompletions[supplier.identifier] = [NSMutableArray array];
+        self.initializeStatus[supplier.identifier] = @(AdvAdnInitStateDefault);
+    }
+    
+    AdvAdnInitState currentState = [self.initializeStatus[supplier.identifier] intValue];
+    /// 已经初始化成功 直接回调
+    if (currentState == AdvAdnInitStateSuccess) {
         dispatch_async(dispatch_get_main_queue(), ^{
             completion(nil);
         });
         return;
     }
     
+    /// 将当前 completion 放入回调队列 (必须 copy 到堆上)
+    if (completion) {
+        [self.pendingCompletions[supplier.identifier] addObject:[completion copy]];
+    }
+    
+    /// 正在初始化中 后续并发进入的广告源
+    if (currentState == AdvAdnInitStateLoading) {
+        // 上面已经把 completion 塞入 queue 了，这里静静等待第一次初始化的结果返回即可
+        return;
+    }
+    
+    /// 之前失败了，或者为默认状态 -> 触发正式初始化
+    self.initializeStatus[supplier.identifier] = @(AdvAdnInitStateLoading);
+    
+    /// 第一个广告源进来，开始执行初始化
     Class protocolClass = NSClassFromString(adapterName);
     SEL initSelector = NSSelectorFromString(@"initializeAdapterWithAppId:appKey:completion:");
     if ([protocolClass respondsToSelector:initSelector]) {
         // 定义block
         void (^completionHandler)(NSError *error) = ^void (NSError *error) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                NSError *wrappedError = [self markSupplierInitialized:supplier error:error];
-                completion(wrappedError);
+                self.initializeStatus[supplier.identifier] = !error ? @(AdvAdnInitStateSuccess) : @(AdvAdnInitStateFailed);
+                [self executePendingCompletionsWithSupplier:supplier error:[self wrappedError:error]];
             });
         };
         ((void (*)(id, SEL, id, id, id))objc_msgSend)(protocolClass, initSelector, supplier.mediaid, supplier.mediakey, completionHandler);
     } else { // 只有自定义ADN才会进入
         dispatch_async(dispatch_get_main_queue(), ^{
-            completion([AdvError errorWithCode:-100 message:@"自定义ADN未遵循初始化协议"].toNSError);
+            self.initializeStatus[supplier.identifier] = @(AdvAdnInitStateFailed);
+            [self executePendingCompletionsWithSupplier:supplier error:[AdvError errorWithCode:-100 message:@"自定义ADN未遵循初始化协议"].toNSError];
         });
     }
 }
 
-/// 标记渠道已经被初始化
-+ (NSError *)markSupplierInitialized:(AdvSupplier *)supplier error:(NSError *)error {
-    if (!error) {
-        [AdvSupplierLoader.initializedDict setObject:@YES forKey:supplier.identifier];
-        return nil;
+/// 执行所有等待中的回调
++ (void)executePendingCompletionsWithSupplier:(AdvSupplier *)supplier error:(NSError *)error {
+    NSMutableArray *queue = self.pendingCompletions[supplier.identifier];
+    // 拷贝一份回调列表，避免在回调执行过程中外部又往队列里塞数据导致崩溃
+    NSArray *completions = [queue copy];
+    [queue removeAllObjects];
+    for (void(^completion)(NSError *) in completions) {
+        if (completion) {
+            completion(error);
+        }
     }
-    /// 包装成更容易识别的错误信息
-    NSError *wrappedError = [AdvError errorWithCode:AdvErrorCode_SupplierInitFailed message:error.userInfo[NSLocalizedDescriptionKey]].toNSError;
-    return wrappedError;
+}
+
+/// 包装成更容易识别的错误信息
++ (NSError *)wrappedError:(NSError *)error {
+    if (error) {
+        NSError *wrappedError = [AdvError errorWithCode:AdvErrorCode_SupplierInitFailed message:error.userInfo[NSLocalizedDescriptionKey]].toNSError;
+        return wrappedError;
+    }
+    return nil;
 }
 
 + (NSString *)mappingConfigAdapterNameWithSupplierId:(NSString *)supplierId {

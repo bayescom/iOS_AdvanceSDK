@@ -28,6 +28,18 @@ typedef NS_ENUM(NSUInteger, AdvSupplierLoadAdState) {
     AdvSupplierLoadAdTimeout,
 };
 
+// 渠道初始化状态
+typedef NS_ENUM(NSUInteger, AdvAdnInitState) {
+    /// 默认值
+    AdvAdnInitStateDefault = 0,
+    /// 初始化进行中
+    AdvAdnInitStateLoading,
+    /// 初始化成功
+    AdvAdnInitStateSuccess,
+    /// 初始化失败
+    AdvAdnInitStateFailed,
+};
+
 // SDK错误码
 typedef NS_ENUM(NSUInteger, AdvErrorCode) {
     /// SDK初始化失败
