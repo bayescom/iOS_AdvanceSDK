@@ -8,6 +8,7 @@
 #import <Foundation/Foundation.h>
 #import "AdvDefines.h"
 #import "AdvYYModel.h"
+#import "AdvanceAdInfo.h"
 @class AdvPolicyModel;
 @class AdvSetting;
 @class AdvSupplier;
@@ -66,6 +67,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) AdvSupplierLoadAdState loadAdState; // 广告加载状态
 @property (nonatomic, assign) BOOL isHit; // 是否已经命中过
 @property (nonatomic, copy) NSString *cachedReqId; // 缓存广告的reqId，用于tk上报
+
+- (AdvanceAdInfo *)transformAdnInfo;
 
 @end
 

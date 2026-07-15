@@ -15,7 +15,7 @@
 #import "AdvParameterHandler.h"
 #import "AdvApiService.h"
 #import "AdvAdCacheManager.h"
-#import "AdvBidWinLossResult.h"
+#import "AdvanceAdInfo.h"
 
 @interface AdvPolicyService ()
 

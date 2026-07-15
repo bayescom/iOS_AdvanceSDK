@@ -10,7 +10,7 @@
 #import <MercurySDK/MercurySDK.h>
 #import "AdvanceCommonAdapter.h"
 #import "AdvAdConfigHeader.h"
-#import "AdvRewardVideoModel.h"
+#import "AdvanceAdInfo.h"
 
 @interface AdvMercuryRewardVideoAdapter () <MercuryRewardVideoAdDelegate, AdvanceCommonRewardVideoAdapter>
 

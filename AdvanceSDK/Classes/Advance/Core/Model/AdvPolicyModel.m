@@ -42,6 +42,18 @@ NS_ASSUME_NONNULL_BEGIN
     return _cache_timeout;
 }
 
+- (AdvanceAdInfo *)transformAdnInfo {
+    AdvanceAdInfo *adInfo = [[AdvanceAdInfo alloc] init];
+    adInfo.adnId = self.identifier;
+    adInfo.adnName = self.name;
+    adInfo.appId = self.mediaid;
+    adInfo.placementId = self.adspotid;
+    adInfo.biddingType = self.is_head_bidding;
+    adInfo.price = self.sdk_price;
+    adInfo.fromCache = self.cachedReqId.length;
+    return adInfo;
+}
+
 @end
 
 @implementation AdvSetting

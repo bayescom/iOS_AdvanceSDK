@@ -7,7 +7,7 @@
 
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
-#import "AdvBidWinLossResult.h"
+#import "AdvanceAdInfo.h"
 #import "AdvanceCommonSplashAdapterBridge.h"
 #import "AdvanceCommonBannerAdapterBridge.h"
 #import "AdvanceCommonInterstitialAdapterBridge.h"

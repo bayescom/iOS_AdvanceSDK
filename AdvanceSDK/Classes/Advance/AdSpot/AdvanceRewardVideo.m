@@ -40,6 +40,14 @@
     return self;
 }
 
+- (AdvanceAdInfo *)getAdInfo {
+    if (self.targetAdapter) {
+        AdvSupplier *supplier = [self getSupplierWithAdapter:self.targetAdapter];
+        return [supplier transformAdnInfo];
+    }
+    return nil;
+}
+
 
 #pragma mark: - AdvPolicyServiceDelegate
 /// 广告策略加载成功

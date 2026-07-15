@@ -9,7 +9,7 @@
 #import <BaiduMobAdSDK/BaiduMobAdSDK.h>
 #import "AdvanceCommonAdapter.h"
 #import "AdvAdConfigHeader.h"
-#import "AdvRewardVideoModel.h"
+#import "AdvanceAdInfo.h"
 
 @interface AdvBaiduRewardVideoAdapter ()<BaiduMobAdRewardVideoDelegate, AdvanceCommonRewardVideoAdapter>
 

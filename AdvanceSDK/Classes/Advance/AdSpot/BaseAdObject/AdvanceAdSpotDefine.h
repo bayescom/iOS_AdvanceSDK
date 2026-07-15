@@ -1,4 +1,5 @@
 #import <UIKit/UIKit.h>
+#import "AdvanceAdInfo.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -33,6 +34,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// 加载广告策略
 - (void)loadAdPolicy;
+
+/// 获取胜出的渠道广告信息
+- (AdvanceAdInfo * _Nullable)getAdInfo;
 
 /// 销毁对象
 - (void)destroyAdapters;

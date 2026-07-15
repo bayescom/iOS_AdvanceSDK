@@ -9,7 +9,7 @@
 #import <WindSDK/WindSDK.h>
 #import "AdvanceCommonAdapter.h"
 #import "AdvAdConfigHeader.h"
-#import "AdvRewardVideoModel.h"
+#import "AdvanceAdInfo.h"
 #import "NSString+Adv.h"
 
 @interface AdvSigmobRewardVideoAdapter () <WindRewardVideoAdDelegate, AdvanceCommonRewardVideoAdapter>

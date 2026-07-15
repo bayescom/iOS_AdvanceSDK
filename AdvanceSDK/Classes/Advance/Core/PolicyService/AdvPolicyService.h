@@ -8,8 +8,7 @@
 #import <Foundation/Foundation.h>
 #import "AdvPolicyModel.h"
 #import "AdvPolicyServiceDelegate.h"
-#import "AdvRewardVideoModel.h"
-#import "AdvRewardCallbackInfo.h"
+#import "AdvanceAdInfo.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

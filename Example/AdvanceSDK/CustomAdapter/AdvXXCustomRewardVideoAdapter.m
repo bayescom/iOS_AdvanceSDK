@@ -10,7 +10,7 @@
 #import <BUAdSDK/BUAdSDK.h>
 #import <AdvanceSDK/AdvanceCommonAdapter.h>
 #import <AdvanceSDK/AdvAdConfigHeader.h>
-#import <AdvanceSDK/AdvRewardVideoModel.h>
+#import <AdvanceSDK/AdvanceAdInfo.h>
 
 @interface AdvXXCustomRewardVideoAdapter () <BUNativeExpressRewardedVideoAdDelegate, AdvanceCommonRewardVideoAdapter>
 

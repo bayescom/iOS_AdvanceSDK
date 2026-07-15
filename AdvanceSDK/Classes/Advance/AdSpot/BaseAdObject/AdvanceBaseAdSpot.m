@@ -43,6 +43,11 @@
     self.manager = nil;
 }
 
+- (AdvanceAdInfo * _Nullable)getAdInfo { 
+    return nil;
+}
+
+
 - (void)setupAllSDKVersion {
     [self setGDTSDKVersion];
     [self setCSJSDKVersion];
