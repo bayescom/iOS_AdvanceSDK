@@ -15,7 +15,6 @@
 
 @property (nonatomic, weak) id<AdvanceCommonNativeExpressAdapterBridge> bridge;
 @property (nonatomic, strong) KSFeedAdsManager *ks_ad;
-@property (nonatomic, copy) NSString *adapterId;
 @property (nonatomic, strong) KSFeedAd *feedAd;
 
 @end
@@ -34,6 +33,7 @@
 
 - (void)adapter_renderAd:(UIViewController *)viewController {
     self.feedAd.delegate = self;
+    // 如果adn广告不需要render，请尽量模拟回调renderSuccess
     if (self.feedAd.materialReady) { // 有效性判断
         [self.bridge nativeExpress_didAdRenderSuccessWithAdapter:self expressView:self.feedAd.feedView];
     } else {

@@ -57,6 +57,7 @@
     [self setTanxSDKVersion];
     [self setSigmobSDKVersion];
     [self setFunlinkSDKVersion];
+    [self setNoahSDKVersion];
     [self setCustomAdnVersion];
 }
 
@@ -129,6 +130,15 @@
     if ([clazz respondsToSelector:@selector(sdkVersion)]) {
         NSString *version = [clazz sdkVersion];
         [_extraDict adv_safeSetObject:version forKey:@"flink_v"];
+    }
+}
+
+- (void)setNoahSDKVersion {
+    NSString *configClass = [AdvSupplierLoader mappingConfigAdapterNameWithSupplierId:SDK_ID_Noah];
+    Class<AdvanceCommonConfigAdapter> clazz = NSClassFromString(configClass);
+    if ([clazz respondsToSelector:@selector(sdkVersion)]) {
+        NSString *version = [clazz sdkVersion];
+        [_extraDict adv_safeSetObject:version forKey:@"hc_v"];
     }
 }
 

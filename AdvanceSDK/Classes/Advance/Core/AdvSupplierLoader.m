@@ -151,6 +151,8 @@ static NSMutableDictionary *_pendingCompletions = nil;
         clsName = @"AdvSigmobConfigAdapter";
     } else if ([supplierId isEqualToString:SDK_ID_Funlink]){
         clsName = @"AdvFunlinkConfigAdapter";
+    } else if ([supplierId isEqualToString:SDK_ID_Noah]){
+        clsName = @"AdvNoahConfigAdapter";
     } else { // 自定义ADN
         clsName = [AdvSupplierLoader getCustomAdnWithSupplierId:supplierId].customConfigAdapterClassName;
     }
@@ -175,6 +177,8 @@ static NSMutableDictionary *_pendingCompletions = nil;
         clsName = @"AdvSigmobSplashAdapter";
     } else if ([supplierId isEqualToString:SDK_ID_Funlink]){
         clsName = @"AdvFunlinkSplashAdapter";
+    } else if ([supplierId isEqualToString:SDK_ID_Noah]){
+        clsName = @"AdvNoahSplashAdapter";
     } else { // 自定义ADN
         clsName = [AdvSupplierLoader getCustomAdnWithSupplierId:supplierId].customSplashAdapterClassName;
     }
@@ -199,6 +203,8 @@ static NSMutableDictionary *_pendingCompletions = nil;
         clsName = @"AdvSigmobInterstitialAdapter";
     } else if ([supplierId isEqualToString:SDK_ID_Funlink]){
         clsName = @"AdvFunlinkInterstitialAdapter";
+    } else if ([supplierId isEqualToString:SDK_ID_Noah]){
+        clsName = @"AdvNoahInterstitialAdapter";
     } else { // 自定义ADN
         clsName = [AdvSupplierLoader getCustomAdnWithSupplierId:supplierId].customInterstitialAdapterClassName;
     }
@@ -223,6 +229,8 @@ static NSMutableDictionary *_pendingCompletions = nil;
         clsName = @"AdvSigmobRewardVideoAdapter";
     } else if ([supplierId isEqualToString:SDK_ID_Funlink]){
         clsName = @"AdvFunlinkRewardVideoAdapter";
+    } else if ([supplierId isEqualToString:SDK_ID_Noah]){
+        clsName = @"AdvNoahRewardVideoAdapter";
     } else { // 自定义ADN
         clsName = [AdvSupplierLoader getCustomAdnWithSupplierId:supplierId].customRewardVideoAdapterClassName;
     }
@@ -259,6 +267,8 @@ static NSMutableDictionary *_pendingCompletions = nil;
         clsName = @"AdvTanxNativeExpressAdapter";
     } else if ([supplierId isEqualToString:SDK_ID_Funlink]){
         clsName = @"AdvFunlinkNativeExpressAdapter";
+    } else if ([supplierId isEqualToString:SDK_ID_Noah]){
+        clsName = @"AdvNoahNativeExpressAdapter";
     } else { // 自定义ADN
         clsName = [AdvSupplierLoader getCustomAdnWithSupplierId:supplierId].customNativeExpressAdapterClassName;
     }
@@ -283,6 +293,8 @@ static NSMutableDictionary *_pendingCompletions = nil;
         clsName = @"AdvSigmobRenderFeedAdapter";
     } else if ([supplierId isEqualToString:SDK_ID_Funlink]){
         clsName = @"AdvFunlinkRenderFeedAdapter";
+    } else if ([supplierId isEqualToString:SDK_ID_Noah]){
+        clsName = @"AdvNoahRenderFeedAdapter";
     } else { // 自定义ADN
         clsName = [AdvSupplierLoader getCustomAdnWithSupplierId:supplierId].customRenderFeedAdapterClassName;
     }

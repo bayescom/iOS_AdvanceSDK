@@ -85,5 +85,11 @@ Pod::Spec.new do |s|
         funlink.dependency 'FunlinkSDK'
         funlink.source_files =  'AdvanceSDK/Classes/Adapters/Funlink/**/*.{h,m}'
     end
+    
+    s.subspec 'NoahAdapter' do |noah|
+        noah.dependency 'AdvanceSDK/Advance'
+        noah.dependency 'AdvNoahSDK'
+        noah.source_files =  'AdvanceSDK/Classes/Adapters/Noah/**/*.{h,m}'
+    end
 
 end

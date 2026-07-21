@@ -38,6 +38,10 @@ target 'AdvanceSDK_Example' do
   pod 'AdvanceSDK/FunlinkAdapter', :path => '../'
   pod 'FunlinkSDK', '2.9.0.1.8'
   
+  #集成NoahAdapter
+  pod 'AdvanceSDK/NoahAdapter', :path => '../'
+  pod 'AdvNoahSDK', '14.5.0.4005'
+  
 
   #Third
   pod 'SDWebImage'
