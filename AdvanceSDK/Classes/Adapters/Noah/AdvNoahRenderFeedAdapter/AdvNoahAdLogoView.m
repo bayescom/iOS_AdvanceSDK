@@ -40,7 +40,7 @@
     if (!_logoImageView) {
         _logoImageView = [[UIImageView alloc] init];
         _logoImageView.contentMode = UIViewContentModeScaleAspectFit;
-//        _logoImageView.image = [AdvanceAsset bundleImageNamed:@"ks_ad_logo_gray"];
+        _logoImageView.image = [AdvanceAsset bundleImageNamed:@"noah_ad_logo"];
     }
     return _logoImageView;
 }
