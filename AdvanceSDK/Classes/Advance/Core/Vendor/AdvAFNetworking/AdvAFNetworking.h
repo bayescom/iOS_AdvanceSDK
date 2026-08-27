@@ -22,7 +22,6 @@
 
 #import <Foundation/Foundation.h>
 #import <Availability.h>
-#import <TargetConditionals.h>
 
 #ifndef _AdvAFNetworking_
     #define _AdvAFNetworking_
@@ -30,10 +29,6 @@
     #import "AdvAFURLRequestSerialization.h"
     #import "AdvAFURLResponseSerialization.h"
     #import "AdvAFSecurityPolicy.h"
-
-#if !TARGET_OS_WATCH
-    #import "AdvAFNetworkReachabilityManager.h"
-#endif
 
     #import "AdvAFURLSessionManager.h"
     #import "AdvAFHTTPSessionManager.h"

@@ -10,6 +10,7 @@
 
 @interface AdvAdCacheManager ()
 @property (nonatomic, strong) AdvYYCache *adCache;
+@property (nonatomic, strong) NSLock *lock;
 
 @end
 
@@ -27,37 +28,57 @@ static AdvAdCacheManager *_instance = nil;
 - (instancetype)init {
     if (self = [super init]) {
         self.adCache = [AdvYYCache cacheWithName:@"AdvanceCacheAd"];
+        self.lock = [[NSLock alloc] init];
     }
     return self;
 }
 
-// 缓存广告Adapter对象
-- (void)cacheAdapter:(id)adapter
-               price:(NSInteger)price
-          expireTime:(NSInteger)expireTime
-         sourceReqId:(NSString *)sourceReqId
-              forKey:(NSString *)key {
-    // 创建广告缓存对象
-    AdvAdCacheModel *cacheModel = [[AdvAdCacheModel alloc] init];
+- (void)cacheAdapterIfAbsent:(id)adapter
+                      price:(NSInteger)price
+                 expireTime:(NSInteger)expireTime
+                sourceReqId:(NSString *)sourceReqId
+                     forKey:(NSString *)key {
+    [self.lock lock];
+    AdvAdCacheModel *cacheModel = [self.adCache.memoryCache objectForKey:key];
+    if (cacheModel && !cacheModel.isCacheValid) {
+        [self.adCache.memoryCache removeObjectForKey:key];
+        cacheModel = nil;
+    }
+    if (cacheModel) {
+        [self.lock unlock];
+        return;
+    }
+    cacheModel = [[AdvAdCacheModel alloc] init];
     cacheModel.adObject = adapter;
     cacheModel.price = price;
     cacheModel.cachedTimestamp = [[NSDate date] timeIntervalSince1970];
     cacheModel.expireTime = expireTime;
     cacheModel.sourceReqId = sourceReqId;
     [self.adCache.memoryCache setObject:cacheModel forKey:key];
+    [self.lock unlock];
 }
 
 - (AdvAdCacheModel *)adCacheModelFromCachedKey:(NSString *)key {
+    [self.lock lock];
     AdvAdCacheModel *cacheModel = [self.adCache.memoryCache objectForKey:key];
     if (cacheModel && !cacheModel.isCacheValid) { // 缓存过期则移除
-        [self removeAdCacheModelFromCachedKey:key];
-        return nil;
+        [self.adCache.memoryCache removeObjectForKey:key];
+        cacheModel = nil;
     }
+    [self.lock unlock];
     return cacheModel;
 }
 
-- (void)removeAdCacheModelFromCachedKey:(NSString *)key {
+- (void)removeAdCacheModelFromCachedKey:(NSString *)key
+                       matchingAdapter:(id)adapter {
+    [self.lock lock];
+    AdvAdCacheModel *cacheModel = [self.adCache.memoryCache objectForKey:key];
+    if (!cacheModel || cacheModel.adObject != adapter) {
+        [self.lock unlock];
+        return;
+    }
     [self.adCache.memoryCache removeObjectForKey:key];
+    [self.lock unlock];
 }
 
 @end

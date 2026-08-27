@@ -32,7 +32,7 @@ static NSMutableDictionary *_pendingCompletions = nil;
 }
 
 + (void)setInitializeStatus:(NSMutableDictionary *)initializeStatus {
-    _initializeStatus = _initializeStatus;
+    _initializeStatus = initializeStatus;
 }
 
 + (NSMutableDictionary *)pendingCompletions {
@@ -48,6 +48,15 @@ static NSMutableDictionary *_pendingCompletions = nil;
 
 // 加载渠道SDK进行初始化调用
 + (void)loadSupplier:(AdvSupplier *)supplier completion:(void (^)(NSError *error))completion {
+    // 渠道初始化状态和等待队列统一由主线程管理，避免多个广告请求同时进入时产生数据竞争
+    if (![NSThread isMainThread]) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self loadSupplier:supplier completion:completion];
+        });
+        return;
+    }
+
+    NSAssert([NSThread isMainThread], @"AdvSupplierLoader must initialize suppliers on the main thread");
 
     NSString *adapterName = [self mappingConfigAdapterNameWithSupplierId:supplier.identifier];
     /// 媒体未引入渠道SDK或Adapter

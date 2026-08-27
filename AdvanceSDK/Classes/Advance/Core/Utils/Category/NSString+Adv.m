@@ -32,31 +32,21 @@
 
 #pragma mark - 字典转json字符串方法
 + (NSString *)adv_jsonStringWithDictionary:(NSDictionary *)dict {
-    NSError *error;
-    
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dict options:NSJSONWritingPrettyPrinted error:&error];
-    
-    NSString *jsonString;
-    
-    if (!jsonData) {
-        
-        //    NSLog(@"%@",error);
-        
-    }else{
-        
-        jsonString = [[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding];
-        
+    // 1. 安全校验：入参为空或非合法 JSON 对象时直接返回 nil
+    if (!dict || ![NSJSONSerialization isValidJSONObject:dict]) {
+        return nil;
     }
     
-    NSMutableString *mutStr = [NSMutableString stringWithString:jsonString];
-        
-    NSRange range2 = {0,mutStr.length};
+    NSError *error = nil;
+    // 2. options 传入 0：直接生成无换行、无额外空格的紧凑型 JSON 数据
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dict options:0 error:&error];
     
-    //去掉字符串中的换行符
+    if (!jsonData || error) {
+        return nil;
+    }
     
-    [mutStr replaceOccurrencesOfString:@"\n" withString:@"" options:NSLiteralSearch range:range2];
-    
-    return mutStr;
+    // 3. 直接转为 NSString 返回，避免创建 NSMutableString 及字符串替换的性能开销
+    return [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
 }
 
 #pragma mark -JSON字符串转化为字典

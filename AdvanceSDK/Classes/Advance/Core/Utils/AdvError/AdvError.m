@@ -45,6 +45,7 @@
         @(AdvErrorCode_Not200) : @"策略接口服务器返回Code值非200",
         @(AdvErrorCode_SupplierTimeout) : @"渠道广告加载超时",
         @(AdvErrorCode_InvalidExpired) : @"广告展示前广告已失效过期",
+        @(AdvErrorCode_AdNotReady) : @"广告尚未准备好，请在加载成功后展示",
         @(AdvErrorCode_AllLoadAdFailed) : @"所有平台都未返回广告（失败或超时）",
         @(AdvErrorCode_SupplierUninstalled) : @"渠道SDK未被安装",
         @(AdvErrorCode_SupplierInitFailed) : @"渠道SDK初始化失败",

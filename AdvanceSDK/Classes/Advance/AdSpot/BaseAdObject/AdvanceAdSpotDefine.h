@@ -41,6 +41,9 @@ NS_ASSUME_NONNULL_BEGIN
 /// 销毁对象
 - (void)destroyAdapters;
 
+/// 统一在主线程处理Adapter加载成功/失败结果
+- (void)performAdapterLoadResultOnMainThread:(void (^)(void))block;
+
 @end
 
 NS_ASSUME_NONNULL_END

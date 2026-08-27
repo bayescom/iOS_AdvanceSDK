@@ -26,9 +26,6 @@
 #import "AdvAFURLRequestSerialization.h"
 #import "AdvAFSecurityPolicy.h"
 #import "AdvAFCompatibilityMacros.h"
-#if !TARGET_OS_WATCH
-#import "AdvAFNetworkReachabilityManager.h"
-#endif
 
 /**
  `AdvAFURLSessionManager` creates and manages an `NSURLSession` object based on a specified `NSURLSessionConfiguration` object, which conforms to `<NSURLSessionTaskDelegate>`, `<NSURLSessionDataDelegate>`, `<NSURLSessionDownloadDelegate>`, and `<NSURLSessionDelegate>`.
@@ -69,10 +66,6 @@
  - `URLSession:downloadTask:didResumeAtOffset:expectedTotalBytes:`
 
  If any of these methods are overridden in a subclass, they _must_ call the `super` implementation first.
-
- ## Network Reachability Monitoring
-
- Network reachability status and change monitoring is available through the `reachabilityManager` property. Applications may choose to monitor network reachability conditions in order to prevent or suspend any outbound requests. See `AdvAFNetworkReachabilityManager` for more details.
 
  ## NSCoding Caveats
 
@@ -115,17 +108,6 @@ NS_ASSUME_NONNULL_BEGIN
  The security policy used by created session to evaluate server trust for secure connections. `AdvAFURLSessionManager` uses the `defaultPolicy` unless otherwise specified.
  */
 @property (nonatomic, strong) AdvAFSecurityPolicy *securityPolicy;
-
-#if !TARGET_OS_WATCH
-///--------------------------------------
-/// @name Monitoring Network Reachability
-///--------------------------------------
-
-/**
- The network reachability manager. `AdvAFURLSessionManager` uses the `sharedManager` by default.
- */
-@property (readwrite, nonatomic, strong) AdvAFNetworkReachabilityManager *reachabilityManager;
-#endif
 
 ///----------------------------
 /// @name Getting Session Tasks

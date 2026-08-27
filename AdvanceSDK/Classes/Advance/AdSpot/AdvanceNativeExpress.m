@@ -101,7 +101,7 @@
 
 // Bidding成功
 - (void)policyServiceFinishBiddingWithWinSupplier:(AdvSupplier *_Nonnull)supplier bidResult:(AdvBidWinLossResult * _Nonnull)bidResult {
-//    self.price = supplier.sdk_price;
+    //    self.price = supplier.sdk_price;
     /// 获取竞胜的adpater
     self.targetAdapter = [self.adapterMap objectForKey:supplier.sdk_id];
     /// 获取模板信息流广告成功
@@ -114,6 +114,9 @@
     }
     /// 渲染广告并设置控制器
     if ([(id<AdvanceCommonNativeExpressAdapter>)self.targetAdapter respondsToSelector:@selector(adapter_renderAd:)]) {
+        /// 模板信息流开始渲染后即视为已消费，避免渲染期间被新请求复用并覆盖bridge
+        [[AdvAdCacheManager sharedInstance] removeAdCacheModelFromCachedKey:supplier.sdk_id
+                                                            matchingAdapter:self.targetAdapter];
         [self.targetAdapter adapter_renderAd:self.viewController];
     }
 }
@@ -128,30 +131,29 @@
 
 #pragma mark: - AdvanceCommonNativeExpressAdapterBridge
 - (void)nativeExpress_didLoadAdWithAdapter:(id<AdvanceCommonNativeExpressAdapter>)adapter price:(NSInteger)price {
-    AdvSupplier *supplier = [self getSupplierWithAdapter:adapter];
-    if (supplier.enable_cache && ![[AdvAdCacheManager sharedInstance] adCacheModelFromCachedKey:supplier.sdk_id]) { // 缓存Adapter
-        [[AdvAdCacheManager sharedInstance] cacheAdapter:adapter price:price expireTime:supplier.cache_timeout sourceReqId:self.reqId forKey:supplier.sdk_id];
-    }
-    AdvPolicyService *manager = self.manager;
-    [manager setECPMIfNeeded:price supplier:supplier];
-    [manager checkTargetWithResultfulSupplier:supplier state:AdvSupplierLoadAdSuccess error:nil];
+    [self performAdapterLoadResultOnMainThread:^{
+        AdvSupplier *supplier = [self getSupplierWithAdapter:adapter];
+        if (supplier.enable_cache) { // 缓存Adapter
+            [[AdvAdCacheManager sharedInstance] cacheAdapterIfAbsent:adapter price:price expireTime:supplier.cache_timeout sourceReqId:self.reqId forKey:supplier.sdk_id];
+        }
+        AdvPolicyService *manager = self.manager;
+        [manager setECPMIfNeeded:price supplier:supplier];
+        [manager checkTargetWithResultfulSupplier:supplier state:AdvSupplierLoadAdSuccess error:nil];
+    }];
 }
 
 - (void)nativeExpress_failedToLoadAdWithAdapter:(id<AdvanceCommonNativeExpressAdapter>)adapter error:(NSError *)error {
-    AdvSupplier *supplier = [self getSupplierWithAdapter:adapter];
-    AdvPolicyService *manager = self.manager;
-    [manager checkTargetWithResultfulSupplier:supplier state:AdvSupplierLoadAdFailed error:error];
+    [self performAdapterLoadResultOnMainThread:^{
+        AdvSupplier *supplier = [self getSupplierWithAdapter:adapter];
+        AdvPolicyService *manager = self.manager;
+        [manager checkTargetWithResultfulSupplier:supplier state:AdvSupplierLoadAdFailed error:error];
+    }];
 }
 
 /// 竞胜的渠道广告执行以下回调
 - (void)nativeExpress_didAdRenderSuccessWithAdapter:(id<AdvanceCommonNativeExpressAdapter>)adapter expressView:(UIView *)expressView {
-    AdvSupplier *supplier = [self getSupplierWithAdapter:adapter];
     if ([self.delegate respondsToSelector:@selector(onNativeExpressAdViewRenderSuccess:)]) {
         [self.delegate onNativeExpressAdViewRenderSuccess:expressView];
-    }
-    /// 删除缓存Adapter
-    if ([[AdvAdCacheManager sharedInstance] adCacheModelFromCachedKey:supplier.sdk_id]) {
-        [[AdvAdCacheManager sharedInstance] removeAdCacheModelFromCachedKey:supplier.sdk_id];
     }
 }
 
@@ -164,10 +166,6 @@
     }
     /// 销毁各渠道Adapter对象
     [self destroyAdapters];
-    /// 删除缓存Adapter
-    if ([[AdvAdCacheManager sharedInstance] adCacheModelFromCachedKey:supplier.sdk_id]) {
-        [[AdvAdCacheManager sharedInstance] removeAdCacheModelFromCachedKey:supplier.sdk_id];
-    }
 }
 
 - (void)nativeExpress_didAdExposuredWithAdapter:(id<AdvanceCommonNativeExpressAdapter>)adapter expressView:(UIView *)expressView {
@@ -222,7 +220,7 @@
 }
 
 - (void)dealloc {
-   
+    
 }
 
 @end

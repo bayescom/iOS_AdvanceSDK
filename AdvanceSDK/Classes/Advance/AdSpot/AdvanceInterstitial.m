@@ -101,7 +101,7 @@
 
 // Bidding成功
 - (void)policyServiceFinishBiddingWithWinSupplier:(AdvSupplier *_Nonnull)supplier bidResult:(AdvBidWinLossResult * _Nonnull)bidResult {
-//    self.price = supplier.sdk_price;
+    //    self.price = supplier.sdk_price;
     /// 获取竞胜的adpater
     self.targetAdapter = [self.adapterMap objectForKey:supplier.sdk_id];
     /// 获取插屏广告成功
@@ -129,6 +129,11 @@
 }
 
 - (void)showAdFromViewController:(UIViewController *)viewController {
+    if (self.targetAdapter) {
+        AdvSupplier *supplier = [self getSupplierWithAdapter:self.targetAdapter];
+        [[AdvAdCacheManager sharedInstance] removeAdCacheModelFromCachedKey:supplier.sdk_id
+                                                            matchingAdapter:self.targetAdapter];
+    }
     if (![self isAdValid]) {
         return;
     }
@@ -136,32 +141,43 @@
 }
 
 - (BOOL)isAdValid {
-    BOOL valid = YES;
+    if (!self.targetAdapter) {
+        NSError *error = [AdvError errorWithCode:AdvErrorCode_AdNotReady].toNSError;
+        if ([self.delegate respondsToSelector:@selector(onInterstitialAdFailToPresent:error:)]) {
+            [self.delegate onInterstitialAdFailToPresent:self error:error];
+        }
+        return NO;
+    }
     if ([(id<AdvanceCommonInterstitialAdapter>)self.targetAdapter respondsToSelector:@selector(adapter_isAdValid)]) {
-        valid = [self.targetAdapter adapter_isAdValid];
+        BOOL valid = [self.targetAdapter adapter_isAdValid];
+        if (!valid) {
+            [self interstitial_failedToShowAdWithAdapter:self.targetAdapter error:[AdvError errorWithCode:AdvErrorCode_InvalidExpired].toNSError];
+        }
+        return valid;
     }
-    if (!valid) {
-        [self interstitial_failedToShowAdWithAdapter:self.targetAdapter error:[AdvError errorWithCode:AdvErrorCode_InvalidExpired].toNSError];
-    }
-    return valid;
+    return YES;
 }
 
 
 #pragma mark: - AdvanceCommonInterstitialAdapterBridge
 - (void)interstitial_didLoadAdWithAdapter:(id<AdvanceCommonInterstitialAdapter>)adapter price:(NSInteger)price {
-    AdvSupplier *supplier = [self getSupplierWithAdapter:adapter];
-    if (supplier.enable_cache && ![[AdvAdCacheManager sharedInstance] adCacheModelFromCachedKey:supplier.sdk_id]) { // 缓存Adapter
-        [[AdvAdCacheManager sharedInstance] cacheAdapter:adapter price:price expireTime:supplier.cache_timeout sourceReqId:self.reqId forKey:supplier.sdk_id];
-    }
-    AdvPolicyService *manager = self.manager;
-    [manager setECPMIfNeeded:price supplier:supplier];
-    [manager checkTargetWithResultfulSupplier:supplier state:AdvSupplierLoadAdSuccess error:nil];
+    [self performAdapterLoadResultOnMainThread:^{
+        AdvSupplier *supplier = [self getSupplierWithAdapter:adapter];
+        if (supplier.enable_cache) { // 缓存Adapter
+            [[AdvAdCacheManager sharedInstance] cacheAdapterIfAbsent:adapter price:price expireTime:supplier.cache_timeout sourceReqId:self.reqId forKey:supplier.sdk_id];
+        }
+        AdvPolicyService *manager = self.manager;
+        [manager setECPMIfNeeded:price supplier:supplier];
+        [manager checkTargetWithResultfulSupplier:supplier state:AdvSupplierLoadAdSuccess error:nil];
+    }];
 }
 
 - (void)interstitial_failedToLoadAdWithAdapter:(id<AdvanceCommonInterstitialAdapter>)adapter error:(NSError *)error {
-    AdvSupplier *supplier = [self getSupplierWithAdapter:adapter];
-    AdvPolicyService *manager = self.manager;
-    [manager checkTargetWithResultfulSupplier:supplier state:AdvSupplierLoadAdFailed error:error];
+    [self performAdapterLoadResultOnMainThread:^{
+        AdvSupplier *supplier = [self getSupplierWithAdapter:adapter];
+        AdvPolicyService *manager = self.manager;
+        [manager checkTargetWithResultfulSupplier:supplier state:AdvSupplierLoadAdFailed error:error];
+    }];
 }
 
 /// 竞胜的渠道广告执行以下回调
@@ -171,10 +187,6 @@
     [manager reportAdDataWithEventType:AdvSupplierReportTKEventExposed supplier:supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(onInterstitialAdExposured:)]) {
         [self.delegate onInterstitialAdExposured:self];
-    }
-    /// 删除缓存Adapter
-    if ([[AdvAdCacheManager sharedInstance] adCacheModelFromCachedKey:supplier.sdk_id]) {
-        [[AdvAdCacheManager sharedInstance] removeAdCacheModelFromCachedKey:supplier.sdk_id];
     }
 }
 
@@ -187,10 +199,6 @@
     }
     /// 销毁各渠道Adapter对象
     [self destroyAdapters];
-    /// 删除缓存Adapter
-    if ([[AdvAdCacheManager sharedInstance] adCacheModelFromCachedKey:supplier.sdk_id]) {
-        [[AdvAdCacheManager sharedInstance] removeAdCacheModelFromCachedKey:supplier.sdk_id];
-    }
 }
 
 - (void)interstitial_didAdClickedWithAdapter:(id<AdvanceCommonInterstitialAdapter>)adapter {

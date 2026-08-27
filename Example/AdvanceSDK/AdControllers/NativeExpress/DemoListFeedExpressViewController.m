@@ -61,7 +61,7 @@
 /// 广告渲染成功
 - (void)onNativeExpressAdViewRenderSuccess:(UIView *)nativeExpressAdView {
     NSLog(@"模板信息流广告渲染成功 %s %@", __func__, nativeExpressAdView);
-    [_arrayData insertObject:nativeExpressAdView atIndex:1];
+    [_arrayData insertObject:nativeExpressAdView atIndex:arc4random_uniform((uint32_t)self.arrayData.count)];
     [self.tableView reloadData];
 }
 

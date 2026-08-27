@@ -62,8 +62,10 @@ typedef NS_ENUM(NSUInteger, AdvErrorCode) {
     AdvErrorCode_SupplierTimeout = 9321,
     /// 广告展示前广告已失效过期
     AdvErrorCode_InvalidExpired = 9322,
+    /// 广告尚未准备好，请在加载成功后展示
+    AdvErrorCode_AdNotReady = 9323,
     /// 所有平台都未返回广告（失败或超时）
-    AdvErrorCode_AllLoadAdFailed = 9323,
+    AdvErrorCode_AllLoadAdFailed = 9324,
     /// 渠道SDK未被安装
     AdvErrorCode_SupplierUninstalled = 9401,
     /// 渠道SDK初始化失败

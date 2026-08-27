@@ -28,12 +28,12 @@
 
 /// Bidding成功
 /// @param supplier 竞胜渠道
-/// @param bidResult 二价结果 （单位：分）
+/// @param bidResult 竞价结果
 - (void)policyServiceFinishBiddingWithWinSupplier:(AdvSupplier *_Nonnull)supplier bidResult:(AdvBidWinLossResult *_Nonnull)bidResult;
 
 /// Bidding失败
 /// @param supplier 参竞的渠道
-/// @param bidResult 一价结果 （单位：分）
+/// @param bidResult 竞价结果
 - (void)policyServiceBidFailedWithBiddingSupplier:(AdvSupplier *_Nonnull)supplier bidResult:(AdvBidWinLossResult *_Nonnull)bidResult;
 
 /// 所有Bidding渠道返回广告失败

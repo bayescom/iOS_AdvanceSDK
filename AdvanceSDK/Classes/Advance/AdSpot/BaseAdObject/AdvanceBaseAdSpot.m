@@ -38,6 +38,14 @@
     [_manager loadPolicyDataWithAdspotId:_adspotid reqId:_reqId extra:_extraDict.copy];
 }
 
+- (void)performAdapterLoadResultOnMainThread:(void (^)(void))block {
+    if ([NSThread isMainThread]) {
+        block();
+        return;
+    }
+    dispatch_async(dispatch_get_main_queue(), block);
+}
+
 - (void)destroyAdapters {
     self.adapterMap = nil;
     self.manager = nil;

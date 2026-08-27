@@ -1,6 +1,6 @@
 #import "AdvDeviceManager.h"
 #import "NSMutableDictionary+Adv.h"
-#import "UIApplication+Adv.h"
+#import "UIWindow+Adv.h"
 #import "AdvLog.h"
 #import "AdvDefines.h"
 #import "NSArray+Adv.h"
@@ -12,7 +12,7 @@
 #define AdvConstantHeader_h
 
 static NSString *const AdvanceSDKAPIVersion = @"3.0";
-static NSString *const AdvanceSDKVersion = @"5.6.1";
+static NSString *const AdvanceSDKVersion = @"5.6.2";
 static NSString *const AdvanceSDKRequestUrl = @"http://cruiser.bayescom.cn/";
 static NSString *const AdvanceSDKSecretKey = @"bayescom1000000w";
 

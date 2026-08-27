@@ -10,9 +10,9 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface UIApplication (Advance)
-// 获取当前的Window
-- (UIWindow *)adv_getCurrentWindow;
+@interface UIWindow (Adv)
+// 获取当前Window
++ (UIWindow *)adv_getCurrentWindow;
 
 @end
 

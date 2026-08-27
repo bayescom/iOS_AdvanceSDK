@@ -14,6 +14,18 @@
 #import "AdvRenderFeedAdWrapper.h"
 #import "objc/message.h"
 
+@interface AdvRenderFeedAdView ()
+
+- (instancetype)initWithRenderFeedAdWrapper:(AdvRenderFeedAdWrapper *)wrapper;
+
+@end
+
+@interface AdvRenderFeedAdData ()
+
+- (instancetype)initWithDataSource:(id<AdvRenderFeedAdDataSource>)dataSource;
+
+@end
+
 @interface AdvanceRenderFeed () <AdvPolicyServiceDelegate, AdvanceCommonRenderFeedAdapterBridge>
 
 @property (nonatomic, strong) AdvRenderFeedAdView *feedAdView;
@@ -103,22 +115,14 @@
 
 // Bidding成功
 - (void)policyServiceFinishBiddingWithWinSupplier:(AdvSupplier *_Nonnull)supplier bidResult:(AdvBidWinLossResult * _Nonnull)bidResult {
-//    self.price = supplier.sdk_price;
+    //    self.price = supplier.sdk_price;
     /// 获取竞胜的adpater
     self.targetAdapter = [self.adapterMap objectForKey:supplier.sdk_id];
     
     /// 获取广告包装类后生成自渲染视图
     AdvRenderFeedAdWrapper *feedAdWrapper = [self.targetAdapter adapter_renderFeedAdWrapper];
-    self.feedAdView = [[AdvRenderFeedAdView alloc] init];
-    SEL selector = NSSelectorFromString(@"initWithRenderFeedAdWrapper:");
-    if ([self.feedAdView respondsToSelector:selector]) {
-        ((void (*)(id, SEL, id))objc_msgSend)(self.feedAdView, selector, feedAdWrapper);
-    }
-    AdvRenderFeedAdData *feedAdData = [[AdvRenderFeedAdData alloc] init];
-    SEL selector2 = NSSelectorFromString(@"initWithDataSource:");
-    if ([feedAdData respondsToSelector:selector2]) {
-        ((void (*)(id, SEL, id))objc_msgSend)(feedAdData, selector2, feedAdWrapper.dataSource);
-    }
+    self.feedAdView = [[AdvRenderFeedAdView alloc] initWithRenderFeedAdWrapper:feedAdWrapper];
+    AdvRenderFeedAdData *feedAdData = [[AdvRenderFeedAdData alloc] initWithDataSource:feedAdWrapper.dataSource];
     
     /// 获取模板信息流广告成功
     if ([_delegate respondsToSelector:@selector(onRenderFeedAdSuccessToLoad:feedAdView:feedAdData:)]) {
@@ -129,9 +133,8 @@
         [self.targetAdapter adapter_sendNotificationWithBidResult:bidResult];
     }
     /// 删除缓存Adapter
-    if ([[AdvAdCacheManager sharedInstance] adCacheModelFromCachedKey:supplier.sdk_id]) {
-        [[AdvAdCacheManager sharedInstance] removeAdCacheModelFromCachedKey:supplier.sdk_id];
-    }
+    [[AdvAdCacheManager sharedInstance] removeAdCacheModelFromCachedKey:supplier.sdk_id
+                                                        matchingAdapter:self.targetAdapter];
 }
 
 // 参竞渠道失败
@@ -145,19 +148,23 @@
 
 #pragma mark: - AdvanceCommonRenderFeedAdapterBridge
 - (void)renderFeed_didLoadAdWithAdapter:(id<AdvanceCommonRenderFeedAdapter>)adapter price:(NSInteger)price {
-    AdvSupplier *supplier = [self getSupplierWithAdapter:adapter];
-    if (supplier.enable_cache && ![[AdvAdCacheManager sharedInstance] adCacheModelFromCachedKey:supplier.sdk_id]) { // 缓存Adapter
-        [[AdvAdCacheManager sharedInstance] cacheAdapter:adapter price:price expireTime:supplier.cache_timeout sourceReqId:self.reqId forKey:supplier.sdk_id];
-    }
-    AdvPolicyService *manager = self.manager;
-    [manager setECPMIfNeeded:price supplier:supplier];
-    [manager checkTargetWithResultfulSupplier:supplier state:AdvSupplierLoadAdSuccess error:nil];
+    [self performAdapterLoadResultOnMainThread:^{
+        AdvSupplier *supplier = [self getSupplierWithAdapter:adapter];
+        if (supplier.enable_cache) { // 缓存Adapter
+            [[AdvAdCacheManager sharedInstance] cacheAdapterIfAbsent:adapter price:price expireTime:supplier.cache_timeout sourceReqId:self.reqId forKey:supplier.sdk_id];
+        }
+        AdvPolicyService *manager = self.manager;
+        [manager setECPMIfNeeded:price supplier:supplier];
+        [manager checkTargetWithResultfulSupplier:supplier state:AdvSupplierLoadAdSuccess error:nil];
+    }];
 }
 
 - (void)renderFeed_failedToLoadAdWithAdapter:(id<AdvanceCommonRenderFeedAdapter>)adapter error:(NSError *)error {
-    AdvSupplier *supplier = [self getSupplierWithAdapter:adapter];
-    AdvPolicyService *manager = self.manager;
-    [manager checkTargetWithResultfulSupplier:supplier state:AdvSupplierLoadAdFailed error:error];
+    [self performAdapterLoadResultOnMainThread:^{
+        AdvSupplier *supplier = [self getSupplierWithAdapter:adapter];
+        AdvPolicyService *manager = self.manager;
+        [manager checkTargetWithResultfulSupplier:supplier state:AdvSupplierLoadAdFailed error:error];
+    }];
 }
 
 /// 竞胜的渠道广告执行以下回调

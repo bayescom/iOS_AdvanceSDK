@@ -6,11 +6,11 @@
 //  Copyright © 2020 BAYESCOM. All rights reserved.
 //
 
-#import "UIApplication+Adv.h"
+#import "UIWindow+Adv.h"
 
-@implementation UIApplication (Adv)
+@implementation UIWindow (Adv)
 
-- (UIWindow *)adv_getCurrentWindow {
++ (UIWindow *)adv_getCurrentWindow {
     UIWindow *window = nil;
     // 先判断系统
     if (@available(iOS 13, *)) {

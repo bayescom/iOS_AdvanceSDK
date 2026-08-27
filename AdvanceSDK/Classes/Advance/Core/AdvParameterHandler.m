@@ -34,9 +34,9 @@
     /// replace timestamp
     NSTimeInterval currentTimeStamp = [[NSDate date] timeIntervalSince1970] * 1000;
     urlString = [urlString stringByReplacingOccurrencesOfString:@"__TIME__" withString:[NSString stringWithFormat:@"%0.f", currentTimeStamp]];
-    /// append is_cahced & cached_reqid
+    /// append is_cached & cached_reqid
     if (cachedReqId) {
-        urlString = [NSString stringWithFormat:@"%@&is_cahced=1&cached_reqid=%@", urlString, cachedReqId];
+        urlString = [NSString stringWithFormat:@"%@&is_cached=1&cached_reqid=%@", urlString, cachedReqId];
     }
     
     NSTimeInterval costTime = currentTimeStamp - loadTimestamp;
