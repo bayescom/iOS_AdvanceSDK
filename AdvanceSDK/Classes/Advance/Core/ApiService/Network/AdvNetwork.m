@@ -30,36 +30,66 @@
                        timeout:(NSTimeInterval)timeout
                        success:(AdvNetWorkSuccess)success
                        failure:(AdvNetWorkFailure)failure {
-    
+
     AdvAFHTTPSessionManager *manager = [AdvNetwork AFSessionManager];
+
+    // 每个请求使用独立的Serializer，避免并发请求互相覆盖编码方式和timeout。
+    // SessionManager仍然复用，其内部NSURLSession继续负责并发执行网络任务。
+    AdvAFHTTPRequestSerializer *requestSerializer = nil;
+    NSString *HTTPMethod = nil;
     switch (method) {
         case RequestMethod_POST: // httpbody要求json gzip压缩
-            manager.requestSerializer = [AdvGZipRequestSerializer serializer];
+            requestSerializer = [AdvGZipRequestSerializer serializer];
+            HTTPMethod = @"POST";
             break;
         case RequestMethod_GET:
-            manager.requestSerializer = [AdvAFHTTPRequestSerializer serializer];
+            requestSerializer = [AdvAFHTTPRequestSerializer serializer];
+            HTTPMethod = @"GET";
             break;
     }
-    manager.requestSerializer.timeoutInterval = timeout;
-    
-    // Callback
-    void (^AdvHTTPRequestSuccess)(NSURLSessionDataTask *task, id responseObject) = ^void(NSURLSessionDataTask *task, id responseObject) {
-        success ? success(responseObject) : nil;
-    };
-    
-    void (^AdvHTTPRequestFailure)(NSURLSessionDataTask *task, NSError *error) = ^void(NSURLSessionDataTask *task, NSError *error){
-        failure ? failure(error) : nil;
-    };
-    
-    switch (method) {
-        case RequestMethod_GET:
-            [manager GET:urlString parameters:parameters headers:headers progress:nil success:AdvHTTPRequestSuccess failure:AdvHTTPRequestFailure];
-            break;
-        case RequestMethod_POST:
-            [manager POST:urlString parameters:parameters headers:headers progress:nil success:AdvHTTPRequestSuccess failure:AdvHTTPRequestFailure];
-            break;
+    requestSerializer.timeoutInterval = timeout;
+
+    // 在局部Serializer上完成参数编码和GZip，不再修改共享manager.requestSerializer。
+    NSError *serializationError = nil;
+    NSString *absoluteURLString = [[NSURL URLWithString:urlString relativeToURL:manager.baseURL] absoluteString];
+    NSMutableURLRequest *request = [requestSerializer requestWithMethod:HTTPMethod
+                                                              URLString:absoluteURLString
+                                                             parameters:parameters
+                                                                  error:&serializationError];
+
+    for (NSString *headerField in headers.keyEnumerator) {
+        [request addValue:headers[headerField] forHTTPHeaderField:headerField];
     }
-    
+
+    if (!request || serializationError) {
+        NSError *requestError = serializationError ?: [NSError errorWithDomain:NSURLErrorDomain
+                                                                           code:NSURLErrorBadURL
+                                                                       userInfo:@{
+            NSLocalizedDescriptionKey: @"Failed to serialize request."
+        }];
+        if (failure) {
+            dispatch_async(manager.completionQueue ?: dispatch_get_main_queue(), ^{
+                failure(requestError);
+            });
+        }
+        return;
+    }
+
+    // 完整Request已经与其他请求隔离，交给共享SessionManager并发执行即可。
+    __block NSURLSessionDataTask *dataTask = nil;
+    dataTask = [manager dataTaskWithRequest:request
+                            uploadProgress:nil
+                          downloadProgress:nil
+                         completionHandler:^(__unused NSURLResponse *response, id responseObject, NSError *error) {
+        if (error) {
+            if (failure) {
+                failure(error);
+            }
+        } else if (success) {
+            success(responseObject);
+        }
+    }];
+    [dataTask resume];
 }
 
 @end

@@ -31,7 +31,6 @@
     _flink_ad = [[FLinkNativeManager alloc] init];
     _flink_ad.delegate = self;
     _flink_ad.mediaId = placementId;
-    _flink_ad.adCount = 1;
     _flink_ad.size = [config[kAdvanceAdSizeKey] CGSizeValue];
     _flink_ad.showAdController = config[kAdvanceAdPresentControllerKey];
     [_flink_ad loadAdData];
@@ -45,7 +44,7 @@
     if (result.bidResultType == AdvBidWinLossResultTypeWin) {
         [_flink_ad sendWinNotificationWithPrice:result.secondPrice];
     } else {
-        [_flink_ad sendLossNotificationWithPrice:result.winPrice];
+        [_flink_ad sendLossNotificationWithPrice:result.winPrice andLossReason:0];
     }
 }
 

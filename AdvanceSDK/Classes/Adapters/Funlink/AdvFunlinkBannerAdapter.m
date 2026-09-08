@@ -47,7 +47,7 @@
     if (result.bidResultType == AdvBidWinLossResultTypeWin) {
         [_flink_ad sendWinNotificationWithPrice:result.secondPrice];
     } else {
-        [_flink_ad sendLossNotificationWithPrice:result.winPrice];
+        [_flink_ad sendLossNotificationWithPrice:result.winPrice andLossReason:0];
     }
 }
 

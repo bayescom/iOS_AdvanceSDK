@@ -42,7 +42,9 @@
 
 - (void)adapter_sendNotificationWithBidResult:(AdvBidWinLossResult *)result {
     if (result.bidResultType == AdvBidWinLossResultTypeLoss) {
-        [_dataObject sendLossNotificationWithPrice:result.winPrice];
+        [_dataObject sendLossNotificationWithWinPrice:result.winPrice lossReason:MercuryAdBidLossReasonOther];
+    } else {
+        [_dataObject sendWinNotificationWithWinPrice:result.winPrice highestLossPrice:result.secondPrice];
     }
 }
 

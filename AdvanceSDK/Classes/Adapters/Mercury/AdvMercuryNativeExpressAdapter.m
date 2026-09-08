@@ -12,7 +12,7 @@
 #import "AdvAdConfigHeader.h"
 #import "AdvError.h"
 
-@interface AdvMercuryNativeExpressAdapter () <MercuryNativeExpressAdDelegete, AdvanceCommonNativeExpressAdapter>
+@interface AdvMercuryNativeExpressAdapter () <MercuryNativeExpressAdDelegate, AdvanceCommonNativeExpressAdapter>
 
 @property (nonatomic, weak) id<AdvanceCommonNativeExpressAdapterBridge> bridge;
 @property (nonatomic, strong) MercuryNativeExpressAd *mercury_ad;
@@ -30,7 +30,7 @@
     _mercury_ad = [[MercuryNativeExpressAd alloc] initAdWithAdspotId:placementId];
     _mercury_ad.renderSize = [config[kAdvanceAdSizeKey] CGSizeValue];
     _mercury_ad.delegate = self;
-    [_mercury_ad loadAdWithCount:1];
+    [_mercury_ad loadAd];
 }
 
 - (void)adapter_renderAd:(UIViewController *)viewController {
@@ -44,7 +44,9 @@
 
 - (void)adapter_sendNotificationWithBidResult:(AdvBidWinLossResult *)result {
     if (result.bidResultType == AdvBidWinLossResultTypeLoss) {
-        [self.expressAdView sendLossNotificationWithPrice:result.winPrice];
+        [self.expressAdView sendLossNotificationWithWinPrice:result.winPrice lossReason:MercuryAdBidLossReasonOther];
+    } else {
+        [self.expressAdView sendWinNotificationWithWinPrice:result.winPrice highestLossPrice:result.secondPrice];
     }
 }
 
