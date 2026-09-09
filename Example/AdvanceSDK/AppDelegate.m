@@ -29,7 +29,11 @@
     self.window.rootViewController = nav;
     [self.window makeKeyAndVisible];
     
-    [AdvanceSDKManager setAppId:@"102768"];
+    [AdvanceSDKManager startWithAppId:@"100255" completion:^(NSError * _Nullable error) {
+        if (error) {
+            NSLog(@"AdvanceSDK初始化失败: %@", error.localizedDescription);
+        }
+    }];
     
     return YES;
 }

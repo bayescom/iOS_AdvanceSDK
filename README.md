@@ -145,14 +145,18 @@ $ pod install --repo-update
 ![1DFAFEBE-74DC-44D4-BFCC-EF0E194C5D45](./_docs/imgs/1DFAFEBE-74DC-44D4-BFCC-EF0E194C5D45.png)
 
 ## 全局初始化设置
-<span style="background-color: #297497"><font  color=#FFFFF>appId必须要在具体广告位初始化之前设置</font></span>
+<span style="background-color: #297497"><font  color=#FFFFF>请在SDK初始化成功后再初始化、加载具体广告位</font></span>
 
 ```
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 
     ...
     
-    [AdvanceSDKManager setAppId:@"your appId"];    
+    [AdvanceSDKManager startWithAppId:@"your appId" completion:^(NSError *error) {
+        if (!error) {
+            // 初始化、加载广告位
+        }
+    }];
     
     return YES;
 }

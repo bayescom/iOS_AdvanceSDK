@@ -122,8 +122,8 @@
     }];
 }
 
-+ (void)getCustomAdnlistInfoWithVersion:(NSString *)version
-                             completion:(void(^)(AdvCustomAdnListInfo *info, NSError *error))completion {
++ (void)getCustomAdnlistInfoWithVersion:(nullable NSString *)version
+                             completion:(void(^)(AdvCustomAdnListInfo * _Nullable info, NSError * _Nullable error))completion {
     
     NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:@{@"appid": [AdvDeviceManager sharedInstance].appId}];
     [params adv_safeSetObject:version forKey:@"version"];
@@ -132,6 +132,9 @@
             return completion(nil, [AdvError errorWithCode:AdvErrorCode_ResponseTypeError].toNSError);
         }
         AdvCustomAdnListInfo *info = [AdvCustomAdnListInfo adv_modelWithJSON:response];
+        if (!info) {
+            return completion(nil, [AdvError errorWithCode:AdvErrorCode_ParseModelError].toNSError);
+        }
         completion(info, nil);
     } failure:^(NSError * _Nonnull error) {
         completion(nil, error);

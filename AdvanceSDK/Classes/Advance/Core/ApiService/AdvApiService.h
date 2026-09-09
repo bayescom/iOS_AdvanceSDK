@@ -31,8 +31,8 @@ NS_ASSUME_NONNULL_BEGIN
                          completion:(void(^)(NSError *error))completion;
 
 /// 获取自定义AdnList信息
-+ (void)getCustomAdnlistInfoWithVersion:(NSString *)version
-                             completion:(void(^)(AdvCustomAdnListInfo *info, NSError *error))completion;
++ (void)getCustomAdnlistInfoWithVersion:(nullable NSString *)version
+                             completion:(void(^)(AdvCustomAdnListInfo * _Nullable info, NSError * _Nullable error))completion;
 
 @end
 
