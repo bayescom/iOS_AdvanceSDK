@@ -31,6 +31,12 @@
 
 - (void)registerContainer:(UIView *)containerView withClickableViews:(NSArray<UIView *> *)clickableViews {
     [self.adView registerDataObject:self.dataObject clickableViews:clickableViews];
+
+    // 保持现有行为：注册后，将 GDT 子视图移到聚合广告容器。
+    NSArray<UIView *> *subviews = [self.adView.subviews copy];
+    for (UIView *view in subviews) {
+        [containerView addSubview:view];
+    }
 }
 
 - (UIView *)logoImageView {

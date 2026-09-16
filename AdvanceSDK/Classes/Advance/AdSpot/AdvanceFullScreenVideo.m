@@ -78,8 +78,7 @@
         [adapter adapter_setFullscreenBridge:self];
         [self fullscreen_didLoadAdWithAdapter:adapter price:cacheModel.price];
     } else {// 根据渠道id初始化对应Adapter
-        NSString *clsName = [AdvSupplierLoader mappingFullScreenAdapterNameWithSupplierId:supplier.identifier];
-        adapter = [[NSClassFromString(clsName) alloc] init];
+        adapter = [AdvSupplierLoader createFullScreenVideoAdapterWithSupplierId:supplier.identifier];
         if (adapter) {
             [self.adapterMap adv_safeSetObject:adapter forKey:supplier.sdk_id];
             [adapter adapter_setFullscreenBridge:self];

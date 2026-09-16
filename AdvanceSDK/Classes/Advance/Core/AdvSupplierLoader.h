@@ -13,21 +13,18 @@
 
 + (void)loadSupplier:(AdvSupplier *)supplier completion:(void (^)(NSError *error))completion;
 
-+ (NSString *)mappingConfigAdapterNameWithSupplierId:(NSString *)supplierId;
++ (id)createSplashAdapterWithSupplierId:(NSString *)supplierId;
 
-+ (NSString *)mappingSplashAdapterNameWithSupplierId:(NSString *)supplierId;
++ (id)createInterstitialAdapterWithSupplierId:(NSString *)supplierId;
 
-+ (NSString *)mappingInterstitialAdapterNameWithSupplierId:(NSString *)supplierId;
++ (id)createRewardVideoAdapterWithSupplierId:(NSString *)supplierId;
 
-+ (NSString *)mappingRewardAdapterNameWithSupplierId:(NSString *)supplierId;
++ (id)createFullScreenVideoAdapterWithSupplierId:(NSString *)supplierId;
 
-+ (NSString *)mappingFullScreenAdapterNameWithSupplierId:(NSString *)supplierId;
++ (id)createNativeExpressAdapterWithSupplierId:(NSString *)supplierId;
 
-+ (NSString *)mappingNativeExpressAdapterNameWithSupplierId:(NSString *)supplierId;
++ (id)createRenderFeedAdapterWithSupplierId:(NSString *)supplierId;
 
-+ (NSString *)mappingRenderFeedAdapterNameWithSupplierId:(NSString *)supplierId;
-
-+ (NSString *)mappingBannerAdapterNameWithSupplierId:(NSString *)supplierId;
++ (id)createBannerAdapterWithSupplierId:(NSString *)supplierId;
 
 @end
-

@@ -8,7 +8,7 @@
 #import "AdvSupplierLoader.h"
 #import "AdvConstantHeader.h"
 #import "AdvError.h"
-#import "AdvCustomAdnCacheManager.h"
+#import "AdvAdapterRepository.h"
 #import "objc/message.h"
 
 @interface AdvSupplierLoader ()
@@ -58,9 +58,9 @@ static NSMutableDictionary *_pendingCompletions = nil;
 
     NSAssert([NSThread isMainThread], @"AdvSupplierLoader must initialize suppliers on the main thread");
 
-    NSString *adapterName = [self mappingConfigAdapterNameWithSupplierId:supplier.identifier];
+    Class adapterClass = [self createConfigAdapterClassWithSupplierId:supplier.identifier];
     /// 媒体未引入渠道SDK或Adapter
-    if (!NSClassFromString(adapterName)) {
+    if (!adapterClass) {
         NSError *error = [AdvError errorWithCode:AdvErrorCode_SupplierUninstalled].toNSError;
         if (supplier.is_custom_adn) {
             error = [AdvError errorWithCode:AdvErrorCode_CustomAdnLoadFailed].toNSError;
@@ -101,9 +101,8 @@ static NSMutableDictionary *_pendingCompletions = nil;
     self.initializeStatus[supplier.identifier] = @(AdvAdnInitStateLoading);
     
     /// 第一个广告源进来，开始执行初始化
-    Class protocolClass = NSClassFromString(adapterName);
     SEL initSelector = NSSelectorFromString(@"initializeAdapterWithAppId:appKey:completion:");
-    if ([protocolClass respondsToSelector:initSelector]) {
+    if ([adapterClass respondsToSelector:initSelector]) {
         // 定义block
         void (^completionHandler)(NSError *error) = ^void (NSError *error) {
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -111,7 +110,7 @@ static NSMutableDictionary *_pendingCompletions = nil;
                 [self executePendingCompletionsWithSupplier:supplier error:[self wrappedError:error]];
             });
         };
-        ((void (*)(id, SEL, id, id, id))objc_msgSend)(protocolClass, initSelector, supplier.mediaid, supplier.mediakey, completionHandler);
+        ((void (*)(id, SEL, id, id, id))objc_msgSend)(adapterClass, initSelector, supplier.mediaid, supplier.mediakey, completionHandler);
     } else { // 只有自定义ADN才会进入
         dispatch_async(dispatch_get_main_queue(), ^{
             self.initializeStatus[supplier.identifier] = @(AdvAdnInitStateFailed);
@@ -142,201 +141,43 @@ static NSMutableDictionary *_pendingCompletions = nil;
     return nil;
 }
 
-+ (NSString *)mappingConfigAdapterNameWithSupplierId:(NSString *)supplierId {
-    NSString *clsName = @"";
-    if ([supplierId isEqualToString:SDK_ID_CSJ]) {
-        clsName = @"AdvCSJConfigAdapter";
-    } else if ([supplierId isEqualToString:SDK_ID_GDT]) {
-        clsName = @"AdvGDTConfigAdapter";
-    } else if ([supplierId isEqualToString:SDK_ID_KS]) {
-        clsName = @"AdvKSConfigAdapter";
-    } else if ([supplierId isEqualToString:SDK_ID_BAIDU]) {
-        clsName = @"AdvBaiduConfigAdapter";
-    } else if ([supplierId isEqualToString:SDK_ID_MERCURY]) {
-        clsName = @"AdvMercuryConfigAdapter";
-    } else if ([supplierId isEqualToString:SDK_ID_TANX]) {
-        clsName = @"AdvTanxConfigAdapter";
-    } else if ([supplierId isEqualToString:SDK_ID_Sigmob]) {
-        clsName = @"AdvSigmobConfigAdapter";
-    } else if ([supplierId isEqualToString:SDK_ID_Funlink]){
-        clsName = @"AdvFunlinkConfigAdapter";
-    } else if ([supplierId isEqualToString:SDK_ID_Noah]){
-        clsName = @"AdvNoahConfigAdapter";
-    } else { // 自定义ADN
-        clsName = [AdvSupplierLoader getCustomAdnWithSupplierId:supplierId].customConfigAdapterClassName;
-    }
-    return clsName;
++ (Class)createConfigAdapterClassWithSupplierId:(NSString *)supplierId {
+    return [[AdvAdapterRepository sharedInstance] descriptorForSupplierId:supplierId].configAdapterClass;
 }
 
-+ (NSString *)mappingSplashAdapterNameWithSupplierId:(NSString *)supplierId {
-    NSString *clsName = @"";
-    if ([supplierId isEqualToString:SDK_ID_CSJ]) {
-        clsName = @"AdvCSJSplashAdapter";
-    } else if ([supplierId isEqualToString:SDK_ID_GDT]) {
-        clsName = @"AdvGDTSplashAdapter";
-    } else if ([supplierId isEqualToString:SDK_ID_KS]) {
-        clsName = @"AdvKSSplashAdapter";
-    } else if ([supplierId isEqualToString:SDK_ID_BAIDU]) {
-        clsName = @"AdvBaiduSplashAdapter";
-    } else if ([supplierId isEqualToString:SDK_ID_MERCURY]) {
-        clsName = @"AdvMercurySplashAdapter";
-    } else if ([supplierId isEqualToString:SDK_ID_TANX]) {
-        clsName = @"AdvTanxSplashAdapter";
-    } else if ([supplierId isEqualToString:SDK_ID_Sigmob]) {
-        clsName = @"AdvSigmobSplashAdapter";
-    } else if ([supplierId isEqualToString:SDK_ID_Funlink]){
-        clsName = @"AdvFunlinkSplashAdapter";
-    } else if ([supplierId isEqualToString:SDK_ID_Noah]){
-        clsName = @"AdvNoahSplashAdapter";
-    } else { // 自定义ADN
-        clsName = [AdvSupplierLoader getCustomAdnWithSupplierId:supplierId].customSplashAdapterClassName;
-    }
-    return clsName;
++ (id)createSplashAdapterWithSupplierId:(NSString *)supplierId {
+    AdvAdapterDescriptor *descriptor = [[AdvAdapterRepository sharedInstance] descriptorForSupplierId:supplierId];
+    return [[descriptor.splashAdapterClass alloc] init];
 }
 
-+ (NSString *)mappingInterstitialAdapterNameWithSupplierId:(NSString *)supplierId {
-    NSString *clsName = @"";
-    if ([supplierId isEqualToString:SDK_ID_CSJ]) {
-        clsName = @"AdvCSJInterstitialAdapter";
-    } else if ([supplierId isEqualToString:SDK_ID_GDT]) {
-        clsName = @"AdvGDTInterstitialAdapter";
-    } else if ([supplierId isEqualToString:SDK_ID_KS]) {
-        clsName = @"AdvKSInterstitialAdapter";
-    } else if ([supplierId isEqualToString:SDK_ID_BAIDU]) {
-        clsName = @"AdvBaiduInterstitialAdapter";
-    } else if ([supplierId isEqualToString:SDK_ID_MERCURY]) {
-        clsName = @"AdvMercuryInterstitialAdapter";
-    } else if ([supplierId isEqualToString:SDK_ID_TANX]) {
-        clsName = @"AdvTanxInterstitialAdapter";
-    } else if ([supplierId isEqualToString:SDK_ID_Sigmob]) {
-        clsName = @"AdvSigmobInterstitialAdapter";
-    } else if ([supplierId isEqualToString:SDK_ID_Funlink]){
-        clsName = @"AdvFunlinkInterstitialAdapter";
-    } else if ([supplierId isEqualToString:SDK_ID_Noah]){
-        clsName = @"AdvNoahInterstitialAdapter";
-    } else { // 自定义ADN
-        clsName = [AdvSupplierLoader getCustomAdnWithSupplierId:supplierId].customInterstitialAdapterClassName;
-    }
-    return clsName;
++ (id)createInterstitialAdapterWithSupplierId:(NSString *)supplierId {
+    AdvAdapterDescriptor *descriptor = [[AdvAdapterRepository sharedInstance] descriptorForSupplierId:supplierId];
+    return [[descriptor.interstitialAdapterClass alloc] init];
 }
 
-+ (NSString *)mappingRewardAdapterNameWithSupplierId:(NSString *)supplierId {
-    NSString *clsName = @"";
-    if ([supplierId isEqualToString:SDK_ID_CSJ]) {
-        clsName = @"AdvCSJRewardVideoAdapter";
-    } else if ([supplierId isEqualToString:SDK_ID_GDT]) {
-        clsName = @"AdvGDTRewardVideoAdapter";
-    } else if ([supplierId isEqualToString:SDK_ID_KS]) {
-        clsName = @"AdvKSRewardVideoAdapter";
-    } else if ([supplierId isEqualToString:SDK_ID_BAIDU]) {
-        clsName = @"AdvBaiduRewardVideoAdapter";
-    } else if ([supplierId isEqualToString:SDK_ID_MERCURY]) {
-        clsName = @"AdvMercuryRewardVideoAdapter";
-    } else if ([supplierId isEqualToString:SDK_ID_TANX]) {
-        clsName = @"AdvTanxRewardVideoAdapter";
-    } else if ([supplierId isEqualToString:SDK_ID_Sigmob]) {
-        clsName = @"AdvSigmobRewardVideoAdapter";
-    } else if ([supplierId isEqualToString:SDK_ID_Funlink]){
-        clsName = @"AdvFunlinkRewardVideoAdapter";
-    } else if ([supplierId isEqualToString:SDK_ID_Noah]){
-        clsName = @"AdvNoahRewardVideoAdapter";
-    } else { // 自定义ADN
-        clsName = [AdvSupplierLoader getCustomAdnWithSupplierId:supplierId].customRewardVideoAdapterClassName;
-    }
-    return clsName;
++ (id)createRewardVideoAdapterWithSupplierId:(NSString *)supplierId {
+    AdvAdapterDescriptor *descriptor = [[AdvAdapterRepository sharedInstance] descriptorForSupplierId:supplierId];
+    return [[descriptor.rewardVideoAdapterClass alloc] init];
 }
 
-+ (NSString *)mappingFullScreenAdapterNameWithSupplierId:(NSString *)supplierId {
-    NSString *clsName = @"";
-    if ([supplierId isEqualToString:SDK_ID_CSJ]) {
-        clsName = @"AdvCSJFullScreenVideoAdapter";
-    } else if ([supplierId isEqualToString:SDK_ID_GDT]) {
-        clsName = @"AdvGDTFullScreenVideoAdapter";
-    } else if ([supplierId isEqualToString:SDK_ID_KS]) {
-        clsName = @"AdvKSFullScreenVideoAdapter";
-    } else if ([supplierId isEqualToString:SDK_ID_BAIDU]) {
-        clsName = @"AdvBaiduFullScreenVideoAdapter";
-    }
-    return clsName;
++ (id)createFullScreenVideoAdapterWithSupplierId:(NSString *)supplierId {
+    AdvAdapterDescriptor *descriptor = [[AdvAdapterRepository sharedInstance] descriptorForSupplierId:supplierId];
+    return [[descriptor.fullScreenVideoAdapterClass alloc] init];
 }
 
-+ (NSString *)mappingNativeExpressAdapterNameWithSupplierId:(NSString *)supplierId {
-    NSString *clsName = @"";
-    if ([supplierId isEqualToString:SDK_ID_CSJ]) {
-        clsName = @"AdvCSJNativeExpressAdapter";
-    } else if ([supplierId isEqualToString:SDK_ID_GDT]) {
-        clsName = @"AdvGDTNativeExpressAdapter";
-    } else if ([supplierId isEqualToString:SDK_ID_KS]) {
-        clsName = @"AdvKSNativeExpressAdapter";
-    } else if ([supplierId isEqualToString:SDK_ID_BAIDU]) {
-        clsName = @"AdvBaiduNativeExpressAdapter";
-    } else if ([supplierId isEqualToString:SDK_ID_MERCURY]) {
-        clsName = @"AdvMercuryNativeExpressAdapter";
-    } else if ([supplierId isEqualToString:SDK_ID_TANX]) {
-        clsName = @"AdvTanxNativeExpressAdapter";
-    } else if ([supplierId isEqualToString:SDK_ID_Funlink]){
-        clsName = @"AdvFunlinkNativeExpressAdapter";
-    } else if ([supplierId isEqualToString:SDK_ID_Noah]){
-        clsName = @"AdvNoahNativeExpressAdapter";
-    } else { // 自定义ADN
-        clsName = [AdvSupplierLoader getCustomAdnWithSupplierId:supplierId].customNativeExpressAdapterClassName;
-    }
-    return clsName;
++ (id)createNativeExpressAdapterWithSupplierId:(NSString *)supplierId {
+    AdvAdapterDescriptor *descriptor = [[AdvAdapterRepository sharedInstance] descriptorForSupplierId:supplierId];
+    return [[descriptor.nativeExpressAdapterClass alloc] init];
 }
 
-+ (NSString *)mappingRenderFeedAdapterNameWithSupplierId:(NSString *)supplierId {
-    NSString *clsName = @"";
-    if ([supplierId isEqualToString:SDK_ID_CSJ]) {
-        clsName = @"AdvCSJRenderFeedAdapter";
-    } else if ([supplierId isEqualToString:SDK_ID_GDT]) {
-        clsName = @"AdvGDTRenderFeedAdapter";
-    } else if ([supplierId isEqualToString:SDK_ID_KS]) {
-        clsName = @"AdvKSRenderFeedAdapter";
-    } else if ([supplierId isEqualToString:SDK_ID_BAIDU]) {
-        clsName = @"AdvBaiduRenderFeedAdapter";
-    } else if ([supplierId isEqualToString:SDK_ID_MERCURY]) {
-        clsName = @"AdvMercuryRenderFeedAdapter";
-    } else if ([supplierId isEqualToString:SDK_ID_TANX]) {
-        clsName = @"AdvTanxRenderFeedAdapter";
-    } else if ([supplierId isEqualToString:SDK_ID_Sigmob]) {
-        clsName = @"AdvSigmobRenderFeedAdapter";
-    } else if ([supplierId isEqualToString:SDK_ID_Funlink]){
-        clsName = @"AdvFunlinkRenderFeedAdapter";
-    } else if ([supplierId isEqualToString:SDK_ID_Noah]){
-        clsName = @"AdvNoahRenderFeedAdapter";
-    } else { // 自定义ADN
-        clsName = [AdvSupplierLoader getCustomAdnWithSupplierId:supplierId].customRenderFeedAdapterClassName;
-    }
-    return clsName;
++ (id)createRenderFeedAdapterWithSupplierId:(NSString *)supplierId {
+    AdvAdapterDescriptor *descriptor = [[AdvAdapterRepository sharedInstance] descriptorForSupplierId:supplierId];
+    return [[descriptor.renderFeedAdapterClass alloc] init];
 }
 
-+ (NSString *)mappingBannerAdapterNameWithSupplierId:(NSString *)supplierId {
-    NSString *clsName = @"";
-    if ([supplierId isEqualToString:SDK_ID_CSJ]) {
-        clsName = @"AdvCSJBannerAdapter";
-    } else if ([supplierId isEqualToString:SDK_ID_GDT]) {
-        clsName = @"AdvGDTBannerAdapter";
-    } else if ([supplierId isEqualToString:SDK_ID_MERCURY]) {
-        clsName = @"AdvMercuryBannerAdapter";
-    } else if ([supplierId isEqualToString:SDK_ID_Funlink]){
-        clsName = @"AdvFunlinkBannerAdapter";
-    } else { // 自定义ADN
-        clsName = [AdvSupplierLoader getCustomAdnWithSupplierId:supplierId].customBannerAdapterClassName;
-    }
-    return clsName;
-}
-
-// 根据id获取自定义ADN对象
-+ (AdvCustomAdnModel *)getCustomAdnWithSupplierId:(NSString *)supplierId {
-    // 从缓存中获取adnlist信息
-    AdvCustomAdnListInfo *cacheInfo = [[AdvCustomAdnCacheManager sharedInstance] customAdnlistInfo];
-    if (cacheInfo.custom_adn_list.count) {
-        AdvCustomAdnModel *adn = [cacheInfo.custom_adn_list adv_filter:^BOOL(AdvCustomAdnModel *model) {
-            return [model.adnId isEqualToString:supplierId];
-        }].firstObject;
-        return adn;
-    }
-    return nil;
++ (id)createBannerAdapterWithSupplierId:(NSString *)supplierId {
+    AdvAdapterDescriptor *descriptor = [[AdvAdapterRepository sharedInstance] descriptorForSupplierId:supplierId];
+    return [[descriptor.bannerAdapterClass alloc] init];
 }
 
 @end

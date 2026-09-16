@@ -92,8 +92,7 @@
         [adapter adapter_setRenderFeedBridge:self];
         [self renderFeed_didLoadAdWithAdapter:adapter price:cacheModel.price];
     } else {// 根据渠道id初始化对应Adapter
-        NSString *clsName = [AdvSupplierLoader mappingRenderFeedAdapterNameWithSupplierId:supplier.identifier];
-        adapter = [[NSClassFromString(clsName) alloc] init];
+        adapter = [AdvSupplierLoader createRenderFeedAdapterWithSupplierId:supplier.identifier];
         if (adapter) {
             [self.adapterMap adv_safeSetObject:adapter forKey:supplier.sdk_id];
             [adapter adapter_setRenderFeedBridge:self];

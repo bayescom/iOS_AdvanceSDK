@@ -42,18 +42,9 @@
     }
 }
 
-/**
- 一般情况下，外层以AdvRenderFeedAdView作为自渲染视图容器
- 广点通会在register之后将logoview和mediaview加入到GDTUnifiedNativeAdView中
- */
 - (void)registerClickableViews:(NSArray<UIView *> *)clickableViews {
     if ([self.wrapper.viewCreator respondsToSelector:@selector(registerContainer:withClickableViews:)]) {
         [self.wrapper.viewCreator registerContainer:self withClickableViews:clickableViews];
-    }
-    if ([NSStringFromClass(self.wrapper.view.class) isEqualToString:@"GDTUnifiedNativeAdView"]) {
-        [self.wrapper.view.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            [self addSubview:obj];
-        }];
     }
 }
 

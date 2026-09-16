@@ -9,6 +9,7 @@
 #import "AdvConstantHeader.h"
 #import "AdvApiService.h"
 #import "AdvCustomAdnCacheManager.h"
+#import "AdvAdapterRepository.h"
 #import "AdvError.h"
 
 @implementation AdvanceSDKManager
@@ -21,10 +22,12 @@
     }
 
     [AdvDeviceManager sharedInstance].appId = appId;
+    [[AdvAdapterRepository sharedInstance] loadBuiltInAdapterDescriptors];
     AdvCustomAdnCacheManager *cacheManager = [AdvCustomAdnCacheManager sharedInstance];
     AdvCustomAdnListInfo *cacheInfo = [cacheManager customAdnlistInfo];
 
     if (cacheInfo) {
+        [[AdvAdapterRepository sharedInstance] syncCustomAdaptersWithAdnList:cacheInfo.custom_adn_list];
         // 已有当前AppId的缓存，可以立即请求广告；更新操作不影响本次初始化结果。
         completion(nil);
         [self updateCustomAdnListInfoWithCacheInfo:cacheInfo];
@@ -38,6 +41,7 @@
             return;
         }
         [cacheManager cacheCustomAdnlistInfo:info];
+        [[AdvAdapterRepository sharedInstance] syncCustomAdaptersWithAdnList:info.custom_adn_list];
         completion(nil);
     }];
 }
@@ -58,6 +62,7 @@
     [AdvApiService getCustomAdnlistInfoWithVersion:cacheInfo.version completion:^(AdvCustomAdnListInfo * _Nullable info, NSError * _Nullable error) {
         if (!error && info.custom_adn_list.count) {
             [[AdvCustomAdnCacheManager sharedInstance] cacheCustomAdnlistInfo:info];
+            [[AdvAdapterRepository sharedInstance] syncCustomAdaptersWithAdnList:info.custom_adn_list];
         }
     }];
 }

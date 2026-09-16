@@ -78,8 +78,7 @@
         [adapter adapter_setNativeExpressBridge:self];
         [self nativeExpress_didLoadAdWithAdapter:adapter price:cacheModel.price];
     } else {// 根据渠道id初始化对应Adapter
-        NSString *clsName = [AdvSupplierLoader mappingNativeExpressAdapterNameWithSupplierId:supplier.identifier];
-        adapter = [[NSClassFromString(clsName) alloc] init];
+        adapter = [AdvSupplierLoader createNativeExpressAdapterWithSupplierId:supplier.identifier];
         if (adapter) {
             [self.adapterMap adv_safeSetObject:adapter forKey:supplier.sdk_id];
             [adapter adapter_setNativeExpressBridge:self];
