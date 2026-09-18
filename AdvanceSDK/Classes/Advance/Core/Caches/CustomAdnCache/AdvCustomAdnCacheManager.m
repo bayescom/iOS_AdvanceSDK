@@ -39,12 +39,12 @@ static AdvCustomAdnCacheManager *_instance = nil;
 
 - (void)cacheCustomAdnlistInfo:(AdvCustomAdnListInfo *)info {
     NSString *key = [NSString stringWithFormat:@"%@%@", AdvanceAdnlistInfoKey, [AdvDeviceManager sharedInstance].appId];
-    [self.adnCache.diskCache setObject:info forKey:key];
+    [self.adnCache setObject:info forKey:key];
 }
 
 - (AdvCustomAdnListInfo *)customAdnlistInfo {
     NSString *key = [NSString stringWithFormat:@"%@%@", AdvanceAdnlistInfoKey, [AdvDeviceManager sharedInstance].appId];
-    AdvCustomAdnListInfo *info = (AdvCustomAdnListInfo *)[self.adnCache.diskCache objectForKey:key];
+    AdvCustomAdnListInfo *info = (AdvCustomAdnListInfo *)[self.adnCache objectForKey:key];
     return info;
 }
 

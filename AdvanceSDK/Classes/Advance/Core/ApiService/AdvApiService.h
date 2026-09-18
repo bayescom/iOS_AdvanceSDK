@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "AdvPolicyModel.h"
 #import "AdvCustomAdnModel.h"
+#import "AdvanceSDKConfig.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -33,6 +34,9 @@ NS_ASSUME_NONNULL_BEGIN
 /// 获取自定义AdnList信息
 + (void)getCustomAdnlistInfoWithVersion:(nullable NSString *)version
                              completion:(void(^)(AdvCustomAdnListInfo * _Nullable info, NSError * _Nullable error))completion;
+
+/// 获取SDK通用配置信息
++ (void)getSDKCommonConfigWithCompletion:(void(^)(AdvanceSDKConfig *config, NSError *error))completion;
 
 @end
 

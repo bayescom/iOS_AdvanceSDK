@@ -141,4 +141,17 @@
     }];
 }
 
++ (void)getSDKCommonConfigWithCompletion:(void(^)(AdvanceSDKConfig *config, NSError *error))completion {
+    NSDictionary *parameters = @{@"appid": [NSString adv_validString:[AdvDeviceManager sharedInstance].appId], @"appver": [AdvDeviceManager getAppVersion], @"sdkver": AdvanceSDKVersion};
+    [AdvNetwork sendRequestByUrlString:[self genAdRequestLink:@"advance_sdk_config"] method:RequestMethod_POST parameters:parameters headers:nil timeout:5.f success:^(id  _Nonnull response) {
+        if(![response isKindOfClass:[NSData class]]) {
+            return completion(nil, [AdvError errorWithCode:AdvErrorCode_ResponseTypeError].toNSError);
+        }
+        AdvanceSDKConfig *config = [AdvanceSDKConfig adv_modelWithJSON:response];
+        completion(config, nil);
+    } failure:^(NSError * _Nonnull error) {
+        completion(nil, error);
+    }];
+}
+
 @end

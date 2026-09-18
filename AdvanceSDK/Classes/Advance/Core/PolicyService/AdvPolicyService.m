@@ -15,6 +15,7 @@
 #import "AdvParameterHandler.h"
 #import "AdvApiService.h"
 #import "AdvAdCacheManager.h"
+#import "AdvConfigCacheManager.h"
 #import "AdvanceAdInfo.h"
 
 @interface AdvPolicyService ()
@@ -54,31 +55,54 @@
     return mgr;
 }
 
-#pragma mark: - 获取实时策略数据
+#pragma mark: - 获取策略数据
 - (void)loadPolicyDataWithAdspotId:(NSString *)adspotId
                              reqId:(NSString *)reqId
                              extra:(nullable NSDictionary *)extra {
     
     NSDictionary *parameter = [AdvParameterHandler requestParameterWithSpotId:adspotId reqId:reqId extra:extra];
     self.loadTimestamp = [[NSDate date] timeIntervalSince1970] * 1000;
+
+    AdvPolicyModel *cachedModel = [[AdvConfigCacheManager sharedInstance] policyModelForAdspotId:adspotId];
+    BOOL usesCachedPolicy = cachedModel != nil;
+    if (usesCachedPolicy) {
+        [self startPolicyWithModel:cachedModel];
+    }
     
+    // 每次都请求最新策略；已命中缓存时，响应只用于更新下次请求的缓存。
     [AdvApiService loadPolicyDataWithParameters:parameter completion:^(AdvPolicyModel * _Nonnull model, NSError * _Nonnull error) {
         if (error) {
-            if ([self.delegate respondsToSelector:@selector(policyServiceLoadFailedWithError:)]) {
+            if (!usesCachedPolicy && [self.delegate respondsToSelector:@selector(policyServiceLoadFailedWithError:)]) {
                 [self.delegate policyServiceLoadFailedWithError:error];
             }
             return;
         }
-        
-        self.model = model;
-        
-        // Success Callback
-        if ([self.delegate respondsToSelector:@selector(policyServiceLoadSuccessWithModel:)]) {
-            [self.delegate policyServiceLoadSuccessWithModel:self.model];
+
+        // 仅在服务端允许缓存时，将最新策略同步写入磁盘。
+        if (model.setting.enable_strategy_cache == 1) {
+            [[AdvConfigCacheManager sharedInstance] cachePolicyModel:model forAdspotId:adspotId];
         }
-        // 执行SDK策略
-        [self executeSDKPolicy];
+
+        if (!usesCachedPolicy) {
+            [self startPolicyWithModel:model];
+        }
     }];
+}
+
+/// 缓存和实时策略共用执行入口，渠道加载及超时监测统一在主线程执行。
+- (void)startPolicyWithModel:(AdvPolicyModel *)model {
+    if (![NSThread isMainThread]) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self startPolicyWithModel:model];
+        });
+        return;
+    }
+
+    self.model = model;
+    if ([self.delegate respondsToSelector:@selector(policyServiceLoadSuccessWithModel:)]) {
+        [self.delegate policyServiceLoadSuccessWithModel:model];
+    }
+    [self executeSDKPolicy];
 }
 
 /// 执行SDK策略

@@ -23,7 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// 策略管理对象
 + (instancetype)manager;
 
-/// 实时加载策略数据
+/// 优先使用有效缓存策略，同时请求最新策略更新缓存；无有效缓存时执行实时策略。
 /// @param adspotId 广告位id
 /// @param reqId 请求id
 /// @param extra 自定义拓展字段

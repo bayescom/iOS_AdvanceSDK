@@ -15,6 +15,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSString *)getUUID;
 
++ (NSString *)getAppVersion;
+
 @end
 
 NS_ASSUME_NONNULL_END

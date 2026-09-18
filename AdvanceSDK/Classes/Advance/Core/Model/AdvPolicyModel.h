@@ -19,7 +19,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface AdvPolicyModel : NSObject
+@interface AdvPolicyModel : NSObject <NSCoding>
 @property (nonatomic, strong) Gro_more  *gro_more;
 @property (nonatomic, strong) ServerReward *server_reward;
 @property (nonatomic, strong) AdvSetting *setting;
@@ -28,10 +28,13 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) NSInteger code;
 @property (nonatomic, copy) NSString *reqid;
 
+/// 【自定义字段】本地策略缓存写入时间，单位秒；仅用于缓存有效期判断。
+@property (nonatomic, assign) NSTimeInterval strategyCachedTimestamp;
+
 @end
 
 // 上游/渠道SDK对象
-@interface AdvSupplier : NSObject
+@interface AdvSupplier : NSObject <NSCoding>
 @property (nonatomic, copy) NSString *identifier; /// 上游sdk id
 @property (nonatomic, copy) NSString *name; /// 上游sdk名称
 @property (nonatomic, copy) NSString *sdktag; /// 上游sdk标识
@@ -63,7 +66,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSString *custom_params; /// 自定义JSON参数
 
 
-/// 以下为自定义字段
+/// 【自定义字段】以下为单次广告加载状态，不参与策略归档。
 @property (nonatomic, assign) AdvSupplierLoadAdState loadAdState; // 广告加载状态
 @property (nonatomic, assign) BOOL isHit; // 是否已经命中过
 @property (nonatomic, copy) NSString *cachedReqId; // 缓存广告的reqId，用于tk上报
@@ -73,11 +76,11 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 // 全局配置信息
-@interface AdvSetting : NSObject
-/// 1:使用缓存模式加载策略，其他使用实时策略
-@property (nonatomic, assign) NSInteger use_cache;
-/// 策略缓存时长
-@property (nonatomic, assign) NSInteger cache_dur;
+@interface AdvSetting : NSObject <NSCoding>
+/// 1：允许本次策略缓存；其他：不允许策略缓存
+@property (nonatomic, assign) NSInteger enable_strategy_cache;
+/// 策略缓存时长（秒）
+@property (nonatomic, assign) NSInteger strategy_cache_duration;
 /// 聚合竞价模式：0表示普通竞价，1 为 GroMore 竞价
 @property (nonatomic, assign) NSInteger bidding_type;
 /// SDK并行请求总体超时时长(ms)
@@ -90,7 +93,7 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 // 服务端激励验证对象
-@interface ServerReward : NSObject
+@interface ServerReward : NSObject <NSCoding>
 /// 当达成激励时，聚合SDK调用此链接询问服务端验证结果
 @property (nonatomic, copy) NSString *url;
 /// 奖励发放的内容名称，用来透传
@@ -102,14 +105,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 // gro_more对象
-@interface Gro_more :NSObject
+@interface Gro_more :NSObject <NSCoding>
 @property (nonatomic, strong) Gmtk              *gmtk;
 @property (nonatomic, strong) Gromore_params    *gromore_params;
 
 @end
 
 // gro_more的上报链接
-@interface Gmtk :NSObject
+@interface Gmtk :NSObject <NSCoding>
 @property (nonatomic, strong) NSArray <NSString *>  * failedtk;
 @property (nonatomic, strong) NSArray <NSString *>  * imptk;
 @property (nonatomic, strong) NSArray <NSString *>  * biddingtk;
@@ -120,12 +123,12 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 // gro_more的配置参数
-@interface Gromore_params :NSObject
+@interface Gromore_params :NSObject <NSCoding>
 @property (nonatomic, copy) NSString     * appid;
 @property (nonatomic, copy) NSString     * adspotid;
 @property (nonatomic, assign) NSInteger    timeout;
 
-/// 【自定义字段】竞胜价格，用于数据上报
+/// 【自定义字段】竞胜价格，用于数据上报，不参与策略归档。
 @property (nonatomic, assign) NSInteger bidPrice;
 
 @end

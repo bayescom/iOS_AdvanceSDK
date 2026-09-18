@@ -34,10 +34,10 @@ static AdvAdCacheManager *_instance = nil;
 }
 
 - (void)cacheAdapterIfAbsent:(id)adapter
-                      price:(NSInteger)price
-                 expireTime:(NSInteger)expireTime
-                sourceReqId:(NSString *)sourceReqId
-                     forKey:(NSString *)key {
+                       price:(NSInteger)price
+                  expireTime:(NSInteger)expireTime
+                 sourceReqId:(NSString *)sourceReqId
+                      forKey:(NSString *)key {
     [self.lock lock];
     AdvAdCacheModel *cacheModel = [self.adCache.memoryCache objectForKey:key];
     if (cacheModel && !cacheModel.isCacheValid) {
@@ -70,7 +70,7 @@ static AdvAdCacheManager *_instance = nil;
 }
 
 - (void)removeAdCacheModelFromCachedKey:(NSString *)key
-                       matchingAdapter:(id)adapter {
+                        matchingAdapter:(id)adapter {
     [self.lock lock];
     AdvAdCacheModel *cacheModel = [self.adCache.memoryCache objectForKey:key];
     if (!cacheModel || cacheModel.adObject != adapter) {

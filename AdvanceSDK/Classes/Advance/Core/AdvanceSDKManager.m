@@ -11,6 +11,7 @@
 #import "AdvCustomAdnCacheManager.h"
 #import "AdvAdapterRepository.h"
 #import "AdvError.h"
+#import "AdvConfigCacheManager.h"
 
 @implementation AdvanceSDKManager
 
@@ -23,14 +24,15 @@
 
     [AdvDeviceManager sharedInstance].appId = appId;
     [[AdvAdapterRepository sharedInstance] loadBuiltInAdapterDescriptors];
-    AdvCustomAdnCacheManager *cacheManager = [AdvCustomAdnCacheManager sharedInstance];
-    AdvCustomAdnListInfo *cacheInfo = [cacheManager customAdnlistInfo];
-
-    if (cacheInfo) {
-        [[AdvAdapterRepository sharedInstance] syncCustomAdaptersWithAdnList:cacheInfo.custom_adn_list];
+    
+    [AdvanceSDKManager cacheSDKCommonConfig];
+    
+    AdvCustomAdnListInfo *cacheAdnInfo = [[AdvCustomAdnCacheManager sharedInstance] customAdnlistInfo];
+    if (cacheAdnInfo) {
+        [[AdvAdapterRepository sharedInstance] syncCustomAdaptersWithAdnList:cacheAdnInfo.custom_adn_list];
         // 已有当前AppId的缓存，可以立即请求广告；更新操作不影响本次初始化结果。
         completion(nil);
-        [self updateCustomAdnListInfoWithCacheInfo:cacheInfo];
+        [self updateCustomAdnListInfoWithCacheInfo:cacheAdnInfo];
         return;
     }
 
@@ -40,7 +42,7 @@
             completion(error);
             return;
         }
-        [cacheManager cacheCustomAdnlistInfo:info];
+        [[AdvCustomAdnCacheManager sharedInstance] cacheCustomAdnlistInfo:info];
         [[AdvAdapterRepository sharedInstance] syncCustomAdaptersWithAdnList:info.custom_adn_list];
         completion(nil);
     }];
@@ -63,6 +65,15 @@
         if (!error && info.custom_adn_list.count) {
             [[AdvCustomAdnCacheManager sharedInstance] cacheCustomAdnlistInfo:info];
             [[AdvAdapterRepository sharedInstance] syncCustomAdaptersWithAdnList:info.custom_adn_list];
+        }
+    }];
+}
+
++ (void)cacheSDKCommonConfig {
+    [AdvApiService getSDKCommonConfigWithCompletion:^(AdvanceSDKConfig * _Nonnull config, NSError * _Nonnull error) {
+        // 接口获取配置成功后更新缓存
+        if (config) {
+            [[AdvConfigCacheManager sharedInstance] cacheSDKConfig:config];
         }
     }];
 }
