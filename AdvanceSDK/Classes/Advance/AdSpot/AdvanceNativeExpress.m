@@ -12,6 +12,7 @@
 #import "AdvanceCommonAdapter.h"
 #import "AdvAdCacheManager.h"
 #import "AdvError.h"
+#import "AdvFrequencyControlManager.h"
 
 @interface AdvanceNativeExpress () <AdvPolicyServiceDelegate, AdvanceCommonNativeExpressAdapterBridge>
 
@@ -151,6 +152,13 @@
 
 /// 竞胜的渠道广告执行以下回调
 - (void)nativeExpress_didAdRenderSuccessWithAdapter:(id<AdvanceCommonNativeExpressAdapter>)adapter expressView:(UIView *)expressView {
+    /// 曝光和点击频控校验
+    NSError *frequencyError = [[AdvFrequencyControlManager sharedInstance] canDisplayAdForAdspotId:self.adspotid];
+    if (frequencyError) {
+        [self nativeExpress_didAdRenderFailWithAdapter:adapter expressView:expressView error:frequencyError];
+        return;
+    }
+
     if ([self.delegate respondsToSelector:@selector(onNativeExpressAdViewRenderSuccess:)]) {
         [self.delegate onNativeExpressAdViewRenderSuccess:expressView];
     }
@@ -168,6 +176,10 @@
 }
 
 - (void)nativeExpress_didAdExposuredWithAdapter:(id<AdvanceCommonNativeExpressAdapter>)adapter expressView:(UIView *)expressView {
+    if (!self.isImpressionCounted) {
+        self.isImpressionCounted = YES;
+        [[AdvFrequencyControlManager sharedInstance] recordValidImpressionForAdspotId:self.adspotid];
+    }
     AdvSupplier *supplier = [self getSupplierWithAdapter:adapter];
     AdvPolicyService *manager = self.manager;
     [manager reportAdDataWithEventType:AdvSupplierReportTKEventExposed supplier:supplier error:nil];
@@ -177,6 +189,10 @@
 }
 
 - (void)nativeExpress_didAdClickedWithAdapter:(id<AdvanceCommonNativeExpressAdapter>)adapter expressView:(UIView *)expressView {
+    if (!self.isClickCounted) {
+        self.isClickCounted = YES;
+        [[AdvFrequencyControlManager sharedInstance] recordClickForAdspotId:self.adspotid];
+    }
     AdvSupplier *supplier = [self getSupplierWithAdapter:adapter];
     AdvPolicyService *manager = self.manager;
     [manager reportAdDataWithEventType:AdvSupplierReportTKEventClicked supplier:supplier error:nil];

@@ -1,13 +1,13 @@
 //
-//  NSDictionary+adv.m
+//  NSDictionary+Adv.m
 //  AdvanceSDK
 //
 //  Created by guangyao on 2026/4/17.
 //
 
-#import "NSDictionary+adv.h"
+#import "NSDictionary+Adv.h"
 
-@implementation NSDictionary (adv)
+@implementation NSDictionary (Adv)
 
 // 转为可读的多行字符串
 - (NSString *)toErrorDescriptionString {

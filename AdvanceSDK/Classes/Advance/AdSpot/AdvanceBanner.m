@@ -12,6 +12,7 @@
 #import "AdvanceCommonAdapter.h"
 #import "AdvAdCacheManager.h"
 #import "AdvError.h"
+#import "AdvFrequencyControlManager.h"
 
 @interface AdvanceBanner () <AdvPolicyServiceDelegate, AdvanceCommonBannerAdapterBridge>
 
@@ -146,6 +147,14 @@
 }
 
 - (UIView *)bannerView {
+    /// 曝光和点击频控校验
+    NSError *frequencyError = [[AdvFrequencyControlManager sharedInstance] canDisplayAdForAdspotId:self.adspotid];
+    if (frequencyError) {
+        [self banner_failedToShowAdWithAdapter:self.targetAdapter error:frequencyError];
+        return nil;
+    }
+
+    /// 展示前获取视图时，删除缓存
     if (self.targetAdapter) {
         AdvSupplier *supplier = [self getSupplierWithAdapter:self.targetAdapter];
         [[AdvAdCacheManager sharedInstance] removeAdCacheModelFromCachedKey:supplier.sdk_id
@@ -180,6 +189,10 @@
 
 /// 竞胜的渠道广告执行以下回调
 - (void)banner_didAdExposuredWithAdapter:(id<AdvanceCommonBannerAdapter>)adapter {
+    if (!self.isImpressionCounted) {
+        self.isImpressionCounted = YES;
+        [[AdvFrequencyControlManager sharedInstance] recordValidImpressionForAdspotId:self.adspotid];
+    }
     AdvSupplier *supplier = [self getSupplierWithAdapter:adapter];
     AdvPolicyService *manager = self.manager;
     [manager reportAdDataWithEventType:AdvSupplierReportTKEventExposed supplier:supplier error:nil];
@@ -200,6 +213,10 @@
 }
 
 - (void)banner_didAdClickedWithAdapter:(id<AdvanceCommonBannerAdapter>)adapter {
+    if (!self.isClickCounted) {
+        self.isClickCounted = YES;
+        [[AdvFrequencyControlManager sharedInstance] recordClickForAdspotId:self.adspotid];
+    }
     AdvSupplier *supplier = [self getSupplierWithAdapter:adapter];
     AdvPolicyService *manager = self.manager;
     [manager reportAdDataWithEventType:AdvSupplierReportTKEventClicked supplier:supplier error:nil];

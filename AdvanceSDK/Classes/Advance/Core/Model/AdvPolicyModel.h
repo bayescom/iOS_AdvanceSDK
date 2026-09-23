@@ -12,6 +12,7 @@
 @class AdvPolicyModel;
 @class AdvSetting;
 @class AdvSupplier;
+@class AdvSupplierRequestLimit;
 @class Gro_more;
 @class Gmtk;
 @class Gromore_params;
@@ -52,6 +53,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) NSInteger is_head_bidding;
 /// 竞价sdk用于和GroMore比价时的加强系数, 目前全是 1
 @property (nonatomic, assign) CGFloat bid_ratio;
+/// 渠道频控信息
+@property (nonatomic, strong) AdvSupplierRequestLimit *request_limit;
 
 @property (nonatomic, strong) NSArray<NSString *> *clicktk;
 @property (nonatomic, strong) NSArray<NSString *> *loadedtk;
@@ -66,12 +69,33 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSString *custom_params; /// 自定义JSON参数
 
 
-/// 【自定义字段】以下为单次广告加载状态，不参与策略归档。
+/// 【自定义字段】以下为单次广告加载及上报状态，不参与策略归档。
 @property (nonatomic, assign) AdvSupplierLoadAdState loadAdState; // 广告加载状态
 @property (nonatomic, assign) BOOL isHit; // 是否已经命中过
 @property (nonatomic, copy) NSString *cachedReqId; // 缓存广告的reqId，用于tk上报
 
+@property (nonatomic, assign) BOOL isLoadedRepo; // 是否已触发渠道SDK启动上报
+@property (nonatomic, assign) BOOL isLoadEndRepo; // 是否已触发渠道SDK初始化成功上报
+@property (nonatomic, assign) BOOL isSucceedRepo; // 是否已触发广告加载成功上报
+@property (nonatomic, assign) BOOL isFailedRepo; // 是否已触发广告失败上报
+@property (nonatomic, assign) BOOL isExposuredRepo; // 是否已触发曝光TK上报
+@property (nonatomic, assign) BOOL isClickedRepo; // 是否已触发点击TK上报
+@property (nonatomic, assign) BOOL isBidWinRepo; // 是否已触发竞胜上报
+
 - (AdvanceAdInfo *)transformAdnInfo;
+
+@end
+
+/// 渠道维度的设备频控配置
+@interface AdvSupplierRequestLimit : NSObject <NSCoding>
+/// 单设备单日请求上限
+@property (nonatomic, assign) NSInteger device_daily_req_limit;
+/// 单设备单日曝光上限
+@property (nonatomic, assign) NSInteger device_daily_imp_limit;
+/// 单设备单日点击上限
+@property (nonatomic, assign) NSInteger device_daily_click_limit;
+/// 单设备请求间隔时间，单位毫秒
+@property (nonatomic, assign) NSInteger device_request_interval;
 
 @end
 

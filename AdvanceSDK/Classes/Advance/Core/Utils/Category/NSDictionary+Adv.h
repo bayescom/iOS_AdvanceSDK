@@ -1,5 +1,5 @@
 //
-//  NSDictionary+adv.h
+//  NSDictionary+Adv.h
 //  AdvanceSDK
 //
 //  Created by guangyao on 2026/4/17.
@@ -9,7 +9,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface NSDictionary (adv)
+@interface NSDictionary (Adv)
 
 - (NSString *)toErrorDescriptionString;
 

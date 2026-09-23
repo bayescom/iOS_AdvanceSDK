@@ -72,5 +72,13 @@ typedef NS_ENUM(NSUInteger, AdvErrorCode) {
     AdvErrorCode_SupplierInitFailed = 9402,
     /// 自定义Adn配置类获取失败
     AdvErrorCode_CustomAdnLoadFailed = 9403,
+    /// 广告位达到日请求次数上限
+    AdvErrorCode_RequestDailyLimit = 9501,
+    /// 广告位请求间隔未满足
+    AdvErrorCode_RequestIntervalLimit = 9502,
+    /// 广告位达到日有效曝光次数上限
+    AdvErrorCode_ImpressionDailyLimit = 9503,
+    /// 广告位达到日点击次数上限
+    AdvErrorCode_ClickDailyLimit = 9504,
     
 };

@@ -11,6 +11,7 @@
 #import "AdvanceCommonAdapter.h"
 #import "AdvAdCacheManager.h"
 #import "AdvError.h"
+#import "AdvFrequencyControlManager.h"
 #import "AdvRenderFeedAdWrapper.h"
 #import "objc/message.h"
 
@@ -168,6 +169,10 @@
 
 /// 竞胜的渠道广告执行以下回调
 - (void)renderFeed_didAdExposuredWithAdapter:(id<AdvanceCommonRenderFeedAdapter>)adapter {
+    if (!self.isImpressionCounted) {
+        self.isImpressionCounted = YES;
+        [[AdvFrequencyControlManager sharedInstance] recordValidImpressionForAdspotId:self.adspotid];
+    }
     AdvSupplier *supplier = [self getSupplierWithAdapter:adapter];
     AdvPolicyService *manager = self.manager;
     [manager reportAdDataWithEventType:AdvSupplierReportTKEventExposed supplier:supplier error:nil];
@@ -177,6 +182,10 @@
 }
 
 - (void)renderFeed_didAdClickedWithAdapter:(id<AdvanceCommonRenderFeedAdapter>)adapter {
+    if (!self.isClickCounted) {
+        self.isClickCounted = YES;
+        [[AdvFrequencyControlManager sharedInstance] recordClickForAdspotId:self.adspotid];
+    }
     AdvSupplier *supplier = [self getSupplierWithAdapter:adapter];
     AdvPolicyService *manager = self.manager;
     [manager reportAdDataWithEventType:AdvSupplierReportTKEventClicked supplier:supplier error:nil];

@@ -65,6 +65,7 @@ NS_ASSUME_NONNULL_BEGIN
         self.cache_timeout = [aDecoder decodeIntegerForKey:@"cache_timeout"];
         self.is_head_bidding = [aDecoder decodeIntegerForKey:@"is_head_bidding"];
         self.bid_ratio = [aDecoder decodeDoubleForKey:@"bid_ratio"];
+        self.request_limit = [aDecoder decodeObjectForKey:@"request_limit"];
         self.clicktk = [aDecoder decodeObjectForKey:@"clicktk"];
         self.loadedtk = [aDecoder decodeObjectForKey:@"loadedtk"];
         self.loadendtk = [aDecoder decodeObjectForKey:@"loadendtk"];
@@ -94,6 +95,7 @@ NS_ASSUME_NONNULL_BEGIN
     [aCoder encodeInteger:_cache_timeout forKey:@"cache_timeout"];
     [aCoder encodeInteger:_is_head_bidding forKey:@"is_head_bidding"];
     [aCoder encodeDouble:_bid_ratio forKey:@"bid_ratio"];
+    [aCoder encodeObject:_request_limit forKey:@"request_limit"];
     [aCoder encodeObject:_clicktk forKey:@"clicktk"];
     [aCoder encodeObject:_loadedtk forKey:@"loadedtk"];
     [aCoder encodeObject:_loadendtk forKey:@"loadendtk"];
@@ -136,6 +138,27 @@ NS_ASSUME_NONNULL_BEGIN
     adInfo.price = self.sdk_price;
     adInfo.fromCache = self.cachedReqId.length;
     return adInfo;
+}
+
+@end
+
+@implementation AdvSupplierRequestLimit
+
+- (nullable instancetype)initWithCoder:(NSCoder *)aDecoder {
+    if (self = [super init]) {
+        self.device_daily_req_limit = [aDecoder decodeIntegerForKey:@"device_daily_req_limit"];
+        self.device_daily_imp_limit = [aDecoder decodeIntegerForKey:@"device_daily_imp_limit"];
+        self.device_daily_click_limit = [aDecoder decodeIntegerForKey:@"device_daily_click_limit"];
+        self.device_request_interval = [aDecoder decodeIntegerForKey:@"device_request_interval"];
+    }
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+    [aCoder encodeInteger:_device_daily_req_limit forKey:@"device_daily_req_limit"];
+    [aCoder encodeInteger:_device_daily_imp_limit forKey:@"device_daily_imp_limit"];
+    [aCoder encodeInteger:_device_daily_click_limit forKey:@"device_daily_click_limit"];
+    [aCoder encodeInteger:_device_request_interval forKey:@"device_request_interval"];
 }
 
 @end

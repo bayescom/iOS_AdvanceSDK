@@ -17,13 +17,19 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSMutableDictionary * _Nullable adapterMap;
 
 /// 被命中展示的Adapter
-@property (nonatomic, strong) id targetAdapter;
+@property (nonatomic, strong) id _Nullable targetAdapter;
 
 /// 策略管理对象
 @property (nonatomic, strong) id _Nullable manager;
 
 /// 渠道对象列表
 @property (nonatomic, strong) NSMutableArray *suppliers;
+
+/// 广告展示频控计数状态
+@property (nonatomic, assign) BOOL isImpressionCounted;
+
+/// 广告点击频控计数状态
+@property (nonatomic, assign) BOOL isClickCounted;
 
 /// 初始化广告位
 /// @param adspotid 广告位id

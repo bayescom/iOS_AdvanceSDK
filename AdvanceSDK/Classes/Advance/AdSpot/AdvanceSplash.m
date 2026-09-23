@@ -5,6 +5,7 @@
 #import "AdvanceCommonAdapter.h"
 #import "AdvAdCacheManager.h"
 #import "AdvError.h"
+#import "AdvFrequencyControlManager.h"
 
 @interface AdvanceSplash () <AdvPolicyServiceDelegate, AdvanceCommonSplashAdapterBridge>
 
@@ -121,6 +122,14 @@
 }
 
 - (void)showAdInWindow:(UIWindow *)window {
+    /// 曝光和点击频控校验
+    NSError *frequencyError = [[AdvFrequencyControlManager sharedInstance] canDisplayAdForAdspotId:self.adspotid];
+    if (frequencyError) {
+        [self splash_failedToShowAdWithAdapter:self.targetAdapter error:frequencyError];
+        return;
+    }
+
+    /// 调用展示即可删除缓存，不必等曝光成功后删除，假设展示失败该缓存下次调用展示依旧会失败，没有留下的必要。
     if (self.targetAdapter) {
         AdvSupplier *supplier = [self getSupplierWithAdapter:self.targetAdapter];
         [[AdvAdCacheManager sharedInstance] removeAdCacheModelFromCachedKey:supplier.sdk_id
@@ -179,6 +188,10 @@
 
 /// 竞胜的渠道广告执行以下回调
 - (void)splash_didAdExposuredWithAdapter:(id<AdvanceCommonSplashAdapter>)adapter {
+    if (!self.isImpressionCounted) {
+        self.isImpressionCounted = YES;
+        [[AdvFrequencyControlManager sharedInstance] recordValidImpressionForAdspotId:self.adspotid];
+    }
     AdvSupplier *supplier = [self getSupplierWithAdapter:adapter];
     AdvPolicyService *manager = self.manager;
     [manager reportAdDataWithEventType:AdvSupplierReportTKEventExposed supplier:supplier error:nil];
@@ -199,6 +212,10 @@
 }
 
 - (void)splash_didAdClickedWithAdapter:(id<AdvanceCommonSplashAdapter>)adapter {
+    if (!self.isClickCounted) {
+        self.isClickCounted = YES;
+        [[AdvFrequencyControlManager sharedInstance] recordClickForAdspotId:self.adspotid];
+    }
     AdvSupplier *supplier = [self getSupplierWithAdapter:adapter];
     AdvPolicyService *manager = self.manager;
     [manager reportAdDataWithEventType:AdvSupplierReportTKEventClicked supplier:supplier error:nil];

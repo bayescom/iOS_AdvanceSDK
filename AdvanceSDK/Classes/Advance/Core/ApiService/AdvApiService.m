@@ -70,21 +70,36 @@
                          supplier:(AdvSupplier *)supplier
                     loadTimestamp:(NSTimeInterval)loadTimestamp
                             error:(nullable NSError *)error {
+    if (!supplier) { return; }
     NSArray<NSString *> *reportUrls = nil;
     /// 按照类型判断上报地址
     if (eventType == AdvSupplierReportTKEventLoaded) { // 启动SDK上报
+        if (supplier.isLoadedRepo) { return; }
+        supplier.isLoadedRepo = YES;
         reportUrls = supplier.loadedtk;
     } else if (eventType == AdvSupplierReportTKEventLoadEnd) { // 渠道SDK初始化成功上报
+        if (supplier.isLoadEndRepo) { return; }
+        supplier.isLoadEndRepo = YES;
         reportUrls = supplier.loadendtk;
     } else if (eventType == AdvSupplierReportTKEventSucceed) { // 获取广告成功上报
+        if (supplier.isSucceedRepo) { return; }
+        supplier.isSucceedRepo = YES;
         reportUrls = supplier.succeedtk;
     } else if (eventType == AdvSupplierReportTKEventFailed) { // 获取广告失败上报
+        if (supplier.isFailedRepo) { return; }
+        supplier.isFailedRepo = YES;
         reportUrls = supplier.failedtk;
     } else if (eventType == AdvSupplierReportTKEventExposed) { // 广告曝光成功上报
+        if (supplier.isExposuredRepo) { return; }
+        supplier.isExposuredRepo = YES;
         reportUrls = supplier.imptk;
     } else if (eventType == AdvSupplierReportTKEventClicked) { // 点击上报
+        if (supplier.isClickedRepo) { return; }
+        supplier.isClickedRepo = YES;
         reportUrls = supplier.clicktk;
     } else if (eventType == AdvSupplierReportTKEventBidWin) { // 广告竞胜上报
+        if (supplier.isBidWinRepo) { return; }
+        supplier.isBidWinRepo = YES;
         reportUrls = supplier.wintk;
     }
     

@@ -16,6 +16,7 @@
 #import "AdvApiService.h"
 #import "AdvAdCacheManager.h"
 #import "AdvConfigCacheManager.h"
+#import "AdvFrequencyControlManager.h"
 #import "AdvanceAdInfo.h"
 
 @interface AdvPolicyService ()
@@ -59,7 +60,22 @@
 - (void)loadPolicyDataWithAdspotId:(NSString *)adspotId
                              reqId:(NSString *)reqId
                              extra:(nullable NSDictionary *)extra {
-    
+    if (![NSThread isMainThread]) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self loadPolicyDataWithAdspotId:adspotId reqId:reqId extra:extra];
+        });
+        return;
+    }
+
+    // 所有广告类型统一检查；频控受限时，缓存策略和实时策略都不加载。
+    NSError *frequencyError = [[AdvFrequencyControlManager sharedInstance] consumeRequestQuotaForAdspotId:adspotId];
+    if (frequencyError) {
+        if ([self.delegate respondsToSelector:@selector(policyServiceLoadFailedWithError:)]) {
+            [self.delegate policyServiceLoadFailedWithError:frequencyError];
+        }
+        return;
+    }
+
     NSDictionary *parameter = [AdvParameterHandler requestParameterWithSpotId:adspotId reqId:reqId extra:extra];
     self.loadTimestamp = [[NSDate date] timeIntervalSince1970] * 1000;
 
@@ -89,15 +105,8 @@
     }];
 }
 
-/// 缓存和实时策略共用执行入口，渠道加载及超时监测统一在主线程执行。
+/// 缓存和实时策略共用执行入口，调用方已保证在主线程执行。
 - (void)startPolicyWithModel:(AdvPolicyModel *)model {
-    if (![NSThread isMainThread]) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self startPolicyWithModel:model];
-        });
-        return;
-    }
-
     self.model = model;
     if ([self.delegate respondsToSelector:@selector(policyServiceLoadSuccessWithModel:)]) {
         [self.delegate policyServiceLoadSuccessWithModel:model];

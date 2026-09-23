@@ -50,6 +50,10 @@
         @(AdvErrorCode_SupplierUninstalled) : @"渠道SDK未被安装",
         @(AdvErrorCode_SupplierInitFailed) : @"渠道SDK初始化失败",
         @(AdvErrorCode_CustomAdnLoadFailed) : @"自定义Adn配置类获取失败",
+        @(AdvErrorCode_RequestDailyLimit) : @"广告位达到日请求次数上限",
+        @(AdvErrorCode_RequestIntervalLimit) : @"广告位请求间隔未满足",
+        @(AdvErrorCode_ImpressionDailyLimit) : @"广告位达到日有效曝光次数上限",
+        @(AdvErrorCode_ClickDailyLimit) : @"广告位达到日点击次数上限",
     };
     return [codeMap objectForKey:@(code)];
 }
