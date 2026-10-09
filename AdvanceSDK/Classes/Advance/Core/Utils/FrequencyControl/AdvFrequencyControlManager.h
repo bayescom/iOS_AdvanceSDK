@@ -18,6 +18,11 @@ NS_ASSUME_NONNULL_BEGIN
 /// 返回 nil 表示通过且请求名额已消费；返回错误表示拒绝且未消费请求名额。
 - (nullable NSError *)consumeRequestQuotaForAdspotId:(NSString *)adspotId;
 
+/// 仅校验并消费广告位每日请求次数，不检查请求间隔、曝光或点击频控，也不更新时间间隔用的最近请求时间。
+/// 未下发该广告位配置时不拦截，但仍记录请求次数。
+/// 返回 nil 表示通过且请求次数已消费；返回错误表示请求次数已达上限且未消费。
+- (nullable NSError *)consumePreloadRequestCountForAdspotId:(NSString *)adspotId;
+
 /// 校验广告是否允许展示，只检查曝光和点击次数，不预占展示名额。
 /// 返回 nil 表示允许展示；返回错误表示曝光或点击已达到上限。
 - (nullable NSError *)canDisplayAdForAdspotId:(NSString *)adspotId;

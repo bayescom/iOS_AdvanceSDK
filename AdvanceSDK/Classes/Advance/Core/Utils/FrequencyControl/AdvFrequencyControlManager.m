@@ -106,6 +106,28 @@ static NSString * const AdvFrequencyControlRecordKey = @"AdvFrequencyControlReco
     return frequencyError;
 }
 
+- (NSError *)consumePreloadRequestCountForAdspotId:(NSString *)adspotId {
+    if (!adspotId.length) {
+        return nil;
+    }
+
+    __block NSError *frequencyError = nil;
+    dispatch_sync(self.transactionQueue, ^{
+        AdvFrequencyControlRecord *record = [self recordForAdspotId:adspotId];
+        AdvanceAdspotConfig *config = [self adspotConfigForAdspotId:adspotId];
+
+        if (config.req_limit > 0 && record.requestCount >= config.req_limit) {
+            frequencyError = [AdvError errorWithCode:AdvErrorCode_RequestDailyLimit].toNSError;
+            return;
+        }
+
+        // 预加载只占用每日请求次数，不更新时间间隔用的时间戳。
+        record.requestCount += 1;
+        [self persistRecord:record adspotId:adspotId];
+    });
+    return frequencyError;
+}
+
 - (NSError *)canDisplayAdForAdspotId:(NSString *)adspotId {
     if (!adspotId.length) {
         return nil;

@@ -7,6 +7,7 @@
 //
 
 #import "AdvanceRewardVideo.h"
+#import "AdvAutoLoadManager.h"
 #import "AdvConstantHeader.h"
 #import "AdvPolicyService.h"
 #import "AdvanceCommonAdapter.h"
@@ -143,6 +144,8 @@
         AdvSupplier *supplier = [self getSupplierWithAdapter:self.targetAdapter];
         [[AdvAdCacheManager sharedInstance] removeAdCacheModelFromCachedKey:supplier.sdk_id
                                                             matchingAdapter:self.targetAdapter];
+        /// 预加载即将展示的渠道广告
+        [self scheduleAutoLoadIfNeededWithSupplier:supplier];
     }
     if (![self isAdValid]) {
         return;
@@ -262,12 +265,36 @@
 
 
 #pragma mark: - setting
+- (NSDictionary *)setupAdspotSpecificConfig {
+    NSMutableDictionary *config = [NSMutableDictionary dictionary];
+    [config adv_safeSetObject:@(self.muted) forKey:kAdvanceAdVideoMutedKey];
+    [config adv_safeSetObject:self.rewardVideoModel forKey:kAdvanceRewardVideoModelKey];
+    return config.copy;
+}
+
+- (void)scheduleAutoLoadIfNeededWithSupplier:(AdvSupplier *)supplier {
+    if (self.didScheduleAutoLoad || !supplier.enable_cache) {
+        return;
+    }
+    self.didScheduleAutoLoad = YES;
+    NSString *adspotId = [self.adspotid copy];
+    NSDictionary *extra = self.extraDict.copy;
+    NSDictionary *adspotConfig = [self setupAdspotSpecificConfig];
+    AdvSupplier *cachedSupplier = supplier;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[AdvAutoLoadManager sharedInstance] preloadAdspotId:adspotId
+                                                       extra:extra
+                                                adspotConfig:adspotConfig
+                                                    supplier:cachedSupplier
+                                                      adType:AdvAutoLoadAdTypeRewardVideo];
+    });
+}
+
 - (NSDictionary *)setupAdConfigWithSupplier:(AdvSupplier *)supplier {
     // 先获取supplier.custom_params
     NSMutableDictionary *config = [NSMutableDictionary dictionaryWithDictionary:[NSString adv_dictionaryWithJsonString:supplier.custom_params]];
-    [config adv_safeSetObject:@(self.muted) forKey:kAdvanceAdVideoMutedKey];
+    [config addEntriesFromDictionary:[self setupAdspotSpecificConfig]];
     [config adv_safeSetObject:supplier.mediaid forKey:kAdvanceSupplierMediaIdKey];
-    [config adv_safeSetObject:self.rewardVideoModel forKey:kAdvanceRewardVideoModelKey];
     [config adv_safeSetObject:self.serverReward.name forKey:kAdvanceServerRewardNameKey];
     [config adv_safeSetObject:@(self.serverReward.count) forKey:kAdvanceServerRewardCountKey];
     return config.copy;

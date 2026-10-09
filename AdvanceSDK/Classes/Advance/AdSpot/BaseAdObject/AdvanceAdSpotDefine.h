@@ -31,6 +31,9 @@ NS_ASSUME_NONNULL_BEGIN
 /// 广告点击频控计数状态
 @property (nonatomic, assign) BOOL isClickCounted;
 
+/// 广告自动加载状态
+@property (nonatomic, assign) BOOL didScheduleAutoLoad;
+
 /// 初始化广告位
 /// @param adspotid 广告位id
 /// @param extra 自定义扩展参数

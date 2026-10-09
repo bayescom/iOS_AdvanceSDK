@@ -7,12 +7,47 @@
 
 #import <Foundation/Foundation.h>
 #import "AdvPolicyModel.h"
-#import "AdvPolicyServiceDelegate.h"
 #import "AdvanceAdInfo.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@protocol AdvPolicyServiceDelegate;
+@class AdvBidWinLossResult;
+
+@protocol AdvPolicyServiceDelegate <NSObject>
+
+@optional
+
+/// 策略服务加载成功
+- (void)policyServiceLoadSuccessWithModel:(AdvPolicyModel *)model;
+
+/// 策略服务加载失败
+- (void)policyServiceLoadFailedWithError:(nullable NSError *)error;
+
+/// 开始Bidding
+/// @param suppliers 参加Bidding的渠道
+- (void)policyServiceStartBiddingWithSuppliers:(nullable NSArray<AdvSupplier *> *)suppliers;
+
+/// 加载某一个渠道对象
+/// @param supplier 被加载的渠道
+- (void)policyServiceLoadAnySupplier:(nullable AdvSupplier *)supplier;
+
+/// Bidding成功
+/// @param supplier 竞胜渠道
+/// @param bidResult 竞价结果
+- (void)policyServiceFinishBiddingWithWinSupplier:(AdvSupplier *)supplier
+                                        bidResult:(AdvBidWinLossResult *)bidResult;
+
+/// Bidding失败
+/// @param supplier 参竞的渠道
+/// @param bidResult 竞价结果
+- (void)policyServiceBidFailedWithBiddingSupplier:(AdvSupplier *)supplier
+                                       bidResult:(AdvBidWinLossResult *)bidResult;
+
+/// 所有Bidding渠道返回广告失败
+/// @param error 错误信息
+- (void)policyServiceAllAdnLoadAdFailedWithError:(nullable NSError *)error;
+
+@end
 
 //MARK: 策略服务类（非单例）
 @interface AdvPolicyService : NSObject

@@ -20,6 +20,7 @@
 @synthesize suppliers = _suppliers;
 @synthesize isClickCounted = _isClickCounted;
 @synthesize isImpressionCounted = _isImpressionCounted;
+@synthesize didScheduleAutoLoad = _didScheduleAutoLoad;
 
 - (instancetype)initWithAdspotId:(NSString *)adspotid
                            extra:(NSDictionary *)extra {

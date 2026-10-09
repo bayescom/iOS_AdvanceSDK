@@ -201,8 +201,8 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 - (NSInteger)strategy_cache_duration {
-    if (!_strategy_cache_duration) {
-        return 48 * 3600; // 策略缓存默认48小时
+    if (!_strategy_cache_duration && _enable_strategy_cache == 1) {
+        return 24 * 3600; // 策略缓存默认24小时
     }
     return _strategy_cache_duration;
 }

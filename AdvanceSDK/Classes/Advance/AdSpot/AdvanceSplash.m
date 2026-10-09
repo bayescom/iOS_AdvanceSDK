@@ -1,5 +1,6 @@
 
 #import "AdvanceSplash.h"
+#import "AdvAutoLoadManager.h"
 #import "AdvConstantHeader.h"
 #import "AdvPolicyService.h"
 #import "AdvanceCommonAdapter.h"
@@ -128,12 +129,14 @@
         [self splash_failedToShowAdWithAdapter:self.targetAdapter error:frequencyError];
         return;
     }
-
+    
     /// 调用展示即可删除缓存，不必等曝光成功后删除，假设展示失败该缓存下次调用展示依旧会失败，没有留下的必要。
     if (self.targetAdapter) {
         AdvSupplier *supplier = [self getSupplierWithAdapter:self.targetAdapter];
         [[AdvAdCacheManager sharedInstance] removeAdCacheModelFromCachedKey:supplier.sdk_id
                                                             matchingAdapter:self.targetAdapter];
+        /// 预加载即将展示的渠道广告
+        [self scheduleAutoLoadIfNeededWithSupplier:supplier];
     }
     if (![self isAdValid]) {
         return;
@@ -233,13 +236,37 @@
 }
 
 #pragma mark: - setting
+- (NSDictionary *)setupAdspotSpecificConfig {
+    NSMutableDictionary *config = [NSMutableDictionary dictionary];
+    [config adv_safeSetObject:self.viewController forKey:kAdvanceAdPresentControllerKey];
+    [config adv_safeSetObject:self.bottomLogoView forKey:kAdvanceSplashBottomViewKey];
+    return config.copy;
+}
+
+- (void)scheduleAutoLoadIfNeededWithSupplier:(AdvSupplier *)supplier {
+    if (self.didScheduleAutoLoad || !supplier.enable_cache) {
+        return;
+    }
+    self.didScheduleAutoLoad = YES;
+    NSString *adspotId = [self.adspotid copy];
+    NSDictionary *extra = self.extraDict.copy;
+    NSDictionary *adspotConfig = [self setupAdspotSpecificConfig];
+    AdvSupplier *cachedSupplier = supplier;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[AdvAutoLoadManager sharedInstance] preloadAdspotId:adspotId
+                                                       extra:extra
+                                                adspotConfig:adspotConfig
+                                                    supplier:cachedSupplier
+                                                      adType:AdvAutoLoadAdTypeSplash];
+    });
+}
+
 - (NSDictionary *)setupAdConfigWithSupplier:(AdvSupplier *)supplier {
     // 先获取supplier.custom_params
     NSMutableDictionary *config = [NSMutableDictionary dictionaryWithDictionary:[NSString adv_dictionaryWithJsonString:supplier.custom_params]];
-    [config adv_safeSetObject:self.viewController forKey:kAdvanceAdPresentControllerKey];
-    [config adv_safeSetObject:self.bottomLogoView forKey:kAdvanceSplashBottomViewKey];
     [config adv_safeSetObject:@(supplier.timeout) forKey:kAdvanceAdLoadTimeoutKey];
     [config adv_safeSetObject:supplier.mediaid forKey:kAdvanceSupplierMediaIdKey];
+    [config addEntriesFromDictionary:[self setupAdspotSpecificConfig]];
     return config.copy;
 }
 
