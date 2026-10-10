@@ -69,16 +69,15 @@
 }
 
 /// 加载某一个渠道对象
-- (void)policyServiceLoadAnySupplier:(nullable AdvSupplier *)supplier {
+- (void)policyServiceLoadAnySupplier:(nullable AdvSupplier *)supplier
+                       cachedAdModel:(nullable AdvAdCacheModel *)cachedAdModel {
     id<AdvanceCommonBannerAdapter> adapter;
-    // 尝试获取Adapter缓存
-    AdvAdCacheModel *cacheModel = [[AdvAdCacheManager sharedInstance] adCacheModelFromCachedKey:supplier.sdk_id];
-    if (supplier.enable_cache && cacheModel) { //此次加载允许缓存 且 内存中存在Adapter缓存时，直接回调成功
-        supplier.cachedReqId = cacheModel.sourceReqId; //用于tk上报
-        adapter = cacheModel.adObject;
+    if (supplier.enable_cache && cachedAdModel) { //此次加载允许缓存 且 内存中存在Adapter缓存时，直接回调成功
+        supplier.cachedReqId = cachedAdModel.sourceReqId; //用于tk上报
+        adapter = cachedAdModel.adObject;
         [self.adapterMap adv_safeSetObject:adapter forKey:supplier.sdk_id];
         [adapter adapter_setBannerBridge:self];
-        [self banner_didLoadAdWithAdapter:adapter price:cacheModel.price];
+        [self banner_didLoadAdWithAdapter:adapter price:cachedAdModel.price];
     } else {// 根据渠道id初始化对应Adapter
         adapter = [AdvSupplierLoader createBannerAdapterWithSupplierId:supplier.identifier];
         if (adapter) {
@@ -148,20 +147,27 @@
 }
 
 - (UIView *)bannerView {
-    /// 曝光和点击频控校验
+    /// 广告位曝光和点击频控校验
     NSError *frequencyError = [[AdvFrequencyControlManager sharedInstance] canDisplayAdForAdspotId:self.adspotid];
     if (frequencyError) {
         [self banner_failedToShowAdWithAdapter:self.targetAdapter error:frequencyError];
         return nil;
     }
 
-    /// 展示前获取视图时，删除缓存
     if (self.targetAdapter) {
-        AdvSupplier *supplier = [self getSupplierWithAdapter:self.targetAdapter];
-        [[AdvAdCacheManager sharedInstance] removeAdCacheModelFromCachedKey:supplier.sdk_id
+        /// 渠道曝光和点击频控校验
+        AdvSupplier *targetSupplier = [self getSupplierWithAdapter:self.targetAdapter];
+        NSError *supplierFrequencyError = [[AdvFrequencyControlManager sharedInstance] canDisplayAdForSupplier:targetSupplier];
+        if (supplierFrequencyError) {
+            [self banner_failedToShowAdWithAdapter:self.targetAdapter error:supplierFrequencyError];
+            return nil;
+        }
+
+        /// 展示前获取视图时，删除缓存
+        [[AdvAdCacheManager sharedInstance] removeAdCacheModelFromCachedKey:targetSupplier.sdk_id
                                                             matchingAdapter:self.targetAdapter];
         /// 预加载即将展示的渠道广告
-        [self scheduleAutoLoadIfNeededWithSupplier:supplier];
+        [self scheduleAutoLoadIfNeededWithSupplier:targetSupplier];
     }
     if ([(id<AdvanceCommonBannerAdapter>)self.targetAdapter respondsToSelector:@selector(adapter_bannerView)]) {
         return [self.targetAdapter adapter_bannerView];
@@ -175,6 +181,11 @@
         AdvSupplier *supplier = [self getSupplierWithAdapter:adapter];
         if (supplier.enable_cache) { // 缓存Adapter
             [[AdvAdCacheManager sharedInstance] cacheAdapterIfAbsent:adapter price:price expireTime:supplier.cache_timeout sourceReqId:self.reqId forKey:supplier.sdk_id];
+        }
+        NSError *frequencyError = [[AdvFrequencyControlManager sharedInstance] canDisplayAdForSupplier:supplier];
+        if (frequencyError) {
+            [self banner_failedToLoadAdWithAdapter:adapter error:frequencyError];
+            return;
         }
         AdvPolicyService *manager = self.manager;
         [manager setECPMIfNeeded:price supplier:supplier];
@@ -192,11 +203,12 @@
 
 /// 竞胜的渠道广告执行以下回调
 - (void)banner_didAdExposuredWithAdapter:(id<AdvanceCommonBannerAdapter>)adapter {
+    AdvSupplier *supplier = [self getSupplierWithAdapter:adapter];
     if (!self.isImpressionCounted) {
         self.isImpressionCounted = YES;
         [[AdvFrequencyControlManager sharedInstance] recordValidImpressionForAdspotId:self.adspotid];
+        [[AdvFrequencyControlManager sharedInstance] recordValidImpressionForSupplier:supplier];
     }
-    AdvSupplier *supplier = [self getSupplierWithAdapter:adapter];
     AdvPolicyService *manager = self.manager;
     [manager reportAdDataWithEventType:AdvSupplierReportTKEventExposed supplier:supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(onBannerAdExposured:)]) {
@@ -216,11 +228,12 @@
 }
 
 - (void)banner_didAdClickedWithAdapter:(id<AdvanceCommonBannerAdapter>)adapter {
+    AdvSupplier *supplier = [self getSupplierWithAdapter:adapter];
     if (!self.isClickCounted) {
         self.isClickCounted = YES;
         [[AdvFrequencyControlManager sharedInstance] recordClickForAdspotId:self.adspotid];
+        [[AdvFrequencyControlManager sharedInstance] recordClickForSupplier:supplier];
     }
-    AdvSupplier *supplier = [self getSupplierWithAdapter:adapter];
     AdvPolicyService *manager = self.manager;
     [manager reportAdDataWithEventType:AdvSupplierReportTKEventClicked supplier:supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(onBannerAdClicked:)]) {

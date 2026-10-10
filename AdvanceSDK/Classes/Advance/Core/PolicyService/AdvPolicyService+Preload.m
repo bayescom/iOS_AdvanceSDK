@@ -5,6 +5,7 @@
 
 #import <objc/runtime.h>
 #import "AdvApiService.h"
+#import "AdvAdCacheManager.h"
 #import "AdvConfigCacheManager.h"
 #import "AdvError.h"
 #import "AdvFrequencyControlManager.h"
@@ -107,13 +108,13 @@ static void *AdvPolicyServicePreloadContextKey = &AdvPolicyServicePreloadContext
         [self.delegate policyServiceLoadSuccessWithModel:model];
     }
     
+    id<AdvPolicyServicePreloadDelegate> delegate = (id<AdvPolicyServicePreloadDelegate>)self.delegate;
     AdvSupplier *preloadSupplier = [model.suppliers adv_filter:^BOOL(AdvSupplier *supplier) {
         return [supplier.sdk_id isEqualToString:context.supplierSDKID] && supplier.enable_cache;
     }].firstObject;
     if (!preloadSupplier) {
         context.finished = YES;
         self.preloadContext = nil;
-        id<AdvPolicyServicePreloadDelegate> delegate = (id<AdvPolicyServicePreloadDelegate>)self.delegate;
         if ([delegate respondsToSelector:@selector(policyServicePreloadDidFailWithError:)]) {
             NSError *error = [AdvError errorWithCode:AdvErrorCode_NoneSupplier
                                              message:@"预加载策略中未找到已曝光且允许缓存的广告源"].toNSError;
@@ -137,7 +138,6 @@ static void *AdvPolicyServicePreloadContextKey = &AdvPolicyServicePreloadContext
         }
         if (error) {
             [self adv_finishPreloadForSupplier:preloadSupplier price:0 error:error];
-            id<AdvPolicyServicePreloadDelegate> delegate = (id<AdvPolicyServicePreloadDelegate>)self.delegate;
             if ([delegate respondsToSelector:@selector(policyServicePreloadDidFailWithError:)]) {
                 [delegate policyServicePreloadDidFailWithError:error];
             }
@@ -148,8 +148,23 @@ static void *AdvPolicyServicePreloadContextKey = &AdvPolicyServicePreloadContext
                                         supplier:preloadSupplier
                                    loadTimestamp:context.loadTimestamp
                                            error:nil];
-        if ([self.delegate respondsToSelector:@selector(policyServiceLoadAnySupplier:)]) {
-            [self.delegate policyServiceLoadAnySupplier:preloadSupplier];
+
+        AdvAdCacheModel *cachedAdModel = preloadSupplier.enable_cache
+            ? [[AdvAdCacheManager sharedInstance] adCacheModelFromCachedKey:preloadSupplier.sdk_id]
+            : nil;
+        NSError *frequencyError = [[AdvFrequencyControlManager sharedInstance]
+                                   consumePreloadRequestCountForSupplier:preloadSupplier
+                                   usingCachedAd:(cachedAdModel != nil)];
+        if (frequencyError) {
+            [self adv_finishPreloadForSupplier:preloadSupplier price:0 error:frequencyError];
+            if ([delegate respondsToSelector:@selector(policyServicePreloadDidFailWithError:)]) {
+                [delegate policyServicePreloadDidFailWithError:frequencyError];
+            }
+            return;
+        }
+
+        if ([self.delegate respondsToSelector:@selector(policyServiceLoadAnySupplier:cachedAdModel:)]) {
+            [self.delegate policyServiceLoadAnySupplier:preloadSupplier cachedAdModel:cachedAdModel];
         }
     }];
 }

@@ -12,6 +12,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @class AdvBidWinLossResult;
+@class AdvAdCacheModel;
 
 @protocol AdvPolicyServiceDelegate <NSObject>
 
@@ -27,9 +28,12 @@ NS_ASSUME_NONNULL_BEGIN
 /// @param suppliers 参加Bidding的渠道
 - (void)policyServiceStartBiddingWithSuppliers:(nullable NSArray<AdvSupplier *> *)suppliers;
 
-/// 加载某一个渠道对象
+/// 加载某一个渠道对象，并传入策略服务判定的有效缓存命中结果。
+/// 命中缓存时策略服务不消费渠道请求次数；未命中时按新请求消费。
 /// @param supplier 被加载的渠道
-- (void)policyServiceLoadAnySupplier:(nullable AdvSupplier *)supplier;
+/// @param cachedAdModel 有效缓存广告，未命中时为 nil
+- (void)policyServiceLoadAnySupplier:(nullable AdvSupplier *)supplier
+                       cachedAdModel:(nullable AdvAdCacheModel *)cachedAdModel;
 
 /// Bidding成功
 /// @param supplier 竞胜渠道

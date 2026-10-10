@@ -171,15 +171,16 @@
     self.adspotConfig = config.copy;
 }
 
-- (void)policyServiceLoadAnySupplier:(AdvSupplier *)supplier {
+- (void)policyServiceLoadAnySupplier:(AdvSupplier *)supplier
+                       cachedAdModel:(AdvAdCacheModel *)cachedAdModel {
     if (self.isFinished || ![supplier.sdk_id isEqualToString:self.supplierSDKID] || !supplier.enable_cache) {
         [self.policyService adv_cancelPreloadForSupplier:supplier];
         [self finish];
         return;
     }
     
-    // 策略请求期间，普通请求可能已经填充共享缓存；此时无需重复请求渠道广告，但策略请求已消耗频控名额。
-    if ([[AdvAdCacheManager sharedInstance] adCacheModelFromCachedKey:supplier.sdk_id]) {
+    // 策略请求期间普通请求可能已填充缓存；策略服务已据此跳过渠道请求次数，本任务无需重复请求。
+    if (cachedAdModel) {
         [self.policyService adv_cancelPreloadForSupplier:supplier];
         [self finish];
         return;
@@ -236,7 +237,7 @@
         [self finish];
         return;
     }
-    
+
     [self.adapter adapter_loadAdWithPlacementId:supplier.adspotid config:[self setupAdConfigWithSupplier:supplier]];
 }
 

@@ -8,8 +8,10 @@
 #import "AdvDeviceManager.h"
 #import "AdvYYCache.h"
 #import "AdvError.h"
+#import "AdvPolicyModel.h"
 
 static NSString * const AdvFrequencyControlRecordKey = @"AdvFrequencyControlRecordKey";
+static NSString * const AdvSupplierFrequencyControlRecordKey = @"AdvSupplierFrequencyControlRecordKey";
 
 @interface AdvFrequencyControlRecord : NSObject <NSCoding>
 
@@ -79,7 +81,8 @@ static NSString * const AdvFrequencyControlRecordKey = @"AdvFrequencyControlReco
 
     __block NSError *frequencyError = nil;
     dispatch_sync(self.transactionQueue, ^{
-        AdvFrequencyControlRecord *record = [self recordForAdspotId:adspotId];
+        NSString *key = [self recordKeyForAdspotId:adspotId];
+        AdvFrequencyControlRecord *record = [self recordForKey:key];
         AdvanceAdspotConfig *config = [self adspotConfigForAdspotId:adspotId];
 
         // 曝光、点击、请求次数和间隔在同一事务中校验，通过后再提交请求计数。
@@ -101,7 +104,7 @@ static NSString * const AdvFrequencyControlRecordKey = @"AdvFrequencyControlReco
 
         record.requestCount += 1;
         record.lastRequestTimestamp = now;
-        [self persistRecord:record adspotId:adspotId];
+        [self persistRecord:record forKey:key];
     });
     return frequencyError;
 }
@@ -113,7 +116,8 @@ static NSString * const AdvFrequencyControlRecordKey = @"AdvFrequencyControlReco
 
     __block NSError *frequencyError = nil;
     dispatch_sync(self.transactionQueue, ^{
-        AdvFrequencyControlRecord *record = [self recordForAdspotId:adspotId];
+        NSString *key = [self recordKeyForAdspotId:adspotId];
+        AdvFrequencyControlRecord *record = [self recordForKey:key];
         AdvanceAdspotConfig *config = [self adspotConfigForAdspotId:adspotId];
 
         if (config.req_limit > 0 && record.requestCount >= config.req_limit) {
@@ -123,7 +127,7 @@ static NSString * const AdvFrequencyControlRecordKey = @"AdvFrequencyControlReco
 
         // 预加载只占用每日请求次数，不更新时间间隔用的时间戳。
         record.requestCount += 1;
-        [self persistRecord:record adspotId:adspotId];
+        [self persistRecord:record forKey:key];
     });
     return frequencyError;
 }
@@ -135,11 +139,96 @@ static NSString * const AdvFrequencyControlRecordKey = @"AdvFrequencyControlReco
 
     __block NSError *frequencyError = nil;
     dispatch_sync(self.transactionQueue, ^{
-        AdvFrequencyControlRecord *record = [self recordForAdspotId:adspotId];
+        AdvFrequencyControlRecord *record = [self recordForKey:[self recordKeyForAdspotId:adspotId]];
         AdvanceAdspotConfig *config = [self adspotConfigForAdspotId:adspotId];
         frequencyError = [self impressionOrClickLimitErrorWithConfig:config record:record];
     });
     return frequencyError;
+}
+
+- (NSError *)consumeRequestQuotaForSupplier:(AdvSupplier *)supplier usingCachedAd:(BOOL)usingCachedAd {
+    if (!supplier.sdk_id.length) {
+        return nil;
+    }
+
+    __block NSError *frequencyError = nil;
+    dispatch_sync(self.transactionQueue, ^{
+        NSString *key = [self recordKeyForSupplier:supplier];
+        AdvFrequencyControlRecord *record = [self recordForKey:key];
+        AdvSupplierRequestLimit *config = supplier.request_limit;
+        frequencyError = [self supplierImpressionOrClickLimitErrorWithConfig:config record:record];
+        if (frequencyError || usingCachedAd) {
+            return;
+        }
+
+        if (config.device_daily_req_limit > 0 && record.requestCount >= config.device_daily_req_limit) {
+            frequencyError = [AdvError errorWithCode:AdvErrorCode_SupplierRequestDailyLimit].toNSError;
+        }
+
+        NSTimeInterval now = [NSDate date].timeIntervalSince1970 * 1000;
+        NSTimeInterval elapsed = now - record.lastRequestTimestamp;
+        if (!frequencyError && config.device_request_interval > 0 && record.lastRequestTimestamp > 0 &&
+            elapsed >= 0 && elapsed < config.device_request_interval) {
+            frequencyError = [AdvError errorWithCode:AdvErrorCode_SupplierRequestIntervalLimit].toNSError;
+        }
+
+        if (frequencyError) {
+            return;
+        }
+
+        record.requestCount += 1;
+        record.lastRequestTimestamp = now;
+        [self persistRecord:record forKey:key];
+    });
+    return frequencyError;
+}
+
+- (NSError *)consumePreloadRequestCountForSupplier:(AdvSupplier *)supplier usingCachedAd:(BOOL)usingCachedAd {
+    if (!supplier.sdk_id.length || usingCachedAd) {
+        return nil;
+    }
+
+    __block NSError *frequencyError = nil;
+    dispatch_sync(self.transactionQueue, ^{
+        NSString *key = [self recordKeyForSupplier:supplier];
+        AdvFrequencyControlRecord *record = [self recordForKey:key];
+        AdvSupplierRequestLimit *config = supplier.request_limit;
+
+        if (config.device_daily_req_limit > 0 && record.requestCount >= config.device_daily_req_limit) {
+            frequencyError = [AdvError errorWithCode:AdvErrorCode_SupplierRequestDailyLimit].toNSError;
+            return;
+        }
+
+        // 预加载只占用每日请求次数，不检查或更新时间间隔，也不校验曝光和点击上限。
+        record.requestCount += 1;
+        [self persistRecord:record forKey:key];
+    });
+    return frequencyError;
+}
+
+- (NSError *)canDisplayAdForSupplier:(AdvSupplier *)supplier {
+    if (!supplier.sdk_id.length) {
+        return nil;
+    }
+
+    __block NSError *frequencyError = nil;
+    dispatch_sync(self.transactionQueue, ^{
+        AdvFrequencyControlRecord *record = [self recordForKey:[self recordKeyForSupplier:supplier]];
+        frequencyError = [self supplierImpressionOrClickLimitErrorWithConfig:supplier.request_limit record:record];
+    });
+    return frequencyError;
+}
+
+- (void)recordValidImpressionForSupplier:(AdvSupplier *)supplier {
+    [self updateRecordForSupplier:supplier block:^(AdvFrequencyControlRecord *record) {
+        record.impressionCount += 1;
+    }];
+}
+
+- (void)recordClickForSupplier:(AdvSupplier *)supplier {
+    [self updateRecordForSupplier:supplier block:^(AdvFrequencyControlRecord *record) {
+        record.clickCount += 1;
+    }];
 }
 
 - (void)recordValidImpressionForAdspotId:(NSString *)adspotId {
@@ -160,9 +249,23 @@ static NSString * const AdvFrequencyControlRecordKey = @"AdvFrequencyControlReco
         return;
     }
     dispatch_sync(self.transactionQueue, ^{
-        AdvFrequencyControlRecord *record = [self recordForAdspotId:adspotId];
+        NSString *key = [self recordKeyForAdspotId:adspotId];
+        AdvFrequencyControlRecord *record = [self recordForKey:key];
         block(record);
-        [self persistRecord:record adspotId:adspotId];
+        [self persistRecord:record forKey:key];
+    });
+}
+
+- (void)updateRecordForSupplier:(AdvSupplier *)supplier
+                          block:(void (^)(AdvFrequencyControlRecord *record))block {
+    if (!supplier.sdk_id.length || !block) {
+        return;
+    }
+    dispatch_sync(self.transactionQueue, ^{
+        NSString *key = [self recordKeyForSupplier:supplier];
+        AdvFrequencyControlRecord *record = [self recordForKey:key];
+        block(record);
+        [self persistRecord:record forKey:key];
     });
 }
 
@@ -192,8 +295,18 @@ static NSString * const AdvFrequencyControlRecordKey = @"AdvFrequencyControlReco
     return nil;
 }
 
-- (AdvFrequencyControlRecord *)recordForAdspotId:(NSString *)adspotId {
-    NSString *key = [self recordKeyForAdspotId:adspotId];
+- (NSError *)supplierImpressionOrClickLimitErrorWithConfig:(AdvSupplierRequestLimit *)config
+                                                    record:(AdvFrequencyControlRecord *)record {
+    if (config.device_daily_imp_limit > 0 && record.impressionCount >= config.device_daily_imp_limit) {
+        return [AdvError errorWithCode:AdvErrorCode_SupplierImpressionDailyLimit].toNSError;
+    }
+    if (config.device_daily_click_limit > 0 && record.clickCount >= config.device_daily_click_limit) {
+        return [AdvError errorWithCode:AdvErrorCode_SupplierClickDailyLimit].toNSError;
+    }
+    return nil;
+}
+
+- (AdvFrequencyControlRecord *)recordForKey:(NSString *)key {
     AdvFrequencyControlRecord *record = (AdvFrequencyControlRecord *)[self.frequencyCache objectForKey:key];
     if (!record) {
         record = [[AdvFrequencyControlRecord alloc] init];
@@ -205,19 +318,26 @@ static NSString * const AdvFrequencyControlRecordKey = @"AdvFrequencyControlReco
         record.requestCount = 0;
         record.impressionCount = 0;
         record.clickCount = 0;
-        [self.frequencyCache setObject:record forKey:key];
+        [self persistRecord:record forKey:key];
     }
     return record;
 }
 
-- (void)persistRecord:(AdvFrequencyControlRecord *)record adspotId:(NSString *)adspotId {
-    [self.frequencyCache setObject:record forKey:[self recordKeyForAdspotId:adspotId]];
+- (void)persistRecord:(AdvFrequencyControlRecord *)record forKey:(NSString *)key {
+    [self.frequencyCache setObject:record forKey:key];
 }
 
 - (NSString *)recordKeyForAdspotId:(NSString *)adspotId {
     NSString *appId = [AdvDeviceManager sharedInstance].appId ?: @"";
     return [NSString stringWithFormat:@"%@:%lu:%@:%@", AdvFrequencyControlRecordKey,
             (unsigned long)appId.length, appId, adspotId];
+}
+
+- (NSString *)recordKeyForSupplier:(AdvSupplier *)supplier {
+    NSString *appId = [AdvDeviceManager sharedInstance].appId ?: @"";
+    NSString *sdkId = supplier.sdk_id ?: @"";
+    return [NSString stringWithFormat:@"%@:%lu:%@:%lu:%@", AdvSupplierFrequencyControlRecordKey,
+            (unsigned long)appId.length, appId, (unsigned long)sdkId.length, sdkId];
 }
 
 - (NSString *)currentDayIdentifier {

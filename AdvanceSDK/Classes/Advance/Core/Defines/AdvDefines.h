@@ -80,5 +80,13 @@ typedef NS_ENUM(NSUInteger, AdvErrorCode) {
     AdvErrorCode_ImpressionDailyLimit = 9503,
     /// 广告位达到日点击次数上限
     AdvErrorCode_ClickDailyLimit = 9504,
+    /// 渠道达到设备日请求次数上限
+    AdvErrorCode_SupplierRequestDailyLimit = 9505,
+    /// 渠道设备请求间隔未满足
+    AdvErrorCode_SupplierRequestIntervalLimit = 9506,
+    /// 渠道达到设备日有效曝光次数上限
+    AdvErrorCode_SupplierImpressionDailyLimit = 9507,
+    /// 渠道达到设备日点击次数上限
+    AdvErrorCode_SupplierClickDailyLimit = 9508,
     
 };

@@ -184,6 +184,10 @@
         
         // 初始化SDK
         [AdvSupplierLoader loadSupplier:supplier completion:^(NSError *error) {
+            // SDK 初始化可能晚于渠道超时回调；终态渠道不能再消费请求额度或启动广告加载。
+            if (supplier.loadAdState != AdvSupplierLoadAdReady) {
+                return;
+            }
             if (error) {
                 AdvLog(@"%@渠道SDK执行初始化失败:%@", supplier.name, error);
                 [self checkTargetWithResultfulSupplier:supplier state:AdvSupplierLoadAdFailed error:error];
@@ -191,9 +195,20 @@
             }
             AdvLog(@"%@渠道SDK执行初始化成功", supplier.name);
             [self reportAdDataWithEventType:AdvSupplierReportTKEventLoadEnd supplier:supplier error:nil];
-            
-            if ([self.delegate respondsToSelector:@selector(policyServiceLoadAnySupplier:)]) {
-                [self.delegate policyServiceLoadAnySupplier:supplier];
+
+            // 在每个渠道即将加载时统一解析缓存并消费渠道请求频控，避免各广告位重复实现。
+            AdvAdCacheModel *cachedAdModel = supplier.enable_cache
+                ? [[AdvAdCacheManager sharedInstance] adCacheModelFromCachedKey:supplier.sdk_id]
+                : nil;
+            NSError *frequencyError = [[AdvFrequencyControlManager sharedInstance]
+                                       consumeRequestQuotaForSupplier:supplier
+                                       usingCachedAd:(cachedAdModel != nil)];
+            if (frequencyError) {
+                [self checkTargetWithResultfulSupplier:supplier state:AdvSupplierLoadAdFailed error:frequencyError];
+                return;
+            }
+            if ([self.delegate respondsToSelector:@selector(policyServiceLoadAnySupplier:cachedAdModel:)]) {
+                [self.delegate policyServiceLoadAnySupplier:supplier cachedAdModel:cachedAdModel];
             }
         }];
     }];

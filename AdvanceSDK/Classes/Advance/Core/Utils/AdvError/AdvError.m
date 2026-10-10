@@ -54,6 +54,10 @@
         @(AdvErrorCode_RequestIntervalLimit) : @"广告位请求间隔未满足",
         @(AdvErrorCode_ImpressionDailyLimit) : @"广告位达到日有效曝光次数上限",
         @(AdvErrorCode_ClickDailyLimit) : @"广告位达到日点击次数上限",
+        @(AdvErrorCode_SupplierRequestDailyLimit) : @"渠道达到设备日请求次数上限",
+        @(AdvErrorCode_SupplierRequestIntervalLimit) : @"渠道设备请求间隔未满足",
+        @(AdvErrorCode_SupplierImpressionDailyLimit) : @"渠道达到设备日有效曝光次数上限",
+        @(AdvErrorCode_SupplierClickDailyLimit) : @"渠道达到设备日点击次数上限",
     };
     return [codeMap objectForKey:@(code)];
 }
