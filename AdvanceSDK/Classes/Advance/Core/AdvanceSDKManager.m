@@ -12,6 +12,7 @@
 #import "AdvAdapterRepository.h"
 #import "AdvError.h"
 #import "AdvConfigCacheManager.h"
+#import "AdvTKReportManager.h"
 
 @implementation AdvanceSDKManager
 
@@ -23,6 +24,8 @@
     }
 
     [AdvDeviceManager sharedInstance].appId = appId;
+    // 离线初始化或策略请求失败时，也要恢复已有 TK；联网后由队列继续补发。
+    [[AdvTKReportManager sharedInstance] start];
     [[AdvAdapterRepository sharedInstance] loadBuiltInAdapterDescriptors];
     
     [AdvanceSDKManager cacheSDKCommonConfig];

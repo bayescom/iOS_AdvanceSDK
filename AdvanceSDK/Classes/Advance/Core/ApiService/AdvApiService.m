@@ -12,6 +12,7 @@
 #import "AdvError.h"
 #import "AdvConstantHeader.h"
 #import "AdvParameterHandler.h"
+#import "AdvTKReportManager.h"
 
 @implementation AdvApiService
 
@@ -71,51 +72,52 @@
                     loadTimestamp:(NSTimeInterval)loadTimestamp
                             error:(nullable NSError *)error {
     if (!supplier) { return; }
-    NSArray<NSString *> *reportUrls = nil;
-    /// 按照类型判断上报地址
-    if (eventType == AdvSupplierReportTKEventLoaded) { // 启动SDK上报
-        if (supplier.isLoadedRepo) { return; }
-        supplier.isLoadedRepo = YES;
-        reportUrls = supplier.loadedtk;
-    } else if (eventType == AdvSupplierReportTKEventLoadEnd) { // 渠道SDK初始化成功上报
-        if (supplier.isLoadEndRepo) { return; }
-        supplier.isLoadEndRepo = YES;
-        reportUrls = supplier.loadendtk;
-    } else if (eventType == AdvSupplierReportTKEventSucceed) { // 获取广告成功上报
-        if (supplier.isSucceedRepo) { return; }
-        supplier.isSucceedRepo = YES;
-        reportUrls = supplier.succeedtk;
-    } else if (eventType == AdvSupplierReportTKEventFailed) { // 获取广告失败上报
-        if (supplier.isFailedRepo) { return; }
-        supplier.isFailedRepo = YES;
-        reportUrls = supplier.failedtk;
-    } else if (eventType == AdvSupplierReportTKEventExposed) { // 广告曝光成功上报
-        if (supplier.isExposuredRepo) { return; }
-        supplier.isExposuredRepo = YES;
-        reportUrls = supplier.imptk;
-    } else if (eventType == AdvSupplierReportTKEventClicked) { // 点击上报
-        if (supplier.isClickedRepo) { return; }
-        supplier.isClickedRepo = YES;
-        reportUrls = supplier.clicktk;
-    } else if (eventType == AdvSupplierReportTKEventBidWin) { // 广告竞胜上报
-        if (supplier.isBidWinRepo) { return; }
-        supplier.isBidWinRepo = YES;
-        reportUrls = supplier.wintk;
+    @synchronized (supplier) {
+        NSArray<NSString *> *reportUrls = nil;
+        /// 按照类型判断上报地址
+        if (eventType == AdvSupplierReportTKEventLoaded) { // 启动SDK上报
+            if (supplier.isLoadedRepo) { return; }
+            supplier.isLoadedRepo = YES;
+            reportUrls = supplier.loadedtk;
+        } else if (eventType == AdvSupplierReportTKEventLoadEnd) { // 渠道SDK初始化成功上报
+            if (supplier.isLoadEndRepo) { return; }
+            supplier.isLoadEndRepo = YES;
+            reportUrls = supplier.loadendtk;
+        } else if (eventType == AdvSupplierReportTKEventSucceed) { // 获取广告成功上报
+            if (supplier.isSucceedRepo) { return; }
+            supplier.isSucceedRepo = YES;
+            reportUrls = supplier.succeedtk;
+        } else if (eventType == AdvSupplierReportTKEventFailed) { // 获取广告失败上报
+            if (supplier.isFailedRepo) { return; }
+            supplier.isFailedRepo = YES;
+            reportUrls = supplier.failedtk;
+        } else if (eventType == AdvSupplierReportTKEventExposed) { // 广告曝光成功上报
+            if (supplier.isExposuredRepo) { return; }
+            supplier.isExposuredRepo = YES;
+            reportUrls = supplier.imptk;
+        } else if (eventType == AdvSupplierReportTKEventClicked) { // 点击上报
+            if (supplier.isClickedRepo) { return; }
+            supplier.isClickedRepo = YES;
+            reportUrls = supplier.clicktk;
+        } else if (eventType == AdvSupplierReportTKEventBidWin) { // 广告竞胜上报
+            if (supplier.isBidWinRepo) { return; }
+            supplier.isBidWinRepo = YES;
+            reportUrls = supplier.wintk;
+        }
+
+        if (reportUrls.count == 0) {return;}
+
+        NSMutableArray<NSString *> *resolvedURLs = [NSMutableArray array];
+        for (NSString *url in reportUrls) {
+            if (![url isKindOfClass:NSString.class]) continue;
+            NSString *reportUrl = [AdvParameterHandler joinParametersWithUrl:url eventType:eventType price:supplier.sdk_price loadTimestamp:loadTimestamp cachedReqId:supplier.cachedReqId error:error];
+            if (reportUrl.length) [resolvedURLs addObject:reportUrl];
+        }
+        // 参数只在事件发生时替换一次；Repo 标记表示已交给队列，网络失败由队列独立补发。
+        [[AdvTKReportManager sharedInstance] enqueueURLs:resolvedURLs
+                                                  appId:[AdvDeviceManager sharedInstance].appId
+                                              eventType:eventType];
     }
-    
-    if (reportUrls.count == 0) {return;}
-    
-    [reportUrls enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        NSString *reportUrl = [AdvParameterHandler joinParametersWithUrl:obj eventType:eventType price:supplier.sdk_price loadTimestamp:loadTimestamp cachedReqId:supplier.cachedReqId error:error];
-        
-        [AdvNetwork sendRequestByUrlString:reportUrl method:RequestMethod_GET parameters:nil headers:nil timeout:5.f success:^(id  _Nonnull response) {
-            NSString *result = [[NSString alloc] initWithData:response encoding:NSUTF8StringEncoding];
-            AdvLog(@"AdvTK上报成功：%@-%@", result, reportUrl);
-        } failure:^(NSError * _Nonnull error) {
-            AdvLog(@"AdvTK上报失败：%@-%@", error, reportUrl);
-        }];
-    }];
-    
 }
 
 + (void)verifyServerSideRewardedURL:(NSString *)URLString

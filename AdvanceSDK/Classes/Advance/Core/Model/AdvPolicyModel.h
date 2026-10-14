@@ -74,6 +74,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) BOOL isHit; // 是否已经命中过
 @property (nonatomic, copy) NSString *cachedReqId; // 缓存广告的reqId，用于tk上报
 
+/// Repo 标记只用于单次事件入队去重，不代表服务端已经确认；补发由 TK 队列负责。
 @property (nonatomic, assign) BOOL isLoadedRepo; // 是否已触发渠道SDK启动上报
 @property (nonatomic, assign) BOOL isLoadEndRepo; // 是否已触发渠道SDK初始化成功上报
 @property (nonatomic, assign) BOOL isSucceedRepo; // 是否已触发广告加载成功上报
