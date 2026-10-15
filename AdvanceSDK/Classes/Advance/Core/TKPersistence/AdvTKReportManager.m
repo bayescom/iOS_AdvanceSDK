@@ -72,8 +72,8 @@ static const NSTimeInterval AdvTKExpireMilliseconds = 86400000;
 
 // 存储、网络和时钟可独立替换，便于验证断网、重启、磁盘错误和退避行为。
 - (instancetype)initWithStore:(AdvTKEventStore *)store
-                     transport:(id<AdvTKTransporting>)transport
-                         clock:(NSTimeInterval (^)(void))clock {
+                    transport:(id<AdvTKTransporting>)transport
+                        clock:(NSTimeInterval (^)(void))clock {
     if (self = [super init]) {
         _store = store;
         _transport = transport;
@@ -279,7 +279,7 @@ static const NSTimeInterval AdvTKExpireMilliseconds = 86400000;
 }
 
 - (void)handleResponse:(NSHTTPURLResponse *)response error:(NSError *)error
-                event:(AdvTKEvent *)event attempt:(AdvTKAttempt *)attempt {
+                 event:(AdvTKEvent *)event attempt:(AdvTKAttempt *)attempt {
     attempt.task = nil;
     if (self.inFlight[event.taskId] != attempt) return;
     [self.inFlight removeObjectForKey:event.taskId];
@@ -327,7 +327,7 @@ static const NSTimeInterval AdvTKExpireMilliseconds = 86400000;
     self.inFlight[event.taskId] = attempt;
     __weak typeof(self) weakSelf = self;
     attempt.task = [self.transport sendURL:event.url timeout:AdvTKRequestTimeout
-                               completion:^(NSHTTPURLResponse *response, NSData *data, NSError *error) {
+                                completion:^(NSHTTPURLResponse *response, NSData *data, NSError *error) {
         AdvTKReportManager *manager = weakSelf;
         if (!manager) return;
         dispatch_async(manager.queue, ^{ [manager handleResponse:response error:error event:sending attempt:attempt]; });

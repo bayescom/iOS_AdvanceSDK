@@ -104,9 +104,9 @@
             supplier.isBidWinRepo = YES;
             reportUrls = supplier.wintk;
         }
-
+        
         if (reportUrls.count == 0) {return;}
-
+        
         NSMutableArray<NSString *> *resolvedURLs = [NSMutableArray array];
         for (NSString *url in reportUrls) {
             if (![url isKindOfClass:NSString.class]) continue;
@@ -115,8 +115,8 @@
         }
         // 参数只在事件发生时替换一次；Repo 标记表示已交给队列，网络失败由队列独立补发。
         [[AdvTKReportManager sharedInstance] enqueueURLs:resolvedURLs
-                                                  appId:[AdvDeviceManager sharedInstance].appId
-                                              eventType:eventType];
+                                                   appId:[AdvDeviceManager sharedInstance].appId
+                                               eventType:eventType];
     }
 }
 
