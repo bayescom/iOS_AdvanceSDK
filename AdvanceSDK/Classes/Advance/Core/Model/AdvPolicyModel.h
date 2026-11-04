@@ -27,7 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSMutableArray<AdvSupplier *> *suppliers;
 @property (nonatomic, copy) NSString *msg;
 @property (nonatomic, assign) NSInteger code;
-@property (nonatomic, copy) NSString *reqid;
+//@property (nonatomic, copy) NSString *reqid;
 
 /// 【自定义字段】本地策略缓存写入时间，单位秒；仅用于缓存有效期判断。
 @property (nonatomic, assign) NSTimeInterval strategyCachedTimestamp;

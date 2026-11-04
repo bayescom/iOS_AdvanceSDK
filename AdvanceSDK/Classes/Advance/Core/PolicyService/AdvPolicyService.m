@@ -25,6 +25,8 @@
 @property (nonatomic, strong) AdvPolicyModel *model;
 /// 发起请求时间戳
 @property (nonatomic, assign) NSTimeInterval loadTimestamp;
+/// 本次广告请求 ID，不从缓存策略模型读取。
+@property (nonatomic, copy) NSString *currentRequestId;
 /// 各渠道的错误回调信息
 @property (nonatomic, strong) NSMutableDictionary *errorInfo;
 
@@ -66,7 +68,7 @@
         });
         return;
     }
-
+    
     // 所有广告类型统一检查；频控受限时，缓存策略和实时策略都不加载。
     NSError *frequencyError = [[AdvFrequencyControlManager sharedInstance] consumeRequestQuotaForAdspotId:adspotId];
     if (frequencyError) {
@@ -75,10 +77,11 @@
         }
         return;
     }
-
+    
+    self.currentRequestId = reqId;
     NSDictionary *parameter = [AdvParameterHandler requestParameterWithSpotId:adspotId reqId:reqId extra:extra];
     self.loadTimestamp = [[NSDate date] timeIntervalSince1970] * 1000;
-
+    
     AdvPolicyModel *cachedModel = [[AdvConfigCacheManager sharedInstance] policyModelForAdspotId:adspotId];
     BOOL usesCachedPolicy = cachedModel != nil;
     if (usesCachedPolicy) {
@@ -93,12 +96,12 @@
             }
             return;
         }
-
+        
         // 仅在服务端允许缓存时，将最新策略同步写入磁盘。
         if (model.setting.enable_strategy_cache == 1) {
             [[AdvConfigCacheManager sharedInstance] cachePolicyModel:model forAdspotId:adspotId];
         }
-
+        
         if (!usesCachedPolicy) {
             [self startPolicyWithModel:model];
         }
@@ -195,11 +198,11 @@
             }
             AdvLog(@"%@渠道SDK执行初始化成功", supplier.name);
             [self reportAdDataWithEventType:AdvSupplierReportTKEventLoadEnd supplier:supplier error:nil];
-
+            
             // 在每个渠道即将加载时统一解析缓存并消费渠道请求频控，避免各广告位重复实现。
             AdvAdCacheModel *cachedAdModel = supplier.enable_cache
-                ? [[AdvAdCacheManager sharedInstance] adCacheModelFromCachedKey:supplier.sdk_id]
-                : nil;
+            ? [[AdvAdCacheManager sharedInstance] adCacheModelFromCachedKey:supplier.sdk_id]
+            : nil;
             NSError *frequencyError = [[AdvFrequencyControlManager sharedInstance]
                                        consumeRequestQuotaForSupplier:supplier
                                        usingCachedAd:(cachedAdModel != nil)];
@@ -435,7 +438,7 @@
             @"extra": [NSString adv_validString:rewardVideoModel.extra],
             @"reward_amount": @(rewardAmount),
             @"reward_name": [NSString adv_validString:rewardName],
-            @"trans_id": self.model.reqid,
+            @"trans_id": [NSString adv_validString:self.currentRequestId],
             @"placement_id": [NSString adv_validString:placementId],
             @"adn_channel_id": [NSString adv_validString:supplier.identifier],
             @"adn_adspot_id": [NSString adv_validString:supplier.adspotid],
@@ -452,6 +455,34 @@
     } else { // 客户端回调
         completion(rewardInfo, nil);
     }
+}
+
+#pragma mark: - material inspection
+- (void)reportMaterialInspectionWithPlacementId:(NSString *)placementId
+                                       supplier:(AdvSupplier *)supplier
+                                       sampleId:(NSString *)sampleId
+                                      imageUrls:(NSArray *)imageUrls
+                                   exposureTime:(long)exposureTime
+                                     completion:(void(^)(NSError *error))completion {
+    
+    NSDictionary *param = @{
+        @"appid": [NSString adv_validString:[AdvDeviceManager sharedInstance].appId],
+        @"sdk_version": AdvanceSDKVersion,
+        @"placement_id": [NSString adv_validString:placementId],
+        @"adn_channel_id": [NSString adv_validString:supplier.identifier],
+        @"adn_source_id": [NSString adv_validString:supplier.sdk_id],
+        @"adn_adspot_id": [NSString adv_validString:supplier.adspotid],
+        @"request_id": [NSString adv_validString:self.currentRequestId],
+        @"cached_reqid": supplier.cachedReqId.length ? supplier.cachedReqId : @"",
+        @"sample_id": [NSString adv_validString:sampleId],
+        @"exposure_timestamp": @(exposureTime),
+        @"image_urls": imageUrls
+    };
+    [AdvApiService reportMaterialInspectionWithParameters:param completion:^(NSError * _Nonnull error) {
+        if (completion) {
+            completion(error);
+        }
+    }];
 }
 
 - (void)dealloc {

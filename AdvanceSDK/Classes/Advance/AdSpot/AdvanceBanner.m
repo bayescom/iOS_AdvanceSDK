@@ -14,8 +14,12 @@
 #import "AdvAdCacheManager.h"
 #import "AdvError.h"
 #import "AdvFrequencyControlManager.h"
+#import "AdvMaterialCaptureManager.h"
 
 @interface AdvanceBanner () <AdvPolicyServiceDelegate, AdvanceCommonBannerAdapterBridge>
+
+@property (nonatomic, weak) UIView *materialCaptureView;
+@property (nonatomic, strong) AdvMaterialCaptureManager *materialCaptureManager;
 
 @end
 
@@ -170,7 +174,9 @@
         [self scheduleAutoLoadIfNeededWithSupplier:targetSupplier];
     }
     if ([(id<AdvanceCommonBannerAdapter>)self.targetAdapter respondsToSelector:@selector(adapter_bannerView)]) {
-        return [self.targetAdapter adapter_bannerView];
+        UIView *view = [self.targetAdapter adapter_bannerView];
+        self.materialCaptureView = view;
+        return view;
     }
     return nil;
 }
@@ -204,12 +210,41 @@
 /// 竞胜的渠道广告执行以下回调
 - (void)banner_didAdExposuredWithAdapter:(id<AdvanceCommonBannerAdapter>)adapter {
     AdvSupplier *supplier = [self getSupplierWithAdapter:adapter];
+    AdvPolicyService *manager = self.manager;
     if (!self.isImpressionCounted) {
+        long exposureTime = (long)([[NSDate date] timeIntervalSince1970] * 1000);
         self.isImpressionCounted = YES;
         [[AdvFrequencyControlManager sharedInstance] recordValidImpressionForAdspotId:self.adspotid];
         [[AdvFrequencyControlManager sharedInstance] recordValidImpressionForSupplier:supplier];
+        // 获取视图时可能同步触发曝光，延后读取已返回的视图。
+        __weak typeof(self) weakSelf = self;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            __strong typeof(weakSelf) strongSelf = weakSelf;
+            if (!strongSelf || strongSelf.targetAdapter != adapter) {
+                return;
+            }
+            UIView *view = strongSelf.materialCaptureView;
+            strongSelf.materialCaptureManager = [AdvMaterialCaptureManager new];
+            [strongSelf.materialCaptureManager startCaptureIfNeededInView:view
+                                                     adnSourceId:supplier.sdk_id
+                                                      completion:^(AdvMaterialCaptureResult *result) {
+                if (result.status != AdvMaterialCaptureStatusUploaded) {
+                    AdvLog(@"Banner 素材巡检未上报：%@", result.reason);
+                    return;
+                }
+                [manager reportMaterialInspectionWithPlacementId:self.adspotid
+                                                         supplier:supplier
+                                                         sampleId:result.sampleId
+                                                        imageUrls:result.urls
+                                                     exposureTime:exposureTime
+                                                       completion:^(NSError *error) {
+                    if (error) {
+                        AdvLog(@"Banner 素材巡检上报失败：%@", error);
+                    }
+                }];
+            }];
+        });
     }
-    AdvPolicyService *manager = self.manager;
     [manager reportAdDataWithEventType:AdvSupplierReportTKEventExposed supplier:supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(onBannerAdExposured:)]) {
         [self.delegate onBannerAdExposured:self];
@@ -242,6 +277,8 @@
 }
 
 - (void)banner_didAdClosedWithAdapter:(id<AdvanceCommonBannerAdapter>)adapter {
+    [self.materialCaptureManager finishCapture];
+    self.materialCaptureView = nil;
     if ([self.delegate respondsToSelector:@selector(onBannerAdClosed:)]) {
         [self.delegate onBannerAdClosed:self];
     }

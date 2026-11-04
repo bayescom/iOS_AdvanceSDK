@@ -14,6 +14,7 @@
 #import "AdvError.h"
 #import "AdvFrequencyControlManager.h"
 #import "AdvRenderFeedAdWrapper.h"
+#import "AdvMaterialCaptureManager.h"
 
 @interface AdvRenderFeedAdView ()
 
@@ -30,6 +31,7 @@
 @interface AdvanceRenderFeed () <AdvPolicyServiceDelegate, AdvanceCommonRenderFeedAdapterBridge>
 
 @property (nonatomic, strong) AdvRenderFeedAdView *feedAdView;
+@property (nonatomic, strong) AdvMaterialCaptureManager *materialCaptureManager;
 
 @end
 
@@ -176,12 +178,32 @@
 /// 竞胜的渠道广告执行以下回调
 - (void)renderFeed_didAdExposuredWithAdapter:(id<AdvanceCommonRenderFeedAdapter>)adapter {
     AdvSupplier *supplier = [self getSupplierWithAdapter:adapter];
+    AdvPolicyService *manager = self.manager;
     if (!self.isImpressionCounted) {
+        long exposureTime = (long)([[NSDate date] timeIntervalSince1970] * 1000);
         self.isImpressionCounted = YES;
         [[AdvFrequencyControlManager sharedInstance] recordValidImpressionForAdspotId:self.adspotid];
         [[AdvFrequencyControlManager sharedInstance] recordValidImpressionForSupplier:supplier];
+        self.materialCaptureManager = [AdvMaterialCaptureManager new];
+        [self.materialCaptureManager startCaptureIfNeededInView:self.feedAdView
+                                                    adnSourceId:supplier.sdk_id
+                                                     completion:^(AdvMaterialCaptureResult *result) {
+            if (result.status != AdvMaterialCaptureStatusUploaded) {
+                AdvLog(@"自渲染信息流素材巡检未上报：%@", result.reason);
+                return;
+            }
+            [manager reportMaterialInspectionWithPlacementId:self.adspotid
+                                                    supplier:supplier
+                                                    sampleId:result.sampleId
+                                                   imageUrls:result.urls
+                                                exposureTime:exposureTime
+                                                  completion:^(NSError *error) {
+                if (error) {
+                    AdvLog(@"自渲染信息流素材巡检上报失败：%@", error);
+                }
+            }];
+        }];
     }
-    AdvPolicyService *manager = self.manager;
     [manager reportAdDataWithEventType:AdvSupplierReportTKEventExposed supplier:supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(onRenderFeedAdViewExposured:)]) {
         [self.delegate onRenderFeedAdViewExposured:self.feedAdView];

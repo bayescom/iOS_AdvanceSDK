@@ -45,7 +45,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// @param supplier 参竞的渠道
 /// @param bidResult 竞价结果
 - (void)policyServiceBidFailedWithBiddingSupplier:(AdvSupplier *)supplier
-                                       bidResult:(AdvBidWinLossResult *)bidResult;
+                                        bidResult:(AdvBidWinLossResult *)bidResult;
 
 /// 所有Bidding渠道返回广告失败
 /// @param error 错误信息
@@ -99,6 +99,14 @@ NS_ASSUME_NONNULL_BEGIN
                  supplier:(AdvSupplier *)supplier
               placementId:(NSString *)placementId
                completion:(void(^)(AdvRewardCallbackInfo *rewardInfo, NSError *error))completion;
+
+/// 素材巡检信息上报
+- (void)reportMaterialInspectionWithPlacementId:(NSString *)placementId
+                                       supplier:(AdvSupplier *)supplier
+                                       sampleId:(NSString *)sampleId
+                                      imageUrls:(NSArray *)imageUrls
+                                   exposureTime:(long)exposureTime
+                                     completion:(void(^)(NSError *error))completion;
 
 @end
 

@@ -10,6 +10,7 @@
 #import "AdvPolicyModel.h"
 #import "AdvCustomAdnModel.h"
 #import "AdvanceSDKConfig.h"
+#import "AdvImageUploadResult.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -37,6 +38,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// 获取SDK通用配置信息
 + (void)getSDKCommonConfigWithCompletion:(void(^)(AdvanceSDKConfig *config, NSError *error))completion;
+
+/// 上传素材图片
++ (void)uploadImageFiles:(NSArray<AdvNetworkImageFile *> *)imageFiles
+              completion:(void(^)(AdvImageUploadResult * _Nullable result, NSError * _Nullable error))completion;
+
+/// 素材巡检上报
++ (void)reportMaterialInspectionWithParameters:(nullable NSDictionary *)parameters
+                                    completion:(void(^)(NSError *error))completion;
+
 
 @end
 

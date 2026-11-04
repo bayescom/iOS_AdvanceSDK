@@ -7,8 +7,12 @@
 #import "AdvAdCacheManager.h"
 #import "AdvError.h"
 #import "AdvFrequencyControlManager.h"
+#import "AdvMaterialCaptureManager.h"
 
 @interface AdvanceSplash () <AdvPolicyServiceDelegate, AdvanceCommonSplashAdapterBridge>
+
+@property (nonatomic, weak) UIWindow *materialCaptureWindow;
+@property (nonatomic, strong) AdvMaterialCaptureManager *materialCaptureManager;
 
 @end
 
@@ -136,7 +140,7 @@
             [self splash_failedToShowAdWithAdapter:self.targetAdapter error:supplierFrequencyError];
             return;
         }
-
+        
         /// 调用展示即可删除缓存，不必等曝光成功后删除，假设展示失败该缓存下次调用展示依旧会失败，没有留下的必要。
         [[AdvAdCacheManager sharedInstance] removeAdCacheModelFromCachedKey:targetSupplier.sdk_id
                                                             matchingAdapter:self.targetAdapter];
@@ -152,6 +156,7 @@
     if (!self.viewController) {
         self.viewController = window.rootViewController;
     }
+    self.materialCaptureWindow = window;
     [self.targetAdapter adapter_showAdInWindow:window];
 }
 
@@ -202,12 +207,32 @@
 /// 竞胜的渠道广告执行以下回调
 - (void)splash_didAdExposuredWithAdapter:(id<AdvanceCommonSplashAdapter>)adapter {
     AdvSupplier *supplier = [self getSupplierWithAdapter:adapter];
+    AdvPolicyService *manager = self.manager;
     if (!self.isImpressionCounted) {
+        long exposureTime = (long)([[NSDate date] timeIntervalSince1970] * 1000);
         self.isImpressionCounted = YES;
         [[AdvFrequencyControlManager sharedInstance] recordValidImpressionForAdspotId:self.adspotid];
         [[AdvFrequencyControlManager sharedInstance] recordValidImpressionForSupplier:supplier];
+        self.materialCaptureManager = [AdvMaterialCaptureManager new];
+        [self.materialCaptureManager startCaptureIfNeededInView:self.materialCaptureWindow
+                                                    adnSourceId:supplier.sdk_id
+                                                     completion:^(AdvMaterialCaptureResult *result) {
+            if (result.status != AdvMaterialCaptureStatusUploaded) {
+                AdvLog(@"开屏素材巡检未上报：%@", result.reason);
+                return;
+            }
+            [manager reportMaterialInspectionWithPlacementId:self.adspotid
+                                                    supplier:supplier
+                                                    sampleId:result.sampleId
+                                                   imageUrls:result.urls
+                                                exposureTime:exposureTime
+                                                  completion:^(NSError *error) {
+                if (error) {
+                    AdvLog(@"开屏素材巡检上报失败：%@", error);
+                }
+            }];
+        }];
     }
-    AdvPolicyService *manager = self.manager;
     [manager reportAdDataWithEventType:AdvSupplierReportTKEventExposed supplier:supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(onSplashAdExposured:)]) {
         [self.delegate onSplashAdExposured:self];
@@ -240,6 +265,7 @@
 }
 
 - (void)splash_didAdClosedWithAdapter:(id<AdvanceCommonSplashAdapter>)adapter {
+    [self.materialCaptureManager finishCapture];
     if ([self.delegate respondsToSelector:@selector(onSplashAdClosed:)]) {
         [self.delegate onSplashAdClosed:self];
     }

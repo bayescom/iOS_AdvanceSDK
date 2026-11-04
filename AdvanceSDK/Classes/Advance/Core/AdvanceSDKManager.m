@@ -33,7 +33,7 @@
     AdvCustomAdnListInfo *cacheAdnInfo = [[AdvCustomAdnCacheManager sharedInstance] customAdnlistInfo];
     if (cacheAdnInfo) {
         [[AdvAdapterRepository sharedInstance] syncCustomAdaptersWithAdnList:cacheAdnInfo.custom_adn_list];
-        // 已有当前AppId的缓存，可以立即请求广告；更新操作不影响本次初始化结果。
+        // 已有当前AppId下自定义Adn缓存，可以立即请求广告；更新操作不影响本次初始化结果。
         completion(nil);
         [self updateCustomAdnListInfoWithCacheInfo:cacheAdnInfo];
         return;

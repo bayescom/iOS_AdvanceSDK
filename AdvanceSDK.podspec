@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
     
     s.name             = 'AdvanceSDK'
-    s.version          = '5.6.2'
+    s.version          = '5.6.3'
     s.license          = { :type => 'MIT', :file => 'LICENSE' }
     s.summary          = 'bayescom iOS AdvanceSDK'
     s.description      = <<-DESC
@@ -35,7 +35,7 @@ Pod::Spec.new do |s|
     
     s.subspec 'Advance' do |adv|
         adv.source_files = 'AdvanceSDK/Classes/Advance/**/*.{h,m}'
-        adv.frameworks = 'UIKit', 'Foundation', 'AdSupport'
+        adv.frameworks = 'UIKit', 'Foundation', 'AdSupport', 'AVFoundation'
     end
     
     s.subspec 'MercuryAdapter' do |mer|

@@ -14,9 +14,12 @@
 #import "AdvAdCacheManager.h"
 #import "AdvError.h"
 #import "AdvFrequencyControlManager.h"
+#import "AdvMaterialCaptureManager.h"
 
 @interface AdvanceRewardVideo () <AdvPolicyServiceDelegate, AdvanceCommonRewardVideoAdapterBridge>
 @property (nonatomic, strong)ServerReward *serverReward;
+@property (nonatomic, weak) UIWindow *materialCaptureWindow;
+@property (nonatomic, strong) AdvMaterialCaptureManager *materialCaptureManager;
 
 @end
 
@@ -137,7 +140,7 @@
         [self rewardVideo_failedToShowAdWithAdapter:self.targetAdapter error:frequencyError];
         return;
     }
-
+    
     if (self.targetAdapter) {
         /// 渠道曝光和点击频控校验
         AdvSupplier *targetSupplier = [self getSupplierWithAdapter:self.targetAdapter];
@@ -146,7 +149,7 @@
             [self rewardVideo_failedToShowAdWithAdapter:self.targetAdapter error:supplierFrequencyError];
             return;
         }
-
+        
         /// 调用展示即可删除缓存，不必等曝光成功后删除，假设展示失败该缓存下次调用展示依旧会失败，没有留下的必要。
         [[AdvAdCacheManager sharedInstance] removeAdCacheModelFromCachedKey:targetSupplier.sdk_id
                                                             matchingAdapter:self.targetAdapter];
@@ -156,6 +159,7 @@
     if (![self isAdValid]) {
         return;
     }
+    self.materialCaptureWindow = viewController.view.window ?: [UIWindow adv_getCurrentWindow];
     [self.targetAdapter adapter_showAdFromRootViewController:viewController];
 }
 
@@ -207,12 +211,33 @@
 /// 竞胜的渠道广告执行以下回调
 - (void)rewardVideo_didAdExposuredWithAdapter:(id<AdvanceCommonRewardVideoAdapter>)adapter {
     AdvSupplier *supplier = [self getSupplierWithAdapter:adapter];
+    AdvPolicyService *manager = self.manager;
     if (!self.isImpressionCounted) {
+        long exposureTime = (long)([[NSDate date] timeIntervalSince1970] * 1000);
         self.isImpressionCounted = YES;
         [[AdvFrequencyControlManager sharedInstance] recordValidImpressionForAdspotId:self.adspotid];
         [[AdvFrequencyControlManager sharedInstance] recordValidImpressionForSupplier:supplier];
+        self.materialCaptureManager = [AdvMaterialCaptureManager new];
+        // 激励视频未统一提供素材视图，按展示窗口所在场景采集整屏，帧数由内部识别。
+        [self.materialCaptureManager startCaptureIfNeededInView:self.materialCaptureWindow
+                                                    adnSourceId:supplier.sdk_id
+                                                     completion:^(AdvMaterialCaptureResult *result) {
+            if (result.status != AdvMaterialCaptureStatusUploaded) {
+                AdvLog(@"激励视频素材巡检未上报：%@", result.reason);
+                return;
+            }
+            [manager reportMaterialInspectionWithPlacementId:self.adspotid
+                                                    supplier:supplier
+                                                    sampleId:result.sampleId
+                                                   imageUrls:result.urls
+                                                exposureTime:exposureTime
+                                                  completion:^(NSError *error) {
+                if (error) {
+                    AdvLog(@"激励视频素材巡检上报失败：%@", error);
+                }
+            }];
+        }];
     }
-    AdvPolicyService *manager = self.manager;
     [manager reportAdDataWithEventType:AdvSupplierReportTKEventExposed supplier:supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(onRewardVideoAdExposured:)]) {
         [self.delegate onRewardVideoAdExposured:self];
@@ -245,6 +270,7 @@
 }
 
 - (void)rewardVideo_didAdClosedWithAdapter:(id<AdvanceCommonRewardVideoAdapter>)adapter {
+    [self.materialCaptureManager finishCapture];
     if ([self.delegate respondsToSelector:@selector(onRewardVideoAdClosed:)]) {
         [self.delegate onRewardVideoAdClosed:self];
     }

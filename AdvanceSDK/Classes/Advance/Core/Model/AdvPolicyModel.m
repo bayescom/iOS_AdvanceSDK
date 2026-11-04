@@ -22,7 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
         self.suppliers = [[aDecoder decodeObjectForKey:@"suppliers"] mutableCopy];
         self.msg = [aDecoder decodeObjectForKey:@"msg"];
         self.code = [aDecoder decodeIntegerForKey:@"code"];
-        self.reqid = [aDecoder decodeObjectForKey:@"reqid"];
+        // self.reqid = [aDecoder decodeObjectForKey:@"reqid"];
         self.strategyCachedTimestamp = [aDecoder decodeDoubleForKey:@"strategyCachedTimestamp"];
     }
     return self;
@@ -35,7 +35,7 @@ NS_ASSUME_NONNULL_BEGIN
     [aCoder encodeObject:_suppliers forKey:@"suppliers"];
     [aCoder encodeObject:_msg forKey:@"msg"];
     [aCoder encodeInteger:_code forKey:@"code"];
-    [aCoder encodeObject:_reqid forKey:@"reqid"];
+    // [aCoder encodeObject:_reqid forKey:@"reqid"];
     [aCoder encodeDouble:_strategyCachedTimestamp forKey:@"strategyCachedTimestamp"];
 }
 

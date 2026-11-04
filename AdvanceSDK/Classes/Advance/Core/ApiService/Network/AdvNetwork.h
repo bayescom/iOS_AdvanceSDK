@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "AdvImageUploadResult.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -36,6 +37,14 @@ typedef void(^AdvNetWorkFailure)(NSError *error);
                        timeout:(NSTimeInterval)timeout
                        success:(AdvNetWorkSuccess)success
                        failure:(AdvNetWorkFailure)failure;
+
+/// 上传图片到素材服务。文件名须带扩展名；支持 jpg、jpeg、png、gif、webp、bmp。
+/// 单次 1～9 张，单张不超过 5 MB，完整 multipart 请求不超过 20 MB。
+/// 成功回调返回原始 JSON 数据，调用方需处理 SUCCESS、PARTIAL_SUCCESS 和 ALL_FAILED。
++ (void)uploadImageFiles:(NSArray<AdvNetworkImageFile *> *)imageFiles
+                 timeout:(NSTimeInterval)timeout
+                 success:(AdvNetWorkSuccess)success
+                 failure:(AdvNetWorkFailure)failure;
 
 @end
 

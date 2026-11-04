@@ -139,6 +139,27 @@
     }];
 }
 
++ (void)reportMaterialInspectionWithParameters:(nullable NSDictionary *)parameters
+                                    completion:(void(^)(NSError *error))completion {
+    
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:parameters options:NSJSONWritingPrettyPrinted error:nil];
+    NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    AdvLog(@"Request Parameters: %@", jsonString);
+    [AdvNetwork sendRequestByUrlString:[self genAdRequestLink:@"sdk_audit"] method:RequestMethod_POST parameters:parameters headers:nil timeout:3.f success:^(id  _Nonnull response) {
+        if(![response isKindOfClass:[NSData class]]) {
+            return completion([AdvError errorWithCode:AdvErrorCode_ResponseTypeError].toNSError);
+        }
+        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:response options:NSJSONReadingAllowFragments error:nil];
+        if ([dict[@"code"] intValue] == 1) { // 成功
+            completion(nil);
+        } else { // 失败
+            completion([AdvError errorWithCode:[dict[@"code"] intValue] message:dict[@"msg"]].toNSError);
+        }
+    } failure:^(NSError * _Nonnull error) {
+        completion(error);
+    }];
+}
+
 + (void)getCustomAdnlistInfoWithVersion:(nullable NSString *)version
                              completion:(void(^)(AdvCustomAdnListInfo * _Nullable info, NSError * _Nullable error))completion {
     
@@ -167,6 +188,19 @@
         AdvanceSDKConfig *config = [AdvanceSDKConfig adv_modelWithJSON:response];
         completion(config, nil);
     } failure:^(NSError * _Nonnull error) {
+        completion(nil, error);
+    }];
+}
+
++ (void)uploadImageFiles:(NSArray<AdvNetworkImageFile *> *)imageFiles
+              completion:(void(^)(AdvImageUploadResult * _Nullable result, NSError * _Nullable error))completion {
+    [AdvNetwork uploadImageFiles:imageFiles timeout:15.f success:^(id response) {
+        AdvImageUploadResult *result = [AdvImageUploadResult adv_modelWithJSON:response];
+        if (!result) {
+            return completion(nil, [AdvError errorWithCode:AdvErrorCode_ParseModelError].toNSError);
+        }
+        completion(result, nil);
+    } failure:^(NSError *error) {
         completion(nil, error);
     }];
 }

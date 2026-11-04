@@ -56,4 +56,20 @@ target 'AdvanceSDK_Example' do
     end
   end
 
+  # SigmobAd-iOS weak-links UIKit and Foundation. The app also links these
+  # frameworks normally, but CocoaPods carries the weak flags into its app
+  # xcconfig, leaving UIImage/NSString class references weak in the app binary.
+  post_integrate do |installer|
+    installer.aggregate_targets.each do |target|
+      next unless target.name == 'Pods-AdvanceSDK_Example'
+
+      target.user_build_configurations.each_key do |configuration|
+        path = target.xcconfig_path(configuration)
+        original = path.read
+        corrected = original.gsub(/ -weak_framework "(?:Foundation|UIKit)"/, '')
+        path.write(corrected) unless corrected == original
+      end
+    end
+  end
+
 end

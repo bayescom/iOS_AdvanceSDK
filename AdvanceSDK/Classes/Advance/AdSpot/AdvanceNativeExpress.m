@@ -14,8 +14,11 @@
 #import "AdvAdCacheManager.h"
 #import "AdvError.h"
 #import "AdvFrequencyControlManager.h"
+#import "AdvMaterialCaptureManager.h"
 
 @interface AdvanceNativeExpress () <AdvPolicyServiceDelegate, AdvanceCommonNativeExpressAdapterBridge>
+
+@property (nonatomic, strong) AdvMaterialCaptureManager *materialCaptureManager;
 
 @end
 
@@ -170,7 +173,7 @@
         [self nativeExpress_didAdRenderFailWithAdapter:adapter expressView:expressView error:frequencyError];
         return;
     }
-
+    
     if ([self.delegate respondsToSelector:@selector(onNativeExpressAdViewRenderSuccess:)]) {
         [self.delegate onNativeExpressAdViewRenderSuccess:expressView];
     }
@@ -189,12 +192,32 @@
 
 - (void)nativeExpress_didAdExposuredWithAdapter:(id<AdvanceCommonNativeExpressAdapter>)adapter expressView:(UIView *)expressView {
     AdvSupplier *supplier = [self getSupplierWithAdapter:adapter];
+    AdvPolicyService *manager = self.manager;
     if (!self.isImpressionCounted) {
+        long exposureTime = (long)([[NSDate date] timeIntervalSince1970] * 1000);
         self.isImpressionCounted = YES;
         [[AdvFrequencyControlManager sharedInstance] recordValidImpressionForAdspotId:self.adspotid];
         [[AdvFrequencyControlManager sharedInstance] recordValidImpressionForSupplier:supplier];
+        self.materialCaptureManager = [AdvMaterialCaptureManager new];
+        [self.materialCaptureManager startCaptureIfNeededInView:expressView
+                                                    adnSourceId:supplier.sdk_id
+                                                     completion:^(AdvMaterialCaptureResult *result) {
+            if (result.status != AdvMaterialCaptureStatusUploaded) {
+                AdvLog(@"模板信息流素材巡检未上报：%@", result.reason);
+                return;
+            }
+            [manager reportMaterialInspectionWithPlacementId:self.adspotid
+                                                    supplier:supplier
+                                                    sampleId:result.sampleId
+                                                   imageUrls:result.urls
+                                                exposureTime:exposureTime
+                                                  completion:^(NSError *error) {
+                if (error) {
+                    AdvLog(@"模板信息流素材巡检上报失败：%@", error);
+                }
+            }];
+        }];
     }
-    AdvPolicyService *manager = self.manager;
     [manager reportAdDataWithEventType:AdvSupplierReportTKEventExposed supplier:supplier error:nil];
     if ([self.delegate respondsToSelector:@selector(onNativeExpressAdViewExposured:)]) {
         [self.delegate onNativeExpressAdViewExposured:expressView];
@@ -216,6 +239,7 @@
 }
 
 - (void)nativeExpress_didAdClosedWithAdapter:(id<AdvanceCommonNativeExpressAdapter>)adapter expressView:(UIView *)expressView {
+    [self.materialCaptureManager finishCapture];
     if ([self.delegate respondsToSelector:@selector(onNativeExpressAdViewClosed:)]) {
         [self.delegate onNativeExpressAdViewClosed:expressView];
     }
